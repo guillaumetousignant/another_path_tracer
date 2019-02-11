@@ -107,7 +107,7 @@ ostream &operator<<(ostream &output, const Vec3f &v) {
     cout << '(' << v[0] << ", " << v[1] << ", " << v[2] << ')';
     return output;
 } 
-int main()
+/*int main()
 {
     Vec3f v1(2,3,-1);
     Vec3f v2(2,5,6);
@@ -121,5 +121,5 @@ int main()
     cout<<"Normalized v1 = "<<v1.normalize()<<endl;
     cout<<"v1.v2 = "<<v1.dot(v2)<<endl;
     cout<<"v1xv2 = "<<v1.cross(v2)<<endl; 
-}
+}*/
 #endif
