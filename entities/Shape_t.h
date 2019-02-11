@@ -8,7 +8,7 @@
 
 class Shape_t{
     public:
-        Shape_t(const Material_t *material, const TransformMatrix_t *transformmatrix): material_(material), transformmatrix_(transformmatrix){};
+        Shape_t(const Material_t *material, const TransformMatrix_t *transform_matrix): material_(material), transform_matrix_(transform_matrix){};
         virtual ~Shape_t() = 0;
 
         virtual void update() = 0;
@@ -19,6 +19,6 @@ class Shape_t{
         virtual void maxcoord(Vec3f &coord)const = 0;
 
         const Material_t *material_;
-        const TransformMatrix_t *transformmatrix_;
+        const TransformMatrix_t *transform_matrix_;
 };
 #endif
