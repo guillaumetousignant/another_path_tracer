@@ -12,9 +12,9 @@ class Shape_t{
         virtual ~Shape_t(){};
 
         virtual void update() = 0;
-        virtual void intersection(const Ray_t *ray, bool &intersected, double &t, double (&uv)[2]) const  = 0; 
-        virtual void normaluv(const Ray_t *ray, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec) const = 0;
-        virtual void normal(const Ray_t *ray, const double (&uv)[2], Vec3f &normalvec) const = 0;
+        virtual void intersection(const Ray_t &ray, bool &intersected, double &t, double (&uv)[2]) const = 0; 
+        virtual void normaluv(const Ray_t &ray, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec) const = 0;
+        virtual void normal(const Ray_t &ray, const double (&uv)[2], Vec3f &normalvec) const = 0;
         virtual void mincoord(Vec3f &coord) const = 0;
         virtual void maxcoord(Vec3f &coord) const = 0;
 
