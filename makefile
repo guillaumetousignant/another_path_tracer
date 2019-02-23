@@ -19,7 +19,11 @@ newline := ""
 #-------------------------------------------------------------------------------------------------------------------+
 # Directory Variables
 
+ifdef VERIFY
+DeactivatedFiles = main.cpp
+else
 DeactivatedFiles := $(shell grep -v '^//' .makeignore | grep -v '^$$')
+endif
 
 # Names of all root folders (these contains source code in any tree structure of visible folders)
 SourceDirs := $(shell tree -dfi --noreport)
@@ -48,7 +52,11 @@ current_dir := $(shell basename $(CURDIR))
 
 Executable = $(current_dir)
 
+ifdef VERIFY
+ExecutableSourceFile = main_test.cpp
+else
 ExecutableSourceFile = main.cpp
+endif
 
 # Executable debug object file
 ExecutableDebugObjectFile = $(subst .cpp,.o,$(addprefix .debug/,$(ExecutableSourceFile)))
@@ -95,13 +103,13 @@ CXX = g++
 MPICXX = mpic++
 CXXFLAGS += -std=c++11 -Wall -Wno-unused-function -Wno-strict-overflow
 
-DEBUGFLAGS += -Og -g -pg 
+DEBUGFLAGS += -Og -g -pg
 RELEASEFLAGS += -O3 -fopenmp
 #--------------------------------------------------------------------------------------------------------------------------------------+
 #---------------------------------------------------------------------------------------------------+
 # Targets
 
-all : mpidebug $(MPIDebugObjectFiles)
+all : mpirelease $(MPIReleaseObjectFiles)
 
 debug : .debug  begun $(DebugObjectFiles) $(ExecutableDebugObjectFile)
 	@printf '   Linking Debug...'
@@ -116,13 +124,13 @@ release : .release begun $(ReleaseObjectFiles) $(ExecutableReleaseObjectFile)
 	@printf '\n'
 
 mpidebug : .mpidebug  begun $(MPIDebugObjectFiles) $(ExecutableMPIDebugObjectFile)
-	@printf '   Linking Debug...'
+	@printf '   Linking MpiDebug...'
 	@$(MPICXX) $(CXXFLAGS) $(DEBUGFLAGS) $(MPIDebugObjectFiles) $(ExecutableMPIDebugObjectFile) -o $(addprefix bin/,$(Executable))
 	@printf 'Done'
 	@printf '\n'
 
-mpirelease : .mpirelease begun $(MPIReleaseObjectFiles) $(ExecutableMPIReleaseObjectFile)
-	@printf '   Linking Release...'
+mpirelease : .mpirelease begun $(MPIReleaseObjectFiles) $(ExecutableMPIReleaseObjectFile)	
+	@printf '   Linking MpiRelease...'
 	@$(MPICXX) $(CXXFLAGS) $(RELEASEFLAGS) $(MPIReleaseObjectFiles) $(ExecutableMPIReleaseObjectFile) -o $(addprefix bin/,$(Executable))
 	@printf 'Done'
 	@printf '\n'
@@ -130,7 +138,7 @@ mpirelease : .mpirelease begun $(MPIReleaseObjectFiles) $(ExecutableMPIReleaseOb
 reset : clean 
 	@$(shell reset)
 
-verify : mpidebug $(MPIDebugObjectFiles)
+verify : mpirelease $(MPIReleaseObjectFiles)
 
 #---------------------------------------------------------------------------------------------------+
 #---------------------------------------------------------------------------------------+
