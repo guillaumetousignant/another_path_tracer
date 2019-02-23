@@ -7,7 +7,7 @@
 
 class Ray_t{
     public:
-        Ray_t(){};
+        Ray_t(Vec3f origin, Vec3f direction, Vec3f colour, Vec3f mask, std::list<Medium_t> medium_list, double time[2] = {1, 1}); // Make constructor take time as opt input
         ~Ray_t();
 
         Vec3f origin_;
