@@ -1,0 +1,7 @@
+.gitignore linguist-vendored
+.makeignore linguist-vendored
+.travis.yml linguist-vendored
+LICENSE linguist-vendored
+makefile linguist-vendored
+README.md linguist-vendored
+catch.hpp linguist-vendored
