@@ -4,6 +4,7 @@
 class TransformMatrix_t{
     public:
         TransformMatrix_t(){};
+        ~TransformMatrix_t(){};
 };
 
 #endif
