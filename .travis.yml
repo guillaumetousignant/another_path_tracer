@@ -1,0 +1,15 @@
+language: cpp
+compiler: mpic++
+before_install:
+  - test -n $CC  && unset CC
+  - test -n $CXX && unset CXX
+  - sudo apt update
+  - sudo apt install -y tree openssh-client openssh-server openmpi-bin openmpi-common libopenmpi1.6 libopenmpi-dev libopenmpi1.6-dbg cppcheck
+script: 
+  - make VERIFY=true
+  - ./bin/another_path_tracer
+  - make clean
+  - make
+before_script: 
+after_script:  make clean
+before_script:
