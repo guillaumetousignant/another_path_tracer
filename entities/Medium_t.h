@@ -8,7 +8,7 @@
 class Medium_t : public Material_t{
     public:
         Medium_t(unsigned int priority, ScatteringFunction_t* scattering): priority_(priority), scattering_(scattering) {};
-        virtual ~Medium_t();
+        virtual ~Medium_t(){};
 
         unsigned int priority_;
         ScatteringFunction_t* scattering_;

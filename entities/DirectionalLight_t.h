@@ -6,7 +6,7 @@
 
 class DirectionalLight_t{
     public:
-        DirectionalLight_t(Vec3f intensity, TransformMatrix_t transformation);
+        DirectionalLight_t(Vec3f intensity, TransformMatrix_t transformation){};
         ~DirectionalLight_t(){};
 
         Vec3f direction_;
@@ -14,7 +14,7 @@ class DirectionalLight_t{
         TransformMatrix_t transformation_;
         double radius_;
 
-        void update();
+        void update(){};
 };
 
 #endif

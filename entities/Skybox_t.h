@@ -5,8 +5,8 @@
 
 class Skybox_t{
     public:
-        Skybox_t();
-        ~Skybox_t();
+        Skybox_t(){};
+        ~Skybox_t(){};
 
         virtual Vec3f get(Vec3f xyz) const = 0;
 };

@@ -7,12 +7,12 @@
 class MeshGeometry_t{
     public:
         MeshGeometry_t(){};
-        ~MeshGeometry_t();
+        ~MeshGeometry_t(){};
 
         unsigned int n_tris_;
-        string* mat_;
+        std::string* mat_;
         Vec3f* v_;
-        double * vt_[2]; // Is this legal?
+        double* vt_[2]; // Is this legal?
         Vec3f* vn_;
 };
 

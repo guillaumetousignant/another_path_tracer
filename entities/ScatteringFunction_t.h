@@ -6,7 +6,7 @@
 class ScatteringFunction_t{
     public:
         ScatteringFunction_t(){};
-        ~ScatteringFunction_t();
+        ~ScatteringFunction_t(){};
 
         virtual void scatter(Ray_t &ray, bool &intersected) const = 0; 
 };

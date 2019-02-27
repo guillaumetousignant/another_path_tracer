@@ -5,7 +5,7 @@ ImgBuffer_t::ImgBuffer_t(unsigned int size_x, unsigned int size_y): size_x_(size
     for (unsigned int i = 0; i < size_x_; i++){
         img_[i] = new Vec3f[size_y_];
     }
-};
+}
 
 ImgBuffer_t::~ImgBuffer_t(){
     if (img_ != nullptr){
@@ -16,11 +16,11 @@ ImgBuffer_t::~ImgBuffer_t(){
         }
         delete [] img_;
     }
-};
+}
 
 void ImgBuffer_t::reset(){
     updates_ = 0;
-};
+}
 
 void ImgBuffer_t::update(const Vec3f** img, unsigned int size_x, unsigned int size_y){
     updates_++;
@@ -30,7 +30,7 @@ void ImgBuffer_t::update(const Vec3f** img, unsigned int size_x, unsigned int si
             img_[i][j] = img_[i][j] * (1 - 1/updates_) + img[i][j]/updates_;
         }
     }
-};
+}
 
 void ImgBuffer_t::set(const Vec3f** img, unsigned int size_x, unsigned int size_y){
     updates_ = 1;
@@ -39,4 +39,4 @@ void ImgBuffer_t::set(const Vec3f** img, unsigned int size_x, unsigned int size_
             img_[i][j] = img[i][j];
         }
     }
-};
+}
