@@ -8,7 +8,7 @@
 
 class Shape_t{
     public:
-        Shape_t(const Material_t *material, const TransformMatrix_t *transform_matrix): material_(material), transform_matrix_(transform_matrix){};
+        Shape_t(Material_t *material, TransformMatrix_t *transform_matrix): material_(material), transform_matrix_(transform_matrix){};
         virtual ~Shape_t(){};
 
         virtual void update() = 0;
