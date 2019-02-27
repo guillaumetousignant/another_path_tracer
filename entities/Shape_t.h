@@ -18,7 +18,7 @@ class Shape_t{
         virtual void mincoord(Vec3f &coord) const = 0;
         virtual void maxcoord(Vec3f &coord) const = 0;
 
-        const Material_t *material_;
-        const TransformMatrix_t *transform_matrix_;
+        Material_t *material_;
+        TransformMatrix_t *transform_matrix_;
 };
 #endif
