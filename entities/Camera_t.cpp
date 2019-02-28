@@ -10,7 +10,7 @@ Camera_t::Camera_t(TransformMatrix_t* transformation, std::string filename, Vec3
     direction_ = transform_norm.multDir(Vec3f(0, 1, 0));  
 }
 
-void Camera_t::accumulate(Scene_t* scene, unsigned int n_iter = 1000000000) const {
+void Camera_t::accumulate(Scene_t* scene, unsigned int n_iter /*= 1000000000*/) const {
     unsigned int n = 0;
     while (n < n_iter){
         n++;
