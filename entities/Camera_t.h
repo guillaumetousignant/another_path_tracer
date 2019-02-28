@@ -4,23 +4,26 @@
 //#include "Scene_t.h"
 #include "Vec3f.h"
 #include <string>
+#include <list>
 //#include "TransformMatrix_t.h"
 //#include "Skybox_t.h"
+//#include "Medium_t.h"
 
 class TransformMatrix_t;
 class Skybox_t;
 class Scene_t;
+class Medium_t;
 
 class Camera_t{
     public:
-        Camera_t(TransformMatrix_t* transformation, std::string filename, Vec3f up, double fov[2], unsigned int subpix[2], std::list <Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double gammaind);
+        Camera_t(TransformMatrix_t* transformation, std::string filename, Vec3f up, double fov[2], unsigned int subpix[2], std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double gammaind);
         Camera_t(){};
 
         TransformMatrix_t* transformation_;
         std::string filename_;
         double fov_[2];
         unsigned int subpix_[2];
-        std::list <Medium_t*> medium_list_;
+        std::list<Medium_t*> medium_list_;
         Skybox_t* skybox_;        
         unsigned int max_bounces_;
         Vec3f direction_;
