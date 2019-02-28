@@ -4,7 +4,7 @@
 #include "Vec3f.h"
 //#include "TransformMatrix_t.h"
 
-class TransformationMatrix_t;
+class TransformMatrix_t;
 
 class DirectionalLight_t{
     public:
