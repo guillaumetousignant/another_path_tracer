@@ -1,10 +1,13 @@
-#include "Material_t.h"
-#include "TransformMatrix_t.h"
+#ifndef SHAPE_T_H
+#define SHAPE_T_H
+
+//#include "Material_t.h"
+//#include "TransformMatrix_t.h"
 #include "Ray_t.h"
 #include "Vec3f.h"
 
-#ifndef SHAPE_T_H
-#define SHAPE_T_H
+class Material_t;
+class TransformMatrix_t;
 
 class Shape_t{
     public:

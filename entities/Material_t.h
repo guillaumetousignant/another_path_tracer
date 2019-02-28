@@ -1,8 +1,10 @@
 #ifndef MATERIAL_T_H
 #define MATERIAL_T_H
 
-#include "Shape_t.h"
+//#include "Shape_t.h"
 #include "Ray_t.h"
+
+class Shape_t;
 
 class Material_t{
     public:

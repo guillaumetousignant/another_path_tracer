@@ -2,10 +2,14 @@
 #define RAY_T_H
 
 #include "Vec3f.h"
-#include "Medium_t.h"
+//#include "Medium_t.h"
 #include <list>
-#include "Scene_t.h"
-#include "Skybox_t.h"
+//#include "Scene_t.h"
+//#include "Skybox_t.h"
+
+class Medium_t;
+class Scene_t;
+class Skybox_t;
 
 class Ray_t{
     public:

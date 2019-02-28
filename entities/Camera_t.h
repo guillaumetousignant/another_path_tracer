@@ -1,11 +1,15 @@
 #ifndef CAMERA_T_H
 #define CAMERA_T_H
 
-#include "Scene_t.h"
+//#include "Scene_t.h"
 #include "Vec3f.h"
 #include <string>
-#include "TransformMatrix_t.h"
-#include "Skybox_t.h"
+//#include "TransformMatrix_t.h"
+//#include "Skybox_t.h"
+
+class TransformMatrix_t;
+class Skybox_t;
+class Scene_t;
 
 class Camera_t{
     public:

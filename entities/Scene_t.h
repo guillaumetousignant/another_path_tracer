@@ -1,10 +1,15 @@
 #ifndef SCENE_T_H
 #define SCENE_T_H
 
-#include "Shape_t.h"
-#include "AccelerationStructure_t.h"
-#include "Mesh_t.h"
+//#include "Shape_t.h"
+//#include "AccelerationStructure_t.h"
+//#include "Mesh_t.h"
 #include "Ray_t.h"
+
+class Shape_t;
+class AccelerationStructure_t;
+class Mesh_t;
+
 
 class Scene_t{
     public:
