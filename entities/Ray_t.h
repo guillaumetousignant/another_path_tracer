@@ -18,8 +18,8 @@ class Ray_t{
 
         Vec3f origin_;
         Vec3f direction_;
-        Vec3f mask_;
         Vec3f colour_;
+        Vec3f mask_;        
         double dist_;
         std::list <Medium_t*> medium_list_;
         double time_;
