@@ -40,7 +40,7 @@ const Vec3f &Vec3f::operator*=(double scale) {
     v[2] *= scale;
     return *this;
 } 
-const Vec3f &operator*=(const Vec3f &other) {
+const Vec3f &Vec3f::operator*=(const Vec3f &other) {
     v[0] *= other[0];
     v[1] *= other[1];
     v[2] *= other[2];
