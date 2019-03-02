@@ -2,6 +2,7 @@
 #define IMGBUFFER_T_H
 
 #include "Vec3f.h"
+#include <string>
 
 class ImgBuffer_t{
     public:
@@ -11,6 +12,7 @@ class ImgBuffer_t{
         void reset();
         void update(const Vec3f** img, unsigned int size_x, unsigned int size_y);
         void set(const Vec3f** img, unsigned int size_x, unsigned int size_y);
+        void write(std::string filename) const;
 
         unsigned int size_x_;
         unsigned int size_y_;

@@ -40,3 +40,7 @@ void ImgBuffer_t::set(const Vec3f** img, unsigned int size_x, unsigned int size_
         }
     }
 }
+
+void ImgBuffer_t::write(std::string filename) const {
+    // What to do here?
+}
