@@ -16,6 +16,8 @@ class Cam_t : public Camera_t{
         Cam_t(TransformMatrix_t* transformation, std::string filename, Vec3f up, double fov[2], unsigned int subpix[2], ImgBuffer_t* image, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double gammaind);
         ~Cam_t();
 
+        ImgBuffer_t* image_;
+
         virtual void update();
         virtual void raytrace(Scene_t* scene) const;
         virtual void focus(double focus_distance);
