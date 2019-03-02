@@ -22,6 +22,7 @@ class Vec3f {
         Vec3f operator-(const Vec3f &other) const;
         Vec3f operator-() const; 
         const Vec3f &operator*=(double scale);
+        const Vec3f &operator*=(const Vec3f &other);
         const Vec3f &operator/=(double scale);
         const Vec3f &operator+=(const Vec3f &other);
         const Vec3f &operator-=(const Vec3f &other); 
