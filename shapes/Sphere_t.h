@@ -12,8 +12,12 @@ class Material_t;
 
 class Sphere_t : public Shape_t{
     public:
-        Sphere_t(Material_t *material, TransformMatrix_t *transform_matrix): Shape_t(material, transform_matrix);
+        Sphere_t(Material_t *material, TransformMatrix_t *transform_matrix);
         virtual ~Sphere_t();
+
+        double radius_;
+        Vec3f origin_;
+        Vec3f direction_sph_;
 
         virtual void update(){};
         virtual void intersection(const Ray_t &ray, bool &intersected, double &t, double (&uv)[2]) const; 
