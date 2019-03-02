@@ -2,6 +2,7 @@
 #define CAM_T_H
 
 #include "Camera_t.h"
+#include "Vec3f.h"
 #include <string>
 #include <list>
 
@@ -20,7 +21,6 @@ class Cam_t : public Camera_t{
 
         virtual void update();
         virtual void raytrace(Scene_t* scene) const;
-        virtual void focus(double focus_distance);
         virtual void write(std::string file_name = "");
         virtual void show() const;
 };
