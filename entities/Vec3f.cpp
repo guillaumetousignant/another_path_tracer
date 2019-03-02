@@ -28,9 +28,15 @@ Vec3f Vec3f::operator/(double scale) const {
 Vec3f Vec3f::operator+(const Vec3f &other)  const{
     return Vec3f(v[0] + other.v[0], v[1] + other.v[1], v[2] + other.v[2]);
 } 
+Vec3f Vec3f::operator+(double factor)  const{
+    return Vec3f(v[0] + factor, v[1] + factor, v[2] + factor);
+} 
 Vec3f Vec3f::operator-(const Vec3f &other) const {
     return Vec3f(v[0] - other.v[0], v[1] - other.v[1], v[2] - other.v[2]);
 } 
+Vec3f Vec3f::operator-(double factor) const {
+    return Vec3f(v[0] - factor, v[1] - factor, v[2] - factor);
+}
 Vec3f Vec3f::operator-() const {
     return Vec3f(-v[0], -v[1], -v[2]);
 } 
@@ -58,12 +64,24 @@ const Vec3f &Vec3f::operator+=(const Vec3f &other) {
     v[2] += other.v[2];
     return *this;
 } 
+const Vec3f &Vec3f::operator+=(double factor) {
+    v[0] += factor;
+    v[1] += factor;
+    v[2] += factor;
+    return *this;
+} 
 const Vec3f &Vec3f::operator-=(const Vec3f &other) {
     v[0] -= other.v[0];
     v[1] -= other.v[1];
     v[2] -= other.v[2];
     return *this;
 } 
+const Vec3f &Vec3f::operator-=(double factor) {
+    v[0] -= factor;
+    v[1] -= factor;
+    v[2] -= factor;
+    return *this;
+}
 double Vec3f::magnitude() const {
     return sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
 } 
