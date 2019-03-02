@@ -19,6 +19,9 @@ double Vec3f::operator[](int index) const {
 Vec3f Vec3f::operator*(double scale) const {
     return Vec3f(v[0] * scale, v[1] * scale, v[2] * scale);
 } 
+Vec3f Vec3f::operator*(const Vec3f &other) const {
+    return Vec3f(v[0] * other[0], v[1] * other[1], v[2] * other[2]);
+} 
 Vec3f Vec3f::operator/(double scale) const {
     return Vec3f(v[0] / scale, v[1] / scale, v[2] / scale);
 } 
