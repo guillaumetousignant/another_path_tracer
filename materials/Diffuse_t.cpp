@@ -3,6 +3,7 @@
 #include <math.h>
 
 #define EPSILON 0.00001
+#define PI 3.141592653589793238463
 
 std::mt19937 rng;
 
@@ -21,7 +22,7 @@ void Diffuse_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray
 
     hit_obj->normal(ray, uv, normal);
 
-    double rand1 = unif_(rng) * 2 * 3.141592653589793238463;
+    double rand1 = unif_(rng) * 2 * PI;
     double rand2 = unif_(rng);
     double rand2s = sqrt(rand2);
 
