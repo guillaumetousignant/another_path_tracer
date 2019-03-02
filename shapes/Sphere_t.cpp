@@ -1,5 +1,6 @@
 #include "Sphere_t.h"
 #include "TransformMatrix_t.h"
+#include "Material_t.h"
 #include <math.h>
 #include <limits>
 #include "Referentials.h"
