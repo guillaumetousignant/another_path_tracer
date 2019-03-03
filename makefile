@@ -105,6 +105,13 @@ CXXFLAGS += -std=c++11 -Wall -Wno-unused-function -Wno-strict-overflow
 
 DEBUGFLAGS += -Og -g -pg
 RELEASEFLAGS += -O3 -fopenmp
+
+# Include search paths
+FREETYPE_INCLUDE_PATH = /usr/include/freetype2
+
+# Included Libraries
+#FREETYPELIBS += -L$(METISROOT)/lib -lmetis
+
 #--------------------------------------------------------------------------------------------------------------------------------------+
 #---------------------------------------------------------------------------------------------------+
 # Targets
@@ -145,19 +152,19 @@ verify : mpirelease $(MPIReleaseObjectFiles)
 # Pattern Rules
 
 .debug/%.o : %.cpp
-	@$(CXX) -c $(CXXFLAGS) $(DEBUGFLAGS)  -I$(subst $(space), -I,$(AllDirs)) $< -o $@ 
+	@$(CXX) -c $(CXXFLAGS) $(DEBUGFLAGS)  -I$(subst $(space), -I,$(AllDirs)) -I$(FREETYPE_INCLUDE_PATH) $< -o $@ 
 	@echo '   Pattern Rule | Compiling | '$(CXXFLAGS) $(DEBUGFLAGS) ' | ' $<' ... Done'
 
 .release/%.o : %.cpp
-	@$(CXX) -c $(CXXFLAGS) $(RELEASEFLAGS)  -I$(subst $(space), -I,$(AllDirs)) $< -o $@ 
+	@$(CXX) -c $(CXXFLAGS) $(RELEASEFLAGS)  -I$(subst $(space), -I,$(AllDirs)) -I$(FREETYPE_INCLUDE_PATH) $< -o $@ 
 	@echo '   Pattern Rule | Compiling | '$(CXXFLAGS) $(RELEASEFLAGS) ' | ' $<' ... Done '
 
 .mpidebug/%.o : %.cpp
-	@$(MPICXX) -c $(CXXFLAGS) $(DEBUGFLAGS)  -I$(subst $(space), -I,$(AllDirs)) $< -o $@ 
+	@$(MPICXX) -c $(CXXFLAGS) $(DEBUGFLAGS)  -I$(subst $(space), -I,$(AllDirs)) -I$(FREETYPE_INCLUDE_PATH) $< -o $@ 
 	@echo '   Pattern Rule | Compiling | '$(CXXFLAGS) $(DEBUGFLAGS) ' | ' $<' ... Done'
 
 .mpirelease/%.o : %.cpp
-	@$(MPICXX) -c $(CXXFLAGS) $(RELEASEFLAGS)  -I$(subst $(space), -I,$(AllDirs)) $< -o $@ 
+	@$(MPICXX) -c $(CXXFLAGS) $(RELEASEFLAGS)  -I$(subst $(space), -I,$(AllDirs)) -I$(FREETYPE_INCLUDE_PATH) $< -o $@ 
 	@echo '   Pattern Rule | Compiling | '$(CXXFLAGS) $(RELEASEFLAGS) ' | ' $<' ... Done '
 
 #---------------------------------------------------------------------------------------+
