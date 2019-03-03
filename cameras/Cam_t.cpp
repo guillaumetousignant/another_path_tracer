@@ -66,7 +66,7 @@ void Cam_t::write(std::string file_name /*= ""*/) {
     if (file_name.empty()){
         file_name = filename_;
     }
-    // Call imgbuffer write
+    image_->write(file_name);
 }
 
 void Cam_t::show() const {
