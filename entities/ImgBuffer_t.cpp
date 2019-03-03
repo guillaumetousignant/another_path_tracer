@@ -1,4 +1,5 @@
 #include "ImgBuffer_t.h"
+#include "pngwriter.h"
 
 ImgBuffer_t::ImgBuffer_t(unsigned int size_x, unsigned int size_y): size_x_(size_x), size_y_(size_y), updates_(0) {
     img_ = new Vec3f*[size_y_];
