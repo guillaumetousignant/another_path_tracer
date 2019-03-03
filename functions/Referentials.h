@@ -5,7 +5,7 @@
 #include <math.h>
 
 Vec3f to_sph(const Vec3f &xyz) {
-    double r = xyz.magnitude;
+    double r = xyz.magnitude();
     return Vec3f(r, acos(xyz[2]/r), atan2(xyz[1], xyz[0])); //CHECK acos might return NANs?
 }
 

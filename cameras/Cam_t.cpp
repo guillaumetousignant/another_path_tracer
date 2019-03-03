@@ -64,7 +64,7 @@ void Cam_t::raytrace(Scene_t* scene) const {
 }
 
 void Cam_t::write(std::string file_name /*= ""*/) {
-    if (file_name.empty){
+    if (file_name.empty()){
         file_name = filename_;
     }
     // Call imgbuffer write
