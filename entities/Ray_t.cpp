@@ -3,6 +3,7 @@
 #include "Scene_t.h"
 #include "Skybox_t.h"
 #include "Shape_t.h"
+#include "ScatteringFunction_t.h"
 
 Ray_t::Ray_t(const Vec3f &origin, const Vec3f &direction, const Vec3f &colour, const Vec3f &mask, const std::list<Medium_t*> &medium_list, double time /*= 0*/) : 
     origin_(origin), direction_(direction), colour_(colour), mask_(mask), dist_(0), medium_list_(medium_list), time_(time) {}
@@ -14,6 +15,7 @@ void Ray_t::raycast(Scene_t* scene, unsigned int &max_bounces, Skybox_t* skybox)
     Shape_t* hit_obj;
     double t;
     double uv[2];
+    bool scattered;
 
     while ((bounces < max_bounces) && (mask_.magnitudeSquared > 0.1)){
         scene->intersect(*this, hit_obj, t, uv);
@@ -21,6 +23,12 @@ void Ray_t::raycast(Scene_t* scene, unsigned int &max_bounces, Skybox_t* skybox)
         if (hit_obj == nullptr){
             colour_ += mask_ * skybox->get(direction_);
             return;
+        }
+        bounces++;
+
+        medium_list_.front()->scattering_->scatter(*this, scattered);
+        if (!scattered){
+            hit_obj->material_->bounce(uv, hit_obj, *this);
         }
     }
 }
