@@ -51,5 +51,13 @@ void ImgBuffer_t::set(const Vec3f** img, unsigned int size_x, unsigned int size_
 }
 
 void ImgBuffer_t::write(std::string filename) const {
-    // What to do here?
+    pngwriter png((int) size_x_, (int) size_y_, 0.0, filename.c_str());
+
+    for (unsigned int j = 0; j < size_y_; j++){
+        for (unsigned int i = 0; i < size_x_; i++){
+            png.plot((int) i, (int) j, img_[j][i][0], img_[j][i][1], img_[j][i][2]);
+        }
+    }
+
+    png.close();
 }
