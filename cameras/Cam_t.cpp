@@ -9,8 +9,8 @@
 
 #define PI 3.141592653589793238463
 
-Cam_t::Cam_t(TransformMatrix_t* transformation, std::string filename, Vec3f up, double fov[2], unsigned int subpix[2], ImgBuffer_t* image, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double gammaind, RandomGenerator_t* rng) 
-    : Camera_t(transformation, filename, up, fov, subpix, medium_list, skybox, max_bounces, gammaind), image_(image), rng_(rng) {
+Cam_t::Cam_t(TransformMatrix_t* transformation, std::string filename, Vec3f up, double fov[2], unsigned int subpix[2], ImgBuffer_t* image, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double gammaind) 
+    : Camera_t(transformation, filename, up, fov, subpix, medium_list, skybox, max_bounces, gammaind), image_(image), unif_(0, 1) {
     direction_ = Vec3f(0, 1, 0); // CHECK fill when transformation mats are done
     origin_ = Vec3f(0, 0, 0);
 }
@@ -21,7 +21,7 @@ void Cam_t::update() {
     // CHECK fill when transforms are done
 }
 
-void Cam_t::raytrace(Scene_t* scene) const {
+void Cam_t::raytrace(Scene_t* scene) {
     double tot_subpix;
     double pixel_span_x, pixel_span_y;
     double subpix_span_x, subpix_span_y;
@@ -45,8 +45,8 @@ void Cam_t::raytrace(Scene_t* scene) const {
             for (unsigned int k = 0; k < subpix_[0]; k++){
                 for (unsigned int l = 0; l < subpix_[1]; l++){
                     
-                    double jitter_y = rng_->rand();
-                    double jitter_x = 0; //unif_(rng); // Or declare above?
+                    double jitter_y = unif_(my_rand::rng);
+                    double jitter_x = unif_(my_rand::rng);
 
                     pix_vec += Vec3f(0, (k - subpix_[0]/2 + jitter_y)*subpix_span_y, (l - subpix_[1]/2 + jitter_x)*subpix_span_x);
                     pix_vec = to_xyz_offset(pix_vec, direction_, horizontal, vertical);

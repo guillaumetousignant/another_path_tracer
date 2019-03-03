@@ -1,12 +1,11 @@
-#include "RandomGenerator_t.h" // was never able to get this to work
+#include "RandomGenerator_t.h"
 
 #include <iostream> // REMOVE
 
-extern RandomGenerator_t* rng;
-
 int main(){
-    RandomGenerator_t* rng = new RandomGenerator_t();
-    std::cout << rng->rand();
+    std::uniform_real_distribution<double> unif_(0, 1);
+
+    std::cout << unif_(my_rand::rng) << std::endl;
 
     return 0;
 }

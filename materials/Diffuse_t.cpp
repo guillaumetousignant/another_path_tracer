@@ -1,11 +1,10 @@
 #include "Diffuse_t.h"
 #include "Shape_t.h"
 #include <math.h>
+#include "RandomGenerator_t.h"
 
 #define EPSILON 0.00001
 #define PI 3.141592653589793238463
-
-extern std::mt19937 rng;
 
 Diffuse_t::Diffuse_t(Vec3f emission, Vec3f colour, double roughness) : 
     emission_(emission), colour_(colour), roughness_(roughness), unif_(std::uniform_real_distribution<double>(0, 1)) {}
@@ -22,8 +21,8 @@ void Diffuse_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray
 
     hit_obj->normal(ray, uv, normal);
 
-    double rand1 = 0; //unif_(rng) * 2 * PI;
-    double rand2 = 0; //unif_(rng);
+    double rand1 = unif_(my_rand::rng);
+    double rand2 = unif_(my_rand::rng);
     double rand2s = sqrt(rand2);
 
     if (normal.dot(ray.direction_) > 0){

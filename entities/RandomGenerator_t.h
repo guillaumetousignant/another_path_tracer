@@ -3,14 +3,7 @@
 
 #include <random> 
 
-class RandomGenerator_t {
-    public:
-        RandomGenerator_t();
-        ~RandomGenerator_t();
-
-        std::mt19937 rng_;
-        std::uniform_real_distribution<double> unif_;
-
-        double rand();
-};
+namespace my_rand{
+    extern std::mt19937 rng;
+}
 #endif
