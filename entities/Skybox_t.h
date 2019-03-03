@@ -8,7 +8,7 @@ class Skybox_t{
         Skybox_t(){};
         ~Skybox_t(){};
 
-        virtual Vec3f get(Vec3f xyz) const = 0;
+        virtual Vec3f get(const Vec3f &xyz) const = 0;
 };
 
 #endif
