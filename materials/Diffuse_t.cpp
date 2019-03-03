@@ -50,5 +50,5 @@ void Diffuse_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray
     ray.colour_ += ray.mask_ * emission_;
     ray.mask_ *= colour_ * pow(newdir.dot(normal), roughness_);
 
-    std::cout << ray.mask_[0] << " " << ray.mask_[1] << " " << ray.mask_[2] << std::endl;
+    //std::cout << ray.mask_[0] << " " << ray.mask_[1] << " " << ray.mask_[2] << std::endl; // REMOVE
 }
