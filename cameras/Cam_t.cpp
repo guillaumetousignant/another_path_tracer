@@ -42,6 +42,10 @@ void Cam_t::raytrace(Scene_t* scene) const {
 
     image_->update();
 
+    std::random_device rd; // REMOVE
+    std::mt19937 rng(rd()); // REMOVE
+    std::uniform_real_distribution<double> unif_(0, 1); // REMOVE
+
     for (unsigned int j = 0; j < image_->size_y_; j++){
         for (unsigned int i = 0; i < image_->size_x_; i++){
             Vec3f col = Vec3f(); // Or declare above?
@@ -49,7 +53,7 @@ void Cam_t::raytrace(Scene_t* scene) const {
         
             for (unsigned int k = 0; k < subpix_[0]; k++){
                 for (unsigned int l = 0; l < subpix_[1]; l++){
-                    std::uniform_real_distribution<double> unif_(0, 1);
+                    
                     double jitter_y = unif_(rng); // Or declare above?
                     double jitter_x = 0; //unif_(rng); // Or declare above?
 
