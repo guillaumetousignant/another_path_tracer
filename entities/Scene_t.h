@@ -13,8 +13,8 @@ class Mesh_t;
 
 class Scene_t{
     public:
-        Scene_t(){};
-        ~Scene_t(){};
+        Scene_t();
+        ~Scene_t();
 
         Shape_t** geometry_;
         unsigned int n_obj_;
