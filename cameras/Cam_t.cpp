@@ -8,10 +8,14 @@
 
 #define PI 3.141592653589793238463
 
-std::mt19937 rng;
+extern std::mt19937 rng;
 
 Cam_t::Cam_t(TransformMatrix_t* transformation, std::string filename, Vec3f up, double fov[2], unsigned int subpix[2], ImgBuffer_t* image, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double gammaind) 
     : Camera_t(transformation, filename, up, fov, subpix, medium_list, skybox, max_bounces, gammaind), image_(image), unif_(0, 1) {
+    /*unif_.param(std::uniform_real_distribution<double>::param_type(0,1));
+    //std::uniform_real_distribution<double> unif_(0, 1);
+    std::random_device rd;
+    std::mt19937 rng_(rd());*/
     direction_ = Vec3f(0, 1, 0); // CHECK fill when transformation mats are done
     origin_ = Vec3f(0, 0, 0);
 }
@@ -27,7 +31,6 @@ void Cam_t::raytrace(Scene_t* scene) const {
     double pixel_span_x, pixel_span_y;
     double subpix_span_x, subpix_span_y;
     Vec3f horizontal, vertical;
-    //Vec3f pix_vec;
     
     tot_subpix = subpix_[0]*subpix_[1];
     pixel_span_y = fov_[0]/image_->size_y_;
@@ -46,8 +49,9 @@ void Cam_t::raytrace(Scene_t* scene) const {
         
             for (unsigned int k = 0; k < subpix_[0]; k++){
                 for (unsigned int l = 0; l < subpix_[1]; l++){
+                    std::uniform_real_distribution<double> unif_(0, 1);
                     double jitter_y = unif_(rng); // Or declare above?
-                    double jitter_x = unif_(rng); // Or declare above?
+                    double jitter_x = 0; //unif_(rng); // Or declare above?
 
                     pix_vec += Vec3f(0, (k - subpix_[0]/2 + jitter_y)*subpix_span_y, (l - subpix_[1]/2 + jitter_x)*subpix_span_x);
                     pix_vec = to_xyz_offset(pix_vec, direction_, horizontal, vertical);

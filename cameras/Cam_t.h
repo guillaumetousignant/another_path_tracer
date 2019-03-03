@@ -20,6 +20,7 @@ class Cam_t : public Camera_t{
 
         ImgBuffer_t* image_;
         std::uniform_real_distribution<double> unif_;
+        //std::mt19937 rng_;
 
         virtual void update();
         virtual void raytrace(Scene_t* scene) const;
