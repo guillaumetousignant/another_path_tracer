@@ -11,6 +11,8 @@ class ImgBuffer_t{
 
         void reset();
         void update(const Vec3f** img, unsigned int size_x, unsigned int size_y);
+        void update();
+        void update(const Vec3f &colour, unsigned int pos_x, unsigned int pos_y);
         void set(const Vec3f** img, unsigned int size_x, unsigned int size_y);
         void write(std::string filename) const;
 
