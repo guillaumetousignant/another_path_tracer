@@ -13,7 +13,7 @@ Diffuse_t::~Diffuse_t(){
 
 }
 
-void Diffuse_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray) const {
+void Diffuse_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray) {
     Vec3f axis;
     Vec3f normal;
     Vec3f u, v;

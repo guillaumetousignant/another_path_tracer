@@ -15,6 +15,6 @@ class Diffuse_t : public Material_t{
         double roughness_;
         std::uniform_real_distribution<double> unif_;
 
-        virtual void bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray) const;
+        virtual void bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray);
 };
 #endif
