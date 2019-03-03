@@ -10,7 +10,7 @@ before_install:
   - cd pngwriter-build
   - cmake ../pngwriter
   - make -j
-  - sudo make install -y
+  - sudo make install
 script: 
   - make VERIFY=true
   - ./bin/another_path_tracer
