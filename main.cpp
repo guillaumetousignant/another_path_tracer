@@ -40,6 +40,9 @@ int main(){
 
     Cam_t* cam = new Cam_t(transform, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer, medium_list, skybox, maxbounces, 1.0);
 
+    cam->accumulate(scene, 1);
+
+    cam->write();
 
     return 0;
 }
