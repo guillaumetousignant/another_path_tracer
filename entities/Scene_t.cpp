@@ -70,7 +70,6 @@ void Scene_t::intersect_brute(Ray_t &ray, Shape_t* hit_obj, double &t, double (&
     bool intersected;
     double uv_temp[2];
     
-    hit_obj = nullptr;
     t = std::numeric_limits<double>::infinity();
 
     for (unsigned int i = 0; i < n_obj_; i++){

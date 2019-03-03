@@ -12,7 +12,7 @@ Ray_t::~Ray_t(){}
 
 void Ray_t::raycast(Scene_t* scene, unsigned int max_bounces, Skybox_t* skybox){
     unsigned int bounces = 0;
-    Shape_t* hit_obj;
+    Shape_t* hit_obj = nullptr;
     double t;
     double uv[2];
     bool scattered;
