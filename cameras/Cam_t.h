@@ -5,6 +5,7 @@
 #include "Vec3f.h"
 #include <string>
 #include <list>
+#include <random>
 
 class TransformMatrix_t;
 class Skybox_t;
@@ -18,6 +19,7 @@ class Cam_t : public Camera_t{
         ~Cam_t();
 
         ImgBuffer_t* image_;
+        std::uniform_real_distribution<double> unif_;
 
         virtual void update();
         virtual void raytrace(Scene_t* scene) const;
