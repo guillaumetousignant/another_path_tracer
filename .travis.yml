@@ -5,12 +5,15 @@ before_install:
   - test -n $CXX && unset CXX
   - sudo apt update
   - sudo apt install -y tree openssh-client openssh-server openmpi-bin openmpi-common libopenmpi1.6 libopenmpi-dev libopenmpi1.6-dbg cppcheck zlib1g zlib1g-dbg zlib1g-dev libpng-dev freetype2-demos libfreetype6 libfreetype6-dev
+  - mkdir -p dependency_builder
+  - cd dependency_builder
   - git clone https://github.com/pngwriter/pngwriter.git
   - mkdir -p pngwriter-build
   - cd pngwriter-build
   - cmake ../pngwriter
   - make -j
   - sudo make install
+  - cd ..
   - cd ..
 script: 
   - make VERIFY=true
