@@ -14,7 +14,7 @@ class MeshGeometry_t;
 
 class Mesh_t : public Shape_t{
     public:
-        Mesh_t(Material_t *material, TransformMatrix_t *transform_matrix): Shape_t(material, transform_matrix);
+        Mesh_t(Material_t *material, TransformMatrix_t *transform_matrix);
         virtual ~Mesh_t();
 
         MeshGeometry_t* geom_;
