@@ -11,7 +11,7 @@ class Material_t{
         Material_t(){};
         ~Material_t(){};
 
-        virtual void bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray) const = 0;
+        virtual void bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray) = 0;
 };
 
 #endif
