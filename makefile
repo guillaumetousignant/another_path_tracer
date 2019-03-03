@@ -108,9 +108,12 @@ RELEASEFLAGS += -O3 -fopenmp
 
 # Include search paths
 FREETYPE_INCLUDE_PATH = /usr/include/freetype2
+LIBPNG_INCLUDE_PATH = /usr/include/libpng16
+PNGWRITER_INCLUDE_PATH = /usr/local/include
 
 # Included Libraries
-#FREETYPELIBS += -L$(METISROOT)/lib -lmetis
+PNGWRITERLIBS += -L/usr/local/lib -lPNGwriter
+LIBPNGLIBS += -lpng
 
 #--------------------------------------------------------------------------------------------------------------------------------------+
 #---------------------------------------------------------------------------------------------------+
@@ -120,25 +123,25 @@ all : mpirelease $(MPIReleaseObjectFiles)
 
 debug : .debug  begun $(DebugObjectFiles) $(ExecutableDebugObjectFile)
 	@printf '   Linking Debug...'
-	@$(CXX) $(CXXFLAGS) $(DEBUGFLAGS) $(DebugObjectFiles) $(ExecutableDebugObjectFile) -o $(addprefix bin/,$(Executable))
+	@$(CXX) $(CXXFLAGS) $(DEBUGFLAGS) $(DebugObjectFiles) $(ExecutableDebugObjectFile) -o $(addprefix bin/,$(Executable)) $(PNGWRITERLIBS) $(LIBPNGLIBS)
 	@printf 'Done'
 	@printf '\n'
 
 release : .release begun $(ReleaseObjectFiles) $(ExecutableReleaseObjectFile)
 	@printf '   Linking Release...'
-	@$(CXX) $(CXXFLAGS) $(RELEASEFLAGS) $(ReleaseObjectFiles) $(ExecutableReleaseObjectFile) -o $(addprefix bin/,$(Executable))
+	@$(CXX) $(CXXFLAGS) $(RELEASEFLAGS) $(ReleaseObjectFiles) $(ExecutableReleaseObjectFile) -o $(addprefix bin/,$(Executable)) $(PNGWRITERLIBS) $(LIBPNGLIBS)
 	@printf 'Done'
 	@printf '\n'
 
 mpidebug : .mpidebug  begun $(MPIDebugObjectFiles) $(ExecutableMPIDebugObjectFile)
 	@printf '   Linking MpiDebug...'
-	@$(MPICXX) $(CXXFLAGS) $(DEBUGFLAGS) $(MPIDebugObjectFiles) $(ExecutableMPIDebugObjectFile) -o $(addprefix bin/,$(Executable))
+	@$(MPICXX) $(CXXFLAGS) $(DEBUGFLAGS) $(MPIDebugObjectFiles) $(ExecutableMPIDebugObjectFile) -o $(addprefix bin/,$(Executable)) $(PNGWRITERLIBS) $(LIBPNGLIBS)
 	@printf 'Done'
 	@printf '\n'
 
 mpirelease : .mpirelease begun $(MPIReleaseObjectFiles) $(ExecutableMPIReleaseObjectFile)	
 	@printf '   Linking MpiRelease...'
-	@$(MPICXX) $(CXXFLAGS) $(RELEASEFLAGS) $(MPIReleaseObjectFiles) $(ExecutableMPIReleaseObjectFile) -o $(addprefix bin/,$(Executable))
+	@$(MPICXX) $(CXXFLAGS) $(RELEASEFLAGS) $(MPIReleaseObjectFiles) $(ExecutableMPIReleaseObjectFile) -o $(addprefix bin/,$(Executable)) $(PNGWRITERLIBS) $(LIBPNGLIBS)
 	@printf 'Done'
 	@printf '\n'
 
@@ -152,19 +155,19 @@ verify : mpirelease $(MPIReleaseObjectFiles)
 # Pattern Rules
 
 .debug/%.o : %.cpp
-	@$(CXX) -c $(CXXFLAGS) $(DEBUGFLAGS)  -I$(subst $(space), -I,$(AllDirs)) -I$(FREETYPE_INCLUDE_PATH) $< -o $@ 
+	@$(CXX) -c $(CXXFLAGS) $(DEBUGFLAGS)  -I$(subst $(space), -I,$(AllDirs)) -I$(FREETYPE_INCLUDE_PATH) -I$(LIBPNG_INCLUDE_PATH) -I$(PNGWRITER_INCLUDE_PATH) $< -o $@ 
 	@echo '   Pattern Rule | Compiling | '$(CXXFLAGS) $(DEBUGFLAGS) ' | ' $<' ... Done'
 
 .release/%.o : %.cpp
-	@$(CXX) -c $(CXXFLAGS) $(RELEASEFLAGS)  -I$(subst $(space), -I,$(AllDirs)) -I$(FREETYPE_INCLUDE_PATH) $< -o $@ 
+	@$(CXX) -c $(CXXFLAGS) $(RELEASEFLAGS)  -I$(subst $(space), -I,$(AllDirs)) -I$(FREETYPE_INCLUDE_PATH) -I$(LIBPNG_INCLUDE_PATH) -I$(PNGWRITER_INCLUDE_PATH) $< -o $@ 
 	@echo '   Pattern Rule | Compiling | '$(CXXFLAGS) $(RELEASEFLAGS) ' | ' $<' ... Done '
 
 .mpidebug/%.o : %.cpp
-	@$(MPICXX) -c $(CXXFLAGS) $(DEBUGFLAGS)  -I$(subst $(space), -I,$(AllDirs)) -I$(FREETYPE_INCLUDE_PATH) $< -o $@ 
+	@$(MPICXX) -c $(CXXFLAGS) $(DEBUGFLAGS)  -I$(subst $(space), -I,$(AllDirs)) -I$(FREETYPE_INCLUDE_PATH) -I$(LIBPNG_INCLUDE_PATH) -I$(PNGWRITER_INCLUDE_PATH) $< -o $@ 
 	@echo '   Pattern Rule | Compiling | '$(CXXFLAGS) $(DEBUGFLAGS) ' | ' $<' ... Done'
 
 .mpirelease/%.o : %.cpp
-	@$(MPICXX) -c $(CXXFLAGS) $(RELEASEFLAGS)  -I$(subst $(space), -I,$(AllDirs)) -I$(FREETYPE_INCLUDE_PATH) $< -o $@ 
+	@$(MPICXX) -c $(CXXFLAGS) $(RELEASEFLAGS)  -I$(subst $(space), -I,$(AllDirs)) -I$(FREETYPE_INCLUDE_PATH) -I$(LIBPNG_INCLUDE_PATH) -I$(PNGWRITER_INCLUDE_PATH) $< -o $@ 
 	@echo '   Pattern Rule | Compiling | '$(CXXFLAGS) $(RELEASEFLAGS) ' | ' $<' ... Done '
 
 #---------------------------------------------------------------------------------------+
