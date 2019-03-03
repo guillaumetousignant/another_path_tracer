@@ -113,7 +113,7 @@ PNGWRITER_INCLUDE_PATH = $(PNGWRITERINCLUDE)
 
 # Included Libraries
 PNGWRITERLIBS += -L$(PNGWRITERLIBSDIR) -lPNGwriter
-LIBPNGLIBS += -L$(LIBPNGLIBSDIR) -lpng
+LIBPNGLIBS += -L$(LIBPNGLIBSDIR) -lpng$(LIBPNGVERSION)
 
 #--------------------------------------------------------------------------------------------------------------------------------------+
 #---------------------------------------------------------------------------------------------------+

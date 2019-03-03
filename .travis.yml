@@ -23,6 +23,7 @@ before_install:
   - export PNGWRITERINCLUDE=/usr/local/include 
   - export PNGWRITERLIBSDIR=/usr/local/lib
   - export LIBPNGLIBSDIR=/usr/lib/x86_64-linux-gnu 
+  - export LIBPNGVERSION=12
 script: 
   - make VERIFY=true
   - ./bin/another_path_tracer
