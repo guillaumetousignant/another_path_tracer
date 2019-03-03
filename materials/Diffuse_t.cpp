@@ -3,6 +3,8 @@
 #include <math.h>
 #include "RandomGenerator_t.h"
 
+//#include <iostream> // REMOVE
+
 #define EPSILON 0.00001
 #define PI 3.141592653589793238463
 
@@ -47,4 +49,6 @@ void Diffuse_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray
 
     ray.colour_ += ray.mask_ * emission_;
     ray.mask_ *= colour_ * pow(newdir.dot(normal), roughness_);
+
+    std::cout << ray.mask_[0] << " " << ray.mask_[1] << " " << ray.mask_[2] << std::endl;
 }

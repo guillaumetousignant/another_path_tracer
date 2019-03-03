@@ -4,6 +4,8 @@
 #include "Mesh_t.h"
 #include <limits>
 
+//#include <iostream> // REMOVE
+
 Scene_t::Scene_t() : geometry_(nullptr), n_obj_(0), acc_(nullptr) {
 
 }
@@ -65,7 +67,7 @@ void Scene_t::build_acc() {
 
 }
 
-void Scene_t::intersect_brute(Ray_t &ray, Shape_t* hit_obj, double &t, double (&uv)[2]) const {
+void Scene_t::intersect_brute(Ray_t &ray, Shape_t* &hit_obj, double &t, double (&uv)[2]) const {
     double t_temp;
     bool intersected;
     double uv_temp[2];
@@ -76,6 +78,7 @@ void Scene_t::intersect_brute(Ray_t &ray, Shape_t* hit_obj, double &t, double (&
         geometry_[i]->intersection(ray, intersected, t_temp, uv_temp);
         if (intersected){
             if (t_temp < t){
+                //std::cout << hit_obj << " " << geometry_[i] << std::endl; // REMOVE
                 hit_obj = geometry_[i];
                 uv[0] = uv_temp[0];
                 uv[1] = uv_temp[1];
@@ -85,6 +88,6 @@ void Scene_t::intersect_brute(Ray_t &ray, Shape_t* hit_obj, double &t, double (&
     }
 }
 
-void Scene_t::intersect(Ray_t &ray, Shape_t* hit_obj, double &t, double (&uv)[2]) const {
+void Scene_t::intersect(Ray_t &ray, Shape_t* &hit_obj, double &t, double (&uv)[2]) const {
     intersect_brute(ray, hit_obj, t, uv);
 }

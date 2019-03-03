@@ -5,6 +5,8 @@
 #include "Shape_t.h"
 #include "ScatteringFunction_t.h"
 
+//#include <iostream> // REMOVE
+
 Ray_t::Ray_t(const Vec3f &origin, const Vec3f &direction, const Vec3f &colour, const Vec3f &mask, const std::list<Medium_t*> &medium_list, double time /*= 0*/) : 
     origin_(origin), direction_(direction), colour_(colour), mask_(mask), dist_(0), medium_list_(medium_list), time_(time) {}
 
@@ -18,13 +20,17 @@ void Ray_t::raycast(Scene_t* scene, unsigned int max_bounces, Skybox_t* skybox){
     bool scattered;
 
     while ((bounces < max_bounces) && (mask_.magnitudeSquared() > 0.1)){
+        //std::cout << hit_obj << " "; // REMOVE
         scene->intersect(*this, hit_obj, t, uv);
+        //std::cout << hit_obj << std::endl; // REMOVE
         dist_ = t;
         if (hit_obj == nullptr){
             colour_ += mask_ * skybox->get(direction_);
             return;
         }
         bounces++;
+
+        //std::cout << "AAAAA" << std::endl; // REMOVE
 
         medium_list_.front()->scattering_->scatter(*this, scattered);
         if (!scattered){
