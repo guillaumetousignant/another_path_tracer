@@ -7,6 +7,7 @@ before_install:
   - sudo apt install -y tree openssh-client openssh-server openmpi-bin openmpi-common libopenmpi1.6 libopenmpi-dev libopenmpi1.6-dbg cppcheck zlib1g zlib1g-dbg zlib1g-dev libpng-dev freetype2-demos libfreetype6 libfreetype6-dev
   - dpkg -L libpng12-dev
   - dpkg -L libpng12-0
+  - ls /usr/lib/x86_64-linux-gnu/
   - mkdir -p dependency_builder
   - cd dependency_builder
   - git clone https://github.com/pngwriter/pngwriter.git
@@ -17,6 +18,11 @@ before_install:
   - sudo make install
   - cd ..
   - cd ..
+  - export FREETYPEINCLUDE=/usr/include/freetype2 
+  - export LIBPNGINCLUDE=/usr/include/libpng 
+  - export PNGWRITERINCLUDE=/usr/local/include 
+  - export PNGWRITERLIBSDIR=/usr/local/lib
+  - export LIBPNGLIBSDIR=/usr/lib/x86_64-linux-gnu 
 script: 
   - make VERIFY=true
   - ./bin/another_path_tracer

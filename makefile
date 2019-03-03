@@ -107,13 +107,13 @@ DEBUGFLAGS += -Og -g -pg
 RELEASEFLAGS += -O3 -fopenmp
 
 # Include search paths
-FREETYPE_INCLUDE_PATH = /usr/include/freetype2
-LIBPNG_INCLUDE_PATH = /usr/include/libpng16
-PNGWRITER_INCLUDE_PATH = /usr/local/include
+FREETYPE_INCLUDE_PATH = $(FREETYPEINCLUDE)
+LIBPNG_INCLUDE_PATH = $(LIBPNGINCLUDE)
+PNGWRITER_INCLUDE_PATH = $(PNGWRITERINCLUDE)
 
 # Included Libraries
-PNGWRITERLIBS += -L/usr/local/lib -lPNGwriter
-LIBPNGLIBS += -lpng
+PNGWRITERLIBS += -L$(PNGWRITERLIBSDIR) -lPNGwriter
+LIBPNGLIBS += -L$(LIBPNGLIBSDIR) -lpng
 
 #--------------------------------------------------------------------------------------------------------------------------------------+
 #---------------------------------------------------------------------------------------------------+
