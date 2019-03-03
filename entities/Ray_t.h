@@ -13,7 +13,7 @@ class Skybox_t;
 
 class Ray_t{
     public:
-        Ray_t(Vec3f origin, Vec3f direction, Vec3f colour, Vec3f mask, std::list<Medium_t*> medium_list, double time = 0); // Make constructor take time as opt input
+        Ray_t(const Vec3f &origin, const Vec3f &direction, const Vec3f &colour, const Vec3f &mask, const std::list<Medium_t*> &medium_list, double time = 0); // Make constructor take time as opt input
         ~Ray_t();
 
         Vec3f origin_;
@@ -24,7 +24,7 @@ class Ray_t{
         std::list <Medium_t*> medium_list_;
         double time_;
 
-        void raycast(Scene_t* scene, unsigned int max_bounces, Skybox_t* skybox);
+        void raycast(Scene_t* scene, unsigned int &max_bounces, Skybox_t* skybox);
         void add_to_mediums(Medium_t* medium);
         void remove_from_mediums(Medium_t* medium);
 };
