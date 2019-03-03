@@ -10,7 +10,7 @@ Ray_t::Ray_t(const Vec3f &origin, const Vec3f &direction, const Vec3f &colour, c
 
 Ray_t::~Ray_t(){}
 
-void Ray_t::raycast(Scene_t* scene, unsigned int &max_bounces, Skybox_t* skybox){
+void Ray_t::raycast(Scene_t* scene, unsigned int max_bounces, Skybox_t* skybox){
     unsigned int bounces = 0;
     Shape_t* hit_obj;
     double t;
