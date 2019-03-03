@@ -19,7 +19,7 @@ class Sphere_t : public Shape_t{
         Vec3f origin_;
         Vec3f direction_sph_;
 
-        virtual void update(){};
+        virtual void update();
         virtual void intersection(const Ray_t &ray, bool &intersected, double &t, double (&uv)[2]) const; 
         virtual void normaluv(const Ray_t &ray, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec) const;
         virtual void normal(const Ray_t &ray, const double (&uv)[2], Vec3f &normalvec) const;
