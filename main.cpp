@@ -34,7 +34,7 @@ int main(){
 
     std::string filename = "test.png";
 
-    double fov[2] ={60, 40}; 
+    double fov[2] ={40 * 2 * PI/360, 60 * 2 * PI /360}; 
     unsigned int subpix[2] = {1, 1};
     unsigned int maxbounces = 8;
 
