@@ -15,6 +15,8 @@
 
 #include <iostream> // REMOVE
 
+#define PI 3.141592653589793238463
+
 int main(){
     Diffuse_t* diffuse = new Diffuse_t(Vec3f(0, 0, 0), Vec3f(0.5, 0.5, 0.5), 0.5);
     TransformMatrix_t* transform = new TransformMatrix_t();
