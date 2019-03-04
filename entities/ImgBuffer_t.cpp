@@ -55,7 +55,7 @@ void ImgBuffer_t::write(std::string &filename) const {
 
     for (unsigned int j = 0; j < size_y_; j++){
         for (unsigned int i = 0; i < size_x_; i++){
-            png.plot((int)i + 1, (int)j + 1, img_[j][i][0], img_[j][i][1], img_[j][i][2]);
+            png.plot((int)i + 1, (int)size_y_ - (int)j, img_[j][i][0], img_[j][i][1], img_[j][i][2]);
         }
     }
 
