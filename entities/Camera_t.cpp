@@ -16,6 +16,15 @@ void Camera_t::accumulate(Scene_t* scene, unsigned int n_iter /*= 1000000000*/) 
         n++;
         raytrace(scene);
         std::cout << "Iteration " << n << " done." << std::endl;
+    }
+}
+
+void Camera_t::accumulateWrite(Scene_t* scene, unsigned int n_iter /*= 1000000000*/) {
+    unsigned int n = 0;
+    while (n < n_iter){
+        n++;
+        raytrace(scene);
+        std::cout << "Iteration " << n << " done." << std::endl;
 
         show();
         write();

@@ -35,6 +35,7 @@ class Camera_t{
         virtual void update() = 0;
         virtual void raytrace(Scene_t* scene) = 0;
         virtual void accumulate(Scene_t* scene, unsigned int n_iter = 1000000000);
+        virtual void accumulateWrite(Scene_t* scene, unsigned int n_iter = 1000000000);
         virtual void focus(double focus_distance){};
         virtual void autoFocus(Scene_t* scene, double position[2]){};
         virtual void setUp(Vec3f &new_up);
