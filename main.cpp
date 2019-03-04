@@ -4,7 +4,7 @@
 #include "Sphere_t.h"
 #include "TransformMatrix_t.h"
 #include "Scene_t.h"
-#include "SkyboxFlat_t.h"
+//#include "SkyboxFlat_t.h"
 #include "ImgBuffer_t.h"
 #include "Cam_t.h"
 #include <string>
@@ -12,6 +12,8 @@
 #include "NonAbsorber_t.h"
 #include "Transparent_t.h"
 #include <string>
+#include "DirectionalLight_t.h"
+#include "SkyboxFlatSun_t.h"
 
 //#include <iostream> // REMOVE
 
@@ -27,14 +29,15 @@ int main(){
     Scene_t* scene = new Scene_t();
     scene->add(sphere);
 
-    SkyboxFlat_t* skybox = new SkyboxFlat_t(Vec3f(0.75, 0.75, 0.9));
+    DirectionalLight_t* dirlight = new DirectionalLight_t(Vec3f(2.0, 2.0, 2.0), transform);
+    SkyboxFlatSun_t* skybox = new SkyboxFlatSun_t(Vec3f(0.75, 0.75, 0.9), dirlight);
     ImgBuffer_t* imgbuffer = new ImgBuffer_t(3000, 2000);
 
     std::list<Medium_t*> medium_list;
     medium_list.push_back(air);
     medium_list.push_back(air);
 
-    std::string filename = "test.png";
+    std::string filename = "./images/test.png";
 
     double fov[2] ={40.0 * 2.0 * PI/360.0, 60.0 * 2.0 * PI /360.0}; 
     unsigned int subpix[2] = {1, 1};
