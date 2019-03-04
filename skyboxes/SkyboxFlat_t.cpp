@@ -1,6 +1,6 @@
 #include "SkyboxFlat_t.h"
 
-SkyboxFlat_t::SkyboxFlat_t(Vec3f background) : background_(background) {}
+SkyboxFlat_t::SkyboxFlat_t(const Vec3f &background) : background_(background) {}
 
 SkyboxFlat_t::~SkyboxFlat_t(){}
 

@@ -6,7 +6,7 @@
 
 class SkyboxFlat_t : public Skybox_t{
     public:
-        SkyboxFlat_t(Vec3f background);
+        SkyboxFlat_t(const Vec3f &background);
         ~SkyboxFlat_t();
 
         Vec3f background_;
