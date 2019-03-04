@@ -11,9 +11,9 @@
 
 Sphere_t::Sphere_t(Material_t *material, TransformMatrix_t *transform_matrix): Shape_t(material, transform_matrix){
     // CHECK change all this
-    origin_ = Vec3f(0, 3, 0);
-    radius_ = 1;
-    direction_sph_ = Vec3f(1, 0, 0);
+    origin_ = Vec3f(0.0, 3.0, 0.0);
+    radius_ = 1.0;
+    direction_sph_ = Vec3f(1.0, 0.0, 0.0);
 }
 
 Sphere_t::~Sphere_t(){}
@@ -33,7 +33,7 @@ void Sphere_t::intersection(const Ray_t &ray, bool &intersected, double &t, doub
     c = to_center.dot(to_center) - pow(radius_, 2);
     discriminant = pow(b, 2) - c;
 
-    if (discriminant < 0){
+    if (discriminant < 0.0){
         intersected = false;
         t = std::numeric_limits<double>::infinity();
         uv[0] = NAN;
@@ -44,9 +44,9 @@ void Sphere_t::intersection(const Ray_t &ray, bool &intersected, double &t, doub
         t = b - sqrt(discriminant);
     }
 
-    if (t < 0){
+    if (t < 0.0){
         t = b + sqrt(discriminant);
-        if (t < 0){
+        if (t < 0.0){
             intersected = false;
             t = std::numeric_limits<double>::infinity();
             uv[0] = NAN;
@@ -59,40 +59,40 @@ void Sphere_t::intersection(const Ray_t &ray, bool &intersected, double &t, doub
 
     intersected = true;
     sph = to_sph(ray.direction_ * t - to_center);
-    uv[0] = sph[2]/(2 * PI) + 0.5;
-    uv[1] = 1 - sph[1]/PI;
+    uv[0] = sph[2]/(2.0 * PI) + 0.5;
+    uv[1] = 1.0 - sph[1]/PI;
 }
 
 void Sphere_t::normaluv(const Ray_t &ray, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec) const {
-    Vec3f sph = Vec3f(1, (1 - uv[1]) * PI, (uv[0] - 0.5) * 2 * PI);
+    Vec3f sph = Vec3f(1.0, (1.0 - uv[1]) * PI, (uv[0] - 0.5) * 2.0 * PI);
     normalvec = to_xyz(sph);
 
     sph = to_sph(normalvec) - direction_sph_;
 
     // CHECK change
-    if (sph[1] < 0){
+    if (sph[1] < 0.0){
         sph[1] = -sph[1];
         sph[2] += PI;
     }
     else if (sph[1] > PI){
-        sph[1] = 2*PI - sph[1];
+        sph[1] = 2.0*PI - sph[1];
         sph[2] += PI;
     }
 
     // CHECK change
     if (sph[2] < -PI){
-        sph[2] += 2*PI;
+        sph[2] += 2.0*PI;
     }
     else if (sph[2] > PI){
-        sph[2] -= 2*PI;
+        sph[2] -= 2.0*PI;
     }
 
-    tuv[0] = sph[2]/(2 * PI) + 0.5;
-    tuv[1] = 1 - sph[1]/PI;
+    tuv[0] = sph[2]/(2.0 * PI) + 0.5;
+    tuv[1] = 1.0 - sph[1]/PI;
 }
 
 void Sphere_t::normal(const Ray_t &ray, const double (&uv)[2], Vec3f &normalvec) const {
-    Vec3f sph = Vec3f(1, (1 - uv[1]) * PI, (uv[0] - 0.5) * 2 * PI);
+    Vec3f sph = Vec3f(1.0, (1.0 - uv[1]) * PI, (uv[0] - 0.5) * 2.0 * PI);
     normalvec = to_xyz(sph);
 }
 
