@@ -37,6 +37,7 @@ void Cam_t::raytrace(Scene_t* scene) {
 
     image_->update();
 
+    #pragma omp parallel for collapse(2) schedule(guided)
     for (unsigned int j = 0; j < image_->size_y_; j++){
         for (unsigned int i = 0; i < image_->size_x_; i++){
             Vec3f col = Vec3f(); // Or declare above?
