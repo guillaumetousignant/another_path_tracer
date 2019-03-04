@@ -19,7 +19,7 @@ void Ray_t::raycast(Scene_t* scene, unsigned int max_bounces, Skybox_t* skybox){
     double uv[2];
     bool scattered;
 
-    while ((bounces < max_bounces) && (mask_.magnitudeSquared() > 0.01)){
+    while ((bounces < max_bounces) && (mask_.magnitudeSquared() > 0.01)){ // Should maybe make magnitudesquared min value lower
         scene->intersect(*this, hit_obj, t, uv);
         dist_ = t;
         if (hit_obj == nullptr){
