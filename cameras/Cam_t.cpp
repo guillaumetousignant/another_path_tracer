@@ -7,8 +7,6 @@
 #include "Referentials.h"
 #include "RandomGenerator_t.h"
 
-#include <iostream> // REMOVE
-
 #define PI 3.141592653589793238463
 
 Cam_t::Cam_t(TransformMatrix_t* transformation, std::string filename, Vec3f up, double fov[2], unsigned int subpix[2], ImgBuffer_t* image, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double gammaind) 
@@ -37,16 +35,13 @@ void Cam_t::raytrace(Scene_t* scene) {
     horizontal = direction_.cross(up_);
     vertical = horizontal.cross(direction_);
 
-    //std::cout << PI/2.0 + (0.0 - (double)image_->size_y_/2.0 + 0.5)*pixel_span_y << " " << (0.0 - (double)image_->size_x_/2.0 + 0.5)*pixel_span_x << std::endl; // REMOVE
-
     image_->update();
 
     for (unsigned int j = 0; j < image_->size_y_; j++){
         for (unsigned int i = 0; i < image_->size_x_; i++){
             Vec3f col = Vec3f(); // Or declare above?
             Vec3f pix_vec = Vec3f(1, PI/2.0 + ((double)j - (double)image_->size_y_/2.0 + 0.5)*pixel_span_y, ((double)i - (double)image_->size_x_/2.0 + 0.5)*pixel_span_x); // Is shit after this line
-            //std::cout << pix_vec[0] << " " << pix_vec[1] << " " << pix_vec[2] << std::endl; // REMOVE
-
+            
             for (unsigned int k = 0; k < subpix_[0]; k++){
                 for (unsigned int l = 0; l < subpix_[1]; l++){
                     
@@ -54,10 +49,7 @@ void Cam_t::raytrace(Scene_t* scene) {
                     double jitter_x = unif_(my_rand::rng);
 
                     pix_vec += Vec3f(0, ((double)k - (double)subpix_[0]/2 + jitter_y)*subpix_span_y, ((double)l - (double)subpix_[1]/2 + jitter_x)*subpix_span_x); // Is shit after this line
-                    //std::cout << pix_vec[0] << " " << pix_vec[1] << " " << pix_vec[2] << std::endl; // REMOVE
                     pix_vec = to_xyz_offset(pix_vec, direction_, horizontal, vertical); // Is shit after this line
-
-                    //std::cout << pix_vec[0] << " " << pix_vec[1] << " " << pix_vec[2] << std::endl; // REMOVE
 
                     Ray_t ray = Ray_t(origin_, pix_vec, Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list_);
                     ray.raycast(scene, max_bounces_, skybox_);

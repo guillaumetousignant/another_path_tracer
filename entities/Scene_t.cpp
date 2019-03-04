@@ -4,11 +4,7 @@
 #include "Mesh_t.h"
 #include <limits>
 
-//#include <iostream> // REMOVE
-
-Scene_t::Scene_t() : geometry_(nullptr), n_obj_(0), acc_(nullptr) {
-
-}
+Scene_t::Scene_t() : geometry_(nullptr), n_obj_(0), acc_(nullptr) {}
 
 Scene_t::~Scene_t() {
     if (geometry_ != nullptr){
@@ -78,7 +74,6 @@ void Scene_t::intersect_brute(Ray_t &ray, Shape_t* &hit_obj, double &t, double (
         geometry_[i]->intersection(ray, intersected, t_temp, uv_temp);
         if (intersected){
             if (t_temp < t){
-                //std::cout << hit_obj << " " << geometry_[i] << std::endl; // REMOVE
                 hit_obj = geometry_[i];
                 uv[0] = uv_temp[0];
                 uv[1] = uv_temp[1];

@@ -5,8 +5,6 @@
 #include <limits>
 #include "Referentials.h"
 
-//#include <iostream> // REMOVE
-
 #define PI 3.141592653589793238463
 
 Sphere_t::Sphere_t(Material_t *material, TransformMatrix_t *transform_matrix): Shape_t(material, transform_matrix){
@@ -54,8 +52,6 @@ void Sphere_t::intersection(const Ray_t &ray, bool &intersected, double &t, doub
             return; 
         }
     }
-
-    //std::cout << "AAAAA" << std::endl; // REMOVE
 
     intersected = true;
     sph = to_sph(ray.direction_ * t - to_center);
