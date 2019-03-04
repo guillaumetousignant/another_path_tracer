@@ -40,6 +40,9 @@ Vec3f Vec3f::operator-(double factor) const {
 Vec3f Vec3f::operator-() const {
     return Vec3f(-v[0], -v[1], -v[2]);
 } 
+bool Vec3f::operator==(const Vec3f &other) const {
+    return (v[0] == other.v[0]) && (v[1] == other.v[1]) && (v[2] == other.v[2]);
+}
 const Vec3f &Vec3f::operator*=(double scale) {
     v[0] *= scale;
     v[1] *= scale;
