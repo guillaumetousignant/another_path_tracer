@@ -28,7 +28,7 @@ void ImgBuffer_t::update(const Vec3f** img, unsigned int size_x, unsigned int si
 
     for (unsigned int j = 0; j < size_y; j++){
         for (unsigned int i = 0; i < size_x; i++){
-            img_[j][i] = img_[j][i] * (1 - 1/updates_) + img[j][i]/updates_;
+            img_[j][i] = img_[j][i] * (1.0 - 1.0/(double)updates_) + img[j][i]/(double)updates_;
         }
     }
 }
@@ -38,7 +38,7 @@ void ImgBuffer_t::update() {
 }
 
 void ImgBuffer_t::update(const Vec3f &colour, unsigned int pos_x, unsigned int pos_y) {
-    img_[pos_y][pos_x] = img_[pos_y][pos_x] * (1 - 1/updates_) + colour/updates_;
+    img_[pos_y][pos_x] = img_[pos_y][pos_x] * (1.0 - 1.0/(double)updates_) + colour/(double)updates_;
 }
 
 void ImgBuffer_t::set(const Vec3f** img, unsigned int size_x, unsigned int size_y){
@@ -55,7 +55,7 @@ void ImgBuffer_t::write(std::string filename) const {
 
     for (unsigned int j = 0; j < size_y_; j++){
         for (unsigned int i = 0; i < size_x_; i++){
-            png.plot((int) i, (int) j, img_[j][i][0], img_[j][i][1], img_[j][i][2]);
+            png.plot((int)i + 1, (int)j + 1, img_[j][i][0], img_[j][i][1], img_[j][i][2]);
         }
     }
 
