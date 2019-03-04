@@ -11,7 +11,7 @@
 
 Sphere_t::Sphere_t(Material_t *material, TransformMatrix_t *transform_matrix): Shape_t(material, transform_matrix){
     // CHECK change all this
-    origin_ = Vec3f(0, 2, 0);
+    origin_ = Vec3f(0, 3, 0);
     radius_ = 1;
     direction_sph_ = Vec3f(1, 0, 0);
 }
