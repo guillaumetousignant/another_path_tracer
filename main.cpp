@@ -27,8 +27,8 @@ int main(){
     Scene_t* scene = new Scene_t();
     scene->add(sphere);
 
-    SkyboxFlat_t* skybox = new SkyboxFlat_t(Vec3f(1.0, 1.0, 1.0));
-    ImgBuffer_t* imgbuffer = new ImgBuffer_t(300, 200);
+    SkyboxFlat_t* skybox = new SkyboxFlat_t(Vec3f(0.75, 0.75, 0.9));
+    ImgBuffer_t* imgbuffer = new ImgBuffer_t(30, 20);
 
     std::list<Medium_t*> medium_list;
     medium_list.push_back(air);
@@ -42,7 +42,7 @@ int main(){
 
     Cam_t* cam = new Cam_t(transform, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer, medium_list, skybox, maxbounces, 1.0);
 
-    cam->accumulate(scene, 10);
+    cam->accumulate(scene, 1);
 
     cam->write();
 
