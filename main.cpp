@@ -13,7 +13,7 @@
 #include "Transparent_t.h"
 #include <string>
 
-#include <iostream> // REMOVE
+//#include <iostream> // REMOVE
 
 #define PI 3.141592653589793238463
 
@@ -28,7 +28,7 @@ int main(){
     scene->add(sphere);
 
     SkyboxFlat_t* skybox = new SkyboxFlat_t(Vec3f(0.75, 0.75, 0.9));
-    ImgBuffer_t* imgbuffer = new ImgBuffer_t(30, 20);
+    ImgBuffer_t* imgbuffer = new ImgBuffer_t(300, 200);
 
     std::list<Medium_t*> medium_list;
     medium_list.push_back(air);
@@ -43,8 +43,12 @@ int main(){
     Cam_t* cam = new Cam_t(transform, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer, medium_list, skybox, maxbounces, 1.0);
 
     cam->accumulate(scene, 1);
-
     cam->write();
+
+    /*for (unsigned int i = 0; i < 1; i++){
+        Ray_t ray = Ray_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.0, 1.0, 0.0), Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list);
+        ray.raycast(scene, 8, skybox);
+    }*/
 
     return 0;
 }
