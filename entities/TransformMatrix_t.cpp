@@ -32,19 +32,19 @@ void TransformMatrix_t::rotateZ(double angle){
 
 }
 
-void TransformMatrix_t::rotateAxis(Vec3f vec, double angle){
+void TransformMatrix_t::rotateAxis(const Vec3f &vec, double angle){
 
 }
 
-void TransformMatrix_t::rotate(Vec3f vec, double angle){
+void TransformMatrix_t::rotate(const Vec3f &vec, double angle){
 
 }
 
-void TransformMatrix_t::translate(Vec3f vec){
+void TransformMatrix_t::translate(const Vec3f &vec){
 
 }
 
-void TransformMatrix_t::scaleAxis(Vec3f vec){
+void TransformMatrix_t::scaleAxis(const Vec3f &vec){
 
 }
 
@@ -52,7 +52,7 @@ void TransformMatrix_t::scaleAxis(double fac){
 
 }
 
-void TransformMatrix_t::scale(Vec3f vec){
+void TransformMatrix_t::scale(const Vec3f &vec){
 
 }
 
@@ -60,11 +60,11 @@ void TransformMatrix_t::scale(double fac){
 
 }
 
-void TransformMatrix_t::reflect(Vec3f vec){
+void TransformMatrix_t::reflect(const Vec3f &vec){
 
 }
 
-void TransformMatrix_t::shear(Vec3f vec){
+void TransformMatrix_t::shear(const Vec3f &vec){
 
 }
 
@@ -80,11 +80,11 @@ void TransformMatrix_t::neg(){
 
 }
 
-Vec3f TransformMatrix_t::multVec(Vec3f vec){
+Vec3f TransformMatrix_t::multVec(const Vec3f &vec){
     return Vec3f();
 }
 
-Vec3f TransformMatrix_t::multDir(Vec3f vec){
+Vec3f TransformMatrix_t::multDir(const Vec3f &vec){
     return Vec3f();
 }
 

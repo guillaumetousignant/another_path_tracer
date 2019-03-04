@@ -24,7 +24,7 @@ class Ray_t{
         std::list <Medium_t*> medium_list_;
         double time_;
 
-        void raycast(Scene_t* scene, unsigned int max_bounces, Skybox_t* skybox);
+        void raycast(const Scene_t* scene, unsigned int max_bounces, const Skybox_t* skybox);
         void add_to_mediums(Medium_t* medium);
         void remove_from_mediums(Medium_t* medium);
 };

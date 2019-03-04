@@ -7,7 +7,7 @@
 
 class Diffuse_t : public Material_t{
     public:
-        Diffuse_t(Vec3f emission, Vec3f colour, double roughness);
+        Diffuse_t(const Vec3f &emission, const Vec3f &colour, double roughness);
         ~Diffuse_t();
 
         Vec3f emission_;

@@ -5,12 +5,12 @@
 #include "Shape_t.h"
 #include "ScatteringFunction_t.h"
 
-Ray_t::Ray_t(const Vec3f &origin, const Vec3f &direction, const Vec3f &colour, const Vec3f &mask, const std::list<Medium_t*> &medium_list, double time /*= 0*/) : 
-    origin_(origin), direction_(direction), colour_(colour), mask_(mask), dist_(0), medium_list_(medium_list), time_(time) {}
+Ray_t::Ray_t(const Vec3f &origin, const Vec3f &direction, const Vec3f &colour, const Vec3f &mask, const std::list<Medium_t*> &medium_list, double time /*= 0.0*/) : 
+    origin_(origin), direction_(direction), colour_(colour), mask_(mask), dist_(0.0), medium_list_(medium_list), time_(time) {}
 
 Ray_t::~Ray_t(){}
 
-void Ray_t::raycast(Scene_t* scene, unsigned int max_bounces, Skybox_t* skybox){
+void Ray_t::raycast(const Scene_t* scene, unsigned int max_bounces, const Skybox_t* skybox){
     unsigned int bounces = 0;
     Shape_t* hit_obj;
     double t;

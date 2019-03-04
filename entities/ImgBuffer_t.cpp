@@ -50,7 +50,7 @@ void ImgBuffer_t::set(const Vec3f** img, unsigned int size_x, unsigned int size_
     }
 }
 
-void ImgBuffer_t::write(std::string filename) const {
+void ImgBuffer_t::write(std::string &filename) const {
     pngwriter png((int) size_x_, (int) size_y_, 0.0, filename.c_str());
 
     for (unsigned int j = 0; j < size_y_; j++){

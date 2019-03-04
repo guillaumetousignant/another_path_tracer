@@ -18,7 +18,7 @@
 #define PI 3.141592653589793238463
 
 int main(){
-    Diffuse_t* diffuse = new Diffuse_t(Vec3f(0, 0, 0), Vec3f(0.5, 0.5, 0.5), 0.5);
+    Diffuse_t* diffuse = new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.5, 0.5, 0.5), 0.5);
     TransformMatrix_t* transform = new TransformMatrix_t();
     Sphere_t* sphere = new Sphere_t(diffuse, transform);
     NonAbsorber_t* airabsorber = new NonAbsorber_t();
@@ -28,7 +28,7 @@ int main(){
     scene->add(sphere);
 
     SkyboxFlat_t* skybox = new SkyboxFlat_t(Vec3f(0.75, 0.75, 0.9));
-    ImgBuffer_t* imgbuffer = new ImgBuffer_t(300, 200);
+    ImgBuffer_t* imgbuffer = new ImgBuffer_t(3000, 2000);
 
     std::list<Medium_t*> medium_list;
     medium_list.push_back(air);
@@ -36,13 +36,13 @@ int main(){
 
     std::string filename = "test.png";
 
-    double fov[2] ={40 * 2 * PI/360, 60 * 2 * PI /360}; 
+    double fov[2] ={40.0 * 2.0 * PI/360.0, 60.0 * 2.0 * PI /360.0}; 
     unsigned int subpix[2] = {1, 1};
     unsigned int maxbounces = 8;
 
     Cam_t* cam = new Cam_t(transform, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer, medium_list, skybox, maxbounces, 1.0);
 
-    cam->accumulate(scene, 1);
+    cam->accumulate(scene, 100);
     cam->write();
 
     /*for (unsigned int i = 0; i < 1; i++){

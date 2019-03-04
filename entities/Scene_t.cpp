@@ -53,7 +53,7 @@ void Scene_t::remove(Mesh_t** meshes, unsigned int n_meshes) {
 
 }
 
-void Scene_t::update() const {
+void Scene_t::update() {
     for (unsigned int i = 0; i < n_obj_; i++){
         geometry_[i]->update();
     }

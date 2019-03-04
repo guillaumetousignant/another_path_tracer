@@ -8,6 +8,6 @@ class NonAbsorber_t : public ScatteringFunction_t{
         NonAbsorber_t();
         ~NonAbsorber_t();
 
-        virtual void scatter(Ray_t &ray, bool &intersected) const; 
+        virtual void scatter(Ray_t &ray, bool &intersected); 
 };
 #endif

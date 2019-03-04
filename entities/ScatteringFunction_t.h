@@ -8,7 +8,7 @@ class ScatteringFunction_t{
         ScatteringFunction_t(){};
         ~ScatteringFunction_t(){};
 
-        virtual void scatter(Ray_t &ray, bool &intersected) const = 0; 
+        virtual void scatter(Ray_t &ray, bool &intersected) = 0; 
 };
 
 #endif
