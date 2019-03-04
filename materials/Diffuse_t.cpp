@@ -3,7 +3,7 @@
 #include <math.h>
 #include "RandomGenerator_t.h"
 
-//#include <iostream> // REMOVE
+#include <iostream> // REMOVE
 
 #define EPSILON 0.00001
 #define PI 3.141592653589793238463
@@ -23,25 +23,27 @@ void Diffuse_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray
 
     hit_obj->normal(ray, uv, normal);
 
+    //std::cout << normal[1] << std::endl; // REMOVE
+
     double rand1 = unif_(my_rand::rng);
     double rand2 = unif_(my_rand::rng);
     double rand2s = sqrt(rand2);
 
-    if (normal.dot(ray.direction_) > 0){
-        normal *= -1;
+    if (normal.dot(ray.direction_) > 0.0){
+        normal *= -1.0;
     }
 
     if (normal[0] > 0.1){
-        axis = Vec3f(0, 1, 0);
+        axis = Vec3f(0.0, 1.0, 0.0);
     }
     else{
-        axis = Vec3f(1, 0, 0);
+        axis = Vec3f(1.0, 0.0, 0.0);
     }
 
     u = axis.cross(normal).normalize(); // Maybe won't work
     v = normal.cross(u);
 
-    newdir = u * cos(rand1)*rand2s + v*sin(rand1)*rand2s + normal*sqrt(1-rand2);
+    newdir = u * cos(rand1)*rand2s + v*sin(rand1)*rand2s + normal*sqrt(1.0-rand2);
     newdir = newdir.normalize();
 
     ray.origin_ = ray.origin_ + ray.direction_ * ray.dist_ + normal * EPSILON;
