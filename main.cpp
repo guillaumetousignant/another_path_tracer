@@ -30,8 +30,8 @@ int main(){
     scene->add(sphere);
 
     DirectionalLight_t* dirlight = new DirectionalLight_t(Vec3f(8.0, 8.0, 6.0), transform);
-    SkyboxFlatSun_t* skybox = new SkyboxFlatSun_t(Vec3f(0.75, 0.75, 0.9), dirlight);
-    ImgBuffer_t* imgbuffer = new ImgBuffer_t(300, 200);
+    SkyboxFlatSun_t* skybox = new SkyboxFlatSun_t(Vec3f(0.85, 0.85, 0.98), dirlight);
+    ImgBuffer_t* imgbuffer = new ImgBuffer_t(1800, 1200);
 
     std::list<Medium_t*> medium_list;
     medium_list.push_back(air);
@@ -45,7 +45,7 @@ int main(){
 
     Cam_t* cam = new Cam_t(transform, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer, medium_list, skybox, maxbounces, 1.0);
 
-    cam->accumulate(scene, 10);
+    cam->accumulate(scene, 1000);
     cam->write();
 
     /*for (unsigned int i = 0; i < 1; i++){
