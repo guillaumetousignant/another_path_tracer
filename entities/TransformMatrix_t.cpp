@@ -271,10 +271,82 @@ TransformMatrix_t& TransformMatrix_t::transpose(){
 
 TransformMatrix_t&  TransformMatrix_t::invert(){ // oh boï
     // See https://graphics.stanford.edu/~mdfisher/Code/Engine/Matrix4.cpp.html
+
+    double tmp[12]; /* temp array for pairs */
+    double det; /* determinant */
     double transpose[16] = {matrix_[0], matrix_[4], matrix_[8], matrix_[12],
                             matrix_[1], matrix_[5], matrix_[9], matrix_[13],
                             matrix_[2], matrix_[6], matrix_[10], matrix_[14],
                             matrix_[3], matrix_[7], matrix_[11], matrix_[15]};
+
+    tmp[0] = transpose[10] * transpose[15];
+    tmp[1] = transpose[11] * transpose[14];
+    tmp[2] = transpose[9] * transpose[15];
+    tmp[3] = transpose[11] * transpose[13];
+    tmp[4] = transpose[9] * transpose[14];
+    tmp[5] = transpose[10] * transpose[13];
+    tmp[6] = transpose[8] * transpose[15];
+    tmp[7] = transpose[11] * transpose[12];
+    tmp[8] = transpose[8] * transpose[14];
+    tmp[9] = transpose[10] * transpose[12];
+    tmp[10] = transpose[8] * transpose[13];
+    tmp[11] = transpose[9] * transpose[12];
+
+    // ij order might be messed up for these. If it is, order it: 0 4 8 12 1 5 9 13.
+    matrix_[0] = tmp[0]*transpose[5] + tmp[3]*transpose[6] + tmp[4]*transpose[7];
+    matrix_[0] -= tmp[1]*transpose[5] + tmp[2]*transpose[6] + tmp[5]*transpose[7];
+    matrix_[1] = tmp[1]*transpose[4] + tmp[6]*transpose[6] + tmp[9]*transpose[7];
+    matrix_[1] -= tmp[0]*transpose[4] + tmp[7]*transpose[6] + tmp[8]*transpose[7];
+    matrix_[2] = tmp[2]*transpose[4] + tmp[7]*transpose[5] + tmp[10]*transpose[7];
+    matrix_[2] -= tmp[3]*transpose[4] + tmp[6]*transpose[5] + tmp[11]*transpose[7];
+    matrix_[3] = tmp[5]*transpose[4] + tmp[8]*transpose[5] + tmp[11]*transpose[6];
+    matrix_[3] -= tmp[4]*transpose[4] + tmp[9]*transpose[5] + tmp[10]*transpose[6];
+    matrix_[4] = tmp[1]*transpose[1] + tmp[2]*transpose[2] + tmp[5]*transpose[3];
+    matrix_[4] -= tmp[0]*transpose[1] + tmp[3]*transpose[2] + tmp[4]*transpose[3];
+    matrix_[5] = tmp[0]*transpose[0] + tmp[7]*transpose[2] + tmp[8]*transpose[3];
+    matrix_[5] -= tmp[1]*transpose[0] + tmp[6]*transpose[2] + tmp[9]*transpose[3];
+    matrix_[6] = tmp[3]*transpose[0] + tmp[6]*transpose[1] + tmp[11]*transpose[3];
+    matrix_[6] -= tmp[2]*transpose[0] + tmp[7]*transpose[1] + tmp[10]*transpose[3];
+    matrix_[7] = tmp[4]*transpose[0] + tmp[9]*transpose[1] + tmp[10]*transpose[2];
+    matrix_[7] -= tmp[5]*transpose[0] + tmp[8]*transpose[1] + tmp[11]*transpose[2];
+
+    tmp[0] = transpose[2]*transpose[7];
+    tmp[1] = transpose[3]*transpose[6];
+    tmp[2] = transpose[1]*transpose[7];
+    tmp[3] = transpose[3]*transpose[5];
+    tmp[4] = transpose[1]*transpose[6];
+    tmp[5] = transpose[2]*transpose[5];
+
+    tmp[6] = transpose[0]*transpose[7];
+    tmp[7] = transpose[3]*transpose[4];
+    tmp[8] = transpose[0]*transpose[6];
+    tmp[9] = transpose[2]*transpose[4];
+    tmp[10] = transpose[0]*transpose[5];
+    tmp[11] = transpose[1]*transpose[4];
+
+    matrix_[8] = tmp[0]*transpose[13] + tmp[3]*transpose[14] + tmp[4]*transpose[15];
+    matrix_[8] -= tmp[1]*transpose[13] + tmp[2]*transpose[14] + tmp[5]*transpose[15];
+    matrix_[9] = tmp[1]*transpose[12] + tmp[6]*transpose[14] + tmp[9]*transpose[15];
+    matrix_[9] -= tmp[0]*transpose[12] + tmp[7]*transpose[14] + tmp[8]*transpose[15];
+    matrix_[10] = tmp[2]*transpose[12] + tmp[7]*transpose[13] + tmp[10]*transpose[15];
+    matrix_[10] -= tmp[3]*transpose[12] + tmp[6]*transpose[13] + tmp[11]*transpose[15];
+    matrix_[11] = tmp[5]*transpose[12] + tmp[8]*transpose[13] + tmp[11]*transpose[14];
+    matrix_[11] -= tmp[4]*transpose[12] + tmp[9]*transpose[13] + tmp[10]*transpose[14];
+    matrix_[12] = tmp[2]*transpose[10] + tmp[5]*transpose[11] + tmp[1]*transpose[9];
+    matrix_[12] -= tmp[4]*transpose[11] + tmp[0]*transpose[9] + tmp[3]*transpose[10];
+    matrix_[13] = tmp[8]*transpose[11] + tmp[0]*transpose[8] + tmp[7]*transpose[10];
+    matrix_[13] -= tmp[6]*transpose[10] + tmp[9]*transpose[11] + tmp[1]*transpose[8];
+    matrix_[14] = tmp[6]*transpose[9] + tmp[11]*transpose[11] + tmp[3]*transpose[8];
+    matrix_[14] -= tmp[10]*transpose[11] + tmp[2]*transpose[8] + tmp[7]*transpose[9];
+    matrix_[15] = tmp[10]*transpose[10] + tmp[4]*transpose[8] + tmp[9]*transpose[9];
+    matrix_[15] -= tmp[8]*transpose[9] + tmp[11]*transpose[10] + tmp[5]*transpose[8];
+
+    det = transpose[0]*matrix_[0]+transpose[1]*matrix_[1]+transpose[2]*matrix_[2]+transpose[3]*matrix_[3];
+    det = 1.0/det;
+
+    for (unsigned int i; i < 16; i++){
+        matrix_[i] *= det;
+    }
 
     return *this;
 }
