@@ -34,8 +34,7 @@ int main(){
     ImgBuffer_t* imgbuffer = new ImgBuffer_t(1800, 1200);
 
     std::list<Medium_t*> medium_list;
-    medium_list.push_back(air);
-    medium_list.push_back(air);
+    medium_list.assign(2, air);
 
     std::string filename = "./images/test.png";
 
@@ -45,7 +44,7 @@ int main(){
 
     Cam_t* cam = new Cam_t(transform, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer, medium_list, skybox, maxbounces, 1.0);
 
-    cam->accumulate(scene, 100);
+    cam->accumulate(scene, 10);
     cam->write();
 
     /*for (unsigned int i = 0; i < 1; i++){
