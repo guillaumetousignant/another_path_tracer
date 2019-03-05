@@ -15,9 +15,9 @@ TransformMatrix_t::~TransformMatrix_t(){}
 
 TransformMatrix_t&  TransformMatrix_t::rotateXAxis(double angle){ // CHECK is wrong
     double other[16] = {1, 0, 0, 0,
-                    0, cos(angle), sin(angle), 0,
-                    0, -sin(angle), cos(angle), 0,
-                    0, 0, 0, 1};
+                        0, cos(angle), sin(angle), 0,
+                        0, -sin(angle), cos(angle), 0,
+                        0, 0, 0, 1};
     double matrix[16];
     std::copy(std::begin(matrix_), std::end(matrix_), std::begin(matrix));
 
