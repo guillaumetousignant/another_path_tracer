@@ -2,6 +2,7 @@
 #define TEXTURE_T_H
 
 #include "Vec3f.h"
+#include <string>
 
 class Texture_t{
     public:
