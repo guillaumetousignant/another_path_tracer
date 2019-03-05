@@ -8,16 +8,27 @@
 #define PI 3.141592653589793238463
 
 Sphere_t::Sphere_t(Material_t *material, TransformMatrix_t *transform_matrix): Shape_t(material, transform_matrix){
-    // CHECK change all this
-    origin_ = Vec3f(0.0, 3.0, 0.0);
-    radius_ = 1.0;
-    direction_sph_ = Vec3f(1.0, 0.0, 0.0);
+    origin_ = transformation_->multVec(Vec3f(0.0, 0.0, 0.0));
+    radius_ = Vec3f(transformation_->matrix_[0], transformation_->matrix_[5], transformation_->matrix_[10]).magnitude();
+    TransformMatrix_t transform_norm = transformation_->transformDir();
+    Vec3f direction = transform_norm.multDir(Vec3f(0.0, 0.0, 1.0)); 
+    Vec3f direction2 = transform_norm.multDir(Vec3f(1.0, 0.0, 1.0));
+    direction = to_sph(direction);
+    direction2 = to_sph(direction2);
+    direction_sph_ = Vec3f(1.0, direction[1], direction2[2]);
 }
 
 Sphere_t::~Sphere_t(){}
 
 void Sphere_t::update(){
-
+    origin_ = transformation_->multVec(Vec3f(0.0, 0.0, 0.0));
+    radius_ = Vec3f(transformation_->matrix_[0], transformation_->matrix_[5], transformation_->matrix_[10]).magnitude();
+    TransformMatrix_t transform_norm = transformation_->transformDir();
+    Vec3f direction = transform_norm.multDir(Vec3f(0.0, 0.0, 1.0)); 
+    Vec3f direction2 = transform_norm.multDir(Vec3f(1.0, 0.0, 1.0));
+    direction = to_sph(direction);
+    direction2 = to_sph(direction2);
+    direction_sph_ = Vec3f(1.0, direction[1], direction2[2]);
 }
 
 void Sphere_t::intersection(const Ray_t &ray, bool &intersected, double &t, double (&uv)[2]) const {
