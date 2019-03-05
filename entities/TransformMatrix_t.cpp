@@ -70,7 +70,7 @@ TransformMatrix_t&  TransformMatrix_t::rotateZAxis(double angle){
     return *this;
 }
 
-TransformMatrix_t&  TransformMatrix_t::rotateX(double angle){
+TransformMatrix_t&  TransformMatrix_t::rotateX(double angle){ // CHECK doesn't work
     double other[16] = {1, 0, 0, 0, /* Dunno if those work, pre-multiplied them*/
                     0, cos(angle), sin(angle), 0,
                     0, -sin(angle), cos(angle), 0,
