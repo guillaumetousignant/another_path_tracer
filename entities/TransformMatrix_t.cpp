@@ -1,93 +1,304 @@
 #include "TransformMatrix_t.h"
 
-TransformMatrix_t::TransformMatrix_t(){
+TransformMatrix_t::TransformMatrix_t() : matrix_{1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1} {}
 
+TransformMatrix_t::TransformMatrix_t(double i0, double i1, double i2, double i3, double i4, double i5, double i6, double i7, double i8, double i9, double i10, double i11, double i12, double i13, double i14, double i15) 
+    : matrix_{i0, i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14, i15} {}
+
+TransformMatrix_t::TransformMatrix_t(const TransformMatrix_t &other)
+    : matrix_{other.matrix_[0], other.matrix_[1], other.matrix_[2], other.matrix_[3],
+              other.matrix_[4], other.matrix_[5], other.matrix_[6], other.matrix_[7],
+              other.matrix_[8], other.matrix_[9], other.matrix_[10], other.matrix_[11],
+              other.matrix_[12], other.matrix_[13], other.matrix_[14], other.matrix_[15]} {}
+
+TransformMatrix_t::~TransformMatrix_t(){}
+
+TransformMatrix_t&  TransformMatrix_t::rotateXAxis(double angle){
+    double other[16] = {1, 0, 0, 0,
+                    0, cos(angle), sin(angle), 0,
+                    0, -sin(angle), cos(angle), 0,
+                    0, 0, 0, 1};
+
+    for (unsigned int j = 0; j < 4; j++){
+        for (unsigned int i = 0; i < 4; i++){
+            matrix_[4*j + i] =    matrix_[4*j] * other[i]
+                                + matrix_[4*j + 1] * other[4 + i]
+                                + matrix_[4*j + 2] * other[8 + i]
+                                + matrix_[4*j + 3] * other[12 + i];
+        }
+    }
+    return *this;
 }
 
-TransformMatrix_t::~TransformMatrix_t(){
+TransformMatrix_t&  TransformMatrix_t::rotateYAxis(double angle){
+    double other[16] = {cos(angle), 0, -sin(angle), 0,
+                        0, 1, 0, 0,
+                        sin(angle), 0, cos(angle), 0,
+                        0, 0, 0, 1};
 
+    for (unsigned int j = 0; j < 4; j++){
+        for (unsigned int i = 0; i < 4; i++){
+            matrix_[4*j + i] =    matrix_[4*j] * other[i]
+                                + matrix_[4*j + 1] * other[4 + i]
+                                + matrix_[4*j + 2] * other[8 + i]
+                                + matrix_[4*j + 3] * other[12 + i];
+        }
+    }
+    return *this;
 }
 
-void TransformMatrix_t::rotateXAxis(double angle){
+TransformMatrix_t&  TransformMatrix_t::rotateZAxis(double angle){
+    double other[16] = {cos(angle), sin(angle), 0, 0,
+                        -sin(angle), cos(angle), 0, 0,
+                        0, 0, 1, 0,
+                        0, 0, 0, 1};
 
+    for (unsigned int j = 0; j < 4; j++){
+        for (unsigned int i = 0; i < 4; i++){
+            matrix_[4*j + i] =    matrix_[4*j] * other[i]
+                                + matrix_[4*j + 1] * other[4 + i]
+                                + matrix_[4*j + 2] * other[8 + i]
+                                + matrix_[4*j + 3] * other[12 + i];
+        }
+    }
+    return *this;
 }
 
-void TransformMatrix_t::rotateYAxis(double angle){
+TransformMatrix_t&  TransformMatrix_t::rotateX(double angle){
+    double other[16] = {1, 0, 0, 0, /* Dunno if those work, pre-multiplied them*/
+                    0, cos(angle), sin(angle), 0,
+                    0, -sin(angle), cos(angle), 0,
+                    0, matrix_[13] - matrix_[13]*cos(angle) + matrix_[14]*sin(angle), matrix_[14] - matrix_[14]*cos(angle) - matrix_[13]*sin(angle), 1};
 
+    for (unsigned int j = 0; j < 4; j++){
+        for (unsigned int i = 0; i < 4; i++){
+            matrix_[4*j + i] =    matrix_[4*j] * other[i]
+                                + matrix_[4*j + 1] * other[4 + i]
+                                + matrix_[4*j + 2] * other[8 + i]
+                                + matrix_[4*j + 3] * other[12 + i];
+        }
+    }
+    return *this;
 }
 
-void TransformMatrix_t::rotateZAxis(double angle){
+TransformMatrix_t&  TransformMatrix_t::rotateY(double angle){
+    double other[16] = {cos(angle), 0, -sin(angle), 0,
+                        0, 1, 0, 0,
+                        sin(angle), 0, cos(angle), 0,
+                        matrix_[12] - matrix_[12]*cos(angle) - matrix_[14]*sin(angle), 0, matrix_[14] - matrix_[14]*cos(angle) + matrix_[12]*sin(angle), 1};
 
+    for (unsigned int j = 0; j < 4; j++){
+        for (unsigned int i = 0; i < 4; i++){
+            matrix_[4*j + i] =    matrix_[4*j] * other[i]
+                                + matrix_[4*j + 1] * other[4 + i]
+                                + matrix_[4*j + 2] * other[8 + i]
+                                + matrix_[4*j + 3] * other[12 + i];
+        }
+    }
+    return *this;
 }
 
-void TransformMatrix_t::rotateX(double angle){
+TransformMatrix_t&  TransformMatrix_t::rotateZ(double angle){
+    double other[16] = {cos(angle), sin(angle), 0, 0,
+                        -sin(angle), cos(angle), 0, 0,
+                        0, 0, 1, 0,
+                        matrix_[12] - matrix_[12]*cos(angle) + matrix_[13]*sin(angle), matrix_[13] - matrix_[13]*cos(angle) - matrix_[12]*sin(angle), 0, 1};
 
+    for (unsigned int j = 0; j < 4; j++){
+        for (unsigned int i = 0; i < 4; i++){
+            matrix_[4*j + i] =    matrix_[4*j] * other[i]
+                                + matrix_[4*j + 1] * other[4 + i]
+                                + matrix_[4*j + 2] * other[8 + i]
+                                + matrix_[4*j + 3] * other[12 + i];
+        }
+    }
+    return *this;
 }
 
-void TransformMatrix_t::rotateY(double angle){
+TransformMatrix_t&  TransformMatrix_t::rotateAxis(const Vec3f &vec, double angle){
+    Vec3f vec2 = vec.normalize(); // Dunno if needed
+    double other[16] = {vec2[0] * vec2[0] * (1 - cos(angle)) + cos(angle), vec2[1] * vec2[0] * (1 - cos(angle)) - vec2[2] * sin(angle), vec2[2] * vec2[0] * (1 - cos(angle)) + vec2[1] * sin(angle), 0,
+                        vec2[0] * vec2[1] * (1 - cos(angle)) + vec2[2] * sin(angle), vec2[1] * vec2[1] * (1 - cos(angle)) + cos(angle), vec2[2] * vec2[1] * (1 - cos(angle)) - vec2[0] * sin(angle), 0,
+                        vec2[0] * vec2[2] * (1 - cos(angle)) - vec2[0] * sin(angle), vec2[0] * vec2[1] * (1 - cos(angle)) + vec2[0] * sin(angle), vec2[2] * vec2[2] * (1 - cos(angle)) + cos(angle), 0,
+                        0, 0, 0, 1};
 
+    for (unsigned int j = 0; j < 4; j++){
+        for (unsigned int i = 0; i < 4; i++){
+            matrix_[4*j + i] =    matrix_[4*j] * other[i]
+                                + matrix_[4*j + 1] * other[4 + i]
+                                + matrix_[4*j + 2] * other[8 + i]
+                                + matrix_[4*j + 3] * other[12 + i];
+        }
+    }
+    return *this;
 }
 
-void TransformMatrix_t::rotateZ(double angle){
-
+TransformMatrix_t&  TransformMatrix_t::rotate(const Vec3f &vec, double angle){
+    Vec3f vec2 = vec.normalize(); // Dunno if needed
+    double other[16] = {vec2[0] * vec2[0] * (1 - cos(angle)) + cos(angle), vec2[1] * vec2[0] * (1 - cos(angle)) - vec2[2] * sin(angle), vec2[2] * vec2[0] * (1 - cos(angle)) + vec2[1] * sin(angle), 0,
+                        vec2[0] * vec2[1] * (1 - cos(angle)) + vec2[2] * sin(angle), vec2[1] * vec2[1] * (1 - cos(angle)) + cos(angle), vec2[2] * vec2[1] * (1 - cos(angle)) - vec2[0] * sin(angle), 0,
+                        vec2[0] * vec2[2] * (1 - cos(angle)) - vec2[0] * sin(angle), vec2[0] * vec2[1] * (1 - cos(angle)) + vec2[0] * sin(angle), vec2[2] * vec2[2] * (1 - cos(angle)) + cos(angle), 0,
+                        matrix_[12] + matrix_[14]*(vec2[0]*sin(angle) + vec2[0]*vec2[2]*(cos(angle) - 1)) - matrix_[13]*(vec2[2]*sin(angle) - vec2[0]*vec2[1]*(cos(angle) - 1)) - matrix_[12]*((1 - cos(angle))*vec2[0]*vec2[0] + cos(angle)), matrix_[13] + matrix_[12]*(vec2[2]*sin(angle) + vec2[0]*vec2[1]*(cos(angle) - 1)) - matrix_[14]*(vec2[0]*sin(angle) - vec2[0]*vec2[1]*(cos(angle) - 1)) - matrix_[13]*((1 - cos(angle))*vec2[1]*vec2[1] + cos(angle)), matrix_[14] - matrix_[12]*(vec2[1]*sin(angle) - vec2[0]*vec2[2]*(cos(angle) - 1)) + matrix_[13]*(vec2[0]*sin(angle) + vec2[1]*vec2[2]*(cos(angle) - 1)) - matrix_[14]*((1 - cos(angle))*vec2[2]*vec2[2] + cos(angle)), 1};
+                        // Wow just wow, such a line to write. I assume this is super slow
+    for (unsigned int j = 0; j < 4; j++){
+        for (unsigned int i = 0; i < 4; i++){
+            matrix_[4*j + i] =    matrix_[4*j] * other[i]
+                                + matrix_[4*j + 1] * other[4 + i]
+                                + matrix_[4*j + 2] * other[8 + i]
+                                + matrix_[4*j + 3] * other[12 + i];
+        }
+    }
+    return *this;
 }
 
-void TransformMatrix_t::rotateAxis(const Vec3f &vec, double angle){
+TransformMatrix_t&  TransformMatrix_t::translate(const Vec3f &vec){
+    double other[16] = {1, 0, 0, 0,
+                        0, 1, 0, 0,
+                        0, 0, 1, 0,
+                        vec[0], vec[1], vec[2], 1};
 
+    for (unsigned int j = 0; j < 4; j++){
+        for (unsigned int i = 0; i < 4; i++){
+            matrix_[4*j + i] =    matrix_[4*j] * other[i]
+                                + matrix_[4*j + 1] * other[4 + i]
+                                + matrix_[4*j + 2] * other[8 + i]
+                                + matrix_[4*j + 3] * other[12 + i];
+        }
+    }
+    return *this;
 }
 
-void TransformMatrix_t::rotate(const Vec3f &vec, double angle){
+TransformMatrix_t&  TransformMatrix_t::scaleAxis(const Vec3f &vec){
+    double other[16] = {vec[0], 0, 0, 0,
+                        0, vec[1], 0, 0,
+                        0, 0, vec[2], 0,
+                        0, 0, 0, 1};
 
+    for (unsigned int j = 0; j < 4; j++){ // This can be optimised
+        for (unsigned int i = 0; i < 4; i++){
+            matrix_[4*j + i] =    matrix_[4*j] * other[i]
+                                + matrix_[4*j + 1] * other[4 + i]
+                                + matrix_[4*j + 2] * other[8 + i]
+                                + matrix_[4*j + 3] * other[12 + i];
+        }
+    }
+    return *this;
 }
 
-void TransformMatrix_t::translate(const Vec3f &vec){
+TransformMatrix_t&  TransformMatrix_t::scaleAxis(double fac){
+    double other[16] = {fac, 0, 0, 0,
+                        0, fac, 0, 0,
+                        0, 0, fac, 0,
+                        0, 0, 0, 1};
 
+    for (unsigned int j = 0; j < 4; j++){ // This can be optimised
+        for (unsigned int i = 0; i < 4; i++){
+            matrix_[4*j + i] =    matrix_[4*j] * other[i]
+                                + matrix_[4*j + 1] * other[4 + i]
+                                + matrix_[4*j + 2] * other[8 + i]
+                                + matrix_[4*j + 3] * other[12 + i];
+        }
+    }
+    return *this;
 }
 
-void TransformMatrix_t::scaleAxis(const Vec3f &vec){
+TransformMatrix_t&  TransformMatrix_t::scale(const Vec3f &vec){
+    double other[16] = {vec[0], 0, 0, 0,
+                        0, vec[1], 0, 0,
+                        0, 0, vec[2], 0,
+                        matrix_[12] - vec[0]*matrix_[12], matrix_[13] - vec[1]*matrix_[13], matrix_[14] - vec[2]*matrix_[14], 1};
 
+    for (unsigned int j = 0; j < 4; j++){ // This can be optimised
+        for (unsigned int i = 0; i < 4; i++){
+            matrix_[4*j + i] =    matrix_[4*j] * other[i]
+                                + matrix_[4*j + 1] * other[4 + i]
+                                + matrix_[4*j + 2] * other[8 + i]
+                                + matrix_[4*j + 3] * other[12 + i];
+        }
+    }
+    return *this;
 }
 
-void TransformMatrix_t::scaleAxis(double fac){
+TransformMatrix_t&  TransformMatrix_t::scale(double fac){
+    double other[16] = {fac, 0, 0, 0,
+                        0, fac, 0, 0,
+                        0, 0, fac, 0,
+                        matrix_[12] - fac*matrix_[12], matrix_[13] - fac*matrix_[13], matrix_[14] - fac*matrix_[14], 1};
 
+    for (unsigned int j = 0; j < 4; j++){ // This can be optimised
+        for (unsigned int i = 0; i < 4; i++){
+            matrix_[4*j + i] =    matrix_[4*j] * other[i]
+                                + matrix_[4*j + 1] * other[4 + i]
+                                + matrix_[4*j + 2] * other[8 + i]
+                                + matrix_[4*j + 3] * other[12 + i];
+        }
+    }
+    return *this;
 }
 
-void TransformMatrix_t::scale(const Vec3f &vec){
+TransformMatrix_t&  TransformMatrix_t::reflect(const Vec3f &vec){ // Needs a 4 component vec, or a distance factor. not used for now
+    /*double other[16] = {1 - 2 * vec[0] * vec[0], -2 * vec[0] * vec[1], -2 * vec[0] * vec[2], -2 * vec[0] * vec[3],
+                        -2 * vec[0] * vec[1], 1 - 2 * vec[1] * vec[1], -2 * vec[1] * vec[2], -2 * vec[1] * vec[3],
+                        -2 * vec[0] * vec[2], -2 * vec[1] * vec[2], 1 - 2 * vec[2] * vec[2], -2 * vec[2] * vec[3],
+                        0, 0, 0, 1};
 
+    for (unsigned int j = 0; j < 4; j++){ // This can be optimised
+        for (unsigned int i = 0; i < 4; i++){
+            matrix_[4*j + i] =    matrix_[4*j] * other[i]
+                                + matrix_[4*j + 1] * other[4 + i]
+                                + matrix_[4*j + 2] * other[8 + i]
+                                + matrix_[4*j + 3] * other[12 + i];
+        }
+    }*/
+    return *this;
 }
 
-void TransformMatrix_t::scale(double fac){
-
+TransformMatrix_t&  TransformMatrix_t::shear(const Vec3f &vec){ // who the hell uses this
+    return *this;
 }
 
-void TransformMatrix_t::reflect(const Vec3f &vec){
-
+TransformMatrix_t& TransformMatrix_t::transpose(){
+    double other[16] = {matrix_[0], matrix_[1], matrix_[2], matrix_[3],
+                        matrix_[4], matrix_[5], matrix_[6], matrix_[6],
+                        matrix_[8], matrix_[9], matrix_[10], matrix_[11],
+                        matrix_[12], matrix_[13], matrix_[14], matrix_[15]};
+    
+    for (unsigned int j = 0; j < 4; j++){ // This can be optimised
+        for (unsigned int i = 0; i < 4; i++){
+            matrix_[4*j + i] = other[4*i + j];
+        }
+    }
+    return *this;
 }
 
-void TransformMatrix_t::shear(const Vec3f &vec){
-
+TransformMatrix_t&  TransformMatrix_t::invert(){ // oh boï
+    return *this;
 }
 
-void TransformMatrix_t::transpose(){
-
+TransformMatrix_t&  TransformMatrix_t::neg(){
+    for (unsigned int i = 0; i < 16; i++){
+        matrix_[i] *= -1;
+    }
+    return *this;
 }
 
-void TransformMatrix_t::invert(){
-
+Vec3f TransformMatrix_t::multVec(const Vec3f &vec) const{
+    double vec2[4];
+    for (unsigned int i = 0; i < 4; i++){
+        vec2[i] = vec[0] * matrix_[i] + vec[1] * matrix_[i + 4] + vec[2] * matrix_[i + 8] + matrix_[i + 12];
+    }
+    return Vec3f(vec2[0], vec2[1], vec2[2])/vec2[3];
 }
 
-void TransformMatrix_t::neg(){
-
+Vec3f TransformMatrix_t::multDir(const Vec3f &vec) const{ // Different than matlab, check. 
+    // https://graphics.stanford.edu/~mdfisher/Code/Engine/Matrix4.cpp.html checks for negative afterwards also
+    double vec2[4];
+    for (unsigned int i = 0; i < 4; i++){
+        vec2[i] = vec[0] * matrix_[i] + vec[1] * matrix_[i + 4] + vec[2] * matrix_[i + 8];
+    }
+    return Vec3f(vec2[0], vec2[1], vec2[2])/vec2[3]; // vec2[3] will probably always be 0. website puts at 1 then. if vec2[3] < 0, inverts result.
 }
 
-Vec3f TransformMatrix_t::multVec(const Vec3f &vec){
-    return Vec3f();
-}
-
-Vec3f TransformMatrix_t::multDir(const Vec3f &vec){
-    return Vec3f();
-}
-
-TransformMatrix_t TransformMatrix_t::transformDir(){
-    return TransformMatrix_t();
+TransformMatrix_t TransformMatrix_t::transformDir() const{
+    return TransformMatrix_t(*this).invert().transpose();
 }
