@@ -11,7 +11,7 @@ class TransformMatrix_t;
 
 class Shape_t{
     public:
-        Shape_t(Material_t *material, TransformMatrix_t *transform_matrix): material_(material), transform_matrix_(transform_matrix){};
+        Shape_t(Material_t *material, TransformMatrix_t *transform_matrix): material_(material), transformation_(transform_matrix){};
         virtual ~Shape_t(){};
 
         virtual void update() = 0;
@@ -22,6 +22,6 @@ class Shape_t{
         virtual Vec3f maxcoord() const = 0;
 
         Material_t *material_;
-        TransformMatrix_t *transform_matrix_;
+        TransformMatrix_t *transformation_;
 };
 #endif
