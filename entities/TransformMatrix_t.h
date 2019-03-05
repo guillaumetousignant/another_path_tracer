@@ -2,33 +2,38 @@
 #define TRANSFORMMATRIX_T_H
 
 #include "Vec3f.h"
+#include <math.h>
 
 class TransformMatrix_t{
     public:
         TransformMatrix_t();
+        TransformMatrix_t(double i0, double i1, double i2, double i3, double i4, double i5, double i6, double i7, double i8, double i9, double i10, double i11, double i12, double i13, double i14, double i15);
+        TransformMatrix_t(const TransformMatrix_t &other);
         ~TransformMatrix_t();
 
-        void rotateXAxis(double angle);
-        void rotateYAxis(double angle);
-        void rotateZAxis(double angle);
-        void rotateX(double angle);
-        void rotateY(double angle);
-        void rotateZ(double angle);
-        void rotateAxis(const Vec3f &vec, double angle);
-        void rotate(const Vec3f &vec, double angle);
-        void translate(const Vec3f &vec);
-        void scaleAxis(const Vec3f &vec);
-        void scaleAxis(double fac);
-        void scale(const Vec3f &vec);
-        void scale(double fac);
-        void reflect(const Vec3f &vec);
-        void shear(const Vec3f &vec);
-        void transpose();
-        void invert();
-        void neg();
-        Vec3f multVec(const Vec3f &vec);
-        Vec3f multDir(const Vec3f &vec);
-        TransformMatrix_t transformDir();
+        double matrix_[16];
+
+        TransformMatrix_t&  rotateXAxis(double angle);
+        TransformMatrix_t&  rotateYAxis(double angle);
+        TransformMatrix_t&  rotateZAxis(double angle);
+        TransformMatrix_t&  rotateX(double angle);
+        TransformMatrix_t&  rotateY(double angle);
+        TransformMatrix_t&  rotateZ(double angle);
+        TransformMatrix_t&  rotateAxis(const Vec3f &vec, double angle);
+        TransformMatrix_t&  rotate(const Vec3f &vec, double angle);
+        TransformMatrix_t&  translate(const Vec3f &vec);
+        TransformMatrix_t&  scaleAxis(const Vec3f &vec);
+        TransformMatrix_t&  scaleAxis(double fac);
+        TransformMatrix_t&  scale(const Vec3f &vec);
+        TransformMatrix_t&  scale(double fac);
+        TransformMatrix_t&  reflect(const Vec3f &vec);
+        TransformMatrix_t&  shear(const Vec3f &vec);
+        TransformMatrix_t& transpose();
+        TransformMatrix_t& invert();
+        TransformMatrix_t&  neg();
+        Vec3f multVec(const Vec3f &vec) const;
+        Vec3f multDir(const Vec3f &vec) const;
+        TransformMatrix_t transformDir() const; // Should return reference?
 };
 
 #endif
