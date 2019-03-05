@@ -344,7 +344,7 @@ TransformMatrix_t&  TransformMatrix_t::invert(){ // oh boï
     det = transpose[0]*matrix_[0]+transpose[1]*matrix_[1]+transpose[2]*matrix_[2]+transpose[3]*matrix_[3];
     det = 1.0/det;
 
-    for (unsigned int i; i < 16; i++){
+    for (unsigned int i = 0; i < 16; i++){
         matrix_[i] *= det;
     }
 
