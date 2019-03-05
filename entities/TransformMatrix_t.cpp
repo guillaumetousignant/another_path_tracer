@@ -260,7 +260,7 @@ TransformMatrix_t&  TransformMatrix_t::shear(const Vec3f &vec){ // who the hell 
 TransformMatrix_t& TransformMatrix_t::transpose(){
     double other[16] = {matrix_[0], matrix_[4], matrix_[8], matrix_[12],
                         matrix_[1], matrix_[5], matrix_[9], matrix_[13],
-                        matrix_[2], matrix_[6], matrix_[10], matrix_[114],
+                        matrix_[2], matrix_[6], matrix_[10], matrix_[14],
                         matrix_[3], matrix_[7], matrix_[11], matrix_[15]};
     
     for (unsigned int i = 0; i < 16; i++){ // This can be optimised
@@ -271,6 +271,10 @@ TransformMatrix_t& TransformMatrix_t::transpose(){
 
 TransformMatrix_t&  TransformMatrix_t::invert(){ // oh boï
     // See https://graphics.stanford.edu/~mdfisher/Code/Engine/Matrix4.cpp.html
+    double transpose[16] = {matrix_[0], matrix_[4], matrix_[8], matrix_[12],
+                            matrix_[1], matrix_[5], matrix_[9], matrix_[13],
+                            matrix_[2], matrix_[6], matrix_[10], matrix_[14],
+                            matrix_[3], matrix_[7], matrix_[11], matrix_[15]};
 
     return *this;
 }
