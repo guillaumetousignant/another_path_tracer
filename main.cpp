@@ -20,16 +20,44 @@
 #define PI 3.141592653589793238463
 
 int main(){
-    Diffuse_t* diffuse = new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.5, 0.5, 0.5), 0.5);
-    TransformMatrix_t* transform = new TransformMatrix_t();
-    Sphere_t* sphere = new Sphere_t(diffuse, transform);
+    Diffuse_t* difpurple = new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.98, 0.7, 0.85), 1);
+    Diffuse_t* diflight = new Diffuse_t(Vec3f(2.0, 2.0, 2.0), Vec3f(1.0, 1.0, 1.0), 1);
+    Diffuse_t* difgreen = new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.8, 0.95, 0.6), 1);
+    Diffuse_t* ref1 = new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.98, 1, 0.9), 1);
+    TransformMatrix_t* transform_light = new TransformMatrix_t();
+    TransformMatrix_t* transform_camera = new TransformMatrix_t();    
+    TransformMatrix_t* transform1 = new TransformMatrix_t();
+    TransformMatrix_t* transform2 = new TransformMatrix_t();
+    TransformMatrix_t* transform3 = new TransformMatrix_t();
+    TransformMatrix_t* transform4 = new TransformMatrix_t();
+    TransformMatrix_t* transform5 = new TransformMatrix_t();
+
+    Sphere_t* spherepurple = new Sphere_t(difpurple, transform1);
+    Sphere_t* mirror = new Sphere_t(ref1, transform2);
+    Sphere_t* light = new Sphere_t(diflight, transform3);
+    //Sphere_t* sphereglass = new Sphere_t(diffuse, transform4);
+    Sphere_t* ground = new Sphere_t(difgreen, transform5);
+
+    spherepurple->transformation_->translate(Vec3f(1, 2, 0.5));
+    spherepurple->transformation_->scale(0.5);
+    mirror->transformation_->translate(Vec3f(-1.5, 4, -0.8));
+    mirror->transformation_->scale(1.5);
+    light->transformation_->translate(Vec3f(0, 3, 0.8));
+    light->transformation_->scale(0.75);
+    ground->transformation_->translate(Vec3f(0, 0, -1001));
+    ground->transformation_->scale(1000);
+    
     NonAbsorber_t* airabsorber = new NonAbsorber_t();
     Transparent_t* air = new Transparent_t(0, airabsorber);
 
     Scene_t* scene = new Scene_t();
-    scene->add(sphere);
+    scene->add(spherepurple);
+    scene->add(mirror);
+    scene->add(light);
+    //scene->add(sphereglass);
+    scene->add(ground);
 
-    DirectionalLight_t* dirlight = new DirectionalLight_t(Vec3f(8.0, 8.0, 6.0), transform);
+    DirectionalLight_t* dirlight = new DirectionalLight_t(Vec3f(8.0, 8.0, 6.0), transform_light);
     SkyboxFlatSun_t* skybox = new SkyboxFlatSun_t(Vec3f(0.85, 0.85, 0.98), dirlight);
     ImgBuffer_t* imgbuffer = new ImgBuffer_t(1800, 1200);
 
@@ -38,11 +66,11 @@ int main(){
 
     std::string filename = "./images/test.png";
 
-    double fov[2] ={40.0 * 2.0 * PI/360.0, 60.0 * 2.0 * PI /360.0}; 
+    double fov[2] ={53.3333333 * 2.0 * PI/360.0, 80.0 * 2.0 * PI /360.0};
     unsigned int subpix[2] = {1, 1};
     unsigned int maxbounces = 8;
 
-    Cam_t* cam = new Cam_t(transform, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer, medium_list, skybox, maxbounces, 1.0);
+    Cam_t* cam = new Cam_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer, medium_list, skybox, maxbounces, 1.0);
 
     cam->accumulate(scene, 10);
     cam->write();
