@@ -15,7 +15,7 @@
 #include "DirectionalLight_t.h"
 #include "SkyboxFlatSun_t.h"
 
-//#include <iostream> // REMOVE
+#include <iostream> // REMOVE
 
 #define PI 3.141592653589793238463
 
@@ -35,7 +35,7 @@ int main(){
     Sphere_t* spherepurple = new Sphere_t(difpurple, transform1);
     Sphere_t* mirror = new Sphere_t(ref1, transform2);
     Sphere_t* light = new Sphere_t(diflight, transform3);
-    //Sphere_t* sphereglass = new Sphere_t(diffuse, transform4);
+    //Sphere_t* sphereglass = new Sphere_t(glass, transform4);
     Sphere_t* ground = new Sphere_t(difgreen, transform5);
 
     spherepurple->transformation_->translate(Vec3f(1, 2, 0.5));
@@ -56,8 +56,14 @@ int main(){
     scene->add(light);
     //scene->add(sphereglass);
     scene->add(ground);
+    scene->update();
 
-    DirectionalLight_t* dirlight = new DirectionalLight_t(Vec3f(8.0, 8.0, 6.0), transform_light);
+    DirectionalLight_t* dirlight = new DirectionalLight_t(Vec3f(5, 5, 4), transform_light);
+    dirlight->transformation_->scale(0.95);
+    dirlight->transformation_->rotateZ(-0.7854);
+    dirlight->transformation_->rotateX(-1.1781);
+    dirlight->update();
+    
     SkyboxFlatSun_t* skybox = new SkyboxFlatSun_t(Vec3f(0.85, 0.85, 0.98), dirlight);
     ImgBuffer_t* imgbuffer = new ImgBuffer_t(1800, 1200);
 
@@ -71,8 +77,9 @@ int main(){
     unsigned int maxbounces = 8;
 
     Cam_t* cam = new Cam_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer, medium_list, skybox, maxbounces, 1.0);
+    cam->update();
 
-    cam->accumulate(scene, 10);
+    cam->accumulate(scene, 100);
     cam->write();
 
     /*for (unsigned int i = 0; i < 1; i++){
