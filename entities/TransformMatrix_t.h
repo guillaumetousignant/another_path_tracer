@@ -34,6 +34,7 @@ class TransformMatrix_t{
         Vec3f multVec(const Vec3f &vec) const;
         Vec3f multDir(const Vec3f &vec) const;
         TransformMatrix_t transformDir() const; // Should return reference?
+        double getScale() const;
 };
 
 #endif

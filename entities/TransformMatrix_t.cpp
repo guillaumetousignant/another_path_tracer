@@ -406,3 +406,7 @@ Vec3f TransformMatrix_t::multDir(const Vec3f &vec) const{ // Different than matl
 TransformMatrix_t TransformMatrix_t::transformDir() const{
     return TransformMatrix_t(*this).invert().transpose();
 }
+
+double TransformMatrix_t::getScale() const{
+    return matrix_[0]*(matrix_[5]*matrix_[10] - matrix_[9]*matrix_[6]) - matrix_[1]*(matrix_[4]*matrix_[10] - matrix_[8]*matrix_[6]) + matrix_[2]*(matrix_[4]*matrix_[9] - matrix_[8]*matrix_[5]);
+}
