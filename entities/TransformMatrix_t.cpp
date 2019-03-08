@@ -1,4 +1,5 @@
 #include "TransformMatrix_t.h"
+#include <algorithm>
 
 TransformMatrix_t::TransformMatrix_t() : matrix_{1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1} {}
 
@@ -408,5 +409,8 @@ TransformMatrix_t TransformMatrix_t::transformDir() const{
 }
 
 double TransformMatrix_t::getScale() const{
-    return matrix_[0]*(matrix_[5]*matrix_[10] - matrix_[9]*matrix_[6]) - matrix_[1]*(matrix_[4]*matrix_[10] - matrix_[8]*matrix_[6]) + matrix_[2]*(matrix_[4]*matrix_[9] - matrix_[8]*matrix_[5]);
+    double norm0 = Vec3f(matrix_[0], matrix_[1], matrix_[2]).magnitude();
+    double norm1 = Vec3f(matrix_[4], matrix_[5], matrix_[6]).magnitude();
+    double norm2 = Vec3f(matrix_[7], matrix_[8], matrix_[9]).magnitude();
+    return std::max(std::max(norm0, norm1), norm2);
 }
