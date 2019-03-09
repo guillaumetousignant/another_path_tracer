@@ -1,5 +1,6 @@
 #include "RandomGenerator_t.h"
 #include "Diffuse_t.h"
+#include "Refractive_t.h"
 #include "Vec3f.h"
 #include "Sphere_t.h"
 #include "TransformMatrix_t.h"
@@ -20,10 +21,14 @@
 #define PI 3.141592653589793238463
 
 int main(){
+    NonAbsorber_t* airabsorber = new NonAbsorber_t();
+
+    Transparent_t* air = new Transparent_t(0, airabsorber);
     Diffuse_t* difpurple = new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.98, 0.7, 0.85), 1);
     Diffuse_t* diflight = new Diffuse_t(Vec3f(2.0, 2.0, 2.0), Vec3f(1.0, 1.0, 1.0), 1);
     Diffuse_t* difgreen = new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.8, 0.95, 0.6), 1);
     Diffuse_t* ref1 = new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.98, 1, 0.9), 1);
+    Refractive_t* glass = new Refractive_t(Vec3f(0.0, 0.0, 0.0), Vec3f(1.0, 1.0, 1.0), 1.5, 10, airabsorber);
     TransformMatrix_t* transform_light = new TransformMatrix_t();
     TransformMatrix_t* transform_camera = new TransformMatrix_t();    
     TransformMatrix_t* transform1 = new TransformMatrix_t();
@@ -35,7 +40,7 @@ int main(){
     Sphere_t* spherepurple = new Sphere_t(difpurple, transform1);
     Sphere_t* mirror = new Sphere_t(ref1, transform2);
     Sphere_t* light = new Sphere_t(diflight, transform3);
-    //Sphere_t* sphereglass = new Sphere_t(glass, transform4);
+    Sphere_t* sphereglass = new Sphere_t(glass, transform4);
     Sphere_t* ground = new Sphere_t(difgreen, transform5);
 
     spherepurple->transformation_->translate(Vec3f(1, 2, 0.5));
@@ -44,17 +49,16 @@ int main(){
     mirror->transformation_->scale(1.5);
     light->transformation_->translate(Vec3f(0, 3, 0.8));
     light->transformation_->scale(0.75);
+    sphereglass->transformation_->translate(Vec3f(0.5, 2.0, 0.2));
+    sphereglass->transformation_->scale(0.4);
     ground->transformation_->translate(Vec3f(0, 0, -1001));
     ground->transformation_->scale(1000);
-    
-    NonAbsorber_t* airabsorber = new NonAbsorber_t();
-    Transparent_t* air = new Transparent_t(0, airabsorber);
 
     Scene_t* scene = new Scene_t();
     scene->add(spherepurple);
     scene->add(mirror);
     scene->add(light);
-    //scene->add(sphereglass);
+    scene->add(sphereglass);
     scene->add(ground);
     scene->update();
 
