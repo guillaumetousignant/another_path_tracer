@@ -74,7 +74,7 @@ int main(){
 
     double fov[2] ={53.3333333 * 2.0 * PI/360.0, 80.0 * 2.0 * PI /360.0};
     unsigned int subpix[2] = {1, 1};
-    unsigned int maxbounces = 8;
+    unsigned int maxbounces = 16;
 
     Cam_t* cam = new Cam_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer, medium_list, skybox, maxbounces, 1.0);
     cam->update();
@@ -86,6 +86,14 @@ int main(){
         Ray_t ray = Ray_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.0, 1.0, 0.0), Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list);
         ray.raycast(scene, 8, skybox);
     }*/
+    
+    /*std::cout << "Left: " << std::endl; // REMOVE
+    Ray_t rayL = Ray_t(Vec3f(0.0, 0.0, 0.0), Vec3f(-0.447643, 0.894212, -0.000745399), Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list);
+    rayL.raycast(scene, 2, skybox);
 
+    std::cout << std::endl << "Right: " << std::endl; // REMOVE
+    Ray_t rayR = Ray_t(Vec3f(0.0, 0.0, 0.0), Vec3f(-0.435534, 0.900172, -0.000281008), Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list);
+    rayR.raycast(scene, 2, skybox); // These are never given a downward direction, never intersect with ground
+    */
     return 0;
 }
