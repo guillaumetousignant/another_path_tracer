@@ -55,7 +55,7 @@ void ImgBuffer_t::set(const Vec3f** img, unsigned int size_x, unsigned int size_
 void ImgBuffer_t::write(std::string &filename) const {
     Vec3f colour;
 
-    double update_mult = 1/updates_;
+    double update_mult = 1/(double)updates_;
     pngwriter png((int) size_x_, (int) size_y_, 0.0, filename.c_str());
 
     for (unsigned int j = 0; j < size_y_; j++){
