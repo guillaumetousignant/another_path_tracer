@@ -19,7 +19,7 @@ void Camera_t::accumulate(Scene_t* scene, unsigned int n_iter /*= 1000000000*/) 
     }
 }
 
-void Camera_t::accumulateWrite(Scene_t* scene, unsigned int n_iter /*= 1000000000*/) {
+void Camera_t::accumulateWrite(Scene_t* scene, unsigned int n_iter /*= 1000000000*/, unsigned int interval /*=1*/) {
     unsigned int n = 0;
     while (n < n_iter){
         n++;
@@ -27,7 +27,10 @@ void Camera_t::accumulateWrite(Scene_t* scene, unsigned int n_iter /*= 100000000
         std::cout << "Iteration " << n << " done." << std::endl;
 
         show();
-        write();
+        if (!(n%interval)){
+            std::cout << "Writing." << std::endl;
+            write();
+        }
     }
 }
 
