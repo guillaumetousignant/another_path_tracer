@@ -17,23 +17,19 @@ void Diffuse_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray
     Vec3f normal;
     Vec3f u, v;
     Vec3f newdir;
+    double rand1, rand2, rand2s;
 
     hit_obj->normal(ray, uv, normal);
 
-    double rand1 = unif_(my_rand::rng)*2*PI;
-    double rand2 = unif_(my_rand::rng);
-    double rand2s = sqrt(rand2);
+    rand1 = unif_(my_rand::rng)*2*PI;
+    rand2 = unif_(my_rand::rng);
+    rand2s = sqrt(rand2);
 
     if (normal.dot(ray.direction_) > 0.0){
         normal *= -1.0;
     }
 
-    if (normal[0] > 0.1){
-        axis = Vec3f(0.0, 1.0, 0.0);
-    }
-    else{
-        axis = Vec3f(1.0, 0.0, 0.0);
-    }
+    axis = std::abs(normal[0]) > 0.1 ? Vec3f(0.0, 1.0, 0.0) : Vec3f(1.0, 0.0, 0.0);
 
     u = axis.cross(normal).normalize();
     v = normal.cross(u).normalize(); // wasn't normalized before
