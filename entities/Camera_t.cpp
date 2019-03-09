@@ -28,8 +28,9 @@ void Camera_t::accumulateWrite(Scene_t* scene, unsigned int n_iter /*= 100000000
 
         show();
         if (!(n%interval)){
-            std::cout << "Writing." << std::endl;
+            std::cout << "Writing started." << std::endl;
             write();
+            std::cout << "Writing done." << std::endl;
         }
     }
 }
