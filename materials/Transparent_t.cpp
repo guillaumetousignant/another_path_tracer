@@ -4,7 +4,7 @@
 
 #define EPSILON 0.00000001
 
-Transparent_t::Transparent_t(unsigned int priority, ScatteringFunction_t* scattering) : Medium_t(priority, scattering) {
+Transparent_t::Transparent_t(unsigned int priority, ScatteringFunction_t* scattering) : Medium_t(1.0, priority, scattering) {
 
 }
 

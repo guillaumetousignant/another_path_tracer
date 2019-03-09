@@ -9,11 +9,12 @@ class ScatteringFunction_t;
 
 class Medium_t : public Material_t{
     public:
-        Medium_t(unsigned int priority, ScatteringFunction_t* scattering): priority_(priority), scattering_(scattering) {};
+        Medium_t(double ind, unsigned int priority, ScatteringFunction_t* scattering): ind_(ind), priority_(priority), scattering_(scattering) {};
         virtual ~Medium_t(){};
 
         unsigned int priority_;
         ScatteringFunction_t* scattering_;
+        double ind_;
 };
 
 #endif
