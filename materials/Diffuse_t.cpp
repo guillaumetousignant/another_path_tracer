@@ -2,6 +2,7 @@
 #include "Shape_t.h"
 #include <math.h>
 #include "RandomGenerator_t.h"
+#include "Referentials.h"
 
 #include <iostream> // REMOVE
 
@@ -40,11 +41,16 @@ void Diffuse_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray
     }
 
     u = axis.cross(normal).normalize(); // Maybe won't work
-    //u = ray.direction_.cross(normal).normalize();
-    v = normal.cross(u);
+    v = normal.cross(u).normalize(); // wasn't normalized before
 
-    newdir = u * cos(rand1)*rand2s + v*sin(rand1)*rand2s + normal*sqrt(1.0-rand2);
+    //std::cout << "u: " << u[0] << " " << u[1] << " " << u[2] << std::endl; // REMOVE
+    //std::cout << "v: " << v[0] << " " << v[1] << " " << v[2] << std::endl; // REMOVE
+    //std::cout <<"rand 1 2 2s: " <<  rand1 << " " << rand2 << " " << rand2s << std::endl; // REMOVE
+
+    newdir = u*cos(rand1)*rand2s + v*sin(rand1)*rand2s + normal*sqrt(1.0-rand2);
     newdir = newdir.normalize();
+
+    //newdir = to_xyz_offset(Vec3f(1, rand1, rand2), normal, u, v);
 
     ray.origin_ += ray.direction_ * ray.dist_ + normal * EPSILON;
     ray.direction_ = newdir;
