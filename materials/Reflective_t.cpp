@@ -2,7 +2,6 @@
 #include "Shape_t.h"
 
 #define EPSILON 0.00000001
-#define PI 3.141592653589793238463
 
 Reflective_t::Reflective_t(const Vec3f &emission, const Vec3f &colour) : 
     emission_(emission), colour_(colour) {}
