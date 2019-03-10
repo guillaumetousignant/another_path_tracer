@@ -95,13 +95,13 @@ const Vec3f &Vec3f::operator-=(double factor) {
     return *this;
 }
 double Vec3f::magnitude() const {
-    return sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+    return std::sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
 } 
 double Vec3f::magnitudeSquared() const {
     return v[0] * v[0] + v[1] * v[1] + v[2] * v[2];
 } 
 Vec3f Vec3f::normalize() const {
-    double m = sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+    double m = std::sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
     return Vec3f(v[0] / m, v[1] / m, v[2] / m);
 } 
 double Vec3f::dot(const Vec3f &other) const {
@@ -113,7 +113,10 @@ Vec3f Vec3f::cross(const Vec3f &other) const {
                  v[0] * other.v[1] - v[1] * other.v[0]);
 } 
 Vec3f Vec3f::ln() const {
-    return Vec3f(log(v[0]), log(v[1]), log(v[2]));
+    return Vec3f(std::log(v[0]), std::log(v[1]), std::log(v[2]));
+}
+Vec3f Vec3f::sqrt() const {
+    return Vec3f(std::sqrt(v[0]), std::sqrt(v[1]), std::sqrt(v[2]));
 }
 ostream &operator<<(ostream &output, const Vec3f &v) {
     cout << '(' << v[0] << ", " << v[1] << ", " << v[2] << ')';

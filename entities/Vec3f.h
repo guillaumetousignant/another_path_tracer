@@ -39,6 +39,7 @@ class Vec3f {
         double dot(const Vec3f &other) const;
         Vec3f cross(const Vec3f &other) const;
         Vec3f ln() const;
+        Vec3f sqrt() const;
 };
 /*int main()
 {
