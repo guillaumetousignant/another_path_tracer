@@ -36,6 +36,7 @@ class Vec3f {
         Vec3f normalize() const;
         double dot(const Vec3f &other) const;
         Vec3f cross(const Vec3f &other) const;
+        Vec3f ln() const;
 };
 /*int main()
 {

@@ -103,6 +103,9 @@ Vec3f Vec3f::cross(const Vec3f &other) const {
                  v[2] * other.v[0] - v[0] * other.v[2],
                  v[0] * other.v[1] - v[1] * other.v[0]);
 } 
+Vec3f Vec3f::ln() const {
+    return Vec3f(log(v[0]), log(v[1]), log(v[2]));
+}
 ostream &operator<<(ostream &output, const Vec3f &v) {
     cout << '(' << v[0] << ", " << v[1] << ", " << v[2] << ')';
     return output;
