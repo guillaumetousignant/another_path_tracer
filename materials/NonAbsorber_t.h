@@ -2,6 +2,7 @@
 #define NONABSORBER_T_H
 
 #include "ScatteringFunction_t.h"
+#include "Ray_t.h"
 
 class NonAbsorber_t : public ScatteringFunction_t{
     public:
