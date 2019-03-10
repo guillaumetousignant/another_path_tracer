@@ -12,6 +12,7 @@
 #include <string>
 #include <list>
 #include "NonAbsorber_t.h"
+#include "Absorber_t.h"
 #include "Transparent_t.h"
 #include <string>
 #include "DirectionalLight_t.h"
@@ -23,13 +24,14 @@
 
 int main(){
     NonAbsorber_t* airabsorber = new NonAbsorber_t();
+    Absorber_t* glassabsorber = new Absorber_t(Vec3f(), Vec3f(0.6, 0.95, 0.8), 32, 100);
 
     Transparent_t* air = new Transparent_t(0, airabsorber);
     Diffuse_t* difpurple = new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.98, 0.7, 0.85), 1);
     Diffuse_t* diflight = new Diffuse_t(Vec3f(2.0, 2.0, 2.0), Vec3f(1.0, 1.0, 1.0), 1);
     Diffuse_t* difgreen = new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.8, 0.95, 0.6), 1);
     Reflective_t* ref1 = new Reflective_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.98, 1, 0.9));
-    Refractive_t* glass = new Refractive_t(Vec3f(0.0, 0.0, 0.0), Vec3f(1.0, 1.0, 1.0), 1.5, 10, airabsorber);
+    Refractive_t* glass = new Refractive_t(Vec3f(0.0, 0.0, 0.0), Vec3f(1.0, 1.0, 1.0), 1.5, 10, glassabsorber);
     TransformMatrix_t* transform_light = new TransformMatrix_t();
     TransformMatrix_t* transform_camera = new TransformMatrix_t(); 
     TransformMatrix_t* transform1 = new TransformMatrix_t();
