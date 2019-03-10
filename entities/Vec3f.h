@@ -40,6 +40,7 @@ class Vec3f {
         Vec3f cross(const Vec3f &other) const;
         Vec3f ln() const;
         Vec3f sqrt() const;
+        Vec3f exp() const;
 };
 /*int main()
 {
