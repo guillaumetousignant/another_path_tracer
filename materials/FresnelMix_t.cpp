@@ -3,9 +3,10 @@
 #include "Medium_t.h"
 #include <math.h> 
 #include "RandomGenerator_t.h"
+#include "Material_t.h"
 
 FresnelMix_t::FresnelMix_t(Material_t* material_refracted, Material_t* material_reflected, double ind) : 
-    material_refracted_(material_refracted), material_reflected_(material_reflected), ind_(ind), unif_(std::uniform_real_distribution<double>(0, 1)) {}
+    MaterialMix_t(material_refracted, material_reflected), ind_(ind), unif_(std::uniform_real_distribution<double>(0, 1)) {}
 
 FresnelMix_t::~FresnelMix_t(){}
 

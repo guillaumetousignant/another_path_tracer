@@ -1,17 +1,17 @@
 #ifndef RANDOMMIX_T_H
 #define RANDOMMIX_T_H
 
-#include "Material_t.h"
+#include "MaterialMix_t.h"
 #include "Ray_t.h"
 #include <random>
 
-class RandomMix_t : public Material_t{
+class Material_t;
+
+class RandomMix_t : public MaterialMix_t{
     public:
         RandomMix_t(Material_t* material_refracted, Material_t* material_reflected, double ratio);
         ~RandomMix_t();
 
-        Material_t* material_refracted_;
-        Material_t* material_reflected_;
         double ratio_;
         std::uniform_real_distribution<double> unif_;
 

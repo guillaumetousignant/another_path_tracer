@@ -1,18 +1,18 @@
 #ifndef FRESNELMIXIN_T_H
 #define FRESNELMIXIN_T_H
 
-#include "Material_t.h"
+#include "MaterialMix_t.h"
 #include "Vec3f.h"
 #include "Ray_t.h"
 #include <random>
 
-class FresnelMixIn_t : public Material_t{
+class Material_t;
+
+class FresnelMixIn_t : public MaterialMix_t{
     public:
         FresnelMixIn_t(Material_t* material_refracted, Material_t* material_reflected, double ind);
         ~FresnelMixIn_t();
 
-        Material_t* material_refracted_;
-        Material_t* material_reflected_;
         double ind_;
         std::uniform_real_distribution<double> unif_;
 

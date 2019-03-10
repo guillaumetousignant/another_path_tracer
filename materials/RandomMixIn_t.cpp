@@ -2,9 +2,10 @@
 #include "Shape_t.h"
 #include "RandomGenerator_t.h"
 #include "Vec3f.h"
+#include "Material_t.h"
 
 RandomMixIn_t::RandomMixIn_t(Material_t* material_refracted, Material_t* material_reflected, double ratio) : 
-    material_refracted_(material_refracted), material_reflected_(material_reflected), ratio_(ratio), unif_(std::uniform_real_distribution<double>(0, 1)) {}
+    MaterialMix_t(material_refracted, material_reflected), ratio_(ratio), unif_(std::uniform_real_distribution<double>(0, 1)) {}
 
 RandomMixIn_t::~RandomMixIn_t(){}
 
