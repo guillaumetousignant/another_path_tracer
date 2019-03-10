@@ -1,6 +1,7 @@
 #include "RandomGenerator_t.h"
 #include "Diffuse_t.h"
 #include "Refractive_t.h"
+#include "Reflective_t.h"
 #include "Vec3f.h"
 #include "Sphere_t.h"
 #include "TransformMatrix_t.h"
@@ -27,10 +28,10 @@ int main(){
     Diffuse_t* difpurple = new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.98, 0.7, 0.85), 1);
     Diffuse_t* diflight = new Diffuse_t(Vec3f(2.0, 2.0, 2.0), Vec3f(1.0, 1.0, 1.0), 1);
     Diffuse_t* difgreen = new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.8, 0.95, 0.6), 1);
-    Diffuse_t* ref1 = new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.98, 1, 0.9), 1);
+    Reflective_t* ref1 = new Reflective_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.98, 1, 0.9));
     Refractive_t* glass = new Refractive_t(Vec3f(0.0, 0.0, 0.0), Vec3f(1.0, 1.0, 1.0), 1.5, 10, airabsorber);
     TransformMatrix_t* transform_light = new TransformMatrix_t();
-    TransformMatrix_t* transform_camera = new TransformMatrix_t();    
+    TransformMatrix_t* transform_camera = new TransformMatrix_t(); 
     TransformMatrix_t* transform1 = new TransformMatrix_t();
     TransformMatrix_t* transform2 = new TransformMatrix_t();
     TransformMatrix_t* transform3 = new TransformMatrix_t();
@@ -69,7 +70,7 @@ int main(){
     dirlight->update();
     
     SkyboxFlatSun_t* skybox = new SkyboxFlatSun_t(Vec3f(0.85, 0.85, 0.98), dirlight);
-    ImgBuffer_t* imgbuffer = new ImgBuffer_t(1800, 1200);
+    ImgBuffer_t* imgbuffer = new ImgBuffer_t(300, 200);
 
     std::list<Medium_t*> medium_list;
     medium_list.assign(2, air);
