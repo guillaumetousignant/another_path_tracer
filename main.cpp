@@ -24,7 +24,7 @@
 
 int main(){
     NonAbsorber_t* airabsorber = new NonAbsorber_t();
-    Absorber_t* glassabsorber = new Absorber_t(Vec3f(), Vec3f(0.6, 0.95, 0.8), 32, 100);
+    Absorber_t* glassabsorber = new Absorber_t(Vec3f(), Vec3f(0.6, 0.95, 0.8), 100, 2.0);
 
     Transparent_t* air = new Transparent_t(0, airabsorber);
     Diffuse_t* difpurple = new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.98, 0.7, 0.85), 1);
