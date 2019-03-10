@@ -72,7 +72,7 @@ int main(){
     dirlight->update();
     
     SkyboxFlatSun_t* skybox = new SkyboxFlatSun_t(Vec3f(0.85, 0.85, 0.98), dirlight);
-    ImgBuffer_t* imgbuffer = new ImgBuffer_t(300, 200);
+    ImgBuffer_t* imgbuffer = new ImgBuffer_t(1800, 1200);
 
     std::list<Medium_t*> medium_list;
     medium_list.assign(2, air);
