@@ -17,7 +17,6 @@ void FresnelMix_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &
     double sint, cost;
     double kr;
     double Rs, Rp;
-    double rand1;
 
     hit_obj->normal(ray, uv, normal);
 
