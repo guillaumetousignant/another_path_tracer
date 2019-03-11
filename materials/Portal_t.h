@@ -2,6 +2,7 @@
 #define PORTAL_T_H
 
 #include "Material_t.h"
+#include "Ray_t.h"
 #include <list>
 
 class Shape_t;
