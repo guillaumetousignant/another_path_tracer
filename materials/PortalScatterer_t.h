@@ -15,8 +15,8 @@ class PortalScatterer_t : public ScatteringFunction_t{
         ~PortalScatterer_t();
 
         TransformMatrix_t* transformation_;
-        std::list<Medium_t*> medium_list_;
         double scattering_coefficient_;
+        std::list<Medium_t*> medium_list_;
         std::uniform_real_distribution<double> unif_;
 
         virtual void scatter(Ray_t &ray, bool &intersected); 
