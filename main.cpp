@@ -73,14 +73,16 @@ int main(){
     dirlight->update();
     
     SkyboxFlatSun_t* skybox = new SkyboxFlatSun_t(Vec3f(0.85, 0.85, 0.98), dirlight);
-    ImgBuffer_t* imgbuffer = new ImgBuffer_t(1800, 1200);
+    ImgBuffer_t* imgbuffer = new ImgBuffer_t(1920*2, 1080*2);
 
     std::list<Medium_t*> medium_list;
     medium_list.assign(2, air);
 
     std::string filename = "./images/test.png";
 
-    double fov[2] ={53.3333333 * 2.0 * PI/360.0, 80.0 * 2.0 * PI /360.0};
+    double fov[2];
+    fov[1] = 80.0 * PI /180.0; 
+    fov[0] = fov[1] * imgbuffer->size_y_/imgbuffer->size_x_;
     unsigned int subpix[2] = {1, 1};
     unsigned int maxbounces = 16;
 
