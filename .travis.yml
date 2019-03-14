@@ -17,6 +17,7 @@ before_install:
   - sudo make install
   - cd ..
   - cd ..
+  - rm -rf dependency_builder
   - export FREETYPEINCLUDE=/usr/include/freetype2 
   - export LIBPNGINCLUDE=/usr/include/libpng 
   - export PNGWRITERINCLUDE=/usr/local/include 
