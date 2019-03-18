@@ -18,7 +18,7 @@ class TriangleTop_t : public Shape_t{
         Vec3f points_[3];
         Vec3f normals_[3];
         Vec3f v0v1_;
-        Vec3f v0v3_;
+        Vec3f v0v2_;
 
         virtual void update() = 0;
         virtual void intersection(const Ray_t &ray, bool &intersected, double &t, double (&uv)[2]) const; 
