@@ -4,6 +4,7 @@
 #include <math.h>
 #include <limits>
 #include "Referentials.h"
+#include <algorithm>
 
 #define PI 3.141592653589793238463
 #define EPSILON 0.00000001
@@ -62,17 +63,25 @@ void TriangleTop_t::intersection(const Ray_t &ray, bool &intersected, double &t,
 }
 
 void TriangleTop_t::normal(const Ray_t &ray, const double (&uv)[2], Vec3f &normalvec) const {
-
+    Vec3f distance = Vec3f(1.0 - uv[0] - uv[1], uv[0], uv[1]);
+    normalvec = Vec3f(distance[0] * normals_[0][0] + distance[1] * normals_[1][0] + distance[2] * normals_[2][0], 
+        distance[0] * normals_[0][1] + distance[1] * normals_[1][1] + distance[2] * normals_[2][1],
+        distance[0] * normals_[0][2] + distance[1] * normals_[1][2] + distance[2] * normals_[2][2]);
+    // Matrix multiplication, optimise.
 }
 
 void TriangleTop_t::normal_face(Vec3f &normalvec) const{
-
+    normalvec = v0v1_.cross(v0v2_).normalize();
 }
 
 Vec3f TriangleTop_t::mincoord() const {
-    return Vec3f();
+    return Vec3f(std::min(std::min(points_[0][0], points_[1][0]), points_[2][0]), 
+                std::min(std::min(points_[0][1], points_[1][1]), points_[2][1]),
+                std::min(std::min(points_[0][2], points_[1][2]), points_[2][2]));
 }
 
 Vec3f TriangleTop_t::maxcoord() const {
-    return Vec3f();
+    return Vec3f(std::max(std::max(points_[0][0], points_[1][0]), points_[2][0]), 
+                std::max(std::max(points_[0][1], points_[1][1]), points_[2][1]),
+                std::max(std::max(points_[0][2], points_[1][2]), points_[2][2]));
 }
