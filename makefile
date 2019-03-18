@@ -174,7 +174,7 @@ verify : mpirelease $(MPIReleaseObjectFiles)
 #--------------------------------------------------------------------------------+
 # Phony Targets
 
-.PHONY : clean cleandebug cleanrelease begin end
+.PHONY : clean cleandebug cleanrelease cleanmpidebug cleanmpirelease begin end
 
 begun :
 
