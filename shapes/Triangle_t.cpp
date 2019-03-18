@@ -9,7 +9,7 @@
 #define PI 3.141592653589793238463
 #define EPSILON 0.00000001
 
-Triangle_t::Triangle_t(Material_t *material, TransformMatrix_t *transform_matrix, Vec3f (&points)[3], Vec3f (&normals)[3], double (&texcoord)[3][2]) 
+Triangle_t::Triangle_t(Material_t *material, TransformMatrix_t *transform_matrix, Vec3f* points, Vec3f* normals, double** texcoord) 
     : TriangleTop_t(material, transform_matrix), points_orig_{points[0], points[1], points[2]} {
 
     if (normals == nullptr){

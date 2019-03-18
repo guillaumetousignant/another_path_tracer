@@ -12,7 +12,7 @@ class Material_t;
 
 class Triangle_t : public TriangleTop_t{
     public:
-        Triangle_t(Material_t *material, TransformMatrix_t *transform_matrix, Vec3f (&points)[3], Vec3f (&normals)[3], double (&texcoord)[3][2]);
+        Triangle_t(Material_t *material, TransformMatrix_t *transform_matrix, Vec3f* points, Vec3f* normals, double** texcoord);
         virtual ~Triangle_t();
 
         Vec3f points_orig_[3];
