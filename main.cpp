@@ -5,6 +5,7 @@
 #include "ReflectiveRefractiveFuzz_t.h"
 #include "Vec3f.h"
 #include "Sphere_t.h"
+#include "Triangle_t.h"
 #include "TransformMatrix_t.h"
 #include "Scene_t.h"
 //#include "SkyboxFlat_t.h"
@@ -40,12 +41,18 @@ int main(){
     TransformMatrix_t* transform3 = new TransformMatrix_t();
     TransformMatrix_t* transform4 = new TransformMatrix_t();
     TransformMatrix_t* transform5 = new TransformMatrix_t();
+    TransformMatrix_t* transform_neutral = new TransformMatrix_t();
 
     Sphere_t* spherepurple = new Sphere_t(difpurple, transform1);
     Sphere_t* mirror = new Sphere_t(ref1, transform2);
     Sphere_t* light = new Sphere_t(diflight, transform3);
     Sphere_t* sphereglass = new Sphere_t(glass, transform4);
     Sphere_t* ground = new Sphere_t(difgreen, transform5);
+    Vec3f points[3];
+    points[0] = Vec3f(-1, 2, -0.4);
+    points[1] = Vec3f(1, 2, -0.4);
+    points[2] = Vec3f(-1, 2, 1.1);
+    Triangle_t* triangle = new Triangle_t(difpurple, transform_neutral, &points[0], nullptr, nullptr);
 
     spherepurple->transformation_->translate(Vec3f(1, 2, 0.5));
     spherepurple->transformation_->scale(0.5);
@@ -64,6 +71,7 @@ int main(){
     scene->add(light);
     scene->add(sphereglass);
     scene->add(ground);
+    scene->add(triangle);
     scene->update();
 
     DirectionalLight_t* dirlight = new DirectionalLight_t(Vec3f(5, 5, 4), transform_light);
@@ -73,7 +81,7 @@ int main(){
     dirlight->update();
     
     SkyboxFlatSun_t* skybox = new SkyboxFlatSun_t(Vec3f(0.85, 0.85, 0.98), dirlight);
-    ImgBuffer_t* imgbuffer = new ImgBuffer_t(1920*2, 1080*2);
+    ImgBuffer_t* imgbuffer = new ImgBuffer_t(300, 200);
 
     std::list<Medium_t*> medium_list;
     medium_list.assign(2, air);
