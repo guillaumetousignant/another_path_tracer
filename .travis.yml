@@ -17,12 +17,14 @@ before_install:
   - sudo make install
   - cd ..
   - cd ..
+  - rm -rf dependency_builder
   - export FREETYPEINCLUDE=/usr/include/freetype2 
   - export LIBPNGINCLUDE=/usr/include/libpng 
   - export PNGWRITERINCLUDE=/usr/local/include 
   - export PNGWRITERLIBSDIR=/usr/local/lib
   - export LIBPNGLIBSDIR=/usr/lib/x86_64-linux-gnu 
   - export LIBPNGVERSION=12
+  - export FREETYPELIBSDIR=/usr/lib/x86_64-linux-gnu 
 script: 
   - make VERIFY=true
   - ./bin/another_path_tracer
