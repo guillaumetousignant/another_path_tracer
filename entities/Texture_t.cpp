@@ -50,12 +50,12 @@ Vec3f Texture_t::get(double (&xy)[2]) const {
     yhi = (unsigned int)std::ceil(y);
 
 
-    return  img_[size_y_ - 1 - ylo][xlo] * (1.0 - xd) * (1.0 - yd) +
-            img_[size_y_ - 1 - ylo][xhi] * xd * (1.0 - yd) + 
-            img_[size_y_ - 1 - yhi][xlo] * (1.0 - xd) * yd +
-            img_[size_y_ - 1 - yhi][xhi] * xd * yd;
+    return  img_[ylo][xlo] * (1.0 - xd) * (1.0 - yd) +
+            img_[ylo][xhi] * xd * (1.0 - yd) + 
+            img_[yhi][xlo] * (1.0 - xd) * yd +
+            img_[ yhi][xhi] * xd * yd;
 }
 
 Vec3f Texture_t::get_nn(double (&xy)[2]) const {
-    return img_[size_y_ - 1 - (unsigned int)std::round(((double)size_x_ - 1.0) * xy[0])][(unsigned int)std::round(((double)size_y_ - 1.0) * xy[1])];
+    return img_[(unsigned int)std::round(((double)size_x_ - 1.0) * xy[0])][(unsigned int)std::round(((double)size_y_ - 1.0) * xy[1])];
 }
