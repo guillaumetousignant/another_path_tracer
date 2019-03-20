@@ -1,5 +1,6 @@
 #include "RandomGenerator_t.h"
 #include "Diffuse_t.h"
+#include "DiffuseTex_t.h"
 #include "Refractive_t.h"
 #include "Reflective_t.h"
 #include "ReflectiveRefractiveFuzz_t.h"
@@ -18,6 +19,7 @@
 #include "Transparent_t.h"
 #include <string>
 #include "DirectionalLight_t.h"
+#include "Texture_t.h"
 #include "SkyboxFlatSun_t.h"
 
 #include <iostream> // REMOVE
@@ -25,6 +27,8 @@
 #define PI 3.141592653589793238463
 
 int main(){
+    Texture_t* earthtex = new Texture_t("./assets/earth_2048.png");
+
     NonAbsorber_t* airabsorber = new NonAbsorber_t();
     Absorber_t* glassabsorber = new Absorber_t(Vec3f(), Vec3f(0.6, 0.95, 0.8), 100, 2.0);
 
@@ -32,6 +36,7 @@ int main(){
     Diffuse_t* difpurple = new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.98, 0.7, 0.85), 1);
     Diffuse_t* diflight = new Diffuse_t(Vec3f(2.0, 2.0, 2.0), Vec3f(1.0, 1.0, 1.0), 1);
     Diffuse_t* difgreen = new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.8, 0.95, 0.6), 1);
+    DiffuseTex_t* earthmat = new DiffuseTex_t(Vec3f(0.0, 0.0, 0.0), earthtex, 0.5);
     Reflective_t* ref1 = new Reflective_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.98, 1, 0.9));
     ReflectiveRefractiveFuzz_t* glass = new ReflectiveRefractiveFuzz_t(Vec3f(0.0, 0.0, 0.0), Vec3f(1.0, 1.0, 1.0), 1.5, 10, 1.0, 0.1, glassabsorber);
     TransformMatrix_t* transform_light = new TransformMatrix_t();
@@ -48,11 +53,29 @@ int main(){
     Sphere_t* light = new Sphere_t(diflight, transform3);
     Sphere_t* sphereglass = new Sphere_t(glass, transform4);
     Sphere_t* ground = new Sphere_t(difgreen, transform5);
-    Vec3f points[3];
+
+    Vec3f* points = new Vec3f[3];
     points[0] = Vec3f(-1, 2, -0.4);
     points[1] = Vec3f(1, 2, -0.4);
     points[2] = Vec3f(-1, 2, 1.1);
-    Triangle_t* triangle = new Triangle_t(difpurple, transform_neutral, &points[0], nullptr, nullptr);
+    double** texcoord = new double*[3]; // Wow this is sketchy
+    texcoord[0] = new double[2];
+    texcoord[1] = new double[2];
+    texcoord[2] = new double[2];
+    texcoord[0][0] = 0.0;
+    texcoord[0][1] = 0.0;
+    texcoord[1][0] = 1.0;
+    texcoord[1][1] = 0.0;
+    texcoord[2][0] = 0.0;
+    texcoord[2][1] = 1.0;
+
+    Triangle_t* triangle = new Triangle_t(earthmat, transform_neutral, &points[0], nullptr, texcoord);
+
+    delete [] texcoord[0];
+    delete [] texcoord[1];
+    delete [] texcoord[2];
+    delete [] texcoord;
+    delete [] points;
 
     spherepurple->transformation_->translate(Vec3f(1, 2, 0.5));
     spherepurple->transformation_->scale(0.5);
