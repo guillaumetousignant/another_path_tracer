@@ -6,8 +6,8 @@
 
 class MeshGeometry_t{
     public:
-        MeshGeometry_t(){};
-        ~MeshGeometry_t(){};
+        MeshGeometry_t();
+        ~MeshGeometry_t();
 
         unsigned int n_tris_;
         std::string* mat_;
