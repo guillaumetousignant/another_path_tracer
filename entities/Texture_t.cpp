@@ -16,12 +16,10 @@ Texture_t::Texture_t(std::string filename){
     }
 
     for (unsigned int j = 0; j < size_y_; j++){
-        for (unsigned int i = 0; j < size_x_; i++){
+        for (unsigned int i = 0; i < size_x_; i++){
             img_[j][i] = Vec3f(png.dread((int)i+1, (int)j+1, 1), png.dread((int)i+1, (int)j+1, 2), png.dread((int)i+1, (int)j+1, 3));
         }
     }
-
-    png.close();
 }
 
 Texture_t::~Texture_t(){
