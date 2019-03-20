@@ -1,6 +1,7 @@
 #include "Camera_t.h"
 #include "TransformMatrix_t.h"
 #include <iostream>
+#include <chrono>
 
 Camera_t::Camera_t(TransformMatrix_t* transformation, std::string filename, Vec3f up, const double (&fov)[2], const unsigned int (&subpix)[2], std::list <Medium_t*> &medium_list, Skybox_t* skybox, unsigned int max_bounces, double gammaind) 
             : transformation_(transformation), filename_(filename), fov_{fov[0], fov[1]}, subpix_{subpix[0], subpix[1]}, medium_list_(medium_list), 
@@ -20,17 +21,30 @@ void Camera_t::accumulate(Scene_t* scene, unsigned int n_iter /*= 1000000000*/) 
 }
 
 void Camera_t::accumulateWrite(Scene_t* scene, unsigned int n_iter /*= 1000000000*/, unsigned int interval /*=1*/) {
+    //std::chrono::steady_clock::time_point t_start, t_end;
     unsigned int n = 0;
+
     while (n < n_iter){
         n++;
+        
+        auto t_start = std::chrono::high_resolution_clock::now();
         raytrace(scene);
-        std::cout << "Iteration " << n << " done." << std::endl;
+        auto t_end = std::chrono::high_resolution_clock::now();
+
+        std::cout << "Iteration " << n << " done in " 
+            << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
+            << "s." << std::endl;
 
         show();
         if (!(n%interval)){
             std::cout << "Writing started." << std::endl;
+            auto t_start = std::chrono::high_resolution_clock::now();
             write();
-            std::cout << "Writing done." << std::endl;
+            auto t_end = std::chrono::high_resolution_clock::now();
+
+            std::cout << "Writing done in "
+            << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
+            << "s." << std::endl;
         }
     }
 }
