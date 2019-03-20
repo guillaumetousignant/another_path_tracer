@@ -12,7 +12,7 @@ class MeshGeometry_t{
         unsigned int n_tris_;
         std::string* mat_;
         Vec3f* v_;
-        double* vt_[2]; // Is this legal?
+        double** vt_; // Is this legal?
         Vec3f* vn_;
 };
 
