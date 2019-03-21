@@ -5,6 +5,35 @@
 #include <sstream>
 
 MeshGeometry_t::MeshGeometry_t(const std::string &filename){
+    readObj(filename);
+    buildTriangles();
+}
+
+MeshGeometry_t::~MeshGeometry_t(){
+    if (mat_ != nullptr){
+        delete [] mat_;
+    }
+
+    if (v_ != nullptr){
+        delete [] v_;
+    }
+
+    if (vn_ != nullptr){
+        delete [] vn_;
+    }
+
+    if (vt_ != nullptr){
+        for (unsigned int i = 0; i < n_tris_; i++){
+            if (vt_[i] != nullptr){
+                delete [] vt_[i];
+            }
+        }
+        delete [] vt_;
+    }
+
+}
+
+void MeshGeometry_t::readObj(const std::string &filename){
     unsigned int nv = 0;
     unsigned int nvt = 0;
     unsigned int nvn = 0;
@@ -20,6 +49,7 @@ MeshGeometry_t::MeshGeometry_t(const std::string &filename){
         return;
     }
 
+    // Getting number of elements
     while (std::getline(meshfile, line)){
         std::istringstream liness(line);
         liness >> token;
@@ -42,6 +72,7 @@ MeshGeometry_t::MeshGeometry_t(const std::string &filename){
         }
     }
 
+    // Getting normals, vertex coordinates and texture coordinates
     unsigned int v_counter = 0;
     unsigned int vt_counter = 0;
     unsigned int vn_counter = 0;
@@ -80,8 +111,19 @@ MeshGeometry_t::MeshGeometry_t(const std::string &filename){
         }
     }    
 
+    // Filling faces
     unsigned int nf_counter = 0;
     std::string material = "";
+    std::string token1, token2;
+
+    n_tris_ = nf;
+    mat_ = new std::string[n_tris_];
+    v_ = new Vec3f[n_tris_];
+    vt_ = new double*[n_tris_];
+    for (unsigned int i = 0; i < n_tris_; i++){
+        vt_[i] = new double[2];
+    }
+    vn_ = new Vec3f[n_tris_];
 
     meshfile.clear();
     meshfile.seekg(0, std::ios::beg);
@@ -90,10 +132,18 @@ MeshGeometry_t::MeshGeometry_t(const std::string &filename){
         std::istringstream liness(line);
         liness >> token;
 
+        if (token.compare("f")){
+            liness >> token >> token1;
+            while (liness >> token2){
 
 
-
-
+                token1 = token2;
+            }
+            
+        }
+        else if (token.compare("usemtl")){ // check if there is :
+            
+        }
     }    
 
     meshfile.close();
@@ -107,26 +157,6 @@ MeshGeometry_t::MeshGeometry_t(const std::string &filename){
     delete [] vn;
 }
 
-MeshGeometry_t::~MeshGeometry_t(){
-    if (mat_ != nullptr){
-        delete [] mat_;
-    }
-
-    if (v_ != nullptr){
-        delete [] v_;
-    }
-
-    if (vn_ != nullptr){
-        delete [] vn_;
-    }
-
-    if (vt_ != nullptr){
-        for (unsigned int i = 0; i < n_tris_; i++){
-            if (vt_[i] != nullptr){
-                delete [] vt_[i];
-            }
-        }
-        delete [] vt_;
-    }
-
+void MeshGeometry_t::buildTriangles(){
+    
 }

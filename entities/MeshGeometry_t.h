@@ -14,6 +14,10 @@ class MeshGeometry_t{
         Vec3f* v_;
         double** vt_; // Is this legal?
         Vec3f* vn_;
+    
+    private:
+        void readObj(const std::string &filename);
+        virtual void buildTriangles();
 };
 
 #endif
