@@ -23,7 +23,7 @@ MeshGeometry_t::~MeshGeometry_t(){
     }
 
     if (vt_ != nullptr){
-        for (unsigned int i = 0; i < n_tris_; i++){
+        for (unsigned int i = 0; i < 3*n_tris_; i++){
             if (vt_[i] != nullptr){
                 delete [] vt_[i];
             }
@@ -118,12 +118,12 @@ void MeshGeometry_t::readObj(const std::string &filename){
 
     n_tris_ = nf;
     mat_ = new std::string[n_tris_];
-    v_ = new Vec3f[n_tris_];
-    vt_ = new double*[n_tris_];
-    for (unsigned int i = 0; i < n_tris_; i++){
+    v_ = new Vec3f[3*n_tris_];
+    vt_ = new double*[3*n_tris_];
+    for (unsigned int i = 0; i < 3*n_tris_; i++){
         vt_[i] = new double[2];
     }
-    vn_ = new Vec3f[n_tris_];
+    vn_ = new Vec3f[3*n_tris_];
 
     meshfile.clear();
     meshfile.seekg(0, std::ios::beg);
@@ -136,7 +136,9 @@ void MeshGeometry_t::readObj(const std::string &filename){
             liness >> token >> token1;
             while (liness >> token2){
 
+                
 
+                nf_counter++;
                 token1 = token2;
             }
             
