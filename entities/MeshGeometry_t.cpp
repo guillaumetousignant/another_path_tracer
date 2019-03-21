@@ -6,7 +6,7 @@
 
 MeshGeometry_t::MeshGeometry_t(const std::string &filename){
     readObj(filename);
-    buildTriangles();
+    deNan();
 }
 
 MeshGeometry_t::~MeshGeometry_t(){
@@ -114,7 +114,9 @@ void MeshGeometry_t::readObj(const std::string &filename){
     // Filling faces
     unsigned int nf_counter = 0;
     std::string material = "";
-    std::string token1, token2;
+    std::string tokens[3];
+    std::string value;
+    size_t pos;
 
     n_tris_ = nf;
     mat_ = new std::string[n_tris_];
@@ -133,18 +135,54 @@ void MeshGeometry_t::readObj(const std::string &filename){
         liness >> token;
 
         if (token.compare("f")){
-            liness >> token >> token1;
-            while (liness >> token2){
+            liness >> tokens[0] >> tokens[1];
+            while (liness >> tokens[2]){
+                for (unsigned int i = 0; i < 3; i++){
+                    mat_[nf_counter] = material;
+                    pos = tokens[i].find("/");
+                    if (pos == std::string::npos){
+                        v_[nf_counter*3 + i] = v[std::stoi(tokens[i], nullptr)];
+                        vt_[nf_counter*3 + i][0] = 0;
+                        vt_[nf_counter*3 + i][1] = 0;
+                        vn_[nf_counter*3 + i] = Vec3f(NAN, NAN, NAN);
+                    }
+                    else{
+                        v_[nf_counter*3 + i] = v[std::stoi(tokens[i].substr(0, pos), nullptr)];
+                        tokens[i].erase(0, pos + 1);
 
-                
+                        pos = tokens[i].find("/");
+                        if (pos == std::string::npos){
+                            vt_[nf_counter*3 + i][0] = vt[std::stoi(tokens[i], nullptr)][0];
+                            vt_[nf_counter*3 + i][1] = vt[std::stoi(tokens[i], nullptr)][1];
+                            vn_[nf_counter*3 + i] = Vec3f(NAN, NAN, NAN);
+                        }
+                        else{
+                            if (pos == 0){
+                                vt_[nf_counter*3 + i][0] = 0;
+                                vt_[nf_counter*3 + i][1] = 0; 
+                            }
+                            else{
+                                vt_[nf_counter*3 + i][0] = vt[std::stoi(tokens[i].substr(0, pos), nullptr)][0];
+                                vt_[nf_counter*3 + i][1] = vt[std::stoi(tokens[i].substr(0, pos), nullptr)][1];
+                            }
+                            tokens[i].erase(0, pos + 1);
+                            vn_[nf_counter*3 + i] = vn[std::stoi(tokens[i], nullptr)];
+                        }
+                    }
+                }
 
                 nf_counter++;
-                token1 = token2;
+                tokens[1] = tokens[2];
             }
             
         }
         else if (token.compare("usemtl")){ // check if there is :
-            
+            liness >> tokens[0];
+            pos = tokens[0].find(":");
+            if (pos != std::string::npos){
+                tokens[0].erase(0, pos + 1);
+            }
+            material = tokens[0];
         }
     }    
 
@@ -159,6 +197,12 @@ void MeshGeometry_t::readObj(const std::string &filename){
     delete [] vn;
 }
 
-void MeshGeometry_t::buildTriangles(){
-    
+void MeshGeometry_t::deNan(){
+    for (unsigned int i = 0; i < n_tris_; i++){
+        for (unsigned int j = 0; j < 3; j++){
+            if (std::isnan(vn_[0])){
+                vn_[3*i + j] = (v_[3*i + 1] - v_[3*i]).cross(v_[3*i + 2] - v_[3*i]).normalize();
+            }
+        }
+    }
 }

@@ -17,7 +17,7 @@ class MeshGeometry_t{
     
     private:
         void readObj(const std::string &filename);
-        virtual void buildTriangles();
+        void deNan();
 };
 
 #endif
