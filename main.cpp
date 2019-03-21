@@ -20,6 +20,7 @@
 #include <string>
 #include "DirectionalLight_t.h"
 #include "Texture_t.h"
+#include "MeshGeometry_t.h"
 #include "SkyboxFlatSun_t.h"
 
 #include <iostream> // REMOVE
@@ -28,6 +29,7 @@
 
 int main(){
     Texture_t* earthtex = new Texture_t("./assets/earth_2048.png");
+    MeshGeometry_t* box = new MeshGeometry_t("./assets/cube.obj");
 
     NonAbsorber_t* airabsorber = new NonAbsorber_t();
     Absorber_t* glassabsorber = new Absorber_t(Vec3f(), Vec3f(0.6, 0.95, 0.8), 100, 2.0);
