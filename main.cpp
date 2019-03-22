@@ -7,6 +7,7 @@
 #include "Vec3f.h"
 #include "Sphere_t.h"
 #include "Triangle_t.h"
+#include "Mesh_t.h"
 #include "TransformMatrix_t.h"
 #include "Scene_t.h"
 //#include "SkyboxFlat_t.h"
@@ -29,7 +30,7 @@
 
 int main(){
     Texture_t* earthtex = new Texture_t("./assets/earth_2048.png");
-    MeshGeometry_t* box = new MeshGeometry_t("./assets/cube.obj");
+    MeshGeometry_t* cube_mesh = new MeshGeometry_t("./assets/cube.obj");
 
     NonAbsorber_t* airabsorber = new NonAbsorber_t();
     Absorber_t* glassabsorber = new Absorber_t(Vec3f(), Vec3f(0.6, 0.95, 0.8), 100, 2.0);
@@ -38,6 +39,7 @@ int main(){
     Diffuse_t* difpurple = new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.98, 0.7, 0.85), 1);
     Diffuse_t* diflight = new Diffuse_t(Vec3f(2.0, 2.0, 2.0), Vec3f(1.0, 1.0, 1.0), 1);
     Diffuse_t* difgreen = new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.8, 0.95, 0.6), 1);
+    Diffuse_t* difblue = new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.1, 0.4, 0.8), 1);
     DiffuseTex_t* earthmat = new DiffuseTex_t(Vec3f(0.0, 0.0, 0.0), earthtex, 0.5);
     Reflective_t* ref1 = new Reflective_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.98, 1, 0.9));
     ReflectiveRefractiveFuzz_t* glass = new ReflectiveRefractiveFuzz_t(Vec3f(0.0, 0.0, 0.0), Vec3f(1.0, 1.0, 1.0), 1.5, 10, 1.0, 0.1, glassabsorber);
@@ -48,7 +50,7 @@ int main(){
     TransformMatrix_t* transform3 = new TransformMatrix_t();
     TransformMatrix_t* transform4 = new TransformMatrix_t();
     TransformMatrix_t* transform5 = new TransformMatrix_t();
-    TransformMatrix_t* transform_neutral = new TransformMatrix_t();
+    TransformMatrix_t* transform_cube = new TransformMatrix_t();
 
     Sphere_t* spherepurple = new Sphere_t(difpurple, transform1);
     Sphere_t* mirror = new Sphere_t(ref1, transform2);
@@ -56,28 +58,7 @@ int main(){
     Sphere_t* sphereglass = new Sphere_t(glass, transform4);
     Sphere_t* ground = new Sphere_t(difgreen, transform5);
 
-    Vec3f* points = new Vec3f[3];
-    points[0] = Vec3f(-1, 2, -0.4);
-    points[1] = Vec3f(1, 2, -0.4);
-    points[2] = Vec3f(-1, 2, 1.1);
-    double** texcoord = new double*[3]; // Wow this is sketchy
-    texcoord[0] = new double[2];
-    texcoord[1] = new double[2];
-    texcoord[2] = new double[2];
-    texcoord[0][0] = 0.0;
-    texcoord[0][1] = 0.0;
-    texcoord[1][0] = 1.0;
-    texcoord[1][1] = 0.0;
-    texcoord[2][0] = 0.0;
-    texcoord[2][1] = 1.0;
-
-    Triangle_t* triangle = new Triangle_t(earthmat, transform_neutral, &points[0], nullptr, texcoord);
-
-    delete [] texcoord[0];
-    delete [] texcoord[1];
-    delete [] texcoord[2];
-    delete [] texcoord;
-    delete [] points;
+    Mesh_t* cube = new Mesh_t(difblue, transform_cube, cube_mesh);
 
     spherepurple->transformation_->translate(Vec3f(1, 2, 0.5));
     spherepurple->transformation_->scale(0.5);
@@ -89,6 +70,9 @@ int main(){
     sphereglass->transformation_->scale(0.4);
     ground->transformation_->translate(Vec3f(0, 0, -1001));
     ground->transformation_->scale(1000);
+    cube->transformation_->translate(Vec3f(0.0, 3.0, 0.2));
+    cube->transformation_->scale(0.7);
+    cube->transformation_->rotateZ(PI/8);
 
     Scene_t* scene = new Scene_t();
     scene->add(spherepurple);
@@ -96,7 +80,7 @@ int main(){
     scene->add(light);
     scene->add(sphereglass);
     scene->add(ground);
-    scene->add(triangle);
+    scene->add(cube);
     scene->update();
 
     DirectionalLight_t* dirlight = new DirectionalLight_t(Vec3f(5, 5, 4), transform_light);
