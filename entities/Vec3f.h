@@ -33,6 +33,8 @@ class Vec3f {
         const Vec3f &operator+=(double factor);
         const Vec3f &operator-=(const Vec3f &other); 
         const Vec3f &operator-=(double factor);
+        const Vec3f &min(const Vec3f &other);
+        const Vec3f &max(const Vec3f &other);
         double magnitude() const;
         double magnitudeSquared() const;
         Vec3f normalize() const;
