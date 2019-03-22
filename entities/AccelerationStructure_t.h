@@ -8,7 +8,7 @@ class Shape_t;
 class AccelerationStructure_t{
     public:
         AccelerationStructure_t(){};
-        ~AccelerationStructure_t(){};
+        virtual ~AccelerationStructure_t(){};
 
         virtual void update() = 0;
         virtual void intersect(Ray_t &ray, Shape_t* hit_obj, double &t, double (&uv)[2]) = 0;
