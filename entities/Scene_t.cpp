@@ -3,12 +3,16 @@
 #include "AccelerationStructure_t.h"
 #include "Mesh_t.h"
 #include <limits>
+#include "AccelerationGrid_t.h"
 
 Scene_t::Scene_t() : geometry_(nullptr), n_obj_(0), acc_(nullptr) {}
 
 Scene_t::~Scene_t() {
     if (geometry_ != nullptr){
         delete [] geometry_;
+    }
+    if (acc_ != nullptr){
+        delete acc_;
     }
 }
 
@@ -71,7 +75,10 @@ void Scene_t::update() {
 }
 
 void Scene_t::build_acc() {
-
+    if (acc_ != nullptr){
+        delete acc_;
+    }
+    acc_ = new AccelerationGrid_t(geometry_, n_obj_);
 }
 
 void Scene_t::intersect_brute(const Ray_t &ray, Shape_t* &hit_obj, double &t, double (&uv)[2]) const {
@@ -93,5 +100,5 @@ void Scene_t::intersect_brute(const Ray_t &ray, Shape_t* &hit_obj, double &t, do
 }
 
 void Scene_t::intersect(const Ray_t &ray, Shape_t* &hit_obj, double &t, double (&uv)[2]) const {
-    intersect_brute(ray, hit_obj, t, uv);
+    acc_->intersect(ray, hit_obj, t, uv);
 }
