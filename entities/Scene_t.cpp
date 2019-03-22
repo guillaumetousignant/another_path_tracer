@@ -30,7 +30,18 @@ void Scene_t::add(Shape_t** shapes, unsigned int n_shapes) {
 }
 
 void Scene_t::add(Mesh_t* mesh) {
-
+    Shape_t** geometry_2 = new Shape_t*[n_obj_+mesh->n_tris_];
+    for (unsigned int i = 0; i < n_obj_; i++){
+        geometry_2[i] = geometry_[i];
+    }
+    for (unsigned int i = 0; i < mesh->n_tris_; i++){
+        geometry_2[i+n_obj_] = mesh->triangles_[i];
+    }
+    if (geometry_ != nullptr){
+        delete [] geometry_;
+    }
+    geometry_ = geometry_2;
+    n_obj_ += mesh->n_tris_;
 }
 
 void Scene_t::add(Mesh_t** meshes, unsigned int n_meshes) {
