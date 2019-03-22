@@ -27,6 +27,6 @@ Vec3f Box_t::mincoord() const {
 
 }
 
-Vec3f Sphere_t::maxcoord() const {
+Vec3f Box_t::maxcoord() const {
 
 }
