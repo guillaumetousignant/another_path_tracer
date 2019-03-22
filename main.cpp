@@ -83,6 +83,8 @@ int main(){
     scene->add(cube);
     scene->update();
 
+    scene->build_acc();
+
     DirectionalLight_t* dirlight = new DirectionalLight_t(Vec3f(5, 5, 4), transform_light);
     dirlight->transformation_->scale(0.95);
     dirlight->transformation_->rotateZ(-0.7854);
