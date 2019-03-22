@@ -147,7 +147,7 @@ void AccelerationGrid_t::intersect(const Ray_t &ray, Shape_t* hit_obj, double &t
         }
     }
 
-    unsigned int cellcoordint[3] = {(unsigned int)cellcoord[0], (unsigned int)cellcoord[1], (unsigned int)cellcoord[2]};
+    int cellcoordint[3] = {(int)cellcoord[0], (int)cellcoord[1], (int)cellcoord[2]};
 
     while (true){
         if (cells_[cellcoordint[0] + cellcoordint[1]*cell_res_[0] + cellcoordint[2]*cell_res_[0]*cell_res_[1]] != nullptr){
