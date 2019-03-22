@@ -134,6 +134,12 @@ Vec3f Vec3f::sqrt() const {
 Vec3f Vec3f::exp() const {
     return Vec3f(std::exp(v[0]), std::exp(v[1]), std::exp(v[2]));
 }
+Vec3f Vec3f::floor() const {
+    return Vec3f(std::floor(v[0]), std::floor(v[1]), std::floor(v[2]));
+}
+Vec3f Vec3f::ceil() const {
+    return Vec3f(std::ceil(v[0]), std::ceil(v[1]), std::ceil(v[2]));
+}
 ostream &operator<<(ostream &output, const Vec3f &v) {
     cout << '(' << v[0] << ", " << v[1] << ", " << v[2] << ')';
     return output;
