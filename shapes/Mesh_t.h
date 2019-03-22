@@ -11,10 +11,12 @@
 class Material_t;
 class TransformMatrix_t;
 class MeshGeometry_t;
+class MaterialMap_t;
 
 class Mesh_t : public Shape_t{
     public:
-        Mesh_t(Material_t *material, TransformMatrix_t *transform_matrix);
+        Mesh_t(Material_t *material, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom);
+        Mesh_t(MaterialMap_t *materialmap, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom);
         virtual ~Mesh_t();
 
         MeshGeometry_t* geom_;
@@ -27,6 +29,6 @@ class Mesh_t : public Shape_t{
         virtual void normal(const Ray_t &ray, const double (&uv)[2], Vec3f &normalvec) const;
         virtual Vec3f mincoord() const;
         virtual Vec3f maxcoord() const;
-        virtual void createTriangles();
+        virtual Shape_t* createTriangle(Material_t *material, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom, unsigned int index);
 };
 #endif
