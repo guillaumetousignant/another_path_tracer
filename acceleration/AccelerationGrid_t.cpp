@@ -96,7 +96,7 @@ void AccelerationGrid_t::update(){
     }
 }
 
-void AccelerationGrid_t::intersect(const Ray_t &ray, Shape_t* hit_obj, double &t, double (&uv)[2]) const {
+void AccelerationGrid_t::intersect(const Ray_t &ray, Shape_t* &hit_obj, double &t, double (&uv)[2]) const {
     Vec3f invdir;
     double tbbox;
     bool intersected;
@@ -128,10 +128,10 @@ void AccelerationGrid_t::intersect(const Ray_t &ray, Shape_t* hit_obj, double &t
         if (cellcoord[i] < 0){
             cellcoord[i] = 0;
         }
-    }
+    }    
     cell_res = Vec3f(cell_res_[0], cell_res_[1], cell_res_[2]);
     cellcoord = cellcoord.min(cell_res-1.0);
-
+    
     for (unsigned int i = 0; i < 3; i++){
         if (ray.direction_[i] < 0){
             deltat[i] = -cell_size_[i] * invdir[i];

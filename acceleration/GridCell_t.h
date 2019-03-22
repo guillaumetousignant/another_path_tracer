@@ -15,7 +15,7 @@ class GridCell_t : public AccelerationStructure_t{
         std::list<Shape_t*> items_; // Should be list or vector or array?
 
         virtual void update();
-        virtual void intersect(const Ray_t &ray, Shape_t* hit_obj, double &t, double (&uv)[2]) const;
+        virtual void intersect(const Ray_t &ray, Shape_t* &hit_obj, double &t, double (&uv)[2]) const;
         virtual void add(Shape_t* item);
         virtual void remove(const Shape_t* item);
 };

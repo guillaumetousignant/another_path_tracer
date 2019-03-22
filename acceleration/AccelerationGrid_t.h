@@ -21,7 +21,7 @@ class AccelerationGrid_t : public AccelerationStructure_t{
         Vec3f coordinates_[2];
 
         virtual void update();
-        virtual void intersect(const Ray_t &ray, Shape_t* hit_obj, double &t, double (&uv)[2]) const;
+        virtual void intersect(const Ray_t &ray, Shape_t* &hit_obj, double &t, double (&uv)[2]) const;
         virtual void add(Shape_t* item);
         virtual void remove(const Shape_t* item);
         void move(Shape_t* item);

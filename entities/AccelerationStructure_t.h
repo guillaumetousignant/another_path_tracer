@@ -11,7 +11,7 @@ class AccelerationStructure_t{
         virtual ~AccelerationStructure_t(){};
 
         virtual void update() = 0;
-        virtual void intersect(const Ray_t &ray, Shape_t* hit_obj, double &t, double (&uv)[2]) const = 0;
+        virtual void intersect(const Ray_t &ray, Shape_t* &hit_obj, double &t, double (&uv)[2]) const = 0;
         virtual void add(Shape_t* item) = 0;
 };
 

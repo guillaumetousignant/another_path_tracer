@@ -13,7 +13,7 @@ void GridCell_t::update(){
     }
 }
 
-void GridCell_t::intersect(const Ray_t &ray, Shape_t* hit_obj, double &t, double (&uv)[2]) const {
+void GridCell_t::intersect(const Ray_t &ray, Shape_t* &hit_obj, double &t, double (&uv)[2]) const {
     double t_temp;
     bool intersected;
     double uv_temp[2];
