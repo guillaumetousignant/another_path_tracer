@@ -17,6 +17,6 @@ class GridCell_t : public AccelerationStructure_t{
         virtual void update();
         virtual void intersect(const Ray_t &ray, Shape_t* hit_obj, double &t, double (&uv)[2]) const;
         void add(Shape_t* item);
-        void remove(Shape_t* item);
+        void remove(const Shape_t* item);
 };
 #endif

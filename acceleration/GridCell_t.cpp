@@ -35,7 +35,7 @@ void GridCell_t::add(Shape_t* item){
     items_.push_back(item);
 }
 
-void GridCell_t::remove(Shape_t* item){
+void GridCell_t::remove(const Shape_t* item){
     for (std::list<Shape_t*>::iterator it = items_.begin(); it != items_.end(); ++it){
         if ((*it) == item){
             items_.erase(it);
