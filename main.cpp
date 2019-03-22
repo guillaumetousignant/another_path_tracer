@@ -4,6 +4,7 @@
 #include "Refractive_t.h"
 #include "Reflective_t.h"
 #include "ReflectiveRefractiveFuzz_t.h"
+#include "ReflectiveRefractive_t.h"
 #include "Vec3f.h"
 #include "Sphere_t.h"
 #include "Triangle_t.h"
@@ -42,7 +43,8 @@ int main(){
     Diffuse_t* difblue = new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.1, 0.4, 0.8), 1);
     DiffuseTex_t* earthmat = new DiffuseTex_t(Vec3f(0.0, 0.0, 0.0), earthtex, 0.5);
     Reflective_t* ref1 = new Reflective_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.98, 1, 0.9));
-    ReflectiveRefractiveFuzz_t* glass = new ReflectiveRefractiveFuzz_t(Vec3f(0.0, 0.0, 0.0), Vec3f(1.0, 1.0, 1.0), 1.5, 10, 1.0, 0.1, glassabsorber);
+    //ReflectiveRefractiveFuzz_t* glass = new ReflectiveRefractiveFuzz_t(Vec3f(0.0, 0.0, 0.0), Vec3f(1.0, 1.0, 1.0), 1.5, 10, 1.0, 0.1, glassabsorber);
+    Refractive_t* glass = new Refractive_t(Vec3f(0.0, 0.0, 0.0), Vec3f(1.0, 1.0, 1.0), 1.5, 10, glassabsorber);
     TransformMatrix_t* transform_light = new TransformMatrix_t();
     TransformMatrix_t* transform_camera = new TransformMatrix_t(); 
     TransformMatrix_t* transform1 = new TransformMatrix_t();
