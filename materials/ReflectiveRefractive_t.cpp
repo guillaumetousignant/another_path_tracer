@@ -24,10 +24,10 @@ void ReflectiveRefractive_t::bounce(const double (&uv)[2], const Shape_t* hit_ob
     cosi = ray.direction_.dot(normal);
 
     if (priority_ >= ray.medium_list_.front()->priority_){ // CHECK also discard if priority is equal, but watch for going out case
-        if (cosi < 0){ // Coming in
+        if (cosi < 0.0){ // Coming in
             etai = ray.medium_list_.front()->ind_;
             etat = ind_;
-            cosi *= -1;
+            cosi *= -1.0;
             n = normal;
             coming_out = false;
         }
@@ -38,10 +38,11 @@ void ReflectiveRefractive_t::bounce(const double (&uv)[2], const Shape_t* hit_ob
             coming_out = true;
         }
 
-        sint = etai/etat * std::sqrt(1.0 - cosi * cosi);
+        eta = etai/etat;
+        sint = eta * std::sqrt(1.0 - cosi * cosi);
 
-        if (sint >= 1){
-            kr = 1;
+        if (sint >= 1.0){
+            kr = 1.0;
         }
         else{
             cost = std::sqrt(1.0 - sint * sint);
@@ -51,13 +52,13 @@ void ReflectiveRefractive_t::bounce(const double (&uv)[2], const Shape_t* hit_ob
             kr = (Rs * Rs + Rp * Rp)/2.0;
         }
 
-        if ((unif_(my_rand::rng) > kr) || coming_out){ // refracted. Not sure if should always be refracted when going out.
-            eta = etai/etat;
-            k = 1.0 - eta * eta * (1 - cosi * cosi);
+        if (unif_(my_rand::rng) > kr){ //|| coming_out){ // refracted. Not sure if should always be refracted when going out.
+            k = 1.0 - sint*sint;
 
-            newdir = k < 0 ? Vec3f() : (ray.direction_ * eta + n * (eta * cosi - std::sqrt(k))).normalize();
+            //newdir = k < 0 ? Vec3f() : (ray.direction_ * eta + n * (eta * cosi - std::sqrt(k))).normalize(); // k shouldn't be smaller than 0 if sint >= 1
+            newdir = (ray.direction_ * eta + n * (eta * cosi - std::sqrt(k))).normalize();
 
-            if (newdir.dot(normal) < 0){ // coming in
+            if (newdir.dot(normal) < 0.0){ // coming in
                 ray.origin_ += ray.direction_ * ray.dist_ - normal * EPSILON; // use n or normal?
                 if (ray.direction_.dot(normal) < 0.0){
                     ray.add_to_mediums(this);
@@ -69,7 +70,7 @@ void ReflectiveRefractive_t::bounce(const double (&uv)[2], const Shape_t* hit_ob
             }
         }
         else{ // Reflected
-            newdir = ray.direction_ - n * 2 * cosi;
+            newdir = ray.direction_ - n * 2.0 * cosi;
             ray.origin_ += ray.direction_ * ray.dist_ + n * EPSILON;            
         }
 
@@ -78,7 +79,7 @@ void ReflectiveRefractive_t::bounce(const double (&uv)[2], const Shape_t* hit_ob
     }
     else{
         newdir = ray.direction_;
-        if (cosi < 0){
+        if (cosi < 0.0){
             ray.origin_ += ray.direction_ * ray.dist_ - normal * EPSILON;
             ray.add_to_mediums(this);
         }

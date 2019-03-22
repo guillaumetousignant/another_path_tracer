@@ -25,7 +25,7 @@ void RefractiveFuzz_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray
     cosi = ray.direction_.dot(normal);
 
     if (priority_ >= ray.medium_list_.front()->priority_){ // CHECK also discard if priority is equal, but watch for going out case
-        if (cosi < 0){ // Coming in
+        if (cosi < 0.0){ // Coming in
             etai = ray.medium_list_.front()->ind_;
             etat = ind_;
             //cosi *= -1;
@@ -37,7 +37,7 @@ void RefractiveFuzz_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray
             n = -normal;
         }
 
-        rand1 = unif_(my_rand::rng)*2*PI;
+        rand1 = unif_(my_rand::rng)*2.0*PI;
         rand2 = std::pow(unif_(my_rand::rng), order_) * diffusivity_;
         rand2s = sqrt(rand2);
 
@@ -53,7 +53,8 @@ void RefractiveFuzz_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray
         eta = etai/etat;
         k = 1.0 - eta*eta * (1.0 - cosi*cosi);
 
-        newdir = k < 0 ? Vec3f(0.0, 0.0, 0.0) : (ray.direction_*eta + normal_fuzz * (eta*cosi - std::sqrt(k))).normalize();
+        //newdir = k < 0 ? Vec3f(0.0, 0.0, 0.0) : (ray.direction_*eta + normal_fuzz * (eta*cosi - std::sqrt(k))).normalize();
+        newdir = k < 0.0 ? (ray.direction_ - normal_fuzz * 2.0 * cosi).normalize() : (ray.direction_*eta + normal_fuzz * (eta*cosi - std::sqrt(k))).normalize();
         // set to 0, 0, 0? maybe mask to 0, 0, 0 also? 
         // Normalize newdir?
 
@@ -64,9 +65,9 @@ void RefractiveFuzz_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray
         newdir = ray.direction_;
     }
 
-    if (newdir.dot(normal) < 0){ // Coming in
+    if (newdir.dot(normal) < 0.0){ // Coming in
         ray.origin_ += ray.direction_ * ray.dist_ - normal * EPSILON; // n or normal?
-        if (ray.direction_.dot(normal) < 0){
+        if (ray.direction_.dot(normal) < 0.0){
             ray.add_to_mediums(this);
         }
     }
