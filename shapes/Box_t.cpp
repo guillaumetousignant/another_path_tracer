@@ -32,8 +32,8 @@ void Box_t::intersection(const Ray_t &ray, bool &intersected, double &t) const {
     tmin = std::max(tmin, tymin);
     tmax = std::min(tmax, tymax);
 
-    tymin = (coordinates_[sign[2]][2] - ray.origin_[2]) * invdir[2];
-    tymax = (coordinates_[!sign[2]][2] - ray.origin_[2]) * invdir[2];
+    tzmin = (coordinates_[sign[2]][2] - ray.origin_[2]) * invdir[2];
+    tzmax = (coordinates_[!sign[2]][2] - ray.origin_[2]) * invdir[2];
 
     if ((tmin > tzmax) || (tzmin > tmax)){
         intersected = false;
