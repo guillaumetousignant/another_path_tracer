@@ -1,32 +1,46 @@
 #include "Box_t.h"
-#include "TransformMatrix_t.h"
-#include "Material_t.h"
+#include <limits>
+#include <algorithm>
 
-Box_t::Box_t(Material_t *material, TransformMatrix_t *transform_matrix, Vec3f (&coord)[2]) 
-    : Shape_t(material, transform_matrix), coordinates_{coord[0], coord[1]} {}
+Box_t::Box_t(Vec3f (&coord)[2]) : coordinates_{coord[0], coord[1]} {}
 
 Box_t::~Box_t(){}
 
-void Box_t::update(){
+void Box_t::intersection(const Ray_t &ray, bool &intersected, double &t) const {
+    Vec3f invdir;
+    bool sign[3];
+    double tmin, tmax;
+    double tymin, tymax;
+    double tzmin, tzmax;
 
-}
+    invdir = Vec3f(1.0, 1.0, 1.0)/ray.direction_;
+    sign[0] = invdir[0] < 0;
+    sign[1] = invdir[1] < 0;
+    sign[2] = invdir[2] < 0;
 
-void Box_t::intersection(const Ray_t &ray, bool &intersected, double &t, double (&uv)[2]) const {
+    tmin = (coordinates_[sign[0]][0] - ray.origin_[0]) * invdir[0];
+    tmax = (coordinates_[!sign[0]][0] - ray.origin_[0]) * invdir[0];
+    tymin = (coordinates_[sign[1]][1] - ray.origin_[1]) * invdir[1];
+    tymax = (coordinates_[!sign[1]][1] - ray.origin_[1]) * invdir[1];
 
-}
+    if ((tmin > tymax) || (tymin > tmax)){
+        intersected = false;
+        t = std::numeric_limits<double>::infinity();
+        return;
+    }
 
-void Box_t::normaluv(const Ray_t &ray, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec) const {
+    tmin = std::max(tmin, tymin);
+    tmax = std::min(tmax, tymax);
 
-}
+    tymin = (coordinates_[sign[2]][2] - ray.origin_[2]) * invdir[2];
+    tymax = (coordinates_[!sign[2]][2] - ray.origin_[2]) * invdir[2];
 
-void Box_t::normal(const Ray_t &ray, const double (&uv)[2], Vec3f &normalvec) const {
-
-}
-
-Vec3f Box_t::mincoord() const {
-
-}
-
-Vec3f Box_t::maxcoord() const {
-
+    if ((tmin > tzmax) || (tzmin > tmax)){
+        intersected = false;
+        t = std::numeric_limits<double>::infinity();
+        return;
+    }
+    
+    t = std::max(tmin, tzmin);
+    intersected = true;
 }
