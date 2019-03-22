@@ -15,7 +15,7 @@ class AccelerationGrid_t : public AccelerationStructure_t{
 
         AccelerationStructure_t** cells_;
         unsigned int n_obj_;
-        Vec3f cell_res_;
+        unsigned int cell_res_[3];
         Vec3f cell_size_;
         Box_t* bounding_box_;
         Vec3f coordinates_[2];
