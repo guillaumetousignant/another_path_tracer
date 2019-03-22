@@ -1,13 +1,18 @@
 #include "AccelerationGrid_t.h"
 #include "Shape_t.h"
 #include "GridCell_t.h"
+#include "Box_t.h"
 
 AccelerationGrid_t::AccelerationGrid_t(Shape_t** items, unsigned int n_items) 
     : n_obj_(n_items) {
 
 }
 
-AccelerationGrid_t::~AccelerationGrid_t(){}
+AccelerationGrid_t::~AccelerationGrid_t(){
+    if (bounding_box_ != nullptr){
+        delete bounding_box_;
+    }
+}
 
 void AccelerationGrid_t::update(){
 

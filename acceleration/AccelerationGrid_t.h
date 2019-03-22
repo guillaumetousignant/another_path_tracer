@@ -6,6 +6,7 @@
 
 class Shape_t;
 class GridCell_t;
+class Box_t;
 
 class AccelerationGrid_t : public AccelerationStructure_t{
     public:
@@ -16,7 +17,7 @@ class AccelerationGrid_t : public AccelerationStructure_t{
         unsigned int n_obj_;
         Vec3f cell_res_;
         Vec3f cell_size_;
-
+        Box_t* bounding_box_;
         Vec3f coordinates_[2];
 
         virtual void update();
