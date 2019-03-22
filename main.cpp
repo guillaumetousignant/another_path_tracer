@@ -68,8 +68,8 @@ int main(){
     light->transformation_->scale(0.75);
     sphereglass->transformation_->translate(Vec3f(0.5, 2.0, 0.2));
     sphereglass->transformation_->scale(0.4);
-    ground->transformation_->translate(Vec3f(0, 0, -1001));
-    ground->transformation_->scale(1000);
+    ground->transformation_->translate(Vec3f(0, 0, -101));
+    ground->transformation_->scale(100);
     cube->transformation_->translate(Vec3f(0.0, 3.0, 0.2));
     cube->transformation_->scale(0.7);
     cube->transformation_->rotateZ(PI/8);
