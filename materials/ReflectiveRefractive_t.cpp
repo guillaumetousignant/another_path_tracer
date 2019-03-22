@@ -16,7 +16,7 @@ void ReflectiveRefractive_t::bounce(const double (&uv)[2], const Shape_t* hit_ob
     double cosi;
     double etai, etat, eta;
     double k, kr;
-    bool coming_out;
+    //bool coming_out;
     double sint, cost;
     double Rs, Rp;
 
@@ -29,13 +29,13 @@ void ReflectiveRefractive_t::bounce(const double (&uv)[2], const Shape_t* hit_ob
             etat = ind_;
             cosi *= -1.0;
             n = normal;
-            coming_out = false;
+            //coming_out = false;
         }
         else{ // Goind out
             etat = (*std::next(ray.medium_list_.begin()))->ind_;
             etai = ind_;
             n = -normal;
-            coming_out = true;
+            //coming_out = true;
         }
 
         eta = etai/etat;

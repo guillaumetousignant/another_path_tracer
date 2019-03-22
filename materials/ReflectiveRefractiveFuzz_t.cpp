@@ -19,7 +19,7 @@ void ReflectiveRefractiveFuzz_t::bounce(const double (&uv)[2], const Shape_t* hi
     double cosi;
     double etai, etat, eta;
     double k, kr;
-    bool coming_out;
+    //bool coming_out;
     double sint, cost;
     double Rs, Rp;
     double rand1, rand2, rand2s;
@@ -33,13 +33,13 @@ void ReflectiveRefractiveFuzz_t::bounce(const double (&uv)[2], const Shape_t* hi
             etat = ind_;
             //cosi *= -1;
             n = normal;
-            coming_out = false;
+            //coming_out = false;
         }
         else{ // Goind out
             etat = (*std::next(ray.medium_list_.begin()))->ind_;
             etai = ind_;
             n = -normal;
-            coming_out = true;
+            //coming_out = true;
         }
 
         rand1 = unif_(my_rand::rng)*2.0*PI;
