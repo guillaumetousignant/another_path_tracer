@@ -74,7 +74,7 @@ void Scene_t::build_acc() {
 
 }
 
-void Scene_t::intersect_brute(Ray_t &ray, Shape_t* &hit_obj, double &t, double (&uv)[2]) const {
+void Scene_t::intersect_brute(const Ray_t &ray, Shape_t* &hit_obj, double &t, double (&uv)[2]) const {
     double t_temp;
     bool intersected;
     double uv_temp[2];
@@ -94,6 +94,6 @@ void Scene_t::intersect_brute(Ray_t &ray, Shape_t* &hit_obj, double &t, double (
     }
 }
 
-void Scene_t::intersect(Ray_t &ray, Shape_t* &hit_obj, double &t, double (&uv)[2]) const {
+void Scene_t::intersect(const Ray_t &ray, Shape_t* &hit_obj, double &t, double (&uv)[2]) const {
     intersect_brute(ray, hit_obj, t, uv);
 }
