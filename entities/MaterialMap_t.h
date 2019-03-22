@@ -14,6 +14,7 @@ class MaterialMap_t{
         std::map<std::string, Material_t*> materials_;
 
         Material_t* getMaterial(const std::string &key) const;
+        Material_t* getFirst() const;
 };
 
 #endif

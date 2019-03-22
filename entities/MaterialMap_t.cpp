@@ -13,3 +13,7 @@ MaterialMap_t::~MaterialMap_t(){}
 Material_t* MaterialMap_t::getMaterial(const std::string &key) const {
     return materials_.at(key);
 }
+
+Material_t* MaterialMap_t::getFirst() const {
+    return materials_.begin()->second;
+}
