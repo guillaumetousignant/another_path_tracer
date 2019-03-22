@@ -134,6 +134,9 @@ Vec3f Vec3f::sqrt() const {
 Vec3f Vec3f::exp() const {
     return Vec3f(std::exp(v[0]), std::exp(v[1]), std::exp(v[2]));
 }
+Vec3f Vec3f::pow(double exp) const{
+    return Vec3f(std::pow(v[0], exp), std::pow(v[1], exp), std::pow(v[2], exp));
+}
 Vec3f Vec3f::floor() const {
     return Vec3f(std::floor(v[0]), std::floor(v[1]), std::floor(v[2]));
 }

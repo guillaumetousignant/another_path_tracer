@@ -43,6 +43,7 @@ class Vec3f {
         Vec3f ln() const;
         Vec3f sqrt() const;
         Vec3f exp() const;
+        Vec3f pow(double exp) const;
         Vec3f floor() const;
         Vec3f ceil() const;
 };
