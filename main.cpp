@@ -111,9 +111,6 @@ int main(){
     Cam_t* cam = new Cam_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer, medium_list, skybox, maxbounces, 1.0);
     cam->update();
 
-    Vec3f maxcoord = zombie->maxcoord();
-    Vec3f mincoord = zombie->mincoord();
-    
     cam->accumulateWrite(scene, 10000, 100);
     cam->write();
 
