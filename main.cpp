@@ -114,7 +114,7 @@ int main(){
     Vec3f maxcoord = zombie->maxcoord();
     Vec3f mincoord = zombie->mincoord();
     
-    cam->accumulateWrite(scene, 10000, 10);
+    cam->accumulateWrite(scene, 10000, 100);
     cam->write();
 
     /*for (unsigned int i = 0; i < 1; i++){
