@@ -71,7 +71,7 @@ int main(){
     sphereglass->transformation_->translate(Vec3f(0.5, 2.0, 0.2));
     sphereglass->transformation_->scale(0.4);
     ground->transformation_->translate(Vec3f(0, 0, -101));
-    ground->transformation_->scale(100);
+    ground->transformation_->scale(64);
     zombie->transformation_->translate(Vec3f(0.0, 2.0, -0.53));
     zombie->transformation_->scale(0.025);
     zombie->transformation_->rotateX(PI/2);
