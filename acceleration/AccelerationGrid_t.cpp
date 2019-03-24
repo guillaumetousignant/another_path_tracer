@@ -7,7 +7,7 @@
 
 #define GRIDMINRES 1
 #define GRIDMAXRES 128
-#define MAXCELLCONTENT 64
+#define MAXCELLCONTENT 32 // Segfaults if too low
 #define MULTIGRID
 
 AccelerationGrid_t::AccelerationGrid_t(Shape_t** items, unsigned int n_items, Vec3f* coordinates) {
