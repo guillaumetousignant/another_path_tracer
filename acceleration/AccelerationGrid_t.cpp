@@ -5,8 +5,6 @@
 #include <limits>
 #include <math.h>
 
-#include <iostream> // REMOVE
-
 #define GRIDMINRES 1
 #define GRIDMAXRES 128
 
@@ -52,8 +50,8 @@ AccelerationGrid_t::AccelerationGrid_t(Shape_t** items, unsigned int n_items)
     
         min1.min(items[i]->mincoord());
         max1.max(items[i]->maxcoord());
-        min1 = (min1 - coordinates_[0]).floor() /cell_size_;
-        max1 = (max1 - coordinates_[0]).floor() /cell_size_;
+        min1 = ((min1 - coordinates_[0])/cell_size_).floor();
+        max1 = ((max1 - coordinates_[0])/cell_size_).floor();
 
         for (unsigned int i = 0; i < 3; i++){
             if(min1[i] < 0){
@@ -66,7 +64,7 @@ AccelerationGrid_t::AccelerationGrid_t(Shape_t** items, unsigned int n_items)
 
         min1.min(cell_res-1.0);
         max1.min(cell_res-1.0);
-
+        
         for (z = (unsigned int)min1[2]; z <= (unsigned int)max1[2]; z++){
             for (y = (unsigned int)min1[1]; y <= (unsigned int)max1[1]; y++){
                 for (x = (unsigned int)min1[0]; x <= (unsigned int)max1[0]; x++){
