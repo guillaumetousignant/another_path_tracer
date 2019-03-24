@@ -31,6 +31,7 @@
 
 int main(){
     Texture_t* zombietex = new Texture_t("./assets/Zombie beast_texture5.png");
+    MeshGeometry_t* cubemesh = new MeshGeometry_t("./assets/cube.obj");
     MeshGeometry_t* zombiemesh = new MeshGeometry_t("./assets/Zombie_Beast4_test2.obj");
 
     NonAbsorber_t* airabsorber = new NonAbsorber_t();
@@ -53,6 +54,7 @@ int main(){
     TransformMatrix_t* transform4 = new TransformMatrix_t();
     TransformMatrix_t* transform5 = new TransformMatrix_t();
     TransformMatrix_t* transform_zombie = new TransformMatrix_t();
+    TransformMatrix_t* transform_cube = new TransformMatrix_t();
 
     Sphere_t* spherepurple = new Sphere_t(difpurple, transform1);
     Sphere_t* mirror = new Sphere_t(ref1, transform2);
@@ -60,7 +62,8 @@ int main(){
     Sphere_t* sphereglass = new Sphere_t(glass, transform4);
     Sphere_t* ground = new Sphere_t(difgreen, transform5);
 
-    Mesh_t* zombie = new Mesh_t(zombiemat, transform_zombie, zombiemesh);
+    Mesh_t* cube = new Mesh_t(difblue, transform_zombie, zombiemesh);
+    Mesh_t* zombie = new Mesh_t(zombiemat, transform_cube, cubemesh);
 
     spherepurple->transformation_->translate(Vec3f(1, 2, 0.5));
     spherepurple->transformation_->scale(0.5);
@@ -70,12 +73,16 @@ int main(){
     light->transformation_->scale(0.75);
     sphereglass->transformation_->translate(Vec3f(0.5, 2.0, 0.2));
     sphereglass->transformation_->scale(0.4);
-    ground->transformation_->translate(Vec3f(0, 0, -101));
+    ground->transformation_->translate(Vec3f(0, 0, -65));
     ground->transformation_->scale(64);
     zombie->transformation_->translate(Vec3f(0.0, 2.0, -0.53));
     zombie->transformation_->scale(0.025);
     zombie->transformation_->rotateX(PI/2);
     zombie->transformation_->rotateZ(-PI/16);
+    cube->transformation_->translate(Vec3f(0.5, 2.0, 0.2));
+    cube->transformation_->scale(0.5);
+    cube->transformation_->rotateX(0);
+    cube->transformation_->rotateZ(PI/8);
 
     Scene_t* scene = new Scene_t();
     //scene->add(spherepurple);
@@ -111,7 +118,7 @@ int main(){
     Cam_t* cam = new Cam_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer, medium_list, skybox, maxbounces, 1.0);
     cam->update();
 
-    cam->accumulateWrite(scene, 10000, 10);
+    cam->accumulateWrite(scene, 10000, 100);
     cam->write();
 
     /*for (unsigned int i = 0; i < 1; i++){
