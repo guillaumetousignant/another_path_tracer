@@ -117,7 +117,7 @@ int main(){
     std::cout << "Mesh mincoord: " << mincoord[0] << " " << mincoord[1] << " " << mincoord[2] << std::endl; // REMOVE
     std::cout << "Camera direction: " << cam->direction_[0] << " " << cam->direction_[1] << " " << cam->direction_[2] << std::endl; // REMOVE
 
-    cam->accumulateWrite(scene, 10000, 100);
+    cam->accumulateWrite(scene, 10000, 10);
     cam->write();
 
     /*for (unsigned int i = 0; i < 1; i++){
