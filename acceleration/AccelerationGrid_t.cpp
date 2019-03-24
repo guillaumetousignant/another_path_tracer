@@ -7,15 +7,20 @@
 
 #define GRIDMINRES 1
 #define GRIDMAXRES 128
+#define MAXCELLCONTENT 16
+#define MULTIGRID
 
 AccelerationGrid_t::AccelerationGrid_t(Shape_t** items, unsigned int n_items) {
     Vec3f grid_size;
     Vec3f min1, max1;
     Vec3f cell_res;
     unsigned int x, y, z;
+    GridCell_t** temp_cells;
+    Shape_t** temp_elements = nullptr;
+    unsigned int element_index;
 
     n_obj_ = n_items;
-    
+
     coordinates_[0] = Vec3f(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
     coordinates_[1] = Vec3f(-std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity());
     
@@ -45,6 +50,11 @@ AccelerationGrid_t::AccelerationGrid_t(Shape_t** items, unsigned int n_items) {
         cells_[i] = nullptr;
     }
 
+    temp_cells = new GridCell_t*[cell_res_[0] *  cell_res_[1] * cell_res_[2]];
+    for (unsigned int i = 0; i < cell_res_[0] * cell_res_[1] * cell_res_[2]; i++){
+        temp_cells[i] = nullptr;
+    }
+
     for (unsigned int i = 0; i < n_obj_; i++){
         min1 = Vec3f(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
         max1 = Vec3f(-std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity());
@@ -69,14 +79,42 @@ AccelerationGrid_t::AccelerationGrid_t(Shape_t** items, unsigned int n_items) {
         for (z = (unsigned int)min1[2]; z <= (unsigned int)max1[2]; z++){
             for (y = (unsigned int)min1[1]; y <= (unsigned int)max1[1]; y++){
                 for (x = (unsigned int)min1[0]; x <= (unsigned int)max1[0]; x++){
-                    if (cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] == nullptr){
-                        cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] = new GridCell_t;
+                    if (temp_cells[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] == nullptr){
+                        temp_cells[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] = new GridCell_t;
                     }
-                    cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]]->add(items[i]);
+                    temp_cells[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]]->add(items[i]);
                 }
             }
         }
     }
+
+    for (unsigned int i = 0; i < (cell_res_[0]*cell_res_[1]*cell_res_[2]); i++){
+        #ifdef MULTIGRID
+        if (temp_cells[i] != nullptr){
+            if (temp_cells[i]->n_obj_ > MAXCELLCONTENT){
+                temp_elements = new Shape_t*[temp_cells[i]->n_obj_];
+                element_index = 0;
+                for (auto it = temp_cells[i]->items_.begin(); it != temp_cells[i]->items_.end(); ++it){
+                    temp_elements[element_index] = *it;
+                    element_index++;
+                }
+
+                cells_[i] = new AccelerationGrid_t(temp_elements, element_index);
+
+                delete [] temp_elements;
+                temp_elements = nullptr;
+
+            }
+            else{
+                cells_[i] = temp_cells[i];
+            }
+        }
+        #else
+        cells_[i] = temp_cells[i];
+        #endif
+    }
+
+    delete [] temp_cells;
 }
 
 AccelerationGrid_t::~AccelerationGrid_t(){
