@@ -3,7 +3,9 @@
 #include <list>
 #include <limits>
 
-GridCell_t::GridCell_t() : items_(std::list<Shape_t*>()) {}
+GridCell_t::GridCell_t() : items_(std::list<Shape_t*>()) {
+    n_obj_ = 0;
+}
 
 GridCell_t::~GridCell_t(){}
 
@@ -33,6 +35,7 @@ void GridCell_t::intersect(const Ray_t &ray, Shape_t* &hit_obj, double &t, doubl
 }
 
 void GridCell_t::add(Shape_t* item){
+    n_obj_++;
     items_.push_back(item);
 }
 

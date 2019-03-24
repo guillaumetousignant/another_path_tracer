@@ -8,13 +8,14 @@
 #define GRIDMINRES 1
 #define GRIDMAXRES 128
 
-AccelerationGrid_t::AccelerationGrid_t(Shape_t** items, unsigned int n_items) 
-    : n_obj_(n_items) {
+AccelerationGrid_t::AccelerationGrid_t(Shape_t** items, unsigned int n_items) {
     Vec3f grid_size;
     Vec3f min1, max1;
     Vec3f cell_res;
     unsigned int x, y, z;
 
+    n_obj_ = n_items;
+    
     coordinates_[0] = Vec3f(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
     coordinates_[1] = Vec3f(-std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity());
     
