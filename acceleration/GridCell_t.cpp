@@ -26,7 +26,7 @@ void GridCell_t::intersect(const Ray_t &ray, Shape_t* &hit_obj, double &t, doubl
     for (auto it = items_.begin(); it != items_.end(); ++it){
         (*it)->intersection(ray, intersected, t_temp, uv_temp);
         if (intersected && (t_temp < t)){
-            hit_obj = (*it);
+            hit_obj = *it;
             uv[0] = uv_temp[0];
             uv[1] = uv_temp[1];
             t = t_temp;
