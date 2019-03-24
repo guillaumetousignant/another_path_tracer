@@ -112,11 +112,8 @@ int main(){
     cam->update();
 
     Vec3f maxcoord = zombie->maxcoord();
-    std::cout << "Mesh maxcoord: " << maxcoord[0] << " " << maxcoord[1] << " " << maxcoord[2] << std::endl; // REMOVE
     Vec3f mincoord = zombie->mincoord();
-    std::cout << "Mesh mincoord: " << mincoord[0] << " " << mincoord[1] << " " << mincoord[2] << std::endl; // REMOVE
-    std::cout << "Camera direction: " << cam->direction_[0] << " " << cam->direction_[1] << " " << cam->direction_[2] << std::endl; // REMOVE
-
+    
     cam->accumulateWrite(scene, 10000, 10);
     cam->write();
 
