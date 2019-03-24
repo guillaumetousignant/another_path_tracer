@@ -5,6 +5,11 @@
 #include <limits>
 #include <math.h>
 
+#include <iostream> // REMOVE
+
+#define GRIDMINRES 1
+#define GRIDMAXRES 128
+
 AccelerationGrid_t::AccelerationGrid_t(Shape_t** items, unsigned int n_items) 
     : n_obj_(n_items) {
     Vec3f grid_size;
@@ -26,11 +31,11 @@ AccelerationGrid_t::AccelerationGrid_t(Shape_t** items, unsigned int n_items)
     cell_res = (grid_size * std::pow(n_obj_/(grid_size[0]*grid_size[1]*grid_size[2]), 3)).floor();
 
     for (unsigned int i = 0; i < 3; i++){
-        if (cell_res[i] < 1){
-            cell_res[i] = 1;
+        if (cell_res[i] < GRIDMINRES){
+            cell_res[i] = GRIDMINRES;
         }
-        else if(cell_res[i] > 128){
-            cell_res[i] = 128;
+        else if(cell_res[i] > GRIDMAXRES){
+            cell_res[i] = GRIDMAXRES;
         }
         cell_res_[i] = (unsigned int)cell_res[i];
     }
@@ -125,8 +130,8 @@ void AccelerationGrid_t::intersect(const Ray_t &ray, Shape_t* &hit_obj, double &
     raycellorigin = (ray.origin_ + ray.direction_ * tbbox) - bounding_box_->coordinates_[0];
     cellcoord = (raycellorigin / cell_size_).floor();
     for (unsigned int i = 0; i < 3; i++){
-        if (cellcoord[i] < 0){
-            cellcoord[i] = 0;
+        if (cellcoord[i] < 0.0){
+            cellcoord[i] = 0.0;
         }
     }    
     cell_res = Vec3f(cell_res_[0], cell_res_[1], cell_res_[2]);
@@ -141,7 +146,7 @@ void AccelerationGrid_t::intersect(const Ray_t &ray, Shape_t* &hit_obj, double &
         }
         else{
             deltat[i] = cell_size_[i] * invdir[i];
-            tnext[i] = tbbox + ((cellcoord[i] + 1) * cell_size_[i] - raycellorigin[i]) * invdir[i];
+            tnext[i] = tbbox + ((cellcoord[i] + 1.0) * cell_size_[i] - raycellorigin[i]) * invdir[i];
             cellexit[i] = cell_res_[i];
             cellstep[i] = 1; 
         }
