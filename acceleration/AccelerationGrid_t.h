@@ -10,7 +10,7 @@ class Box_t;
 
 class AccelerationGrid_t : public AccelerationStructure_t{
     public:
-        AccelerationGrid_t(Shape_t** items, unsigned int n_items);
+        AccelerationGrid_t(Shape_t** items, unsigned int n_items, Vec3f* coordinates);
         virtual ~AccelerationGrid_t();
 
         AccelerationStructure_t** cells_;

@@ -7,32 +7,41 @@
 
 #define GRIDMINRES 1
 #define GRIDMAXRES 128
-#define MAXCELLCONTENT 16
+#define MAXCELLCONTENT 64
 #define MULTIGRID
 
-AccelerationGrid_t::AccelerationGrid_t(Shape_t** items, unsigned int n_items) {
+AccelerationGrid_t::AccelerationGrid_t(Shape_t** items, unsigned int n_items, Vec3f* coordinates) {
     Vec3f grid_size;
     Vec3f min1, max1;
     Vec3f cell_res;
     unsigned int x, y, z;
     GridCell_t** temp_cells;
+    #ifdef MULTIGRID
     Shape_t** temp_elements = nullptr;
     unsigned int element_index;
+    Vec3f cell_extent[2];
+    #endif
 
     n_obj_ = n_items;
 
-    coordinates_[0] = Vec3f(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
-    coordinates_[1] = Vec3f(-std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity());
-    
-    for (unsigned int i = 0; i < n_obj_; i++){
-        coordinates_[0].min(items[i]->mincoord());
-        coordinates_[1].max(items[i]->maxcoord());
+    if (coordinates == nullptr){
+        coordinates_[0] = Vec3f(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
+        coordinates_[1] = Vec3f(-std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity());
+        
+        for (unsigned int i = 0; i < n_obj_; i++){
+            coordinates_[0].min(items[i]->mincoord());
+            coordinates_[1].max(items[i]->maxcoord());
+        }
+    }
+    else{
+        coordinates_[0] = coordinates[0];
+        coordinates_[1] = coordinates[1];
     }
 
     grid_size = coordinates_[1] - coordinates_[0];
     bounding_box_ = new Box_t(coordinates_);
 
-    cell_res = (grid_size * std::pow(n_obj_/(grid_size[0]*grid_size[1]*grid_size[2]), 3)).floor();
+    cell_res = (grid_size * std::pow(n_obj_/(grid_size[0]*grid_size[1]*grid_size[2]), 1.0/3.0)).floor();
 
     for (unsigned int i = 0; i < 3; i++){
         if (cell_res[i] < GRIDMINRES){
@@ -89,8 +98,8 @@ AccelerationGrid_t::AccelerationGrid_t(Shape_t** items, unsigned int n_items) {
     }
 
     for (unsigned int i = 0; i < (cell_res_[0]*cell_res_[1]*cell_res_[2]); i++){
-        #ifdef MULTIGRID
         if (temp_cells[i] != nullptr){
+            #ifdef MULTIGRID
             if (temp_cells[i]->n_obj_ > MAXCELLCONTENT){
                 temp_elements = new Shape_t*[temp_cells[i]->n_obj_];
                 element_index = 0;
@@ -99,7 +108,15 @@ AccelerationGrid_t::AccelerationGrid_t(Shape_t** items, unsigned int n_items) {
                     element_index++;
                 }
 
-                cells_[i] = new AccelerationGrid_t(temp_elements, element_index);
+                z = i/(cell_res_[0]*cell_res_[1]);
+                y = (i - z * cell_res_[0]*cell_res_[1])/cell_res_[0];
+                x = (i - y * cell_res_[0] - z * cell_res_[0]*cell_res_[1]);
+
+                cell_extent[0] = coordinates_[0] + grid_size*Vec3f(x, y, z)/cell_res;
+                cell_extent[1] = cell_extent[0] + cell_size_;
+
+                cells_[i] = new AccelerationGrid_t(temp_elements, temp_cells[i]->n_obj_, &cell_extent[0]);
+                //cells_[i] = temp_cells[i];
 
                 delete [] temp_elements;
                 temp_elements = nullptr;
@@ -108,10 +125,10 @@ AccelerationGrid_t::AccelerationGrid_t(Shape_t** items, unsigned int n_items) {
             else{
                 cells_[i] = temp_cells[i];
             }
+            #else
+            cells_[i] = temp_cells[i];
+            #endif
         }
-        #else
-        cells_[i] = temp_cells[i];
-        #endif
     }
 
     delete [] temp_cells;

@@ -78,7 +78,7 @@ void Scene_t::build_acc() {
     if (acc_ != nullptr){
         delete acc_;
     }
-    acc_ = new AccelerationGrid_t(geometry_, n_obj_);
+    acc_ = new AccelerationGrid_t(geometry_, n_obj_, nullptr);
 }
 
 void Scene_t::intersect_brute(const Ray_t &ray, Shape_t* &hit_obj, double &t, double (&uv)[2]) const {

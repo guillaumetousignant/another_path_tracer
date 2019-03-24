@@ -82,7 +82,7 @@ int main(){
     //scene->add(mirror);
     //scene->add(light);
     //scene->add(sphereglass);
-    //scene->add(ground);
+    scene->add(ground);
     scene->add(zombie);
     scene->update();
 
@@ -111,7 +111,7 @@ int main(){
     Cam_t* cam = new Cam_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer, medium_list, skybox, maxbounces, 1.0);
     cam->update();
 
-    cam->accumulateWrite(scene, 10000, 100);
+    cam->accumulateWrite(scene, 10000, 10);
     cam->write();
 
     /*for (unsigned int i = 0; i < 1; i++){
