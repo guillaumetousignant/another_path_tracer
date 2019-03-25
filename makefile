@@ -110,12 +110,13 @@ RELEASEFLAGS += -O3 -fopenmp
 FREETYPE_INCLUDE_PATH = $(FREETYPEINCLUDE)
 LIBPNG_INCLUDE_PATH = $(LIBPNGINCLUDE)
 PNGWRITER_INCLUDE_PATH = $(PNGWRITERINCLUDE)
+GL_INCLUDE_PATH = $(GLINCLUDE)
 
 # Included Libraries
 PNGWRITERLIBS += -L$(PNGWRITERLIBSDIR) -lPNGwriter
 LIBPNGLIBS += -L$(LIBPNGLIBSDIR) -lpng#$(LIBPNGVERSION)
 FREETYPELIBS += -L$(FREETYPELIBSDIR) -lfreetype
-DISPLAYLIBS += -lglut -lGL -lGLU
+DISPLAYLIBS += -L$(GLLIBSDIR) -lglut -lGL -lGLU
 
 #--------------------------------------------------------------------------------------------------------------------------------------+
 #---------------------------------------------------------------------------------------------------+
@@ -157,19 +158,19 @@ verify : mpirelease $(MPIReleaseObjectFiles)
 # Pattern Rules
 
 .debug/%.o : %.cpp
-	@$(CXX) -c $(CXXFLAGS) $(DEBUGFLAGS)  -I$(subst $(space), -I,$(AllDirs)) -I$(FREETYPE_INCLUDE_PATH) -I$(LIBPNG_INCLUDE_PATH) -I$(PNGWRITER_INCLUDE_PATH) $< -o $@ 
+	@$(CXX) -c $(CXXFLAGS) $(DEBUGFLAGS)  -I$(subst $(space), -I,$(AllDirs)) -I$(FREETYPE_INCLUDE_PATH) -I$(LIBPNG_INCLUDE_PATH) -I$(PNGWRITER_INCLUDE_PATH) -I$(GL_INCLUDE_PATH) $< -o $@ 
 	@echo '   Pattern Rule | Compiling | '$(CXXFLAGS) $(DEBUGFLAGS) ' | ' $<' ... Done'
 
 .release/%.o : %.cpp
-	@$(CXX) -c $(CXXFLAGS) $(RELEASEFLAGS)  -I$(subst $(space), -I,$(AllDirs)) -I$(FREETYPE_INCLUDE_PATH) -I$(LIBPNG_INCLUDE_PATH) -I$(PNGWRITER_INCLUDE_PATH) $< -o $@ 
+	@$(CXX) -c $(CXXFLAGS) $(RELEASEFLAGS)  -I$(subst $(space), -I,$(AllDirs)) -I$(FREETYPE_INCLUDE_PATH) -I$(LIBPNG_INCLUDE_PATH) -I$(PNGWRITER_INCLUDE_PATH) -I$(GL_INCLUDE_PATH) $< -o $@ 
 	@echo '   Pattern Rule | Compiling | '$(CXXFLAGS) $(RELEASEFLAGS) ' | ' $<' ... Done '
 
 .mpidebug/%.o : %.cpp
-	@$(MPICXX) -c $(CXXFLAGS) $(DEBUGFLAGS)  -I$(subst $(space), -I,$(AllDirs)) -I$(FREETYPE_INCLUDE_PATH) -I$(LIBPNG_INCLUDE_PATH) -I$(PNGWRITER_INCLUDE_PATH) $< -o $@ 
+	@$(MPICXX) -c $(CXXFLAGS) $(DEBUGFLAGS)  -I$(subst $(space), -I,$(AllDirs)) -I$(FREETYPE_INCLUDE_PATH) -I$(LIBPNG_INCLUDE_PATH) -I$(PNGWRITER_INCLUDE_PATH) -I$(GL_INCLUDE_PATH) $< -o $@ 
 	@echo '   Pattern Rule | Compiling | '$(CXXFLAGS) $(DEBUGFLAGS) ' | ' $<' ... Done'
 
 .mpirelease/%.o : %.cpp
-	@$(MPICXX) -c $(CXXFLAGS) $(RELEASEFLAGS)  -I$(subst $(space), -I,$(AllDirs)) -I$(FREETYPE_INCLUDE_PATH) -I$(LIBPNG_INCLUDE_PATH) -I$(PNGWRITER_INCLUDE_PATH) $< -o $@ 
+	@$(MPICXX) -c $(CXXFLAGS) $(RELEASEFLAGS)  -I$(subst $(space), -I,$(AllDirs)) -I$(FREETYPE_INCLUDE_PATH) -I$(LIBPNG_INCLUDE_PATH) -I$(PNGWRITER_INCLUDE_PATH) -I$(GL_INCLUDE_PATH) $< -o $@ 
 	@echo '   Pattern Rule | Compiling | '$(CXXFLAGS) $(RELEASEFLAGS) ' | ' $<' ... Done '
 
 #---------------------------------------------------------------------------------------+
