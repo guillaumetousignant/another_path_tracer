@@ -260,7 +260,7 @@ int main(int argc, char **argv){
     Vec3f maxcoord = naca->maxcoord();
 
     std::cout << "Min coord: " << mincoord[0] << " " << mincoord[1] << " " << mincoord[2] << std::endl;
-    std::cout << "Max coord: " << maxcoord[0] << " " << maxcoord[1] << " " << maxcoord[2] << std::endl;
+    std::cout << "Max coord: " << maxcoord[0] << " " << maxcoord[1] << " " << maxcoord[2] << std::endl << std::endl;
 
     // Camera stuff
     std::string filename = "./images/test.png";
