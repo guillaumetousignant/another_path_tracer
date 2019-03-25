@@ -110,8 +110,11 @@ void keyboard(unsigned char key, int x, int y){
 
 int main(int argc, char **argv){
     Texture_t* zombietex = new Texture_t("./assets/Zombie beast_texture5.png");
+    Texture_t* pipertex = new Texture_t("./assets/piper_pa18_obj/piper_diffuse.png");
+
     MeshGeometry_t* cubemesh = new MeshGeometry_t("./assets/cube.obj");
     MeshGeometry_t* zombiemesh = new MeshGeometry_t("./assets/Zombie_Beast4_test2.obj");
+    MeshGeometry_t* pipermesh = new MeshGeometry_t("./assets/piper_pa18_obj/piper_pa18.obj");
 
     NonAbsorber_t* airabsorber = new NonAbsorber_t();
     Absorber_t* glassabsorber = new Absorber_t(Vec3f(), Vec3f(0.6, 0.95, 0.8), 100, 2.0);
@@ -122,9 +125,11 @@ int main(int argc, char **argv){
     Diffuse_t* difgreen = new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.8, 0.95, 0.6), 1);
     Diffuse_t* difblue = new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.1, 0.4, 0.8), 1);
     DiffuseTex_t* zombiemat = new DiffuseTex_t(Vec3f(0.0, 0.0, 0.0), zombietex, 0.2);
+    DiffuseTex_t* pipermat = new DiffuseTex_t(Vec3f(0.0, 0.0, 0.0), pipertex, 0.8);
     Reflective_t* ref1 = new Reflective_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.98, 1, 0.9));
     //ReflectiveRefractiveFuzz_t* glass = new ReflectiveRefractiveFuzz_t(Vec3f(0.0, 0.0, 0.0), Vec3f(1.0, 1.0, 1.0), 1.5, 10, 1.0, 0.1, glassabsorber);
     Refractive_t* glass = new Refractive_t(Vec3f(0.0, 0.0, 0.0), Vec3f(1.0, 1.0, 1.0), 1.5, 10, glassabsorber);
+
     TransformMatrix_t* transform_light = new TransformMatrix_t();
     TransformMatrix_t* transform_camera = new TransformMatrix_t(); 
     TransformMatrix_t* transform1 = new TransformMatrix_t();
@@ -133,6 +138,7 @@ int main(int argc, char **argv){
     TransformMatrix_t* transform4 = new TransformMatrix_t();
     TransformMatrix_t* transform5 = new TransformMatrix_t();
     TransformMatrix_t* transform_zombie = new TransformMatrix_t();
+    TransformMatrix_t* transform_piper = new TransformMatrix_t();
     TransformMatrix_t* transform_cube = new TransformMatrix_t();
 
     Sphere_t* spherepurple = new Sphere_t(difpurple, transform1);
@@ -143,6 +149,7 @@ int main(int argc, char **argv){
 
     Mesh_t* cube = new Mesh_t(difblue, transform_cube, cubemesh);
     Mesh_t* zombie = new Mesh_t(zombiemat, transform_zombie, zombiemesh);
+    Mesh_t* piper = new Mesh_t(pipermat, transform_piper, pipermesh);
 
     spherepurple->transformation_->translate(Vec3f(1, 2, 0.5));
     spherepurple->transformation_->scale(0.5);
@@ -162,6 +169,10 @@ int main(int argc, char **argv){
     cube->transformation_->scale(0.5);
     cube->transformation_->rotateX(0);
     cube->transformation_->rotateZ(PI/8);
+    piper->transformation_->translate(Vec3f(0.0, 1.75, -0.25));
+    piper->transformation_->scale(0.2);
+    piper->transformation_->rotateX(PI/2.0);
+    piper->transformation_->rotateZ(PI/8.0);
 
     Scene_t* scene = new Scene_t();
     thescene = scene;
@@ -169,8 +180,9 @@ int main(int argc, char **argv){
     //scene->add(mirror);
     //scene->add(light);
     //scene->add(sphereglass);
-    scene->add(ground);
-    scene->add(zombie);
+    //scene->add(ground);
+    //scene->add(zombie);
+    scene->add(piper);
     scene->update();
 
     scene->build_acc();
@@ -180,8 +192,8 @@ int main(int argc, char **argv){
     std::string filename = "./images/test.png";
 
     unsigned int res_x = 300;
-    width = res_x;
     unsigned int res_y = 200;
+    width = res_x;
     height = res_y;
     double fov[2];
     fov[1] = 80.0 * PI /180.0; 
