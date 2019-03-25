@@ -186,6 +186,8 @@ int main(int argc, char **argv){
     piper->transformation_->rotateZ(PI/8.0);
 
     Scene_t* scene = new Scene_t();
+
+    auto t_start = std::chrono::high_resolution_clock::now();
     thescene = scene;
     //scene->add(spherepurple);
     //scene->add(mirror);
@@ -194,15 +196,24 @@ int main(int argc, char **argv){
     scene->add(ground);
     scene->add(zombie);
     //scene->add(piper);
+    auto t_end = std::chrono::high_resolution_clock::now();
+    std::cout << "Elements added in " 
+            << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
+            << "s." << std::endl;
+
+    auto t_start = std::chrono::high_resolution_clock::now();
     scene->update();
+    auto t_end = std::chrono::high_resolution_clock::now();
+    std::cout << "Scene updated in " 
+            << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
+            << "s." << std::endl;
 
     auto t_start = std::chrono::high_resolution_clock::now();
     scene->build_acc();
     auto t_end = std::chrono::high_resolution_clock::now();
-
-    std::cout << "Scene built in " 
+    std::cout << "Acceleration structure built in " 
             << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
-            << "s." << std::endl;
+            << "s." << std::endl << std::endl;
 
     // Camera stuff
 
