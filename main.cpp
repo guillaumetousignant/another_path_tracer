@@ -84,8 +84,11 @@ void mouse_movement(int x, int y){
         right_x_pos = x;
         right_y_pos = y;
 
-        thecamera->transformation_->rotateZ(differential_x/thecamera->fov_[1]); // CHECK those should be switched
-        thecamera->transformation_->rotateX(differential_y/thecamera->fov_[0]); // CHECK those should be switched
+        Vec3f horizontal = thecamera->direction_.cross(thecamera->up_);
+        Vec3f vertical = horizontal.cross(thecamera->direction_);
+
+        thecamera->transformation_->rotate(horizontal, -differential_y/thecamera->fov_[0]);
+        thecamera->transformation_->rotate(vertical, differential_x/thecamera->fov_[1]);
 
         TransformMatrix_t transform_norm = thecamera->transformation_->transformDir();
         newdir = transform_norm.multDir(Vec3f(0.0, 1.0, 0.0));
@@ -168,7 +171,15 @@ void keyboard(unsigned char key, int x, int y){
 int main(int argc, char **argv){
     auto t_start = std::chrono::high_resolution_clock::now();
 
-    MeshGeometry_t* nacamesh = new MeshGeometry_t("./assets/mesh_ONERAM6_inv_ffd.su2");
+    std::string mesh_filename;
+    if (argc > 1){
+        mesh_filename = argv[1];
+    }
+    else{
+        mesh_filename = "./assets/naca0012_coarse.su2";
+    }
+
+    MeshGeometry_t* nacamesh = new MeshGeometry_t(mesh_filename);
     
     NonAbsorber_t* airabsorber = new NonAbsorber_t();
     
@@ -226,17 +237,14 @@ int main(int argc, char **argv){
             << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
             << "s." << std::endl << std::endl;
 
-    std::cout << "Max coord: " << naca->maxcoord()[0] << " " << naca->maxcoord()[1] << " " << naca->maxcoord()[2] << std::endl; // REMOVE
-    std::cout << "Min coord: " << naca->mincoord()[0] << " " << naca->mincoord()[1] << " " << naca->mincoord()[2] << std::endl; // REMOVE
-
     // Camera stuff
     std::string filename = "./images/test.png";
 
     unsigned int res_x;
     unsigned int res_y;
-    if (argc > 2){
-        res_x = std::stoi(argv[1]);
-        res_y = std::stoi(argv[2]);
+    if (argc > 3){
+        res_x = std::stoi(argv[2]);
+        res_y = std::stoi(argv[3]);
     }
     else{
         res_x = 300;
