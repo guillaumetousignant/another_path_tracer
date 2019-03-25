@@ -10,7 +10,7 @@ class Box_t;
 
 class AccelerationGrid_t : public AccelerationStructure_t{
     public:
-        AccelerationGrid_t(Shape_t** items, unsigned int n_items, Vec3f* coordinates);
+        AccelerationGrid_t(Shape_t** items, unsigned int n_items, Vec3f* coordinates = nullptr, unsigned int level = 0);
         virtual ~AccelerationGrid_t();
 
         AccelerationStructure_t** cells_;
@@ -18,6 +18,7 @@ class AccelerationGrid_t : public AccelerationStructure_t{
         Vec3f cell_size_;
         Box_t* bounding_box_;
         Vec3f coordinates_[2];
+        unsigned int level_;
 
         virtual void update();
         virtual void intersect(const Ray_t &ray, Shape_t* &hit_obj, double &t, double (&uv)[2]) const;

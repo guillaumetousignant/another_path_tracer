@@ -7,10 +7,11 @@
 
 #define GRIDMINRES 1
 #define GRIDMAXRES 128
-#define MAXCELLCONTENT 256 // Segfaults if too low. 16 segfaults zombie
 #define MULTIGRID
+#define MAXCELLCONTENT 256 // Segfaults if too low. 16 segfaults zombie
+#define MAXGRIDLEVEL 2
 
-AccelerationGrid_t::AccelerationGrid_t(Shape_t** items, unsigned int n_items, Vec3f* coordinates) {
+AccelerationGrid_t::AccelerationGrid_t(Shape_t** items, unsigned int n_items, Vec3f* coordinates/* = nullptr*/, unsigned int level /* = 0*/) : level_(level) {
     Vec3f grid_size;
     Vec3f min1, max1;
     Vec3f cell_res;
@@ -100,7 +101,7 @@ AccelerationGrid_t::AccelerationGrid_t(Shape_t** items, unsigned int n_items, Ve
     for (unsigned int i = 0; i < (cell_res_[0]*cell_res_[1]*cell_res_[2]); i++){
         if (temp_cells[i] != nullptr){
             #ifdef MULTIGRID
-            if (temp_cells[i]->n_obj_ > MAXCELLCONTENT){
+            if ((temp_cells[i]->n_obj_ > MAXCELLCONTENT) && (level_ < MAXGRIDLEVEL)){
                 temp_elements = new Shape_t*[temp_cells[i]->n_obj_];
                 element_index = 0;
                 for (auto it = temp_cells[i]->items_.begin(); it != temp_cells[i]->items_.end(); ++it){
@@ -115,7 +116,7 @@ AccelerationGrid_t::AccelerationGrid_t(Shape_t** items, unsigned int n_items, Ve
                 cell_extent[0] = coordinates_[0] + grid_size*Vec3f(x, y, z)/cell_res;
                 cell_extent[1] = cell_extent[0] + cell_size_;
 
-                cells_[i] = new AccelerationGrid_t(temp_elements, temp_cells[i]->n_obj_, &cell_extent[0]);
+                cells_[i] = new AccelerationGrid_t(temp_elements, temp_cells[i]->n_obj_, &cell_extent[0], level_+1);
                 //cells_[i] = temp_cells[i];
 
                 delete [] temp_elements;
