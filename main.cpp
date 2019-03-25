@@ -109,7 +109,15 @@ void keyboard(unsigned char key, int x, int y){
     switch (key)
     {
     case 's':
+        //std::cout << "Writing started." << std::endl;
+        //auto t_start_write = std::chrono::high_resolution_clock::now();
         thecamera->write();
+        //auto t_end_write = std::chrono::high_resolution_clock::now();
+
+        /*std::cout << "Writing done in "
+        << std::chrono::duration<double, std::milli>(t_end_write-t_start_write).count()/1000.0 
+        << "s." << std::endl;*/
+        
         break;
 
     case 'f':
