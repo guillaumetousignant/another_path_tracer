@@ -265,8 +265,13 @@ void MeshGeometry_t::readSU2(const std::string &filename){
     meshfile.seekg(0, std::ios::beg);
 
     while (std::getline(meshfile, line)){
+        if ((line == "\r") || (line.empty())){
+            token = "";
+        }
+        else{
         std::istringstream liness(line);
         liness >> token;
+        }
 
         if (token == "NELEM="){
             points_started = false;
@@ -282,15 +287,9 @@ void MeshGeometry_t::readSU2(const std::string &filename){
             points_started = false;
         }
 
-        if (line == "\n"){
-            //std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" << std::endl; // REMOVE
-        }
-
-        if (points_started && (!line.empty())){
-            //std::cout << "token: " << token << std::endl; // REMOVE
+        if (points_started && (!token.empty())){
             std::istringstream liness2(line);
             liness2 >> val0 >> val1 >> val2;
-            //std::cout << "v " << v_counter << ": " << val0 << " " << val1 << " " << val2 << std::endl; // REMOVE
             v[v_counter] = Vec3f(val0, val1, val2);
             v_counter++;
         }
@@ -305,14 +304,9 @@ void MeshGeometry_t::readSU2(const std::string &filename){
     wall_started = false;
 
     n_tris_ = nf;
-    std::cout << "Noot" << std::endl; // REMOVE
-    std::cout << "Ntris: " << n_tris_ << std::endl; // REMOVE
     mat_ = new std::string[n_tris_];
-    std::cout << "Noot" << std::endl; // REMOVE
     v_ = new Vec3f[3*n_tris_];
-    std::cout << "Noot" << std::endl; // REMOVE
     vt_ = new double*[3*n_tris_];
-    std::cout << "Noot" << std::endl; // REMOVE
     for (unsigned int i = 0; i < 3*n_tris_; i++){
         vt_[i] = new double[2];
     }
