@@ -22,7 +22,7 @@ class Cam_t : public Camera_t{
         std::uniform_real_distribution<double> unif_;
 
         virtual void update();
-        virtual void raytrace(Scene_t* scene);
+        virtual void raytrace(const Scene_t* scene);
         virtual void write(std::string file_name = "");
         virtual void show() const;
 };

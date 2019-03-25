@@ -21,7 +21,7 @@ void Cam_t::update() {
     up_ = up_buffer_;
 }
 
-void Cam_t::raytrace(Scene_t* scene) {
+void Cam_t::raytrace(const Scene_t* scene) {
     double tot_subpix;
     double pixel_span_x, pixel_span_y;
     double subpix_span_x, subpix_span_y;
