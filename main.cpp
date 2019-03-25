@@ -47,13 +47,13 @@ int n_iter_gl = 0;
 
 void raytrace(){
     n_iter_gl++;
-    auto t_start = std::chrono::high_resolution_clock::now();
+    //auto t_start = std::chrono::high_resolution_clock::now();
     thecamera->raytrace(thescene);
-    auto t_end = std::chrono::high_resolution_clock::now();
+    //auto t_end = std::chrono::high_resolution_clock::now();
 
-    std::cout << "Iteration " << n_iter_gl << " done in " 
+    /*std::cout << "Iteration " << n_iter_gl << " done in " 
         << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
-        << "s." << std::endl;
+        << "s." << std::endl;*/
     glutPostRedisplay(); // REMOVE but makes it work, soooooooo...
 }
 
