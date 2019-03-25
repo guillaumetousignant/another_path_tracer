@@ -45,8 +45,11 @@ int right_x_pos = 0;
 int right_y_pos = 0;
 int left_x_pos = 0;
 int left_y_pos = 0;
+int middle_x_pos = 0;
+int middle_y_pos = 0;
 bool right_clicked = false;
 bool left_clicked = false;
+bool middle_clicked = false;
 int n_iter_gl = 0;
 Vec3f focus_point;
 double camera_dist = 5;
@@ -70,6 +73,17 @@ void resetDisplay(void){
 
 void mouse_movement(int x, int y){
     Vec3f newdir = thecamera->direction_;
+    if (middle_clicked){
+        double differential_x = double(x - middle_x_pos)/double(width);
+        double differential_y = double(y - middle_y_pos)/double(height);
+        middle_x_pos = x;
+        middle_y_pos = y;
+
+        Vec3f horizontal = thecamera->direction_.cross(thecamera->up_);
+        Vec3f vertical = horizontal.cross(thecamera->direction_);
+
+        focus_point += horizontal * differential_x * camera_dist + vertical * differential_y * camera_dist;
+    }
     if (left_clicked){
         //double differential_x = double(x - left_x_pos)/double(width);
         double differential_y = double(y - left_y_pos)/double(height);
@@ -87,7 +101,7 @@ void mouse_movement(int x, int y){
         Vec3f horizontal = thecamera->direction_.cross(thecamera->up_);
         Vec3f vertical = horizontal.cross(thecamera->direction_);
 
-        thecamera->transformation_->rotate(horizontal, -differential_y/thecamera->fov_[0]);
+        thecamera->transformation_->rotate(horizontal, differential_y/thecamera->fov_[0]);
         thecamera->transformation_->rotate(vertical, differential_x/thecamera->fov_[1]);
 
         TransformMatrix_t transform_norm = thecamera->transformation_->transformDir();
@@ -119,8 +133,13 @@ void mouse_click(int button, int state, int x, int y){
 
     case GLUT_MIDDLE_BUTTON:
         if(state == GLUT_DOWN)
-        {
-            resetDisplay();
+        {            
+            middle_clicked = true;
+            middle_x_pos = x;
+            middle_y_pos = y;
+        }
+        else if(state == GLUT_UP){
+            middle_clicked = false;
         }
         break;
 
