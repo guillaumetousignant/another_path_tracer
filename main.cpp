@@ -146,7 +146,8 @@ int main(int argc, char **argv){
     MeshGeometry_t* cubemesh = new MeshGeometry_t("./assets/cube.obj");
     MeshGeometry_t* zombiemesh = new MeshGeometry_t("./assets/Zombie_Beast4_test2.obj");
     //MeshGeometry_t* pipermesh = new MeshGeometry_t("./assets/piper_pa18_obj/piper_pa18.obj");
-
+    MeshGeometry_t* nacamesh = new MeshGeometry_t("./assets/naca0012_coarse.su2");
+    
     NonAbsorber_t* airabsorber = new NonAbsorber_t();
     Absorber_t* glassabsorber = new Absorber_t(Vec3f(), Vec3f(0.6, 0.95, 0.8), 100, 2.0);
 
@@ -172,6 +173,7 @@ int main(int argc, char **argv){
     //TransformMatrix_t* transform_piper = new TransformMatrix_t();
     TransformMatrix_t* transform_cube = new TransformMatrix_t();
     TransformMatrix_t* transform_neutral = new TransformMatrix_t();
+    //TransformMatrix_t* transform_naca = new TransformMatrix_t();
 
     Sphere_t* spherepurple = new Sphere_t(difpurple, transform1);
     Sphere_t* mirror = new Sphere_t(ref1, transform2);
@@ -196,6 +198,8 @@ int main(int argc, char **argv){
     Mesh_t* cube = new Mesh_t(difblue, transform_cube, cubemesh);
     Mesh_t* zombie = new Mesh_t(zombiemat, transform_zombie, zombiemesh);
     //Mesh_t* piper = new Mesh_t(pipermat, transform_piper, pipermesh);
+    //Mesh_t* naca = new Mesh_t(difpurple, transform_naca, nacamesh);
+
     auto t_end = std::chrono::high_resolution_clock::now();
     std::cout << "Elements created in " 
             << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
@@ -224,6 +228,11 @@ int main(int argc, char **argv){
     piper->transformation_->scale(0.2);
     piper->transformation_->rotateX(PI/2.0);
     piper->transformation_->rotateZ(PI/8.0);*/
+    /*naca->transformation_->translate(Vec3f(0.0, 2.0, 0));
+    naca->transformation_->scale(1.0);
+    naca->transformation_->rotateX(0.0);
+    naca->transformation_->rotateZ(0.0);*/
+
     t_end = std::chrono::high_resolution_clock::now();
     std::cout << "Elements transformed in " 
             << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
@@ -238,9 +247,11 @@ int main(int argc, char **argv){
     //scene->add(sphereglass);
     //scene->add(ground);
     scene->add(zombie);
-    scene->add(planegrey1);
-    scene->add(planegrey2);
+    //scene->add(planegrey1);
+    //scene->add(planegrey2);
     //scene->add(piper);
+    //scene->add(naca);
+
     t_end = std::chrono::high_resolution_clock::now();
     std::cout << "Elements added in " 
             << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
