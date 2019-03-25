@@ -5,7 +5,14 @@
 #include <sstream>
 
 MeshGeometry_t::MeshGeometry_t(const std::string &filename){
-    readObj(filename);
+    std::string ext = filename.substr(filename.find_last_of(".") + 1);
+    if(ext == "obj") {
+        readObj(filename);
+    } 
+    else if((ext == "su2") || (ext == "SU2") || (ext == "Su2") || (ext == "sU2")){
+        readSU2(filename);
+    }
+    
     deNan();
 }
 
@@ -141,8 +148,8 @@ void MeshGeometry_t::readObj(const std::string &filename){
                     pos = tokens[i].find("/");
                     if (pos == std::string::npos){
                         v_[f_counter*3 + i] = v[std::stoi(tokens[i], nullptr)-1];
-                        vt_[f_counter*3 + i][0] = 0;
-                        vt_[f_counter*3 + i][1] = 0;
+                        vt_[f_counter*3 + i][0] = 0.0;
+                        vt_[f_counter*3 + i][1] = 0.0;
                         vn_[f_counter*3 + i] = Vec3f(NAN, NAN, NAN);
                     }
                     else{
@@ -193,6 +200,201 @@ void MeshGeometry_t::readObj(const std::string &filename){
     }
     delete [] vt;
     delete [] vn;
+}
+
+void MeshGeometry_t::readSU2(const std::string &filename){
+    std::cout << "In read su2" << std::endl; // REMOVE
+    unsigned int nv = 0;
+    unsigned int nf = 0;
+    std::string line;
+    std::string token;
+    std::string dummy;
+    unsigned int value;
+    bool wall_started = false;
+
+    std::ifstream meshfile(filename);
+    if (!meshfile.is_open()) {
+        std::cout << "Error: file '" << filename << "' could nor be opened. Exiting." << std::endl;
+        return;
+    }
+
+    // Getting number of elements
+    while (std::getline(meshfile, line)){
+        std::istringstream liness(line);
+        liness >> token;
+
+        if (token == "NPOIN="){
+            liness >> value;
+            wall_started = false;
+            nv += value;
+        }
+        else if (token == "MARKER_TAG="){
+            liness >> token;
+            if (token == "WALL"){
+                wall_started = true;
+                std::getline(meshfile, line);
+            }
+            else{
+                wall_started = false;
+            }
+        }
+        else if (token == ""){
+            wall_started = false;
+        }
+        else if (token == "5"){
+            if (wall_started){
+                nf++;
+            }
+        }
+        else if (token == "9"){
+            if (wall_started){
+                nf += 2;
+            }
+        }
+    }
+    std::cout << "Sizes gotten, " << nv << " points" << std::endl; // REMOVE
+
+    // Getting normals, vertex coordinates and texture coordinates
+    unsigned int v_counter = 0;
+    double val0, val1, val2;
+    bool points_started = false;
+
+    Vec3f* v = new Vec3f[nv];
+
+    meshfile.clear();
+    meshfile.seekg(0, std::ios::beg);
+
+    while (std::getline(meshfile, line)){
+        std::istringstream liness(line);
+        liness >> token;
+
+        if (token == "NELEM="){
+            points_started = false;
+        }
+        else if (token == "NPOIN="){
+            points_started = true;
+            std::getline(meshfile, line);
+        }
+        else if (token == "NMARK="){
+            points_started = false;
+        }
+        else if (token == "MARKER_TAG="){
+            points_started = false;
+        }
+
+        if (line == "\n"){
+            //std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" << std::endl; // REMOVE
+        }
+
+        if (points_started && (!line.empty())){
+            //std::cout << "token: " << token << std::endl; // REMOVE
+            std::istringstream liness2(line);
+            liness2 >> val0 >> val1 >> val2;
+            //std::cout << "v " << v_counter << ": " << val0 << " " << val1 << " " << val2 << std::endl; // REMOVE
+            v[v_counter] = Vec3f(val0, val1, val2);
+            v_counter++;
+        }
+    }   
+    std::cout << "V counter is " << v_counter << std::endl; // REMOVE
+    std::cout << "Points filled, " << nf << " faces" << std::endl; // REMOVE
+
+    // Filling faces
+    unsigned int f_counter = 0;
+    std::string material = "";
+    unsigned int tokens[3];
+    wall_started = false;
+
+    n_tris_ = nf;
+    std::cout << "Noot" << std::endl; // REMOVE
+    std::cout << "Ntris: " << n_tris_ << std::endl; // REMOVE
+    mat_ = new std::string[n_tris_];
+    std::cout << "Noot" << std::endl; // REMOVE
+    v_ = new Vec3f[3*n_tris_];
+    std::cout << "Noot" << std::endl; // REMOVE
+    vt_ = new double*[3*n_tris_];
+    std::cout << "Noot" << std::endl; // REMOVE
+    for (unsigned int i = 0; i < 3*n_tris_; i++){
+        vt_[i] = new double[2];
+    }
+    vn_ = new Vec3f[3*n_tris_];
+
+    meshfile.clear();
+    meshfile.seekg(0, std::ios::beg);
+
+    std::cout << "Starting face fill" << std::endl; // REMOVE
+
+    while (std::getline(meshfile, line)){
+        std::istringstream liness(line);
+        liness >> token;
+
+        if (token == "MARKER_TAG="){
+            liness >> token;
+            if (token == "WALL"){
+                wall_started = true;
+                std::getline(meshfile, line);
+                std::getline(meshfile, line);
+                std::istringstream liness(line);
+                liness >> token;
+            }
+            else{
+                wall_started = false;
+            }
+        }
+        else if (token == ""){
+            wall_started = false;
+        }
+        else if (token == "NMARK="){
+            wall_started = false;
+        }
+        else if (token == "MARKER_TAG="){
+            wall_started = false;
+        }
+        else if (token == "NELEM="){
+            wall_started = false;
+        }
+        else if (token == "MARKER_ELEMS="){
+            wall_started = false;
+        }
+
+        if (wall_started){
+            if (token == "5"){
+                for (unsigned int i = 0; i < 3; i++){
+                    liness >> tokens[i];
+                    v_[3*f_counter + i] = v[tokens[i]];
+                    mat_[f_counter] = material;
+                    vt_[3*f_counter + i][0] = 0.0;
+                    vt_[3*f_counter + i][1] = 0.0;
+                    vn_[3*f_counter + i] = Vec3f(NAN, NAN, NAN);
+                }
+                f_counter++;
+            }
+            else if (token == "9"){
+                for (unsigned int i = 0; i < 3; i++){
+                    liness >> tokens[i];
+                    v_[3*f_counter + i] = v[tokens[i]];
+                    mat_[f_counter] = material;
+                    vt_[3*f_counter + i][0] = 0.0;
+                    vt_[3*f_counter + i][1] = 0.0;
+                    vn_[3*f_counter + i] = Vec3f(NAN, NAN, NAN);
+                }
+                f_counter++;
+                tokens[1] = tokens[2];
+                liness >> tokens[2];
+                for (unsigned int i = 0; i < 3; i++){
+                    v_[3*f_counter + i] = v[tokens[i]];
+                    mat_[f_counter] = material;
+                    vt_[3*f_counter + i][0] = 0.0;
+                    vt_[3*f_counter + i][1] = 0.0;
+                    vn_[3*f_counter + i] = Vec3f(NAN, NAN, NAN);
+                }
+                f_counter++;
+            }
+        }        
+    }  
+    std::cout << "Faces filled" << std::endl; // REMOVE  
+
+    meshfile.close();
+    delete [] v;
 }
 
 void MeshGeometry_t::deNan(){

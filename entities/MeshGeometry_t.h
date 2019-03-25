@@ -17,6 +17,7 @@ class MeshGeometry_t{
     
     private:
         void readObj(const std::string &filename);
+        void readSU2(const std::string &filename);
         void deNan();
 };
 
