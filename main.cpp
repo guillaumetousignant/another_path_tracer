@@ -25,6 +25,7 @@
 #include "MeshGeometry_t.h"
 #include "SkyboxFlatSun_t.h"
 #include <cmath>
+#include <chrono>
 
 #include "GL/glut.h"
 #include "GL/gl.h"
@@ -39,14 +40,23 @@ double width, height;
 int right_x_pos = 0;
 int right_y_pos = 0;
 bool right_clicked = false;
+int n_iter_gl = 0;
 
 void raytrace(){
+    n_iter_gl++;
+    auto t_start = std::chrono::high_resolution_clock::now();
     thecamera->raytrace(thescene);
+    auto t_end = std::chrono::high_resolution_clock::now();
+
+    std::cout << "Iteration " << n_iter_gl << " done in " 
+        << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
+        << "s." << std::endl;
     glutPostRedisplay(); // REMOVE but makes it work, soooooooo...
 }
 
 void resetDisplay(void){
     thecamera->reset();
+    n_iter_gl = 0;
 }
 
 void mouse_movement(int x, int y){
@@ -59,6 +69,7 @@ void mouse_movement(int x, int y){
         thecamera->transformation_->rotateY(differential_x/thecamera->fov_[1]); // CHECK those should be switched
         thecamera->transformation_->rotateX(differential_y/thecamera->fov_[0]); // CHECK those should be switched
         thecamera->update();
+        n_iter_gl = 0;
     }
 }
 
@@ -185,7 +196,13 @@ int main(int argc, char **argv){
     scene->add(piper);
     scene->update();
 
+    auto t_start = std::chrono::high_resolution_clock::now();
     scene->build_acc();
+    auto t_end = std::chrono::high_resolution_clock::now();
+
+    std::cout << "Scene built in " 
+            << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
+            << "s." << std::endl;
 
     // Camera stuff
 
