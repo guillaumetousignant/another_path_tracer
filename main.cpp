@@ -201,16 +201,16 @@ int main(int argc, char **argv){
             << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
             << "s." << std::endl;
 
-    auto t_start = std::chrono::high_resolution_clock::now();
+    t_start = std::chrono::high_resolution_clock::now();
     scene->update();
-    auto t_end = std::chrono::high_resolution_clock::now();
+    t_end = std::chrono::high_resolution_clock::now();
     std::cout << "Scene updated in " 
             << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
             << "s." << std::endl;
 
-    auto t_start = std::chrono::high_resolution_clock::now();
+    t_start = std::chrono::high_resolution_clock::now();
     scene->build_acc();
-    auto t_end = std::chrono::high_resolution_clock::now();
+    t_end = std::chrono::high_resolution_clock::now();
     std::cout << "Acceleration structure built in " 
             << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
             << "s." << std::endl << std::endl;
