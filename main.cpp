@@ -261,11 +261,18 @@ int main(int argc, char **argv){
             << "s." << std::endl << std::endl;
 
     // Camera stuff
-
     std::string filename = "./images/test.png";
 
-    unsigned int res_x = 300;
-    unsigned int res_y = 200;
+    unsigned int res_x;
+    unsigned int res_y;
+    if (argc > 2){
+        res_x = std::stoi(argv[1]);
+        res_y = std::stoi(argv[2]);
+    }
+    else{
+        res_x = 300;
+        res_y = 200;
+    }
     width = res_x;
     height = res_y;
     double fov[2];
@@ -290,7 +297,10 @@ int main(int argc, char **argv){
     thecamera = cam;
     cam->update();
 
-    glutInit(&argc, argv);
+    int gl_argc = 1;
+    char* gl_argv[1];
+    gl_argv[0] = argv[0];
+    glutInit(&gl_argc, gl_argv); // was &argc, argv
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
     glutInitWindowSize(res_x, res_y);
     glutInitWindowPosition(10,10);
