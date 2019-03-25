@@ -12,7 +12,7 @@
 #include "TransformMatrix_t.h"
 #include "Scene_t.h"
 //#include "SkyboxFlat_t.h"
-#include "ImgBuffer_t.h"
+#include "ImgBufferOpenGL_t.h"
 #include "Cam_t.h"
 #include <string>
 #include <list>
@@ -24,12 +24,25 @@
 #include "Texture_t.h"
 #include "MeshGeometry_t.h"
 #include "SkyboxFlatSun_t.h"
+#include <cmath>
+
+#include "GL/glut.h"
+#include "GL/gl.h"
+#include <functional>
 
 #include <iostream> // REMOVE
 
 #define PI 3.141592653589793238463
 
-int main(){
+Cam_t* thecamera;
+Scene_t* thescene;
+
+void raytrace(){
+    thecamera->raytrace(thescene);
+    glutPostRedisplay(); // REMOVE but makes it work, soooooooo...
+}
+
+int main(int argc, char **argv){
     Texture_t* zombietex = new Texture_t("./assets/Zombie beast_texture5.png");
     MeshGeometry_t* cubemesh = new MeshGeometry_t("./assets/cube.obj");
     MeshGeometry_t* zombiemesh = new MeshGeometry_t("./assets/Zombie_Beast4_test2.obj");
@@ -62,8 +75,8 @@ int main(){
     Sphere_t* sphereglass = new Sphere_t(glass, transform4);
     Sphere_t* ground = new Sphere_t(difgreen, transform5);
 
-    Mesh_t* cube = new Mesh_t(difblue, transform_zombie, zombiemesh);
-    Mesh_t* zombie = new Mesh_t(zombiemat, transform_cube, cubemesh);
+    Mesh_t* cube = new Mesh_t(difblue, transform_cube, cubemesh);
+    Mesh_t* zombie = new Mesh_t(zombiemat, transform_zombie, zombiemesh);
 
     spherepurple->transformation_->translate(Vec3f(1, 2, 0.5));
     spherepurple->transformation_->scale(0.5);
@@ -73,7 +86,7 @@ int main(){
     light->transformation_->scale(0.75);
     sphereglass->transformation_->translate(Vec3f(0.5, 2.0, 0.2));
     sphereglass->transformation_->scale(0.4);
-    ground->transformation_->translate(Vec3f(0, 0, -65));
+    ground->transformation_->translate(Vec3f(0, 0, -64.5));
     ground->transformation_->scale(64);
     zombie->transformation_->translate(Vec3f(0.0, 2.0, -0.53));
     zombie->transformation_->scale(0.025);
@@ -85,6 +98,7 @@ int main(){
     cube->transformation_->rotateZ(PI/8);
 
     Scene_t* scene = new Scene_t();
+    thescene = scene;
     //scene->add(spherepurple);
     //scene->add(mirror);
     //scene->add(light);
@@ -95,6 +109,18 @@ int main(){
 
     scene->build_acc();
 
+    // Camera stuff
+
+    std::string filename = "./images/test.png";
+
+    unsigned int res_x = 300;
+    unsigned int res_y = 200;
+    double fov[2];
+    fov[1] = 80.0 * PI /180.0; 
+    fov[0] = fov[1] * res_y/res_x;
+    unsigned int subpix[2] = {1, 1};
+    unsigned int maxbounces = 16;
+
     DirectionalLight_t* dirlight = new DirectionalLight_t(Vec3f(5, 5, 4), transform_light);
     dirlight->transformation_->scale(0.95);
     dirlight->transformation_->rotateZ(-0.7854);
@@ -102,24 +128,37 @@ int main(){
     dirlight->update();
     
     SkyboxFlatSun_t* skybox = new SkyboxFlatSun_t(Vec3f(0.85, 0.85, 0.98), dirlight);
-    ImgBuffer_t* imgbuffer = new ImgBuffer_t(1800, 1200);
+    ImgBufferOpenGL_t* imgbuffer = new ImgBufferOpenGL_t(res_x, res_y);
 
     std::list<Medium_t*> medium_list;
     medium_list.assign(2, air);
 
-    std::string filename = "./images/test.png";
-
-    double fov[2];
-    fov[1] = 80.0 * PI /180.0; 
-    fov[0] = fov[1] * imgbuffer->size_y_/imgbuffer->size_x_;
-    unsigned int subpix[2] = {1, 1};
-    unsigned int maxbounces = 16;
-
     Cam_t* cam = new Cam_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer, medium_list, skybox, maxbounces, 1.0);
+    thecamera = cam;
     cam->update();
 
-    cam->accumulateWrite(scene, 10000, 100);
-    cam->write();
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+    glutInitWindowSize(res_x, res_y);
+    glutInitWindowPosition(10,10);
+    glutCreateWindow(argv[0]);
+    glutDisplayFunc(raytrace);
+    glutMouseFunc(nullptr);
+
+    glGenTextures( 1, &(imgbuffer->tex_) );
+    glBindTexture( GL_TEXTURE_2D, imgbuffer->tex_ );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+    glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+    glTexImage2D( GL_TEXTURE_2D, 0, 3, res_x, res_y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL );    
+
+    glutMainLoop();
+
+    std::cout << "Don't get here" << std::endl; // REMOVE
+    //cam->accumulateWrite(scene, 10000, 100);
+    //cam->write();
 
     /*for (unsigned int i = 0; i < 1; i++){
         Ray_t ray = Ray_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.0, 1.0, 0.0), Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list);
