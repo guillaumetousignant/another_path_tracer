@@ -122,7 +122,7 @@ DISPLAYLIBS += -L$(GLLIBSDIR) -lglut -lGL -lGLU
 #---------------------------------------------------------------------------------------------------+
 # Targets
 
-all : mpidebug $(MPIDebugObjectFiles)
+all : mpirelease $(MPIReleaseObjectFiles)
 
 debug : .debug  begun $(DebugObjectFiles) $(ExecutableDebugObjectFile)
 	@printf '   Linking Debug...'
@@ -151,7 +151,7 @@ mpirelease : .mpirelease begun $(MPIReleaseObjectFiles) $(ExecutableMPIReleaseOb
 reset : clean 
 	@$(shell reset)
 
-verify : mpidebug $(MPIDebugObjectFiles)
+verify : mpirelease $(MPIReleaseObjectFiles)
 
 #---------------------------------------------------------------------------------------------------+
 #---------------------------------------------------------------------------------------+
