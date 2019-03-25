@@ -315,11 +315,16 @@ void MeshGeometry_t::readSU2(const std::string &filename){
     meshfile.clear();
     meshfile.seekg(0, std::ios::beg);
 
-    std::cout << "Starting face fill" << std::endl; // REMOVE
+    std::cout << "Starting face fill. Face arrays have size " << 3*n_tris_ << std::endl; // REMOVE
 
     while (std::getline(meshfile, line)){
         std::istringstream liness(line);
-        liness >> token;
+        if ((line == "\r") || (line.empty())){
+            token = "";
+        }
+        else{
+            liness >> token;
+        }
 
         if (token == "MARKER_TAG="){
             liness >> token;
@@ -328,7 +333,12 @@ void MeshGeometry_t::readSU2(const std::string &filename){
                 std::getline(meshfile, line);
                 std::getline(meshfile, line);
                 std::istringstream liness(line);
-                liness >> token;
+                if ((line == "\r") || (line.empty())){
+                    token = "";
+                }
+                else{
+                    liness >> token;
+                }
             }
             else{
                 wall_started = false;
@@ -354,7 +364,7 @@ void MeshGeometry_t::readSU2(const std::string &filename){
             if (token == "5"){
                 for (unsigned int i = 0; i < 3; i++){
                     liness >> tokens[i];
-                    v_[3*f_counter + i] = v[tokens[i]];
+                    v_[3*f_counter + i] = v[tokens[i]-1];
                     mat_[f_counter] = material;
                     vt_[3*f_counter + i][0] = 0.0;
                     vt_[3*f_counter + i][1] = 0.0;
@@ -363,9 +373,11 @@ void MeshGeometry_t::readSU2(const std::string &filename){
                 f_counter++;
             }
             else if (token == "9"){
+                std::cout << line << std::endl; // REMOVE
                 for (unsigned int i = 0; i < 3; i++){
                     liness >> tokens[i];
-                    v_[3*f_counter + i] = v[tokens[i]];
+                    std::cout << "Accessing v " << tokens[i]-1 << std::endl; // REMOVE
+                    v_[3*f_counter + i] = v[tokens[i]-1];
                     mat_[f_counter] = material;
                     vt_[3*f_counter + i][0] = 0.0;
                     vt_[3*f_counter + i][1] = 0.0;
@@ -375,7 +387,8 @@ void MeshGeometry_t::readSU2(const std::string &filename){
                 tokens[1] = tokens[2];
                 liness >> tokens[2];
                 for (unsigned int i = 0; i < 3; i++){
-                    v_[3*f_counter + i] = v[tokens[i]];
+                    std::cout << "Accessing v " << tokens[i]-1 << std::endl; // REMOVE
+                    v_[3*f_counter + i] = v[tokens[i]-1];
                     mat_[f_counter] = material;
                     vt_[3*f_counter + i][0] = 0.0;
                     vt_[3*f_counter + i][1] = 0.0;
