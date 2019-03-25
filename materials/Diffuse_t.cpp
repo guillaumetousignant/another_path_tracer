@@ -4,7 +4,7 @@
 #include "RandomGenerator_t.h"
 #include "Referentials.h"
 
-#define EPSILON 0.00001 // was 0.00001
+#define EPSILON 0.01 // was 0.00001
 #define PI 3.141592653589793238463
 
 Diffuse_t::Diffuse_t(const Vec3f &emission, const Vec3f &colour, double roughness) : 
@@ -37,7 +37,7 @@ void Diffuse_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray
     newdir = u*cos(rand1)*rand2s + v*sin(rand1)*rand2s + normal*sqrt(1.0-rand2);
     newdir = newdir.normalize();
 
-    ray.origin_ += ray.direction_ * ray.dist_ + normal * EPSILON;
+    ray.origin_ += ray.direction_ * ray.dist_ + normal * EPSILON*ray.dist_; // Made EPSILON relative, check // well guess what wasn,t a goood idea
     ray.direction_ = newdir;
 
     ray.colour_ += ray.mask_ * emission_;
