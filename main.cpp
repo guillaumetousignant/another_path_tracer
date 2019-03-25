@@ -39,21 +39,25 @@
 
 Cam_t* thecamera;
 Scene_t* thescene;
+Mesh_t* themesh;
 double width, height;
 int right_x_pos = 0;
 int right_y_pos = 0;
+int left_x_pos = 0;
+int left_y_pos = 0;
 bool right_clicked = false;
+bool left_clicked = false;
 int n_iter_gl = 0;
 
 void raytrace(){
     n_iter_gl++;
-    //auto t_start = std::chrono::high_resolution_clock::now();
+    auto t_start = std::chrono::high_resolution_clock::now();
     thecamera->raytrace(thescene);
-    //auto t_end = std::chrono::high_resolution_clock::now();
+    auto t_end = std::chrono::high_resolution_clock::now();
 
-    /*std::cout << "Iteration " << n_iter_gl << " done in " 
+    std::cout << "Iteration " << n_iter_gl << " done in " 
         << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
-        << "s." << std::endl;*/
+        << "s." << std::endl;
     glutPostRedisplay(); // REMOVE but makes it work, soooooooo...
 }
 
@@ -69,9 +73,23 @@ void mouse_movement(int x, int y){
         right_x_pos = x;
         right_y_pos = y;
 
-        thecamera->transformation_->rotateY(differential_x/thecamera->fov_[1]); // CHECK those should be switched
-        thecamera->transformation_->rotateX(differential_y/thecamera->fov_[0]); // CHECK those should be switched
-        thecamera->update();
+        themesh->transformation_->rotateY(differential_x/thecamera->fov_[1]); // CHECK those should be switched
+        themesh->transformation_->rotateX(differential_y/thecamera->fov_[0]); // CHECK those should be switched
+        themesh->update();
+        thescene->build_acc();
+        resetDisplay();
+        n_iter_gl = 0;
+    }
+    if (left_clicked){
+        double differential_x = double(x - left_x_pos)/double(width);
+        double differential_y = double(y - left_y_pos)/double(height);
+        left_x_pos = x;
+        left_y_pos = y;
+
+        themesh->transformation_->scale(std::pow(2.0, differential_y)); // CHECK those should be switched
+        themesh->update();
+        thescene->build_acc();
+        resetDisplay();
         n_iter_gl = 0;
     }
 }
@@ -81,8 +99,13 @@ void mouse_click(int button, int state, int x, int y){
     {
     case GLUT_LEFT_BUTTON:
         if(state == GLUT_DOWN)
-        {
-            glutIdleFunc(nullptr);
+        {            
+            left_clicked = true;
+            left_x_pos = x;
+            left_y_pos = y;
+        }
+        else if(state == GLUT_UP){
+            left_clicked = false;
         }
         break;
 
@@ -100,7 +123,6 @@ void mouse_click(int button, int state, int x, int y){
             right_x_pos = x;
             right_y_pos = y;
         }
-
         else if(state == GLUT_UP){
             right_clicked = false;
         }
@@ -199,6 +221,7 @@ int main(int argc, char **argv){
     Mesh_t* zombie = new Mesh_t(zombiemat, transform_zombie, zombiemesh);
     //Mesh_t* piper = new Mesh_t(pipermat, transform_piper, pipermesh);
     Mesh_t* naca = new Mesh_t(difpurple, transform_naca, nacamesh);
+    themesh = naca;
 
     auto t_end = std::chrono::high_resolution_clock::now();
     std::cout << "Elements created in " 
