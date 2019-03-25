@@ -48,6 +48,8 @@ int left_y_pos = 0;
 bool right_clicked = false;
 bool left_clicked = false;
 int n_iter_gl = 0;
+Vec3f focus_point;
+double camera_dist = 5;
 
 void raytrace(){
     n_iter_gl++;
@@ -81,7 +83,7 @@ void mouse_movement(int x, int y){
         n_iter_gl = 0;
     }
     if (left_clicked){
-        double differential_x = double(x - left_x_pos)/double(width);
+        //double differential_x = double(x - left_x_pos)/double(width);
         double differential_y = double(y - left_y_pos)/double(height);
         left_x_pos = x;
         left_y_pos = y;
@@ -162,64 +164,18 @@ void keyboard(unsigned char key, int x, int y){
 
 int main(int argc, char **argv){
     auto t_start = std::chrono::high_resolution_clock::now();
-    Texture_t* zombietex = new Texture_t("./assets/Zombie beast_texture5.png");
-    //Texture_t* pipertex = new Texture_t("./assets/piper_pa18_obj/piper_diffuse.png");
 
-    MeshGeometry_t* cubemesh = new MeshGeometry_t("./assets/cube.obj");
-    MeshGeometry_t* zombiemesh = new MeshGeometry_t("./assets/Zombie_Beast4_test2.obj");
-    //MeshGeometry_t* pipermesh = new MeshGeometry_t("./assets/piper_pa18_obj/piper_pa18.obj");
     MeshGeometry_t* nacamesh = new MeshGeometry_t("./assets/mesh_ONERAM6_inv_ffd.su2");
     
     NonAbsorber_t* airabsorber = new NonAbsorber_t();
-    Absorber_t* glassabsorber = new Absorber_t(Vec3f(), Vec3f(0.6, 0.95, 0.8), 100, 2.0);
-
+    
     Transparent_t* air = new Transparent_t(0, airabsorber);
     Diffuse_t* difpurple = new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.98, 0.7, 0.85), 1);
-    Diffuse_t* diflight = new Diffuse_t(Vec3f(2.0, 2.0, 2.0), Vec3f(1.0, 1.0, 1.0), 1);
-    Diffuse_t* difgreen = new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.8, 0.95, 0.6), 1);
-    Diffuse_t* difblue = new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.1, 0.4, 0.8), 1);
-    DiffuseTex_t* zombiemat = new DiffuseTex_t(Vec3f(0.0, 0.0, 0.0), zombietex, 0.2);
-    //DiffuseTex_t* pipermat = new DiffuseTex_t(Vec3f(0.0, 0.0, 0.0), pipertex, 0.8);
-    Reflective_t* ref1 = new Reflective_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.98, 1, 0.9));
-    //ReflectiveRefractiveFuzz_t* glass = new ReflectiveRefractiveFuzz_t(Vec3f(0.0, 0.0, 0.0), Vec3f(1.0, 1.0, 1.0), 1.5, 10, 1.0, 0.1, glassabsorber);
-    Refractive_t* glass = new Refractive_t(Vec3f(0.0, 0.0, 0.0), Vec3f(1.0, 1.0, 1.0), 1.5, 10, glassabsorber);
-
+    
     TransformMatrix_t* transform_light = new TransformMatrix_t();
     TransformMatrix_t* transform_camera = new TransformMatrix_t(); 
-    TransformMatrix_t* transform1 = new TransformMatrix_t();
-    TransformMatrix_t* transform2 = new TransformMatrix_t();
-    TransformMatrix_t* transform3 = new TransformMatrix_t();
-    TransformMatrix_t* transform4 = new TransformMatrix_t();
-    TransformMatrix_t* transform5 = new TransformMatrix_t();
-    TransformMatrix_t* transform_zombie = new TransformMatrix_t();
-    //TransformMatrix_t* transform_piper = new TransformMatrix_t();
-    TransformMatrix_t* transform_cube = new TransformMatrix_t();
-    TransformMatrix_t* transform_neutral = new TransformMatrix_t();
     TransformMatrix_t* transform_naca = new TransformMatrix_t();
 
-    Sphere_t* spherepurple = new Sphere_t(difpurple, transform1);
-    Sphere_t* mirror = new Sphere_t(ref1, transform2);
-    Sphere_t* light = new Sphere_t(diflight, transform3);
-    Sphere_t* sphereglass = new Sphere_t(glass, transform4);
-    Sphere_t* ground = new Sphere_t(difgreen, transform5);
-
-    Vec3f points1[3];
-    Vec3f points2[3];
-
-    points1[0] = Vec3f(-2, 4, -0.5);
-    points1[1] = Vec3f(-2, -4, -0.5);
-    points1[2] = Vec3f(2, -4, -0.5);
-    
-    points2[0] = Vec3f(-2, 4, -0.5);
-    points2[1] = Vec3f(2, -4, -0.5);
-    points2[2] = Vec3f(2, 4, -0.5);
-
-    Triangle_t* planegrey1 = new Triangle_t(difgreen, transform_neutral, &points1[0], nullptr, nullptr);
-    Triangle_t* planegrey2 = new Triangle_t(difgreen, transform_neutral, &points2[0], nullptr, nullptr);
-
-    Mesh_t* cube = new Mesh_t(difblue, transform_cube, cubemesh);
-    Mesh_t* zombie = new Mesh_t(zombiemat, transform_zombie, zombiemesh);
-    //Mesh_t* piper = new Mesh_t(pipermat, transform_piper, pipermesh);
     Mesh_t* naca = new Mesh_t(difpurple, transform_naca, nacamesh);
     themesh = naca;
 
@@ -229,34 +185,15 @@ int main(int argc, char **argv){
             << "s." << std::endl;
 
     t_start = std::chrono::high_resolution_clock::now();
-    spherepurple->transformation_->translate(Vec3f(1, 2, 0.5));
-    spherepurple->transformation_->scale(0.5);
-    mirror->transformation_->translate(Vec3f(-1.5, 4, -0.8));
-    mirror->transformation_->scale(1.5);
-    light->transformation_->translate(Vec3f(0, 3, 0.8));
-    light->transformation_->scale(0.75);
-    sphereglass->transformation_->translate(Vec3f(0.5, 2.0, 0.2));
-    sphereglass->transformation_->scale(0.4);
-    ground->transformation_->translate(Vec3f(0, 0, -65));
-    ground->transformation_->scale(64);
-    zombie->transformation_->translate(Vec3f(0.0, 2.0, -0.53));
-    zombie->transformation_->scale(0.025);
-    zombie->transformation_->rotateX(PI/2);
-    zombie->transformation_->rotateZ(-PI/16);
-    cube->transformation_->translate(Vec3f(0.5, 2.0, 0.2));
-    cube->transformation_->scale(0.5);
-    cube->transformation_->rotateX(0);
-    cube->transformation_->rotateZ(PI/8);
-    /*piper->transformation_->translate(Vec3f(0.0, 1.75, -0.25));
-    piper->transformation_->scale(0.2);
-    piper->transformation_->rotateX(PI/2.0);
-    piper->transformation_->rotateZ(PI/8.0);*/
-    naca->transformation_->translate(Vec3f(0.0, 2.0, 0));
+
+    focus_point = Vec3f();
+    naca->transformation_->translate(Vec3f(0.0, 0.0, 0.0));
     naca->transformation_->scale(1.0/100.0);
     naca->transformation_->rotateX(0.0);
     naca->transformation_->rotateZ(0.0);
 
     t_end = std::chrono::high_resolution_clock::now();
+
     std::cout << "Elements transformed in " 
             << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
             << "s." << std::endl;
@@ -264,15 +201,7 @@ int main(int argc, char **argv){
     t_start = std::chrono::high_resolution_clock::now();
     Scene_t* scene = new Scene_t();
     thescene = scene;
-    //scene->add(spherepurple);
-    //scene->add(mirror);
-    //scene->add(light);
-    //scene->add(sphereglass);
-    //scene->add(ground);
-    //scene->add(zombie);
-    //scene->add(planegrey1);
-    //scene->add(planegrey2);
-    //scene->add(piper);
+
     scene->add(naca);
 
     t_end = std::chrono::high_resolution_clock::now();
@@ -332,6 +261,7 @@ int main(int argc, char **argv){
 
     Cam_t* cam = new Cam_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer, medium_list, skybox, maxbounces, 1.0);
     thecamera = cam;
+    cam->transformation_->translate(Vec3f(0.0, -camera_dist, 0.0));
     cam->update();
 
     int gl_argc = 1;
@@ -357,23 +287,5 @@ int main(int argc, char **argv){
     glTexImage2D( GL_TEXTURE_2D, 0, 3, res_x, res_y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL );    
 
     glutMainLoop();
-
-    std::cout << "Don't get here" << std::endl; // REMOVE
-    //cam->accumulateWrite(scene, 10000, 100);
-    //cam->write();
-
-    /*for (unsigned int i = 0; i < 1; i++){
-        Ray_t ray = Ray_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.0, 1.0, 0.0), Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list);
-        ray.raycast(scene, 8, skybox);
-    }*/
-    
-    /*std::cout << "Left: " << std::endl; // REMOVE
-    Ray_t rayL = Ray_t(Vec3f(0.0, 0.0, 0.0), Vec3f(-0.447643, 0.894212, -0.000745399), Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list);
-    rayL.raycast(scene, 2, skybox);
-
-    std::cout << std::endl << "Right: " << std::endl; // REMOVE
-    Ray_t rayR = Ray_t(Vec3f(0.0, 0.0, 0.0), Vec3f(-0.435534, 0.900172, -0.000281008), Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list);
-    rayR.raycast(scene, 2, skybox); // These are never given a downward direction, never intersect with ground
-    */
     return 0;
 }
