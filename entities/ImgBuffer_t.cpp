@@ -21,6 +21,11 @@ ImgBuffer_t::~ImgBuffer_t(){
 
 void ImgBuffer_t::reset(){
     updates_ = 0;
+    for (unsigned int j = 0; j < size_y_; j++){
+        for (unsigned int i = 0; i < size_x_; i++){
+            img_[j][i] = Vec3f();
+        }
+    }
 }
 
 void ImgBuffer_t::update(const Vec3f** img, unsigned int size_x, unsigned int size_y){

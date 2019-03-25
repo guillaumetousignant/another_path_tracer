@@ -28,7 +28,6 @@
 
 #include "GL/glut.h"
 #include "GL/gl.h"
-#include <functional>
 
 #include <iostream> // REMOVE
 
@@ -36,10 +35,77 @@
 
 Cam_t* thecamera;
 Scene_t* thescene;
+double width, height;
+int right_x_pos = 0;
+int right_y_pos = 0;
+bool right_clicked = false;
 
 void raytrace(){
     thecamera->raytrace(thescene);
     glutPostRedisplay(); // REMOVE but makes it work, soooooooo...
+}
+
+void resetDisplay(void){
+    thecamera->reset();
+}
+
+void mouse_movement(int x, int y){
+    if (right_clicked){
+        double differential_x = double(x - right_x_pos)/double(width);
+        double differential_y = double(y - right_y_pos)/double(height);
+        right_x_pos = x;
+        right_y_pos = y;
+
+        thecamera->transformation_->rotateY(differential_x/thecamera->fov_[1]); // CHECK those should be switched
+        thecamera->transformation_->rotateX(differential_y/thecamera->fov_[0]); // CHECK those should be switched
+        thecamera->update();
+    }
+}
+
+void mouse_click(int button, int state, int x, int y){
+    switch (button)
+    {
+    case GLUT_LEFT_BUTTON:
+        if(state == GLUT_DOWN)
+        {
+            glutIdleFunc(nullptr);
+        }
+        break;
+
+    case GLUT_MIDDLE_BUTTON:
+        if(state == GLUT_DOWN)
+        {
+            resetDisplay();
+        }
+        break;
+
+    case GLUT_RIGHT_BUTTON:
+        if(state == GLUT_DOWN)
+        {            
+            right_clicked = true;
+            right_x_pos = x;
+            right_y_pos = y;
+        }
+
+        else if(state == GLUT_UP){
+            right_clicked = false;
+        }
+        break;
+    }
+}
+
+void keyboard(unsigned char key, int x, int y){
+    switch (key)
+    {
+    case 's':
+        thecamera->write();
+        break;
+
+    case 'f':
+        double position[2] = {std::min(std::max(double(x)/double(width), 0.0), 1.0), std::min(std::max(double(y)/double(height), 0.0), 1.0)};
+        thecamera->autoFocus(thescene, position);
+        break;
+    }
 }
 
 int main(int argc, char **argv){
@@ -114,7 +180,9 @@ int main(int argc, char **argv){
     std::string filename = "./images/test.png";
 
     unsigned int res_x = 300;
+    width = res_x;
     unsigned int res_y = 200;
+    height = res_y;
     double fov[2];
     fov[1] = 80.0 * PI /180.0; 
     fov[0] = fov[1] * res_y/res_x;
@@ -143,7 +211,9 @@ int main(int argc, char **argv){
     glutInitWindowPosition(10,10);
     glutCreateWindow(argv[0]);
     glutDisplayFunc(raytrace);
-    glutMouseFunc(nullptr);
+    glutMouseFunc(mouse_click);
+    glutMotionFunc(mouse_movement);
+    glutKeyboardFunc(keyboard);
 
     glGenTextures( 1, &(imgbuffer->tex_) );
     glBindTexture( GL_TEXTURE_2D, imgbuffer->tex_ );

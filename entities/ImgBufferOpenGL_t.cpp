@@ -29,8 +29,12 @@ ImgBufferOpenGL_t::~ImgBufferOpenGL_t(){
 }
 
 void ImgBufferOpenGL_t::reset(){
-    glutPostRedisplay();
     updates_ = 0;
+    for (unsigned int j = 0; j < size_y_; j++){
+        for (unsigned int i = 0; i < size_x_; i++){
+            img_[j][i] = Vec3f();
+        }
+    }
 }
 
 void ImgBufferOpenGL_t::update(const Vec3f** img, unsigned int size_x, unsigned int size_y){
@@ -44,6 +48,8 @@ void ImgBufferOpenGL_t::update(const Vec3f** img, unsigned int size_x, unsigned 
 }
 
 void ImgBufferOpenGL_t::update() {
+    updates_++;
+    
     glClearColor(0.0, 0.0, 0.0, 0.0);
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -77,8 +83,6 @@ void ImgBufferOpenGL_t::update() {
     glEnd();
 
     glutSwapBuffers();
-
-    updates_++;
 }
 
 void ImgBufferOpenGL_t::update(const Vec3f &colour, unsigned int pos_x, unsigned int pos_y) {

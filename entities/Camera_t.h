@@ -41,6 +41,7 @@ class Camera_t{
         virtual void setUp(Vec3f &new_up);
         virtual void write(std::string file_name = "") = 0;
         virtual void show() const = 0;
+        virtual void reset() = 0;
 };
 
 #endif
