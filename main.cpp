@@ -191,9 +191,9 @@ int main(int argc, char **argv){
     //scene->add(mirror);
     //scene->add(light);
     //scene->add(sphereglass);
-    //scene->add(ground);
-    //scene->add(zombie);
-    scene->add(piper);
+    scene->add(ground);
+    scene->add(zombie);
+    //scene->add(piper);
     scene->update();
 
     auto t_start = std::chrono::high_resolution_clock::now();
@@ -208,8 +208,8 @@ int main(int argc, char **argv){
 
     std::string filename = "./images/test.png";
 
-    unsigned int res_x = 300;
-    unsigned int res_y = 200;
+    unsigned int res_x = 1800;
+    unsigned int res_y = 1200;
     width = res_x;
     height = res_y;
     double fov[2];

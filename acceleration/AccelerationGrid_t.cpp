@@ -8,8 +8,9 @@
 #define GRIDMINRES 1
 #define GRIDMAXRES 128
 #define MULTIGRID
-#define MAXCELLCONTENT 256 // Segfaults if too low. 16 segfaults zombie
-#define MAXGRIDLEVEL 0
+#define MAXCELLCONTENT 32 // Segfaults if too low. 16 segfaults zombie
+#define MAXGRIDLEVEL 2
+#define CELLLIST
 
 AccelerationGrid_t::AccelerationGrid_t(Shape_t** items, unsigned int n_items, Vec3f* coordinates/* = nullptr*/, unsigned int level /* = 0*/) : level_(level) {
     Vec3f grid_size;
@@ -18,9 +19,11 @@ AccelerationGrid_t::AccelerationGrid_t(Shape_t** items, unsigned int n_items, Ve
     unsigned int x, y, z;
     GridCell_t** temp_cells;
     #ifdef MULTIGRID
+    Vec3f cell_extent[2];
+    #endif
+    #if defined(CELLLIST) && defined(MULTIGRID)
     Shape_t** temp_elements = nullptr;
     unsigned int element_index;
-    Vec3f cell_extent[2];
     #endif
 
     n_obj_ = n_items;
@@ -102,12 +105,14 @@ AccelerationGrid_t::AccelerationGrid_t(Shape_t** items, unsigned int n_items, Ve
         if (temp_cells[i] != nullptr){
             #ifdef MULTIGRID
             if ((temp_cells[i]->n_obj_ > MAXCELLCONTENT) && (level_ < MAXGRIDLEVEL)){
+                #ifdef CELLLIST
                 temp_elements = new Shape_t*[temp_cells[i]->n_obj_];
                 element_index = 0;
                 for (auto it = temp_cells[i]->items_.begin(); it != temp_cells[i]->items_.end(); ++it){
                     temp_elements[element_index] = *it;
                     element_index++;
                 }
+                #endif
 
                 z = i/(cell_res_[0]*cell_res_[1]);
                 y = (i - z * cell_res_[0]*cell_res_[1])/cell_res_[0];
@@ -116,11 +121,16 @@ AccelerationGrid_t::AccelerationGrid_t(Shape_t** items, unsigned int n_items, Ve
                 cell_extent[0] = coordinates_[0] + grid_size*Vec3f(x, y, z)/cell_res;
                 cell_extent[1] = cell_extent[0] + cell_size_;
 
+                #ifdef CELLLIST
                 cells_[i] = new AccelerationGrid_t(temp_elements, temp_cells[i]->n_obj_, &cell_extent[0], level_+1);
-                //cells_[i] = temp_cells[i];
+                #else
+                cells_[i] = new AccelerationGrid_t(temp_cells[i]->items_, temp_cells[i]->n_obj_, &cell_extent[0], level_+1);
+                #endif
 
+                #ifdef CELLLIST
                 delete [] temp_elements;
                 temp_elements = nullptr;
+                #endif
                 delete temp_cells[i];
                 temp_cells[i] = nullptr;
 
