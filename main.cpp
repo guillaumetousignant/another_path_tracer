@@ -33,6 +33,9 @@
 #include <iostream> // REMOVE
 
 #define PI 3.141592653589793238463
+#ifdef _WIN32
+#define GL_CLAMP_TO_EDGE 0x812F
+#endif
 
 Cam_t* thecamera;
 Scene_t* thescene;
