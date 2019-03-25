@@ -52,7 +52,7 @@ void MeshGeometry_t::readObj(const std::string &filename){
 
     std::ifstream meshfile(filename);
     if (!meshfile.is_open()) {
-        std::cout << "Error: file '" << filename << "' could nor be opened. Exiting." << std::endl;
+        std::cout << "Error: file '" << filename << "' could not be opened. Exiting." << std::endl;
         return;
     }
 
@@ -214,7 +214,7 @@ void MeshGeometry_t::readSU2(const std::string &filename){
 
     std::ifstream meshfile(filename);
     if (!meshfile.is_open()) {
-        std::cout << "Error: file '" << filename << "' could nor be opened. Exiting." << std::endl;
+        std::cout << "Error: file '" << filename << "' could not be opened. Exiting." << std::endl;
         return;
     }
 
