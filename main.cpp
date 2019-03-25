@@ -82,7 +82,7 @@ void mouse_movement(int x, int y){
         Vec3f horizontal = thecamera->direction_.cross(thecamera->up_);
         Vec3f vertical = horizontal.cross(thecamera->direction_);
 
-        focus_point += horizontal * differential_x * camera_dist + vertical * differential_y * camera_dist;
+        focus_point += horizontal * -differential_x * camera_dist + vertical * differential_y * camera_dist;
     }
     if (left_clicked){
         //double differential_x = double(x - left_x_pos)/double(width);
@@ -220,10 +220,10 @@ int main(int argc, char **argv){
     t_start = std::chrono::high_resolution_clock::now();
 
     focus_point = Vec3f();
-    naca->transformation_->translate(Vec3f(0.0, 0.0, 0.0));
-    naca->transformation_->scale(1.0/100.0);
+    /*naca->transformation_->translate(Vec3f(0.0, 0.0, 0.0));
+    naca->transformation_->scale(1.0);
     naca->transformation_->rotateX(0.0);
-    naca->transformation_->rotateZ(0.0);
+    naca->transformation_->rotateZ(0.0);*/
 
     t_end = std::chrono::high_resolution_clock::now();
 
@@ -255,6 +255,12 @@ int main(int argc, char **argv){
     std::cout << "Acceleration structure built in " 
             << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
             << "s." << std::endl << std::endl;
+
+    Vec3f mincoord = naca->mincoord();
+    Vec3f maxcoord = naca->maxcoord();
+
+    std::cout << "Min coord: " << mincoord[0] << " " << mincoord[1] << " " << mincoord[2] << std::endl;
+    std::cout << "Max coord: " << maxcoord[0] << " " << maxcoord[1] << " " << maxcoord[2] << std::endl;
 
     // Camera stuff
     std::string filename = "./images/test.png";
