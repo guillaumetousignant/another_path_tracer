@@ -53,13 +53,13 @@ double camera_dist = 5;
 
 void raytrace(){
     n_iter_gl++;
-    auto t_start = std::chrono::high_resolution_clock::now();
+    //auto t_start = std::chrono::high_resolution_clock::now();
     thecamera->raytrace(thescene);
-    auto t_end = std::chrono::high_resolution_clock::now();
+    //auto t_end = std::chrono::high_resolution_clock::now();
 
-    std::cout << "Iteration " << n_iter_gl << " done in " 
+    /*std::cout << "Iteration " << n_iter_gl << " done in " 
         << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
-        << "s." << std::endl;
+        << "s." << std::endl;*/
     glutPostRedisplay(); // REMOVE but makes it work, soooooooo...
 }
 
@@ -69,31 +69,34 @@ void resetDisplay(void){
 }
 
 void mouse_movement(int x, int y){
-    if (right_clicked){
-        double differential_x = double(x - right_x_pos)/double(width);
-        double differential_y = double(y - right_y_pos)/double(height);
-        right_x_pos = x;
-        right_y_pos = y;
-
-        themesh->transformation_->rotateY(differential_x/thecamera->fov_[1]); // CHECK those should be switched
-        themesh->transformation_->rotateX(differential_y/thecamera->fov_[0]); // CHECK those should be switched
-        themesh->update();
-        thescene->build_acc();
-        resetDisplay();
-        n_iter_gl = 0;
-    }
+    Vec3f newdir = thecamera->direction_;
     if (left_clicked){
         //double differential_x = double(x - left_x_pos)/double(width);
         double differential_y = double(y - left_y_pos)/double(height);
         left_x_pos = x;
         left_y_pos = y;
 
-        themesh->transformation_->scale(std::pow(2.0, differential_y)); // CHECK those should be switched
-        themesh->update();
-        thescene->build_acc();
-        resetDisplay();
-        n_iter_gl = 0;
+        camera_dist *= std::pow(2.0, -differential_y);
     }
+    if (right_clicked){
+        double differential_x = double(x - right_x_pos)/double(width);
+        double differential_y = double(y - right_y_pos)/double(height);
+        right_x_pos = x;
+        right_y_pos = y;
+
+        thecamera->transformation_->rotateZ(differential_x/thecamera->fov_[1]); // CHECK those should be switched
+        thecamera->transformation_->rotateX(differential_y/thecamera->fov_[0]); // CHECK those should be switched
+
+        TransformMatrix_t transform_norm = thecamera->transformation_->transformDir();
+        newdir = transform_norm.multDir(Vec3f(0.0, 1.0, 0.0));
+    }
+
+    Vec3f diff = focus_point - newdir * camera_dist - thecamera->origin_;
+    thecamera->transformation_->translate(diff);
+
+    thecamera->update();
+    thecamera->reset();
+    n_iter_gl = 0;
 }
 
 void mouse_click(int button, int state, int x, int y){
