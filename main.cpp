@@ -106,28 +106,37 @@ void mouse_click(int button, int state, int x, int y){
 }
 
 void keyboard(unsigned char key, int x, int y){
+    auto t_start_write = std::chrono::high_resolution_clock::now(); // why is this needed?
+    auto t_end_write = t_start_write;
+    double position[2];
     switch (key)
     {
     case 's':
-        //std::cout << "Writing started." << std::endl;
-        //auto t_start_write = std::chrono::high_resolution_clock::now();
+        std::cout << "Writing started." << std::endl;
+        t_start_write = std::chrono::high_resolution_clock::now();
         thecamera->write();
-        //auto t_end_write = std::chrono::high_resolution_clock::now();
+        t_end_write = std::chrono::high_resolution_clock::now();
 
-        /*std::cout << "Writing done in "
+        std::cout << "Writing done in "
         << std::chrono::duration<double, std::milli>(t_end_write-t_start_write).count()/1000.0 
-        << "s." << std::endl;*/
-        
+        << "s." << std::endl;
         break;
 
     case 'f':
-        double position[2] = {std::min(std::max(double(x)/double(width), 0.0), 1.0), std::min(std::max(double(y)/double(height), 0.0), 1.0)};
+        position[0] = std::min(std::max(double(x)/double(width), 0.0), 1.0);
+        position[1] = std::min(std::max(double(y)/double(height), 0.0), 1.0);
         thecamera->autoFocus(thescene, position);
+        break;
+
+    case 'q':
+        glutDestroyWindow(0);
+        exit(0);
         break;
     }
 }
 
 int main(int argc, char **argv){
+    auto t_start = std::chrono::high_resolution_clock::now();
     Texture_t* zombietex = new Texture_t("./assets/Zombie beast_texture5.png");
     Texture_t* pipertex = new Texture_t("./assets/piper_pa18_obj/piper_diffuse.png");
 
@@ -169,7 +178,12 @@ int main(int argc, char **argv){
     Mesh_t* cube = new Mesh_t(difblue, transform_cube, cubemesh);
     Mesh_t* zombie = new Mesh_t(zombiemat, transform_zombie, zombiemesh);
     Mesh_t* piper = new Mesh_t(pipermat, transform_piper, pipermesh);
+    auto t_end = std::chrono::high_resolution_clock::now();
+    std::cout << "Elements created in " 
+            << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
+            << "s." << std::endl;
 
+    t_start = std::chrono::high_resolution_clock::now();
     spherepurple->transformation_->translate(Vec3f(1, 2, 0.5));
     spherepurple->transformation_->scale(0.5);
     mirror->transformation_->translate(Vec3f(-1.5, 4, -0.8));
@@ -192,10 +206,13 @@ int main(int argc, char **argv){
     piper->transformation_->scale(0.2);
     piper->transformation_->rotateX(PI/2.0);
     piper->transformation_->rotateZ(PI/8.0);
+    t_end = std::chrono::high_resolution_clock::now();
+    std::cout << "Elements transformed in " 
+            << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
+            << "s." << std::endl;
 
+    t_start = std::chrono::high_resolution_clock::now();
     Scene_t* scene = new Scene_t();
-
-    auto t_start = std::chrono::high_resolution_clock::now();
     thescene = scene;
     //scene->add(spherepurple);
     //scene->add(mirror);
@@ -204,7 +221,7 @@ int main(int argc, char **argv){
     scene->add(ground);
     scene->add(zombie);
     //scene->add(piper);
-    auto t_end = std::chrono::high_resolution_clock::now();
+    t_end = std::chrono::high_resolution_clock::now();
     std::cout << "Elements added in " 
             << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
             << "s." << std::endl;
@@ -227,8 +244,8 @@ int main(int argc, char **argv){
 
     std::string filename = "./images/test.png";
 
-    unsigned int res_x = 1800;
-    unsigned int res_y = 1200;
+    unsigned int res_x = 300;
+    unsigned int res_y = 200;
     width = res_x;
     height = res_y;
     double fov[2];
