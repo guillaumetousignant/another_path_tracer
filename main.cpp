@@ -50,7 +50,7 @@ bool right_clicked = false;
 bool left_clicked = false;
 bool middle_clicked = false;
 int n_iter_gl = 0;
-Vec3f focus_point;
+Vec3f focus_point = Vec3f();
 double camera_dist = 5;
 
 void raytrace(){
@@ -341,7 +341,6 @@ int main(int argc, char **argv){
     fov[0] = fov[1] * res_y/res_x;
     unsigned int subpix[2] = {1, 1};
     unsigned int maxbounces = 16;
-    Vec3f focus_point = Vec3f();
 
     DirectionalLight_t* dirlight = new DirectionalLight_t(Vec3f(5, 5, 4), transform_light);
     dirlight->transformation_->scale(0.95);
