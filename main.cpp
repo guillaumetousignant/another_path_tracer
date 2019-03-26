@@ -42,8 +42,16 @@ Scene_t* thescene;
 double width, height;
 int right_x_pos = 0;
 int right_y_pos = 0;
+int left_x_pos = 0;
+int left_y_pos = 0;
+int middle_x_pos = 0;
+int middle_y_pos = 0;
 bool right_clicked = false;
+bool left_clicked = false;
+bool middle_clicked = false;
 int n_iter_gl = 0;
+Vec3f focus_point;
+double camera_dist = 5;
 
 void raytrace(){
     n_iter_gl++;
@@ -63,17 +71,48 @@ void resetDisplay(void){
 }
 
 void mouse_movement(int x, int y){
+    Vec3f newdir = thecamera->direction_;
+    if (middle_clicked){
+        double differential_x = double(x - middle_x_pos)/double(width);
+        double differential_y = double(y - middle_y_pos)/double(height);
+        middle_x_pos = x;
+        middle_y_pos = y;
+
+        Vec3f horizontal = thecamera->direction_.cross(thecamera->up_);
+        Vec3f vertical = horizontal.cross(thecamera->direction_);
+
+        focus_point += horizontal * -differential_x * camera_dist + vertical * differential_y * camera_dist;
+    }
+    if (left_clicked){
+        //double differential_x = double(x - left_x_pos)/double(width);
+        double differential_y = double(y - left_y_pos)/double(height);
+        left_x_pos = x;
+        left_y_pos = y;
+
+        camera_dist *= std::pow(2.0, -differential_y);
+    }
     if (right_clicked){
         double differential_x = double(x - right_x_pos)/double(width);
         double differential_y = double(y - right_y_pos)/double(height);
         right_x_pos = x;
         right_y_pos = y;
 
-        thecamera->transformation_->rotateY(differential_x/thecamera->fov_[1]); // CHECK those should be switched
-        thecamera->transformation_->rotateX(differential_y/thecamera->fov_[0]); // CHECK those should be switched
-        thecamera->update();
-        n_iter_gl = 0;
+        Vec3f horizontal = thecamera->direction_.cross(thecamera->up_);
+        Vec3f vertical = horizontal.cross(thecamera->direction_);
+
+        thecamera->transformation_->rotate(horizontal, differential_y/thecamera->fov_[0]);
+        thecamera->transformation_->rotate(vertical, differential_x/thecamera->fov_[1]);
+
+        TransformMatrix_t transform_norm = thecamera->transformation_->transformDir();
+        newdir = transform_norm.multDir(Vec3f(0.0, 1.0, 0.0));
     }
+
+    Vec3f diff = focus_point - newdir * camera_dist - thecamera->origin_;
+    thecamera->transformation_->translate(diff);
+
+    thecamera->update();
+    thecamera->reset();
+    n_iter_gl = 0;
 }
 
 void mouse_click(int button, int state, int x, int y){
@@ -81,15 +120,25 @@ void mouse_click(int button, int state, int x, int y){
     {
     case GLUT_LEFT_BUTTON:
         if(state == GLUT_DOWN)
-        {
-            glutIdleFunc(nullptr);
+        {            
+            left_clicked = true;
+            left_x_pos = x;
+            left_y_pos = y;
+        }
+        else if(state == GLUT_UP){
+            left_clicked = false;
         }
         break;
 
     case GLUT_MIDDLE_BUTTON:
         if(state == GLUT_DOWN)
-        {
-            resetDisplay();
+        {            
+            middle_clicked = true;
+            middle_x_pos = x;
+            middle_y_pos = y;
+        }
+        else if(state == GLUT_UP){
+            middle_clicked = false;
         }
         break;
 
@@ -100,7 +149,6 @@ void mouse_click(int button, int state, int x, int y){
             right_x_pos = x;
             right_y_pos = y;
         }
-
         else if(state == GLUT_UP){
             right_clicked = false;
         }
@@ -137,7 +185,6 @@ void keyboard(unsigned char key, int x, int y){
         break;
     }
 }
-
 int main(int argc, char **argv){
     auto t_start = std::chrono::high_resolution_clock::now();
     Texture_t* zombietex = new Texture_t("./assets/Zombie beast_texture5.png");
@@ -216,7 +263,7 @@ int main(int argc, char **argv){
     sphereglass->transformation_->scale(0.4);
     ground->transformation_->translate(Vec3f(0, 0, -65));
     ground->transformation_->scale(64);
-    zombie->transformation_->translate(Vec3f(0.0, 2.0, -0.53));
+    zombie->transformation_->translate(Vec3f(0.0, 0.0, -0.53));
     zombie->transformation_->scale(0.025);
     zombie->transformation_->rotateX(PI/2);
     zombie->transformation_->rotateZ(-PI/16);
@@ -294,6 +341,7 @@ int main(int argc, char **argv){
     fov[0] = fov[1] * res_y/res_x;
     unsigned int subpix[2] = {1, 1};
     unsigned int maxbounces = 16;
+    Vec3f focus_point = Vec3f();
 
     DirectionalLight_t* dirlight = new DirectionalLight_t(Vec3f(5, 5, 4), transform_light);
     dirlight->transformation_->scale(0.95);
@@ -309,6 +357,7 @@ int main(int argc, char **argv){
 
     Cam_t* cam = new Cam_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer, medium_list, skybox, maxbounces, 1.0);
     thecamera = cam;
+    cam->transformation_->translate(Vec3f(0, -camera_dist, 0));
     cam->update();
 
     int gl_argc = 1;
