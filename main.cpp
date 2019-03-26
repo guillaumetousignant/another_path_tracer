@@ -293,11 +293,11 @@ int main(int argc, char **argv){
     //scene->add(light);
     //scene->add(sphereglass);
     //scene->add(ground);
-    //scene->add(zombie);
-    //scene->add(planegrey1);
-    //scene->add(planegrey2);
+    scene->add(zombie);
+    scene->add(planegrey1);
+    scene->add(planegrey2);
     //scene->add(piper);
-    scene->add(naca);
+    //scene->add(naca);
 
     t_end = std::chrono::high_resolution_clock::now();
     std::cout << "Elements added in " 
