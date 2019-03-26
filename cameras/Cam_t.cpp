@@ -19,7 +19,6 @@ void Cam_t::update() {
     TransformMatrix_t transform_norm = transformation_->transformDir();
     direction_ = transform_norm.multDir(Vec3f(0.0, 1.0, 0.0));
     up_ = up_buffer_;
-    reset();
 }
 
 void Cam_t::raytrace(const Scene_t* scene) {
