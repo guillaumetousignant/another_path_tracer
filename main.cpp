@@ -5,6 +5,7 @@
 #include "Reflective_t.h"
 #include "ReflectiveRefractiveFuzz_t.h"
 #include "ReflectiveRefractive_t.h"
+#include "NormalMaterial_t.h"
 #include "Vec3f.h"
 #include "Sphere_t.h"
 #include "Triangle_t.h"
@@ -203,13 +204,14 @@ int main(int argc, char **argv){
     NonAbsorber_t* airabsorber = new NonAbsorber_t();
     
     Transparent_t* air = new Transparent_t(0, airabsorber);
-    Diffuse_t* difpurple = new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.98, 0.7, 0.85), 1);
+    //Diffuse_t* difpurple = new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.98, 0.7, 0.85), 1);
+    NormalMaterial_t* normalmat = new NormalMaterial_t();
     
     TransformMatrix_t* transform_light = new TransformMatrix_t();
     TransformMatrix_t* transform_camera = new TransformMatrix_t(); 
     TransformMatrix_t* transform_naca = new TransformMatrix_t();
 
-    Mesh_t* naca = new Mesh_t(difpurple, transform_naca, nacamesh);
+    Mesh_t* naca = new Mesh_t(normalmat, transform_naca, nacamesh);
     themesh = naca;
 
     auto t_end = std::chrono::high_resolution_clock::now();
@@ -281,7 +283,7 @@ int main(int argc, char **argv){
     fov[1] = 80.0 * PI /180.0; 
     fov[0] = fov[1] * res_y/res_x;
     unsigned int subpix[2] = {1, 1};
-    unsigned int maxbounces = 16;
+    unsigned int maxbounces = 1;
 
     DirectionalLight_t* dirlight = new DirectionalLight_t(Vec3f(5, 5, 4), transform_light);
     dirlight->transformation_->scale(0.95);
