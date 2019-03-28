@@ -24,7 +24,7 @@ class CamAperture_t : public Cam_t{
 
         virtual void update();
         virtual void raytrace(const Scene_t* scene);
-        virtual void focus(double focus_distance){};
-        virtual void autoFocus(const Scene_t* scene, double position[2]){};
+        virtual void focus(double focus_distance);
+        virtual void autoFocus(const Scene_t* scene, double position[2]);
 };
 #endif
