@@ -77,9 +77,21 @@ void CamAperture_t::focus(double focus_distance){
 void CamAperture_t::autoFocus(const Scene_t* scene, double position[2]){
     Vec3f horizontal, vertical;
     Vec3f ray_direction_sph;
+    Shape_t* hit_obj = nullptr;
+    double t = std::numeric_limits<double>::infinity();
+    double uv[2];
 
     horizontal = direction_.cross(up_);
     vertical = horizontal.cross(direction_);
 
     ray_direction_sph = Vec3f(1.0, PI/2.0 + (position[1]-0.5)*fov_[0], (position[0]-0.5)*fov_[1]); // 0, y, x
+
+    Ray_t focus_ray = Ray_t(origin_, to_xyz_offset(ray_direction_sph, direction_, horizontal, vertical), Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list_);
+
+    scene->intersect(focus_ray, hit_obj, t, uv);
+
+    if (t == std::numeric_limits<double>::infinity()){
+        t = 1000000.0;
+    }
+    focus(t);
 }
