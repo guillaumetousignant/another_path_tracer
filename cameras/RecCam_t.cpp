@@ -33,8 +33,8 @@ void RecCam_t::raytrace(const Scene_t* scene) {
     vertical = horizontal.cross(direction_);
     focus_point = origin_ + direction_;
     tot_subpix = subpix_[0]*subpix_[1];
-    pixel_span_y = horizontal * std::tan(fov_[0]/2.0) * 2.0/image_->size_y_;
-    pixel_span_x = vertical * std::tan(fov_[1]/2.0) * 2.0/image_->size_x_;
+    pixel_span_y = vertical * std::tan(fov_[0]/2.0) * 2.0/image_->size_y_;
+    pixel_span_x = horizontal * std::tan(fov_[1]/2.0) * 2.0/image_->size_x_;
     subpix_span_y = pixel_span_y/subpix_[0];
     subpix_span_x = pixel_span_x/subpix_[1];
 
@@ -52,7 +52,7 @@ void RecCam_t::raytrace(const Scene_t* scene) {
                     double jitter_y = unif_(my_rand::rng);
                     double jitter_x = unif_(my_rand::rng);
 
-                    pix_vec -= subpix_span_y * ((double)k - (double)subpix_[0]/2.0 + jitter_y) + subpix_span_x * ((double)l - (double)subpix_[1]/2.0 + jitter_x);
+                    pix_vec -= subpix_span_y * ((double)k - (double)subpix_[0]/2.0 + jitter_y) - subpix_span_x * ((double)l - (double)subpix_[1]/2.0 + jitter_x);
                     pix_vec -= origin_;
                     pix_vec = pix_vec.normalize();
 
