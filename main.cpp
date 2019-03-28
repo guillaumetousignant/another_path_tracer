@@ -13,7 +13,9 @@
 #include "Scene_t.h"
 //#include "SkyboxFlat_t.h"
 #include "ImgBufferOpenGL_t.h"
+#include "Camera_t.h"
 #include "Cam_t.h"
+#include "CamAperture_t.h"
 #include <string>
 #include <list>
 #include "NonAbsorber_t.h"
@@ -37,7 +39,7 @@
 #define GL_CLAMP_TO_EDGE 0x812F
 #endif
 
-Cam_t* thecamera;
+Camera_t* thecamera;
 Scene_t* thescene;
 double width, height;
 int right_x_pos = 0;
@@ -160,8 +162,7 @@ void keyboard(unsigned char key, int x, int y){
     auto t_start_write = std::chrono::high_resolution_clock::now(); // why is this needed?
     auto t_end_write = t_start_write;
     double position[2];
-    switch (key)
-    {
+    switch (key){
     case 's':
         std::cout << "Writing started." << std::endl;
         t_start_write = std::chrono::high_resolution_clock::now();
@@ -177,6 +178,8 @@ void keyboard(unsigned char key, int x, int y){
         position[0] = std::min(std::max(double(x)/double(width), 0.0), 1.0);
         position[1] = std::min(std::max(double(y)/double(height), 0.0), 1.0);
         thecamera->autoFocus(thescene, position);
+        thecamera->reset();
+        thecamera->update(); // Should not be here!
         break;
 
     case 'q':
@@ -193,7 +196,7 @@ int main(int argc, char **argv){
     MeshGeometry_t* cubemesh = new MeshGeometry_t("./assets/cube.obj");
     MeshGeometry_t* zombiemesh = new MeshGeometry_t("./assets/Zombie_Beast4_test2.obj");
     //MeshGeometry_t* pipermesh = new MeshGeometry_t("./assets/piper_pa18_obj/piper_pa18.obj");
-    MeshGeometry_t* nacamesh = new MeshGeometry_t("./assets/mesh_ONERAM6_inv_ffd.su2");
+    //MeshGeometry_t* nacamesh = new MeshGeometry_t("./assets/mesh_ONERAM6_inv_ffd.su2");
     
     NonAbsorber_t* airabsorber = new NonAbsorber_t();
     Absorber_t* glassabsorber = new Absorber_t(Vec3f(), Vec3f(0.6, 0.95, 0.8), 100, 2.0);
@@ -220,7 +223,7 @@ int main(int argc, char **argv){
     //TransformMatrix_t* transform_piper = new TransformMatrix_t();
     TransformMatrix_t* transform_cube = new TransformMatrix_t();
     TransformMatrix_t* transform_neutral = new TransformMatrix_t();
-    TransformMatrix_t* transform_naca = new TransformMatrix_t();
+    //TransformMatrix_t* transform_naca = new TransformMatrix_t();
 
     Sphere_t* spherepurple = new Sphere_t(difpurple, transform1);
     Sphere_t* mirror = new Sphere_t(ref1, transform2);
@@ -245,7 +248,7 @@ int main(int argc, char **argv){
     Mesh_t* cube = new Mesh_t(difblue, transform_cube, cubemesh);
     Mesh_t* zombie = new Mesh_t(zombiemat, transform_zombie, zombiemesh);
     //Mesh_t* piper = new Mesh_t(pipermat, transform_piper, pipermesh);
-    Mesh_t* naca = new Mesh_t(difpurple, transform_naca, nacamesh);
+    //Mesh_t* naca = new Mesh_t(difpurple, transform_naca, nacamesh);
 
     auto t_end = std::chrono::high_resolution_clock::now();
     std::cout << "Elements created in " 
@@ -275,10 +278,10 @@ int main(int argc, char **argv){
     piper->transformation_->scale(0.2);
     piper->transformation_->rotateX(PI/2.0);
     piper->transformation_->rotateZ(PI/8.0);*/
-    naca->transformation_->translate(Vec3f(0.0, 2.0, 0));
+    /*naca->transformation_->translate(Vec3f(0.0, 2.0, 0));
     naca->transformation_->scale(1.0/100.0);
     naca->transformation_->rotateX(0.0);
-    naca->transformation_->rotateZ(0.0);
+    naca->transformation_->rotateZ(0.0);*/
 
     t_end = std::chrono::high_resolution_clock::now();
     std::cout << "Elements transformed in " 
@@ -318,8 +321,8 @@ int main(int argc, char **argv){
             << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
             << "s." << std::endl << std::endl;
 
-    std::cout << "Max coord: " << naca->maxcoord()[0] << " " << naca->maxcoord()[1] << " " << naca->maxcoord()[2] << std::endl; // REMOVE
-    std::cout << "Min coord: " << naca->mincoord()[0] << " " << naca->mincoord()[1] << " " << naca->mincoord()[2] << std::endl; // REMOVE
+    //std::cout << "Max coord: " << naca->maxcoord()[0] << " " << naca->maxcoord()[1] << " " << naca->maxcoord()[2] << std::endl; // REMOVE
+    //std::cout << "Min coord: " << naca->mincoord()[0] << " " << naca->mincoord()[1] << " " << naca->mincoord()[2] << std::endl; // REMOVE
 
     // Camera stuff
     std::string filename = "./images/test.png";
@@ -341,6 +344,8 @@ int main(int argc, char **argv){
     fov[0] = fov[1] * res_y/res_x;
     unsigned int subpix[2] = {1, 1};
     unsigned int maxbounces = 16;
+    double focal_length = 2.0;
+    double aperture = 0.05;
 
     DirectionalLight_t* dirlight = new DirectionalLight_t(Vec3f(5, 5, 4), transform_light);
     dirlight->transformation_->scale(0.95);
@@ -354,7 +359,7 @@ int main(int argc, char **argv){
     std::list<Medium_t*> medium_list;
     medium_list.assign(2, air);
 
-    Cam_t* cam = new Cam_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer, medium_list, skybox, maxbounces, 1.0);
+    CamAperture_t* cam = new CamAperture_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer, medium_list, skybox, maxbounces, focal_length, aperture, 1.0);
     thecamera = cam;
     cam->transformation_->translate(Vec3f(0, -camera_dist, 0));
     cam->update();
