@@ -17,6 +17,7 @@
 #include "Cam_t.h"
 #include "CamAperture_t.h"
 #include "RecCam_t.h"
+#include "RecCamAperture_t.h"
 #include <string>
 #include <list>
 #include "NonAbsorber_t.h"
@@ -346,7 +347,7 @@ int main(int argc, char **argv){
     unsigned int subpix[2] = {1, 1};
     unsigned int maxbounces = 16;
     double focal_length = 2.0;
-    double aperture = 0.05;
+    double aperture = 0.02;
 
     DirectionalLight_t* dirlight = new DirectionalLight_t(Vec3f(5, 5, 4), transform_light);
     dirlight->transformation_->scale(0.95);
@@ -360,7 +361,7 @@ int main(int argc, char **argv){
     std::list<Medium_t*> medium_list;
     medium_list.assign(2, air);
 
-    RecCam_t* cam = new RecCam_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer, medium_list, skybox, maxbounces, 1.0);
+    RecCamAperture_t* cam = new RecCamAperture_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer, medium_list, skybox, maxbounces, focal_length, aperture, 1.0);
     thecamera = cam;
     cam->transformation_->translate(Vec3f(0, -camera_dist, 0));
     cam->update();
