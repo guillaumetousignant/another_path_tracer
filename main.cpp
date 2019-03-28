@@ -16,6 +16,7 @@
 #include "Camera_t.h"
 #include "Cam_t.h"
 #include "CamAperture_t.h"
+#include "RecCam_t.h"
 #include <string>
 #include <list>
 #include "NonAbsorber_t.h"
@@ -359,7 +360,7 @@ int main(int argc, char **argv){
     std::list<Medium_t*> medium_list;
     medium_list.assign(2, air);
 
-    CamAperture_t* cam = new CamAperture_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer, medium_list, skybox, maxbounces, focal_length, aperture, 1.0);
+    RecCam_t* cam = new RecCam_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer, medium_list, skybox, maxbounces, 1.0);
     thecamera = cam;
     cam->transformation_->translate(Vec3f(0, -camera_dist, 0));
     cam->update();
@@ -377,8 +378,8 @@ int main(int argc, char **argv){
     glutMotionFunc(mouse_movement);
     glutKeyboardFunc(keyboard);
 
-    glGenTextures( 1, &(imgbuffer->tex_) );
-    glBindTexture( GL_TEXTURE_2D, imgbuffer->tex_ );
+    glGenTextures(1, &(imgbuffer->tex_));
+    glBindTexture(GL_TEXTURE_2D, imgbuffer->tex_);
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
