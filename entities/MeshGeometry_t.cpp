@@ -264,11 +264,11 @@ void MeshGeometry_t::readSU2(const std::string &filename){
     meshfile.seekg(0, std::ios::beg);
 
     while (std::getline(meshfile, line)){
+        std::istringstream liness(line);
         if ((line == "\r") || (line.empty())){
             token = "";
         }
         else{
-            std::istringstream liness(line);
             liness >> token;
         }
 
@@ -299,6 +299,7 @@ void MeshGeometry_t::readSU2(const std::string &filename){
     std::string material = "";
     unsigned int tokens[3];
     wall_started = false;
+    std::string marker_token;
 
     n_tris_ = nf;
     mat_ = new std::string[n_tris_];
@@ -322,8 +323,8 @@ void MeshGeometry_t::readSU2(const std::string &filename){
         }
 
         if (token == "MARKER_TAG="){
-            liness >> token;
-            if (token != "WALL"){
+            liness >> marker_token;
+            if (marker_token != "WALL"){
                 wall_started = false;
             }
         } 
@@ -379,8 +380,7 @@ void MeshGeometry_t::readSU2(const std::string &filename){
         }   
 
         if (token == "MARKER_TAG="){
-            liness >> token;
-            if (token == "WALL"){
+            if (marker_token == "WALL"){
                 wall_started = true;
                 std::getline(meshfile, line);
             }
