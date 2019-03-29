@@ -323,22 +323,10 @@ void MeshGeometry_t::readSU2(const std::string &filename){
 
         if (token == "MARKER_TAG="){
             liness >> token;
-            if (token == "WALL"){
-                wall_started = true;
-                std::getline(meshfile, line);
-                std::getline(meshfile, line);
-                liness = std::istringstream(line); // CHECK
-                if ((line == "\r") || (line.empty())){
-                    token = "";
-                }
-                else{
-                    liness >> token;
-                }
-            }
-            else{
+            if (token != "WALL"){
                 wall_started = false;
             }
-        }
+        } 
         else if (token == ""){
             wall_started = false;
         }
@@ -388,7 +376,15 @@ void MeshGeometry_t::readSU2(const std::string &filename){
                 }
                 f_counter++;
             }
-        }        
+        }   
+
+        if (token == "MARKER_TAG="){
+            liness >> token;
+            if (token == "WALL"){
+                wall_started = true;
+                std::getline(meshfile, line);
+            }
+        }     
     } 
 
     meshfile.close();
