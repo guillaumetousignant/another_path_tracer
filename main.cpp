@@ -31,7 +31,6 @@
 
 Camera_t* thecamera;
 Scene_t* thescene;
-Mesh_t* themesh;
 double width, height;
 int right_x_pos = 0;
 int right_y_pos = 0;
@@ -182,15 +181,20 @@ void keyboard(unsigned char key, int x, int y){
 int main(int argc, char **argv){
     auto t_start = std::chrono::high_resolution_clock::now();
 
-    std::string mesh_filename;
-    if (argc > 1){
-        mesh_filename = argv[1];
+    MeshGeometry_t** mesh_geometries = nullptr;
+    unsigned int n_meshes = 0;
+    if (argc > 3){
+        n_meshes = argc - 3;
     }
     else{
-        mesh_filename = "./assets/naca0012_coarse.su2";
+        std::cout << "Too few input arguments, specify x resolution, y resolution, then one or many meshes/blocks. Exiting." << std::endl;
+        exit(-1);
     }
 
-    MeshGeometry_t* nacamesh = new MeshGeometry_t(mesh_filename);
+    mesh_geometries = new MeshGeometry_t*[n_meshes];
+    for (unsigned int i = 0; i < n_meshes; i++){
+        mesh_geometries[i] = new MeshGeometry_t(argv[i + 3]);
+    }
     
     NonAbsorber_t* airabsorber = new NonAbsorber_t();
     
@@ -200,10 +204,16 @@ int main(int argc, char **argv){
     
     TransformMatrix_t* transform_light = new TransformMatrix_t();
     TransformMatrix_t* transform_camera = new TransformMatrix_t(); 
-    TransformMatrix_t* transform_naca = new TransformMatrix_t();
 
-    Mesh_t* naca = new Mesh_t(normalmat, transform_naca, nacamesh);
-    themesh = naca;
+    TransformMatrix_t** transforms = new TransformMatrix_t*[n_meshes];
+    for (unsigned int i = 0; i < n_meshes; i++){
+        transforms[i] = new TransformMatrix_t();
+    }
+
+    Mesh_t** meshes = new Mesh_t*[n_meshes];
+    for (unsigned int i = 0; i < n_meshes; i++){
+        meshes[i] = new Mesh_t(normalmat, transforms[i], mesh_geometries[i]);
+    }
 
     auto t_end = std::chrono::high_resolution_clock::now();
     std::cout << "Elements created in " 
@@ -228,7 +238,9 @@ int main(int argc, char **argv){
     Scene_t* scene = new Scene_t();
     thescene = scene;
 
-    scene->add(naca);
+    for (unsigned int i = 0; i < n_meshes; i++){
+        scene->add(meshes[i]);
+    }
 
     t_end = std::chrono::high_resolution_clock::now();
     std::cout << "Elements added in " 
@@ -249,20 +261,14 @@ int main(int argc, char **argv){
             << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
             << "s." << std::endl << std::endl;
 
-    Vec3f mincoord = naca->mincoord();
-    Vec3f maxcoord = naca->maxcoord();
-
-    std::cout << "Min coord: " << mincoord[0] << " " << mincoord[1] << " " << mincoord[2] << std::endl;
-    std::cout << "Max coord: " << maxcoord[0] << " " << maxcoord[1] << " " << maxcoord[2] << std::endl << std::endl;
-
     // Camera stuff
     std::string filename = "./images/test.png";
 
     unsigned int res_x;
     unsigned int res_y;
-    if (argc > 3){
-        res_x = std::stoi(argv[2]);
-        res_y = std::stoi(argv[3]);
+    if (argc > 2){
+        res_x = std::stoi(argv[1]);
+        res_y = std::stoi(argv[2]);
     }
     else{
         res_x = 300;
@@ -271,7 +277,7 @@ int main(int argc, char **argv){
     width = res_x;
     height = res_y;
     double fov[2];
-    fov[1] = 80.0 * PI /180.0; 
+    fov[1] = 60.0 * PI /180.0; // was 80
     fov[0] = fov[1] * res_y/res_x;
     unsigned int subpix[2] = {1, 1};
     unsigned int maxbounces = 1;
@@ -288,7 +294,7 @@ int main(int argc, char **argv){
     std::list<Medium_t*> medium_list;
     medium_list.assign(2, air);
 
-    RecCamAperture_t* cam = new RecCamAperture_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer, medium_list, skybox, maxbounces, focal_length, aperture, 1.0);
+    Cam_t* cam = new Cam_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer, medium_list, skybox, maxbounces, 1.0);
     thecamera = cam;
     cam->transformation_->translate(Vec3f(0.0, -camera_dist, 0.0));
     cam->update();
