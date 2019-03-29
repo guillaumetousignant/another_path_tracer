@@ -1,6 +1,5 @@
 #include "Mesh_t.h"
 #include "MeshGeometry_t.h"
-#include "MaterialMap_t.h"
 #include "TriangleMesh_t.h"
 #include <iostream>
 #include <limits>
@@ -11,15 +10,6 @@ Mesh_t::Mesh_t(Material_t *material, TransformMatrix_t *transform_matrix, MeshGe
     triangles_ = new Shape_t*[n_tris_];
     for (unsigned int i = 0; i < n_tris_; i++){
         triangles_[i] = this->createTriangle(material, transformation_, geom_, i);
-    }
-}
-
-Mesh_t::Mesh_t(MaterialMap_t *materialmap, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom) 
-    : Shape_t(materialmap->getFirst(), transform_matrix), geom_(geom), n_tris_(geom->n_tris_) {
-
-    triangles_ = new Shape_t*[n_tris_];
-    for (unsigned int i = 0; i < n_tris_; i++){
-        triangles_[i] = this->createTriangle(materialmap->getMaterial(geom_->mat_[i]), transformation_, geom_, i);
     }
 }        
 

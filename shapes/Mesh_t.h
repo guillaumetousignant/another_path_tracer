@@ -16,7 +16,6 @@ class MaterialMap_t;
 class Mesh_t : public Shape_t{
     public:
         Mesh_t(Material_t *material, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom);
-        Mesh_t(MaterialMap_t *materialmap, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom);
         virtual ~Mesh_t();
 
         MeshGeometry_t* geom_;
