@@ -21,10 +21,12 @@ before_install:
   - export FREETYPEINCLUDE=/usr/include/freetype2 
   - export LIBPNGINCLUDE=/usr/include/libpng 
   - export PNGWRITERINCLUDE=/usr/local/include 
+  - export GLINCLUDE=/usr/include
+  - export FREETYPELIBSDIR=/usr/lib/x86_64-linux-gnu 
   - export PNGWRITERLIBSDIR=/usr/local/lib
   - export LIBPNGLIBSDIR=/usr/lib/x86_64-linux-gnu 
   - export LIBPNGVERSION=12
-  - export FREETYPELIBSDIR=/usr/lib/x86_64-linux-gnu 
+  - export GLLIBSDIR=/usr/lib/x86_64-linux-gnu
 script: 
   - make VERIFY=true
   - ./bin/another_path_tracer

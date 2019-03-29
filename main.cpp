@@ -282,7 +282,7 @@ int main(int argc, char **argv){
     unsigned int subpix[2] = {1, 1};
     unsigned int maxbounces = 1;
 
-    DirectionalLight_t* dirlight = new DirectionalLight_t(Vec3f(5, 5, 4), transform_light);
+    DirectionalLight_t* dirlight = new DirectionalLight_t(Vec3f(5.0, 5.0, 4.0), transform_light);
     dirlight->transformation_->scale(0.95);
     dirlight->transformation_->rotateZ(-0.7854);
     dirlight->transformation_->rotateX(-1.1781);
