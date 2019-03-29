@@ -4,28 +4,8 @@ before_install:
   - test -n $CC  && unset CC
   - test -n $CXX && unset CXX
   - sudo apt update
-  - sudo apt install -y tree openssh-client openssh-server openmpi-bin openmpi-common libopenmpi1.6 libopenmpi-dev libopenmpi1.6-dbg cppcheck zlib1g zlib1g-dbg zlib1g-dev libpng-dev freetype2-demos libfreetype6 libfreetype6-dev freeglut3 freeglut3-dev
-  - ls /usr/include/libpng/
-  - ls /usr/lib/x86_64-linux-gnu/
-  - mkdir -p dependency_builder
-  - cd dependency_builder
-  - git clone https://github.com/pngwriter/pngwriter.git
-  - mkdir -p pngwriter-build
-  - cd pngwriter-build
-  - cmake ../pngwriter
-  - make -j
-  - sudo make install
-  - cd ..
-  - cd ..
-  - rm -rf dependency_builder
-  - export FREETYPEINCLUDE=/usr/include/freetype2 
-  - export LIBPNGINCLUDE=/usr/include/libpng 
-  - export PNGWRITERINCLUDE=/usr/local/include 
+  - sudo apt install -y tree openssh-client openssh-server openmpi-bin openmpi-common libopenmpi1.6 libopenmpi-dev libopenmpi1.6-dbg cppcheck freeglut3 freeglut3-dev
   - export GLINCLUDE=/usr/include
-  - export FREETYPELIBSDIR=/usr/lib/x86_64-linux-gnu 
-  - export PNGWRITERLIBSDIR=/usr/local/lib
-  - export LIBPNGLIBSDIR=/usr/lib/x86_64-linux-gnu 
-  - export LIBPNGVERSION=12
   - export GLLIBSDIR=/usr/lib/x86_64-linux-gnu
 script: 
   - make VERIFY=true

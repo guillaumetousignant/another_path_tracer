@@ -1,5 +1,5 @@
 #include "ImgBuffer_t.h"
-#include "pngwriter.h"
+#include <iostream>
 
 ImgBuffer_t::ImgBuffer_t(unsigned int size_x, unsigned int size_y): size_x_(size_x), size_y_(size_y), updates_(0) {
     img_ = new Vec3f*[size_y_];
@@ -58,17 +58,5 @@ void ImgBuffer_t::set(const Vec3f** img, unsigned int size_x, unsigned int size_
 }
 
 void ImgBuffer_t::write(std::string &filename) const {
-    Vec3f colour;
-
-    double update_mult = 1/(double)updates_;
-    pngwriter png((int) size_x_, (int) size_y_, 0.0, filename.c_str());
-
-    for (unsigned int j = 0; j < size_y_; j++){
-        for (unsigned int i = 0; i < size_x_; i++){
-            colour = img_[j][i]*update_mult;
-            png.plot((int)i + 1, (int)size_y_ - (int)j, colour[0], colour[1], colour[2]);
-        }
-    }
-
-    png.close();
+    std::cout << "Warning: Writing disabled!" << std::endl;
 }
