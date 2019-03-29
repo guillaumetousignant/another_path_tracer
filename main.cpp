@@ -14,7 +14,11 @@
 #include "Scene_t.h"
 //#include "SkyboxFlat_t.h"
 #include "ImgBufferOpenGL_t.h"
+#include "Camera_t.h"
 #include "Cam_t.h"
+#include "CamAperture_t.h"
+#include "RecCam_t.h"
+#include "RecCamAperture_t.h"
 #include <string>
 #include <list>
 #include "NonAbsorber_t.h"
@@ -38,7 +42,7 @@
 #define GL_CLAMP_TO_EDGE 0x812F
 #endif
 
-Cam_t* thecamera;
+Camera_t* thecamera;
 Scene_t* thescene;
 Mesh_t* themesh;
 double width, height;
@@ -52,7 +56,7 @@ bool right_clicked = false;
 bool left_clicked = false;
 bool middle_clicked = false;
 int n_iter_gl = 0;
-Vec3f focus_point;
+Vec3f focus_point = Vec3f();
 double camera_dist = 5;
 
 void raytrace(){
@@ -162,8 +166,7 @@ void keyboard(unsigned char key, int x, int y){
     auto t_start_write = std::chrono::high_resolution_clock::now(); // why is this needed?
     auto t_end_write = t_start_write;
     double position[2];
-    switch (key)
-    {
+    switch (key){
     case 's':
         std::cout << "Writing started." << std::endl;
         t_start_write = std::chrono::high_resolution_clock::now();
@@ -179,6 +182,8 @@ void keyboard(unsigned char key, int x, int y){
         position[0] = std::min(std::max(double(x)/double(width), 0.0), 1.0);
         position[1] = std::min(std::max(double(y)/double(height), 0.0), 1.0);
         thecamera->autoFocus(thescene, position);
+        thecamera->reset();
+        thecamera->update(); // Should not be here!
         break;
 
     case 'q':
@@ -187,7 +192,6 @@ void keyboard(unsigned char key, int x, int y){
         break;
     }
 }
-
 int main(int argc, char **argv){
     auto t_start = std::chrono::high_resolution_clock::now();
 
@@ -297,7 +301,7 @@ int main(int argc, char **argv){
     std::list<Medium_t*> medium_list;
     medium_list.assign(2, air);
 
-    Cam_t* cam = new Cam_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer, medium_list, skybox, maxbounces, 1.0);
+    RecCamAperture_t* cam = new RecCamAperture_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer, medium_list, skybox, maxbounces, focal_length, aperture, 1.0);
     thecamera = cam;
     cam->transformation_->translate(Vec3f(0.0, -camera_dist, 0.0));
     cam->update();
@@ -315,8 +319,8 @@ int main(int argc, char **argv){
     glutMotionFunc(mouse_movement);
     glutKeyboardFunc(keyboard);
 
-    glGenTextures( 1, &(imgbuffer->tex_) );
-    glBindTexture( GL_TEXTURE_2D, imgbuffer->tex_ );
+    glGenTextures(1, &(imgbuffer->tex_));
+    glBindTexture(GL_TEXTURE_2D, imgbuffer->tex_);
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );

@@ -4,7 +4,7 @@
 #include "RandomGenerator_t.h"
 #include "Referentials.h"
 
-#define EPSILON 0.00001 // was 0.00001, 0.01 works well with *t
+#define EPSILON 0.00001 // was 0.00001, 0.01 works ok when *t
 #define PI 3.141592653589793238463
 
 Diffuse_t::Diffuse_t(const Vec3f &emission, const Vec3f &colour, double roughness) : 
