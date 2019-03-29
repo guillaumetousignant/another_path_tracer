@@ -208,7 +208,7 @@ void MeshGeometry_t::readSU2(const std::string &filename){
     std::string line;
     std::string token;
     std::string dummy;    
-    std::istringstream liness;
+    //std::istringstream liness;
     unsigned int value;
     bool wall_started = false;
 
@@ -220,7 +220,7 @@ void MeshGeometry_t::readSU2(const std::string &filename){
 
     // Getting number of elements
     while (std::getline(meshfile, line)){
-        liness = std::istringstream(line);
+        std::istringstream liness(line);
         liness >> token;
 
         if (token == "NPOIN="){
@@ -268,7 +268,7 @@ void MeshGeometry_t::readSU2(const std::string &filename){
             token = "";
         }
         else{
-            liness = std::istringstream(line);
+            std::istringstream liness(line);
             liness >> token;
         }
 
@@ -313,7 +313,7 @@ void MeshGeometry_t::readSU2(const std::string &filename){
     meshfile.seekg(0, std::ios::beg);
 
     while (std::getline(meshfile, line)){
-        liness = std::istringstream(line);
+        std::istringstream liness(line);
         if ((line == "\r") || (line.empty())){
             token = "";
         }
@@ -323,22 +323,10 @@ void MeshGeometry_t::readSU2(const std::string &filename){
 
         if (token == "MARKER_TAG="){
             liness >> token;
-            if (token == "WALL"){
-                wall_started = true;
-                std::getline(meshfile, line);
-                std::getline(meshfile, line);
-                liness = std::istringstream(line);
-                if ((line == "\r") || (line.empty())){
-                    token = "";
-                }
-                else{
-                    liness >> token;
-                }
-            }
-            else{
+            if (token != "WALL"){
                 wall_started = false;
             }
-        }
+        } 
         else if (token == ""){
             wall_started = false;
         }
@@ -388,7 +376,15 @@ void MeshGeometry_t::readSU2(const std::string &filename){
                 }
                 f_counter++;
             }
-        }        
+        }   
+
+        if (token == "MARKER_TAG="){
+            liness >> token;
+            if (token == "WALL"){
+                wall_started = true;
+                std::getline(meshfile, line);
+            }
+        }     
     } 
 
     meshfile.close();

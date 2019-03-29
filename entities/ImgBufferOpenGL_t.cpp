@@ -13,15 +13,6 @@ ImgBufferOpenGL_t::ImgBufferOpenGL_t(unsigned int size_x, unsigned int size_y): 
 }
 
 ImgBufferOpenGL_t::~ImgBufferOpenGL_t(){
-    if (img_ != nullptr){
-        for (unsigned int j = 0; j < size_y_; j++){
-            if (img_[j] != nullptr){
-                delete [] img_[j];
-            }
-        }
-        delete [] img_;
-    }
-
     if (img_gl_ != nullptr){
         delete [] img_gl_;
     }
