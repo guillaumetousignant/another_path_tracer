@@ -207,8 +207,6 @@ void MeshGeometry_t::readSU2(const std::string &filename){
     unsigned int nf = 0;
     std::string line;
     std::string token;
-    std::string dummy;    
-    //std::istringstream liness;
     unsigned int value;
     bool wall_started = false;
 
