@@ -349,7 +349,7 @@ int main(int argc, char **argv){
     double focal_length = 2.0;
     double aperture = 0.02;
 
-    DirectionalLight_t* dirlight = new DirectionalLight_t(Vec3f(5, 5, 4), transform_light);
+    DirectionalLight_t* dirlight = new DirectionalLight_t(Vec3f(5.0, 5.0, 4.0), transform_light);
     dirlight->transformation_->scale(0.95);
     dirlight->transformation_->rotateZ(-0.7854);
     dirlight->transformation_->rotateX(-1.1781);
@@ -363,7 +363,7 @@ int main(int argc, char **argv){
 
     RecCamAperture_t* cam = new RecCamAperture_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer, medium_list, skybox, maxbounces, focal_length, aperture, 1.0);
     thecamera = cam;
-    cam->transformation_->translate(Vec3f(0, -camera_dist, 0));
+    cam->transformation_->translate(Vec3f(0.0, -camera_dist, 0.0));
     cam->update();
 
     int gl_argc = 1;
