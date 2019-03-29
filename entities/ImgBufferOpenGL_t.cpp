@@ -14,15 +14,6 @@ ImgBufferOpenGL_t::ImgBufferOpenGL_t(unsigned int size_x, unsigned int size_y): 
 }
 
 ImgBufferOpenGL_t::~ImgBufferOpenGL_t(){
-    if (img_ != nullptr){
-        for (unsigned int j = 0; j < size_y_; j++){
-            if (img_[j] != nullptr){
-                delete [] img_[j];
-            }
-        }
-        delete [] img_;
-    }
-
     if (img_gl_ != nullptr){
         delete [] img_gl_;
     }
@@ -100,20 +91,4 @@ void ImgBufferOpenGL_t::set(const Vec3f** img, unsigned int size_x, unsigned int
             img_[j][i] = img[j][i];
         }
     }
-}
-
-void ImgBufferOpenGL_t::write(std::string &filename) const {
-    Vec3f colour;
-
-    double update_mult = 1/(double)updates_;
-    pngwriter png((int) size_x_, (int) size_y_, 0.0, filename.c_str());
-
-    for (unsigned int j = 0; j < size_y_; j++){
-        for (unsigned int i = 0; i < size_x_; i++){
-            colour = img_[j][i]*update_mult;
-            png.plot((int)i + 1, (int)size_y_ - (int)j, colour[0], colour[1], colour[2]);
-        }
-    }
-
-    png.close();
 }
