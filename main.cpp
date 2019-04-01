@@ -18,6 +18,7 @@
 #include "CamAperture_t.h"
 #include "RecCam_t.h"
 #include "RecCamAperture_t.h"
+#include "IsoCam_t.h"
 #include <string>
 #include <list>
 #include "NonAbsorber_t.h"
@@ -344,6 +345,9 @@ int main(int argc, char **argv){
     double fov[2];
     fov[1] = 80.0 * PI /180.0; 
     fov[0] = fov[1] * res_y/res_x;
+    double fov_iso[2];
+    fov_iso[1] = 2;
+    fov_iso[0] = fov_iso[1] * res_y/res_x;
     unsigned int subpix[2] = {1, 1};
     unsigned int maxbounces = 16;
     double focal_length = 2.0;
@@ -361,7 +365,7 @@ int main(int argc, char **argv){
     std::list<Medium_t*> medium_list;
     medium_list.assign(2, air);
 
-    RecCamAperture_t* cam = new RecCamAperture_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer, medium_list, skybox, maxbounces, focal_length, aperture, 1.0);
+    IsoCam_t* cam = new IsoCam_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov_iso, subpix, imgbuffer, medium_list, skybox, maxbounces, 1.0);
     thecamera = cam;
     cam->transformation_->translate(Vec3f(0.0, -camera_dist, 0.0));
     cam->update();
