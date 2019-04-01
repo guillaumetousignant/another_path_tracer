@@ -215,7 +215,23 @@ void keyboard(unsigned char key, int x, int y){
 }
 
 void keyboard_paused(unsigned char key, int x, int y){
+    auto t_start_write = std::chrono::high_resolution_clock::now(); // why is this needed?
+    auto t_end_write = t_start_write;
     switch (key){
+        case 's':
+        std::cout << "Writing started. " << n_iter_gl << " iterations." << std::endl;
+        t_start_write = std::chrono::high_resolution_clock::now();
+        thecamera->write();
+        t_end_write = std::chrono::high_resolution_clock::now();
+
+        std::cout << "Writing done in "
+        << std::chrono::duration<double, std::milli>(t_end_write-t_start_write).count()/1000.0 
+        << "s." << std::endl;
+        break;
+    case 'q':
+        glutDestroyWindow(0);
+        exit(0);
+        break;
     case 'p':
         std::cout << "Unpaused" << std::endl;
         glutDisplayFunc(raytrace);
