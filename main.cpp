@@ -15,6 +15,7 @@
 #include "Camera_t.h"
 #include "Cam_t.h"
 #include "CamAperture_t.h"
+#include "CamMotionblur_t.h"
 #include "RecCam_t.h"
 #include "RecCamAperture_t.h"
 #include "IsoCam_t.h"
@@ -58,8 +59,22 @@ bool middle_clicked = false;
 int n_iter_gl = 0;
 Vec3f focus_point = Vec3f();
 double camera_dist = 5;
+bool updated = false;
+
+void dummy_disp(){}
 
 void raytrace(){
+    if (updated){
+        TransformMatrix_t transform_norm = thecamera->transformation_->transformDir();
+        Vec3f newdir = transform_norm.multDir(Vec3f(0.0, 1.0, 0.0));
+        thecamera->transformation_->translate(focus_point - newdir * camera_dist - thecamera->origin_);
+
+        updated = false;
+        thecamera->update();
+        //std::cout << "Updating" << std::endl; // REMOVE
+        thecamera->reset();
+        n_iter_gl = 0;
+    }
     n_iter_gl++;
     //auto t_start = std::chrono::high_resolution_clock::now();
     thecamera->raytrace(thescene);
@@ -68,6 +83,7 @@ void raytrace(){
     /*std::cout << "Iteration " << n_iter_gl << " done in " 
         << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
         << "s." << std::endl;*/
+    updated = false;
     glutPostRedisplay(); // REMOVE but makes it work, soooooooo...
 }
 
@@ -77,7 +93,7 @@ void resetDisplay(void){
 }
 
 void mouse_movement(int x, int y){
-    Vec3f newdir = thecamera->direction_;
+    //Vec3f newdir = thecamera->direction_;
     if (middle_clicked){
         double differential_x = double(x - middle_x_pos)/double(width);
         double differential_y = double(y - middle_y_pos)/double(height);
@@ -109,16 +125,13 @@ void mouse_movement(int x, int y){
         thecamera->transformation_->rotate(horizontal, differential_y/thecamera->fov_[0]);
         thecamera->transformation_->rotate(vertical, differential_x/thecamera->fov_[1]);
 
-        TransformMatrix_t transform_norm = thecamera->transformation_->transformDir();
-        newdir = transform_norm.multDir(Vec3f(0.0, 1.0, 0.0));
+        //TransformMatrix_t transform_norm = thecamera->transformation_->transformDir();
+        //newdir = transform_norm.multDir(Vec3f(0.0, 1.0, 0.0));
     }
 
-    Vec3f diff = focus_point - newdir * camera_dist - thecamera->origin_;
-    thecamera->transformation_->translate(diff);
-
-    thecamera->update();
-    thecamera->reset();
-    n_iter_gl = 0;
+    //Vec3f diff = focus_point - newdir * camera_dist - thecamera->origin_;
+    //thecamera->transformation_->translate(diff);
+    updated = true;
 }
 
 void mouse_click(int button, int state, int x, int y){
@@ -162,13 +175,14 @@ void mouse_click(int button, int state, int x, int y){
     }
 }
 
+void keyboard_paused(unsigned char key, int x, int y);
 void keyboard(unsigned char key, int x, int y){
     auto t_start_write = std::chrono::high_resolution_clock::now(); // why is this needed?
     auto t_end_write = t_start_write;
     double position[2];
     switch (key){
     case 's':
-        std::cout << "Writing started." << std::endl;
+        std::cout << "Writing started. " << n_iter_gl << " iterations." << std::endl;
         t_start_write = std::chrono::high_resolution_clock::now();
         thecamera->write();
         t_end_write = std::chrono::high_resolution_clock::now();
@@ -190,8 +204,29 @@ void keyboard(unsigned char key, int x, int y){
         glutDestroyWindow(0);
         exit(0);
         break;
+    case 'p':
+        std::cout << "Paused." << std::endl;
+        glutDisplayFunc(dummy_disp);
+        glutMouseFunc(nullptr);
+        glutMotionFunc(nullptr);
+        glutKeyboardFunc(keyboard_paused);
+        break;
     }
 }
+
+void keyboard_paused(unsigned char key, int x, int y){
+    switch (key){
+    case 'p':
+        std::cout << "Unpaused" << std::endl;
+        glutDisplayFunc(raytrace);
+        glutMouseFunc(mouse_click);
+        glutMotionFunc(mouse_movement);
+        glutKeyboardFunc(keyboard);
+        glutPostRedisplay();
+        break;
+    }
+}
+
 int main(int argc, char **argv){
     auto t_start = std::chrono::high_resolution_clock::now();
     Texture_t* zombietex = new Texture_t("./assets/Zombie beast_texture5.png");
@@ -353,6 +388,7 @@ int main(int argc, char **argv){
     unsigned int maxbounces = 16;
     double focal_length = 2.0;
     double aperture = 0.02;
+    double time[2] = {0, 1};
 
     DirectionalLight_t* dirlight = new DirectionalLight_t(Vec3f(5.0, 5.0, 4.0), transform_light);
     dirlight->transformation_->scale(0.95);
@@ -366,9 +402,10 @@ int main(int argc, char **argv){
     std::list<Medium_t*> medium_list;
     medium_list.assign(2, air);
 
-    IsoCamAperture_t* cam = new IsoCamAperture_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov_iso, subpix, imgbuffer, medium_list, skybox, maxbounces, focal_length, aperture, 1.0);
+    CamMotionblur_t* cam = new CamMotionblur_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov_iso, subpix, imgbuffer, medium_list, skybox, maxbounces, time, 1.0);
     thecamera = cam;
     cam->transformation_->translate(Vec3f(0.0, -camera_dist, 0.0));
+    cam->update();
     cam->update();
 
     int gl_argc = 1;
