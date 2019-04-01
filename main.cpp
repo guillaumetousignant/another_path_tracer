@@ -11,7 +11,6 @@
 #include "Mesh_t.h"
 #include "TransformMatrix_t.h"
 #include "Scene_t.h"
-//#include "SkyboxFlat_t.h"
 #include "ImgBufferOpenGL_t.h"
 #include "Camera_t.h"
 #include "Cam_t.h"
@@ -19,6 +18,7 @@
 #include "RecCam_t.h"
 #include "RecCamAperture_t.h"
 #include "IsoCam_t.h"
+#include "IsoCamAperture_t.h"
 #include <string>
 #include <list>
 #include "NonAbsorber_t.h"
@@ -28,6 +28,7 @@
 #include "DirectionalLight_t.h"
 #include "Texture_t.h"
 #include "MeshGeometry_t.h"
+#include "SkyboxFlat_t.h"
 #include "SkyboxFlatSun_t.h"
 #include <cmath>
 #include <chrono>
@@ -365,7 +366,7 @@ int main(int argc, char **argv){
     std::list<Medium_t*> medium_list;
     medium_list.assign(2, air);
 
-    IsoCam_t* cam = new IsoCam_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov_iso, subpix, imgbuffer, medium_list, skybox, maxbounces, 1.0);
+    IsoCamAperture_t* cam = new IsoCamAperture_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov_iso, subpix, imgbuffer, medium_list, skybox, maxbounces, focal_length, aperture, 1.0);
     thecamera = cam;
     cam->transformation_->translate(Vec3f(0.0, -camera_dist, 0.0));
     cam->update();
