@@ -4,7 +4,7 @@ before_install:
   - test -n $CC  && unset CC
   - test -n $CXX && unset CXX
   - sudo apt update
-  - sudo apt install -y tree openssh-client openssh-server openmpi-bin openmpi-common libopenmpi1.6 libopenmpi-dev libopenmpi1.6-dbg cppcheck zlib1g zlib1g-dbg zlib1g-dev libpng-dev freetype2-demos libfreetype6 libfreetype6-dev freeglut3 freeglut3-dev
+  - sudo apt install -y tree openssh-client openssh-server openmpi-bin openmpi-common libopenmpi-dev cppcheck zlib1g zlib1g-dbg zlib1g-dev libpng-dev libfreetype6 libfreetype6-dev freeglut3 freeglut3-dev
   - mkdir -p dependency_builder
   - cd dependency_builder
   - git clone https://github.com/pngwriter/pngwriter.git
