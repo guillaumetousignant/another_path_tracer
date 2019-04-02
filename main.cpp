@@ -183,7 +183,7 @@ void keyboard(unsigned char key, int x, int y){
     
     switch (key){
     case 's':
-        std::cout << "Writing started. " << n_iter_gl << " iterations." << std::endl;
+        std::cout << "Writing started at " << n_iter_gl << " iterations." << std::endl;
         t_start_write = std::chrono::high_resolution_clock::now();
         thecamera->write();
         t_end_write = std::chrono::high_resolution_clock::now();
