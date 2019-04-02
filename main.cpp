@@ -33,6 +33,7 @@
 #include "SkyboxFlatSun_t.h"
 #include <cmath>
 #include <chrono>
+#include <algorithm>
 
 #include "GL/glut.h"
 #include "GL/gl.h"
@@ -397,6 +398,16 @@ int main(int argc, char **argv){
         res_x = 300;
         res_y = 200;
     }
+
+    bool no_GL = false;
+    if (argc > 3){
+        std::string switch_GL = argv[3];
+        std::transform(switch_GL.begin(), switch_GL.end(), switch_GL.begin(), ::tolower);
+        if (switch_GL == "nogl"){
+            no_GL = true;
+        }
+    }
+
     width = res_x;
     height = res_y;
     double fov[2];
@@ -418,7 +429,16 @@ int main(int argc, char **argv){
     dirlight->update();
     
     SkyboxFlatSun_t* skybox = new SkyboxFlatSun_t(Vec3f(0.85, 0.85, 0.98), dirlight);
-    ImgBufferOpenGL_t* imgbuffer = new ImgBufferOpenGL_t(res_x, res_y);
+
+    ImgBuffer_t* imgbuffer = nullptr;
+    ImgBufferOpenGL_t* imgbuffer_GL = nullptr;
+    if (no_GL){
+        imgbuffer = new ImgBuffer_t(res_x, res_y);
+    }
+    else{
+        imgbuffer_GL = new ImgBufferOpenGL_t(res_x, res_y);
+        imgbuffer = imgbuffer_GL;
+    }
 
     std::list<Medium_t*> medium_list;
     medium_list.assign(2, air);
@@ -429,46 +449,33 @@ int main(int argc, char **argv){
     cam->update();
     cam->update();
 
-    int gl_argc = 1;
-    char* gl_argv[1];
-    gl_argv[0] = argv[0];
-    glutInit(&gl_argc, gl_argv); // was &argc, argv
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-    glutInitWindowSize(res_x, res_y);
-    glutInitWindowPosition(10,10);
-    glutCreateWindow(argv[0]);
-    glutDisplayFunc(raytrace);
-    glutMouseFunc(mouse_click);
-    glutMotionFunc(mouse_movement);
-    glutKeyboardFunc(keyboard);
+    if (no_GL){
+        cam->accumulateWrite(scene, 10000, 100);
+    }
+    else{
+        int gl_argc = 1;
+        char* gl_argv[1];
+        gl_argv[0] = argv[0];
+        glutInit(&gl_argc, gl_argv); // was &argc, argv
+        glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+        glutInitWindowSize(res_x, res_y);
+        glutInitWindowPosition(10,10);
+        glutCreateWindow(argv[0]);
+        glutDisplayFunc(raytrace);
+        glutMouseFunc(mouse_click);
+        glutMotionFunc(mouse_movement);
+        glutKeyboardFunc(keyboard);
 
-    glGenTextures(1, &(imgbuffer->tex_));
-    glBindTexture(GL_TEXTURE_2D, imgbuffer->tex_);
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-    glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
-    glTexImage2D( GL_TEXTURE_2D, 0, 3, res_x, res_y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL );    
+        glGenTextures(1, &(imgbuffer_GL->tex_));
+        glBindTexture(GL_TEXTURE_2D, imgbuffer_GL->tex_);
+        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
+        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
+        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+        glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+        glTexImage2D( GL_TEXTURE_2D, 0, 3, res_x, res_y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL );    
 
-    glutMainLoop();
-
-    std::cout << "Don't get here" << std::endl; // REMOVE
-    //cam->accumulateWrite(scene, 10000, 100);
-    //cam->write();
-
-    /*for (unsigned int i = 0; i < 1; i++){
-        Ray_t ray = Ray_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.0, 1.0, 0.0), Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list);
-        ray.raycast(scene, 8, skybox);
-    }*/
-    
-    /*std::cout << "Left: " << std::endl; // REMOVE
-    Ray_t rayL = Ray_t(Vec3f(0.0, 0.0, 0.0), Vec3f(-0.447643, 0.894212, -0.000745399), Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list);
-    rayL.raycast(scene, 2, skybox);
-
-    std::cout << std::endl << "Right: " << std::endl; // REMOVE
-    Ray_t rayR = Ray_t(Vec3f(0.0, 0.0, 0.0), Vec3f(-0.435534, 0.900172, -0.000281008), Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list);
-    rayR.raycast(scene, 2, skybox); // These are never given a downward direction, never intersect with ground
-    */
+        glutMainLoop();
+    }
     return 0;
 }
