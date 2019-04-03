@@ -25,8 +25,5 @@ class CamMotionblur_t : public Cam_t{
 
         virtual void update();
         virtual void raytrace(const Scene_t* scene);
-        virtual void write(std::string file_name = "");
-        virtual void show() const;
-        virtual void reset();
 };
 #endif

@@ -76,18 +76,3 @@ void CamMotionblur_t::raytrace(const Scene_t* scene) {
         }
     }
 }
-
-void CamMotionblur_t::write(std::string file_name /*= ""*/) {
-    if (file_name.empty()){
-        file_name = filename_;
-    }
-    image_->write(file_name);
-}
-
-void CamMotionblur_t::show() const {
-    // What to do here?
-}
-
-void CamMotionblur_t::reset(){
-    image_->reset();
-}
