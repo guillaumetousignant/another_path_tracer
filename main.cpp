@@ -46,7 +46,8 @@
 #define GL_CLAMP_TO_EDGE 0x812F
 #endif
 
-Camera_t* thecamera;
+//Camera_t* thecamera;
+CamMotionblurAperture_t* thecamera;
 Scene_t* thescene;
 double width, height;
 int right_x_pos = 0;
@@ -70,10 +71,18 @@ void raytrace(){
         TransformMatrix_t transform_norm = thecamera->transformation_->transformDir();
         Vec3f newdir = transform_norm.multDir(Vec3f(0.0, 1.0, 0.0));
         thecamera->transformation_->translate(focus_point - newdir * camera_dist - thecamera->origin_);
-
+        //std::cout << "Origin: " << thecamera->origin_[0] << " " << thecamera->origin_[1] << " " << thecamera->origin_[2] << std::endl; // REMOVE
+        //std::cout << "Direction: " << thecamera->direction_[0] << " " << thecamera->direction_[1] << " " << thecamera->direction_[2] << std::endl; // REMOVE
+        //std::cout << "fov: " << thecamera->fov_[0] << " " << thecamera->fov_[1] << std::endl; // REMOVE
+        //std::cout << "aperture: " << thecamera->aperture_ << std::endl << std::endl; // REMOVE
+        
         updated = false;
         thecamera->update();
         //std::cout << "Updating" << std::endl; // REMOVE
+        
+        std::cout << "focal length last: " << thecamera->focal_length_last_ << std::endl; // REMOVE
+        std::cout << "focal length: " << thecamera->focal_length_ << std::endl; // REMOVE
+        
         thecamera->reset();
         n_iter_gl = 0;
     }
@@ -199,8 +208,7 @@ void keyboard(unsigned char key, int x, int y){
         position[0] = std::min(std::max(double(x)/double(width), 0.0), 1.0);
         position[1] = std::min(std::max(double(y)/double(height), 0.0), 1.0);
         thecamera->autoFocus(thescene, position);
-        thecamera->reset();
-        thecamera->update(); // Should not be here!
+        updated = true;
         break;
 
     case 'q':
@@ -446,6 +454,7 @@ int main(int argc, char **argv){
 
     CamMotionblurAperture_t* cam = new CamMotionblurAperture_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov_iso, subpix, imgbuffer, medium_list, skybox, maxbounces, focal_length, aperture, time, 1.0);
     thecamera = cam;
+    camera_dist = 5;
     cam->transformation_->translate(Vec3f(0.0, -camera_dist, 0.0));
     cam->update();
     cam->update();
