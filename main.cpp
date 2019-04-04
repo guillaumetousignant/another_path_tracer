@@ -44,8 +44,21 @@ bool middle_clicked = false;
 int n_iter_gl = 0;
 Vec3f focus_point = Vec3f();
 double camera_dist = 5;
+bool updated = false;
+
+void dummy_disp(){}
 
 void raytrace(){
+    if (updated){
+        TransformMatrix_t transform_norm = thecamera->transformation_->transformDir();
+        Vec3f newdir = transform_norm.multDir(Vec3f(0.0, 1.0, 0.0));
+        thecamera->transformation_->translate(focus_point - newdir * camera_dist - thecamera->origin_);
+       
+        updated = false;
+        thecamera->update();     
+        thecamera->reset();
+        n_iter_gl = 0;
+    }
     n_iter_gl++;
     //auto t_start = std::chrono::high_resolution_clock::now();
     thecamera->raytrace(thescene);
@@ -54,6 +67,7 @@ void raytrace(){
     /*std::cout << "Iteration " << n_iter_gl << " done in " 
         << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
         << "s." << std::endl;*/
+    updated = false;
     glutPostRedisplay(); // REMOVE but makes it work, soooooooo...
 }
 
@@ -63,7 +77,7 @@ void resetDisplay(void){
 }
 
 void mouse_movement(int x, int y){
-    Vec3f newdir = thecamera->direction_;
+    //Vec3f newdir = thecamera->direction_;
     if (middle_clicked){
         double differential_x = double(x - middle_x_pos)/double(width);
         double differential_y = double(y - middle_y_pos)/double(height);
@@ -95,16 +109,13 @@ void mouse_movement(int x, int y){
         thecamera->transformation_->rotate(horizontal, differential_y/thecamera->fov_[0]);
         thecamera->transformation_->rotate(vertical, differential_x/thecamera->fov_[1]);
 
-        TransformMatrix_t transform_norm = thecamera->transformation_->transformDir();
-        newdir = transform_norm.multDir(Vec3f(0.0, 1.0, 0.0));
+        //TransformMatrix_t transform_norm = thecamera->transformation_->transformDir();
+        //newdir = transform_norm.multDir(Vec3f(0.0, 1.0, 0.0));
     }
 
-    Vec3f diff = focus_point - newdir * camera_dist - thecamera->origin_;
-    thecamera->transformation_->translate(diff);
-
-    thecamera->update();
-    thecamera->reset();
-    n_iter_gl = 0;
+    //Vec3f diff = focus_point - newdir * camera_dist - thecamera->origin_;
+    //thecamera->transformation_->translate(diff);
+    updated = true;
 }
 
 void mouse_click(int button, int state, int x, int y){
@@ -148,13 +159,15 @@ void mouse_click(int button, int state, int x, int y){
     }
 }
 
+void keyboard_paused(unsigned char key, int x, int y);
 void keyboard(unsigned char key, int x, int y){
     auto t_start_write = std::chrono::high_resolution_clock::now(); // why is this needed?
     auto t_end_write = t_start_write;
     double position[2];
+    
     switch (key){
     case 's':
-        std::cout << "Writing started." << std::endl;
+        std::cout << "Writing started at " << n_iter_gl << " iterations." << std::endl;
         t_start_write = std::chrono::high_resolution_clock::now();
         thecamera->write();
         t_end_write = std::chrono::high_resolution_clock::now();
@@ -168,16 +181,56 @@ void keyboard(unsigned char key, int x, int y){
         position[0] = std::min(std::max(double(x)/double(width), 0.0), 1.0);
         position[1] = std::min(std::max(double(y)/double(height), 0.0), 1.0);
         thecamera->autoFocus(thescene, position);
-        thecamera->reset();
-        thecamera->update(); // Should not be here!
+        updated = true;
         break;
 
     case 'q':
         glutDestroyWindow(0);
         exit(0);
         break;
+
+    case 'p':
+        std::cout << "Paused at " << n_iter_gl << " iterations." << std::endl;
+        glutDisplayFunc(dummy_disp);
+        glutMouseFunc(nullptr);
+        glutMotionFunc(nullptr);
+        glutKeyboardFunc(keyboard_paused);
+        break;
     }
 }
+
+void keyboard_paused(unsigned char key, int x, int y){
+    auto t_start_write = std::chrono::high_resolution_clock::now(); // why is this needed?
+    auto t_end_write = t_start_write;
+
+    switch (key){
+        case 's':
+        std::cout << "Writing started. " << n_iter_gl << " iterations." << std::endl;
+        t_start_write = std::chrono::high_resolution_clock::now();
+        thecamera->write();
+        t_end_write = std::chrono::high_resolution_clock::now();
+
+        std::cout << "Writing done in "
+        << std::chrono::duration<double, std::milli>(t_end_write-t_start_write).count()/1000.0 
+        << "s." << std::endl;
+        break;
+
+    case 'q':
+        glutDestroyWindow(0);
+        exit(0);
+        break;
+
+    case 'p':
+        std::cout << "Unpaused" << std::endl;
+        glutDisplayFunc(raytrace);
+        glutMouseFunc(mouse_click);
+        glutMotionFunc(mouse_movement);
+        glutKeyboardFunc(keyboard);
+        glutPostRedisplay();
+        break;
+    }
+}
+
 int main(int argc, char **argv){
     auto t_start = std::chrono::high_resolution_clock::now();
 
