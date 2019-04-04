@@ -71,18 +71,9 @@ void raytrace(){
         TransformMatrix_t transform_norm = thecamera->transformation_->transformDir();
         Vec3f newdir = transform_norm.multDir(Vec3f(0.0, 1.0, 0.0));
         thecamera->transformation_->translate(focus_point - newdir * camera_dist - thecamera->origin_);
-        //std::cout << "Origin: " << thecamera->origin_[0] << " " << thecamera->origin_[1] << " " << thecamera->origin_[2] << std::endl; // REMOVE
-        //std::cout << "Direction: " << thecamera->direction_[0] << " " << thecamera->direction_[1] << " " << thecamera->direction_[2] << std::endl; // REMOVE
-        //std::cout << "fov: " << thecamera->fov_[0] << " " << thecamera->fov_[1] << std::endl; // REMOVE
-        //std::cout << "aperture: " << thecamera->aperture_ << std::endl << std::endl; // REMOVE
-        
+       
         updated = false;
-        thecamera->update();
-        //std::cout << "Updating" << std::endl; // REMOVE
-        
-        std::cout << "focal length last: " << thecamera->focal_length_last_ << std::endl; // REMOVE
-        std::cout << "focal length: " << thecamera->focal_length_ << std::endl; // REMOVE
-        
+        thecamera->update();     
         thecamera->reset();
         n_iter_gl = 0;
     }
