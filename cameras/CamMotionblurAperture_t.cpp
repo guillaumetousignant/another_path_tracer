@@ -71,7 +71,7 @@ void CamMotionblurAperture_t::raytrace(const Scene_t* scene) {
                     pix_vec += Vec3f(0.0, ((double)k - (double)subpix_[0]/2.0 + jitter_y)*subpix_span_y, ((double)l - (double)subpix_[1]/2.0 + jitter_x)*subpix_span_x);
                     Vec3f origin2 = origin_int + vertical_int * std::cos(rand_theta) * rand_r + horizontal_int * std::sin(rand_theta) * rand_r;
                     
-                    pix_vec = ((origin_int + to_xyz_offset(pix_vec, direction_int, horizontal_int, vertical_int) * focal_length_)*focal_length_int - origin2).normalize();
+                    pix_vec = (origin_int + to_xyz_offset(pix_vec, direction_int, horizontal_int, vertical_int) * focal_length_int - origin2).normalize();
 
                     Ray_t ray = Ray_t(origin2, pix_vec, Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list_, rand_time);
                     ray.raycast(scene, max_bounces_, skybox_);
