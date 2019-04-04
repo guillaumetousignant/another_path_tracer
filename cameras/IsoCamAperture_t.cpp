@@ -30,8 +30,8 @@ void IsoCamAperture_t::raytrace(const Scene_t* scene) {
     double subpix_span_x, subpix_span_y;
     Vec3f horizontal, vertical;
     
-    horizontal = direction_.cross(up_);
-    vertical = horizontal.cross(direction_);
+    horizontal = direction_.cross(up_).normalize();
+    vertical = horizontal.cross(direction_).normalize();
     tot_subpix = subpix_[0]*subpix_[1];
     pixel_span_y = fov_[0]/image_->size_y_;
     pixel_span_x = fov_[1]/image_->size_x_;

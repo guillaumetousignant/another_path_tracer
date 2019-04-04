@@ -29,8 +29,8 @@ void RecCam_t::raytrace(const Scene_t* scene) {
     Vec3f horizontal, vertical;
     Vec3f focus_point;
     
-    horizontal = direction_.cross(up_);
-    vertical = horizontal.cross(direction_);
+    horizontal = direction_.cross(up_).normalize();
+    vertical = horizontal.cross(direction_).normalize();
     focus_point = origin_ + direction_;
     tot_subpix = subpix_[0]*subpix_[1];
     pixel_span_y = vertical * std::tan(fov_[0]/2.0) * 2.0/image_->size_y_;

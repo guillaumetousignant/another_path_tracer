@@ -39,10 +39,10 @@ void CamMotionblur_t::raytrace(const Scene_t* scene) {
     subpix_span_y = pixel_span_y/subpix_[0];
     subpix_span_x = pixel_span_x/subpix_[1];
 
-    horizontal_last = direction_last_.cross(up_last_);
-    vertical_last = horizontal_last.cross(direction_last_);
-    horizontal = direction_.cross(up_);
-    vertical = horizontal.cross(direction_);
+    horizontal_last = direction_last_.cross(up_last_).normalize();
+    vertical_last = horizontal_last.cross(direction_last_).normalize();
+    horizontal = direction_.cross(up_).normalize();
+    vertical = horizontal.cross(direction_).normalize();
 
     image_->update();
 

@@ -32,8 +32,8 @@ void Cam_t::raytrace(const Scene_t* scene) {
     pixel_span_x = fov_[1]/image_->size_x_;
     subpix_span_y = pixel_span_y/subpix_[0];
     subpix_span_x = pixel_span_x/subpix_[1];
-    horizontal = direction_.cross(up_);
-    vertical = horizontal.cross(direction_);
+    horizontal = direction_.cross(up_).normalize();
+    vertical = horizontal.cross(direction_).normalize();
 
     image_->update();
 
