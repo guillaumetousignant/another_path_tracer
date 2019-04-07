@@ -4,9 +4,7 @@ before_install:
   - test -n $CC  && unset CC
   - test -n $CXX && unset CXX
   - sudo apt update
-  - sudo apt install -y tree openssh-client openssh-server openmpi-bin openmpi-common libopenmpi1.6 libopenmpi-dev libopenmpi1.6-dbg cppcheck freeglut3 freeglut3-dev
-  - export GLINCLUDE=/usr/include
-  - export GLLIBSDIR=/usr/lib/x86_64-linux-gnu
+  - sudo apt install -y tree openssh-client openssh-server openmpi-bin openmpi-common libopenmpi-dev freeglut3 freeglut3-dev
 script: 
   - make VERIFY=true
   - ./bin/another_path_tracer

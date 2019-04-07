@@ -107,10 +107,9 @@ DEBUGFLAGS += -Og -g -pg
 RELEASEFLAGS += -O3 -fopenmp
 
 # Include search paths
-GL_INCLUDE_PATH = $(GLINCLUDE)
 
 # Included Libraries
-DISPLAYLIBS += -L$(GLLIBSDIR) -lglut -lGL -lGLU
+DISPLAYLIBS += -lglut -lGL -lGLU
 
 #--------------------------------------------------------------------------------------------------------------------------------------+
 #---------------------------------------------------------------------------------------------------+
@@ -152,19 +151,19 @@ verify : mpirelease $(MPIReleaseObjectFiles)
 # Pattern Rules
 
 .debug/%.o : %.cpp
-	@$(CXX) -c $(CXXFLAGS) $(DEBUGFLAGS)  -I$(subst $(space), -I,$(AllDirs)) -I$(GL_INCLUDE_PATH) $< -o $@ 
+	@$(CXX) -c $(CXXFLAGS) $(DEBUGFLAGS)  -I$(subst $(space), -I,$(AllDirs)) $< -o $@ 
 	@echo '   Pattern Rule | Compiling | '$(CXXFLAGS) $(DEBUGFLAGS) ' | ' $<' ... Done'
 
 .release/%.o : %.cpp
-	@$(CXX) -c $(CXXFLAGS) $(RELEASEFLAGS)  -I$(subst $(space), -I,$(AllDirs)) -I$(GL_INCLUDE_PATH) $< -o $@ 
+	@$(CXX) -c $(CXXFLAGS) $(RELEASEFLAGS)  -I$(subst $(space), -I,$(AllDirs)) $< -o $@ 
 	@echo '   Pattern Rule | Compiling | '$(CXXFLAGS) $(RELEASEFLAGS) ' | ' $<' ... Done '
 
 .mpidebug/%.o : %.cpp
-	@$(MPICXX) -c $(CXXFLAGS) $(DEBUGFLAGS)  -I$(subst $(space), -I,$(AllDirs)) -I$(GL_INCLUDE_PATH) $< -o $@ 
+	@$(MPICXX) -c $(CXXFLAGS) $(DEBUGFLAGS)  -I$(subst $(space), -I,$(AllDirs)) $< -o $@ 
 	@echo '   Pattern Rule | Compiling | '$(CXXFLAGS) $(DEBUGFLAGS) ' | ' $<' ... Done'
 
 .mpirelease/%.o : %.cpp
-	@$(MPICXX) -c $(CXXFLAGS) $(RELEASEFLAGS)  -I$(subst $(space), -I,$(AllDirs)) -I$(GL_INCLUDE_PATH) $< -o $@ 
+	@$(MPICXX) -c $(CXXFLAGS) $(RELEASEFLAGS)  -I$(subst $(space), -I,$(AllDirs)) $< -o $@ 
 	@echo '   Pattern Rule | Compiling | '$(CXXFLAGS) $(RELEASEFLAGS) ' | ' $<' ... Done '
 
 #---------------------------------------------------------------------------------------+
