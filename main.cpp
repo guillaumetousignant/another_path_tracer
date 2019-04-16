@@ -314,6 +314,9 @@ int main(int argc, char **argv){
             << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
             << "s." << std::endl << std::endl;
 
+    std::cout << "Min coord: " << meshes[0]->mincoord()[0] << " " << meshes[0]->mincoord()[1] << " " << meshes[0]->mincoord()[2] << std::endl;
+    std::cout << "Max coord: " << meshes[0]->maxcoord()[0] << " " << meshes[0]->maxcoord()[1] << " " << meshes[0]->maxcoord()[2] << std::endl;
+
     // Camera stuff
     std::string filename = "./images/test.png";
 
