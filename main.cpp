@@ -417,7 +417,7 @@ int main(int argc, char **argv){
     double fov_iso[2];
     fov_iso[1] = 2;
     fov_iso[0] = fov_iso[1] * res_y/res_x;
-    unsigned int subpix[2] = {1, 1};
+    unsigned int subpix[2] = {2, 2};
     unsigned int maxbounces = 16;
     double focal_length = 2.0;
     double aperture = 0.02;
@@ -444,7 +444,7 @@ int main(int argc, char **argv){
     std::list<Medium_t*> medium_list;
     medium_list.assign(2, air);
 
-    IsoCamMotionblur_t* cam = new IsoCamMotionblur_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov_iso, subpix, imgbuffer, medium_list, skybox, maxbounces, time, 1.0);
+    Cam_t* cam = new Cam_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov_iso, subpix, imgbuffer, medium_list, skybox, maxbounces, 1.0);
     thecamera = cam;
     camera_dist = 5;
     cam->transformation_->translate(Vec3f(0.0, -camera_dist, 0.0));

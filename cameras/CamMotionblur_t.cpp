@@ -63,10 +63,10 @@ void CamMotionblur_t::raytrace(const Scene_t* scene) {
                     Vec3f vertical_int = vertical * rand_time + vertical_last * (1.0 - rand_time);
                     Vec3f origin_int = origin_ * rand_time + origin_last_ * (1.0 - rand_time);
 
-                    pix_vec += Vec3f(0.0, ((double)k - (double)subpix_[0]/2.0 + jitter_y)*subpix_span_y, ((double)l - (double)subpix_[1]/2.0 + jitter_x)*subpix_span_x); // Is shit after this line
-                    pix_vec = to_xyz_offset(pix_vec, direction_int, horizontal_int, vertical_int);
+                    Vec3f subpix_vec = pix_vec + Vec3f(0.0, ((double)k - (double)subpix_[0]/2.0 + jitter_y)*subpix_span_y, ((double)l - (double)subpix_[1]/2.0 + jitter_x)*subpix_span_x); // Is shit after this line
+                    subpix_vec = to_xyz_offset(subpix_vec, direction_int, horizontal_int, vertical_int);
 
-                    Ray_t ray = Ray_t(origin_int, pix_vec, Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list_, rand_time);
+                    Ray_t ray = Ray_t(origin_int, subpix_vec, Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list_, rand_time);
                     ray.raycast(scene, max_bounces_, skybox_);
                     col += ray.colour_;
                 }

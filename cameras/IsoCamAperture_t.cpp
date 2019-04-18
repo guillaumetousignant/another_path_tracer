@@ -53,9 +53,9 @@ void IsoCamAperture_t::raytrace(const Scene_t* scene) {
                     double jitter_y = unif_(my_rand::rng);
                     double jitter_x = unif_(my_rand::rng);
 
-                    ray_origin -= vertical * subpix_span_y * ((double)k - (double)subpix_[0]/2.0 + jitter_y) - horizontal * subpix_span_x * ((double)l - (double)subpix_[1]/2.0 + jitter_x);;
-                    Vec3f ray_origin2 = ray_origin + vertical * std::cos(rand_theta) * rand_r + horizontal * std::sin(rand_theta) * rand_r;
-                    Vec3f direction2 = ray_origin + direction_ * focal_length_ - ray_origin2;
+                    Vec3f subpix_ray_origin = ray_origin - vertical * subpix_span_y * ((double)k - (double)subpix_[0]/2.0 + jitter_y) + horizontal * subpix_span_x * ((double)l - (double)subpix_[1]/2.0 + jitter_x);;
+                    Vec3f ray_origin2 = subpix_ray_origin + vertical * std::cos(rand_theta) * rand_r + horizontal * std::sin(rand_theta) * rand_r;
+                    Vec3f direction2 = subpix_ray_origin + direction_ * focal_length_ - ray_origin2;
 
                     Ray_t ray = Ray_t(ray_origin2, direction2.normalize(), Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list_);
                     ray.raycast(scene, max_bounces_, skybox_);

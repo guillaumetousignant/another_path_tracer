@@ -58,11 +58,11 @@ void RecCamAperture_t::raytrace(const Scene_t* scene) {
 
                     Vec3f origin2 = origin_ + vertical * std::cos(rand_theta) * rand_r + horizontal * std::sin(rand_theta) * rand_r;
 
-                    pix_vec -= subpix_span_y * ((double)k - (double)subpix_[0]/2.0 + jitter_y) - subpix_span_x * ((double)l - (double)subpix_[1]/2.0 + jitter_x);
-                    pix_vec -= origin2;
-                    pix_vec = pix_vec.normalize();
+                    Vec3f subpix_vec = pix_vec - subpix_span_y * ((double)k - (double)subpix_[0]/2.0 + jitter_y) + subpix_span_x * ((double)l - (double)subpix_[1]/2.0 + jitter_x);
+                    subpix_vec -= origin2;
+                    subpix_vec = subpix_vec.normalize();
 
-                    Ray_t ray = Ray_t(origin2, pix_vec, Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list_);
+                    Ray_t ray = Ray_t(origin2, subpix_vec, Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list_);
                     ray.raycast(scene, max_bounces_, skybox_);
                     col += ray.colour_;
                 }

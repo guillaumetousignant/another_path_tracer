@@ -50,9 +50,9 @@ void IsoCam_t::raytrace(const Scene_t* scene) {
                     double jitter_y = unif_(my_rand::rng);
                     double jitter_x = unif_(my_rand::rng);
 
-                    ray_origin -= vertical * subpix_span_y * ((double)k - (double)subpix_[0]/2.0 + jitter_y) - horizontal * subpix_span_x * ((double)l - (double)subpix_[1]/2.0 + jitter_x);;
+                    Vec3f subpix_ray_origin = ray_origin - vertical * subpix_span_y * ((double)k - (double)subpix_[0]/2.0 + jitter_y) + horizontal * subpix_span_x * ((double)l - (double)subpix_[1]/2.0 + jitter_x);;
 
-                    Ray_t ray = Ray_t(ray_origin, direction_, Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list_);
+                    Ray_t ray = Ray_t(subpix_ray_origin, direction_, Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list_);
                     ray.raycast(scene, max_bounces_, skybox_);
                     col += ray.colour_;
                 }
