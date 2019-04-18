@@ -417,7 +417,7 @@ int main(int argc, char **argv){
     double fov_iso[2];
     fov_iso[1] = 2;
     fov_iso[0] = fov_iso[1] * res_y/res_x;
-    unsigned int subpix[2] = {2, 2};
+    unsigned int subpix[2] = {1, 1};
     unsigned int maxbounces = 16;
     double focal_length = 2.0;
     double aperture = 0.02;
