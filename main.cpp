@@ -444,7 +444,7 @@ int main(int argc, char **argv){
     std::list<Medium_t*> medium_list;
     medium_list.assign(2, air);
 
-    Cam_t* cam = new Cam_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov_iso, subpix, imgbuffer, medium_list, skybox, maxbounces, 1.0);
+    Cam_t* cam = new Cam_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer, medium_list, skybox, maxbounces, 1.0);
     thecamera = cam;
     camera_dist = 5;
     cam->transformation_->translate(Vec3f(0.0, -camera_dist, 0.0));
