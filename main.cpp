@@ -449,10 +449,11 @@ int main(int argc, char **argv){
 
     RecCamMotionblurAperture_t* cam = new RecCamMotionblurAperture_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer, medium_list, skybox, maxbounces, focal_length, aperture, time, 1.0);
     thecamera = cam;
-    camera_dist = 5;
-    cam->transformation_->translate(Vec3f(0.0, -camera_dist, 0.0));
+    cam->transformation_->translate(Vec3f(0.0, -2, 0.0));
     cam->update();
     cam->update();
+
+    camera_dist = (Vec3f(0.0, 0.0, 0.0) - cam->origin_).magnitude();
 
     if (no_GL){
         cam->accumulateWrite(scene, 10000, 100);
