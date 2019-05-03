@@ -19,6 +19,7 @@
 #include "CamMotionblurAperture_t.h"
 #include "RecCam_t.h"
 #include "RecCamAperture_t.h"
+#include "RecCamMotionblur_t.h"
 #include "IsoCam_t.h"
 #include "IsoCamAperture_t.h"
 #include "IsoCamMotionblur_t.h"
@@ -445,7 +446,7 @@ int main(int argc, char **argv){
     std::list<Medium_t*> medium_list;
     medium_list.assign(2, air);
 
-    IsoCamMotionblurAperture_t* cam = new IsoCamMotionblurAperture_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov_iso, subpix, imgbuffer, medium_list, skybox, maxbounces, focal_length, aperture, time, 1.0);
+    RecCamMotionblur_t* cam = new RecCamMotionblur_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer, medium_list, skybox, maxbounces, time, 1.0);
     thecamera = cam;
     camera_dist = 5;
     cam->transformation_->translate(Vec3f(0.0, -camera_dist, 0.0));
