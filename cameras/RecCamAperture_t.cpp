@@ -77,7 +77,7 @@ void RecCamAperture_t::focus(double focus_distance){
     focal_length_buffer_ = focus_distance;
 }
 
-void RecCamAperture_t::autoFocus(const Scene_t* scene, double position[2]){
+void RecCamAperture_t::autoFocus(const Scene_t* scene, const double (&position)[2]){
     Vec3f horizontal, vertical;
     Vec3f ray_vec;
     Vec3f span_x, span_y;

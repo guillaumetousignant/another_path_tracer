@@ -72,7 +72,7 @@ void IsoCamAperture_t::focus(double focus_distance){
     focal_length_buffer_ = focus_distance;
 }
 
-void IsoCamAperture_t::autoFocus(const Scene_t* scene, double position[2]){
+void IsoCamAperture_t::autoFocus(const Scene_t* scene, const double (&position)[2]){
     Vec3f horizontal, vertical;
     Vec3f ray_origin;
     Shape_t* hit_obj = nullptr;

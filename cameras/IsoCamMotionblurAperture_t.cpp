@@ -87,7 +87,7 @@ void IsoCamMotionblurAperture_t::focus(double focus_distance){
     focal_length_buffer_ = focus_distance;
 }
 
-void IsoCamMotionblurAperture_t::autoFocus(const Scene_t* scene, double position[2]){
+void IsoCamMotionblurAperture_t::autoFocus(const Scene_t* scene, const double (&position)[2]){
     Vec3f horizontal, vertical;
     Vec3f pix_origin;
     Shape_t* hit_obj = nullptr;
