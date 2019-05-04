@@ -7,6 +7,7 @@
 #include "ReflectiveRefractive_t.h"
 #include "Vec3f.h"
 #include "Sphere_t.h"
+#include "SphereMotionblur_t.h"
 #include "Triangle_t.h"
 #include "Mesh_t.h"
 #include "TransformMatrix_t.h"
@@ -271,6 +272,7 @@ int main(int argc, char **argv){
     Diffuse_t* diflight = new Diffuse_t(Vec3f(2.0, 2.0, 2.0), Vec3f(1.0, 1.0, 1.0), 1);
     Diffuse_t* difgreen = new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.8, 0.95, 0.6), 1);
     Diffuse_t* difblue = new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.1, 0.4, 0.8), 1);
+    Diffuse_t* difgrey = new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.75, 0.75, 0.75), 0.5);
     DiffuseTex_t* zombiemat = new DiffuseTex_t(Vec3f(0.0, 0.0, 0.0), zombietex, 0.2);
     //DiffuseTex_t* pipermat = new DiffuseTex_t(Vec3f(0.0, 0.0, 0.0), pipertex, 0.8);
     Reflective_t* ref1 = new Reflective_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.98, 1, 0.9));
@@ -284,6 +286,7 @@ int main(int argc, char **argv){
     TransformMatrix_t* transform3 = new TransformMatrix_t();
     TransformMatrix_t* transform4 = new TransformMatrix_t();
     TransformMatrix_t* transform5 = new TransformMatrix_t();
+    TransformMatrix_t* transform6 = new TransformMatrix_t();
     TransformMatrix_t* transform_zombie = new TransformMatrix_t();
     //TransformMatrix_t* transform_piper = new TransformMatrix_t();
     TransformMatrix_t* transform_cube = new TransformMatrix_t();
@@ -295,6 +298,7 @@ int main(int argc, char **argv){
     Sphere_t* light = new Sphere_t(diflight, transform3);
     Sphere_t* sphereglass = new Sphere_t(glass, transform4);
     Sphere_t* ground = new Sphere_t(difgreen, transform5);
+    SphereMotionblur_t* spheregrey = new SphereMotionblur_t(difgrey, transform6);
 
     Vec3f points1[3];
     Vec3f points2[3];
@@ -347,6 +351,7 @@ int main(int argc, char **argv){
     naca->transformation_->scale(1.0/100.0);
     naca->transformation_->rotateX(0.0);
     naca->transformation_->rotateZ(0.0);*/
+    spheregrey->transformation_->translate(Vec3f(-0.5, 0.0, 0.0));
 
     t_end = std::chrono::high_resolution_clock::now();
     std::cout << "Elements transformed in " 
@@ -361,7 +366,8 @@ int main(int argc, char **argv){
     //scene->add(light);
     //scene->add(sphereglass);
     //scene->add(ground);
-    scene->add(zombie);
+    //scene->add(zombie);
+    scene->add(spheregrey);
     scene->add(planegrey1);
     scene->add(planegrey2);
     //scene->add(piper);
@@ -378,6 +384,10 @@ int main(int argc, char **argv){
     std::cout << "Scene updated in " 
             << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
             << "s." << std::endl;
+
+    // Motion    
+    spheregrey->transformation_->translate(Vec3f(1.0, 0.0, 0.0));
+    scene->update();
 
     t_start = std::chrono::high_resolution_clock::now();
     scene->build_acc();
