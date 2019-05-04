@@ -35,6 +35,8 @@ class Vec3f {
         const Vec3f &operator-=(double factor);
         const Vec3f &min(const Vec3f &other);
         const Vec3f &max(const Vec3f &other);
+        Vec3f getMin(const Vec3f &other) const;
+        Vec3f getMax(const Vec3f &other) const;
         double magnitude() const;
         double magnitudeSquared() const;
         Vec3f normalize() const;
