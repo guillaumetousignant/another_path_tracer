@@ -9,6 +9,7 @@
 #include "Sphere_t.h"
 #include "SphereMotionblur_t.h"
 #include "Triangle_t.h"
+#include "TriangleMotionblur_t.h"
 #include "Mesh_t.h"
 #include "TransformMatrix_t.h"
 #include "Scene_t.h"
@@ -311,8 +312,8 @@ int main(int argc, char **argv){
     points2[1] = Vec3f(2, -4, -0.5);
     points2[2] = Vec3f(2, 4, -0.5);
 
-    Triangle_t* planegrey1 = new Triangle_t(difgreen, transform_neutral, &points1[0], nullptr, nullptr);
-    Triangle_t* planegrey2 = new Triangle_t(difgreen, transform_neutral, &points2[0], nullptr, nullptr);
+    TriangleMotionblur_t* planegrey1 = new TriangleMotionblur_t(difgreen, transform_neutral, &points1[0], nullptr, nullptr);
+    TriangleMotionblur_t* planegrey2 = new TriangleMotionblur_t(difgreen, transform_neutral, &points2[0], nullptr, nullptr);
 
     Mesh_t* cube = new Mesh_t(difblue, transform_cube, cubemesh);
     Mesh_t* zombie = new Mesh_t(zombiemat, transform_zombie, zombiemesh);
@@ -386,6 +387,8 @@ int main(int argc, char **argv){
             << "s." << std::endl;
 
     // Motion    
+    planegrey1->transformation_->translate(Vec3f(1.0, 0.0, 0.0));
+    planegrey2->transformation_->translate(Vec3f(1.0, 0.0, 0.0));
     spheregrey->transformation_->translate(Vec3f(1.0, 0.0, 0.0));
     scene->update();
 
