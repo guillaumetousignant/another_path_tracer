@@ -29,6 +29,7 @@ class Mesh_t : public Shape_t{
         virtual void normal(const Ray_t &ray, const double (&uv)[2], Vec3f &normalvec) const;
         virtual Vec3f mincoord() const;
         virtual Vec3f maxcoord() const;
-        virtual Shape_t* createTriangle(Material_t *material, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom, unsigned int index);
+        virtual void createTriangles();
+        virtual void createTriangles(MaterialMap_t *materialmap);
 };
 #endif
