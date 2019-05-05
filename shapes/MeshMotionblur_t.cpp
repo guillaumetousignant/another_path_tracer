@@ -1,7 +1,7 @@
 #include "MeshMotionblur_t.h"
 #include "MeshGeometry_t.h"
 #include "MaterialMap_t.h"
-#include "TriangleMesh_t.h"
+#include "TriangleMeshMotionblur_t.h"
 #include <iostream>
 #include <limits>
 
