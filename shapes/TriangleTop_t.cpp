@@ -70,18 +70,14 @@ void TriangleTop_t::normal(const Ray_t &ray, const double (&uv)[2], Vec3f &norma
     // Matrix multiplication, optimise.
 }
 
-void TriangleTop_t::normal_face(Vec3f &normalvec) const{
+void TriangleTop_t::normal_face(const Ray_t &ray, Vec3f &normalvec) const{
     normalvec = v0v1_.cross(v0v2_).normalize();
 }
 
 Vec3f TriangleTop_t::mincoord() const {
-    return Vec3f(std::min(std::min(points_[0][0], points_[1][0]), points_[2][0]), 
-                std::min(std::min(points_[0][1], points_[1][1]), points_[2][1]),
-                std::min(std::min(points_[0][2], points_[1][2]), points_[2][2]));
+    return points_[0].getMin(points_[1]).min(points_[2]);
 }
 
 Vec3f TriangleTop_t::maxcoord() const {
-    return Vec3f(std::max(std::max(points_[0][0], points_[1][0]), points_[2][0]), 
-                std::max(std::max(points_[0][1], points_[1][1]), points_[2][1]),
-                std::max(std::max(points_[0][2], points_[1][2]), points_[2][2]));
+    return points_[0].getMax(points_[1]).max(points_[2]);
 }
