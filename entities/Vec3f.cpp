@@ -95,13 +95,13 @@ const Vec3f &Vec3f::operator-=(double factor) {
     v[2] -= factor;
     return *this;
 }
-const Vec3f &Vec3f::min(const Vec3f &other){
+Vec3f &Vec3f::min(const Vec3f &other){
     v[0] = std::min(v[0], other[0]);
     v[1] = std::min(v[1], other[1]);
     v[2] = std::min(v[2], other[2]);
     return *this;
 }
-const Vec3f &Vec3f::max(const Vec3f &other){
+Vec3f &Vec3f::max(const Vec3f &other){
     v[0] = std::max(v[0], other[0]);
     v[1] = std::max(v[1], other[1]);
     v[2] = std::max(v[2], other[2]);
