@@ -40,14 +40,11 @@ Triangle_t::Triangle_t(Material_t *material, TransformMatrix_t *transform_matrix
         }
     }
 
-    for (unsigned int i = 0; i < 3; i++){ // Loop or explicit?
-        points_[i] = transformation_->multVec(points_orig_[i]);
-    }
-
     TransformMatrix_t transform_norm = transformation_->transformDir();
 
     for (unsigned int i = 0; i < 3; i++){ // Loop or explicit?
-        normals_[i] = transformation_->multDir(normals_orig_[i]);
+        points_[i] = transformation_->multVec(points_orig_[i]);
+        normals_[i] = transform_norm.multDir(normals_orig_[i]); // was transformation_ before
     }
 
     v0v1_ = points_[1] - points_[0];
@@ -57,14 +54,11 @@ Triangle_t::Triangle_t(Material_t *material, TransformMatrix_t *transform_matrix
 Triangle_t::~Triangle_t(){}
 
 void Triangle_t::update() {
-    for (unsigned int i = 0; i < 3; i++){ // Loop or explicit?
-        points_[i] = transformation_->multVec(points_orig_[i]);
-    }
-
     TransformMatrix_t transform_norm = transformation_->transformDir();
 
     for (unsigned int i = 0; i < 3; i++){ // Loop or explicit?
-        normals_[i] = transformation_->multDir(normals_orig_[i]);
+        points_[i] = transformation_->multVec(points_orig_[i]);
+        normals_[i] = transform_norm.multDir(normals_orig_[i]);
     }
 
     v0v1_ = points_[1] - points_[0];

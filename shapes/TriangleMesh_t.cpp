@@ -13,14 +13,11 @@
 TriangleMesh_t::TriangleMesh_t(Material_t *material, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom, unsigned int index) 
     : TriangleTop_t(material, transform_matrix), geom_(geom), index_(index) {
 
-    for (unsigned int i = 0; i < 3; i++){ // Loop or explicit?
-        points_[i] = transformation_->multVec(geom_->v_[3 * index_ + i]);
-    }
-
     TransformMatrix_t transform_norm = transformation_->transformDir();
 
     for (unsigned int i = 0; i < 3; i++){ // Loop or explicit?
-        normals_[i] = transformation_->multDir(geom_->vn_[3 * index_ + i]);
+        points_[i] = transformation_->multVec(geom_->v_[3 * index_ + i]);
+        normals_[i] = transform_norm.multDir(geom_->vn_[3 * index_ + i]); // was transformation_
     }
 
     v0v1_ = points_[1] - points_[0];
@@ -30,14 +27,11 @@ TriangleMesh_t::TriangleMesh_t(Material_t *material, TransformMatrix_t *transfor
 TriangleMesh_t::~TriangleMesh_t(){}
 
 void TriangleMesh_t::update() {
-    for (unsigned int i = 0; i < 3; i++){ // Loop or explicit?
-        points_[i] = transformation_->multVec(geom_->v_[3 * index_ + i]);
-    }
-
     TransformMatrix_t transform_norm = transformation_->transformDir();
 
     for (unsigned int i = 0; i < 3; i++){ // Loop or explicit?
-        normals_[i] = transformation_->multDir(geom_->vn_[3 * index_ + i]);
+    points_[i] = transformation_->multVec(geom_->v_[3 * index_ + i]);
+        normals_[i] = transform_norm.multDir(geom_->vn_[3 * index_ + i]); // was transformation_
     }
 
     v0v1_ = points_[1] - points_[0];
