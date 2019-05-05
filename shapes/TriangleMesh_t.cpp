@@ -30,7 +30,7 @@ void TriangleMesh_t::update() {
     TransformMatrix_t transform_norm = transformation_->transformDir();
 
     for (unsigned int i = 0; i < 3; i++){ // Loop or explicit?
-    points_[i] = transformation_->multVec(geom_->v_[3 * index_ + i]);
+        points_[i] = transformation_->multVec(geom_->v_[3 * index_ + i]);
         normals_[i] = transform_norm.multDir(geom_->vn_[3 * index_ + i]); // was transformation_
     }
 
