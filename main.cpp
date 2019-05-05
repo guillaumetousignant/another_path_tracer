@@ -11,6 +11,7 @@
 #include "Triangle_t.h"
 #include "TriangleMotionblur_t.h"
 #include "Mesh_t.h"
+#include "MeshMotionblur_t.h"
 #include "TransformMatrix_t.h"
 #include "Scene_t.h"
 #include "ImgBufferOpenGL_t.h"
@@ -316,7 +317,7 @@ int main(int argc, char **argv){
     Triangle_t* planegrey2 = new Triangle_t(difgreen, transform_neutral, &points2[0], nullptr, nullptr);
 
     Mesh_t* cube = new Mesh_t(difblue, transform_cube, cubemesh);
-    Mesh_t* zombie = new Mesh_t(zombiemat, transform_zombie, zombiemesh);
+    MeshMotionblur_t* zombie = new MeshMotionblur_t(zombiemat, transform_zombie, zombiemesh);
     //Mesh_t* piper = new Mesh_t(pipermat, transform_piper, pipermesh);
     //Mesh_t* naca = new Mesh_t(difpurple, transform_naca, nacamesh);
 
@@ -367,8 +368,8 @@ int main(int argc, char **argv){
     //scene->add(light);
     //scene->add(sphereglass);
     //scene->add(ground);
-    //scene->add(zombie);
-    scene->add(spheregrey);
+    scene->add(zombie);
+    //scene->add(spheregrey);
     scene->add(planegrey1);
     scene->add(planegrey2);
     //scene->add(piper);
@@ -388,6 +389,7 @@ int main(int argc, char **argv){
 
     // Motion
     spheregrey->transformation_->translate(Vec3f(1.0, 0.0, 0.0));
+    zombie->transformation_->rotateZ(-PI/16);
     scene->update();
 
     t_start = std::chrono::high_resolution_clock::now();
