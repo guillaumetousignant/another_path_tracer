@@ -6,7 +6,7 @@
 
 class Texture_t{
     public:
-        Texture_t(std::string filename);
+        Texture_t(const std::string &filename);
         ~Texture_t();
 
         unsigned int size_x_;

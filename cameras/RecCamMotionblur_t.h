@@ -15,7 +15,7 @@ class ImgBuffer_t;
 
 class RecCamMotionblur_t : public RecCam_t{
     public:
-        RecCamMotionblur_t(TransformMatrix_t* transformation, std::string filename, Vec3f up, const double (&fov)[2], const unsigned int (&subpix)[2], ImgBuffer_t* image, std::list<Medium_t*> &medium_list, Skybox_t* skybox, unsigned int max_bounces, double (&time)[2], double gammaind);
+        RecCamMotionblur_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, const double (&fov)[2], const unsigned int (&subpix)[2], ImgBuffer_t* image, std::list<Medium_t*> &medium_list, Skybox_t* skybox, unsigned int max_bounces, double (&time)[2], double gammaind);
         ~RecCamMotionblur_t();
 
         Vec3f direction_last_;

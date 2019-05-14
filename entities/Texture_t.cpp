@@ -2,7 +2,7 @@
 #include <string>
 #include "pngwriter.h"
 
-Texture_t::Texture_t(std::string filename){
+Texture_t::Texture_t(const std::string &filename){
     pngwriter png(1, 1, 0.0, "");
     png.readfromfile(filename.c_str()); 
 

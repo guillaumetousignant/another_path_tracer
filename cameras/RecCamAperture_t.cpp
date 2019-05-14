@@ -11,7 +11,7 @@
 
 #define PI 3.141592653589793238463
 
-RecCamAperture_t::RecCamAperture_t(TransformMatrix_t* transformation, std::string filename, Vec3f up, const double (&fov)[2], const unsigned int (&subpix)[2], ImgBuffer_t* image, std::list<Medium_t*> &medium_list, Skybox_t* skybox, unsigned int max_bounces, double focal_length, double aperture, double gammaind) 
+RecCamAperture_t::RecCamAperture_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, const double (&fov)[2], const unsigned int (&subpix)[2], ImgBuffer_t* image, std::list<Medium_t*> &medium_list, Skybox_t* skybox, unsigned int max_bounces, double focal_length, double aperture, double gammaind) 
     : RecCam_t(transformation, filename, up, fov, subpix, image, medium_list, skybox, max_bounces, gammaind),  
     focal_length_(focal_length), aperture_(aperture), focal_length_buffer_(focal_length) {}
 
