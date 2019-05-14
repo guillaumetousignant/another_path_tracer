@@ -1,4 +1,5 @@
 #include "Cam3D_t.h"
+#include "Cam_t.h"
 #include "TransformMatrix_t.h"
 #include "Skybox_t.h"
 #include "Scene_t.h"
@@ -14,9 +15,31 @@ Cam3D_t::Cam3D_t(TransformMatrix_t* transformation, const std::string &filename,
     image_(image), unif_(0.0, 1.0), eye_dist_(eye_dist), focal_length_(focal_length), focal_length_buffer_(focal_length) {
 
     std::string filename_S, filename_L, filename_R;
+    size_t point;
+
+    point = filename.find_last_of(".");
+
+    if (point != std::string::npos){
+        filename_L = filename.substr(0, point) + "_L" + filename.substr(point);
+        filename_R = filename.substr(0, point) + "_R" + filename.substr(point);
+        filename_S = filename;
+    }
+    else{
+        filename_L = filename + "_L.png";
+        filename_R = filename + "_R.png";
+        filename_S = filename;
+    }
+
+    camera_L_ = new Cam_t(transformation, filename_L, up_, fov_, subpix_, image_L, medium_list_, skybox_, max_bounces_, gammaind_);
+    camera_R_ = new Cam_t(transformation, filename_R, up_, fov_, subpix_, image_R, medium_list_, skybox_, max_bounces_, gammaind_);
+
+    filename_ = filename_S;
 }
 
-Cam3D_t::~Cam3D_t() {}
+Cam3D_t::~Cam3D_t() {
+    delete camera_L_;
+    delete camera_R_;
+}
 
 void Cam3D_t::update() {
     origin_ = transformation_->multVec(Vec3f(0.0, 0.0, 0.0));
