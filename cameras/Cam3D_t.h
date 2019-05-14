@@ -19,11 +19,12 @@ class Cam3D_t : public Camera_t{
         ~Cam3D_t();
 
         ImgBuffer_t* image_;
-        ImgBuffer_t* image_L_;
-        ImgBuffer_t* image_R_;
         std::uniform_real_distribution<double> unif_;
         double eye_dist_;
         double focal_length_;
+        double focal_length_buffer_;
+        Camera_t* camera_L_;
+        Camera_t* camera_R_;
 
         virtual void update();
         virtual void raytrace(const Scene_t* scene);
