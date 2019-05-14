@@ -34,6 +34,7 @@ Cam3D_t::Cam3D_t(TransformMatrix_t* transformation, const std::string &filename,
     camera_R_ = new Cam_t(transformation, filename_R, up_, fov_, subpix_, image_R, medium_list_, skybox_, max_bounces_, gammaind_);
 
     filename_ = filename_S;
+    image_ = image;
 }
 
 Cam3D_t::~Cam3D_t() {
