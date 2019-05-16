@@ -67,7 +67,7 @@ void RecCam_t::raytrace(const Scene_t* scene) {
     }
 }
 
-void RecCam_t::write(const std::string &file_name /*= ""*/) {
+void RecCam_t::write(std::string file_name /*= ""*/) {
     if (file_name.empty()){
         file_name = filename_;
     }

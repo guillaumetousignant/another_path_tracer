@@ -39,7 +39,7 @@ class Camera_t{
         virtual void focus(double focus_distance){};
         virtual void autoFocus(const Scene_t* scene, const double (&position)[2]){};
         virtual void setUp(Vec3f &new_up);
-        virtual void write(const std::string &file_name = "") = 0;
+        virtual void write(std::string file_name = "") = 0;
         virtual void show() const = 0;
         virtual void reset() = 0;
 };
