@@ -28,6 +28,7 @@
 #include "IsoCamAperture_t.h"
 #include "IsoCamMotionblur_t.h"
 #include "IsoCamMotionblurAperture_t.h"
+#include "Cam3D_t.h"
 #include <string>
 #include <list>
 #include "NonAbsorber_t.h"
@@ -438,6 +439,7 @@ int main(int argc, char **argv){
     double focal_length = 2.0;
     double aperture = 0.02;
     double time[2] = {0, 1};
+    double eye_dist = 0;
 
     DirectionalLight_t* dirlight = new DirectionalLight_t(Vec3f(5.0, 5.0, 4.0), transform_light);
     dirlight->transformation_->scale(0.95);
@@ -456,11 +458,14 @@ int main(int argc, char **argv){
         imgbuffer_GL = new ImgBufferOpenGL_t(res_x, res_y);
         imgbuffer = imgbuffer_GL;
     }
+    ImgBuffer_t* imgbuffer_L = new ImgBuffer_t(res_x, res_y);
+    ImgBuffer_t* imgbuffer_R = new ImgBuffer_t(res_x, res_y);
+
 
     std::list<Medium_t*> medium_list;
     medium_list.assign(2, air);
 
-    RecCamMotionblurAperture_t* cam = new RecCamMotionblurAperture_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer, medium_list, skybox, maxbounces, focal_length, aperture, time, 1.0);
+    Cam3D_t* cam = new Cam3D_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer, imgbuffer_L, imgbuffer_R, , medium_list, skybox, maxbounces, focal_length, aperture, time, 1.0);
     thecamera = cam;
     cam->transformation_->translate(Vec3f(0.0, -2, 0.0));
     cam->update();
