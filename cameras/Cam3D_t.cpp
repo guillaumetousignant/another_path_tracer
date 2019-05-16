@@ -74,10 +74,29 @@ void Cam3D_t::raytrace(const Scene_t* scene) {
 }
 
 void Cam3D_t::write(std::string file_name /*= ""*/) {
+    std::string filename_S, filename_L, filename_R;
+
     if (file_name.empty()){
-        file_name = filename_;
+        filename_L = "";
+        filename_R = "";
+        filename_S = filename_;
     }
-    image_->write(file_name);
+    else{
+        size_t point = file_name.find_last_of(".");
+        if (point != std::string::npos){
+            filename_L = file_name.substr(0, point) + "_L" + file_name.substr(point);
+            filename_R = file_name.substr(0, point) + "_R" + file_name.substr(point);
+            filename_S = file_name;
+        }
+        else{
+            filename_L = file_name + "_L.png";
+            filename_R = file_name + "_R.png";
+            filename_S = file_name;
+        }
+    }
+    camera_L_->write(filename_L);
+    camera_R_->write(filename_R);
+    image_->write(filename_S);
 }
 
 void Cam3D_t::show() const {
@@ -85,13 +104,29 @@ void Cam3D_t::show() const {
 }
 
 void Cam3D_t::reset(){
+    camera_L_->reset();
+    camera_R_->reset();
     image_->reset();
 }
 
 void Cam3D_t::focus(double focus_distance){
-
+    focal_length_buffer_ = focus_distance;
 }
 
 void Cam3D_t::autoFocus(const Scene_t* scene, const double (&position)[2]){
+    Vec3f ray_direction_sph;
+    Shape_t* hit_obj = nullptr;
+    double t = std::numeric_limits<double>::infinity();
+    double uv[2];
 
+    ray_direction_sph = to_sph(direction_) + Vec3f(0, (position[1]-0.5)*fov_[0], (position[0]-0.5)*-fov_[1]); // 0, y, x
+
+    Ray_t focus_ray = Ray_t(origin_, to_xyz(ray_direction_sph), Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list_);
+
+    scene->intersect(focus_ray, hit_obj, t, uv);
+
+    if (t == std::numeric_limits<double>::infinity()){
+        t = 1000000.0;
+    }
+    focus(t);
 }
