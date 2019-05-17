@@ -1,7 +1,7 @@
 #include "Scene_t.h"
 #include "Shape_t.h"
 #include "AccelerationStructure_t.h"
-#include "Mesh_t.h"
+#include "MeshTop_t.h"
 #include <limits>
 #include "AccelerationGrid_t.h"
 
@@ -33,7 +33,7 @@ void Scene_t::add(Shape_t** shapes, unsigned int n_shapes) {
 
 }
 
-void Scene_t::add(Mesh_t* mesh) {
+void Scene_t::add(MeshTop_t* mesh) {
     Shape_t** geometry_2 = new Shape_t*[n_obj_+mesh->n_tris_];
     for (unsigned int i = 0; i < n_obj_; i++){
         geometry_2[i] = geometry_[i];
@@ -48,7 +48,7 @@ void Scene_t::add(Mesh_t* mesh) {
     n_obj_ += mesh->n_tris_;
 }
 
-void Scene_t::add(Mesh_t** meshes, unsigned int n_meshes) {
+void Scene_t::add(MeshTop_t** meshes, unsigned int n_meshes) {
 
 }
 
@@ -60,11 +60,11 @@ void Scene_t::remove(Shape_t** shapes, unsigned int n_shapes) {
 
 }
 
-void Scene_t::remove(Mesh_t* mesh) {
+void Scene_t::remove(MeshTop_t* mesh) {
 
 }
 
-void Scene_t::remove(Mesh_t** meshes, unsigned int n_meshes) {
+void Scene_t::remove(MeshTop_t** meshes, unsigned int n_meshes) {
 
 }
 
