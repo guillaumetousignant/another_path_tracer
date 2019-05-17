@@ -18,8 +18,6 @@ MeshMotionblur_t::MeshMotionblur_t(MaterialMap_t *materialmap, TransformMatrix_t
 MeshMotionblur_t::~MeshMotionblur_t(){}  
 
 void MeshMotionblur_t::createTriangles(){
-    std::cout << "Motion function" << std::endl; // REMOVE
-
     triangles_ = new Shape_t*[n_tris_];
     for (unsigned int i = 0; i < n_tris_; i++){
         triangles_[i] = new TriangleMeshMotionblur_t(material_, transformation_, geom_, i);
