@@ -17,7 +17,7 @@ class Cam_t;
 class Cam3D_t : public Camera_t{
     public:
         Cam3D_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, const double (&fov)[2], const unsigned int (&subpix)[2], ImgBuffer_t* image, ImgBuffer_t* image_L, ImgBuffer_t* image_R, double eye_dist, std::list<Medium_t*> &medium_list, Skybox_t* skybox, unsigned int max_bounces, double focal_length, double gammaind);
-        ~Cam3D_t();
+        virtual ~Cam3D_t();
 
         ImgBuffer_t* image_;
         std::uniform_real_distribution<double> unif_;

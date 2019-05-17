@@ -17,7 +17,7 @@ class Medium_t;
 class Camera_t{
     public:
         Camera_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, const double (&fov)[2], const unsigned int (&subpix)[2], std::list<Medium_t*> &medium_list, Skybox_t* skybox, unsigned int max_bounces, double gammaind);
-        Camera_t(){};
+        virtual ~Camera_t(){};
 
         TransformMatrix_t* transformation_;
         std::string filename_;
