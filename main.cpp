@@ -29,6 +29,7 @@
 #include "IsoCamMotionblur_t.h"
 #include "IsoCamMotionblurAperture_t.h"
 #include "Cam3D_t.h"
+#include "Cam3DAperture_t.h"
 #include <string>
 #include <list>
 #include "NonAbsorber_t.h"
@@ -465,7 +466,7 @@ int main(int argc, char **argv){
     std::list<Medium_t*> medium_list;
     medium_list.assign(2, air);
 
-    Cam3D_t* cam = new Cam3D_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer, imgbuffer_L, imgbuffer_R, eye_dist, medium_list, skybox, maxbounces, focal_length, 1.0);
+    Cam3DAperture_t* cam = new Cam3DAperture_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer, imgbuffer_L, imgbuffer_R, eye_dist, medium_list, skybox, maxbounces, focal_length, aperture, 1.0);
     thecamera = cam;
     cam->transformation_->translate(Vec3f(0.0, -2, 0.0));
     cam->update();
