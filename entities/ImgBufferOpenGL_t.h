@@ -18,6 +18,7 @@ class ImgBufferOpenGL_t : public ImgBuffer_t{
         virtual void update();
         virtual void update(const Vec3f &colour, unsigned int pos_x, unsigned int pos_y);
         virtual void set(const Vec3f** img, unsigned int size_x, unsigned int size_y);
+        virtual void set(const Vec3f &colour, unsigned int pos_x, unsigned int pos_y);
 
         unsigned char* img_gl_;
         GLuint tex_;

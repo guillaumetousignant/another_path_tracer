@@ -57,6 +57,10 @@ void ImgBuffer_t::set(const Vec3f** img, unsigned int size_x, unsigned int size_
     }
 }
 
+void ImgBuffer_t::set(const Vec3f &colour, unsigned int pos_x, unsigned int pos_y){
+    img_[pos_y][pos_x] = colour;
+}
+
 void ImgBuffer_t::write(std::string &filename) const {
     Vec3f colour;
 
