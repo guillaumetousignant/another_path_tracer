@@ -71,6 +71,13 @@ void Cam3D_t::update() {
 void Cam3D_t::raytrace(const Scene_t* scene) {
     camera_L_->raytrace(scene);
     camera_R_->raytrace(scene);
+
+    image_->update();
+    for (unsigned int j = 0; j < image_->size_y_; j++){
+        for (unsigned int i = 0; i < image_->size_x_; i++){
+            image_->update(Vec3f(camera_L_->image_->img_[j][i][0], camera_R_->image_->img_[j][i][1], camera_R_->image_->img_[j][i][2]), i, j);
+        }
+    }
 }
 
 void Cam3D_t::write(std::string file_name /*= ""*/) {

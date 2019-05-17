@@ -12,6 +12,7 @@ class Skybox_t;
 class Scene_t;
 class Medium_t;
 class ImgBuffer_t;
+class Cam_t;
 
 class Cam3D_t : public Camera_t{
     public:
@@ -23,8 +24,8 @@ class Cam3D_t : public Camera_t{
         double eye_dist_;
         double focal_length_;
         double focal_length_buffer_;
-        Camera_t* camera_L_;
-        Camera_t* camera_R_;
+        Cam_t* camera_L_;
+        Cam_t* camera_R_;
 
         virtual void update();
         virtual void raytrace(const Scene_t* scene);
