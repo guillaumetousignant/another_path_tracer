@@ -37,7 +37,6 @@
 #include "NonAbsorber_t.h"
 #include "Absorber_t.h"
 #include "Transparent_t.h"
-#include <string>
 #include "DirectionalLight_t.h"
 #include "Texture_t.h"
 #include "MeshGeometry_t.h"
