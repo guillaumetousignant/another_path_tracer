@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<scene name="diffuse" primitive_list="sphere1, planegrey1, planegrey2">
+   <scatterers>
+      <scatterer name="air_absorber" type="nonabsorber"/>
+   </scatterers>
+   <materials>
+      <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>
+      <material colour="grey2" emission="black" name="difgrey2" roughness="1" type="diffuse"/>
+      <material colour="white" emission="black" ind="1.001" name="air" priority="0" scattering_fn="air_absorber" type="refractive"/>
+   </materials>
+   <objects>
+      <object material="difgrey" name="planegrey1" normals="NaN" points="-1000 1000 -1&#xA;-1000 -1000 -1&#xA; 1000 -1000 -1" texture_coordinates="NaN" transform_matrix="NaN" type="triangle"/>
+      <object material="difgrey" name="planegrey2" normals="NaN" points="-1000 1000 -1&#xA; 1000 -1000 -1&#xA; 1000 1000 -1" texture_coordinates="NaN" transform_matrix="NaN" type="triangle"/>
+      <object material="difgrey2" name="sphere1" transform_matrix="NaN" type="sphere">
+         <transformations_pre>
+            <transformation_pre type="translate" value="0 4 0"/>
+            <transformation_pre type="uniformscale" value="1"/>
+         </transformations_pre>
+      </object>
+   </objects>
+   <directional_lights>
+      <directional_light colour="5 5 4" name="sun" transform_matrix="NaN">
+         <transformations_pre>
+            <transformation_pre type="uniformscale" value="0.95"/>
+            <transformation_pre type="rotatez" value="-0.7854"/>
+            <transformation_pre type="rotatex" value="-1.1781"/>
+         </transformations_pre>
+      </directional_light>
+   </directional_lights>
+   <skyboxes>
+      <skybox colour="0.75 0.75 0.75" lights="sun" name="grey" type="skybox_flat_sun"/>
+   </skyboxes>
+   <imgbuffers>
+      <imgbuffer name="buffer1" resx="300" resy="200" type="imgbuffer"/>
+   </imgbuffers>
+   <cameras>
+      <camera filename="NaN" fov="0.93084 1.3963" gammaind="1" imgbuffer="1" max_bounces="8" medium_list="air; air" n_iter="Inf" name="camera1" rendermode="accumulation" skybox="1" subpix="1 1" transform_matrix="NaN" type="cam" up="0.31623 0 0.94868"/>
+   </cameras>
+</scene>

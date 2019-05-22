@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<scene mesh_list="sand; water" name="beach">
+   <scatterers>
+      <scatterer name="air_absorber" type="nonabsorber"/>
+      <scatterer absorption_distance="0.5" colour="watercolour" emission="black" emission_distance="0.5" name="water_absorber" scattering_distance="2" type="scatterer"/>
+   </scatterers>
+   <materials>
+      <material colour="white" emission="black" ind="1.001" name="air" priority="0" scattering_fn="air_absorber" type="refractive"/>
+      <material colour="0.9 0.85 0.7" emission="black" name="sand_mat" roughness="0.5" type="diffuse"/>
+      <material colour="white" emission="black" ind="1.33" name="water_mat" priority="10" scattering_fn="water_absorber" type="reflective_refractive"/>
+   </materials>
+   <transform_matrices>
+      <transform_matrix name="beach_matrix" value="NaN"/>
+   </transform_matrices>
+   <mesh_geometries>
+      <mesh_geometry filename=".\assets\sand.obj" name="sand_mesh" type="mesh_geometry"/>
+      <mesh_geometry filename=".\assets\water.obj" name="water_mesh" type="mesh_geometry"/>
+   </mesh_geometries>
+   <objects>
+      <object material="sand_mat" mesh_geometry="sand_mesh" name="sand" transform_matrix="beach_matrix" type="mesh">
+         <transformations_pre>
+            <transformation_pre type="translate" value="0 1 -0.4"/>
+            <transformation_pre type="uniformscale" value="1"/>
+            <transformation_pre type="rotatex" value="1.5708"/>
+            <transformation_pre type="rotatez" value="1.9635"/>
+         </transformations_pre>
+      </object>
+      <object material="water_mat" mesh_geometry="water_mesh" name="water" transform_matrix="beach_matrix" type="mesh"/>
+   </objects>
+   <directional_lights>
+      <directional_light colour="5 5 4" name="sun" transform_matrix="NaN">
+         <transformations_pre>
+            <transformation_pre type="uniformscale" value="0.95"/>
+            <transformation_pre type="rotatez" value="-0.7854"/>
+            <transformation_pre type="rotatex" value="-1.1781"/>
+         </transformations_pre>
+      </directional_light>
+   </directional_lights>
+   <skyboxes>
+      <skybox colour="0.804 0.8825 0.9765" lights="sun" name="day" type="skybox_flat_sun"/>
+   </skyboxes>
+   <imgbuffers>
+      <imgbuffer name="buffer1" resx="300" resy="200" type="imgbuffer"/>
+   </imgbuffers>
+   <cameras>
+      <camera aperture="0.01" filename="NaN" focal_length="1" fov="0.93084 1.3963" gammaind="1" imgbuffer="1" max_bounces="8" medium_list="air; air" n_iter="Inf" name="camera1" rendermode="accumulation" skybox="day" subpix="1 1" transform_matrix="NaN" type="cam_aperture" up="0 0 1"/>
+   </cameras>
+</scene>

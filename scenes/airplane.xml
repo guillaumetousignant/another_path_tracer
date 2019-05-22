@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<scene mesh_list="airplane" name="airplane">
+   <textures>
+      <texture filename=".\assets\A380\b737_800_2_T.tga" name="b737_800_2_T" type="texture"/>
+      <texture filename=".\assets\A380\a380_01.tga" name="a380_01" type="texture"/>
+      <texture filename=".\assets\A380\A380_mw.tga" name="A380_mw" type="texture"/>
+      <texture filename=".\assets\A380\A380_L.tga" name="A380_L" type="texture"/>
+      <texture filename=".\assets\A380\A380_R.tga" name="A380_R" type="texture"/>
+      <texture filename=".\assets\A380\A380_part1.tga" name="A380_part1" type="texture"/>
+      <texture filename=".\assets\A380\A380_part2.tga" name="A380_part2" type="texture"/>
+      <texture filename=".\assets\A380\A380_part3.tga" name="A380_part3" type="texture"/>
+   </textures>
+   <scatterers>
+      <scatterer name="air_absorber" type="nonabsorber"/>
+   </scatterers>
+   <materials>
+      <material colour="white" emission="black" ind="1.001" name="air" priority="0" scattering_fn="air_absorber" type="refractive"/>
+      <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>
+      <material emission="black" name="b737_800_2_t" roughness="1" texture="b737_800_2_T" type="diffuse_tex"/>
+      <material colour="0.24314 0.24314 0.24314" emission="black" name="matte__ffffffff01" roughness="1" type="diffuse"/>
+      <material colour="1 1 1" emission="black" name="Material__57" roughness="1" type="diffuse"/>
+      <material colour="0.16471 0.16471 0.16471" emission="black" name="black" roughness="1" type="diffuse"/>
+      <material emission="black" name="a380_011" roughness="1" texture="a380_01" type="diffuse_tex"/>
+      <material emission="black" name="a380_mw" roughness="1" texture="A380_mw" type="diffuse_tex"/>
+      <material emission="black" name="a380_l_" roughness="1" texture="A380_L" type="diffuse_tex"/>
+      <material emission="black" name="a380_r" roughness="1" texture="A380_R" type="diffuse_tex"/>
+      <material emission="black" name="a380_part1" roughness="1" texture="A380_part1" type="diffuse_tex"/>
+      <material emission="black" name="a380_part2" roughness="1" texture="A380_part2" type="diffuse_tex"/>
+      <material emission="black" name="a380_part3" roughness="1" texture="A380_part3" type="diffuse_tex"/>
+      <material materials_list="b737_800_2_t; b737_800_2_t; matte__ffffffff01; Material__57; b737_800_2_t; matte__ffffffff01; Material__57; black; black; a380_01; black; black; a380_01; a380_01; a380_01; a380_01; a380_01; a380_01; a380_01; black" materials_names="b737_800_2_t2SG; b737_800_2_tSG; matte__ffffffff02SG; Material__57; b737_800_2_t1SG; matte__ffffffff01SG; Material__68; blackSG; black2SG; a380_02SG; Material__46; black1SG; a380_01SG; a380_mwSG; a380_l_SG; a380_rSG; a380_part1SG; a380_part2SG; a380_part3SG; Material__35" name="airplane_mat" type="aggregate"/>
+      <material colour="white" emission="black" name="coating" type="reflective"/>
+      <material ind="1.5" material_reflected="coating" material_refracted="a380_011" name="a380_01" type="fresnelmix"/>
+   </materials>
+   <mesh_geometries>
+      <mesh_geometry filename=".\assets\A380\A380_test3.obj" name="airplane_mesh" type="mesh_geometry"/>
+   </mesh_geometries>
+   <objects>
+      <object material="difgrey" name="planegrey1" normals="NaN" points="-2 4 -0.5&#xA;-2 0 -0.5&#xA; 2 0 -0.5" texture_coordinates="NaN" transform_matrix="NaN" type="triangle"/>
+      <object material="difgrey" name="planegrey2" normals="NaN" points="-2 4 -0.5&#xA; 2 0 -0.5&#xA; 2 4 -0.5" texture_coordinates="NaN" transform_matrix="NaN" type="triangle"/>
+      <object material="airplane_mat" mesh_geometry="airplane_mesh" name="airplane" transform_matrix="NaN" type="mesh">
+         <transformations_pre>
+            <transformation_pre type="translate" value="0.1 4 -0.5"/>
+            <transformation_pre type="uniformscale" value="0.09"/>
+            <transformation_pre type="rotatex" value="1.5708"/>
+            <transformation_pre type="rotatez" value="3.5343"/>
+         </transformations_pre>
+      </object>
+   </objects>
+   <directional_lights>
+      <directional_light colour="5 5 4" name="sun" transform_matrix="NaN">
+         <transformations_pre>
+            <transformation_pre type="uniformscale" value="0.95"/>
+            <transformation_pre type="rotatez" value="-0.7854"/>
+            <transformation_pre type="rotatex" value="-1.1781"/>
+         </transformations_pre>
+      </directional_light>
+   </directional_lights>
+   <skyboxes>
+      <skybox colour="0.804 0.8825 0.9765" lights="sun" name="day" type="skybox_flat_sun"/>
+   </skyboxes>
+   <imgbuffers>
+      <imgbuffer name="buffer1" resx="1920" resy="1080" type="imgbuffer"/>
+   </imgbuffers>
+   <cameras>
+      <camera aperture="0.005" filename="NaN" focal_length="3.5" fov="0.7854 1.3963" gammaind="1" imgbuffer="1" max_bounces="8" medium_list="air; air" n_iter="Inf" name="camera1" rendermode="accumulation" skybox="day" subpix="1 1" transform_matrix="NaN" type="cam_aperture" up="0 0 1"/>
+   </cameras>
+</scene>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<scene name="default" primitive_list="spherepurple, mirror, light, sphereglass, ground">
+   <scatterers>
+      <scatterer name="air_absorber" type="nonabsorber"/>
+      <scatterer absorption_distance="32" colour="turquoise" emission="black" emission_distance="100" name="glass_absorber" type="absorber"/>
+   </scatterers>
+   <materials>
+      <material colour="white" emission="black" ind="1.001" name="air" priority="0" scattering_fn="air_absorber" type="refractive"/>
+      <material colour="purple" emission="black" name="difpurple" roughness="1" type="diffuse"/>
+      <material colour="white" emission="2 2 2" name="diflight" roughness="1" type="diffuse"/>
+      <material colour="green" emission="black" name="difgreen" roughness="1" type="diffuse"/>
+      <material colour="yellow" emission="black" name="ref1" type="reflective"/>
+      <material colour="white" emission="black" ind="1.5" name="glass" priority="10" scattering_fn="glass_absorber" type="reflective_refractive"/>
+   </materials>
+   <objects>
+      <object material="difpurple" name="spherepurple" transform_matrix="NaN" type="sphere">
+         <transformations_pre>
+            <transformation_pre type="translate" value="1 2 0.5"/>
+            <transformation_pre type="uniformscale" value="0.5"/>
+         </transformations_pre>
+      </object>
+      <object material="ref1" name="mirror" transform_matrix="NaN" type="sphere">
+         <transformations_pre>
+            <transformation_pre type="translate" value="-1.5 4 -0.8"/>
+            <transformation_pre type="uniformscale" value="1.5"/>
+         </transformations_pre>
+      </object>
+      <object material="diflight" name="light" transform_matrix="NaN" type="sphere">
+         <transformations_pre>
+            <transformation_pre type="translate" value="0 3 0.8"/>
+            <transformation_pre type="uniformscale" value="0.75"/>
+         </transformations_pre>
+      </object>
+      <object material="glass" name="sphereglass" transform_matrix="NaN" type="sphere">
+         <transformations_pre>
+            <transformation_pre type="translate" value="0.5 2 0.2"/>
+            <transformation_pre type="uniformscale" value="0.4"/>
+         </transformations_pre>
+      </object>
+      <object material="difgreen" name="ground" transform_matrix="NaN" type="sphere">
+         <transformations_pre>
+            <transformation_pre type="translate" value="0 0 -101"/>
+            <transformation_pre type="uniformscale" value="100"/>
+         </transformations_pre>
+      </object>
+   </objects>
+   <directional_lights>
+      <directional_light colour="5 5 4" name="sun" transform_matrix="NaN">
+         <transformations_pre>
+            <transformation_pre type="uniformscale" value="0.95"/>
+            <transformation_pre type="rotatez" value="-0.7854"/>
+            <transformation_pre type="rotatex" value="-1.1781"/>
+         </transformations_pre>
+      </directional_light>
+   </directional_lights>
+   <skyboxes>
+      <skybox colour="0.75 0.75 0.75" lights="sun" name="grey" type="skybox_flat_sun"/>
+   </skyboxes>
+   <imgbuffers>
+      <imgbuffer name="buffer1" resx="300" resy="200" type="imgbuffer"/>
+   </imgbuffers>
+   <cameras>
+      <camera filename="NaN" fov="0.93084 1.3963" gammaind="1" imgbuffer="1" max_bounces="8" medium_list="air; air" n_iter="Inf" name="camera1" rendermode="accumulation" skybox="1" subpix="1 1" transform_matrix="NaN" type="cam" up="0 0 1"/>
+   </cameras>
+</scene>
