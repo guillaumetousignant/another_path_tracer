@@ -4,7 +4,7 @@
 #include <cmath>
 #include <chrono>
 #include <algorithm>
-#include <iostream> // REMOVE
+#include <iostream>
 #include "tinyxml2.h"
 #include "Vec3f.h"
 #include "Colours.h"
@@ -273,9 +273,10 @@ namespace rendering{
 void read_scene(const std::string &xml_filename){
     bool use_GL = true;
 
+    tinyxml2::XMLDocument xml_scene;
+	xml_scene.LoadFile(xml_filename.c_str());
 
-
-
+    
 
 
 
