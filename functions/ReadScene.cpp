@@ -64,207 +64,209 @@
 #define GL_CLAMP_TO_EDGE 0x812F
 #endif
 
-Camera_t* thecamera = nullptr;
-Scene_t* thescene = nullptr;
-ImgBufferOpenGL_t* imgbuffer_GL = nullptr;
-double width = 0;
-double height = 0;
-int right_x_pos = 0;
-int right_y_pos = 0;
-int left_x_pos = 0;
-int left_y_pos = 0;
-int middle_x_pos = 0;
-int middle_y_pos = 0;
-bool right_clicked = false;
-bool left_clicked = false;
-bool middle_clicked = false;
-int n_iter_gl = 0;
-Vec3f focus_point = Vec3f();
-double camera_dist = 5;
-bool updated = false;
+namespace rendering{
+    Camera_t* thecamera = nullptr;
+    Scene_t* thescene = nullptr;
+    ImgBufferOpenGL_t* imgbuffer_GL = nullptr;
+    double width = 0;
+    double height = 0;
+    int right_x_pos = 0;
+    int right_y_pos = 0;
+    int left_x_pos = 0;
+    int left_y_pos = 0;
+    int middle_x_pos = 0;
+    int middle_y_pos = 0;
+    bool right_clicked = false;
+    bool left_clicked = false;
+    bool middle_clicked = false;
+    int n_iter_gl = 0;
+    Vec3f focus_point = Vec3f();
+    double camera_dist = 5;
+    bool updated = false;
 
-void dummy_disp(){}
+    void dummy_disp(){}
 
-void raytrace(){
-    if (updated){
-        TransformMatrix_t transform_norm = thecamera->transformation_->transformDir();
-        Vec3f newdir = transform_norm.multDir(Vec3f(0.0, 1.0, 0.0));
-        thecamera->transformation_->translate(focus_point - newdir * camera_dist - thecamera->origin_);
-       
+    void raytrace(){
+        if (updated){
+            TransformMatrix_t transform_norm = thecamera->transformation_->transformDir();
+            Vec3f newdir = transform_norm.multDir(Vec3f(0.0, 1.0, 0.0));
+            thecamera->transformation_->translate(focus_point - newdir * camera_dist - thecamera->origin_);
+        
+            updated = false;
+            thecamera->update();     
+            thecamera->reset();
+            n_iter_gl = 0;
+        }
+        n_iter_gl++;
+        //auto t_start = std::chrono::high_resolution_clock::now();
+        thecamera->raytrace(thescene);
+        //auto t_end = std::chrono::high_resolution_clock::now();
+
+        /*std::cout << "Iteration " << n_iter_gl << " done in " 
+            << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
+            << "s." << std::endl;*/
         updated = false;
-        thecamera->update();     
+        glutPostRedisplay(); // REMOVE but makes it work, soooooooo...
+    }
+
+    void resetDisplay(void){
         thecamera->reset();
         n_iter_gl = 0;
     }
-    n_iter_gl++;
-    //auto t_start = std::chrono::high_resolution_clock::now();
-    thecamera->raytrace(thescene);
-    //auto t_end = std::chrono::high_resolution_clock::now();
 
-    /*std::cout << "Iteration " << n_iter_gl << " done in " 
-        << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
-        << "s." << std::endl;*/
-    updated = false;
-    glutPostRedisplay(); // REMOVE but makes it work, soooooooo...
-}
-
-void resetDisplay(void){
-    thecamera->reset();
-    n_iter_gl = 0;
-}
-
-void mouse_movement(int x, int y){
-    //Vec3f newdir = thecamera->direction_;
-    if (middle_clicked){
-        double differential_x = double(x - middle_x_pos)/double(width);
-        double differential_y = double(y - middle_y_pos)/double(height);
-        middle_x_pos = x;
-        middle_y_pos = y;
-
-        Vec3f horizontal = thecamera->direction_.cross(thecamera->up_);
-        Vec3f vertical = horizontal.cross(thecamera->direction_);
-
-        focus_point += horizontal * -differential_x * camera_dist + vertical * differential_y * camera_dist;
-    }
-    if (left_clicked){
-        //double differential_x = double(x - left_x_pos)/double(width);
-        double differential_y = double(y - left_y_pos)/double(height);
-        left_x_pos = x;
-        left_y_pos = y;
-
-        camera_dist *= std::pow(2.0, -differential_y);
-    }
-    if (right_clicked){
-        double differential_x = double(x - right_x_pos)/double(width);
-        double differential_y = double(y - right_y_pos)/double(height);
-        right_x_pos = x;
-        right_y_pos = y;
-
-        Vec3f horizontal = thecamera->direction_.cross(thecamera->up_);
-        Vec3f vertical = horizontal.cross(thecamera->direction_);
-
-        thecamera->transformation_->rotate(horizontal, differential_y/thecamera->fov_[0]);
-        thecamera->transformation_->rotate(vertical, differential_x/thecamera->fov_[1]);
-
-        //TransformMatrix_t transform_norm = thecamera->transformation_->transformDir();
-        //newdir = transform_norm.multDir(Vec3f(0.0, 1.0, 0.0));
-    }
-
-    //Vec3f diff = focus_point - newdir * camera_dist - thecamera->origin_;
-    //thecamera->transformation_->translate(diff);
-    updated = true;
-}
-
-void mouse_click(int button, int state, int x, int y){
-    switch (button)
-    {
-    case GLUT_LEFT_BUTTON:
-        if(state == GLUT_DOWN)
-        {            
-            left_clicked = true;
-            left_x_pos = x;
-            left_y_pos = y;
-        }
-        else if(state == GLUT_UP){
-            left_clicked = false;
-        }
-        break;
-
-    case GLUT_MIDDLE_BUTTON:
-        if(state == GLUT_DOWN)
-        {            
-            middle_clicked = true;
+    void mouse_movement(int x, int y){
+        //Vec3f newdir = thecamera->direction_;
+        if (middle_clicked){
+            double differential_x = double(x - middle_x_pos)/double(width);
+            double differential_y = double(y - middle_y_pos)/double(height);
             middle_x_pos = x;
             middle_y_pos = y;
-        }
-        else if(state == GLUT_UP){
-            middle_clicked = false;
-        }
-        break;
 
-    case GLUT_RIGHT_BUTTON:
-        if(state == GLUT_DOWN)
-        {            
-            right_clicked = true;
+            Vec3f horizontal = thecamera->direction_.cross(thecamera->up_);
+            Vec3f vertical = horizontal.cross(thecamera->direction_);
+
+            focus_point += horizontal * -differential_x * camera_dist + vertical * differential_y * camera_dist;
+        }
+        if (left_clicked){
+            //double differential_x = double(x - left_x_pos)/double(width);
+            double differential_y = double(y - left_y_pos)/double(height);
+            left_x_pos = x;
+            left_y_pos = y;
+
+            camera_dist *= std::pow(2.0, -differential_y);
+        }
+        if (right_clicked){
+            double differential_x = double(x - right_x_pos)/double(width);
+            double differential_y = double(y - right_y_pos)/double(height);
             right_x_pos = x;
             right_y_pos = y;
+
+            Vec3f horizontal = thecamera->direction_.cross(thecamera->up_);
+            Vec3f vertical = horizontal.cross(thecamera->direction_);
+
+            thecamera->transformation_->rotate(horizontal, differential_y/thecamera->fov_[0]);
+            thecamera->transformation_->rotate(vertical, differential_x/thecamera->fov_[1]);
+
+            //TransformMatrix_t transform_norm = thecamera->transformation_->transformDir();
+            //newdir = transform_norm.multDir(Vec3f(0.0, 1.0, 0.0));
         }
-        else if(state == GLUT_UP){
-            right_clicked = false;
-        }
-        break;
-    }
-}
 
-void keyboard_paused(unsigned char key, int x, int y);
-void keyboard(unsigned char key, int x, int y){
-    auto t_start_write = std::chrono::high_resolution_clock::now(); // why is this needed?
-    auto t_end_write = t_start_write;
-    double position[2];
-    
-    switch (key){
-    case 's':
-        std::cout << "Writing started at " << n_iter_gl << " iterations." << std::endl;
-        t_start_write = std::chrono::high_resolution_clock::now();
-        thecamera->write();
-        t_end_write = std::chrono::high_resolution_clock::now();
-
-        std::cout << "Writing done in "
-        << std::chrono::duration<double, std::milli>(t_end_write-t_start_write).count()/1000.0 
-        << "s." << std::endl;
-        break;
-
-    case 'f':
-        position[0] = std::min(std::max(double(x)/double(width), 0.0), 1.0);
-        position[1] = std::min(std::max(double(y)/double(height), 0.0), 1.0);
-        thecamera->autoFocus(thescene, position);
+        //Vec3f diff = focus_point - newdir * camera_dist - thecamera->origin_;
+        //thecamera->transformation_->translate(diff);
         updated = true;
-        break;
-
-    case 'q':
-        glutDestroyWindow(0);
-        exit(0);
-        break;
-
-    case 'p':
-        std::cout << "Paused at " << n_iter_gl << " iterations." << std::endl;
-        glutDisplayFunc(dummy_disp);
-        glutMouseFunc(nullptr);
-        glutMotionFunc(nullptr);
-        glutKeyboardFunc(keyboard_paused);
-        break;
     }
-}
 
-void keyboard_paused(unsigned char key, int x, int y){
-    auto t_start_write = std::chrono::high_resolution_clock::now(); // why is this needed?
-    auto t_end_write = t_start_write;
+    void mouse_click(int button, int state, int x, int y){
+        switch (button)
+        {
+        case GLUT_LEFT_BUTTON:
+            if(state == GLUT_DOWN)
+            {            
+                left_clicked = true;
+                left_x_pos = x;
+                left_y_pos = y;
+            }
+            else if(state == GLUT_UP){
+                left_clicked = false;
+            }
+            break;
 
-    switch (key){
+        case GLUT_MIDDLE_BUTTON:
+            if(state == GLUT_DOWN)
+            {            
+                middle_clicked = true;
+                middle_x_pos = x;
+                middle_y_pos = y;
+            }
+            else if(state == GLUT_UP){
+                middle_clicked = false;
+            }
+            break;
+
+        case GLUT_RIGHT_BUTTON:
+            if(state == GLUT_DOWN)
+            {            
+                right_clicked = true;
+                right_x_pos = x;
+                right_y_pos = y;
+            }
+            else if(state == GLUT_UP){
+                right_clicked = false;
+            }
+            break;
+        }
+    }
+
+    void keyboard_paused(unsigned char key, int x, int y);
+    void keyboard(unsigned char key, int x, int y){
+        auto t_start_write = std::chrono::high_resolution_clock::now(); // why is this needed?
+        auto t_end_write = t_start_write;
+        double position[2];
+        
+        switch (key){
         case 's':
-        std::cout << "Writing started. " << n_iter_gl << " iterations." << std::endl;
-        t_start_write = std::chrono::high_resolution_clock::now();
-        thecamera->write();
-        t_end_write = std::chrono::high_resolution_clock::now();
+            std::cout << "Writing started at " << n_iter_gl << " iterations." << std::endl;
+            t_start_write = std::chrono::high_resolution_clock::now();
+            thecamera->write();
+            t_end_write = std::chrono::high_resolution_clock::now();
 
-        std::cout << "Writing done in "
-        << std::chrono::duration<double, std::milli>(t_end_write-t_start_write).count()/1000.0 
-        << "s." << std::endl;
-        break;
+            std::cout << "Writing done in "
+            << std::chrono::duration<double, std::milli>(t_end_write-t_start_write).count()/1000.0 
+            << "s." << std::endl;
+            break;
 
-    case 'q':
-        glutDestroyWindow(0);
-        exit(0);
-        break;
+        case 'f':
+            position[0] = std::min(std::max(double(x)/double(width), 0.0), 1.0);
+            position[1] = std::min(std::max(double(y)/double(height), 0.0), 1.0);
+            thecamera->autoFocus(thescene, position);
+            updated = true;
+            break;
 
-    case 'p':
-        std::cout << "Unpaused" << std::endl;
-        glutDisplayFunc(raytrace);
-        glutMouseFunc(mouse_click);
-        glutMotionFunc(mouse_movement);
-        glutKeyboardFunc(keyboard);
-        glutPostRedisplay();
-        break;
+        case 'q':
+            glutDestroyWindow(0);
+            exit(0);
+            break;
+
+        case 'p':
+            std::cout << "Paused at " << n_iter_gl << " iterations." << std::endl;
+            glutDisplayFunc(dummy_disp);
+            glutMouseFunc(nullptr);
+            glutMotionFunc(nullptr);
+            glutKeyboardFunc(keyboard_paused);
+            break;
+        }
+    }
+
+    void keyboard_paused(unsigned char key, int x, int y){
+        auto t_start_write = std::chrono::high_resolution_clock::now(); // why is this needed?
+        auto t_end_write = t_start_write;
+
+        switch (key){
+            case 's':
+            std::cout << "Writing started. " << n_iter_gl << " iterations." << std::endl;
+            t_start_write = std::chrono::high_resolution_clock::now();
+            thecamera->write();
+            t_end_write = std::chrono::high_resolution_clock::now();
+
+            std::cout << "Writing done in "
+            << std::chrono::duration<double, std::milli>(t_end_write-t_start_write).count()/1000.0 
+            << "s." << std::endl;
+            break;
+
+        case 'q':
+            glutDestroyWindow(0);
+            exit(0);
+            break;
+
+        case 'p':
+            std::cout << "Unpaused" << std::endl;
+            glutDisplayFunc(raytrace);
+            glutMouseFunc(mouse_click);
+            glutMotionFunc(mouse_movement);
+            glutKeyboardFunc(keyboard);
+            glutPostRedisplay();
+            break;
+        }
     }
 }
 
@@ -392,7 +394,7 @@ void read_scene(const std::string &xml_filename){
 
     t_start = std::chrono::high_resolution_clock::now();
     Scene_t* scene = new Scene_t();
-    thescene = scene;
+    rendering::thescene = scene;
     //scene->add(spherepurple);
     //scene->add(mirror);
     //scene->add(light);
@@ -455,8 +457,8 @@ void read_scene(const std::string &xml_filename){
         }
     }*/
 
-    width = res_x;
-    height = res_y;
+    rendering::width = res_x;
+    rendering::height = res_y;
     double fov[2];
     fov[1] = 80.0 * PI /180.0; 
     fov[0] = fov[1] * res_y/res_x;
@@ -483,8 +485,8 @@ void read_scene(const std::string &xml_filename){
         imgbuffer = new ImgBuffer_t(res_x, res_y);
     }
     else{
-        imgbuffer_GL = new ImgBufferOpenGL_t(res_x, res_y);
-        imgbuffer = imgbuffer_GL;
+        rendering::imgbuffer_GL = new ImgBufferOpenGL_t(res_x, res_y);
+        imgbuffer = rendering::imgbuffer_GL;
     }
     ImgBuffer_t* imgbuffer_L = new ImgBuffer_t(res_x, res_y);
     ImgBuffer_t* imgbuffer_R = new ImgBuffer_t(res_x, res_y);
@@ -494,12 +496,12 @@ void read_scene(const std::string &xml_filename){
     medium_list.assign(2, air);
 
     Cam3DMotionblurAperture_t* cam = new Cam3DMotionblurAperture_t(transform_camera, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer, imgbuffer_L, imgbuffer_R, eye_dist, medium_list, skybox, maxbounces, focal_length, aperture, time, 1.0);
-    thecamera = cam;
+    rendering::thecamera = cam;
     cam->transformation_->translate(Vec3f(0.0, -2, 0.0));
     cam->update();
     cam->update();
 
-    camera_dist = (Vec3f(0.0, 0.0, 0.0) - cam->origin_).magnitude();
+    rendering::camera_dist = (Vec3f(0.0, 0.0, 0.0) - cam->origin_).magnitude();
 
     if (!use_GL){
         cam->accumulateWrite(scene, 10000, 100);
@@ -513,13 +515,13 @@ void read_scene(const std::string &xml_filename){
         glutInitWindowSize(res_x, res_y);
         glutInitWindowPosition(10,10);
         glutCreateWindow(gl_argv[0]);
-        glutDisplayFunc(raytrace);
-        glutMouseFunc(mouse_click);
-        glutMotionFunc(mouse_movement);
-        glutKeyboardFunc(keyboard);
+        glutDisplayFunc(rendering::raytrace);
+        glutMouseFunc(rendering::mouse_click);
+        glutMotionFunc(rendering::mouse_movement);
+        glutKeyboardFunc(rendering::keyboard);
 
-        glGenTextures(1, &(imgbuffer_GL->tex_));
-        glBindTexture(GL_TEXTURE_2D, imgbuffer_GL->tex_);
+        glGenTextures(1, &(rendering::imgbuffer_GL->tex_));
+        glBindTexture(GL_TEXTURE_2D, rendering::imgbuffer_GL->tex_);
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
