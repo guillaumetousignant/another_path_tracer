@@ -131,6 +131,38 @@ Vec3f Vec3f::cross(const Vec3f &other) const {
                  v[2] * other.v[0] - v[0] * other.v[2],
                  v[0] * other.v[1] - v[1] * other.v[0]);
 } 
+const Vec3f &Vec3f::to_sph(){
+    double temp = std::move(v[2]);
+    v[2] = std::atan2(v[1], v[0]);
+    v[0] = magnitude();
+    v[1] = std::acos(v[2]/v[0]);
+    return *this;
+}
+const Vec3f &Vec3f::to_xyz(){
+    double temp = std::move(v[2]);
+    v[2] = v[0]*std::cos(v[1]);
+    double temp2 = std::move(v[1]);
+    v[1] = v[0]*std::sin(temp2)*std::sin(temp);
+    v[0] *= std::sin(temp2)*std::cos(temp);
+    return *this;
+}
+const Vec3f &Vec3f::to_xyz_offset(const Vec3f &ref1, const Vec3f &ref2, const Vec3f &ref3){
+    Vec3f temp = Vec3f(v[0]*std::sin(v[1])*std::cos(v[2]), v[0]*std::sin(v[1])*std::sin(v[2]),  v[0]*std::cos(v[1])); // CHECK could be better
+    v[0] = ref1[0] * temp[0] + ref2[0] * temp[1] + ref3[0] * temp[2];
+    v[1] = ref1[1] * temp[0] + ref2[1] * temp[1] + ref3[1] * temp[2];
+    v[2] = ref1[2] * temp[0] + ref2[2] * temp[1] + ref3[2] * temp[2];
+    return *this;
+}
+Vec3f Vec3f::get_sph() const {
+    double r = magnitude();
+    return Vec3f(r, std::acos(v[2]/r), std::atan2(v[1], v[0])); //CHECK acos might return NANs?
+}
+Vec3f Vec3f::get_xyz() const {
+    return Vec3f(v[0]*std::sin(v[1])*std::cos(v[2]), v[0]*std::sin(v[1])*std::sin(v[2]), v[0]*std::cos(v[1]));
+}
+Vec3f Vec3f::get_xyz_offset(const Vec3f &ref1, const Vec3f &ref2, const Vec3f &ref3) const {
+    return ref1 * v[0]*std::sin(v[1])*std::cos(v[2]) + ref2 * v[0]*std::sin(v[1])*std::sin(v[2]) + ref3 * v[0]*std::cos(v[1]);
+}
 Vec3f Vec3f::ln() const {
     return Vec3f(std::log(v[0]), std::log(v[1]), std::log(v[2]));
 }

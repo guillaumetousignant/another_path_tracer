@@ -42,6 +42,12 @@ class Vec3f {
         Vec3f normalize() const;
         double dot(const Vec3f &other) const;
         Vec3f cross(const Vec3f &other) const;
+        const Vec3f &to_sph();
+        const Vec3f &to_xyz();
+        const Vec3f &to_xyz_offset(const Vec3f &ref1, const Vec3f &ref2, const Vec3f &ref3);
+        Vec3f get_sph() const;
+        Vec3f get_xyz() const;
+        Vec3f get_xyz_offset(const Vec3f &ref1, const Vec3f &ref2, const Vec3f &ref3) const;
         Vec3f ln() const;
         Vec3f sqrt() const;
         Vec3f exp() const;
