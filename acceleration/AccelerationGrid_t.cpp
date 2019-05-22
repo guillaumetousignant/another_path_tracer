@@ -3,7 +3,7 @@
 #include "GridCell_t.h"
 #include "Box_t.h"
 #include <limits>
-#include <math.h>
+#include <cmath>
 
 #define GRIDMINRES 1
 #define GRIDMAXRES 128

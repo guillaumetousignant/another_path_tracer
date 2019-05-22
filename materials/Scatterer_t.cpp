@@ -1,5 +1,5 @@
 #include "Scatterer_t.h"
-#include <math.h>
+#include <cmath>
 #include "RandomGenerator_t.h"
 
 #define PI 3.141592653589793238463

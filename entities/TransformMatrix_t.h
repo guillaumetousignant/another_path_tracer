@@ -2,7 +2,7 @@
 #define TRANSFORMMATRIX_T_H
 
 #include "Vec3f.h"
-#include <math.h>
+#include <cmath>
 
 class TransformMatrix_t{
     public:

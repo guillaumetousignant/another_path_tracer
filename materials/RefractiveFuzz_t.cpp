@@ -1,7 +1,7 @@
 #include "RefractiveFuzz_t.h"
 #include "Shape_t.h"
 #include "RandomGenerator_t.h"
-#include <math.h>
+#include <cmath>
 
 #define EPSILON 0.00000001
 #define PI 3.141592653589793238463

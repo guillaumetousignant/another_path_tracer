@@ -1,7 +1,7 @@
 #include "FresnelMixIn_t.h"
 #include "Shape_t.h"
 #include "Medium_t.h"
-#include <math.h> 
+#include <cmath> 
 #include "RandomGenerator_t.h"
 #include "Material_t.h"
 

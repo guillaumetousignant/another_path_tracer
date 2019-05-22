@@ -1,7 +1,7 @@
 #include "TriangleMesh_t.h"
 #include "TransformMatrix_t.h"
 #include "Material_t.h"
-#include <math.h>
+#include <cmath>
 #include <limits>
 #include <algorithm>
 #include "MeshGeometry_t.h"

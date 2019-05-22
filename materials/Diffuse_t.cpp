@@ -1,6 +1,6 @@
 #include "Diffuse_t.h"
 #include "Shape_t.h"
-#include <math.h>
+#include <cmath>
 #include "RandomGenerator_t.h"
 
 #define EPSILON 0.00001 // was 0.00001, 0.01 works ok when *t

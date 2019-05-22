@@ -1,7 +1,7 @@
 #include "Sphere_t.h"
 #include "TransformMatrix_t.h"
 #include "Material_t.h"
-#include <math.h>
+#include <cmath>
 #include <limits>
 
 #define PI 3.141592653589793238463
