@@ -135,7 +135,7 @@ const Vec3f &Vec3f::to_sph(){
     double temp = std::move(v[2]);
     v[2] = std::atan2(v[1], v[0]);
     v[0] = magnitude();
-    v[1] = std::acos(v[2]/v[0]);
+    v[1] = std::acos(temp/v[0]);
     return *this;
 }
 const Vec3f &Vec3f::to_xyz(){

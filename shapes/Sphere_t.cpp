@@ -3,7 +3,6 @@
 #include "Material_t.h"
 #include <math.h>
 #include <limits>
-#include "Referentials.h"
 
 #define PI 3.141592653589793238463
 
@@ -11,10 +10,8 @@ Sphere_t::Sphere_t(Material_t *material, TransformMatrix_t *transform_matrix): S
     origin_ = transformation_->multVec(Vec3f(0.0, 0.0, 0.0));
     radius_ = transformation_->getScale(); 
     TransformMatrix_t transform_norm = transformation_->transformDir();
-    Vec3f direction = transform_norm.multDir(Vec3f(0.0, 0.0, 1.0)); 
-    Vec3f direction2 = transform_norm.multDir(Vec3f(1.0, 0.0, 1.0));
-    direction = to_sph(direction);
-    direction2 = to_sph(direction2);
+    Vec3f direction = transform_norm.multDir(Vec3f(0.0, 0.0, 1.0)).to_sph(); 
+    Vec3f direction2 = transform_norm.multDir(Vec3f(1.0, 0.0, 1.0)).to_sph();
     direction_sph_ = Vec3f(1.0, direction[1], direction2[2]);
 }
 
@@ -24,10 +21,8 @@ void Sphere_t::update(){
     origin_ = transformation_->multVec(Vec3f(0.0, 0.0, 0.0));
     radius_ = transformation_->getScale();
     TransformMatrix_t transform_norm = transformation_->transformDir();
-    Vec3f direction = transform_norm.multDir(Vec3f(0.0, 0.0, 1.0)); 
-    Vec3f direction2 = transform_norm.multDir(Vec3f(1.0, 0.0, 1.0));
-    direction = to_sph(direction);
-    direction2 = to_sph(direction2);
+    Vec3f direction = transform_norm.multDir(Vec3f(0.0, 0.0, 1.0)).to_sph(); 
+    Vec3f direction2 = transform_norm.multDir(Vec3f(1.0, 0.0, 1.0)).to_sph();
     direction_sph_ = Vec3f(1.0, direction[1], direction2[2]);
 }
 
@@ -65,16 +60,16 @@ void Sphere_t::intersection(const Ray_t &ray, bool &intersected, double &t, doub
     }
 
     intersected = true;
-    sph = to_sph(ray.direction_ * t - to_center);
+    sph = (ray.direction_ * t - to_center).to_sph();
     uv[0] = sph[2]/(2.0 * PI) + 0.5;
     uv[1] = 1.0 - sph[1]/PI;
 }
 
 void Sphere_t::normaluv(const Ray_t &ray, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec) const {
     Vec3f sph = Vec3f(1.0, (1.0 - uv[1]) * PI, (uv[0] - 0.5) * 2.0 * PI);
-    normalvec = to_xyz(sph);
+    normalvec = sph.get_xyz();
 
-    sph = to_sph(normalvec) - direction_sph_;
+    sph = normalvec.get_sph() - direction_sph_;
 
     // CHECK change
     if (sph[1] < 0.0){
@@ -99,8 +94,7 @@ void Sphere_t::normaluv(const Ray_t &ray, const double (&uv)[2], double (&tuv)[2
 }
 
 void Sphere_t::normal(const Ray_t &ray, const double (&uv)[2], Vec3f &normalvec) const {
-    Vec3f sph = Vec3f(1.0, (1.0 - uv[1]) * PI, (uv[0] - 0.5) * 2.0 * PI);
-    normalvec = to_xyz(sph);
+    normalvec = Vec3f(1.0, (1.0 - uv[1]) * PI, (uv[0] - 0.5) * 2.0 * PI).to_xyz();
 }
 
 Vec3f Sphere_t::mincoord() const {

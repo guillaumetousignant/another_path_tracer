@@ -3,7 +3,6 @@
 #include "Material_t.h"
 #include <math.h>
 #include <limits>
-#include "Referentials.h"
 #include <algorithm>
 
 #define PI 3.141592653589793238463

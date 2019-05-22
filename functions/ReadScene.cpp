@@ -65,6 +65,7 @@
 
 Camera_t* thecamera = nullptr;
 Scene_t* thescene = nullptr;
+ImgBufferOpenGL_t* imgbuffer_GL = nullptr;
 double width = 0;
 double height = 0;
 int right_x_pos = 0;
@@ -267,6 +268,15 @@ void keyboard_paused(unsigned char key, int x, int y){
 }
 
 void read_scene(const std::string &xml_filename){
+    bool use_GL = true;
+
+
+
+
+
+
+
+
 
 
 
@@ -468,7 +478,6 @@ void read_scene(const std::string &xml_filename){
     SkyboxFlatSun_t* skybox = new SkyboxFlatSun_t(Vec3f(0.85, 0.85, 0.98), dirlight);
 
     ImgBuffer_t* imgbuffer = nullptr;
-    ImgBufferOpenGL_t* imgbuffer_GL = nullptr;
     if (no_GL){
         imgbuffer = new ImgBuffer_t(res_x, res_y);
     }
@@ -491,7 +500,7 @@ void read_scene(const std::string &xml_filename){
 
     camera_dist = (Vec3f(0.0, 0.0, 0.0) - cam->origin_).magnitude();
 
-    if (no_GL){
+    if (!use_GL){
         cam->accumulateWrite(scene, 10000, 100);
     }
     else{

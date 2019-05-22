@@ -3,7 +3,6 @@
 #include "Texture_t.h"
 #include <math.h>
 #include "RandomGenerator_t.h"
-#include "Referentials.h"
 
 #define EPSILON 0.00000001
 #define PI 3.141592653589793238463

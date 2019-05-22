@@ -5,7 +5,6 @@
 #include "Scene_t.h"
 #include "Medium_t.h"
 #include "ImgBuffer_t.h"
-#include "Referentials.h"
 #include "RandomGenerator_t.h"
 
 #define PI 3.141592653589793238463
@@ -143,9 +142,9 @@ void Cam3DMotionblurAperture_t::autoFocus(const Scene_t* scene, const double (&p
     double t = std::numeric_limits<double>::infinity();
     double uv[2];
 
-    ray_direction_sph = to_sph(direction_) + Vec3f(0, (position[1]-0.5)*fov_[0], (position[0]-0.5)*-fov_[1]); // 0, y, x
+    ray_direction_sph = direction_.get_sph() + Vec3f(0, (position[1]-0.5)*fov_[0], (position[0]-0.5)*-fov_[1]); // 0, y, x
 
-    Ray_t focus_ray = Ray_t(origin_, to_xyz(ray_direction_sph), Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list_);
+    Ray_t focus_ray = Ray_t(origin_, ray_direction_sph.to_xyz(), Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list_);
 
     scene->intersect(focus_ray, hit_obj, t, uv);
 

@@ -3,7 +3,6 @@
 #include "Material_t.h"
 #include <math.h>
 #include <limits>
-#include "Referentials.h"
 #include <algorithm>
 #include "MeshGeometry_t.h"
 

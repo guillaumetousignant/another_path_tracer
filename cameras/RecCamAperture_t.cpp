@@ -4,7 +4,6 @@
 #include "Scene_t.h"
 #include "Medium_t.h"
 #include "ImgBuffer_t.h"
-#include "Referentials.h"
 #include "RandomGenerator_t.h"
 #include <cmath>
 #include <limits>
