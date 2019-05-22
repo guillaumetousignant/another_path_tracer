@@ -7,6 +7,7 @@
 #include <iostream> // REMOVE
 #include "tinyxml2.h"
 #include "Vec3f.h"
+#include "Colours.h"
 
 #include "Diffuse_t.h"
 #include "DiffuseTex_t.h"
