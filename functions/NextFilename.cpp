@@ -3,6 +3,11 @@
 #include <iomanip>
 #include <fstream>
 
+bool exists_test (const std::string& name) {
+    std::ifstream f(name.c_str());
+    return f.good();
+}
+
 std::string next_filename(const std::string &prefix) {
     size_t point;
     std::string name, extension;
@@ -13,7 +18,7 @@ std::string next_filename(const std::string &prefix) {
 
     if (point != std::string::npos){
         name = prefix.substr(0, point);
-        extension = filename.substr(point);
+        extension = prefix.substr(point);
     }
     else{
         name = prefix;
@@ -37,11 +42,5 @@ std::string next_filename(const std::string &prefix) {
         filename_R = name + index_ss1.str() + "_R" + extension;
         filename_S = name + index_ss1.str() + "_S" + extension;
     }
-
     return filename;
-}
-
-bool exists_test (const std::string& name) {
-    std::ifstream f(name.c_str());
-    return f.good();
 }
