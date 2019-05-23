@@ -298,24 +298,34 @@ void read_scene(const std::string &xml_filename){
 
     // Data
     unsigned int n_transform_matrices = 0;
+    unsigned int index_transform_matrices = 0;
     TransformMatrix_t** transform_matrices = nullptr;
     unsigned int n_textures = 0;
+    unsigned int index_textures = 0;
     Texture_t** textures = nullptr;
     unsigned int n_scatterers = 0;
+    unsigned int index_scatterers = 0;
     ScatteringFunction_t** scatterers = nullptr;
     unsigned int n_materials = 0;
+    unsigned int index_materials = 0;
     Material_t** materials = nullptr;
     unsigned int n_mesh_geometries = 0;
+    unsigned int index_mesh_geometries = 0;
     MeshGeometry_t** mesh_geometries = nullptr;
     unsigned int n_objects = 0;
+    unsigned int index_objects = 0;
     Shape_t** objects = nullptr;
     unsigned int n_directional_lights = 0;
+    unsigned int index_directional_lights = 0;
     DirectionalLight_t** directional_lights = nullptr;
     unsigned int n_skyboxes = 0;
+    unsigned int index_skyboxes= 0;
     Skybox_t** skyboxes = nullptr;
     unsigned int n_imgbuffers = 0;
+    unsigned int index_imgbuffers = 0;
     ImgBuffer_t** imgbuffers = nullptr;
     unsigned int n_cameras = 0;
+    unsigned int index_cameras = 0;
     Camera_t** cameras = nullptr;
 
     // Fields
