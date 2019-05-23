@@ -283,7 +283,11 @@ void read_scene(const std::string &xml_filename){
     #endif
 
     tinyxml2::XMLDocument xml_scene;
-	xml_scene.LoadFile(xml_filename.c_str()); // CHECK if is open
+	xml_scene.LoadFile(xml_filename.c_str());
+    if (xml_scene.Error()){
+        std::cout << "There was an error while opening or parsing file '" << xml_filename << "'. Exiting." << std::endl;
+        return;
+    }
 
     tinyxml2::XMLElement* xml_top = xml_scene.FirstChildElement();
     scene_name = xml_top->Attribute("name");
@@ -326,6 +330,8 @@ void read_scene(const std::string &xml_filename){
     tinyxml2::XMLElement* xml_imgbuffers = xml_top->FirstChildElement("imgbuffers");
     tinyxml2::XMLElement* xml_cameras = xml_top->FirstChildElement("cameras");
 
+    std::cout << "Noot 1" << std::endl; // REMOVE
+
     // Transformation matrices
     if (xml_transform_matrices != nullptr){
         tinyxml2::XMLElement* xml_transform_matrix;
@@ -333,6 +339,8 @@ void read_scene(const std::string &xml_filename){
             ++n_transform_matrices;
         }
     }
+
+    std::cout << "Noot 2" << std::endl; // REMOVE
 
     if (xml_scatterers != nullptr){
         tinyxml2::XMLElement* xml_scatterer;
