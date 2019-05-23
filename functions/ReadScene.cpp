@@ -8,6 +8,7 @@
 #include "tinyxml2.h"
 #include "Vec3f.h"
 #include "Colours.h"
+#include "NextFilename.h"
 
 #include "Diffuse_t.h"
 #include "DiffuseTex_t.h"
@@ -272,13 +273,15 @@ namespace rendering{
 
 void read_scene(const std::string &xml_filename){
     bool use_GL = true;
+    std::string scene_name, new_filename;
 
     tinyxml2::XMLDocument xml_scene;
 	xml_scene.LoadFile(xml_filename.c_str());
 
-    
+    tinyxml2::XMLElement* xml_top = xml_scene.FirstChildElement();
+    scene_name = xml_top->Attribute("name"); 
 
-
+    std::cout << "Scene name: '" << scene_name << "'." << std::endl; // REMOVE
 
 
 
