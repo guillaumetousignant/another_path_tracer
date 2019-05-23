@@ -313,8 +313,25 @@ void read_scene(const std::string &xml_filename){
     unsigned int n_cameras = 0;
     Camera_t * cameras = nullptr;
 
-    // Transformation matrices
+    // Fields
+    tinyxml2::XMLElement* xml_transform_matrices = xml_top->FirstChildElement("transform_matrices");
+    tinyxml2::XMLElement* xml_textures = xml_top->FirstChildElement("textures");
+    tinyxml2::XMLElement* xml_scatterers = xml_top->FirstChildElement("scatterers");
+    tinyxml2::XMLElement* xml_materials = xml_top->FirstChildElement("materials");
+    tinyxml2::XMLElement* xml_mesh_geometries = xml_top->FirstChildElement("mesh_geometries");
+    tinyxml2::XMLElement* xml_objects = xml_top->FirstChildElement("objects");
+    tinyxml2::XMLElement* xml_directional_lights = xml_top->FirstChildElement("directional_lights");
+    tinyxml2::XMLElement* xml_skyboxes = xml_top->FirstChildElement("skyboxes");
+    tinyxml2::XMLElement* xml_imgbuffers = xml_top->FirstChildElement("imgbuffers");
+    tinyxml2::XMLElement* xml_cameras = xml_top->FirstChildElement("cameras");
 
+    // Transformation matrices
+    /*if (xml_transform_matrices != nullptr){
+        tinyxml2::XMLElement* xml_transform_matrix;
+        for (xml_transform_matrix = xml_transform_matrices->FirstChild("transform_matrix"); xml_transform_matrix; xml_transform_matrix = xml_transform_matrix->NextSibling("transform_matrix"){
+
+        }
+    }*/
 
 
 
