@@ -298,25 +298,25 @@ void read_scene(const std::string &xml_filename){
 
     // Data
     unsigned int n_transform_matrices = 0;
-    TransformMatrix_t * transform_matrices = nullptr;
+    TransformMatrix_t** transform_matrices = nullptr;
     unsigned int n_textures = 0;
-    Texture_t * textures = nullptr;
+    Texture_t** textures = nullptr;
     unsigned int n_scatterers = 0;
-    ScatteringFunction_t * scatterers = nullptr;
+    ScatteringFunction_t** scatterers = nullptr;
     unsigned int n_materials = 0;
-    Material_t * materials = nullptr;
+    Material_t** materials = nullptr;
     unsigned int n_mesh_geometries = 0;
-    MeshGeometry_t * mesh_geometries = nullptr;
+    MeshGeometry_t** mesh_geometries = nullptr;
     unsigned int n_objects = 0;
-    Shape_t * objects = nullptr;
+    Shape_t** objects = nullptr;
     unsigned int n_directional_lights = 0;
-    DirectionalLight_t * directional_lights = nullptr;
+    DirectionalLight_t** directional_lights = nullptr;
     unsigned int n_skyboxes = 0;
-    Skybox_t * skyboxes = nullptr;
+    Skybox_t** skyboxes = nullptr;
     unsigned int n_imgbuffers = 0;
-    ImgBuffer_t * imgbuffers = nullptr;
+    ImgBuffer_t** imgbuffers = nullptr;
     unsigned int n_cameras = 0;
-    Camera_t * cameras = nullptr;
+    Camera_t** cameras = nullptr;
 
     // Fields
     tinyxml2::XMLElement* xml_transform_matrices = xml_top->FirstChildElement("transform_matrices");
@@ -449,6 +449,39 @@ void read_scene(const std::string &xml_filename){
     std::cout << "Skybox count: " << n_skyboxes << std::endl; // REMOVE
     std::cout << "Img buffers count: " << n_imgbuffers << std::endl; // REMOVE
     std::cout << "Camera count: " << n_cameras << std::endl << std::endl; // REMOVE
+
+    // Buffer creation
+    if (n_transform_matrices){
+        transform_matrices = new TransformMatrix_t*[n_transform_matrices];
+    }
+    if (n_textures){
+        textures = new Texture_t*[n_textures];
+    }
+    if (n_scatterers){
+        scatterers = new ScatteringFunction_t*[n_scatterers];
+    }
+    if (n_materials){
+        materials = new Material_t*[n_materials];
+    }
+    if (n_mesh_geometries){
+        mesh_geometries = new MeshGeometry_t*[n_mesh_geometries];
+    }
+    if (n_objects){
+        objects = new Shape_t*[n_objects];
+    }
+    if (n_directional_lights){
+        directional_lights = new DirectionalLight_t*[n_directional_lights];
+    }
+    if (n_skyboxes){
+        skyboxes = new Skybox_t*[n_skyboxes];
+    }
+    if (n_imgbuffers){
+        imgbuffers = new ImgBuffer_t*[n_imgbuffers];
+    }
+    if (n_cameras){
+        cameras = new Camera_t*[n_cameras];
+    }
+
 
 
 
