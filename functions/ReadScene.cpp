@@ -330,8 +330,6 @@ void read_scene(const std::string &xml_filename){
     tinyxml2::XMLElement* xml_imgbuffers = xml_top->FirstChildElement("imgbuffers");
     tinyxml2::XMLElement* xml_cameras = xml_top->FirstChildElement("cameras");
 
-    std::cout << "Noot 1" << std::endl; // REMOVE
-
     // Transformation matrices
     if (xml_transform_matrices != nullptr){
         tinyxml2::XMLElement* xml_transform_matrix;
@@ -340,17 +338,16 @@ void read_scene(const std::string &xml_filename){
         }
     }
 
-    std::cout << "Noot 2" << std::endl; // REMOVE
-
     if (xml_scatterers != nullptr){
         tinyxml2::XMLElement* xml_scatterer;
-        std::string string_transform_matrix;
         for (xml_scatterer = xml_scatterers->FirstChildElement("scatterer"); xml_scatterer; xml_scatterer = xml_scatterer->NextSiblingElement("scatterer")){
-            string_transform_matrix = "";
-            string_transform_matrix = xml_scatterer->Attribute("transform_matrix");
-            std::transform(string_transform_matrix.begin(), string_transform_matrix.end(), string_transform_matrix.begin(), ::tolower);
-            if (string_transform_matrix == "nan"){
-                ++n_transform_matrices;
+            const char* char_transform_matrix = xml_scatterer->Attribute("transform_matrix");
+            if (char_transform_matrix != nullptr){
+                std::string string_transform_matrix = char_transform_matrix;
+                std::transform(string_transform_matrix.begin(), string_transform_matrix.end(), string_transform_matrix.begin(), ::tolower);
+                if (string_transform_matrix == "nan"){
+                    ++n_transform_matrices;
+                }
             }
         }
     }
