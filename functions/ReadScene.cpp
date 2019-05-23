@@ -273,15 +273,23 @@ namespace rendering{
 
 void read_scene(const std::string &xml_filename){
     bool use_GL = true;
-    std::string scene_name, new_filename;
+    std::string scene_name, new_filename, folder;
+
+    #ifdef _WIN32
+        folder = "images\\";
+    #else
+        folder = "images/";
+    #endif
 
     tinyxml2::XMLDocument xml_scene;
 	xml_scene.LoadFile(xml_filename.c_str());
 
     tinyxml2::XMLElement* xml_top = xml_scene.FirstChildElement();
-    scene_name = xml_top->Attribute("name"); 
+    scene_name = xml_top->Attribute("name");
+    new_filename = next_filename(folder + scene_name + ".png");
 
     std::cout << "Scene name: '" << scene_name << "'." << std::endl; // REMOVE
+    std::cout << "Filename: '" << new_filename << "'." << std::endl; // REMOVE
 
 
 
