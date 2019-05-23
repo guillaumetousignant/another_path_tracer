@@ -5,6 +5,7 @@
 #include <chrono>
 #include <algorithm>
 #include <iostream>
+#include <algorithm>
 #include "tinyxml2.h"
 #include "Vec3f.h"
 #include "Colours.h"
@@ -282,7 +283,7 @@ void read_scene(const std::string &xml_filename){
     #endif
 
     tinyxml2::XMLDocument xml_scene;
-	xml_scene.LoadFile(xml_filename.c_str());
+	xml_scene.LoadFile(xml_filename.c_str()); // CHECK if is open
 
     tinyxml2::XMLElement* xml_top = xml_scene.FirstChildElement();
     scene_name = xml_top->Attribute("name");
@@ -326,22 +327,92 @@ void read_scene(const std::string &xml_filename){
     tinyxml2::XMLElement* xml_cameras = xml_top->FirstChildElement("cameras");
 
     // Transformation matrices
-    /*if (xml_transform_matrices != nullptr){
+    if (xml_transform_matrices != nullptr){
         tinyxml2::XMLElement* xml_transform_matrix;
-        for (xml_transform_matrix = xml_transform_matrices->FirstChild("transform_matrix"); xml_transform_matrix; xml_transform_matrix = xml_transform_matrix->NextSibling("transform_matrix"){
-
+        for (xml_transform_matrix = xml_transform_matrices->FirstChildElement("transform_matrix"); xml_transform_matrix; xml_transform_matrix = xml_transform_matrix->NextSiblingElement("transform_matrix")){
+            ++n_transform_matrices;
         }
-    }*/
+    }
 
+    if (xml_scatterers != nullptr){
+        tinyxml2::XMLElement* xml_scatterer;
+        std::string string_transform_matrix;
+        for (xml_scatterer = xml_scatterers->FirstChildElement("scatterer"); xml_scatterer; xml_scatterer = xml_scatterer->NextSiblingElement("scatterer")){
+            string_transform_matrix = "";
+            string_transform_matrix = xml_scatterer->Attribute("transform_matrix");
+            std::transform(string_transform_matrix.begin(), string_transform_matrix.end(), string_transform_matrix.begin(), ::tolower);
+            if (string_transform_matrix == "nan"){
+                ++n_transform_matrices;
+            }
+        }
+    }
 
+    if (xml_materials != nullptr){
+        tinyxml2::XMLElement* xml_material;
+        std::string string_transform_matrix;
+        for (xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
+            string_transform_matrix = "";
+            string_transform_matrix = xml_material->Attribute("transform_matrix");
+            std::transform(string_transform_matrix.begin(), string_transform_matrix.end(), string_transform_matrix.begin(), ::tolower);
+            if (string_transform_matrix == "nan"){
+                ++n_transform_matrices;
+            }
+        }
+    }
 
+    if (xml_objects != nullptr){
+        tinyxml2::XMLElement* xml_object;
+        std::string string_transform_matrix;
+        for (xml_object = xml_objects->FirstChildElement("object"); xml_object; xml_object = xml_object->NextSiblingElement("object")){
+            string_transform_matrix = "";
+            string_transform_matrix = xml_object->Attribute("transform_matrix");
+            std::transform(string_transform_matrix.begin(), string_transform_matrix.end(), string_transform_matrix.begin(), ::tolower);
+            if (string_transform_matrix == "nan"){
+                ++n_transform_matrices;
+            }
+        }
+    }
 
+    if (xml_directional_lights != nullptr){
+        tinyxml2::XMLElement* xml_directional_light;
+        std::string string_transform_matrix;
+        for (xml_directional_light = xml_directional_lights->FirstChildElement("directional_light"); xml_directional_light; xml_directional_light = xml_directional_light->NextSiblingElement("directional_light")){
+            string_transform_matrix = "";
+            string_transform_matrix = xml_directional_light->Attribute("transform_matrix");
+            std::transform(string_transform_matrix.begin(), string_transform_matrix.end(), string_transform_matrix.begin(), ::tolower);
+            if (string_transform_matrix == "nan"){
+                ++n_transform_matrices;
+            }
+        }
+    }
 
+    if (xml_skyboxes != nullptr){
+        tinyxml2::XMLElement* xml_skybox;
+        std::string string_transform_matrix;
+        for (xml_skybox = xml_skyboxes->FirstChildElement("skybox"); xml_skybox; xml_skybox = xml_skybox->NextSiblingElement("skybox")){
+            string_transform_matrix = "";
+            string_transform_matrix = xml_skybox->Attribute("transform_matrix");
+            std::transform(string_transform_matrix.begin(), string_transform_matrix.end(), string_transform_matrix.begin(), ::tolower);
+            if (string_transform_matrix == "nan"){
+                ++n_transform_matrices;
+            }
+        }
+    }
 
+    if (xml_cameras != nullptr){
+        tinyxml2::XMLElement* xml_camera;
+        std::string string_transform_matrix;
+        for (xml_camera = xml_cameras->FirstChildElement("camera"); xml_camera; xml_camera = xml_camera->NextSiblingElement("camera")){
+            string_transform_matrix = "";
+            string_transform_matrix = xml_camera->Attribute("transform_matrix");
+            std::transform(string_transform_matrix.begin(), string_transform_matrix.end(), string_transform_matrix.begin(), ::tolower);
+            if (string_transform_matrix == "nan"){
+                ++n_transform_matrices;
+            }
+        }
+    }
 
-
-
-
+    std::cout << "Transform matrix count: " << n_transform_matrices << std::endl; // REMOVE
 
 
 
