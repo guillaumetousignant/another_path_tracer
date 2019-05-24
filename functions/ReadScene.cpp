@@ -276,12 +276,16 @@ namespace rendering{
 }
 
 namespace factory{
-    TransformMatrix_t* create_transform_matrix(const std::string &value){
-        if (value == "nan"){
+    TransformMatrix_t* create_transform_matrix(tinyxml2::XMLElement* xml_transform_matrix){
+        const char* char_transform_matrix = xml_transform_matrix->Attribute("value"); // Check here if fiels exists
+        std::string string_transform_matrix = char_transform_matrix;
+        std::transform(string_transform_matrix.begin(), string_transform_matrix.end(), string_transform_matrix.begin(), ::tolower);
+        
+        if (string_transform_matrix == "nan"){
             return new TransformMatrix_t();
         }
         else{
-            std::istringstream iss(value);
+            std::istringstream iss(valstring_transform_matrixue);
             std::vector<std::string> results(std::istream_iterator<std::string>{iss},
                                  std::istream_iterator<std::string>());
             if (results.size() == 16){ // could also use stod directly, with second argument
@@ -521,10 +525,7 @@ void read_scene(const std::string &xml_filename){
     // Filling buffers
     if (xml_transform_matrices != nullptr){
         for (tinyxml2::XMLElement* xml_transform_matrix = xml_transform_matrices->FirstChildElement("transform_matrix"); xml_transform_matrix; xml_transform_matrix = xml_transform_matrix->NextSiblingElement("transform_matrix")){
-            const char* char_transform_matrix = xml_transform_matrix->Attribute("value"); // Check here if fiels exists
-            std::string string_transform_matrix = char_transform_matrix;
-            std::transform(string_transform_matrix.begin(), string_transform_matrix.end(), string_transform_matrix.begin(), ::tolower);
-            transform_matrices[index_transform_matrices] = factory::create_transform_matrix(string_transform_matrix);
+            transform_matrices[index_transform_matrices] = factory::create_transform_matrix(xml_transform_matrix);
             ++index_transform_matrices;
         }
     }
