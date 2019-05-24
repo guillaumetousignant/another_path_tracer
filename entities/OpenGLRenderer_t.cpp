@@ -7,7 +7,6 @@
 #include "ImgBufferOpenGL_t.h"
 #include "TransformMatrix_t.h"
 
-#define PI 3.141592653589793238463
 #ifdef _WIN32
 #define GL_CLAMP_TO_EDGE 0x812F
 #endif
