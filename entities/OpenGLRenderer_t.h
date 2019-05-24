@@ -13,6 +13,7 @@ class ImgBufferOpenGL_t;
 class OpenGLRenderer_t{
     public:
         OpenGLRenderer_t();
+        OpenGLRenderer_t(Scene_t* scene, Camera_t* camera, ImgBufferOpenGL_t* imgbuffer);
         ~OpenGLRenderer_t();
 
         Camera_t* camera_ = nullptr;

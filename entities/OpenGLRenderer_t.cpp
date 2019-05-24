@@ -18,6 +18,12 @@ OpenGLRenderer_t::OpenGLRenderer_t() :
     middle_y_pos_(0), right_clicked_(false), left_clicked_(false), middle_clicked_(false),
     n_iter_gl_(0), focus_point_(Vec3f()), camera_dist_(0), updated_(false) {}
 
+OpenGLRenderer_t::OpenGLRenderer_t(Scene_t* scene, Camera_t* camera, ImgBufferOpenGL_t* imgbuffer) :
+    camera_(camera), scene_(scene), imgbuffer_(imgbuffer), width_(0), height_(0), 
+    right_x_pos_(0), right_y_pos_(0), left_x_pos_(0), left_y_pos_(0), middle_x_pos_(0), 
+    middle_y_pos_(0), right_clicked_(false), left_clicked_(false), middle_clicked_(false),
+    n_iter_gl_(0), focus_point_(Vec3f()), camera_dist_(0), updated_(false) {}
+
 OpenGLRenderer_t::~OpenGLRenderer_t() {}
 
 void OpenGLRenderer_t::raytrace(){
