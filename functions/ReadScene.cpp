@@ -349,7 +349,7 @@ void read_scene(const std::string &xml_filename){
     unsigned int index_directional_lights = 0;
     DirectionalLight_t** directional_lights = nullptr;
     unsigned int n_skyboxes = 0;
-    unsigned int index_skyboxes= 0;
+    unsigned int index_skyboxes = 0;
     Skybox_t** skyboxes = nullptr;
     unsigned int n_imgbuffers = 0;
     unsigned int index_imgbuffers = 0;
