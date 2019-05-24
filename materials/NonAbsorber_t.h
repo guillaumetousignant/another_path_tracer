@@ -7,7 +7,7 @@
 class NonAbsorber_t : public ScatteringFunction_t{
     public:
         NonAbsorber_t();
-        ~NonAbsorber_t();
+        virtual ~NonAbsorber_t();
 
         virtual void scatter(Ray_t &ray, bool &intersected); 
 };

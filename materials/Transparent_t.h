@@ -11,7 +11,7 @@ class Shape_t;
 class Transparent_t : public Medium_t {
     public:
         Transparent_t(unsigned int priority, ScatteringFunction_t* scattering);
-        ~Transparent_t();
+        virtual ~Transparent_t();
 
         virtual void bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray);
 };

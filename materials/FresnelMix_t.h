@@ -11,7 +11,7 @@ class Material_t;
 class FresnelMix_t : public MaterialMix_t{
     public:
         FresnelMix_t(Material_t* material_refracted, Material_t* material_reflected, double ind);
-        ~FresnelMix_t();
+        virtual ~FresnelMix_t();
 
         double ind_;
         std::uniform_real_distribution<double> unif_;

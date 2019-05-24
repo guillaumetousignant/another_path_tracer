@@ -8,7 +8,7 @@
 class Diffuse_t : public Material_t{
     public:
         Diffuse_t(const Vec3f &emission, const Vec3f &colour, double roughness);
-        ~Diffuse_t();
+        virtual ~Diffuse_t();
 
         Vec3f emission_;
         Vec3f colour_;

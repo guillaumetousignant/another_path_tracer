@@ -1,13 +1,9 @@
 #ifndef CAMERA_T_H
 #define CAMERA_T_H
 
-//#include "Scene_t.h"
 #include "Vec3f.h"
 #include <string>
 #include <list>
-//#include "TransformMatrix_t.h"
-//#include "Skybox_t.h"
-//#include "Medium_t.h"
 
 class TransformMatrix_t;
 class Skybox_t;

@@ -10,7 +10,7 @@ class SkyboxFlatSun_t : public Skybox_t{
     public:
         SkyboxFlatSun_t(const Vec3f &background, DirectionalLight_t* light);
         SkyboxFlatSun_t(const Vec3f &background, DirectionalLight_t** lights, unsigned int n_lights);
-        ~SkyboxFlatSun_t();
+        virtual ~SkyboxFlatSun_t();
 
         Vec3f background_;
         DirectionalLight_t** lights_;

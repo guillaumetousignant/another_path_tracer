@@ -10,7 +10,7 @@ class Texture_t;
 class ReflectiveFuzzTex_t : public Material_t{
     public:
         ReflectiveFuzzTex_t(Texture_t* texture, const Vec3f &colour, double order, double diffusivity);
-        ~ReflectiveFuzzTex_t();
+        virtual ~ReflectiveFuzzTex_t();
 
         Texture_t* texture_;
         Vec3f colour_;

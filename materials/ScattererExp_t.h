@@ -9,7 +9,7 @@
 class ScattererExp_t : public ScatteringFunction_t{
     public:
         ScattererExp_t(Vec3f emi_vol, Vec3f col_vol, double abs_dist_emi, double abs_dist_col, double scat_dist, double order, double scattering_angle);
-        ~ScattererExp_t();
+        virtual ~ScattererExp_t();
 
         Vec3f emission_vol_;
         Vec3f colour_vol_;

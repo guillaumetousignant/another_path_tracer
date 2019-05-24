@@ -1,8 +1,6 @@
 #ifndef SHAPE_T_H
 #define SHAPE_T_H
 
-//#include "Material_t.h"
-//#include "TransformMatrix_t.h"
 #include "Ray_t.h"
 #include "Vec3f.h"
 

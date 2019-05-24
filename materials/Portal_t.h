@@ -12,7 +12,7 @@ class Medium_t;
 class Portal_t : public Material_t{
     public:
         Portal_t(TransformMatrix_t* transformation, std::list<Medium_t*> medium_list);
-        ~Portal_t();
+        virtual ~Portal_t();
 
         TransformMatrix_t* transformation_;
         std::list<Medium_t*> medium_list_;

@@ -2,7 +2,6 @@
 #define DIRECTIONALLIGHT_T_H
 
 #include "Vec3f.h"
-//#include "TransformMatrix_t.h"
 
 class TransformMatrix_t;
 

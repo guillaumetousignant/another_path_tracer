@@ -8,7 +8,7 @@
 class ReflectiveFuzz_t : public Material_t{
     public:
         ReflectiveFuzz_t(const Vec3f &emission, const Vec3f &colour, double order, double diffusivity);
-        ~ReflectiveFuzz_t();
+        virtual ~ReflectiveFuzz_t();
 
         Vec3f emission_;
         Vec3f colour_;

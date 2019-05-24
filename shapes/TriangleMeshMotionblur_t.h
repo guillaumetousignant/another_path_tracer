@@ -1,8 +1,6 @@
 #ifndef TRIANGLEMESHMOTIONBLUR_T_H
 #define TRIANGLEMESHMOTIONBLUR_T_H
 
-//#include "Material_t.h"
-//#include "TransformMatrix_t.h"
 #include "Ray_t.h"
 #include "Vec3f.h"
 #include "TriangleMesh_t.h"

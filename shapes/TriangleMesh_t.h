@@ -1,8 +1,6 @@
 #ifndef TRIANGLEMESH_T_H
 #define TRIANGLEMESH_T_H
 
-//#include "Material_t.h"
-//#include "TransformMatrix_t.h"
 #include "Ray_t.h"
 #include "Vec3f.h"
 #include "TriangleTop_t.h"

@@ -9,7 +9,7 @@ class Texture_t;
 class SkyboxTexture_t : public Skybox_t{
     public:
         SkyboxTexture_t(Texture_t* texture);
-        ~SkyboxTexture_t();
+        virtual ~SkyboxTexture_t();
 
         Texture_t* texture_;
 

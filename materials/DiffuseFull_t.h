@@ -10,7 +10,7 @@ class Texture_t;
 class DiffuseFull_t : public Material_t{
     public:
         DiffuseFull_t(const Texture_t* emission_map, const Texture_t* texture, double roughness);
-        ~DiffuseFull_t();
+        virtual ~DiffuseFull_t();
 
         const Texture_t* emission_map_;
         const Texture_t* texture_;

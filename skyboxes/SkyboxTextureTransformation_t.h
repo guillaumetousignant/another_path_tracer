@@ -10,7 +10,7 @@ class TransformMatrix_t;
 class SkyboxTextureTransformation_t : public SkyboxTexture_t{
     public:
         SkyboxTextureTransformation_t(Texture_t* texture, TransformMatrix_t* transformation);
-        ~SkyboxTextureTransformation_t();
+        virtual ~SkyboxTextureTransformation_t();
 
         TransformMatrix_t* transformation_;
         

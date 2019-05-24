@@ -2,8 +2,6 @@
 #define MEDIUM_T_H
 
 #include "Material_t.h"
-//#include "Ray_t.h"
-//#include "ScatteringFunction_t.h"
 
 class ScatteringFunction_t;
 

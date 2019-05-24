@@ -9,7 +9,7 @@ class Texture_t;
 class SkyboxTextureSun_t : public SkyboxTexture_t{
     public:
         SkyboxTextureSun_t(Texture_t* texture, const double (&sun_pos)[2], Vec3f sun_col, double sun_rad);
-        ~SkyboxTextureSun_t();
+        virtual ~SkyboxTextureSun_t();
 
         double sun_pos_[2];
         Vec3f sun_col_;

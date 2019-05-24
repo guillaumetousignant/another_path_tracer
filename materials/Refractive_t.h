@@ -9,7 +9,7 @@ class ScatteringFunction_t;
 class Refractive_t : public Medium_t{
     public:
         Refractive_t(const Vec3f &emission, const Vec3f &colour, double ind, unsigned int priority, ScatteringFunction_t* scattering);
-        ~Refractive_t();
+        virtual ~Refractive_t();
 
         Vec3f emission_;
         Vec3f colour_;

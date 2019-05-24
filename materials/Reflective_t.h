@@ -7,7 +7,7 @@
 class Reflective_t : public Material_t{
     public:
         Reflective_t(const Vec3f &emission, const Vec3f &colour);
-        ~Reflective_t();
+        virtual ~Reflective_t();
 
         Vec3f emission_;
         Vec3f colour_;

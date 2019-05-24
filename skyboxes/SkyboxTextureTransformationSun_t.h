@@ -10,7 +10,7 @@ class TransformMatrix_t;
 class SkyboxTextureTransformationSun_t : public SkyboxTextureTransformation_t{
     public:
         SkyboxTextureTransformationSun_t(Texture_t* texture, TransformMatrix_t* transformation, const double (&sun_pos)[2], Vec3f sun_col, double sun_rad);
-        ~SkyboxTextureTransformationSun_t();
+        virtual ~SkyboxTextureTransformationSun_t();
 
         double sun_pos_[2];
         Vec3f sun_col_;

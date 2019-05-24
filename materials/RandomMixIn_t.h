@@ -10,7 +10,7 @@ class Material_t;
 class RandomMixIn_t : public MaterialMix_t{
     public:
         RandomMixIn_t(Material_t* material_refracted, Material_t* material_reflected, double ratio);
-        ~RandomMixIn_t();
+        virtual ~RandomMixIn_t();
 
         double ratio_;
         std::uniform_real_distribution<double> unif_;

@@ -10,7 +10,7 @@ class ScatteringFunction_t;
 class ReflectiveRefractiveFuzz_t : public Medium_t{
     public:
         ReflectiveRefractiveFuzz_t(const Vec3f &emission, const Vec3f &colour, double ind, unsigned int priority, double order, double diffusivity, ScatteringFunction_t* scattering);
-        ~ReflectiveRefractiveFuzz_t();
+        virtual ~ReflectiveRefractiveFuzz_t();
 
         Vec3f emission_;
         Vec3f colour_;

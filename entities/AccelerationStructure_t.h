@@ -2,7 +2,7 @@
 #define ACCELERATIONSTRUCTURE_T_H
 
 #include "Ray_t.h"
-//#include "Shape_t.h"
+
 class Shape_t;
 
 class AccelerationStructure_t{

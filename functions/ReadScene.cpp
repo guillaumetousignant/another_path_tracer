@@ -529,7 +529,11 @@ void read_scene(const std::string &xml_filename){
         }
     }
 
-
+    if (xml_textures != nullptr){
+        for (tinyxml2::XMLElement* xml_texture = xml_textures->FirstChildElement("texture"); xml_textures; xml_textures = xml_textures->NextSiblingElement("texture")){
+            
+        }
+    }
 
 
 

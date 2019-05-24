@@ -1,12 +1,9 @@
 #ifndef MESH_T_H
 #define MESH_T_H
 
-//#include "Material_t.h"
-//#include "TransformMatrix_t.h"
 #include "Ray_t.h"
 #include "Vec3f.h"
 #include "MeshTop_t.h"
-//#include "MeshGeometry_t.h"
 
 class Material_t;
 class TransformMatrix_t;
