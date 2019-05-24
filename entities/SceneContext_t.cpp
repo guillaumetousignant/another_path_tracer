@@ -286,83 +286,121 @@ void SceneContext_t::reset(){
     // Deleting buffers
     if (transform_matrices_ != nullptr){
         for (unsigned int i = 0; i < n_transform_matrices_; i++){
-            delete transform_matrices_[i];
+            if (transform_matrices_[i] != nullptr){
+                delete transform_matrices_[i];
+            }
         }
         delete [] transform_matrices_;
+        transform_matrices_ = nullptr;
     }
     n_transform_matrices_ = 0;
 
     if (textures_ != nullptr){
         for (unsigned int i = 0; i < n_textures_; i++){
-            delete textures_[i];
+            if (textures_[i] != nullptr){
+                delete textures_[i];
+            }
         }
         delete [] textures_;
+        textures_ = nullptr;
     }
     n_textures_ = 0;
     
     if (scatterers_ != nullptr){
         for (unsigned int i = 0; i < n_scatterers_; i++){
-            delete scatterers_[i];
+            if (scatterers_[i] != nullptr){
+                delete scatterers_[i];
+            }
         }
         delete [] scatterers_;
+        scatterers_ = nullptr;
     }
     n_scatterers_ = 0;
 
     if (materials_ != nullptr){
         for (unsigned int i = 0; i < n_materials_; i++){
-            delete materials_[i];
+            if (materials_[i] != nullptr){
+                delete materials_[i];
+            }
         }
         delete [] materials_;
+        materials_ = nullptr;
     }
     n_materials_ = 0;
 
     if (mesh_geometries_ != nullptr){
         for (unsigned int i = 0; i < n_mesh_geometries_; i++){
-            delete mesh_geometries_[i];
+            if (mesh_geometries_[i] != nullptr){
+                delete mesh_geometries_[i];
+            }
         }
         delete [] mesh_geometries_;
+        mesh_geometries_ = nullptr;
     }
     n_mesh_geometries_ = 0;
 
     if (objects_ != nullptr){
         for (unsigned int i = 0; i < n_objects_; i++){
-            delete objects_[i];
+            if (objects_[i] != nullptr){
+                delete objects_[i];
+            }
         }
         delete [] objects_;
+        objects_ = nullptr;
     }
     n_objects_ = 0;
 
     if (directional_lights_ != nullptr){
         for (unsigned int i = 0; i < n_directional_lights_; i++){
-            delete directional_lights_[i];
+            if (directional_lights_[i] != nullptr){
+                delete directional_lights_[i];
+            }
         }
         delete [] directional_lights_;
+        directional_lights_ = nullptr;
     }
     n_directional_lights_ = 0;
 
     if (skyboxes_ != nullptr){
         for (unsigned int i = 0; i < n_skyboxes_; i++){
-            delete skyboxes_[i];
+            if (skyboxes_[i] != nullptr){
+                delete skyboxes_[i];
+            }
         }
         delete [] skyboxes_;
+        skyboxes_ = nullptr;
     }
     n_skyboxes_ = 0;
 
     if (imgbuffers_ != nullptr){
         for (unsigned int i = 0; i < n_imgbuffers_; i++){
-            delete imgbuffers_[i];
+            if (imgbuffers_[i] != nullptr){
+                delete imgbuffers_[i];
+            }
         }
         delete [] imgbuffers_;
+        imgbuffers_ = nullptr;
     }
     n_imgbuffers_ = 0;
 
     if (cameras_ != nullptr){
         for (unsigned int i = 0; i < n_cameras_; i++){
-            delete cameras_[i];
+            if (cameras_[i] != nullptr){
+                delete cameras_[i];
+            }
         }
         delete [] cameras_;
+        cameras_ = nullptr;
     }
     n_cameras_ = 0;
+
+    if (opengl_renderer_ != nullptr){
+        delete opengl_renderer_;
+        opengl_renderer_= nullptr;
+    }
+
+    use_gl_ = false;
+    scene_name_ = "";
 }
 
 TransformMatrix_t* SceneContext_t::create_transform_matrix(const tinyxml2::XMLElement* xml_transform_matrix) const {
@@ -374,5 +412,5 @@ Texture_t* SceneContext_t::create_texture(const tinyxml2::XMLElement* xml_textur
 }
 
 void SceneContext_t::render(){
-    
+
 }
