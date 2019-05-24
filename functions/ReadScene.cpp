@@ -6,6 +6,9 @@
 #include <algorithm>
 #include <iostream>
 #include <algorithm>
+#include <sstream>
+#include <iterator>
+#include <vector>
 #include "tinyxml2.h"
 #include "Vec3f.h"
 #include "Colours.h"
@@ -272,6 +275,29 @@ namespace rendering{
     }
 }
 
+namespace factory{
+    TransformMatrix_t* create_transform_matrix(const std::string &value){
+        if (value == "nan"){
+            return new TransformMatrix_t();
+        }
+        else{
+            std::istringstream iss(value);
+            std::vector<std::string> results(std::istream_iterator<std::string>{iss},
+                                 std::istream_iterator<std::string>());
+            if (results.size() == 16){ // could also use stod directly, with second argument
+                return new TransformMatrix_t(std::stod(results[0]), std::stod(results[1]), std::stod(results[2]), std::stod(results[3]), 
+                                            std::stod(results[4]), std::stod(results[5]), std::stod(results[6]), std::stod(results[7]), 
+                                            std::stod(results[8]), std::stod(results[9]), std::stod(results[10]), std::stod(results[11]), 
+                                            std::stod(results[12]), std::stod(results[13]), std::stod(results[14]), std::stod(results[15]));
+            }
+            else{
+                std::cout << "Warning, transform matrices should have 16 elements or be NaN to signify neutral. Identity used." << std::endl;
+                return new TransformMatrix_t();
+            }            
+        }
+    }
+}
+
 void read_scene(const std::string &xml_filename){
     bool use_GL = true;
     std::string scene_name, new_filename, folder;
@@ -491,6 +517,113 @@ void read_scene(const std::string &xml_filename){
     if (n_cameras){
         cameras = new Camera_t*[n_cameras];
     }
+
+    // Filling buffers
+    if (xml_transform_matrices != nullptr){
+        for (tinyxml2::XMLElement* xml_transform_matrix = xml_transform_matrices->FirstChildElement("transform_matrix"); xml_transform_matrix; xml_transform_matrix = xml_transform_matrix->NextSiblingElement("transform_matrix")){
+            const char* char_transform_matrix = xml_transform_matrix->Attribute("value"); // Check here if fiels exists
+            std::string string_transform_matrix = char_transform_matrix;
+            std::transform(string_transform_matrix.begin(), string_transform_matrix.end(), string_transform_matrix.begin(), ::tolower);
+            transform_matrices[index_transform_matrices] = factory::create_transform_matrix(string_transform_matrix);
+            ++index_transform_matrices;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // Deleting buffers
+    if (transform_matrices != nullptr){
+        for (unsigned int i = 0; i < n_transform_matrices; i++){
+            delete transform_matrices[i];
+        }
+        delete [] transform_matrices;
+    }
+
+    if (textures != nullptr){
+        for (unsigned int i = 0; i < n_textures; i++){
+            delete textures[i];
+        }
+        delete [] textures;
+    }
+    
+    if (scatterers != nullptr){
+        for (unsigned int i = 0; i < n_scatterers; i++){
+            delete scatterers[i];
+        }
+        delete [] scatterers;
+    }
+
+    if (materials != nullptr){
+        for (unsigned int i = 0; i < n_materials; i++){
+            delete materials[i];
+        }
+        delete [] materials;
+    }
+
+    if (mesh_geometries != nullptr){
+        for (unsigned int i = 0; i < n_mesh_geometries; i++){
+            delete mesh_geometries[i];
+        }
+        delete [] mesh_geometries;
+    }
+
+    if (objects != nullptr){
+        for (unsigned int i = 0; i < n_objects; i++){
+            delete objects[i];
+        }
+        delete [] objects;
+    }
+
+    if (directional_lights != nullptr){
+        for (unsigned int i = 0; i < n_directional_lights; i++){
+            delete directional_lights[i];
+        }
+        delete [] directional_lights;
+    }
+
+    if (skyboxes != nullptr){
+        for (unsigned int i = 0; i < n_skyboxes; i++){
+            delete skyboxes[i];
+        }
+        delete [] skyboxes;
+    }
+
+    if (imgbuffers != nullptr){
+        for (unsigned int i = 0; i < n_imgbuffers; i++){
+            delete imgbuffers[i];
+        }
+        delete [] imgbuffers;
+    }
+
+    if (cameras != nullptr){
+        for (unsigned int i = 0; i < n_cameras; i++){
+            delete cameras[i];
+        }
+        delete [] cameras;
+    }
+
+
+
+
+
+
+
+
 
 
 
