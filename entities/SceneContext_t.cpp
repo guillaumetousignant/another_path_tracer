@@ -48,7 +48,11 @@
 #include "SkyboxFlatSun_t.h"
 
 SceneContext_t::SceneContext_t() :
-    use_gl_(false) {}
+    use_gl_(false), scene_name_(""), n_transform_matrices_(0), n_textures_(0), n_scatterers_(0),
+    n_materials_(0), n_mesh_geometries_(0), n_objects_(0), n_directional_lights_(0), n_skyboxes_(0), 
+    n_imgbuffers_(0), n_cameras_(0), transform_matrices_(nullptr), textures_(nullptr), scatterers_(nullptr), 
+    materials_(nullptr), mesh_geometries_(nullptr), objects_(nullptr), directional_lights_(nullptr),
+    skyboxes_(nullptr), imgbuffers_(nullptr), cameras_(nullptr) {}
 
 SceneContext_t::~SceneContext_t() {
     reset();
