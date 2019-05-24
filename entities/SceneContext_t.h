@@ -15,6 +15,8 @@ class Skybox_t;
 class ImgBuffer_t;
 class Camera_t;
 
+class OpenGLRenderer_t;
+
 class SceneContext_t{
     public:
         SceneContext_t();
@@ -22,6 +24,7 @@ class SceneContext_t{
 
         bool use_gl_;
         std::string scene_name_;
+        OpenGLRenderer_t* opengl_renderer_;
 
         unsigned int n_transform_matrices_;
         unsigned int n_textures_;
@@ -48,6 +51,7 @@ class SceneContext_t{
         void readXML(const std::string &filename);
         void reset();
         TransformMatrix_t* create_transform_matrix(const tinyxml2::XMLElement* xml_transform_matrix) const;
+        Texture_t* create_texture(const tinyxml2::XMLElement* xml_texture) const;
 };
 
 #endif
