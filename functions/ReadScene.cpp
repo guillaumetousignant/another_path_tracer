@@ -285,7 +285,7 @@ namespace factory{
             return new TransformMatrix_t();
         }
         else{
-            std::istringstream iss(valstring_transform_matrixue);
+            std::istringstream iss(string_transform_matrix);
             std::vector<std::string> results(std::istream_iterator<std::string>{iss},
                                  std::istream_iterator<std::string>());
             if (results.size() == 16){ // could also use stod directly, with second argument
