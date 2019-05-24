@@ -368,3 +368,11 @@ void SceneContext_t::reset(){
 TransformMatrix_t* SceneContext_t::create_transform_matrix(const tinyxml2::XMLElement* xml_transform_matrix) const {
 
 }
+
+Texture_t* SceneContext_t::create_texture(const tinyxml2::XMLElement* xml_texture) const {
+
+}
+
+void SceneContext_t::render(){
+    
+}

@@ -52,6 +52,7 @@ class SceneContext_t{
         void reset();
         TransformMatrix_t* create_transform_matrix(const tinyxml2::XMLElement* xml_transform_matrix) const;
         Texture_t* create_texture(const tinyxml2::XMLElement* xml_texture) const;
+        void render();
 };
 
 #endif
