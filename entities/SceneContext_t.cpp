@@ -495,7 +495,7 @@ ScatteringFunction_t* SceneContext_t::create_scatterer(const tinyxml2::XMLElemen
     }
     else if (type == "portal_scatterer"){
         // CHECK add medium_list stuff
-        scatterers_medium_list = new 
+        scatterers_medium_list = get_medium_list(xml_scatterer->Attribute("medium_list"), xml_materials);
         return new PortalScatterer_t(get_transform_matrix(xml_scatterer->Attribute("transform_matrix"), xml_transform_matrices), std::stod(xml_scatterer->Attribute("scattering_distance")), std::list<Medium_t*>());
     }
     else if (type == "scatterer_exp"){
