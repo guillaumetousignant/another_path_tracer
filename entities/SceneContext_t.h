@@ -2,6 +2,7 @@
 #define SCENECONTEXT_T_H
 
 #include <string>
+#include <list>
 #include "tinyxml2.h"
 
 class TransformMatrix_t;
@@ -52,6 +53,7 @@ class SceneContext_t{
         void reset();
         TransformMatrix_t* create_transform_matrix(const tinyxml2::XMLElement* xml_transform_matrix) const;
         Texture_t* create_texture(const tinyxml2::XMLElement* xml_texture) const;
+        ScatteringFunction_t* create_scatterer(const tinyxml2::XMLElement* xml_scatterer, std::list<unsigned int>** scatterers_medium_list);
         void render();
 };
 

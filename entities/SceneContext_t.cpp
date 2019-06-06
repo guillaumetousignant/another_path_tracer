@@ -115,6 +115,8 @@ void SceneContext_t::readXML(const std::string &filename){
     tinyxml2::XMLElement* xml_imgbuffers = xml_top->FirstChildElement("imgbuffers_");
     tinyxml2::XMLElement* xml_cameras = xml_top->FirstChildElement("cameras_");
 
+    std::list<unsigned int>** scatterers_medium_list = nullptr;
+
     // Counts
     if (xml_transform_matrices != nullptr){
         for (tinyxml2::XMLElement* xml_transform_matrix = xml_transform_matrices->FirstChildElement("transform_matrix"); xml_transform_matrix; xml_transform_matrix = xml_transform_matrix->NextSiblingElement("transform_matrix")){
@@ -244,6 +246,10 @@ void SceneContext_t::readXML(const std::string &filename){
     }
     if (n_scatterers_){
         scatterers_ = new ScatteringFunction_t*[n_scatterers_];
+        scatterers_medium_list = new std::list<unsigned int>*[n_scatterers_];
+        for (unsigned int i = 0; i < n_scatterers_; i++){
+            scatterers_medium_list[i] = nullptr;
+        }
     }
     if (n_materials_){
         materials_ = new Material_t*[n_materials_];
@@ -276,10 +282,32 @@ void SceneContext_t::readXML(const std::string &filename){
     }
 
     if (xml_textures != nullptr){
-        for (tinyxml2::XMLElement* xml_texture = xml_textures->FirstChildElement("texture"); xml_textures; xml_textures = xml_textures->NextSiblingElement("texture")){
+        for (tinyxml2::XMLElement* xml_texture = xml_textures->FirstChildElement("texture"); xml_texture; xml_texture = xml_texture->NextSiblingElement("texture")){
             textures_[index_textures] = create_texture(xml_texture);
             ++index_textures;
         }
+    }
+
+    if (xml_scatterers != nullptr){
+        for (tinyxml2::XMLElement* xml_scatterer = xml_scatterers->FirstChildElement("scatterer"); xml_scatterer; xml_scatterer = xml_scatterer->NextSiblingElement("scatterer")){
+            scatterers_[index_scatterers] = create_scatterer(xml_scatterer, scatterers_medium_list);
+            ++index_scatterers;
+        }
+    }
+
+
+    // Fixes 
+
+    // Scatterers medium list fix
+
+    if (scatterers_medium_list != nullptr){
+        for (unsigned int i = 0; i < n_scatterers_; i++){
+            if (scatterers_medium_list[i] != nullptr){
+                delete scatterers_medium_list[i];
+            }
+        }
+        delete [] scatterers_medium_list;
+        scatterers_medium_list = nullptr;
     }
 
 }    
@@ -438,7 +466,41 @@ TransformMatrix_t* SceneContext_t::create_transform_matrix(const tinyxml2::XMLEl
 }
 
 Texture_t* SceneContext_t::create_texture(const tinyxml2::XMLElement* xml_texture) const {
+    std::string type = xml_texture->Attribute("type");
+    std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
+    if (type == "texture"){
+        return new Texture_t(xml_texture->Attribute("filename"));
+    }
+    else{
+        std::cout << "Error, texture type '" << type << "' not implemented. Only 'texture' exists for now. Exiting." << std::endl; 
+        exit(20);
+    }
+}
+
+ScatteringFunction_t* SceneContext_t::create_scatterer(const tinyxml2::XMLElement* xml_scatterer, std::list<unsigned int>** scatterers_medium_list) {
+    std::string type = xml_scatterer->Attribute("type");
+    std::transform(type.begin(), type.end(), type.begin(), ::tolower);
+
+    if (type == "absorber"){
+        return new Absorber_t();
+    }
+    else if (type == "nonabsorber"){
+        return new NonAbsorber_t();
+    }
+    else if (type == "portal_scatterer"){
+
+    }
+    else if (type == "scatterer_exp"){
+
+    }
+    else if (type == "scatterer"){
+
+    }
+    else{
+        std::cout << "Error, scatterer type '" << type << "' not implemented. Only 'absorber', 'nonabsorber', 'portal_scatterer', 'scatterer_exp', and 'scatterer' exists for now. Ignoring." << std::endl; 
+        return new NonAbsorber_t();
+    }
 }
 
 void SceneContext_t::render(){
