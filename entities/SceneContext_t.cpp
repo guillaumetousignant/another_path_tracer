@@ -13,10 +13,13 @@
 #include "Reflective_t.h"
 #include "ReflectiveRefractiveFuzz_t.h"
 #include "ReflectiveRefractive_t.h"
+#include "Transparent_t.h"
 
 #include "NonAbsorber_t.h"
 #include "Absorber_t.h"
-#include "Transparent_t.h"
+#include "Scatterer_t.h"
+#include "ScattererExp_t.h"
+#include "PortalScatterer_t.h"
 
 #include "TransformMatrix_t.h"
 #include "ImgBuffer_t.h"
@@ -57,9 +60,12 @@
 SceneContext_t::SceneContext_t() :
     use_gl_(false), scene_name_(""), opengl_renderer_(nullptr), n_transform_matrices_(0), n_textures_(0), 
     n_scatterers_(0), n_materials_(0), n_mesh_geometries_(0), n_objects_(0), n_directional_lights_(0), 
-    n_skyboxes_(0), n_imgbuffers_(0), n_cameras_(0), transform_matrices_(nullptr), textures_(nullptr), 
-    scatterers_(nullptr), materials_(nullptr), mesh_geometries_(nullptr), objects_(nullptr), 
-    directional_lights_(nullptr), skyboxes_(nullptr), imgbuffers_(nullptr), cameras_(nullptr) 
+    n_skyboxes_(0), n_imgbuffers_(0), n_cameras_(0), index_transform_matrices_(0), index_textures_(0), 
+    index_scatterers_(0), index_materials_(0), index_mesh_geometries_(0), index_objects_(0), 
+    index_directional_lights_(0), index_skyboxes_(0), index_imgbuffers_(0), index_cameras_(0),
+    transform_matrices_(nullptr), textures_(nullptr), scatterers_(nullptr), materials_(nullptr), 
+    mesh_geometries_(nullptr), objects_(nullptr), directional_lights_(nullptr), skyboxes_(nullptr), 
+    imgbuffers_(nullptr), cameras_(nullptr) 
     {}
 
 SceneContext_t::~SceneContext_t() {
@@ -90,18 +96,6 @@ void SceneContext_t::readXML(const std::string &filename){
 
     std::cout << "Scene name: '" << scene_name_ << "'." << std::endl; // REMOVE
     std::cout << "Filename: '" << new_filename << "'." << std::endl; // REMOVE
-
-    // Data
-    unsigned int index_transform_matrices = 0;
-    unsigned int index_textures = 0;
-    unsigned int index_scatterers = 0;
-    unsigned int index_materials = 0;
-    unsigned int index_mesh_geometries = 0;
-    unsigned int index_objects = 0;
-    unsigned int index_directional_lights = 0;
-    unsigned int index_skyboxes = 0;
-    unsigned int index_imgbuffers = 0;
-    unsigned int index_cameras = 0;
 
     // Fields
     tinyxml2::XMLElement* xml_transform_matrices = xml_top->FirstChildElement("transform_matrices_");
@@ -276,22 +270,22 @@ void SceneContext_t::readXML(const std::string &filename){
     // Filling buffers
     if (xml_transform_matrices != nullptr){
         for (tinyxml2::XMLElement* xml_transform_matrix = xml_transform_matrices->FirstChildElement("transform_matrix"); xml_transform_matrix; xml_transform_matrix = xml_transform_matrix->NextSiblingElement("transform_matrix")){
-            transform_matrices_[index_transform_matrices] = create_transform_matrix(xml_transform_matrix);
-            ++index_transform_matrices;
+            transform_matrices_[index_transform_matrices_] = create_transform_matrix(xml_transform_matrix);
+            ++index_transform_matrices_;
         }
     }
 
     if (xml_textures != nullptr){
         for (tinyxml2::XMLElement* xml_texture = xml_textures->FirstChildElement("texture"); xml_texture; xml_texture = xml_texture->NextSiblingElement("texture")){
-            textures_[index_textures] = create_texture(xml_texture);
-            ++index_textures;
+            textures_[index_textures_] = create_texture(xml_texture);
+            ++index_textures_;
         }
     }
 
     if (xml_scatterers != nullptr){
         for (tinyxml2::XMLElement* xml_scatterer = xml_scatterers->FirstChildElement("scatterer"); xml_scatterer; xml_scatterer = xml_scatterer->NextSiblingElement("scatterer")){
-            scatterers_[index_scatterers] = create_scatterer(xml_scatterer, scatterers_medium_list);
-            ++index_scatterers;
+            scatterers_[index_scatterers_] = create_scatterer(xml_scatterer, scatterers_medium_list);
+            ++index_scatterers_;
         }
     }
 
@@ -313,6 +307,17 @@ void SceneContext_t::readXML(const std::string &filename){
 }    
 
 void SceneContext_t::reset(){
+    index_transform_matrices_ = 0;
+    index_textures_ = 0;
+    index_scatterers_ = 0;
+    index_materials_ = 0;
+    index_mesh_geometries_ = 0;
+    index_objects_ = 0;
+    index_directional_lights_ = 0;
+    index_skyboxes_ = 0;
+    index_imgbuffers_ = 0;
+    index_cameras_ = 0;
+
     // Deleting buffers
     if (transform_matrices_ != nullptr){
         for (unsigned int i = 0; i < n_transform_matrices_; i++){
@@ -482,7 +487,8 @@ ScatteringFunction_t* SceneContext_t::create_scatterer(const tinyxml2::XMLElemen
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
     if (type == "absorber"){
-        return new Absorber_t();
+        return new Absorber_t(get_colour(xml_scatterer->Attribute("emisison")), get_colour(xml_scatterer->Attribute("colour")), 
+                                std::stod(xml_scatterer->Attribute("emission_distance")), std::stod(xml_scatterer->Attribute("absorption_distance")));
     }
     else if (type == "nonabsorber"){
         return new NonAbsorber_t();
@@ -491,10 +497,15 @@ ScatteringFunction_t* SceneContext_t::create_scatterer(const tinyxml2::XMLElemen
 
     }
     else if (type == "scatterer_exp"){
-
+        return new ScattererExp_t(get_colour(xml_scatterer->Attribute("emisison")), get_colour(xml_scatterer->Attribute("colour")),
+                                std::stod(xml_scatterer->Attribute("emission_distance")), std::stod(xml_scatterer->Attribute("absorption_distance")),
+                                std::stod(xml_scatterer->Attribute("scattering_distance")), std::stod(xml_scatterer->Attribute("order")), 
+                                std::stod(xml_scatterer->Attribute("scattering_angle")));
     }
     else if (type == "scatterer"){
-
+        return new Scatterer_t(get_colour(xml_scatterer->Attribute("emisison")), get_colour(xml_scatterer->Attribute("colour")),
+                                std::stod(xml_scatterer->Attribute("emission_distance")), std::stod(xml_scatterer->Attribute("absorption_distance")),
+                                std::stod(xml_scatterer->Attribute("scattering_distance")));
     }
     else{
         std::cout << "Error, scatterer type '" << type << "' not implemented. Only 'absorber', 'nonabsorber', 'portal_scatterer', 'scatterer_exp', and 'scatterer' exists for now. Ignoring." << std::endl; 
@@ -506,7 +517,7 @@ void SceneContext_t::render(){
 
 }
 
-Vec3f SceneContext_t::get_colour(std::string &colour){
+Vec3f SceneContext_t::get_colour(std::string colour) const {
     std::transform(colour.begin(), colour.end(), colour.begin(), ::tolower);
     std::map<std::string, Vec3f>::iterator it;
     it = my_colours::colours.find(colour);

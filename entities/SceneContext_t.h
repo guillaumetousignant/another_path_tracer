@@ -37,6 +37,17 @@ class SceneContext_t{
         unsigned int n_skyboxes_;
         unsigned int n_imgbuffers_;
         unsigned int n_cameras_;
+
+        unsigned int index_transform_matrices_;
+        unsigned int index_textures_;
+        unsigned int index_scatterers_;
+        unsigned int index_materials_;
+        unsigned int index_mesh_geometries_;
+        unsigned int index_objects_;
+        unsigned int index_directional_lights_;
+        unsigned int index_skyboxes_;
+        unsigned int index_imgbuffers_;
+        unsigned int index_cameras_;
         
         TransformMatrix_t** transform_matrices_;
         Texture_t** textures_;
@@ -54,7 +65,7 @@ class SceneContext_t{
         TransformMatrix_t* create_transform_matrix(const tinyxml2::XMLElement* xml_transform_matrix) const;
         Texture_t* create_texture(const tinyxml2::XMLElement* xml_texture) const;
         ScatteringFunction_t* create_scatterer(const tinyxml2::XMLElement* xml_scatterer, std::list<unsigned int>** scatterers_medium_list);
-        Vec3f get_colour(std::string &colour); // not const string
+        Vec3f get_colour(std::string colour) const; // not const string
         void render();
 };
 
