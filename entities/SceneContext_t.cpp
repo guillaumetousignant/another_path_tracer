@@ -284,7 +284,7 @@ void SceneContext_t::readXML(const std::string &filename){
 
     if (xml_scatterers != nullptr){
         for (tinyxml2::XMLElement* xml_scatterer = xml_scatterers->FirstChildElement("scatterer"); xml_scatterer; xml_scatterer = xml_scatterer->NextSiblingElement("scatterer")){
-            scatterers_[index_scatterers_] = create_scatterer(xml_scatterer, scatterers_medium_list, xml_transform_matrices, xml_materials);
+            scatterers_[index_scatterers_] = create_scatterer(xml_scatterer, scatterers_medium_list[index_scatterers_], xml_transform_matrices, xml_materials);
             ++index_scatterers_;
         }
     }
@@ -482,7 +482,7 @@ Texture_t* SceneContext_t::create_texture(const tinyxml2::XMLElement* xml_textur
     }
 }
 
-ScatteringFunction_t* SceneContext_t::create_scatterer(const tinyxml2::XMLElement* xml_scatterer, std::list<unsigned int>** scatterers_medium_list, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials) {
+ScatteringFunction_t* SceneContext_t::create_scatterer(const tinyxml2::XMLElement* xml_scatterer, std::list<unsigned int>* &scatterers_medium_list, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials) {
     std::string type = xml_scatterer->Attribute("type");
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
@@ -495,6 +495,7 @@ ScatteringFunction_t* SceneContext_t::create_scatterer(const tinyxml2::XMLElemen
     }
     else if (type == "portal_scatterer"){
         // CHECK add medium_list stuff
+        scatterers_medium_list = new 
         return new PortalScatterer_t(get_transform_matrix(xml_scatterer->Attribute("transform_matrix"), xml_transform_matrices), std::stod(xml_scatterer->Attribute("scattering_distance")), std::list<Medium_t*>());
     }
     else if (type == "scatterer_exp"){
