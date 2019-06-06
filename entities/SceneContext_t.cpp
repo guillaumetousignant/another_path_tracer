@@ -284,7 +284,7 @@ void SceneContext_t::readXML(const std::string &filename){
 
     if (xml_scatterers != nullptr){
         for (tinyxml2::XMLElement* xml_scatterer = xml_scatterers->FirstChildElement("scatterer"); xml_scatterer; xml_scatterer = xml_scatterer->NextSiblingElement("scatterer")){
-            scatterers_[index_scatterers_] = create_scatterer(xml_scatterer, scatterers_medium_list);
+            scatterers_[index_scatterers_] = create_scatterer(xml_scatterer, scatterers_medium_list, xml_transform_matrices, xml_materials);
             ++index_scatterers_;
         }
     }
@@ -482,7 +482,7 @@ Texture_t* SceneContext_t::create_texture(const tinyxml2::XMLElement* xml_textur
     }
 }
 
-ScatteringFunction_t* SceneContext_t::create_scatterer(const tinyxml2::XMLElement* xml_scatterer, std::list<unsigned int>** scatterers_medium_list) {
+ScatteringFunction_t* SceneContext_t::create_scatterer(const tinyxml2::XMLElement* xml_scatterer, std::list<unsigned int>** scatterers_medium_list, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials) {
     std::string type = xml_scatterer->Attribute("type");
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
@@ -494,7 +494,8 @@ ScatteringFunction_t* SceneContext_t::create_scatterer(const tinyxml2::XMLElemen
         return new NonAbsorber_t();
     }
     else if (type == "portal_scatterer"){
-
+        // CHECK add medium_list stuff
+        return new PortalScatterer_t(get_transform_matrix(xml_scatterer->Attribute("transform_matrix"), xml_transform_matrices), std::stod(xml_scatterer->Attribute("scattering_distance")), std::list<Medium_t*>());
     }
     else if (type == "scatterer_exp"){
         return new ScattererExp_t(get_colour(xml_scatterer->Attribute("emisison")), get_colour(xml_scatterer->Attribute("colour")),
@@ -544,4 +545,34 @@ Vec3f SceneContext_t::get_colour(std::string colour) const {
             return Vec3f(values[0], values[1], values[2]);
         }
 	}
+}
+
+TransformMatrix_t* SceneContext_t::get_transform_matrix(std::string transform_matrix, const tinyxml2::XMLElement* xml_transform_matrices){
+    std::transform(transform_matrix.begin(), transform_matrix.end(), transform_matrix.begin(), ::tolower);
+    if (transform_matrix == "nan"){
+        transform_matrices_[index_transform_matrices_] = new TransformMatrix_t();
+        ++index_transform_matrices_;
+        return transform_matrices_[index_transform_matrices_ - 1];
+    }
+    else if (is_number(transform_matrix)) {
+        return transform_matrices_[std::stoi(transform_matrix) - 1];
+    }
+    else {
+        if (xml_transform_matrices != nullptr){
+            unsigned int index = 0;
+            for (const tinyxml2::XMLElement* xml_transform_matrix = xml_transform_matrices->FirstChildElement("transform_matrix"); xml_transform_matrix; xml_transform_matrix = xml_transform_matrix->NextSiblingElement("transform_matrix")){
+                std::string name_transform_matrix = xml_transform_matrix->Attribute("name");
+                std::transform(name_transform_matrix.begin(), name_transform_matrix.end(), name_transform_matrix.begin(), ::tolower);
+                if (name_transform_matrix == transform_matrix){
+                    return transform_matrices_[index];
+                }
+                ++index;
+            }
+        }
+    }
+}
+
+bool SceneContext_t::is_number(const std::string& s) const {
+    return !s.empty() && std::find_if(s.begin(), 
+        s.end(), [](char c) { return !std::isdigit(c); }) == s.end();
 }
