@@ -1,6 +1,8 @@
 #include "SceneContext_t.h"
 
 #include <iostream>
+#include <string>
+#include <sstream> 
 #include "Colours.h"
 #include "NextFilename.h"
 #include "OpenGLRenderer_t.h"
@@ -404,7 +406,35 @@ void SceneContext_t::reset(){
 }
 
 TransformMatrix_t* SceneContext_t::create_transform_matrix(const tinyxml2::XMLElement* xml_transform_matrix) const {
+    std::string string_transform_matrix = xml_transform_matrix->Attribute("value");
+    std::transform(string_transform_matrix.begin(), string_transform_matrix.end(), string_transform_matrix.begin(), ::tolower);
 
+    if (string_transform_matrix == "nan"){
+        return new TransformMatrix_t();
+    }
+    else{
+        double values[16];
+        unsigned int count = 0;
+
+        std::stringstream ss(string_transform_matrix); // Turn the string into a stream.
+        
+        for(std::string s; ss >> s; ){
+            if (count < 16){
+                values[count] = std::stod(s);
+            }
+            ++count;
+        }
+        if (count != 16) {
+            std::cout << "Error, transform matrix value should be 16 values seperated by spaces, or nan. Current number of values it " << count << ". Ignoring." << std::endl;
+            return new TransformMatrix_t();
+        }
+        else{
+            return new TransformMatrix_t(values[0], values[1], values[2], values[3],
+                                        values[4], values[5], values[6], values[7],
+                                        values[8], values[9], values[10], values[11],
+                                        values[12], values[13], values[14], values[15]);
+        }
+    }
 }
 
 Texture_t* SceneContext_t::create_texture(const tinyxml2::XMLElement* xml_texture) const {
