@@ -443,8 +443,7 @@ TransformMatrix_t* SceneContext_t::create_transform_matrix(const tinyxml2::XMLEl
     else{
         double values[16];
         unsigned int count = 0;
-
-        std::stringstream ss(string_transform_matrix); // Turn the string into a stream.
+        std::stringstream ss(string_transform_matrix);
         
         for(std::string s; ss >> s; ){
             if (count < 16){
@@ -453,7 +452,7 @@ TransformMatrix_t* SceneContext_t::create_transform_matrix(const tinyxml2::XMLEl
             ++count;
         }
         if (count != 16) {
-            std::cout << "Error, transform matrix value should be 16 values seperated by spaces, or nan. Current number of values it " << count << ". Ignoring." << std::endl;
+            std::cout << "Error, transform matrix value should be 16 values seperated by spaces, or nan. Current number of values is " << count << ". Ignoring." << std::endl;
             return new TransformMatrix_t();
         }
         else{
@@ -505,4 +504,33 @@ ScatteringFunction_t* SceneContext_t::create_scatterer(const tinyxml2::XMLElemen
 
 void SceneContext_t::render(){
 
+}
+
+Vec3f SceneContext_t::get_colour(std::string &colour){
+    std::transform(colour.begin(), colour.end(), colour.begin(), ::tolower);
+    std::map<std::string, Vec3f>::iterator it;
+    it = my_colours::colours.find(colour);
+    if (it != my_colours::colours.end()) {
+		return it->second;
+	} 
+    else {
+        double values[3];
+        unsigned int count = 0;
+		std::stringstream ss(colour);
+
+        for(std::string s; ss >> s; ){
+            if (count < 3){
+                values[count] = std::stod(s);
+            }
+            ++count;
+        }
+
+        if (count != 3) {
+            std::cout << "Error, colour should be 3 values seperated by spaces, or a string. Current number of values is " << count << ", colour is '" << colour << "'. Ignoring." << std::endl;
+            return Vec3f(0.5, 0.5, 0.5);
+        }
+        else{
+            return Vec3f(values[0], values[1], values[2]);
+        }
+	}
 }
