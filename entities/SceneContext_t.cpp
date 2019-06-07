@@ -293,6 +293,16 @@ void SceneContext_t::readXML(const std::string &filename){
     // Fixes 
 
     // Scatterers medium list fix
+    for (unsigned int i = 0; i < n_scatterers_; i++){
+        if (scatterers_medium_list[i] != nullptr) {
+            for (auto it = scatterers_medium_list[i]->begin(); it != scatterers_medium_list[i]->end(); ++it){
+ 
+                PortalScatterer_t* portal_scatterer = dynamic_cast<PortalScatterer_t*>(scatterers_[i]);
+                Medium_t* medium = dynamic_cast<Medium_t*>(materials_[*it]); // CHECK I don't like those either
+                portal_scatterer->medium_list_.push_back(medium);
+            }
+        }
+    }
 
     if (scatterers_medium_list != nullptr){
         for (unsigned int i = 0; i < n_scatterers_; i++){
