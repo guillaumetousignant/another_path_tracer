@@ -571,6 +571,58 @@ TransformMatrix_t* SceneContext_t::get_transform_matrix(std::string transform_ma
             }
         }
     }
+    std::cout << "Error, transformation matrix '" << transform_matrix << "' not found. Ignoring. This causes a memory leak." << std::endl;
+    return new TransformMatrix_t();
+}
+
+std::list<unsigned int>* SceneContext_t::get_medium_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_materials) const {
+    std::list<unsigned int>* medium_list = new std::list<unsigned int>();
+    std::string delimiter = ", ";
+    size_t pos = 0;
+    std::string token;
+
+    while ((pos = string_medium_list.find(delimiter)) != std::string::npos) {
+        token = string_medium_list.substr(0, pos);
+
+        if (is_number(token)) {
+            medium_list->push_back(std::stoi(token) - 1);
+        }
+        else {
+            if (xml_materials != nullptr){
+                unsigned int index = 0;
+                for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
+                    std::string name_material = xml_material->Attribute("name");
+                    std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
+                    if (name_material == token){
+                        medium_list->push_back(index);
+                        break;
+                    }
+                    ++index;
+                }
+            }
+        }
+        // CHECK this should check for errors.
+
+        string_medium_list.erase(0, pos + delimiter.length());
+    }
+    if (is_number(string_medium_list)) {
+        medium_list->push_back(std::stoi(string_medium_list) - 1);
+    }
+    else {
+        if (xml_materials != nullptr){
+            unsigned int index = 0;
+            for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
+                std::string name_material = xml_material->Attribute("name");
+                std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
+                if (name_material == string_medium_list){
+                    medium_list->push_back(index);
+                    break;
+                }
+                ++index;
+            }
+        }
+    }
+    return medium_list;
 }
 
 bool SceneContext_t::is_number(const std::string& s) const {
