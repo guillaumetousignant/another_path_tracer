@@ -14,11 +14,14 @@
 #include "ReflectiveRefractiveFuzz_t.h"
 #include "ReflectiveRefractive_t.h"
 #include "Transparent_t.h"
+#include "PortalTop_t.h"
+#include "Portal_t.h"
 
 #include "NonAbsorber_t.h"
 #include "Absorber_t.h"
 #include "Scatterer_t.h"
 #include "ScattererExp_t.h"
+#include "PortalScattererTop_t.h"
 #include "PortalScatterer_t.h"
 
 #include "TransformMatrix_t.h"
@@ -297,7 +300,7 @@ void SceneContext_t::readXML(const std::string &filename){
         if (scatterers_medium_list[i] != nullptr) {
             for (auto it = scatterers_medium_list[i]->begin(); it != scatterers_medium_list[i]->end(); ++it){
  
-                PortalScatterer_t* portal_scatterer = dynamic_cast<PortalScatterer_t*>(scatterers_[i]);
+                PortalScattererTop_t* portal_scatterer = dynamic_cast<PortalScattererTop_t*>(scatterers_[i]);
                 Medium_t* medium = dynamic_cast<Medium_t*>(materials_[*it]); // CHECK I don't like those either
                 portal_scatterer->medium_list_.push_back(medium);
             }

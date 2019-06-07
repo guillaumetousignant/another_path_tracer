@@ -7,7 +7,7 @@
 #define EPSILON 0.00000001
 
 Portal_t::Portal_t(TransformMatrix_t* transformation, std::list<Medium_t*> medium_list) 
-    : transformation_(transformation), medium_list_(medium_list) {}
+    : PortalTop_t(transformation, medium_list) {}
 
 Portal_t::~Portal_t(){}
 

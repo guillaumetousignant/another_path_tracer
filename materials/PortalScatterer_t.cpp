@@ -4,7 +4,7 @@
 #include "RandomGenerator_t.h"
 
 PortalScatterer_t::PortalScatterer_t(TransformMatrix_t* transformation, double scattering_distance, std::list<Medium_t*> medium_list)
-    : transformation_(transformation), scattering_coefficient_(1/scattering_distance), medium_list_(medium_list), unif_(0.0, 1.0) {}
+    : PortalScattererTop_t(transformation, medium_list), scattering_coefficient_(1/scattering_distance), unif_(0.0, 1.0) {}
 
 PortalScatterer_t::~PortalScatterer_t() {}
 
