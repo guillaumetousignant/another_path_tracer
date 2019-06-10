@@ -113,6 +113,7 @@ void SceneContext_t::readXML(const std::string &filename){
     tinyxml2::XMLElement* xml_cameras = xml_top->FirstChildElement("cameras_");
 
     std::list<unsigned int>** scatterers_medium_list = nullptr;
+    std::list<unsigned int>** materials_medium_list = nullptr;
 
     // Counts
     if (xml_transform_matrices != nullptr){
@@ -250,6 +251,10 @@ void SceneContext_t::readXML(const std::string &filename){
     }
     if (n_materials_){
         materials_ = new Material_t*[n_materials_];
+        materials_medium_list = new std::list<unsigned int>*[n_materials_];
+        for (unsigned int i = 0; i < n_materials_; i++){
+            materials_medium_list[i] = nullptr;
+        }
     }
     if (n_mesh_geometries_){
         mesh_geometries_ = new MeshGeometry_t*[n_mesh_geometries_];
@@ -301,6 +306,19 @@ void SceneContext_t::readXML(const std::string &filename){
 
 
     // Fixes 
+    // Material mixes fix
+
+    // Materials mediumn list fix
+
+    if (materials_medium_list != nullptr){
+        for (unsigned int i = 0; i < n_materials_; i++){
+            if (materials_medium_list[i] != nullptr){
+                delete materials_medium_list[i];
+            }
+        }
+        delete [] materials_medium_list;
+        materials_medium_list = nullptr;
+    }
 
     // Scatterers medium list fix
     for (unsigned int i = 0; i < n_scatterers_; i++){
@@ -323,6 +341,8 @@ void SceneContext_t::readXML(const std::string &filename){
         delete [] scatterers_medium_list;
         scatterers_medium_list = nullptr;
     }
+
+    // Material aggregates fix
 
 }    
 
@@ -536,7 +556,7 @@ ScatteringFunction_t* SceneContext_t::create_scatterer(const tinyxml2::XMLElemen
 }
 
 Material_t* SceneContext_t::create_material(const tinyxml2::XMLElement* xml_material) const {
-    
+
 }
 
 void SceneContext_t::render(){
