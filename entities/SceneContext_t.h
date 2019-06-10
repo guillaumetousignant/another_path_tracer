@@ -68,6 +68,7 @@ class SceneContext_t{
         TransformMatrix_t* create_transform_matrix(const tinyxml2::XMLElement* xml_transform_matrix) const;
         Texture_t* create_texture(const tinyxml2::XMLElement* xml_texture) const;
         ScatteringFunction_t* create_scatterer(const tinyxml2::XMLElement* xml_scatterer, std::list<unsigned int>* &scatterers_medium_list, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials);
+        Material_t* create_material(const tinyxml2::XMLElement* xml_material) const;
         
         Vec3f get_colour(std::string colour) const; // copies string :(
         TransformMatrix_t* get_transform_matrix(std::string transform_matrix, const tinyxml2::XMLElement* xml_transform_matrices);

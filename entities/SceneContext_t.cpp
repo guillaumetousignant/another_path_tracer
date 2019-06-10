@@ -292,6 +292,13 @@ void SceneContext_t::readXML(const std::string &filename){
         }
     }
 
+    if (xml_materials != nullptr){
+        for (tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
+            materials_[index_materials_] = create_material(xml_material);
+            ++index_materials_;
+        }
+    }
+
 
     // Fixes 
 
@@ -526,6 +533,10 @@ ScatteringFunction_t* SceneContext_t::create_scatterer(const tinyxml2::XMLElemen
         std::cout << "Error, scatterer type '" << type << "' not implemented. Only 'absorber', 'nonabsorber', 'portal_scatterer', 'scatterer_exp', and 'scatterer' exists for now. Ignoring." << std::endl; 
         return new NonAbsorber_t();
     }
+}
+
+Material_t* SceneContext_t::create_material(const tinyxml2::XMLElement* xml_material) const {
+    
 }
 
 void SceneContext_t::render(){
