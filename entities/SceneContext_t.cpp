@@ -556,7 +556,76 @@ ScatteringFunction_t* SceneContext_t::create_scatterer(const tinyxml2::XMLElemen
 }
 
 Material_t* SceneContext_t::create_material(const tinyxml2::XMLElement* xml_material) const {
+    std::string type = xml_material->Attribute("type");
+    std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
+    if (type == "diffuse"){
+        
+    }
+    else if (type == "diffuse_full"){
+       
+    }
+    else if (type == "diffuse_tex"){
+       
+    }
+    else if (type == "fresnelmix"){
+       
+    }
+    else if (type == "fresnelmix_in"){
+       
+    }
+    else if (type == "normal_material"){
+       
+    }
+    else if (type == "portal"){
+       
+    }
+    else if (type == "portal_refractive"){
+       
+    }
+    else if (type == "randommix"){
+       
+    }
+    else if (type == "randommix_in"){
+       
+    }
+    else if (type == "reflective"){
+       
+    }
+    else if (type == "reflective_fuzz"){
+       
+    }
+    else if (type == "reflective_fuzz_tex"){
+       
+    }
+    else if (type == "nonabsorber"){
+       
+    }
+    else if (type == "reflective_refractive"){
+       
+    }
+    else if (type == "reflective_refractive_fuzz"){
+       
+    }
+    else if (type == "refractive"){
+       
+    }
+    else if (type == "refractive_fuzz"){
+       
+    }
+    else if (type == "transparent"){
+       
+    }
+    else if (type == "toon"){
+       
+    }
+    else if (type == "aggregate"){
+       
+    }
+    else{
+        std::cout << "Error, material type '" << type << "' not implemented. Ignoring." << std::endl; 
+        return new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.5, 0.5, 0.5), 1.0);
+    }
 }
 
 void SceneContext_t::render(){
