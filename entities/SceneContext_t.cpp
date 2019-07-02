@@ -3,6 +3,8 @@
 #include <iostream>
 #include <string>
 #include <sstream> 
+#include <tuple>
+
 #include "Colours.h"
 #include "NextFilename.h"
 #include "OpenGLRenderer_t.h"
@@ -21,10 +23,12 @@
 #include "PortalTop_t.h"
 #include "Portal_t.h"
 #include "NormalMaterial_t.h"
+#include "MaterialMix_t.h"
 #include "FresnelMix_t.h"
 #include "FresnelMixIn_t.h"
 #include "RandomMix_t.h"
 #include "RandomMixIn_t.h"
+#include "MaterialMap_t.h"
 
 #include "NonAbsorber_t.h"
 #include "Absorber_t.h"
@@ -68,6 +72,10 @@
 
 #include "SkyboxFlat_t.h"
 #include "SkyboxFlatSun_t.h"
+#include "SkyboxTexture_t.h"
+#include "SkyboxTextureSun_t.h"
+#include "SkyboxTextureTransformation_t.h"
+#include "SkyboxTextureTransformationSun_t.h"
 
 SceneContext_t::SceneContext_t() :
     use_gl_(false), scene_name_(""), opengl_renderer_(nullptr), n_transform_matrices_(0), n_textures_(0), 
@@ -124,6 +132,7 @@ void SceneContext_t::readXML(const std::string &filename){
     std::list<unsigned int>** scatterers_medium_list = nullptr;
     unsigned int** materials_mix_list = nullptr;
     std::list<unsigned int>** materials_medium_list = nullptr;
+    std::tuple<std::list<unsigned int>, std::list<std::string>>** materials_aggregate_list = nullptr;
 
     // Counts
     if (xml_transform_matrices != nullptr){
@@ -263,9 +272,11 @@ void SceneContext_t::readXML(const std::string &filename){
         materials_ = new Material_t*[n_materials_];
         materials_mix_list = new unsigned int*[n_materials_];
         materials_medium_list = new std::list<unsigned int>*[n_materials_];
+        materials_aggregate_list = new std::tuple<std::list<unsigned int>, std::list<std::string>>*[n_materials_];
         for (unsigned int i = 0; i < n_materials_; i++){
             materials_mix_list[i] = nullptr;
             materials_medium_list[i] = nullptr;
+            materials_aggregate_list[i] = nullptr;
         }
     }
     if (n_mesh_geometries_){
@@ -311,7 +322,7 @@ void SceneContext_t::readXML(const std::string &filename){
 
     if (xml_materials != nullptr){
         for (tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
-            materials_[index_materials_] = create_material(xml_material, materials_medium_list[index_materials_], materials_mix_list[index_materials_], xml_textures, xml_transform_matrices, xml_materials, xml_scatterers);
+            materials_[index_materials_] = create_material(xml_material, materials_medium_list[index_materials_], materials_mix_list[index_materials_], materials_aggregate_list[index_materials_], xml_textures, xml_transform_matrices, xml_materials, xml_scatterers);
             ++index_materials_;
         }
     }
@@ -365,6 +376,19 @@ void SceneContext_t::readXML(const std::string &filename){
     }
 
     // Material aggregates fix
+
+    if (materials_aggregate_list != nullptr){
+        for (unsigned int i = 0; i < n_materials_; i++){
+            if (materials_aggregate_list[i] != nullptr){
+                delete materials_aggregate_list[i];
+            }
+        }
+        delete [] materials_aggregate_list;
+        materials_aggregate_list = nullptr;
+    }
+
+
+
 
 }    
 
@@ -577,7 +601,7 @@ ScatteringFunction_t* SceneContext_t::create_scatterer(const tinyxml2::XMLElemen
     }
 }
 
-Material_t* SceneContext_t::create_material(const tinyxml2::XMLElement* xml_material, std::list<unsigned int>* &materials_medium_list, unsigned int* &materials_mix_list, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_scatterers) {
+Material_t* SceneContext_t::create_material(const tinyxml2::XMLElement* xml_material, std::list<unsigned int>* &materials_medium_list, unsigned int* &materials_mix_list, std::tuple<std::list<unsigned int>, std::list<std::string>>* &materials_aggregate_list, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_scatterers) {
     std::string type = xml_material->Attribute("type");
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
@@ -649,7 +673,7 @@ Material_t* SceneContext_t::create_material(const tinyxml2::XMLElement* xml_mate
         return new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.5, 0.5, 0.5), 1.0);
     }
     else if (type == "aggregate"){
-        
+        // CHECK add aggregates
     }
     else{
         std::cout << "Error, material type '" << type << "' not implemented. Ignoring." << std::endl; 
