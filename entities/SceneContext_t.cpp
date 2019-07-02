@@ -8,6 +8,7 @@
 #include "OpenGLRenderer_t.h"
 
 #include "Diffuse_t.h"
+#include "DiffuseFull_t.h"
 #include "DiffuseTex_t.h"
 #include "Refractive_t.h"
 #include "Reflective_t.h"
@@ -299,7 +300,7 @@ void SceneContext_t::readXML(const std::string &filename){
 
     if (xml_materials != nullptr){
         for (tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
-            materials_[index_materials_] = create_material(xml_material);
+            materials_[index_materials_] = create_material(xml_material, xml_textures);
             ++index_materials_;
         }
     }
@@ -555,16 +556,17 @@ ScatteringFunction_t* SceneContext_t::create_scatterer(const tinyxml2::XMLElemen
     }
 }
 
-Material_t* SceneContext_t::create_material(const tinyxml2::XMLElement* xml_material) const {
+Material_t* SceneContext_t::create_material(const tinyxml2::XMLElement* xml_material, const tinyxml2::XMLElement* xml_textures) const {
     std::string type = xml_material->Attribute("type");
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
     if (type == "diffuse"){
-        return new Diffuse_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_scatterer->Attribute("colour")), 
-                                std::stod(xml_scatterer->Attribute("emission_distance")), std::stod(xml_scatterer->Attribute("absorption_distance")));
+        return new Diffuse_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), 
+                                std::stod(xml_material->Attribute("roughness")));
     }
     else if (type == "diffuse_full"){
-       
+       return new DiffuseFull_t(get_texture(xml_material->Attribute("emission_map"), xml_textures), get_texture(xml_material->Attribute("texture"), xml_textures), 
+                                std::stod(xml_material->Attribute("roughness")));
     }
     else if (type == "diffuse_tex"){
        
@@ -737,6 +739,29 @@ std::list<unsigned int>* SceneContext_t::get_medium_list(std::string string_medi
         }
     }
     return medium_list;
+}
+
+Texture_t* SceneContext_t::get_texture(std::string texture, const tinyxml2::XMLElement* xml_textures) const {
+    std::transform(texture.begin(), texture.end(), texture.begin(), ::tolower);
+    
+    if (is_number(texture)) {
+        return textures_[std::stoi(texture) - 1];
+    }
+    else {
+        if (xml_textures != nullptr){
+            unsigned int index = 0;
+            for (const tinyxml2::XMLElement* xml_texture = xml_textures->FirstChildElement("texture"); xml_texture; xml_texture = xml_texture->NextSiblingElement("texture")){
+                std::string name_texture = xml_texture->Attribute("name");
+                std::transform(name_texture.begin(), name_texture.end(), name_texture.begin(), ::tolower);
+                if (name_texture == texture){
+                    return textures_[index];
+                }
+                ++index;
+            }
+        }
+    }
+    std::cout << "Error, texture '" << texture << "' not found. Exiting." << std::endl;
+    exit(21); 
 }
 
 bool SceneContext_t::is_number(const std::string& s) const {
