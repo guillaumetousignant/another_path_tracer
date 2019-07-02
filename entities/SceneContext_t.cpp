@@ -527,7 +527,7 @@ ScatteringFunction_t* SceneContext_t::create_scatterer(const tinyxml2::XMLElemen
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
     if (type == "absorber"){
-        return new Absorber_t(get_colour(xml_scatterer->Attribute("emisison")), get_colour(xml_scatterer->Attribute("colour")), 
+        return new Absorber_t(get_colour(xml_scatterer->Attribute("emission")), get_colour(xml_scatterer->Attribute("colour")), 
                                 std::stod(xml_scatterer->Attribute("emission_distance")), std::stod(xml_scatterer->Attribute("absorption_distance")));
     }
     else if (type == "nonabsorber"){
@@ -539,13 +539,13 @@ ScatteringFunction_t* SceneContext_t::create_scatterer(const tinyxml2::XMLElemen
         return new PortalScatterer_t(get_transform_matrix(xml_scatterer->Attribute("transform_matrix"), xml_transform_matrices), std::stod(xml_scatterer->Attribute("scattering_distance")), std::list<Medium_t*>());
     }
     else if (type == "scatterer_exp"){
-        return new ScattererExp_t(get_colour(xml_scatterer->Attribute("emisison")), get_colour(xml_scatterer->Attribute("colour")),
+        return new ScattererExp_t(get_colour(xml_scatterer->Attribute("emission")), get_colour(xml_scatterer->Attribute("colour")),
                                 std::stod(xml_scatterer->Attribute("emission_distance")), std::stod(xml_scatterer->Attribute("absorption_distance")),
                                 std::stod(xml_scatterer->Attribute("scattering_distance")), std::stod(xml_scatterer->Attribute("order")), 
                                 std::stod(xml_scatterer->Attribute("scattering_angle")));
     }
     else if (type == "scatterer"){
-        return new Scatterer_t(get_colour(xml_scatterer->Attribute("emisison")), get_colour(xml_scatterer->Attribute("colour")),
+        return new Scatterer_t(get_colour(xml_scatterer->Attribute("emission")), get_colour(xml_scatterer->Attribute("colour")),
                                 std::stod(xml_scatterer->Attribute("emission_distance")), std::stod(xml_scatterer->Attribute("absorption_distance")),
                                 std::stod(xml_scatterer->Attribute("scattering_distance")));
     }
@@ -560,7 +560,8 @@ Material_t* SceneContext_t::create_material(const tinyxml2::XMLElement* xml_mate
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
     if (type == "diffuse"){
-        
+        return new Diffuse_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_scatterer->Attribute("colour")), 
+                                std::stod(xml_scatterer->Attribute("emission_distance")), std::stod(xml_scatterer->Attribute("absorption_distance")));
     }
     else if (type == "diffuse_full"){
        
