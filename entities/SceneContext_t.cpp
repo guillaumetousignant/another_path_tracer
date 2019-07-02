@@ -569,7 +569,8 @@ Material_t* SceneContext_t::create_material(const tinyxml2::XMLElement* xml_mate
                                 std::stod(xml_material->Attribute("roughness")));
     }
     else if (type == "diffuse_tex"){
-       
+       return new DiffuseTex_t(get_colour(xml_material->Attribute("emission")), get_texture(xml_material->Attribute("texture"), xml_textures), 
+                                std::stod(xml_material->Attribute("roughness")));
     }
     else if (type == "fresnelmix"){
        
