@@ -10,10 +10,13 @@
 #include "Diffuse_t.h"
 #include "DiffuseFull_t.h"
 #include "DiffuseTex_t.h"
-#include "Refractive_t.h"
 #include "Reflective_t.h"
-#include "ReflectiveRefractiveFuzz_t.h"
+#include "ReflectiveFuzz_t.h"
+#include "ReflectiveFuzzTex_t.h"
 #include "ReflectiveRefractive_t.h"
+#include "ReflectiveRefractiveFuzz_t.h"
+#include "Refractive_t.h"
+#include "RefractiveFuzz_t.h"
 #include "Transparent_t.h"
 #include "PortalTop_t.h"
 #include "Portal_t.h"
@@ -308,7 +311,7 @@ void SceneContext_t::readXML(const std::string &filename){
 
     if (xml_materials != nullptr){
         for (tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
-            materials_[index_materials_] = create_material(xml_material, materials_medium_list[index_materials_], materials_mix_list[index_materials_], xml_textures, xml_transform_matrices, xml_materials);
+            materials_[index_materials_] = create_material(xml_material, materials_medium_list[index_materials_], materials_mix_list[index_materials_], xml_textures, xml_transform_matrices, xml_materials, xml_scatterers);
             ++index_materials_;
         }
     }
@@ -574,7 +577,7 @@ ScatteringFunction_t* SceneContext_t::create_scatterer(const tinyxml2::XMLElemen
     }
 }
 
-Material_t* SceneContext_t::create_material(const tinyxml2::XMLElement* xml_material, std::list<unsigned int>* &materials_medium_list, unsigned int* &materials_mix_list, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials) {
+Material_t* SceneContext_t::create_material(const tinyxml2::XMLElement* xml_material, std::list<unsigned int>* &materials_medium_list, unsigned int* &materials_mix_list, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_scatterers) {
     std::string type = xml_material->Attribute("type");
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
@@ -583,72 +586,70 @@ Material_t* SceneContext_t::create_material(const tinyxml2::XMLElement* xml_mate
                                 std::stod(xml_material->Attribute("roughness")));
     }
     else if (type == "diffuse_full"){
-       return new DiffuseFull_t(get_texture(xml_material->Attribute("emission_map"), xml_textures), get_texture(xml_material->Attribute("texture"), xml_textures), 
+        return new DiffuseFull_t(get_texture(xml_material->Attribute("emission_map"), xml_textures), get_texture(xml_material->Attribute("texture"), xml_textures), 
                                 std::stod(xml_material->Attribute("roughness")));
     }
     else if (type == "diffuse_tex"){
-       return new DiffuseTex_t(get_colour(xml_material->Attribute("emission")), get_texture(xml_material->Attribute("texture"), xml_textures), 
+        return new DiffuseTex_t(get_colour(xml_material->Attribute("emission")), get_texture(xml_material->Attribute("texture"), xml_textures), 
                                 std::stod(xml_material->Attribute("roughness")));
     }
     else if (type == "fresnelmix"){
-       materials_mix_list = get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials);
-       return new FresnelMix_t(nullptr, nullptr, std::stod(xml_material->Attribute("ind")));
+        materials_mix_list = get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials);
+        return new FresnelMix_t(nullptr, nullptr, std::stod(xml_material->Attribute("ind")));
     }
     else if (type == "fresnelmix_in"){
-       materials_mix_list = get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials);
-       return new FresnelMixIn_t(nullptr, nullptr, std::stod(xml_material->Attribute("ind")));
+        materials_mix_list = get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials);
+        return new FresnelMixIn_t(nullptr, nullptr, std::stod(xml_material->Attribute("ind")));
     }
     else if (type == "normal_material"){
-       return new NormalMaterial_t();
+        return new NormalMaterial_t();
     }
     else if (type == "portal"){
-       materials_medium_list = get_medium_list(xml_material->Attribute("medium_list"), xml_materials);
-       return new Portal_t(get_transform_matrix(xml_material->Attribute("transform_matrix"), xml_transform_matrices), std::list<Medium_t*>());
+        materials_medium_list = get_medium_list(xml_material->Attribute("medium_list"), xml_materials);
+        return new Portal_t(get_transform_matrix(xml_material->Attribute("transform_matrix"), xml_transform_matrices), std::list<Medium_t*>());
     }
     else if (type == "portal_refractive"){
-       std::cout << "Error, refractive portal not implemented yet. Ignoring." << std::endl; 
+        std::cout << "Error, refractive portal not implemented yet. Ignoring." << std::endl; 
         return new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.5, 0.5, 0.5), 1.0);
     }
     else if (type == "randommix"){
-       materials_mix_list = get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials);
-       return new RandomMix_t(nullptr, nullptr, std::stod(xml_material->Attribute("ratio")));
+        materials_mix_list = get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials);
+        return new RandomMix_t(nullptr, nullptr, std::stod(xml_material->Attribute("ratio")));
     }
     else if (type == "randommix_in"){
-       materials_mix_list = get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials);
-       return new RandomMixIn_t(nullptr, nullptr, std::stod(xml_material->Attribute("ratio")));
+        materials_mix_list = get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials);
+        return new RandomMixIn_t(nullptr, nullptr, std::stod(xml_material->Attribute("ratio")));
     }
     else if (type == "reflective"){
-       
+        return new Reflective_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")));
     }
     else if (type == "reflective_fuzz"){
-       
+        return new ReflectiveFuzz_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), std::stod(xml_material->Attribute("order")), std::stod(xml_material->Attribute("diffusivity")));
     }
     else if (type == "reflective_fuzz_tex"){
-       
-    }
-    else if (type == "nonabsorber"){
-       
+        return new ReflectiveFuzzTex_t(get_texture(xml_material->Attribute("texture"), xml_textures), get_colour(xml_material->Attribute("emission")), std::stod(xml_material->Attribute("order")), std::stod(xml_material->Attribute("diffusivity")));
     }
     else if (type == "reflective_refractive"){
-       
+        return new ReflectiveRefractive_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), std::stod(xml_material->Attribute("ind")), std::stoi(xml_material->Attribute("priority")), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers));
     }
     else if (type == "reflective_refractive_fuzz"){
-       
+        return new ReflectiveRefractiveFuzz_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), std::stod(xml_material->Attribute("ind")), std::stoi(xml_material->Attribute("priority")), std::stod(xml_material->Attribute("order")), std::stod(xml_material->Attribute("diffusivity")), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers));
     }
     else if (type == "refractive"){
-       
+        return new Refractive_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), std::stod(xml_material->Attribute("ind")), std::stoi(xml_material->Attribute("priority")), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers));
     }
     else if (type == "refractive_fuzz"){
-       
+        return new RefractiveFuzz_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), std::stod(xml_material->Attribute("ind")), std::stoi(xml_material->Attribute("priority")), std::stod(xml_material->Attribute("order")), std::stod(xml_material->Attribute("diffusivity")), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers));
     }
     else if (type == "transparent"){
-       
+        return new Transparent_t(std::stoi(xml_material->Attribute("priority")), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers));
     }
     else if (type == "toon"){
-       
+        std::cout << "Error, toon shader not implemented yet. Ignoring." << std::endl; 
+        return new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.5, 0.5, 0.5), 1.0);
     }
     else if (type == "aggregate"){
-       
+        
     }
     else{
         std::cout << "Error, material type '" << type << "' not implemented. Ignoring." << std::endl; 
@@ -850,6 +851,28 @@ unsigned int* SceneContext_t::get_material_mix(std::string material_refracted, s
     }
 
     return output_materials;
+}
+
+ScatteringFunction_t* SceneContext_t::get_scatterer(std::string scatterer, const tinyxml2::XMLElement* xml_scatterers) const {
+    if (is_number(scatterer)) {
+        return scatterers_[std::stoi(scatterer) - 1];
+    }
+    else {
+        if (xml_scatterers != nullptr){
+            std::transform(scatterer.begin(), scatterer.end(), scatterer.begin(), ::tolower);
+            unsigned int index = 0;
+            for (const tinyxml2::XMLElement* xml_scatterer = xml_scatterers->FirstChildElement("scatterer"); xml_scatterer; xml_scatterer = xml_scatterer->NextSiblingElement("scatterer")){
+                std::string name_scatterer = xml_scatterer->Attribute("name");
+                std::transform(name_scatterer.begin(), name_scatterer.end(), name_scatterer.begin(), ::tolower);
+                if (name_scatterer == scatterer){
+                    return scatterers_[index];
+                }
+                ++index;
+            }
+        }
+    }
+    std::cout << "Error, scatterer '" << scatterer << "' not found. Ignoring. This Causes a memory leak." << std::endl;
+    return new NonAbsorber_t();
 }
 
 bool SceneContext_t::is_number(const std::string& s) const {
