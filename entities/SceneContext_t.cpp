@@ -17,6 +17,11 @@
 #include "Transparent_t.h"
 #include "PortalTop_t.h"
 #include "Portal_t.h"
+#include "NormalMaterial_t.h"
+#include "FresnelMix_t.h"
+#include "FresnelMixIn_t.h"
+#include "RandomMix_t.h"
+#include "RandomMixIn_t.h"
 
 #include "NonAbsorber_t.h"
 #include "Absorber_t.h"
@@ -114,6 +119,7 @@ void SceneContext_t::readXML(const std::string &filename){
     tinyxml2::XMLElement* xml_cameras = xml_top->FirstChildElement("cameras_");
 
     std::list<unsigned int>** scatterers_medium_list = nullptr;
+    unsigned int** materials_mix_list = nullptr;
     std::list<unsigned int>** materials_medium_list = nullptr;
 
     // Counts
@@ -252,8 +258,10 @@ void SceneContext_t::readXML(const std::string &filename){
     }
     if (n_materials_){
         materials_ = new Material_t*[n_materials_];
+        materials_mix_list = new unsigned int*[n_materials_];
         materials_medium_list = new std::list<unsigned int>*[n_materials_];
         for (unsigned int i = 0; i < n_materials_; i++){
+            materials_mix_list[i] = nullptr;
             materials_medium_list[i] = nullptr;
         }
     }
@@ -300,7 +308,7 @@ void SceneContext_t::readXML(const std::string &filename){
 
     if (xml_materials != nullptr){
         for (tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
-            materials_[index_materials_] = create_material(xml_material, xml_textures);
+            materials_[index_materials_] = create_material(xml_material, materials_medium_list[index_materials_], materials_mix_list[index_materials_], xml_textures, xml_transform_matrices, xml_materials);
             ++index_materials_;
         }
     }
@@ -308,6 +316,16 @@ void SceneContext_t::readXML(const std::string &filename){
 
     // Fixes 
     // Material mixes fix
+
+    if (materials_mix_list != nullptr){
+        for (unsigned int i = 0; i < n_materials_; i++){
+            if (materials_mix_list[i] != nullptr){
+                delete [] materials_mix_list[i];
+            }
+        }
+        delete [] materials_mix_list;
+        materials_mix_list = nullptr;
+    }
 
     // Materials mediumn list fix
 
@@ -556,7 +574,7 @@ ScatteringFunction_t* SceneContext_t::create_scatterer(const tinyxml2::XMLElemen
     }
 }
 
-Material_t* SceneContext_t::create_material(const tinyxml2::XMLElement* xml_material, const tinyxml2::XMLElement* xml_textures) const {
+Material_t* SceneContext_t::create_material(const tinyxml2::XMLElement* xml_material, std::list<unsigned int>* &materials_medium_list, unsigned int* &materials_mix_list, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials) {
     std::string type = xml_material->Attribute("type");
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
@@ -573,25 +591,31 @@ Material_t* SceneContext_t::create_material(const tinyxml2::XMLElement* xml_mate
                                 std::stod(xml_material->Attribute("roughness")));
     }
     else if (type == "fresnelmix"){
-       
+       materials_mix_list = get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials);
+       return new FresnelMix_t(nullptr, nullptr, std::stod(xml_material->Attribute("ind")));
     }
     else if (type == "fresnelmix_in"){
-       
+       materials_mix_list = get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials);
+       return new FresnelMixIn_t(nullptr, nullptr, std::stod(xml_material->Attribute("ind")));
     }
     else if (type == "normal_material"){
-       
+       return new NormalMaterial_t();
     }
     else if (type == "portal"){
-       
+       materials_medium_list = get_medium_list(xml_material->Attribute("medium_list"), xml_materials);
+       return new Portal_t(get_transform_matrix(xml_material->Attribute("transform_matrix"), xml_transform_matrices), std::list<Medium_t*>());
     }
     else if (type == "portal_refractive"){
-       
+       std::cout << "Error, refractive portal not implemented yet. Ignoring." << std::endl; 
+        return new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.5, 0.5, 0.5), 1.0);
     }
     else if (type == "randommix"){
-       
+       materials_mix_list = get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials);
+       return new RandomMix_t(nullptr, nullptr, std::stod(xml_material->Attribute("ratio")));
     }
     else if (type == "randommix_in"){
-       
+       materials_mix_list = get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials);
+       return new RandomMixIn_t(nullptr, nullptr, std::stod(xml_material->Attribute("ratio")));
     }
     else if (type == "reflective"){
        
@@ -743,13 +767,12 @@ std::list<unsigned int>* SceneContext_t::get_medium_list(std::string string_medi
 }
 
 Texture_t* SceneContext_t::get_texture(std::string texture, const tinyxml2::XMLElement* xml_textures) const {
-    std::transform(texture.begin(), texture.end(), texture.begin(), ::tolower);
-    
     if (is_number(texture)) {
         return textures_[std::stoi(texture) - 1];
     }
     else {
         if (xml_textures != nullptr){
+            std::transform(texture.begin(), texture.end(), texture.begin(), ::tolower);
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_texture = xml_textures->FirstChildElement("texture"); xml_texture; xml_texture = xml_texture->NextSiblingElement("texture")){
                 std::string name_texture = xml_texture->Attribute("name");
@@ -763,6 +786,70 @@ Texture_t* SceneContext_t::get_texture(std::string texture, const tinyxml2::XMLE
     }
     std::cout << "Error, texture '" << texture << "' not found. Exiting." << std::endl;
     exit(21); 
+}
+
+unsigned int* SceneContext_t::get_material_mix(std::string material_refracted, std::string material_reflected, const tinyxml2::XMLElement* xml_materials) const {
+    unsigned int* output_materials = new unsigned int[2];
+    
+    if (is_number(material_refracted)) {
+        output_materials[0] = std::stoi(material_refracted) - 1;
+    }
+    else {
+        if (xml_materials != nullptr){
+            std::transform(material_refracted.begin(), material_refracted.end(), material_refracted.begin(), ::tolower);
+            bool material_missing = true;
+            unsigned int index = 0;
+            for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
+                std::string name_material = xml_material->Attribute("name");
+                std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
+                if (material_refracted == name_material){
+                    output_materials[0] = index;
+                    material_missing = false;
+                    break;
+                }
+                ++index;
+            }
+            if (material_missing){
+                std::cout << "Error, material '" << material_refracted << "' not found. Exiting." << std::endl;
+                exit(41); 
+            }
+        }
+        else{
+            std::cout << "Error, no materials, '" << material_refracted << "' not found. Exiting." << std::endl;
+            exit(47);
+        }        
+    }
+
+    if (is_number(material_reflected)) {
+        output_materials[1] = std::stoi(material_reflected) - 1;
+    }
+    else {
+        if (xml_materials != nullptr){
+            std::transform(material_reflected.begin(), material_reflected.end(), material_reflected.begin(), ::tolower);
+            bool material_missing = true;
+            unsigned int index = 0;
+            for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
+                std::string name_material = xml_material->Attribute("name");
+                std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
+                if (material_reflected == name_material){
+                    output_materials[1] = index;
+                    material_missing = false;
+                    break;
+                }
+                ++index;
+            }
+            if (material_missing){
+                std::cout << "Error, material '" << material_reflected << "' not found. Exiting." << std::endl;
+                exit(41); 
+            }
+        }
+        else{
+            std::cout << "Error, no materials, '" << material_reflected << "' not found. Exiting." << std::endl;
+            exit(47);
+        }        
+    }
+
+    return output_materials;
 }
 
 bool SceneContext_t::is_number(const std::string& s) const {

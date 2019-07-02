@@ -68,12 +68,13 @@ class SceneContext_t{
         TransformMatrix_t* create_transform_matrix(const tinyxml2::XMLElement* xml_transform_matrix) const;
         Texture_t* create_texture(const tinyxml2::XMLElement* xml_texture) const;
         ScatteringFunction_t* create_scatterer(const tinyxml2::XMLElement* xml_scatterer, std::list<unsigned int>* &scatterers_medium_list, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials);
-        Material_t* create_material(const tinyxml2::XMLElement* xml_material, const tinyxml2::XMLElement* xml_textures) const;
+        Material_t* create_material(const tinyxml2::XMLElement* xml_material, std::list<unsigned int>* &materials_medium_list, unsigned int* &materials_mix_list, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials);
         
         Vec3f get_colour(std::string colour) const; // copies string :(
         TransformMatrix_t* get_transform_matrix(std::string transform_matrix, const tinyxml2::XMLElement* xml_transform_matrices);
         std::list<unsigned int>* get_medium_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_materials) const;
         Texture_t* get_texture(std::string texture, const tinyxml2::XMLElement* xml_textures) const;
+        unsigned int* get_material_mix(std::string material_refracted, std::string material_reflected, const tinyxml2::XMLElement* xml_materials) const;
         bool is_number(const std::string& s) const;
 };
 
