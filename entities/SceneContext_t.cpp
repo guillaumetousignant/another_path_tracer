@@ -330,6 +330,13 @@ void SceneContext_t::readXML(const std::string &filename){
 
     // Fixes 
     // Material mixes fix
+    for (unsigned int i = 0; i < n_materials_; i++){
+        if (materials_mix_list[i] != nullptr){
+            MaterialMix_t* material_mix = dynamic_cast<MaterialMix_t*>(materials_[i]); // dynamic caaaast :(
+            material_mix->material_refracted_ = materials_[materials_mix_list[i][0]];
+            material_mix->material_reflected_ = materials_[materials_mix_list[i][1]];
+        }
+    }
 
     if (materials_mix_list != nullptr){
         for (unsigned int i = 0; i < n_materials_; i++){
@@ -341,7 +348,17 @@ void SceneContext_t::readXML(const std::string &filename){
         materials_mix_list = nullptr;
     }
 
-    // Materials mediumn list fix
+    // Materials medium list fix
+    for (unsigned int i = 0; i < n_materials_; i++){
+        if (materials_medium_list[i] != nullptr) {
+            for (auto it = materials_medium_list[i]->begin(); it != materials_medium_list[i]->end(); ++it){
+ 
+                PortalTop_t* portal = dynamic_cast<PortalTop_t*>(materials_[i]);
+                Medium_t* medium = dynamic_cast<Medium_t*>(materials_[*it]); // CHECK I don't like those either
+                portal->medium_list_.push_back(medium);
+            }
+        }
+    }
 
     if (materials_medium_list != nullptr){
         for (unsigned int i = 0; i < n_materials_; i++){
