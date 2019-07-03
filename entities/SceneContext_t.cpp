@@ -330,7 +330,6 @@ void SceneContext_t::readXML(const std::string &filename){
         }
     }
 
-
     // Fixes 
     // Material mixes fix
     for (unsigned int i = 0; i < n_materials_; i++){
@@ -432,7 +431,12 @@ void SceneContext_t::readXML(const std::string &filename){
         materials_aggregate_list = nullptr;
     }
 
-
+    if (xml_mesh_geometries != nullptr){
+        for (tinyxml2::XMLElement* xml_mesh_geometry= xml_mesh_geometries->FirstChildElement("mesh_geometry"); xml_mesh_geometry; xml_mesh_geometry = xml_mesh_geometry->NextSiblingElement("mesh_geometry")){
+            mesh_geometries_[index_mesh_geometries_] = create_mesh_geometry(xml_mesh_geometry);
+            ++index_mesh_geometries_;
+        }
+    }
 
 
 }    
@@ -734,6 +738,19 @@ Material_t* SceneContext_t::create_material(const tinyxml2::XMLElement* xml_mate
     else{
         std::cout << "Error, material type '" << type << "' not implemented. Ignoring." << std::endl; 
         return new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.5, 0.5, 0.5), 1.0);
+    }
+}
+
+MeshGeometry_t* SceneContext_t::create_mesh_geometry(const tinyxml2::XMLElement* xml_mesh_geometry) const {
+    std::string type = xml_mesh_geometry->Attribute("type");
+    std::transform(type.begin(), type.end(), type.begin(), ::tolower);
+
+    if (type == "mesh_geometry"){
+        return new MeshGeometry_t(xml_mesh_geometry->Attribute("filename"));
+    }
+    else{
+        std::cout << "Error, mesh geometry type '" << type << "' not implemented. Only 'mesh_geometry' exists for now. Exiting." << std::endl; 
+        exit(50);
     }
 }
 
