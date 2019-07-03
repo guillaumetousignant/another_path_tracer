@@ -49,6 +49,8 @@
 #include "SphereMotionblur_t.h"
 #include "Triangle_t.h"
 #include "TriangleMotionblur_t.h"
+#include "TriangleMesh_t.h"
+#include "TriangleMeshMotionblur_t.h"
 #include "Mesh_t.h"
 #include "MeshMotionblur_t.h"
 
@@ -57,14 +59,14 @@
 #include "CamAperture_t.h"
 #include "CamMotionblur_t.h"
 #include "CamMotionblurAperture_t.h"
-#include "RecCam_t.h"
-#include "RecCamAperture_t.h"
-#include "RecCamMotionblur_t.h"
-#include "RecCamMotionblurAperture_t.h"
 #include "IsoCam_t.h"
 #include "IsoCamAperture_t.h"
 #include "IsoCamMotionblur_t.h"
 #include "IsoCamMotionblurAperture_t.h"
+#include "RecCam_t.h"
+#include "RecCamAperture_t.h"
+#include "RecCamMotionblur_t.h"
+#include "RecCamMotionblurAperture_t.h"
 #include "Cam3D_t.h"
 #include "Cam3DAperture_t.h"
 #include "Cam3DMotionblur_t.h"
@@ -432,12 +434,18 @@ void SceneContext_t::readXML(const std::string &filename){
     }
 
     if (xml_mesh_geometries != nullptr){
-        for (tinyxml2::XMLElement* xml_mesh_geometry= xml_mesh_geometries->FirstChildElement("mesh_geometry"); xml_mesh_geometry; xml_mesh_geometry = xml_mesh_geometry->NextSiblingElement("mesh_geometry")){
+        for (tinyxml2::XMLElement* xml_mesh_geometry = xml_mesh_geometries->FirstChildElement("mesh_geometry"); xml_mesh_geometry; xml_mesh_geometry = xml_mesh_geometry->NextSiblingElement("mesh_geometry")){
             mesh_geometries_[index_mesh_geometries_] = create_mesh_geometry(xml_mesh_geometry);
             ++index_mesh_geometries_;
         }
     }
 
+    if (xml_objects != nullptr){
+        for (tinyxml2::XMLElement* xml_object = xml_objects->FirstChildElement("object"); xml_object; xml_object = xml_object->NextSiblingElement("object")){
+            objects_[index_objects_] = create_object(xml_object, xml_transform_matrices, xml_materials, xml_mesh_geometries);
+            ++index_objects_;
+        }
+    }
 
 }    
 
@@ -754,6 +762,52 @@ MeshGeometry_t* SceneContext_t::create_mesh_geometry(const tinyxml2::XMLElement*
     }
 }
 
+Shape_t* SceneContext_t::create_object(const tinyxml2::XMLElement* xml_object, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_mesh_geometries) {
+    std::string type = xml_object->Attribute("type");
+    std::transform(type.begin(), type.end(), type.begin(), ::tolower);
+
+    if (type == "mesh"){
+        unsigned int material_index = get_material_index(xml_object->Attribute("material"), xml_materials);
+        if (material_aggregates_[material_index] != nullptr){
+            return new Mesh_t(material_aggregates_[material_index], get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries));
+        }
+        else {
+            return new Mesh_t(materials_[material_index], get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries));
+        }
+    }
+    else if (type == "mesh_motionblur"){
+        unsigned int material_index = get_material_index(xml_object->Attribute("material"), xml_materials);
+        if (material_aggregates_[material_index] != nullptr){
+            return new MeshMotionblur_t(material_aggregates_[material_index], get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries));
+        }
+        else {
+            return new MeshMotionblur_t(materials_[material_index], get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries));
+        }
+    }
+    else if (type == "sphere"){
+        return new Sphere_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices));
+    }
+    else if (type == "sphere_motionblur"){
+        return new SphereMotionblur_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices));
+    }
+    else if (type == "triangle"){
+        
+    }
+    else if (type == "triangle_motionblur"){
+        
+    }
+    else if (type == "triangle_mesh"){
+        return new TriangleMesh_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries), std::stoi(xml_object->Attribute("index")));
+    }
+    else if (type == "triangle_mesh_motionblur"){
+        return new TriangleMeshMotionblur_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries), std::stoi(xml_object->Attribute("index")));
+    }
+    else{
+        std::cout << "Error, object type '" << type << "' not implemented. Only 'mesh_geometry' exists for now. Exiting." << std::endl; 
+        exit(60);
+    }
+}
+
 void SceneContext_t::render(){
 
 }
@@ -984,6 +1038,72 @@ ScatteringFunction_t* SceneContext_t::get_scatterer(std::string scatterer, const
     }
     std::cout << "Error, scatterer '" << scatterer << "' not found. Ignoring. This Causes a memory leak." << std::endl;
     return new NonAbsorber_t();
+}
+
+MeshGeometry_t* SceneContext_t::get_mesh_geometry(std::string mesh_geometry, const tinyxml2::XMLElement* xml_mesh_geometries) const {
+    if (is_number(mesh_geometry)) {
+        return mesh_geometries_[std::stoi(mesh_geometry) - 1];
+    }
+    else {
+        if (xml_mesh_geometries != nullptr){
+            std::transform(mesh_geometry.begin(), mesh_geometry.end(), mesh_geometry.begin(), ::tolower);
+            unsigned int index = 0;
+            for (const tinyxml2::XMLElement* xml_mesh_geometry = xml_mesh_geometries->FirstChildElement("mesh_geometry"); xml_mesh_geometry; xml_mesh_geometry = xml_mesh_geometry->NextSiblingElement("mesh_geometry")){
+                std::string name_mesh_geometry = xml_mesh_geometry->Attribute("name");
+                std::transform(name_mesh_geometry.begin(), name_mesh_geometry.end(), name_mesh_geometry.begin(), ::tolower);
+                if (name_mesh_geometry == mesh_geometry){
+                    return mesh_geometries_[index];
+                }
+                ++index;
+            }
+        }
+    }
+    std::cout << "Error, mesh geometry '" << mesh_geometry << "' not found. Exiting." << std::endl;
+    exit(51);
+}
+
+unsigned int SceneContext_t::get_material_index(std::string material, const tinyxml2::XMLElement* xml_materials) const {
+    if (is_number(material)) {
+        return std::stoi(material) - 1;
+    }
+    else {
+        if (xml_materials != nullptr){
+            std::transform(material.begin(), material.end(), material.begin(), ::tolower);
+            unsigned int index = 0;
+            for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
+                std::string name_material = xml_material->Attribute("name");
+                std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
+                if (name_material == material){
+                    return index;
+                }
+                ++index;
+            }
+        }
+    }
+    std::cout << "Error, material '" << material << "' not found. Exiting." << std::endl;
+    exit(41);
+}
+
+Material_t* SceneContext_t::get_material(std::string material, const tinyxml2::XMLElement* xml_materials) const {
+    if (is_number(material)) {
+        return materials_[std::stoi(material) - 1];
+    }
+    else {
+        if (xml_materials != nullptr){
+            std::transform(material.begin(), material.end(), material.begin(), ::tolower);
+            unsigned int index = 0;
+            for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
+                std::string name_material = xml_material->Attribute("name");
+                std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
+                if (name_material == material){
+                    return materials_[index];
+                }
+                ++index;
+            }
+        }
+    }
+    std::cout << "Error, material '" << material << "' not found. Exiting." << std::endl;
+    exit(41);
 }
 
 bool SceneContext_t::is_number(const std::string& s) const {
