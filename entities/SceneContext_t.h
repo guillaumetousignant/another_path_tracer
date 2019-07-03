@@ -16,6 +16,7 @@ class DirectionalLight_t;
 class Skybox_t;
 class ImgBuffer_t;
 class Camera_t;
+class MaterialMap_t;
 
 class OpenGLRenderer_t;
 
@@ -60,6 +61,7 @@ class SceneContext_t{
         Skybox_t** skyboxes_;
         ImgBuffer_t** imgbuffers_;
         Camera_t** cameras_;
+        MaterialMap_t** material_aggregates_;
 
         void readXML(const std::string &filename);
         void render();

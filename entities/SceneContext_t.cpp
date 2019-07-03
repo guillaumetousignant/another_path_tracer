@@ -85,7 +85,7 @@ SceneContext_t::SceneContext_t() :
     index_directional_lights_(0), index_skyboxes_(0), index_imgbuffers_(0), index_cameras_(0),
     transform_matrices_(nullptr), textures_(nullptr), scatterers_(nullptr), materials_(nullptr), 
     mesh_geometries_(nullptr), objects_(nullptr), directional_lights_(nullptr), skyboxes_(nullptr), 
-    imgbuffers_(nullptr), cameras_(nullptr) 
+    imgbuffers_(nullptr), cameras_(nullptr), material_aggregates_(nullptr) 
     {}
 
 SceneContext_t::~SceneContext_t() {
@@ -133,6 +133,7 @@ void SceneContext_t::readXML(const std::string &filename){
     unsigned int** materials_mix_list = nullptr;
     std::list<unsigned int>** materials_medium_list = nullptr;
     std::tuple<std::list<unsigned int>*, std::list<std::string>*>** materials_aggregate_list = nullptr;
+    MaterialMap_t** material_aggregates_ = nullptr;
 
     // Counts
     if (xml_transform_matrices != nullptr){
@@ -273,10 +274,12 @@ void SceneContext_t::readXML(const std::string &filename){
         materials_mix_list = new unsigned int*[n_materials_];
         materials_medium_list = new std::list<unsigned int>*[n_materials_];
         materials_aggregate_list = new std::tuple<std::list<unsigned int>*, std::list<std::string>*>*[n_materials_];
+        material_aggregates_ = new MaterialMap_t*[n_materials_];
         for (unsigned int i = 0; i < n_materials_; i++){
             materials_mix_list[i] = nullptr;
             materials_medium_list[i] = nullptr;
             materials_aggregate_list[i] = nullptr;
+            material_aggregates_[i] = nullptr;
         }
     }
     if (n_mesh_geometries_){
@@ -393,6 +396,29 @@ void SceneContext_t::readXML(const std::string &filename){
     }
 
     // Material aggregates fix
+    for (unsigned int i = 0; i < n_materials_; i++){
+        if (materials_aggregate_list[i] != nullptr) {
+            unsigned int n = std::get<0>(*materials_aggregate_list[i])->size();
+            std::string* names = new std::string[n];
+            Material_t** materials = new Material_t*[n];
+
+            unsigned int index = 0;
+            for (auto it = std::get<0>(*materials_aggregate_list[i])->begin(); it != std::get<0>(*materials_aggregate_list[i])->end(); ++it){
+                materials[index] = materials_[*it];
+                ++index;
+            }
+            index = 0;
+            for (auto it = std::get<1>(*materials_aggregate_list[i])->begin(); it != std::get<1>(*materials_aggregate_list[i])->end(); ++it){
+                names[index] = *it;
+                ++index;
+            }
+            
+            material_aggregates_[i] = new MaterialMap_t(names, materials, n);
+
+            delete [] names;
+            delete [] materials;
+        }
+    }
 
     if (materials_aggregate_list != nullptr){
         for (unsigned int i = 0; i < n_materials_; i++){
@@ -465,6 +491,15 @@ void SceneContext_t::reset(){
         }
         delete [] materials_;
         materials_ = nullptr;
+    }
+    if (material_aggregates_ != nullptr){
+        for (unsigned int i = 0; i < n_materials_; i++){
+            if (material_aggregates_[i] != nullptr){
+                delete material_aggregates_[i];
+            }
+        }
+        delete [] material_aggregates_;
+        material_aggregates_ = nullptr;
     }
     n_materials_ = 0;
 
