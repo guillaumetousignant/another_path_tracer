@@ -76,8 +76,8 @@ class SceneContext_t{
         Material_t* create_material(const tinyxml2::XMLElement* xml_material, std::list<unsigned int>* &materials_medium_list, unsigned int* &materials_mix_list, std::tuple<std::list<unsigned int>*, std::list<std::string>*>* &materials_aggregate_list, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_scatterers);
         MeshGeometry_t* create_mesh_geometry(const tinyxml2::XMLElement* xml_mesh_geometry) const;
         Shape_t* create_object(const tinyxml2::XMLElement* xml_object, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_mesh_geometries);
+        DirectionalLight_t* create_directional_light(const tinyxml2::XMLElement* xml_directional_light, const tinyxml2::XMLElement* xml_transform_matrices);
 
-        Vec3f get_colour(std::string colour) const; // copies string :(
         TransformMatrix_t* get_transform_matrix(std::string transform_matrix, const tinyxml2::XMLElement* xml_transform_matrices);
         std::list<unsigned int>* get_medium_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_materials) const;
         Texture_t* get_texture(std::string texture, const tinyxml2::XMLElement* xml_textures) const;
@@ -88,6 +88,7 @@ class SceneContext_t{
         Material_t* get_material(std::string material, const tinyxml2::XMLElement* xml_materials) const;
 };
 
+Vec3f get_colour(std::string colour); // copies string :(
 Vec3f* get_points(std::string points_string);
 double** get_texture_coordinates(std::string texture_coordinates_string);    
 std::list<std::string>* get_medium_names(std::string string_medium_names);
