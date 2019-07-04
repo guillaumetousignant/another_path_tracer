@@ -433,6 +433,7 @@ void SceneContext_t::readXML(const std::string &filename){
         materials_aggregate_list = nullptr;
     }
 
+    // Filling buffers again
     if (xml_mesh_geometries != nullptr){
         for (tinyxml2::XMLElement* xml_mesh_geometry = xml_mesh_geometries->FirstChildElement("mesh_geometry"); xml_mesh_geometry; xml_mesh_geometry = xml_mesh_geometry->NextSiblingElement("mesh_geometry")){
             mesh_geometries_[index_mesh_geometries_] = create_mesh_geometry(xml_mesh_geometry);
@@ -791,10 +792,48 @@ Shape_t* SceneContext_t::create_object(const tinyxml2::XMLElement* xml_object, c
         return new SphereMotionblur_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices));
     }
     else if (type == "triangle"){
-        
+        Vec3f* points = get_points(xml_object->Attribute("points"));
+        Vec3f* normals = get_points(xml_object->Attribute("normals"));
+        double** texture_coordinates = get_texture_coordinates(xml_object->Attribute("texture_coordinates"));
+
+        Shape_t* triangle = new Triangle_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), points, normals, texture_coordinates);
+
+        if (points != nullptr){
+            delete [] points;
+        }
+        if (normals != nullptr){
+            delete [] normals;
+        }
+        if (texture_coordinates != nullptr){
+            delete [] texture_coordinates[0];
+            delete [] texture_coordinates[1];
+            delete [] texture_coordinates[2];
+            delete [] texture_coordinates;
+        }
+
+        return triangle;
     }
     else if (type == "triangle_motionblur"){
-        
+        Vec3f* points = get_points(xml_object->Attribute("points"));
+        Vec3f* normals = get_points(xml_object->Attribute("normals"));
+        double** texture_coordinates = get_texture_coordinates(xml_object->Attribute("texture_coordinates"));
+
+        Shape_t* triangle = new TriangleMotionblur_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), points, normals, texture_coordinates);
+
+        if (points != nullptr){
+            delete [] points;
+        }
+        if (normals != nullptr){
+            delete [] normals;
+        }
+        if (texture_coordinates != nullptr){
+            delete [] texture_coordinates[0];
+            delete [] texture_coordinates[1];
+            delete [] texture_coordinates[2];
+            delete [] texture_coordinates;
+        }
+
+        return triangle;
     }
     else if (type == "triangle_mesh"){
         return new TriangleMesh_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries), std::stoi(xml_object->Attribute("index")));
@@ -916,20 +955,6 @@ std::list<unsigned int>* SceneContext_t::get_medium_list(std::string string_medi
         }
     }
     return medium_list;
-}
-
-std::list<std::string>* SceneContext_t::get_medium_names(std::string string_medium_names) const {
-    std::list<std::string>* medium_names = new std::list<std::string>();
-    std::string delimiter = ", ";
-    size_t pos = 0;
-
-    while ((pos = string_medium_names.find(delimiter)) != std::string::npos) {
-        medium_names->push_back(string_medium_names.substr(0, pos));
-        string_medium_names.erase(0, pos + delimiter.length());
-    }
-    medium_names->push_back(string_medium_names);
-
-    return medium_names;
 }
 
 Texture_t* SceneContext_t::get_texture(std::string texture, const tinyxml2::XMLElement* xml_textures) const {
@@ -1106,7 +1131,93 @@ Material_t* SceneContext_t::get_material(std::string material, const tinyxml2::X
     exit(41);
 }
 
-bool SceneContext_t::is_number(const std::string& s) const {
+Vec3f* get_points(std::string points_string) {
+    Vec3f* points = nullptr;
+    std::transform(points_string.begin(), points_string.end(), points_string.begin(), ::tolower);
+
+    if (points_string != "nan"){
+        points = new Vec3f[3];
+        double values[9];
+        unsigned int count = 0;
+        std::stringstream ss(points_string);
+        
+        for(std::string s; ss >> s; ){
+            if (count < 9){
+                values[count] = std::stod(s);
+            }
+            ++count;
+        }
+        if (count != 9) {
+            std::cout << "Error, triangle points should be 9 values seperated by spaces, or nan. Current number of values is " << count << ". Exiting." << std::endl;
+            exit(67);
+        }
+        else{
+            points[0][0] = values[0];
+            points[0][1] = values[1];
+            points[0][2] = values[2];
+            points[1][0] = values[3];
+            points[1][1] = values[4];
+            points[1][2] = values[5];
+            points[2][0] = values[6];
+            points[2][1] = values[7];
+            points[2][2] = values[8];
+        }
+    } 
+
+    return points;
+}
+
+double** get_texture_coordinates(std::string texture_coordinates_string) {
+    double** texture_coordinates = nullptr;
+
+    std::transform(texture_coordinates_string.begin(), texture_coordinates_string.end(), texture_coordinates_string.begin(), ::tolower);
+
+    if (texture_coordinates_string != "nan"){
+        texture_coordinates = new double*[3];
+        texture_coordinates[0] = new double[2];
+        texture_coordinates[1] = new double[2];
+        texture_coordinates[2] = new double[2];
+        double values[6];
+        unsigned int count = 0;
+        std::stringstream ss(texture_coordinates_string);
+        
+        for(std::string s; ss >> s; ){
+            if (count < 6){
+                values[count] = std::stod(s);
+            }
+            ++count;
+        }
+        if (count != 6) {
+            std::cout << "Error, triangle texture coordinates should be 6 values seperated by spaces, or nan. Current number of values is " << count << ". Exiting." << std::endl;
+            exit(68);
+        }
+        else{
+            texture_coordinates[0][0] = values[0];
+            texture_coordinates[0][1] = values[1];
+            texture_coordinates[1][0] = values[2];
+            texture_coordinates[1][1] = values[3];
+            texture_coordinates[2][0] = values[4];
+            texture_coordinates[2][1] = values[5];
+        }
+
+    return texture_coordinates;
+}
+
+std::list<std::string>* get_medium_names(std::string string_medium_names) {
+    std::list<std::string>* medium_names = new std::list<std::string>();
+    std::string delimiter = ", ";
+    size_t pos = 0;
+
+    while ((pos = string_medium_names.find(delimiter)) != std::string::npos) {
+        medium_names->push_back(string_medium_names.substr(0, pos));
+        string_medium_names.erase(0, pos + delimiter.length());
+    }
+    medium_names->push_back(string_medium_names);
+
+    return medium_names;
+}
+
+bool is_number(const std::string& s) {
     return !s.empty() && std::find_if(s.begin(), 
         s.end(), [](char c) { return !std::isdigit(c); }) == s.end();
 }

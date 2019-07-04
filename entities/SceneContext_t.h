@@ -79,15 +79,17 @@ class SceneContext_t{
         Vec3f get_colour(std::string colour) const; // copies string :(
         TransformMatrix_t* get_transform_matrix(std::string transform_matrix, const tinyxml2::XMLElement* xml_transform_matrices);
         std::list<unsigned int>* get_medium_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_materials) const;
-        std::list<std::string>* get_medium_names(std::string string_medium_names) const;
         Texture_t* get_texture(std::string texture, const tinyxml2::XMLElement* xml_textures) const;
         unsigned int* get_material_mix(std::string material_refracted, std::string material_reflected, const tinyxml2::XMLElement* xml_materials) const;
         ScatteringFunction_t* get_scatterer(std::string scatterer, const tinyxml2::XMLElement* xml_scatterers) const;
         MeshGeometry_t* get_mesh_geometry(std::string mesh_geometry, const tinyxml2::XMLElement* xml_mesh_geometries) const;
         unsigned int get_material_index(std::string material, const tinyxml2::XMLElement* xml_materials) const;
         Material_t* get_material(std::string material, const tinyxml2::XMLElement* xml_materials) const;
-    
-        bool is_number(const std::string& s) const;
 };
+
+Vec3f* get_points(std::string points_string);
+double** get_texture_coordinates(std::string texture_coordinates_string);    
+std::list<std::string>* get_medium_names(std::string string_medium_names);
+bool is_number(const std::string& s);
 
 #endif
