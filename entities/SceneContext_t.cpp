@@ -416,6 +416,7 @@ void SceneContext_t::readXML(const std::string &filename){
             }
             
             material_aggregates_[i] = new MaterialMap_t(names, materials, n);
+            materials_[i] = material_aggregates_[i]->getFirst();
 
             delete [] names;
             delete [] materials;
