@@ -742,7 +742,7 @@ Material_t* SceneContext_t::create_material(const tinyxml2::XMLElement* xml_mate
         return new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.5, 0.5, 0.5), 1.0);
     }
     else if (type == "aggregate"){
-        materials_aggregate_list = new std::tuple(get_medium_list(xml_material->Attribute("materials_list"), xml_materials), get_medium_names(xml_material->Attribute("materials_names")));
+        materials_aggregate_list = new std::tuple<std::list<unsigned int>*, std::list<std::string>*>(get_medium_list(xml_material->Attribute("materials_list"), xml_materials), get_medium_names(xml_material->Attribute("materials_names")));
         return nullptr;
         // CHECK add aggregates
     }
