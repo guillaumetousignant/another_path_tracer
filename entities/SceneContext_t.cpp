@@ -457,6 +457,15 @@ void SceneContext_t::readXML(const std::string &filename){
         }
     }
 
+    if (xml_skyboxes != nullptr){
+        for (tinyxml2::XMLElement* xml_skybox = xml_skyboxes->FirstChildElement("skybox"); xml_skybox; xml_skybox = xml_skybox->NextSiblingElement("skybox")){
+            skyboxes_[index_skyboxes_] = create_skybox(xml_skybox, xml_transform_matrices, xml_directional_lights);
+            ++index_skyboxes_;
+        }
+    }
+
+
+
 }    
 
 void SceneContext_t::reset(){
@@ -851,13 +860,41 @@ Shape_t* SceneContext_t::create_object(const tinyxml2::XMLElement* xml_object, c
         return new TriangleMeshMotionblur_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries), std::stoi(xml_object->Attribute("index")));
     }
     else{
-        std::cout << "Error, object type '" << type << "' not implemented. Only 'mesh_geometry' exists for now. Exiting." << std::endl; 
+        std::cout << "Error, object type '" << type << "' not implemented. Exiting." << std::endl; 
         exit(60);
     }
 }
 
 DirectionalLight_t* SceneContext_t::create_directional_light(const tinyxml2::XMLElement* xml_directional_light, const tinyxml2::XMLElement* xml_transform_matrices){
     return new DirectionalLight_t(get_colour(xml_directional_light->Attribute("colour")), get_transform_matrix(xml_directional_light->Attribute("transform_matrix"), xml_transform_matrices));
+}
+
+Skybox_t* SceneContext_t::create_skybox(const tinyxml2::XMLElement* xml_skybox, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_directional_lights){
+    std::string type = xml_skybox->Attribute("type");
+    std::transform(type.begin(), type.end(), type.begin(), ::tolower);
+
+    if (type == "skybox_flat"){
+        return new SkyboxFlat_t(get_colour(xml_skybox->Attribute("colour")));
+    }
+    else if (type == "skybox_flat_sun"){
+        return new SkyboxFlatSun_t(get_colour(xml_skybox->Attribute("colour")), , );
+    }
+    else if (type == "skybox_texture"){
+        
+    }
+    else if (type == "skybox_texture_sun"){
+        
+    }
+    else if (type == "skybox_texture_transformation"){
+        
+    }
+    else if (type == "skybox_texture_transformation_sun"){
+        
+    }
+    else{
+        std::cout << "Error, skybox type '" << type << "' not implemented. Ignoring." << std::endl; 
+        return new SkyboxFlat_t(Vec3f(0.5, 0.5, 0.5));
+    }
 }
 
 void SceneContext_t::render(){

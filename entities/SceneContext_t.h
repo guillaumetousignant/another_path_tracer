@@ -77,6 +77,7 @@ class SceneContext_t{
         MeshGeometry_t* create_mesh_geometry(const tinyxml2::XMLElement* xml_mesh_geometry) const;
         Shape_t* create_object(const tinyxml2::XMLElement* xml_object, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_mesh_geometries);
         DirectionalLight_t* create_directional_light(const tinyxml2::XMLElement* xml_directional_light, const tinyxml2::XMLElement* xml_transform_matrices);
+        Skybox_t* create_skybox(const tinyxml2::XMLElement* xml_skybox, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_directional_lights);
 
         TransformMatrix_t* get_transform_matrix(std::string transform_matrix, const tinyxml2::XMLElement* xml_transform_matrices);
         std::list<unsigned int>* get_medium_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_materials) const;
