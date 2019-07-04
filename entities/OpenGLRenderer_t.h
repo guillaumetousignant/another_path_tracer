@@ -46,4 +46,14 @@ class OpenGLRenderer_t{
         void render();
 };
 
+OpenGLRenderer_t* openGL_renderer = nullptr;
+
+void openGL_dummyDisp();
+void openGL_raytrace();
+void openGL_resetDisplay(void);
+void openGL_mouseMovement(int x, int y);
+void openGL_mouseClick(int button, int state, int x, int y);
+void openGL_keyboardPaused(unsigned char key, int x, int y);
+void openGL_keyboard(unsigned char key, int x, int y);
+
 #endif

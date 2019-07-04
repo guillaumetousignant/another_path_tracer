@@ -15,15 +15,21 @@ OpenGLRenderer_t::OpenGLRenderer_t() :
     camera_(nullptr), scene_(nullptr), imgbuffer_(nullptr), width_(0), height_(0), 
     right_x_pos_(0), right_y_pos_(0), left_x_pos_(0), left_y_pos_(0), middle_x_pos_(0), 
     middle_y_pos_(0), right_clicked_(false), left_clicked_(false), middle_clicked_(false),
-    n_iter_gl_(0), focus_point_(Vec3f()), camera_dist_(0), updated_(false) {}
+    n_iter_gl_(0), focus_point_(Vec3f()), camera_dist_(0), updated_(false) {
+        openGL_renderer = this;
+}
 
 OpenGLRenderer_t::OpenGLRenderer_t(Scene_t* scene, Camera_t* camera, ImgBufferOpenGL_t* imgbuffer) :
     camera_(camera), scene_(scene), imgbuffer_(imgbuffer), width_(0), height_(0), 
     right_x_pos_(0), right_y_pos_(0), left_x_pos_(0), left_y_pos_(0), middle_x_pos_(0), 
     middle_y_pos_(0), right_clicked_(false), left_clicked_(false), middle_clicked_(false),
-    n_iter_gl_(0), focus_point_(Vec3f()), camera_dist_(0), updated_(false) {}
+    n_iter_gl_(0), focus_point_(Vec3f()), camera_dist_(0), updated_(false) {
+        openGL_renderer = this;
+}
 
-OpenGLRenderer_t::~OpenGLRenderer_t() {}
+OpenGLRenderer_t::~OpenGLRenderer_t() {
+    openGL_renderer = nullptr;
+}
 
 void OpenGLRenderer_t::raytrace(){
     if (updated_){
@@ -155,10 +161,10 @@ void OpenGLRenderer_t::keyboardPaused(unsigned char key, int x, int y){
 
     case 'p':
         std::cout << "Unpaused" << std::endl;
-        glutDisplayFunc(this->raytrace);
-        glutMouseFunc(this->mouseClick);
-        glutMotionFunc(this->mouseMovement);
-        glutKeyboardFunc(this->keyboard);
+        glutDisplayFunc(openGL_raytrace);
+        glutMouseFunc(openGL_mouseClick);
+        glutMotionFunc(openGL_mouseMovement);
+        glutKeyboardFunc(openGL_keyboard);
         glutPostRedisplay();
         break;
     }
@@ -195,10 +201,10 @@ void OpenGLRenderer_t::keyboard(unsigned char key, int x, int y){
 
     case 'p':
         std::cout << "Paused at " << n_iter_gl_ << " iterations." << std::endl;
-        glutDisplayFunc(this->dummyDisp);
+        glutDisplayFunc(openGL_dummyDisp);
         glutMouseFunc(nullptr);
         glutMotionFunc(nullptr);
-        glutKeyboardFunc(this->keyboardPaused);
+        glutKeyboardFunc(openGL_keyboardPaused);
         break;
     }
 }
@@ -212,10 +218,10 @@ void OpenGLRenderer_t::initialise(){
     glutInitWindowSize(imgbuffer_->size_x_, imgbuffer_->size_y_);
     glutInitWindowPosition(10,10);
     glutCreateWindow(gl_argv[0]);
-    glutDisplayFunc(this->raytrace);
-    glutMouseFunc(this->mouseClick);
-    glutMotionFunc(this->mouseMovement);
-    glutKeyboardFunc(this->keyboard);
+    glutDisplayFunc(openGL_raytrace);
+    glutMouseFunc(openGL_mouseClick);
+    glutMotionFunc(openGL_mouseMovement);
+    glutKeyboardFunc(openGL_keyboard);
 
     glGenTextures(1, &(this->imgbuffer_->tex_));
     glBindTexture(GL_TEXTURE_2D, this->imgbuffer_->tex_);
@@ -229,4 +235,32 @@ void OpenGLRenderer_t::initialise(){
 
 void OpenGLRenderer_t::render(){
     glutMainLoop();
+}
+
+void openGL_dummyDisp(){
+    openGL_renderer->dummyDisp();
+}
+
+void openGL_raytrace(){
+    openGL_renderer->raytrace();
+}
+
+void openGL_resetDisplay(void){
+    openGL_renderer->resetDisplay();
+}
+
+void openGL_mouseMovement(int x, int y){
+    openGL_renderer->mouseMovement(std::forward<int>(x), std::forward<int>(y));
+}
+
+void openGL_mouseClick(int button, int state, int x, int y){
+    openGL_renderer->mouseClick(std::forward<int>(button), std::forward<int>(state), std::forward<int>(x), std::forward<int>(y));
+}
+
+void openGL_keyboardPaused(unsigned char key, int x, int y){
+    openGL_renderer->keyboardPaused(std::forward<unsigned char>(key), std::forward<int>(x), std::forward<int>(y));
+}
+
+void openGL_keyboard(unsigned char key, int x, int y){
+    openGL_renderer->keyboard(std::forward<unsigned char>(key), std::forward<int>(x), std::forward<int>(y));
 }
