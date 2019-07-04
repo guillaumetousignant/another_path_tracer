@@ -877,7 +877,12 @@ Skybox_t* SceneContext_t::create_skybox(const tinyxml2::XMLElement* xml_skybox, 
         return new SkyboxFlat_t(get_colour(xml_skybox->Attribute("colour")));
     }
     else if (type == "skybox_flat_sun"){
+        DirectionalLight_t** lights = nullptr;
+        unsigned int n = 0;
+
         Skybox_t* skybox = new SkyboxFlatSun_t(get_colour(xml_skybox->Attribute("colour")), , );
+        
+        delete [] lights;        
         return skybox;
     }
     else if (type == "skybox_texture"){
