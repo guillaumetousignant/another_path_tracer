@@ -5,6 +5,7 @@
 #include <list>
 #include <tuple>
 #include "tinyxml2.h"
+#include "Vec3f.h"
 
 class TransformMatrix_t;
 class Texture_t;

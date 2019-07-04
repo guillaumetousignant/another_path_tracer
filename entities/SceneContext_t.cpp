@@ -4,6 +4,7 @@
 #include <string>
 #include <sstream> 
 #include <tuple>
+#include <algorithm>
 
 #include "Colours.h"
 #include "NextFilename.h"
@@ -1199,6 +1200,7 @@ double** get_texture_coordinates(std::string texture_coordinates_string) {
             texture_coordinates[2][0] = values[4];
             texture_coordinates[2][1] = values[5];
         }
+    }
 
     return texture_coordinates;
 }
