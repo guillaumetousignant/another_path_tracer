@@ -880,7 +880,9 @@ Skybox_t* SceneContext_t::create_skybox(const tinyxml2::XMLElement* xml_skybox, 
         DirectionalLight_t** lights = nullptr;
         unsigned int n = 0;
 
-        Skybox_t* skybox = new SkyboxFlatSun_t(get_colour(xml_skybox->Attribute("colour")), , );
+        get_lights(xml_skybox->Attribute("lights"), lights, n, xml_directional_lights);
+
+        Skybox_t* skybox = new SkyboxFlatSun_t(get_colour(xml_skybox->Attribute("colour")), lights, n);
         
         delete [] lights;        
         return skybox;
@@ -1156,6 +1158,10 @@ Material_t* SceneContext_t::get_material(std::string material, const tinyxml2::X
     }
     std::cout << "Error, material '" << material << "' not found. Exiting." << std::endl;
     exit(41);
+}
+
+void SceneContext_t::get_lights(std::string lights_string, DirectionalLight_t** &lights, unsigned int &n, const tinyxml2::XMLElement* xml_directional_lights) const {
+
 }
 
 Vec3f get_colour(std::string colour) {

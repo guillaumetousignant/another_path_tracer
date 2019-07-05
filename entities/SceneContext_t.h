@@ -87,6 +87,7 @@ class SceneContext_t{
         MeshGeometry_t* get_mesh_geometry(std::string mesh_geometry, const tinyxml2::XMLElement* xml_mesh_geometries) const;
         unsigned int get_material_index(std::string material, const tinyxml2::XMLElement* xml_materials) const;
         Material_t* get_material(std::string material, const tinyxml2::XMLElement* xml_materials) const;
+        void get_lights(std::string lights_string, DirectionalLight_t** &lights, unsigned int &n, const tinyxml2::XMLElement* xml_directional_lights) const;
 };
 
 Vec3f get_colour(std::string colour); // copies string :(
