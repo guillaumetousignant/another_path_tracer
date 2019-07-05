@@ -871,7 +871,16 @@ Shape_t* SceneContext_t::create_object(const tinyxml2::XMLElement* xml_object, c
 }
 
 DirectionalLight_t* SceneContext_t::create_directional_light(const tinyxml2::XMLElement* xml_directional_light, const tinyxml2::XMLElement* xml_transform_matrices){
-    return new DirectionalLight_t(get_colour(xml_directional_light->Attribute("colour")), get_transform_matrix(xml_directional_light->Attribute("transform_matrix"), xml_transform_matrices));
+    std::string type = xml_directional_light->Attribute("type");
+    std::transform(type.begin(), type.end(), type.begin(), ::tolower);
+
+    if (type == "directional_light"){
+        return new DirectionalLight_t(get_colour(xml_directional_light->Attribute("colour")), get_transform_matrix(xml_directional_light->Attribute("transform_matrix"), xml_transform_matrices));
+    }
+    else{
+        std::cout << "Error, directional light type '" << type << "' not implemented. Only 'directional_light' exists for now. Exiting." << std::endl; 
+        exit(70);
+    }
 }
 
 Skybox_t* SceneContext_t::create_skybox(const tinyxml2::XMLElement* xml_skybox, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_directional_lights){
