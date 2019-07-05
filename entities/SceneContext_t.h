@@ -79,6 +79,7 @@ class SceneContext_t{
         DirectionalLight_t* create_directional_light(const tinyxml2::XMLElement* xml_directional_light, const tinyxml2::XMLElement* xml_transform_matrices);
         Skybox_t* create_skybox(const tinyxml2::XMLElement* xml_skybox, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_directional_lights);
         ImgBuffer_t* create_imgbuffer(const tinyxml2::XMLElement* xml_imgbuffer) const;
+        Camera_t* create_camera(const tinyxml2::XMLElement* xml_camera, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_imgbuffers, const tinyxml2::XMLElement* xml_skyboxes);
 
         TransformMatrix_t* get_transform_matrix(std::string transform_matrix, const tinyxml2::XMLElement* xml_transform_matrices);
         std::list<unsigned int>* get_medium_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_materials) const;

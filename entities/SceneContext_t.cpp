@@ -471,6 +471,13 @@ void SceneContext_t::readXML(const std::string &filename){
         }
     }
 
+    if (xml_cameras != nullptr){
+        for (tinyxml2::XMLElement* xml_camera = xml_cameras->FirstChildElement("camera"); xml_camera; xml_camera = xml_camera->NextSiblingElement("camera")){
+            cameras_[index_cameras_] = create_camera(xml_camera, xml_transform_matrices, xml_materials, xml_imgbuffers, xml_skyboxes);
+            ++index_cameras_;
+        }
+    }
+
 }    
 
 void SceneContext_t::reset(){
@@ -883,7 +890,7 @@ DirectionalLight_t* SceneContext_t::create_directional_light(const tinyxml2::XML
     }
 }
 
-Skybox_t* SceneContext_t::create_skybox(const tinyxml2::XMLElement* xml_skybox, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_directional_lights){
+Skybox_t* SceneContext_t::create_skybox(const tinyxml2::XMLElement* xml_skybox, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_directional_lights) {
     std::string type = xml_skybox->Attribute("type");
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
@@ -937,6 +944,10 @@ ImgBuffer_t* SceneContext_t::create_imgbuffer(const tinyxml2::XMLElement* xml_im
         std::cout << "Error, imgbuffer type '" << type << "' not implemented. Only 'imgbuffer', and 'imgbuffer_opengl' exist for now. Ignoring." << std::endl; 
         return new ImgBuffer_t(300, 200);
     }
+}
+
+Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_imgbuffers, const tinyxml2::XMLElement* xml_skyboxes) {
+
 }
 
 void SceneContext_t::render(){
