@@ -305,6 +305,7 @@ void SceneContext_t::readXML(const std::string &filename){
     }
 
     // Filling buffers
+    // Transform matrices (1)
     if (xml_transform_matrices != nullptr){
         for (tinyxml2::XMLElement* xml_transform_matrix = xml_transform_matrices->FirstChildElement("transform_matrix"); xml_transform_matrix; xml_transform_matrix = xml_transform_matrix->NextSiblingElement("transform_matrix")){
             transform_matrices_[index_transform_matrices_] = create_transform_matrix(xml_transform_matrix);
@@ -312,6 +313,7 @@ void SceneContext_t::readXML(const std::string &filename){
         }
     }
 
+    // Textures (2)
     if (xml_textures != nullptr){
         for (tinyxml2::XMLElement* xml_texture = xml_textures->FirstChildElement("texture"); xml_texture; xml_texture = xml_texture->NextSiblingElement("texture")){
             textures_[index_textures_] = create_texture(xml_texture);
@@ -319,6 +321,7 @@ void SceneContext_t::readXML(const std::string &filename){
         }
     }
 
+    // Scatterers (3)
     if (xml_scatterers != nullptr){
         for (tinyxml2::XMLElement* xml_scatterer = xml_scatterers->FirstChildElement("scatterer"); xml_scatterer; xml_scatterer = xml_scatterer->NextSiblingElement("scatterer")){
             scatterers_[index_scatterers_] = create_scatterer(xml_scatterer, scatterers_medium_list[index_scatterers_], xml_transform_matrices, xml_materials);
@@ -326,6 +329,7 @@ void SceneContext_t::readXML(const std::string &filename){
         }
     }
 
+    // Materials (4)
     if (xml_materials != nullptr){
         for (tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
             materials_[index_materials_] = create_material(xml_material, materials_medium_list[index_materials_], materials_mix_list[index_materials_], materials_aggregate_list[index_materials_], xml_textures, xml_transform_matrices, xml_materials, xml_scatterers);
@@ -436,6 +440,7 @@ void SceneContext_t::readXML(const std::string &filename){
     }
 
     // Filling buffers again
+    // Mesh geometries (5)
     if (xml_mesh_geometries != nullptr){
         for (tinyxml2::XMLElement* xml_mesh_geometry = xml_mesh_geometries->FirstChildElement("mesh_geometry"); xml_mesh_geometry; xml_mesh_geometry = xml_mesh_geometry->NextSiblingElement("mesh_geometry")){
             mesh_geometries_[index_mesh_geometries_] = create_mesh_geometry(xml_mesh_geometry);
@@ -443,6 +448,7 @@ void SceneContext_t::readXML(const std::string &filename){
         }
     }
 
+    // SHapes (6)
     if (xml_objects != nullptr){
         for (tinyxml2::XMLElement* xml_object = xml_objects->FirstChildElement("object"); xml_object; xml_object = xml_object->NextSiblingElement("object")){
             objects_[index_objects_] = create_object(xml_object, xml_transform_matrices, xml_materials, xml_mesh_geometries);
@@ -450,6 +456,7 @@ void SceneContext_t::readXML(const std::string &filename){
         }
     }
 
+    // Directional lights (7)
     if (xml_directional_lights != nullptr){
         for (tinyxml2::XMLElement* xml_directional_light = xml_directional_lights->FirstChildElement("directional_light"); xml_directional_light; xml_directional_light = xml_directional_light->NextSiblingElement("directional_light")){
             directional_lights_[index_directional_lights_] = create_directional_light(xml_directional_light, xml_transform_matrices);
@@ -457,6 +464,7 @@ void SceneContext_t::readXML(const std::string &filename){
         }
     }
 
+    // Skyboxes (8)
     if (xml_skyboxes != nullptr){
         for (tinyxml2::XMLElement* xml_skybox = xml_skyboxes->FirstChildElement("skybox"); xml_skybox; xml_skybox = xml_skybox->NextSiblingElement("skybox")){
             skyboxes_[index_skyboxes_] = create_skybox(xml_skybox, xml_textures, xml_transform_matrices, xml_directional_lights);
@@ -464,6 +472,7 @@ void SceneContext_t::readXML(const std::string &filename){
         }
     }
 
+    // Image buffers (9)
     if (xml_imgbuffers != nullptr){
         for (tinyxml2::XMLElement* xml_imgbuffer = xml_imgbuffers->FirstChildElement("imgbuffer"); xml_imgbuffer; xml_imgbuffer = xml_imgbuffer->NextSiblingElement("imgbuffers")){
             imgbuffers_[index_imgbuffers_] = create_imgbuffer(xml_imgbuffer);
@@ -471,6 +480,7 @@ void SceneContext_t::readXML(const std::string &filename){
         }
     }
 
+    // Cameras (10)
     if (xml_cameras != nullptr){
         for (tinyxml2::XMLElement* xml_camera = xml_cameras->FirstChildElement("camera"); xml_camera; xml_camera = xml_camera->NextSiblingElement("camera")){
             cameras_[index_cameras_] = create_camera(xml_camera, xml_transform_matrices, xml_materials, xml_imgbuffers, xml_skyboxes);
@@ -678,7 +688,7 @@ ScatteringFunction_t* SceneContext_t::create_scatterer(const tinyxml2::XMLElemen
     }
     else if (type == "portal_scatterer"){
         // CHECK add medium_list stuff
-        scatterers_medium_list = get_medium_list(xml_scatterer->Attribute("medium_list"), xml_materials);
+        scatterers_medium_list = get_medium_index_list(xml_scatterer->Attribute("medium_list"), xml_materials);
         return new PortalScatterer_t(get_transform_matrix(xml_scatterer->Attribute("transform_matrix"), xml_transform_matrices), std::stod(xml_scatterer->Attribute("scattering_distance")), std::list<Medium_t*>());
     }
     else if (type == "scatterer_exp"){
@@ -726,7 +736,7 @@ Material_t* SceneContext_t::create_material(const tinyxml2::XMLElement* xml_mate
         return new NormalMaterial_t();
     }
     else if (type == "portal"){
-        materials_medium_list = get_medium_list(xml_material->Attribute("medium_list"), xml_materials);
+        materials_medium_list = get_medium_index_list(xml_material->Attribute("medium_list"), xml_materials);
         return new Portal_t(get_transform_matrix(xml_material->Attribute("transform_matrix"), xml_transform_matrices), std::list<Medium_t*>());
     }
     else if (type == "portal_refractive"){
@@ -770,7 +780,7 @@ Material_t* SceneContext_t::create_material(const tinyxml2::XMLElement* xml_mate
         return new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.5, 0.5, 0.5), 1.0);
     }
     else if (type == "aggregate"){
-        materials_aggregate_list = new std::tuple<std::list<unsigned int>*, std::list<std::string>*>(get_medium_list(xml_material->Attribute("materials_list"), xml_materials), get_medium_names(xml_material->Attribute("materials_names")));
+        materials_aggregate_list = new std::tuple<std::list<unsigned int>*, std::list<std::string>*>(get_medium_index_list(xml_material->Attribute("materials_list"), xml_materials), get_medium_names(xml_material->Attribute("materials_names")));
         return nullptr;
         // CHECK add aggregates
     }
@@ -981,7 +991,7 @@ TransformMatrix_t* SceneContext_t::get_transform_matrix(std::string transform_ma
     return new TransformMatrix_t();
 }
 
-std::list<unsigned int>* SceneContext_t::get_medium_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_materials) const {
+std::list<unsigned int>* SceneContext_t::get_medium_index_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_materials) const {
     std::list<unsigned int>* medium_list = new std::list<unsigned int>();
     std::string delimiter = ", ";
     size_t pos = 0;
@@ -1022,6 +1032,56 @@ std::list<unsigned int>* SceneContext_t::get_medium_list(std::string string_medi
                 std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
                 if (name_material == string_medium_list){
                     medium_list->push_back(index);
+                    break;
+                }
+                ++index;
+            }
+        }
+    }
+    return medium_list;
+}
+
+std::list<Medium_t*> SceneContext_t::get_medium_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_materials) const {
+    std::list<Medium_t*> medium_list = std::list<Medium_t*>(); // CHECK full of dynamic casts with no checks... should maybe check for errors
+    std::string delimiter = ", ";
+    size_t pos = 0;
+    std::string token;
+
+    while ((pos = string_medium_list.find(delimiter)) != std::string::npos) {
+        token = string_medium_list.substr(0, pos);
+
+        if (is_number(token)) {
+            medium_list.push_back(dynamic_cast<Medium_t*>(materials_[std::stoi(token) - 1]));
+        }
+        else {
+            if (xml_materials != nullptr){
+                unsigned int index = 0;
+                for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
+                    std::string name_material = xml_material->Attribute("name");
+                    std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
+                    if (name_material == token){
+                        medium_list.push_back(dynamic_cast<Medium_t*>(materials_[index]));
+                        break;
+                    }
+                    ++index;
+                }
+            }
+        }
+        // CHECK this should check for errors.
+
+        string_medium_list.erase(0, pos + delimiter.length());
+    }
+    if (is_number(string_medium_list)) {
+        medium_list.push_back(dynamic_cast<Medium_t*>(materials_[std::stoi(string_medium_list) - 1]));
+    }
+    else {
+        if (xml_materials != nullptr){
+            unsigned int index = 0;
+            for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
+                std::string name_material = xml_material->Attribute("name");
+                std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
+                if (name_material == string_medium_list){
+                    medium_list.push_back(dynamic_cast<Medium_t*>(materials_[index]));
                     break;
                 }
                 ++index;
@@ -1263,6 +1323,50 @@ void SceneContext_t::get_lights(std::string lights_string, DirectionalLight_t** 
             ++index;
         }
     }
+}
+
+ImgBuffer_t* SceneContext_t::get_imgbuffer(std::string imgbuffer, const tinyxml2::XMLElement* xml_imgbuffers) const {
+    if (is_number(imgbuffer)) {
+        return imgbuffers_[std::stoi(imgbuffer) - 1];
+    }
+    else {
+        if (xml_imgbuffers != nullptr){
+            std::transform(imgbuffer.begin(), imgbuffer.end(), imgbuffer.begin(), ::tolower);
+            unsigned int index = 0;
+            for (const tinyxml2::XMLElement* xml_imgbuffer = xml_imgbuffers->FirstChildElement("imgbuffer"); xml_imgbuffer; xml_imgbuffer = xml_imgbuffer->NextSiblingElement("imgbuffer")){
+                std::string name_imgbuffer = xml_imgbuffer->Attribute("name");
+                std::transform(name_imgbuffer.begin(), name_imgbuffer.end(), name_imgbuffer.begin(), ::tolower);
+                if (name_imgbuffer == imgbuffer){
+                    return imgbuffers_[index];
+                }
+                ++index;
+            }
+        }
+    }
+    std::cout << "Error, image buffer '" << imgbuffer << "' not found. Exiting." << std::endl;
+    exit(91); 
+}
+
+Skybox_t* SceneContext_t::get_skybox(std::string skybox, const tinyxml2::XMLElement* xml_skyboxes) const {
+    if (is_number(skybox)) {
+        return skyboxes_[std::stoi(skybox) - 1];
+    }
+    else {
+        if (xml_skyboxes != nullptr){
+            std::transform(skybox.begin(), skybox.end(), skybox.begin(), ::tolower);
+            unsigned int index = 0;
+            for (const tinyxml2::XMLElement* xml_skybox = xml_skyboxes->FirstChildElement("skybox"); xml_skybox; xml_skybox = xml_skybox->NextSiblingElement("skybox")){
+                std::string name_skybox = xml_skybox->Attribute("name");
+                std::transform(name_skybox.begin(), name_skybox.end(), name_skybox.begin(), ::tolower);
+                if (name_skybox == skybox){
+                    return skyboxes_[index];
+                }
+                ++index;
+            }
+        }
+    }
+    std::cout << "Error, skybox '" << skybox << "' not found. Exiting." << std::endl;
+    exit(81); 
 }
 
 Vec3f get_colour(std::string colour) {
