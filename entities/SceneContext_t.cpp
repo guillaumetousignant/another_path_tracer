@@ -459,7 +459,7 @@ void SceneContext_t::readXML(const std::string &filename){
 
     if (xml_skyboxes != nullptr){
         for (tinyxml2::XMLElement* xml_skybox = xml_skyboxes->FirstChildElement("skybox"); xml_skybox; xml_skybox = xml_skybox->NextSiblingElement("skybox")){
-            skyboxes_[index_skyboxes_] = create_skybox(xml_skybox, xml_transform_matrices, xml_directional_lights);
+            skyboxes_[index_skyboxes_] = create_skybox(xml_skybox, xml_textures, xml_transform_matrices, xml_directional_lights);
             ++index_skyboxes_;
         }
     }
@@ -869,7 +869,7 @@ DirectionalLight_t* SceneContext_t::create_directional_light(const tinyxml2::XML
     return new DirectionalLight_t(get_colour(xml_directional_light->Attribute("colour")), get_transform_matrix(xml_directional_light->Attribute("transform_matrix"), xml_transform_matrices));
 }
 
-Skybox_t* SceneContext_t::create_skybox(const tinyxml2::XMLElement* xml_skybox, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_directional_lights){
+Skybox_t* SceneContext_t::create_skybox(const tinyxml2::XMLElement* xml_skybox, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_directional_lights){
     std::string type = xml_skybox->Attribute("type");
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
@@ -888,16 +888,20 @@ Skybox_t* SceneContext_t::create_skybox(const tinyxml2::XMLElement* xml_skybox, 
         return skybox;
     }
     else if (type == "skybox_texture"){
-        
+        return new SkyboxTexture_t(get_texture(xml_skybox->Attribute("texture"), xml_textures));
     }
     else if (type == "skybox_texture_sun"){
-        
+        double sun_pos[2];
+        get_xy(xml_skybox->Attribute("light_position"), sun_pos);
+        return new SkyboxTextureSun_t(get_texture(xml_skybox->Attribute("texture"), xml_textures), sun_pos, get_colour(xml_skybox->Attribute("light_colour")), std::stod(xml_skybox->Attribute("light_radius")));
     }
     else if (type == "skybox_texture_transformation"){
-        
+        return new SkyboxTextureTransformation_t(get_texture(xml_skybox->Attribute("texture"), xml_textures), get_transform_matrix(xml_skybox->Attribute("transform_matrix"), xml_transform_matrices));
     }
     else if (type == "skybox_texture_transformation_sun"){
-        
+        double sun_pos[2];
+        get_xy(xml_skybox->Attribute("light_position"), sun_pos);
+        return new SkyboxTextureTransformationSun_t(get_texture(xml_skybox->Attribute("texture"), xml_textures), get_transform_matrix(xml_skybox->Attribute("transform_matrix"), xml_transform_matrices), sun_pos, get_colour(xml_skybox->Attribute("light_colour")), std::stod(xml_skybox->Attribute("light_radius")));
     }
     else{
         std::cout << "Error, skybox type '" << type << "' not implemented. Ignoring." << std::endl; 
@@ -1334,6 +1338,22 @@ std::list<std::string>* get_medium_names(std::string string_medium_names) {
     medium_names->push_back(string_medium_names);
 
     return medium_names;
+}
+
+void get_xy(const std::string &light_position, double (&position)[2]) {
+    unsigned int count = 0;
+    std::stringstream ss(light_position);
+
+    for(std::string s; ss >> s; ){
+        if (count < 2){
+            position[count] = std::stod(s);
+        }
+        ++count;
+    }
+
+    if (count != 2) {
+        std::cout << "Error, xy should be 2 values seperated by spaces. Current number of values is " << count << ", string is '" << light_position << "'. Ignoring." << std::endl;
+    }
 }
 
 bool is_number(const std::string& s) {
