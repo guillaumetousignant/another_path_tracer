@@ -342,6 +342,10 @@ void SceneContext_t::readXML(const std::string &filename){
     for (unsigned int i = 0; i < n_materials_; i++){
         if (materials_mix_list[i] != nullptr){
             MaterialMix_t* material_mix = dynamic_cast<MaterialMix_t*>(materials_[i]); // dynamic caaaast :(
+            if (material_mix == nullptr){
+                std::cout << "Error: material #" << i << " was marked as a material mix but is not convertible to one. Exiting." << std::endl;
+                exit(491);
+            }
             material_mix->material_refracted_ = materials_[materials_mix_list[i][0]];
             material_mix->material_reflected_ = materials_[materials_mix_list[i][1]];
         }
@@ -360,10 +364,17 @@ void SceneContext_t::readXML(const std::string &filename){
     // Materials medium list fix
     for (unsigned int i = 0; i < n_materials_; i++){
         if (materials_medium_list[i] != nullptr) {
+            PortalTop_t* portal = dynamic_cast<PortalTop_t*>(materials_[i]);
+            if (portal == nullptr){
+                std::cout << "Error: material #" << i << " was marked as a portal but is not convertible to one. Exiting." << std::endl;
+                exit(492);
+            }
             for (auto it = materials_medium_list[i]->begin(); it != materials_medium_list[i]->end(); ++it){
- 
-                PortalTop_t* portal = dynamic_cast<PortalTop_t*>(materials_[i]);
                 Medium_t* medium = dynamic_cast<Medium_t*>(materials_[*it]); // CHECK I don't like those either
+                if (medium == nullptr){
+                    std::cout << "Error: material #" << i << " had material #" << *it << " in its medium list, but it is not convertible to one. Exiting." << std::endl;
+                    exit(493);
+                }
                 portal->medium_list_.push_back(medium);
             }
         }
@@ -382,10 +393,17 @@ void SceneContext_t::readXML(const std::string &filename){
     // Scatterers medium list fix
     for (unsigned int i = 0; i < n_scatterers_; i++){
         if (scatterers_medium_list[i] != nullptr) {
+            PortalScattererTop_t* portal_scatterer = dynamic_cast<PortalScattererTop_t*>(scatterers_[i]);
+            if (portal_scatterer == nullptr){
+                std::cout << "Error: scatterer #" << i << " was marked as a portal but is not convertible to one. Exiting." << std::endl;
+                exit(392);
+            }
             for (auto it = scatterers_medium_list[i]->begin(); it != scatterers_medium_list[i]->end(); ++it){
- 
-                PortalScattererTop_t* portal_scatterer = dynamic_cast<PortalScattererTop_t*>(scatterers_[i]);
                 Medium_t* medium = dynamic_cast<Medium_t*>(materials_[*it]); // CHECK I don't like those either
+                if (medium == nullptr){
+                    std::cout << "Error: scatterer #" << i << " had material #" << *it << " in its medium list, but it is not convertible to one. Exiting." << std::endl;
+                    exit(393);
+                }
                 portal_scatterer->medium_list_.push_back(medium);
             }
         }
@@ -1051,7 +1069,12 @@ std::list<Medium_t*> SceneContext_t::get_medium_list(std::string string_medium_l
         token = string_medium_list.substr(0, pos);
 
         if (is_number(token)) {
-            medium_list.push_back(dynamic_cast<Medium_t*>(materials_[std::stoi(token) - 1]));
+            Medium_t* medium = dynamic_cast<Medium_t*>(materials_[std::stoi(token) - 1]);
+            if (medium == nullptr){
+                std::cout << "Error: material #" << token << " is in a medium list, but it is not convertible to one. Exiting." << std::endl;
+                exit(494);
+            }
+            medium_list.push_back(medium);
         }
         else {
             if (xml_materials != nullptr){
@@ -1060,7 +1083,12 @@ std::list<Medium_t*> SceneContext_t::get_medium_list(std::string string_medium_l
                     std::string name_material = xml_material->Attribute("name");
                     std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
                     if (name_material == token){
-                        medium_list.push_back(dynamic_cast<Medium_t*>(materials_[index]));
+                        Medium_t* medium = dynamic_cast<Medium_t*>(materials_[index]);
+                        if (medium == nullptr){
+                            std::cout << "Error: material '" << token << "' is in a medium list, but it is not convertible to one. Exiting." << std::endl;
+                            exit(495);
+                        }
+                        medium_list.push_back(medium);
                         break;
                     }
                     ++index;
@@ -1072,7 +1100,12 @@ std::list<Medium_t*> SceneContext_t::get_medium_list(std::string string_medium_l
         string_medium_list.erase(0, pos + delimiter.length());
     }
     if (is_number(string_medium_list)) {
-        medium_list.push_back(dynamic_cast<Medium_t*>(materials_[std::stoi(string_medium_list) - 1]));
+        Medium_t* medium = dynamic_cast<Medium_t*>(materials_[std::stoi(string_medium_list) - 1]);
+        if (medium == nullptr){
+            std::cout << "Error: material #" << token << " is in a medium list, but it is not convertible to one. Exiting." << std::endl;
+            exit(494);
+        }
+        medium_list.push_back(medium);
     }
     else {
         if (xml_materials != nullptr){
@@ -1081,7 +1114,12 @@ std::list<Medium_t*> SceneContext_t::get_medium_list(std::string string_medium_l
                 std::string name_material = xml_material->Attribute("name");
                 std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
                 if (name_material == string_medium_list){
-                    medium_list.push_back(dynamic_cast<Medium_t*>(materials_[index]));
+                    Medium_t* medium = dynamic_cast<Medium_t*>(materials_[index]);
+                    if (medium == nullptr){
+                        std::cout << "Error: material '" << token << "' is in a medium list, but it is not convertible to one. Exiting." << std::endl;
+                        exit(495);
+                    }
+                    medium_list.push_back(medium);
                     break;
                 }
                 ++index;
