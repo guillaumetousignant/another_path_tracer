@@ -1161,7 +1161,63 @@ Material_t* SceneContext_t::get_material(std::string material, const tinyxml2::X
 }
 
 void SceneContext_t::get_lights(std::string lights_string, DirectionalLight_t** &lights, unsigned int &n, const tinyxml2::XMLElement* xml_directional_lights) const {
+    std::list<DirectionalLight_t*> lights_list = std::list<DirectionalLight_t*>();
+    std::string delimiter = ", ";
+    size_t pos = 0;
+    std::string token;
 
+    while ((pos = lights_string.find(delimiter)) != std::string::npos) {
+        token = lights_string.substr(0, pos);
+
+        if (is_number(token)) {
+            lights_list.push_back(directional_lights_[std::stoi(token) - 1]);
+        }
+        else {
+            if (xml_directional_lights != nullptr){
+                unsigned int index = 0;
+                for (const tinyxml2::XMLElement* xml_directional_light = xml_directional_lights->FirstChildElement("directional_light"); xml_directional_light; xml_directional_light = xml_directional_light->NextSiblingElement("directional_light")){
+                    std::string name_light = xml_directional_light->Attribute("name");
+                    std::transform(name_light.begin(), name_light.end(), name_light.begin(), ::tolower);
+                    if (name_light == token){
+                        lights_list.push_back(directional_lights_[index]);
+                        break;
+                    }
+                    ++index;
+                }
+            }
+        }
+        // CHECK this should check for errors.
+
+        lights_string.erase(0, pos + delimiter.length());
+    }
+    if (is_number(lights_string)) {
+        lights_list.push_back(directional_lights_[std::stoi(lights_string) - 1]);
+    }
+    else {
+        if (xml_directional_lights != nullptr){
+            unsigned int index = 0;
+            for (const tinyxml2::XMLElement* xml_directional_light = xml_directional_lights->FirstChildElement("directional_light"); xml_directional_light; xml_directional_light = xml_directional_light->NextSiblingElement("directional_light")){
+                std::string name_light = xml_directional_light->Attribute("name");
+                std::transform(name_light.begin(), name_light.end(), name_light.begin(), ::tolower);
+                if (name_light == lights_string){
+                    lights_list.push_back(directional_lights_[index]);
+                    break;
+                }
+                ++index;
+            }
+        }
+    }
+
+    if (lights_list.size() > 0){
+        n = lights_list.size();
+        lights = new DirectionalLight_t*[n];
+        unsigned int index = 0;
+
+        for (auto it = lights_list.begin(); it != lights_list.end(); ++it){
+            lights[index] = *it;
+            ++index;
+        }
+    }
 }
 
 Vec3f get_colour(std::string colour) {
