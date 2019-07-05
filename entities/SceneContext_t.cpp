@@ -464,7 +464,12 @@ void SceneContext_t::readXML(const std::string &filename){
         }
     }
 
-
+    if (xml_imgbuffers != nullptr){
+        for (tinyxml2::XMLElement* xml_imgbuffer = xml_imgbuffers->FirstChildElement("imgbuffer"); xml_imgbuffer; xml_imgbuffer = xml_imgbuffer->NextSiblingElement("imgbuffers")){
+            imgbuffers_[index_imgbuffers_] = create_imgbuffer(xml_imgbuffer);
+            ++index_imgbuffers_;
+        }
+    }
 
 }    
 
@@ -906,6 +911,22 @@ Skybox_t* SceneContext_t::create_skybox(const tinyxml2::XMLElement* xml_skybox, 
     else{
         std::cout << "Error, skybox type '" << type << "' not implemented. Ignoring." << std::endl; 
         return new SkyboxFlat_t(Vec3f(0.5, 0.5, 0.5));
+    }
+}
+
+ImgBuffer_t* SceneContext_t::create_imgbuffer(const tinyxml2::XMLElement* xml_imgbuffer) const {
+    std::string type = xml_imgbuffer->Attribute("type");
+    std::transform(type.begin(), type.end(), type.begin(), ::tolower);
+
+    if (type == "imgbuffer"){
+        return new ImgBuffer_t(std::stod(xml_imgbuffer->Attribute("resx")), std::stod(xml_imgbuffer->Attribute("resy")));
+    }
+    else if (type == "imgbuffer_opengl"){
+        return new ImgBufferOpenGL_t(std::stod(xml_imgbuffer->Attribute("resx")), std::stod(xml_imgbuffer->Attribute("resy")));
+    }
+    else{
+        std::cout << "Error, imgbuffer type '" << type << "' not implemented. Only 'imgbuffer', and 'imgbuffer_opengl' exist for now. Ignoring." << std::endl; 
+        return new ImgBuffer_t(300, 200);
     }
 }
 
