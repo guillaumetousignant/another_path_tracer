@@ -103,5 +103,6 @@ void get_xy(const std::string &string_value, double (&value)[2]);
 void get_xy(const std::string &string_value, unsigned int (&value)[2]);
 
 bool is_number(const std::string& s);
+void apply_transformation(TransformMatrix_t* transform_matrix, const tinyxml2::XMLElement* transform);
 
 #endif

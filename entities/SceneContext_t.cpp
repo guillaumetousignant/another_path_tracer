@@ -99,6 +99,7 @@ void SceneContext_t::readXML(const std::string &filename){
     reset();
 
     std::string new_filename, folder;
+    bool use_GL = false;
 
     #ifdef _WIN32
         folder = "images\\";
@@ -505,6 +506,8 @@ void SceneContext_t::readXML(const std::string &filename){
             ++index_cameras_;
         }
     }
+
+    // Updating pre
 
 }    
 
@@ -1631,8 +1634,11 @@ Vec3f get_colour(std::string colour) {
             ++count;
         }
 
-        if (count != 3) {
-            std::cout << "Error, colour should be 3 values seperated by spaces, or a string. Current number of values is " << count << ", colour is '" << colour << "'. Ignoring." << std::endl;
+        if (count == 1) {
+            return Vec3f(values[0], values[0], values[0]);
+        }
+        else if (count != 3) {
+            std::cout << "Error, colour should be 1 or 3 values seperated by spaces, or a string. Current number of values is " << count << ", colour is '" << colour << "'. Ignoring." << std::endl;
             return Vec3f(0.5, 0.5, 0.5);
         }
         else{
@@ -1763,4 +1769,62 @@ void get_xy(const std::string &string_value, unsigned int (&value)[2]) {
 bool is_number(const std::string& s) {
     return !s.empty() && std::find_if(s.begin(), 
         s.end(), [](char c) { return !std::isdigit(c); }) == s.end();
+}
+
+void apply_transformation(TransformMatrix_t* transform_matrix, const tinyxml2::XMLElement* transform) {
+    std::string type = transform->Attribute("type");
+    std::transform(type.begin(), type.end(), type.begin(), ::tolower);
+
+    if (type == "rotatexaxis"){
+        transform_matrix->rotateXAxis(std::stod(transform->Attribute("value")));
+    }
+    else if (type == "rotateyaxis"){
+        transform_matrix->rotateYAxis(std::stod(transform->Attribute("value")));
+    }
+    else if (type == "rotatezaxis"){
+        transform_matrix->rotateZAxis(std::stod(transform->Attribute("value")));
+    }
+    else if (type == "rotatex"){
+        transform_matrix->rotateX(std::stod(transform->Attribute("value")));
+    }
+    else if (type == "rotatey"){
+        transform_matrix->rotateY(std::stod(transform->Attribute("value")));
+    }
+    else if (type == "rotatez"){
+        transform_matrix->rotateZ(std::stod(transform->Attribute("value")));
+    }
+    else if (type == "rotateaxis"){
+        transform_matrix->rotateAxis(get_colour(transform->Attribute("axis")), std::stod(transform->Attribute("value")));
+    }
+    else if (type == "rotate"){
+        transform_matrix->rotate(get_colour(transform->Attribute("axis")), std::stod(transform->Attribute("value")));
+    }
+    else if (type == "translate"){
+        transform_matrix->translate(get_colour(transform->Attribute("value")));
+    }
+    else if (type == "scaleaxis"){
+        transform_matrix->scaleAxis(get_colour(transform->Attribute("value")));
+    }
+    else if (type == "scale"){
+        transform_matrix->scale(get_colour(transform->Attribute("value")));
+    }
+    else if (type == "reflect"){
+        transform_matrix->reflect(get_colour(transform->Attribute("value")));
+    }
+    else if (type == "shear"){
+        transform_matrix->shear(get_colour(transform->Attribute("value")));
+    }
+    else if (type == "transpose"){
+        transform_matrix->transpose();
+    }
+    else if (type == "invert"){
+        transform_matrix->invert();
+    }
+    else if (type == "neg"){
+        transform_matrix->neg();
+    }
+    else{
+        std::cout << "Error, transform type '" << type << "' not implemented. Ignoring." << std::endl; 
+        return;
+    }
 }
