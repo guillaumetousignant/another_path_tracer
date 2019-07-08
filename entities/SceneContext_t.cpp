@@ -118,7 +118,7 @@ void SceneContext_t::readXML(const std::string &filename){
     new_filename = next_filename(folder + scene_name_ + ".png");
 
     std::cout << "Scene name: '" << scene_name_ << "'." << std::endl; // REMOVE
-    std::cout << "Filename: '" << new_filename << "'." << std::endl; // REMOVE
+    std::cout << "Next filename: '" << new_filename << "'." << std::endl; // REMOVE
 
     // Fields
     tinyxml2::XMLElement* xml_transform_matrices = xml_top->FirstChildElement("transform_matrices_");
@@ -501,7 +501,7 @@ void SceneContext_t::readXML(const std::string &filename){
     // Cameras (10)
     if (xml_cameras != nullptr){
         for (tinyxml2::XMLElement* xml_camera = xml_cameras->FirstChildElement("camera"); xml_camera; xml_camera = xml_camera->NextSiblingElement("camera")){
-            cameras_[index_cameras_] = create_camera(xml_camera, xml_transform_matrices, xml_materials, xml_imgbuffers, xml_skyboxes);
+            cameras_[index_cameras_] = create_camera(xml_camera, new_filename, xml_transform_matrices, xml_materials, xml_imgbuffers, xml_skyboxes);
             ++index_cameras_;
         }
     }
@@ -974,8 +974,213 @@ ImgBuffer_t* SceneContext_t::create_imgbuffer(const tinyxml2::XMLElement* xml_im
     }
 }
 
-Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_imgbuffers, const tinyxml2::XMLElement* xml_skyboxes) {
+Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, const std::string &next_filename, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_imgbuffers, const tinyxml2::XMLElement* xml_skyboxes) {
+    std::string type = xml_camera->Attribute("type");
+    std::transform(type.begin(), type.end(), type.begin(), ::tolower);
+    std::string filename = xml_camera->Attribute("filename");
+    std::string filename_check = filename;
+    std::transform(filename_check.begin(), filename_check.end(), filename_check.begin(), ::tolower);
 
+    if (filename_check == "nan"){
+        filename = next_filename;
+    }
+
+    if (type == "cam"){
+        double fov[2];
+        unsigned int subpix[2];
+        get_xy(xml_camera->Attribute("fov"), fov);
+        get_xy(xml_camera->Attribute("subpix"), subpix);
+
+        return new Cam_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), 
+                            fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), 
+                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), std::stoi(xml_camera->Attribute("max_bounces")), std::stod(xml_camera->Attribute("gammaind")));
+    }
+    else if (type == "cam_aperture"){
+        double fov[2];
+        unsigned int subpix[2];
+        get_xy(xml_camera->Attribute("fov"), fov);
+        get_xy(xml_camera->Attribute("subpix"), subpix);
+
+        return new CamAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), 
+                            fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), 
+                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), std::stoi(xml_camera->Attribute("max_bounces")), std::stod(xml_camera->Attribute("focal_length")),
+                            std::stod(xml_camera->Attribute("aperture")), std::stod(xml_camera->Attribute("gammaind")));
+    }
+    else if (type == "cam_motionblur"){
+        double fov[2];
+        unsigned int subpix[2];
+        double time[2];
+        get_xy(xml_camera->Attribute("fov"), fov);
+        get_xy(xml_camera->Attribute("subpix"), subpix);
+        get_xy(xml_camera->Attribute("time"), time);
+        
+        return new CamMotionblur_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), 
+                            fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), 
+                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), std::stoi(xml_camera->Attribute("max_bounces")), time, std::stod(xml_camera->Attribute("gammaind")));
+    }
+    else if (type == "cam_motionblur_aperture"){
+        double fov[2];
+        unsigned int subpix[2];
+        double time[2];
+        get_xy(xml_camera->Attribute("fov"), fov);
+        get_xy(xml_camera->Attribute("subpix"), subpix);
+        get_xy(xml_camera->Attribute("time"), time);
+        
+        return new CamMotionblurAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), 
+                            fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), 
+                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), std::stoi(xml_camera->Attribute("max_bounces")), std::stod(xml_camera->Attribute("focal_length")),
+                            std::stod(xml_camera->Attribute("aperture")), time, std::stod(xml_camera->Attribute("gammaind")));
+    }
+    else if (type == "isocam"){
+        double fov[2];
+        unsigned int subpix[2];
+        get_xy(xml_camera->Attribute("fov"), fov);
+        get_xy(xml_camera->Attribute("subpix"), subpix);
+
+        return new IsoCam_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), 
+                            fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), 
+                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), std::stoi(xml_camera->Attribute("max_bounces")), std::stod(xml_camera->Attribute("gammaind")));
+    }
+    else if (type == "isocam_aperture"){
+        double fov[2];
+        unsigned int subpix[2];
+        get_xy(xml_camera->Attribute("fov"), fov);
+        get_xy(xml_camera->Attribute("subpix"), subpix);
+
+        return new IsoCamAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), 
+                            fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), 
+                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), std::stoi(xml_camera->Attribute("max_bounces")), std::stod(xml_camera->Attribute("focal_length")),
+                            std::stod(xml_camera->Attribute("aperture")), std::stod(xml_camera->Attribute("gammaind")));
+    }
+    else if (type == "isocam_motionblur"){
+        double fov[2];
+        unsigned int subpix[2];
+        double time[2];
+        get_xy(xml_camera->Attribute("fov"), fov);
+        get_xy(xml_camera->Attribute("subpix"), subpix);
+        get_xy(xml_camera->Attribute("time"), time);
+        
+        return new IsoCamMotionblur_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), 
+                            fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), 
+                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), std::stoi(xml_camera->Attribute("max_bounces")), time, std::stod(xml_camera->Attribute("gammaind")));
+    }
+    else if (type == "isocam_motionblur_aperture"){
+        double fov[2];
+        unsigned int subpix[2];
+        double time[2];
+        get_xy(xml_camera->Attribute("fov"), fov);
+        get_xy(xml_camera->Attribute("subpix"), subpix);
+        get_xy(xml_camera->Attribute("time"), time);
+        
+        return new IsoCamMotionblurAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), 
+                            fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), 
+                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), std::stoi(xml_camera->Attribute("max_bounces")), std::stod(xml_camera->Attribute("focal_length")),
+                            std::stod(xml_camera->Attribute("aperture")), time, std::stod(xml_camera->Attribute("gammaind")));
+    }
+    else if (type == "reccam"){
+        double fov[2];
+        unsigned int subpix[2];
+        get_xy(xml_camera->Attribute("fov"), fov);
+        get_xy(xml_camera->Attribute("subpix"), subpix);
+
+        return new RecCam_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), 
+                            fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), 
+                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), std::stoi(xml_camera->Attribute("max_bounces")), std::stod(xml_camera->Attribute("gammaind")));
+    }
+    else if (type == "reccam_aperture"){
+        double fov[2];
+        unsigned int subpix[2];
+        get_xy(xml_camera->Attribute("fov"), fov);
+        get_xy(xml_camera->Attribute("subpix"), subpix);
+
+        return new RecCamAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), 
+                            fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), 
+                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), std::stoi(xml_camera->Attribute("max_bounces")), std::stod(xml_camera->Attribute("focal_length")),
+                            std::stod(xml_camera->Attribute("aperture")), std::stod(xml_camera->Attribute("gammaind")));
+    }
+    else if (type == "reccam_motionblur"){
+        double fov[2];
+        unsigned int subpix[2];
+        double time[2];
+        get_xy(xml_camera->Attribute("fov"), fov);
+        get_xy(xml_camera->Attribute("subpix"), subpix);
+        get_xy(xml_camera->Attribute("time"), time);
+        
+        return new RecCamMotionblur_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), 
+                            fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), 
+                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), std::stoi(xml_camera->Attribute("max_bounces")), time, std::stod(xml_camera->Attribute("gammaind")));
+    }
+    else if (type == "reccam_motionblur_aperture"){
+        double fov[2];
+        unsigned int subpix[2];
+        double time[2];
+        get_xy(xml_camera->Attribute("fov"), fov);
+        get_xy(xml_camera->Attribute("subpix"), subpix);
+        get_xy(xml_camera->Attribute("time"), time);
+        
+        return new RecCamMotionblurAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), 
+                            fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), 
+                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), std::stoi(xml_camera->Attribute("max_bounces")), std::stod(xml_camera->Attribute("focal_length")),
+                            std::stod(xml_camera->Attribute("aperture")), time, std::stod(xml_camera->Attribute("gammaind")));
+    }
+    else if (type == "cam_3d"){
+        double fov[2];
+        unsigned int subpix[2];
+        get_xy(xml_camera->Attribute("fov"), fov);
+        get_xy(xml_camera->Attribute("subpix"), subpix);
+
+        return new Cam3D_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), fov, subpix, 
+                            get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_imgbuffer(xml_camera->Attribute("imgbuffer_L"), xml_imgbuffers), 
+                            get_imgbuffer(xml_camera->Attribute("imgbuffer_R"), xml_imgbuffers), std::stod(xml_camera->Attribute("eye_dist")), 
+                            get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), 
+                            std::stoi(xml_camera->Attribute("max_bounces")), std::stod(xml_camera->Attribute("focal_length")), std::stod(xml_camera->Attribute("gammaind")));
+    }
+    else if (type == "cam_3d_aperture"){
+        double fov[2];
+        unsigned int subpix[2];
+        get_xy(xml_camera->Attribute("fov"), fov);
+        get_xy(xml_camera->Attribute("subpix"), subpix);
+
+        return new Cam3DAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), fov, subpix, 
+                            get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_imgbuffer(xml_camera->Attribute("imgbuffer_L"), xml_imgbuffers), 
+                            get_imgbuffer(xml_camera->Attribute("imgbuffer_R"), xml_imgbuffers), std::stod(xml_camera->Attribute("eye_dist")), 
+                            get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), 
+                            std::stoi(xml_camera->Attribute("max_bounces")), std::stod(xml_camera->Attribute("focal_length")), std::stod(xml_camera->Attribute("aperture")), 
+                            std::stod(xml_camera->Attribute("gammaind")));
+    }
+    else if (type == "cam_3d_motionblur"){
+        double fov[2];
+        unsigned int subpix[2];
+        double time[2];
+        get_xy(xml_camera->Attribute("fov"), fov);
+        get_xy(xml_camera->Attribute("subpix"), subpix);
+        get_xy(xml_camera->Attribute("time"), time);
+
+        return new Cam3DMotionblur_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), fov, subpix, 
+                            get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_imgbuffer(xml_camera->Attribute("imgbuffer_L"), xml_imgbuffers), 
+                            get_imgbuffer(xml_camera->Attribute("imgbuffer_R"), xml_imgbuffers), std::stod(xml_camera->Attribute("eye_dist")), 
+                            get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), 
+                            std::stoi(xml_camera->Attribute("max_bounces")), std::stod(xml_camera->Attribute("focal_length")), time, std::stod(xml_camera->Attribute("gammaind")));
+    }
+    else if (type == "cam_3d_motionblur_aperture"){
+        double fov[2];
+        unsigned int subpix[2];
+        double time[2];
+        get_xy(xml_camera->Attribute("fov"), fov);
+        get_xy(xml_camera->Attribute("subpix"), subpix);
+        get_xy(xml_camera->Attribute("time"), time);
+
+        return new Cam3DMotionblurAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), fov, subpix, 
+                            get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_imgbuffer(xml_camera->Attribute("imgbuffer_L"), xml_imgbuffers), 
+                            get_imgbuffer(xml_camera->Attribute("imgbuffer_R"), xml_imgbuffers), std::stod(xml_camera->Attribute("eye_dist")), 
+                            get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), 
+                            std::stoi(xml_camera->Attribute("max_bounces")), std::stod(xml_camera->Attribute("focal_length")), std::stod(xml_camera->Attribute("aperture")), 
+                            time, std::stod(xml_camera->Attribute("gammaind")));
+    }
+    else{
+        std::cout << "Error, camera type '" << type << "' not implemented. Exiting." << std::endl; 
+        exit(100);
+    }
 }
 
 void SceneContext_t::render(){
@@ -1523,19 +1728,35 @@ std::list<std::string>* get_medium_names(std::string string_medium_names) {
     return medium_names;
 }
 
-void get_xy(const std::string &light_position, double (&position)[2]) {
+void get_xy(const std::string &string_value, double (&value)[2]) {
     unsigned int count = 0;
-    std::stringstream ss(light_position);
+    std::stringstream ss(string_value);
 
     for(std::string s; ss >> s; ){
         if (count < 2){
-            position[count] = std::stod(s);
+            value[count] = std::stod(s);
         }
         ++count;
     }
 
     if (count != 2) {
-        std::cout << "Error, xy should be 2 values seperated by spaces. Current number of values is " << count << ", string is '" << light_position << "'. Ignoring." << std::endl;
+        std::cout << "Error, xy should be 2 values seperated by spaces. Current number of values is " << count << ", string is '" << string_value << "'. Ignoring." << std::endl;
+    }
+}
+
+void get_xy(const std::string &string_value, unsigned int (&value)[2]) {
+    unsigned int count = 0;
+    std::stringstream ss(string_value);
+
+    for(std::string s; ss >> s; ){
+        if (count < 2){
+            value[count] = std::stoi(s);
+        }
+        ++count;
+    }
+
+    if (count != 2) {
+        std::cout << "Error, xy should be 2 values seperated by spaces. Current number of values is " << count << ", string is '" << string_value << "'. Ignoring." << std::endl;
     }
 }
 

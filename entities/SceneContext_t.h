@@ -79,7 +79,7 @@ class SceneContext_t{
         DirectionalLight_t* create_directional_light(const tinyxml2::XMLElement* xml_directional_light, const tinyxml2::XMLElement* xml_transform_matrices);
         Skybox_t* create_skybox(const tinyxml2::XMLElement* xml_skybox, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_directional_lights);
         ImgBuffer_t* create_imgbuffer(const tinyxml2::XMLElement* xml_imgbuffer) const;
-        Camera_t* create_camera(const tinyxml2::XMLElement* xml_camera, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_imgbuffers, const tinyxml2::XMLElement* xml_skyboxes);
+        Camera_t* create_camera(const tinyxml2::XMLElement* xml_camera, const std::string &next_filename, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_imgbuffers, const tinyxml2::XMLElement* xml_skyboxes);
 
         TransformMatrix_t* get_transform_matrix(std::string transform_matrix, const tinyxml2::XMLElement* xml_transform_matrices);
         std::list<unsigned int>* get_medium_index_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_materials) const;
@@ -99,7 +99,8 @@ Vec3f get_colour(std::string colour); // copies string :(
 Vec3f* get_points(std::string points_string);
 double** get_texture_coordinates(std::string texture_coordinates_string);    
 std::list<std::string>* get_medium_names(std::string string_medium_names);
-void get_xy(const std::string &light_position, double (&position)[2]);
+void get_xy(const std::string &string_value, double (&value)[2]);
+void get_xy(const std::string &string_value, unsigned int (&value)[2]);
 
 bool is_number(const std::string& s);
 
