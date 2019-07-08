@@ -99,7 +99,6 @@ void SceneContext_t::readXML(const std::string &filename){
     reset();
 
     std::string new_filename, folder;
-    bool use_GL = false;
 
     #ifdef _WIN32
         folder = "images\\";
@@ -122,16 +121,16 @@ void SceneContext_t::readXML(const std::string &filename){
     std::cout << "Next filename: '" << new_filename << "'." << std::endl; // REMOVE
 
     // Fields
-    tinyxml2::XMLElement* xml_transform_matrices = xml_top->FirstChildElement("transform_matrices_");
-    tinyxml2::XMLElement* xml_textures = xml_top->FirstChildElement("textures_");
-    tinyxml2::XMLElement* xml_scatterers = xml_top->FirstChildElement("scatterers_");
-    tinyxml2::XMLElement* xml_materials = xml_top->FirstChildElement("materials_");
-    tinyxml2::XMLElement* xml_mesh_geometries = xml_top->FirstChildElement("mesh_geometries_");
-    tinyxml2::XMLElement* xml_objects = xml_top->FirstChildElement("objects_");
-    tinyxml2::XMLElement* xml_directional_lights = xml_top->FirstChildElement("directional_lights_");
-    tinyxml2::XMLElement* xml_skyboxes = xml_top->FirstChildElement("skyboxes_");
-    tinyxml2::XMLElement* xml_imgbuffers = xml_top->FirstChildElement("imgbuffers_");
-    tinyxml2::XMLElement* xml_cameras = xml_top->FirstChildElement("cameras_");
+    tinyxml2::XMLElement* xml_transform_matrices = xml_top->FirstChildElement("transform_matrices");
+    tinyxml2::XMLElement* xml_textures = xml_top->FirstChildElement("textures");
+    tinyxml2::XMLElement* xml_scatterers = xml_top->FirstChildElement("scatterers");
+    tinyxml2::XMLElement* xml_materials = xml_top->FirstChildElement("materials");
+    tinyxml2::XMLElement* xml_mesh_geometries = xml_top->FirstChildElement("mesh_geometries");
+    tinyxml2::XMLElement* xml_objects = xml_top->FirstChildElement("objects");
+    tinyxml2::XMLElement* xml_directional_lights = xml_top->FirstChildElement("directional_lights");
+    tinyxml2::XMLElement* xml_skyboxes = xml_top->FirstChildElement("skyboxes");
+    tinyxml2::XMLElement* xml_imgbuffers = xml_top->FirstChildElement("imgbuffers");
+    tinyxml2::XMLElement* xml_cameras = xml_top->FirstChildElement("cameras");
 
     std::list<unsigned int>** scatterers_medium_list = nullptr;
     unsigned int** materials_mix_list = nullptr;
@@ -467,7 +466,7 @@ void SceneContext_t::readXML(const std::string &filename){
         }
     }
 
-    // SHapes (6)
+    // Shapes (6)
     if (xml_objects != nullptr){
         for (tinyxml2::XMLElement* xml_object = xml_objects->FirstChildElement("object"); xml_object; xml_object = xml_object->NextSiblingElement("object")){
             objects_[index_objects_] = create_object(xml_object, xml_transform_matrices, xml_materials, xml_mesh_geometries);
@@ -508,7 +507,63 @@ void SceneContext_t::readXML(const std::string &filename){
     }
 
     // Updating pre
+    // Directional lights
+    if (xml_directional_lights != nullptr){
+        unsigned int index = 0;
+        for (tinyxml2::XMLElement* xml_directional_light = xml_directional_lights->FirstChildElement("directional_light"); xml_directional_light; xml_directional_light = xml_directional_light->NextSiblingElement("directional_light")){
+            tinyxml2::XMLElement* transformations_pre = xml_directional_light->FirstChildElement("transformations_pre");
+            if (transformations_pre != nullptr){
+                for (tinyxml2::XMLElement* transformation_pre = transformations_pre->FirstChildElement("transformation_pre"); transformation_pre; transformation_pre = transformation_pre->NextSiblingElement("transformation_pre")){
+                    apply_transformation(directional_lights_[index]->transformation_, transformation_pre);
+                }
+            }
+            ++index;
+        }
+    }
 
+    // Objects
+    if (xml_objects != nullptr){
+        unsigned int index = 0;
+        for (tinyxml2::XMLElement* xml_object = xml_objects->FirstChildElement("object"); xml_object; xml_object = xml_object->NextSiblingElement("object")){
+            tinyxml2::XMLElement* transformations_pre = xml_object->FirstChildElement("transformations_pre");
+            if (transformations_pre != nullptr){
+                for (tinyxml2::XMLElement* transformation_pre = transformations_pre->FirstChildElement("transformation_pre"); transformation_pre; transformation_pre = transformation_pre->NextSiblingElement("transformation_pre")){
+                    apply_transformation(objects_[index]->transformation_, transformation_pre);
+                }
+            }
+            ++index;
+        }
+    }
+
+    // Cameras
+    if (xml_cameras != nullptr){
+        unsigned int index = 0;
+        for (tinyxml2::XMLElement* xml_camera = xml_cameras->FirstChildElement("camera"); xml_camera; xml_camera = xml_camera->NextSiblingElement("camera")){
+            tinyxml2::XMLElement* transformations_pre = xml_camera->FirstChildElement("transformations_pre");
+            if (transformations_pre != nullptr){
+                for (tinyxml2::XMLElement* transformation_pre = transformations_pre->FirstChildElement("transformation_pre"); transformation_pre; transformation_pre = transformation_pre->NextSiblingElement("transformation_pre")){
+                    apply_transformation(cameras_[index]->transformation_, transformation_pre);
+                }
+            }
+            ++index;
+        }
+    }
+
+    // Scene building
+
+    // Scene update
+
+    // Updating post
+
+    // Scene update
+
+    // Acceleration structure build
+
+    // Autofocus
+
+    // GL stuff
+
+    // Running
 }    
 
 void SceneContext_t::reset(){
@@ -961,7 +1016,7 @@ Skybox_t* SceneContext_t::create_skybox(const tinyxml2::XMLElement* xml_skybox, 
     }
 }
 
-ImgBuffer_t* SceneContext_t::create_imgbuffer(const tinyxml2::XMLElement* xml_imgbuffer) const {
+ImgBuffer_t* SceneContext_t::create_imgbuffer(const tinyxml2::XMLElement* xml_imgbuffer) {
     std::string type = xml_imgbuffer->Attribute("type");
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
@@ -969,6 +1024,7 @@ ImgBuffer_t* SceneContext_t::create_imgbuffer(const tinyxml2::XMLElement* xml_im
         return new ImgBuffer_t(std::stod(xml_imgbuffer->Attribute("resx")), std::stod(xml_imgbuffer->Attribute("resy")));
     }
     else if (type == "imgbuffer_opengl"){
+        use_gl_ = true;
         return new ImgBufferOpenGL_t(std::stod(xml_imgbuffer->Attribute("resx")), std::stod(xml_imgbuffer->Attribute("resy")));
     }
     else{
