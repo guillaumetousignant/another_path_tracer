@@ -550,16 +550,36 @@ void SceneContext_t::readXML(const std::string &filename){
     }
 
     // Scene building
-    const char* primitive_list_char = xml_top->Attribute("primitive_list");
-    const char* mesh_list_char = xml_top->Attribute("mesh_list");
+    Scene_t* scene = new Scene_t();
+    const char* primitive_list = xml_top->Attribute("primitive_list");
+    const char* mesh_list = xml_top->Attribute("mesh_list");
+    
+    if (primitive_list != NULL){
+        Shape_t** objects = nullptr;
+        unsigned int n = 0;
+        get_shapes(primitive_list, objects, n, xml_objects);
+
+        scene->add(objects, n);
+    }
+
+    if (mesh_list != NULL){
+        MeshTop_t** meshes = nullptr;
+        unsigned int n = 0;
+        get_meshes(mesh_list, meshes, n, xml_objects);
+
+        scene->add(meshes, n);
+    }
 
     // Scene update
+    scene->update();
 
     // Updating post
 
     // Scene update
+    scene->update();
 
     // Acceleration structure build
+    scene->build_acc();
 
     // Autofocus
 
