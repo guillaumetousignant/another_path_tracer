@@ -81,14 +81,16 @@
 #include "SkyboxTextureTransformationSun_t.h"
 
 SceneContext_t::SceneContext_t() :
-    use_gl_(false), scene_name_(""), opengl_renderer_(nullptr), opengl_imgbuffer_(nullptr), opengl_camera_(nullptr), scene_(nullptr), n_transform_matrices_(0), n_textures_(0), 
-    n_scatterers_(0), n_materials_(0), n_mesh_geometries_(0), n_objects_(0), n_directional_lights_(0), 
-    n_skyboxes_(0), n_imgbuffers_(0), n_cameras_(0), index_transform_matrices_(0), index_textures_(0), 
-    index_scatterers_(0), index_materials_(0), index_mesh_geometries_(0), index_objects_(0), 
-    index_directional_lights_(0), index_skyboxes_(0), index_imgbuffers_(0), index_cameras_(0),
-    transform_matrices_(nullptr), textures_(nullptr), scatterers_(nullptr), materials_(nullptr), 
-    mesh_geometries_(nullptr), objects_(nullptr), directional_lights_(nullptr), skyboxes_(nullptr), 
-    imgbuffers_(nullptr), cameras_(nullptr), material_aggregates_(nullptr) 
+    use_gl_(false), scene_name_(""), opengl_renderer_(nullptr), opengl_imgbuffer_(nullptr), 
+    opengl_camera_(nullptr), scene_(nullptr), camera_rendermode_(nullptr), camera_n_iter_(nullptr), camera_write_interval_(nullptr), n_transform_matrices_(0), 
+    n_textures_(0), n_scatterers_(0), n_materials_(0), n_mesh_geometries_(0), n_objects_(0), 
+    n_directional_lights_(0), n_skyboxes_(0), n_imgbuffers_(0), n_cameras_(0), 
+    index_transform_matrices_(0), index_textures_(0), index_scatterers_(0), index_materials_(0), 
+    index_mesh_geometries_(0), index_objects_(0), index_directional_lights_(0), index_skyboxes_(0), 
+    index_imgbuffers_(0), index_cameras_(0), transform_matrices_(nullptr), textures_(nullptr), 
+    scatterers_(nullptr), materials_(nullptr), mesh_geometries_(nullptr), objects_(nullptr), 
+    directional_lights_(nullptr), skyboxes_(nullptr), imgbuffers_(nullptr), cameras_(nullptr), 
+    material_aggregates_(nullptr) 
     {}
 
 SceneContext_t::~SceneContext_t() {
@@ -604,10 +606,51 @@ void SceneContext_t::readXML(const std::string &filename){
     }
 
     // Running
-    if (use_gl_) {
-        opengl_camera_ = cameras_[0]; // CHECK dunno how to fix this
-        opengl_renderer_ = new OpenGLRenderer_t(scene_, opengl_camera_, opengl_imgbuffer_);
-        opengl_renderer_->initialise();
+    if (xml_cameras != nullptr){
+        if (use_gl_) {
+            opengl_camera_ = cameras_[0]; // CHECK dunno how to fix this
+            opengl_renderer_ = new OpenGLRenderer_t(scene_, opengl_camera_, opengl_imgbuffer_);
+            opengl_renderer_->initialise();
+        }
+
+        camera_rendermode_ = new std::string[n_cameras_];
+        camera_n_iter_ = new unsigned int[n_cameras_];
+        camera_write_interval_ = new unsigned int[n_cameras_];
+
+        for (unsigned int i = 0; i < n_cameras_; i++){
+            camera_rendermode_[i] = "";
+            camera_n_iter_[i] = 0;
+            camera_write_interval_[i] = 0;
+        }
+
+        unsigned int index = 0;
+        for (tinyxml2::XMLElement* xml_camera = xml_cameras->FirstChildElement("camera"); xml_camera; xml_camera = xml_camera->NextSiblingElement("camera")){
+            std::string render_mode = xml_camera->Attribute("rendermode");
+            std::transform(render_mode.begin(), render_mode.end(), render_mode.begin(), ::tolower);
+            
+            if (render_mode == "accumulation") {
+                camera_rendermode_[index] = "accumulation";
+                camera_n_iter_[index] = std::stoi(xml_camera->Attribute("n_iter"));
+            }
+            else if (render_mode == "accumulation_write") {
+                camera_rendermode_[index] = "accumulation_write";
+                camera_n_iter_[index] = std::stoi(xml_camera->Attribute("n_iter"));
+                camera_write_interval_[index] = std::stoi(xml_camera->Attribute("write_interval"));
+            }
+            else if (render_mode == "single") {
+                camera_rendermode_[index] = "single";
+            }
+            else if (render_mode == "motion") {
+                std::cout << "Error, motion render mode not implemented yet. Single frame render fallback." << std::endl;
+                camera_rendermode_[index] = "single";
+            }
+            else {
+                std::cout << "Error, render mode '" << render_mode << "', used by camera #" << index << ", is unknown. Only 'accumulation', 'accumulation_write', 'single', and 'motion' exist for now. Ignoring." << std::endl;
+                camera_rendermode_[index] = "";
+            }
+
+            ++index;
+        }
     }
 }    
 
@@ -617,30 +660,28 @@ void SceneContext_t::render(){
         opengl_renderer_->render();
     }
     else {
-        if (xml_cameras != nullptr){
-            unsigned int index = 0;
-            for (tinyxml2::XMLElement* xml_camera = xml_cameras->FirstChildElement("camera"); xml_camera; xml_camera = xml_camera->NextSiblingElement("camera")){
-                std::string render_mode = xml_camera->Attribute("rendermode");
-                std::transform(render_mode.begin(), render_mode.end(), render_mode.begin(), ::tolower);
-                
-                if (render_mode == "accumulation") {
-                    cameras_[index]->accumulate(scene_, std::stoi(xml_camera->Attribute("n_iter")));
-                }
-                else if (render_mode == "accumulation_write") {
-                    cameras_[index]->accumulateWrite(scene_, std::stoi(xml_camera->Attribute("n_iter")), std::stoi(xml_camera->Attribute("write_interval")));
-                }
-                else if (render_mode == "single") {
-                    cameras_[index]->raytrace(scene_);
-                }
-                else if (render_mode == "motion") {
-                    std::cout << "Error, motion render mode not implemented yet. Single frame render fallback." << std::endl;
-                    cameras_[index]->raytrace(scene_);
-                }
-                else {
-                    std::cout << "Error, render mode '" << render_mode << "', used by camera #" << index << ", is unknown. Only 'accumulation', 'accumulation_write', 'single', and 'motion' exist for now. Ignoring." << std::endl;
-                }
+        for (unsigned int i = 0; i < n_cameras_; i++){
+            std::string render_mode = camera_rendermode_[i];
+            std::transform(render_mode.begin(), render_mode.end(), render_mode.begin(), ::tolower);
 
-                ++index;
+            if (render_mode == "accumulation") {
+                cameras_[i]->accumulate(scene_, camera_n_iter_[i]);
+            }
+            else if (render_mode == "accumulation_write") {
+                cameras_[i]->accumulateWrite(scene_, camera_n_iter_[i], camera_write_interval_[i]);
+            }
+            else if (render_mode == "single") {
+                cameras_[i]->raytrace(scene_);
+            }
+            else if (render_mode == "motion") {
+                std::cout << "Error, motion render mode not implemented yet. Single frame render fallback." << std::endl;
+                cameras_[i]->raytrace(scene_);
+            }
+            else if (render_mode == "") {
+
+            }
+            else {
+                std::cout << "Error, render mode '" << render_mode << "', used by camera #" << i << ", is unknown. Only 'accumulation', 'accumulation_write', 'single', and 'motion' exist for now. Ignoring." << std::endl;
             }
         }
     }
@@ -788,6 +829,21 @@ void SceneContext_t::reset(){
     if (scene_ != nullptr){
         delete scene_;
         scene_ = nullptr;
+    }
+
+    if (camera_rendermode_ != nullptr){
+        delete [] camera_rendermode_;
+        camera_rendermode_ = nullptr;
+    }
+
+    if (camera_n_iter_ != nullptr){
+        delete [] camera_n_iter_;
+        camera_n_iter_ = nullptr;
+    }
+
+    if (camera_write_interval_ != nullptr){
+        delete [] camera_write_interval_;
+        camera_write_interval_ = nullptr;
     }
 
     use_gl_ = false;
