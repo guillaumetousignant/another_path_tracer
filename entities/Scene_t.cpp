@@ -41,7 +41,7 @@ void Scene_t::add(Shape_t** shapes, unsigned int n_shapes) {
         delete [] geometry_;
     }
     geometry_ = geometry_2;
-    n_obj_++;
+    n_obj_ += n_shapes;
 }
 
 void Scene_t::add(MeshTop_t* mesh) {
