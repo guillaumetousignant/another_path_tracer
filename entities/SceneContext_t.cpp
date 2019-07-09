@@ -254,7 +254,7 @@ void SceneContext_t::readXML(const std::string &filename){
     std::cout << "Scatterer count: " << n_scatterers_ << std::endl; // REMOVE
     std::cout << "Material count: " << n_materials_ << std::endl; // REMOVE
     std::cout << "Mesh count: " << n_mesh_geometries_ << std::endl; // REMOVE
-    std::cout << "Object count: " << n_objects_ << std::endl; // REMOVE
+    std::cout << "Shape count: " << n_objects_ << std::endl; // REMOVE
     std::cout << "Directional light count: " << n_directional_lights_ << std::endl; // REMOVE
     std::cout << "Skybox count: " << n_skyboxes_ << std::endl; // REMOVE
     std::cout << "Img buffers count: " << n_imgbuffers_ << std::endl; // REMOVE
@@ -306,6 +306,8 @@ void SceneContext_t::readXML(const std::string &filename){
         cameras_ = new Camera_t*[n_cameras_];
     }
 
+    std::cout << "Buffers created." << std::endl << std::endl;
+
     // Filling buffers
     // Transform matrices (1)
     if (xml_transform_matrices != nullptr){
@@ -313,6 +315,7 @@ void SceneContext_t::readXML(const std::string &filename){
             transform_matrices_[index_transform_matrices_] = create_transform_matrix(xml_transform_matrix);
             ++index_transform_matrices_;
         }
+        std::cout << "Transform matrices created." << std::endl;
     }
 
     // Textures (2)
@@ -321,6 +324,7 @@ void SceneContext_t::readXML(const std::string &filename){
             textures_[index_textures_] = create_texture(xml_texture);
             ++index_textures_;
         }
+        std::cout << "Textures created." << std::endl;
     }
 
     // Scatterers (3)
@@ -329,6 +333,7 @@ void SceneContext_t::readXML(const std::string &filename){
             scatterers_[index_scatterers_] = create_scatterer(xml_scatterer, scatterers_medium_list[index_scatterers_], xml_transform_matrices, xml_materials);
             ++index_scatterers_;
         }
+        std::cout << "Scatterers created." << std::endl;
     }
 
     // Materials (4)
@@ -337,6 +342,7 @@ void SceneContext_t::readXML(const std::string &filename){
             materials_[index_materials_] = create_material(xml_material, materials_medium_list[index_materials_], materials_mix_list[index_materials_], materials_aggregate_list[index_materials_], xml_textures, xml_transform_matrices, xml_materials, xml_scatterers);
             ++index_materials_;
         }
+        std::cout << "Materials created." << std::endl;
     }
 
     // Fixes 
@@ -458,6 +464,7 @@ void SceneContext_t::readXML(const std::string &filename){
         delete [] materials_aggregate_list;
         materials_aggregate_list = nullptr;
     }
+    std::cout << std::endl << "Fixes done." << std::endl << std::endl;
 
     // Filling buffers again
     // Mesh geometries (5)
@@ -466,6 +473,7 @@ void SceneContext_t::readXML(const std::string &filename){
             mesh_geometries_[index_mesh_geometries_] = create_mesh_geometry(xml_mesh_geometry);
             ++index_mesh_geometries_;
         }
+        std::cout << "Mesh geometries created." << std::endl;
     }
 
     // Shapes (6)
@@ -474,6 +482,7 @@ void SceneContext_t::readXML(const std::string &filename){
             objects_[index_objects_] = create_object(xml_object, xml_transform_matrices, xml_materials, xml_mesh_geometries);
             ++index_objects_;
         }
+        std::cout << "Shapes created." << std::endl;
     }
 
     // Directional lights (7)
@@ -482,6 +491,7 @@ void SceneContext_t::readXML(const std::string &filename){
             directional_lights_[index_directional_lights_] = create_directional_light(xml_directional_light, xml_transform_matrices);
             ++index_directional_lights_;
         }
+        std::cout << "Directional lights created." << std::endl;
     }
 
     // Skyboxes (8)
@@ -490,6 +500,7 @@ void SceneContext_t::readXML(const std::string &filename){
             skyboxes_[index_skyboxes_] = create_skybox(xml_skybox, xml_textures, xml_transform_matrices, xml_directional_lights);
             ++index_skyboxes_;
         }
+        std::cout << "Skyboxes created." << std::endl;
     }
 
     // Image buffers (9)
@@ -498,6 +509,7 @@ void SceneContext_t::readXML(const std::string &filename){
             imgbuffers_[index_imgbuffers_] = create_imgbuffer(xml_imgbuffer);
             ++index_imgbuffers_;
         }
+        std::cout << "Image buffers created." << std::endl;
     }
 
     // Cameras (10)
@@ -506,7 +518,9 @@ void SceneContext_t::readXML(const std::string &filename){
             cameras_[index_cameras_] = create_camera(xml_camera, new_filename, xml_transform_matrices, xml_materials, xml_imgbuffers, xml_skyboxes);
             ++index_cameras_;
         }
+        std::cout << "Cameras created." << std::endl;
     }
+    std::cout << std::endl;
 
     // Updating pre
     // Directional lights
@@ -521,6 +535,7 @@ void SceneContext_t::readXML(const std::string &filename){
             }
             ++index;
         }
+        std::cout << "Directional lights transformed." << std::endl;
     }
 
     // Objects
@@ -535,6 +550,7 @@ void SceneContext_t::readXML(const std::string &filename){
             }
             ++index;
         }
+        std::cout << "Shapes transformed." << std::endl;
     }
 
     // Cameras
@@ -549,12 +565,15 @@ void SceneContext_t::readXML(const std::string &filename){
             }
             ++index;
         }
+        std::cout << "Cameras transformed." << std::endl;
     }
+    std::cout << std::endl;
 
     // Scene building
     Scene_t* scene_ = new Scene_t();
     const char* primitive_list = xml_top->Attribute("primitive_list");
     const char* mesh_list = xml_top->Attribute("mesh_list");
+    std::cout << "Scene created." << std::endl;
     
     if (primitive_list != NULL){
         Shape_t** objects = nullptr;
@@ -564,6 +583,7 @@ void SceneContext_t::readXML(const std::string &filename){
         scene_->add(objects, n);
 
         delete [] objects;
+        std::cout << "Shapes added." << std::endl;
     }
 
     if (mesh_list != NULL){
@@ -574,18 +594,22 @@ void SceneContext_t::readXML(const std::string &filename){
         scene_->add(meshes, n);
 
         delete [] meshes;
+        std::cout << "Meshes added." << std::endl;
     }
 
     // Scene update
     scene_->update();
+    std::cout << std::endl << "Scene updated." << std::endl;
 
     // Updating post
 
     // Scene update
     scene_->update();
+    std::cout << "Scene updated." << std::endl;
 
     // Acceleration structure build
     scene_->build_acc();
+    std::cout << "Acceleration structure built." << std::endl << std::endl;
 
     // Autofocus
     if (xml_cameras != nullptr){
@@ -599,18 +623,20 @@ void SceneContext_t::readXML(const std::string &filename){
                     double position[2];
                     get_xy(xml_camera->Attribute("focus_position"), position);
                     cameras_[index]->autoFocus(scene_, position);
+                    std::cout << "Camera #" << index << " autofocus." << std::endl;
                 }
             }
             ++index;
         }
     }
 
-    // Running
+    // Running modes
     if (xml_cameras != nullptr){
         if (use_gl_) {
             opengl_camera_ = cameras_[0]; // CHECK dunno how to fix this
             opengl_renderer_ = new OpenGLRenderer_t(scene_, opengl_camera_, opengl_imgbuffer_);
             opengl_renderer_->initialise();
+            std::cout << "OpenGL initialised." << std::endl;
         }
 
         camera_rendermode_ = new std::string[n_cameras_];
@@ -651,7 +677,9 @@ void SceneContext_t::readXML(const std::string &filename){
 
             ++index;
         }
+        std::cout << "Camera render modes set." << std::endl;
     }
+    std::cout << std::endl << "ReadXML done." << std::endl << std::endl;
 }    
 
 void SceneContext_t::render(){
