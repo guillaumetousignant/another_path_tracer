@@ -23,7 +23,7 @@
       </object>
    </objects>
    <directional_lights>
-      <directional_light colour="5 5 4" name="sun" transform_matrix="NaN">
+      <directional_light colour="5 5 4" name="sun" transform_matrix="NaN" type="directional_light">
          <transformations_pre>
             <transformation_pre type="uniformscale" value="0.95"/>
             <transformation_pre type="rotatez" value="-0.7854"/>
