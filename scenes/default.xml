@@ -54,7 +54,7 @@
       </directional_light>
    </directional_lights>
    <skyboxes>
-      <skybox colour="0.75 0.75 0.75" lights="sun" name="grey" type="skybox_flat_sun"/>
+      <skybox colour="0.7 0.8 0.99" lights="sun" name="grey" type="skybox_flat_sun"/>
    </skyboxes>
    <imgbuffers>
       <imgbuffer name="buffer1" resx="600" resy="400" type="imgbuffer_opengl"/>
