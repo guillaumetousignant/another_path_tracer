@@ -1,6 +1,6 @@
 #include <iostream>
 #include "RandomGenerator_t.h"
-#include "ReadScene.h"
+#include "SceneContext_t.h"
 
 int main(int argc, char **argv){
     if (argc < 2){
@@ -8,7 +8,10 @@ int main(int argc, char **argv){
         return 42;
     }
 
-    read_scene(argv[1]);
+    SceneContext_t scene_context = SceneContext_t();
+
+    scene_context.readXML(argv[1]);
+    scene_context.render();
     
     return 0;
 }
