@@ -81,7 +81,7 @@
 #include "SkyboxTextureTransformationSun_t.h"
 
 SceneContext_t::SceneContext_t() :
-    use_gl_(false), scene_name_(""), opengl_renderer_(nullptr), opengl_imgbuffer_(nullptr), opengl_camera_(nullptr), n_transform_matrices_(0), n_textures_(0), 
+    use_gl_(false), scene_name_(""), opengl_renderer_(nullptr), opengl_imgbuffer_(nullptr), opengl_camera_(nullptr), scene_(nullptr), n_transform_matrices_(0), n_textures_(0), 
     n_scatterers_(0), n_materials_(0), n_mesh_geometries_(0), n_objects_(0), n_directional_lights_(0), 
     n_skyboxes_(0), n_imgbuffers_(0), n_cameras_(0), index_transform_matrices_(0), index_textures_(0), 
     index_scatterers_(0), index_materials_(0), index_mesh_geometries_(0), index_objects_(0), 
@@ -550,7 +550,7 @@ void SceneContext_t::readXML(const std::string &filename){
     }
 
     // Scene building
-    Scene_t* scene = new Scene_t();
+    Scene_t* scene_ = new Scene_t();
     const char* primitive_list = xml_top->Attribute("primitive_list");
     const char* mesh_list = xml_top->Attribute("mesh_list");
     
@@ -559,7 +559,9 @@ void SceneContext_t::readXML(const std::string &filename){
         unsigned int n = 0;
         get_shapes(primitive_list, objects, n, xml_objects);
 
-        scene->add(objects, n);
+        scene_->add(objects, n);
+
+        delete [] objects;
     }
 
     if (mesh_list != NULL){
@@ -567,19 +569,21 @@ void SceneContext_t::readXML(const std::string &filename){
         unsigned int n = 0;
         get_meshes(mesh_list, meshes, n, xml_objects);
 
-        scene->add(meshes, n);
+        scene_->add(meshes, n);
+
+        delete [] meshes;
     }
 
     // Scene update
-    scene->update();
+    scene_->update();
 
     // Updating post
 
     // Scene update
-    scene->update();
+    scene_->update();
 
     // Acceleration structure build
-    scene->build_acc();
+    scene_->build_acc();
 
     // Autofocus
     if (xml_cameras != nullptr){
@@ -592,7 +596,7 @@ void SceneContext_t::readXML(const std::string &filename){
                 if (focal_length == "nan"){
                     double position[2];
                     get_xy(xml_camera->Attribute("focus_position"), position);
-                    cameras_[index]->autoFocus(scene, position);
+                    cameras_[index]->autoFocus(scene_, position);
                 }
             }
             ++index;
@@ -602,8 +606,14 @@ void SceneContext_t::readXML(const std::string &filename){
     // Running
     if (use_gl_) {
         opengl_camera_ = cameras_[0]; // CHECK dunno how to fix this
-        opengl_renderer_ = new OpenGLRenderer_t(scene, opengl_camera_, opengl_imgbuffer_);
+        opengl_renderer_ = new OpenGLRenderer_t(scene_, opengl_camera_, opengl_imgbuffer_);
         opengl_renderer_->initialise();
+    }
+}    
+
+void SceneContext_t::render(){
+    // Running
+    if (use_gl_) {
         opengl_renderer_->render();
     }
     else {
@@ -614,17 +624,17 @@ void SceneContext_t::readXML(const std::string &filename){
                 std::transform(render_mode.begin(), render_mode.end(), render_mode.begin(), ::tolower);
                 
                 if (render_mode == "accumulation") {
-                    cameras_[index]->accumulate(scene, std::stoi(xml_camera->Attribute("n_iter")));
+                    cameras_[index]->accumulate(scene_, std::stoi(xml_camera->Attribute("n_iter")));
                 }
                 else if (render_mode == "accumulation_write") {
-                    cameras_[index]->accumulateWrite(scene, std::stoi(xml_camera->Attribute("n_iter")), std::stoi(xml_camera->Attribute("write_interval")));
+                    cameras_[index]->accumulateWrite(scene_, std::stoi(xml_camera->Attribute("n_iter")), std::stoi(xml_camera->Attribute("write_interval")));
                 }
                 else if (render_mode == "single") {
-                    cameras_[index]->raytrace(scene);
+                    cameras_[index]->raytrace(scene_);
                 }
                 else if (render_mode == "motion") {
                     std::cout << "Error, motion render mode not implemented yet. Single frame render fallback." << std::endl;
-                    cameras_[index]->raytrace(scene);
+                    cameras_[index]->raytrace(scene_);
                 }
                 else {
                     std::cout << "Error, render mode '" << render_mode << "', used by camera #" << index << ", is unknown. Only 'accumulation', 'accumulation_write', 'single', and 'motion' exist for now. Ignoring." << std::endl;
@@ -634,7 +644,7 @@ void SceneContext_t::readXML(const std::string &filename){
             }
         }
     }
-}    
+}
 
 void SceneContext_t::reset(){
     index_transform_matrices_ = 0;
@@ -773,6 +783,11 @@ void SceneContext_t::reset(){
     if (opengl_renderer_ != nullptr){
         delete opengl_renderer_;
         opengl_renderer_= nullptr;
+    }
+
+    if (scene_ != nullptr){
+        delete scene_;
+        scene_ = nullptr;
     }
 
     use_gl_ = false;
@@ -1313,10 +1328,6 @@ Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, 
         std::cout << "Error, camera type '" << type << "' not implemented. Exiting." << std::endl; 
         exit(100);
     }
-}
-
-void SceneContext_t::render(){
-
 }
 
 TransformMatrix_t* SceneContext_t::get_transform_matrix(std::string transform_matrix, const tinyxml2::XMLElement* xml_transform_matrices){
