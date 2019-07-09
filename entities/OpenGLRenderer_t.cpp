@@ -225,8 +225,8 @@ void OpenGLRenderer_t::initialise(){
     glutMotionFunc(openGL_mouseMovement);
     glutKeyboardFunc(openGL_keyboard);
 
-    glGenTextures(1, &(this->imgbuffer_->tex_));
-    glBindTexture(GL_TEXTURE_2D, this->imgbuffer_->tex_);
+    glGenTextures(1, &(imgbuffer_->tex_));
+    glBindTexture(GL_TEXTURE_2D, imgbuffer_->tex_);
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
@@ -236,6 +236,7 @@ void OpenGLRenderer_t::initialise(){
 }
 
 void OpenGLRenderer_t::render(){
+    std::cout << "In OpenGLRenderer render function." << std::endl; // REMOVE
     glutMainLoop();
 }
 
