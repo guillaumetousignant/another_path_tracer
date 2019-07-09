@@ -578,6 +578,7 @@ void SceneContext_t::readXML(const std::string &filename){
 
     // Scene building
     Scene_t* scene_ = new Scene_t();
+    std::cout << "1. Scene pointer has value: " << scene_ << std::endl; // REMOVE
     const char* primitive_list = xml_top->Attribute("primitive_list");
     const char* mesh_list = xml_top->Attribute("mesh_list");
     std::cout << "Scene created." << std::endl;
@@ -593,6 +594,8 @@ void SceneContext_t::readXML(const std::string &filename){
         std::cout << "Shapes added." << std::endl;
     }
 
+    std::cout << "2. Scene pointer has value: " << scene_ << std::endl; // REMOVE
+
     if (mesh_list != nullptr){
         MeshTop_t** meshes = nullptr;
         unsigned int n = 0;
@@ -604,9 +607,13 @@ void SceneContext_t::readXML(const std::string &filename){
         std::cout << "Meshes added." << std::endl;
     }
 
+    std::cout << "3. Scene pointer has value: " << scene_ << std::endl; // REMOVE
+
     // Scene update
     scene_->update();
     std::cout << std::endl << "Scene updated." << std::endl;
+
+    std::cout << "4. Scene pointer has value: " << scene_ << std::endl; // REMOVE
 
     // Updating post
 
@@ -614,9 +621,13 @@ void SceneContext_t::readXML(const std::string &filename){
     scene_->update();
     std::cout << "Scene updated." << std::endl;
 
+    std::cout << "5. Scene pointer has value: " << scene_ << std::endl; // REMOVE
+
     // Acceleration structure build
     scene_->build_acc();
     std::cout << "Acceleration structure built." << std::endl << std::endl;
+
+    std::cout << "6. Scene pointer has value: " << scene_ << std::endl; // REMOVE
 
     // Autofocus
     if (xml_cameras != nullptr){
@@ -646,6 +657,8 @@ void SceneContext_t::readXML(const std::string &filename){
         }
     }
 
+    std::cout << "7. Scene pointer has value: " << scene_ << std::endl; // REMOVE
+
     // Running modes
     if (xml_cameras != nullptr){
         if (use_gl_) {
@@ -654,6 +667,8 @@ void SceneContext_t::readXML(const std::string &filename){
             opengl_renderer_->initialise();
             std::cout << "OpenGL initialised." << std::endl;
         }
+
+        std::cout << "8. Scene pointer has value: " << scene_ << std::endl; // REMOVE
 
         camera_rendermode_ = new std::string[n_cameras_];
         camera_n_iter_ = new unsigned int[n_cameras_];
@@ -753,9 +768,12 @@ void SceneContext_t::readXML(const std::string &filename){
         std::cout << "Camera render modes set." << std::endl;
     }
     std::cout << std::endl << "ReadXML done." << std::endl << std::endl;
+    std::cout << "8. Scene pointer has value: " << scene_ << std::endl; // REMOVE
 }    
 
 void SceneContext_t::render(){
+    std::cout << "In rendering function." << std::endl;
+    std::cout << "9. Scene pointer has value: " << scene_ << std::endl; // REMOVE
     // Running
     if (use_gl_) {
         opengl_renderer_->render();
@@ -764,6 +782,8 @@ void SceneContext_t::render(){
         for (unsigned int i = 0; i < n_cameras_; i++){
             std::string render_mode = camera_rendermode_[i];
             std::transform(render_mode.begin(), render_mode.end(), render_mode.begin(), ::tolower);
+
+            std::cout << "Camera #" << i << " rendering scene '" << scene_ << "' in '" <<  render_mode << "' mode." << std::endl;
 
             if (render_mode == "accumulation") {
                 cameras_[i]->accumulate(scene_, camera_n_iter_[i]);
@@ -789,6 +809,8 @@ void SceneContext_t::render(){
 }
 
 void SceneContext_t::reset(){
+    std::cout << "Reset function called." << std::endl; // REMOVE
+
     index_transform_matrices_ = 0;
     index_textures_ = 0;
     index_scatterers_ = 0;
