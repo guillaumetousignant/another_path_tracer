@@ -690,7 +690,14 @@ void SceneContext_t::readXML(const std::string &filename){
                 else {
                     n_iter = n_iter_char;
                 }
-                camera_n_iter_[index] = std::stoi(n_iter);
+
+                std::transform(n_iter.begin(), n_iter.end(), n_iter.begin(), ::tolower);
+                if (n_iter == "inf"){
+                    camera_n_iter_[index] = 1000000000;
+                }
+                else {
+                    camera_n_iter_[index] = std::stoi(n_iter);
+                }              
             }
             else if (render_mode == "accumulation_write") {
                 std::string n_iter, write_interval;
@@ -712,8 +719,22 @@ void SceneContext_t::readXML(const std::string &filename){
                 }
 
                 camera_rendermode_[index] = "accumulation_write";
-                camera_n_iter_[index] = std::stoi(n_iter);
-                camera_write_interval_[index] = std::stoi(write_interval);
+
+                std::transform(n_iter.begin(), n_iter.end(), n_iter.begin(), ::tolower);
+                if (n_iter == "inf"){
+                    camera_n_iter_[index] = 1000000000;
+                }
+                else {
+                    camera_n_iter_[index] = std::stoi(n_iter);
+                }
+
+                std::transform(write_interval.begin(), write_interval.end(), write_interval.begin(), ::tolower);
+                if (write_interval == "inf"){
+                    camera_write_interval_[index] = 1000000000;
+                }
+                else {
+                    camera_write_interval_[index] = std::stoi(write_interval);
+                }
             }
             else if (render_mode == "single") {
                 camera_rendermode_[index] = "single";
