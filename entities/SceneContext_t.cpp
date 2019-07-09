@@ -582,6 +582,23 @@ void SceneContext_t::readXML(const std::string &filename){
     scene->build_acc();
 
     // Autofocus
+    if (xml_cameras != nullptr){
+        unsigned int index = 0;
+        for (tinyxml2::XMLElement* xml_camera = xml_cameras->FirstChildElement("camera"); xml_camera; xml_camera = xml_camera->NextSiblingElement("camera")){
+            const char* focal_length_char = xml_camera->Attribute("focal_length");
+            if (focal_length_char != NULL){
+                std::string focal_length = focal_length_char;
+                std::transform(focal_length.begin(), focal_length.end(), focal_length.begin(), ::tolower);
+                if (focal_length == "nan"){
+                    double position[2];
+                    get_xy(xml_camera->Attribute("focus_position"), position);
+                    cameras_[index]->autoFocus(scene, position);
+                }
+            }
+            ++index;
+        }
+    }
+    
 
     // GL stuff
 
