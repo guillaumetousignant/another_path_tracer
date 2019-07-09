@@ -116,7 +116,14 @@ void SceneContext_t::readXML(const std::string &filename){
     }
 
     tinyxml2::XMLElement* xml_top = xml_scene.FirstChildElement();
-    scene_name_ = xml_top->Attribute("name");
+    const char* temp_name = xml_top->Attribute("name");
+    if (temp_name == nullptr) {
+        std::cout << "Scene name not found. XML scene should have a 'name' attribute. Using 'nullptr'." << std::endl;
+        scene_name_ = "nullptr";
+    }
+    else {
+        scene_name_ = temp_name;
+    }
     new_filename = next_filename(folder + scene_name_ + ".png");
 
     std::cout << "Scene name: '" << scene_name_ << "'." << std::endl; // REMOVE
@@ -575,7 +582,7 @@ void SceneContext_t::readXML(const std::string &filename){
     const char* mesh_list = xml_top->Attribute("mesh_list");
     std::cout << "Scene created." << std::endl;
     
-    if (primitive_list != NULL){
+    if (primitive_list != nullptr){
         Shape_t** objects = nullptr;
         unsigned int n = 0;
         get_shapes(primitive_list, objects, n, xml_objects);
@@ -586,7 +593,7 @@ void SceneContext_t::readXML(const std::string &filename){
         std::cout << "Shapes added." << std::endl;
     }
 
-    if (mesh_list != NULL){
+    if (mesh_list != nullptr){
         MeshTop_t** meshes = nullptr;
         unsigned int n = 0;
         get_meshes(mesh_list, meshes, n, xml_objects);
@@ -616,12 +623,21 @@ void SceneContext_t::readXML(const std::string &filename){
         unsigned int index = 0;
         for (tinyxml2::XMLElement* xml_camera = xml_cameras->FirstChildElement("camera"); xml_camera; xml_camera = xml_camera->NextSiblingElement("camera")){
             const char* focal_length_char = xml_camera->Attribute("focal_length");
-            if (focal_length_char != NULL){
+            if (focal_length_char != nullptr){
                 std::string focal_length = focal_length_char;
                 std::transform(focal_length.begin(), focal_length.end(), focal_length.begin(), ::tolower);
                 if (focal_length == "nan"){
                     double position[2];
-                    get_xy(xml_camera->Attribute("focus_position"), position);
+                    const char* focus_position_char = xml_camera->Attribute("focus_position");
+                    std::string focus_position;
+                    if (focus_position_char == nullptr) {
+                        std::cout << "Error: Cameras with nan as 'focal_length' attribute should have a 'focus_position' attribute. Using 0.5 0.5." << std::endl;
+                        focus_position = "0.5 0.5";
+                    }
+                    else {
+                        focus_position = focus_position_char;
+                    }
+                    get_xy(focus_position, position);
                     cameras_[index]->autoFocus(scene_, position);
                     std::cout << "Camera #" << index << " autofocus." << std::endl;
                 }
@@ -651,17 +667,53 @@ void SceneContext_t::readXML(const std::string &filename){
 
         unsigned int index = 0;
         for (tinyxml2::XMLElement* xml_camera = xml_cameras->FirstChildElement("camera"); xml_camera; xml_camera = xml_camera->NextSiblingElement("camera")){
-            std::string render_mode = xml_camera->Attribute("rendermode");
+            std::string render_mode;
+            const char* render_mode_char = xml_camera->Attribute("rendermode");
+            if (render_mode_char == nullptr){
+                std::cout << "Error: XML cameras should have a 'rendermode' attribute. Using 'single'." << std::endl;
+                render_mode = "single";
+            }
+            else{
+                render_mode = render_mode_char;
+            }
+
             std::transform(render_mode.begin(), render_mode.end(), render_mode.begin(), ::tolower);
             
             if (render_mode == "accumulation") {
                 camera_rendermode_[index] = "accumulation";
-                camera_n_iter_[index] = std::stoi(xml_camera->Attribute("n_iter"));
+                std::string n_iter;
+                const char* n_iter_char = xml_camera->Attribute("n_iter");
+                if (n_iter_char == nullptr){
+                    std::cout << "Error: XML cameras in accumulation mode should have a 'n_iter' attribute. Using 1." << std::endl;
+                    n_iter = "1";
+                }
+                else {
+                    n_iter = n_iter_char;
+                }
+                camera_n_iter_[index] = std::stoi(n_iter);
             }
             else if (render_mode == "accumulation_write") {
+                std::string n_iter, write_interval;
+                const char* n_iter_char = xml_camera->Attribute("n_iter");
+                const char* write_interval_char = xml_camera->Attribute("write_interval");
+                if (n_iter_char == nullptr){
+                    std::cout << "Error: XML cameras in accumulation mode should have a 'n_iter' attribute. Using 1." << std::endl;
+                    n_iter = "1";
+                }
+                else {
+                    n_iter = n_iter_char;
+                }
+                if (write_interval_char == nullptr){
+                    std::cout << "Error: XML cameras in accumulation_write mode should have a 'write_interval' attribute. Using 1." << std::endl;
+                    write_interval = "1";
+                }
+                else {
+                    write_interval = write_interval_char;
+                }
+
                 camera_rendermode_[index] = "accumulation_write";
-                camera_n_iter_[index] = std::stoi(xml_camera->Attribute("n_iter"));
-                camera_write_interval_[index] = std::stoi(xml_camera->Attribute("write_interval"));
+                camera_n_iter_[index] = std::stoi(n_iter);
+                camera_write_interval_[index] = std::stoi(write_interval);
             }
             else if (render_mode == "single") {
                 camera_rendermode_[index] = "single";
@@ -879,7 +931,16 @@ void SceneContext_t::reset(){
 }
 
 TransformMatrix_t* SceneContext_t::create_transform_matrix(const tinyxml2::XMLElement* xml_transform_matrix) const {
-    std::string string_transform_matrix = xml_transform_matrix->Attribute("value");
+    std::string string_transform_matrix;
+    const char* transform_matrix_char = xml_transform_matrix->Attribute("value");
+    if (transform_matrix_char == nullptr){
+        std::cout << "Error: XML transform matrices should have a 'value' attribute. Using identity." << std::endl;
+        string_transform_matrix = "nan";
+    }
+    else {
+        string_transform_matrix = transform_matrix_char;
+    }
+
     std::transform(string_transform_matrix.begin(), string_transform_matrix.end(), string_transform_matrix.begin(), ::tolower);
 
     if (string_transform_matrix == "nan"){
@@ -910,7 +971,15 @@ TransformMatrix_t* SceneContext_t::create_transform_matrix(const tinyxml2::XMLEl
 }
 
 Texture_t* SceneContext_t::create_texture(const tinyxml2::XMLElement* xml_texture) const {
-    std::string type = xml_texture->Attribute("type");
+    std::string type;
+    const char* type_char = xml_texture->Attribute("type");
+    if (type_char == nullptr) {
+        std::cout << "Error: XML textures should have a 'type' attribute. Using 'texture'." << std::endl;
+        type = "texture";
+    }
+    else {
+        type = type_char;
+    }
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
     if (type == "texture"){
@@ -923,7 +992,15 @@ Texture_t* SceneContext_t::create_texture(const tinyxml2::XMLElement* xml_textur
 }
 
 ScatteringFunction_t* SceneContext_t::create_scatterer(const tinyxml2::XMLElement* xml_scatterer, std::list<unsigned int>* &scatterers_medium_list, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials) {
-    std::string type = xml_scatterer->Attribute("type");
+    std::string type;
+    const char* type_char = xml_scatterer->Attribute("type");
+    if (type_char == nullptr) {
+        std::cout << "Error: XML scatterers should have a 'type' attribute. Using 'nonabsorber'." << std::endl;
+        type = "nonabsorber";
+    }
+    else {
+        type = type_char;
+    }
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
     if (type == "absorber"){
@@ -956,7 +1033,15 @@ ScatteringFunction_t* SceneContext_t::create_scatterer(const tinyxml2::XMLElemen
 }
 
 Material_t* SceneContext_t::create_material(const tinyxml2::XMLElement* xml_material, std::list<unsigned int>* &materials_medium_list, unsigned int* &materials_mix_list, std::tuple<std::list<unsigned int>*, std::list<std::string>*>* &materials_aggregate_list, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_scatterers) {
-    std::string type = xml_material->Attribute("type");
+    std::string type;
+    const char* type_char = xml_material->Attribute("type");
+    if (type_char == nullptr) {
+        std::cout << "Error: XML materials should have a 'type' attribute. Using 'normal_material'." << std::endl;
+        type = "normal_material";
+    }
+    else {
+        type = type_char;
+    }
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
     if (type == "diffuse"){
@@ -1033,12 +1118,20 @@ Material_t* SceneContext_t::create_material(const tinyxml2::XMLElement* xml_mate
     }
     else{
         std::cout << "Error, material type '" << type << "' not implemented. Ignoring." << std::endl; 
-        return new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.5, 0.5, 0.5), 1.0);
+        return new NormalMaterial_t();
     }
 }
 
 MeshGeometry_t* SceneContext_t::create_mesh_geometry(const tinyxml2::XMLElement* xml_mesh_geometry) const {
-    std::string type = xml_mesh_geometry->Attribute("type");
+    std::string type;
+    const char* type_char = xml_mesh_geometry->Attribute("type");
+    if (type_char == nullptr) {
+        std::cout << "Error: XML mesh geometries should have a 'type' attribute. Using 'mesh_geometry'." << std::endl;
+        type = "mesh_geometry";
+    }
+    else {
+        type = type_char;
+    }
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
     if (type == "mesh_geometry"){
@@ -1051,7 +1144,15 @@ MeshGeometry_t* SceneContext_t::create_mesh_geometry(const tinyxml2::XMLElement*
 }
 
 Shape_t* SceneContext_t::create_object(const tinyxml2::XMLElement* xml_object, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_mesh_geometries) {
-    std::string type = xml_object->Attribute("type");
+    std::string type;
+    const char* type_char = xml_object->Attribute("type");
+    if (type_char == nullptr) {
+        std::cout << "Error: XML objects should have a 'type' attribute. Using 'sphere'." << std::endl;
+        type = "sphere";
+    }
+    else {
+        type = type_char;
+    }
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
     if (type == "mesh"){
@@ -1135,7 +1236,15 @@ Shape_t* SceneContext_t::create_object(const tinyxml2::XMLElement* xml_object, c
 }
 
 DirectionalLight_t* SceneContext_t::create_directional_light(const tinyxml2::XMLElement* xml_directional_light, const tinyxml2::XMLElement* xml_transform_matrices){
-    std::string type = xml_directional_light->Attribute("type");
+    std::string type;
+    const char* type_char = xml_directional_light->Attribute("type");
+    if (type_char == nullptr) {
+        std::cout << "Error: XML directional lights should have a 'type' attribute. Using 'directional_light'." << std::endl;
+        type = "directional_light";
+    }
+    else {
+        type = type_char;
+    }
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
     if (type == "directional_light"){
@@ -1148,7 +1257,15 @@ DirectionalLight_t* SceneContext_t::create_directional_light(const tinyxml2::XML
 }
 
 Skybox_t* SceneContext_t::create_skybox(const tinyxml2::XMLElement* xml_skybox, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_directional_lights) {
-    std::string type = xml_skybox->Attribute("type");
+    std::string type;
+    const char* type_char = xml_skybox->Attribute("type");
+    if (type_char == nullptr) {
+        std::cout << "Error: XML skyboxes should have a 'type' attribute. Using 'skybox_flat'." << std::endl;
+        type = "skybox_flat";
+    }
+    else {
+        type = type_char;
+    }
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
     if (type == "skybox_flat"){
@@ -1188,7 +1305,15 @@ Skybox_t* SceneContext_t::create_skybox(const tinyxml2::XMLElement* xml_skybox, 
 }
 
 ImgBuffer_t* SceneContext_t::create_imgbuffer(const tinyxml2::XMLElement* xml_imgbuffer) {
-    std::string type = xml_imgbuffer->Attribute("type");
+    std::string type;
+    const char* type_char = xml_imgbuffer->Attribute("type");
+    if (type_char == nullptr) {
+        std::cout << "Error: XML imgbuffers should have a 'type' attribute. Using 'imgbuffer'." << std::endl;
+        type = "imgbuffer";
+    }
+    else {
+        type = type_char;
+    }
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
     if (type == "imgbuffer"){
@@ -1206,9 +1331,25 @@ ImgBuffer_t* SceneContext_t::create_imgbuffer(const tinyxml2::XMLElement* xml_im
 }
 
 Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, const std::string &next_filename, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_imgbuffers, const tinyxml2::XMLElement* xml_skyboxes) {
-    std::string type = xml_camera->Attribute("type");
+    std::string type;
+    const char* type_char = xml_camera->Attribute("type");
+    if (type_char == nullptr) {
+        std::cout << "Error: XML cameras should have a 'type' attribute. Using 'cam'." << std::endl;
+        type = "cam";
+    }
+    else {
+        type = type_char;
+    }
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
-    std::string filename = xml_camera->Attribute("filename");
+    std::string filename;
+    const char* filename_char = xml_camera->Attribute("filename");
+    if (filename_char == nullptr){
+        std::cout << "Error: XML cameras should have a 'filename' attribute. Using 'nan'." << std::endl;
+        filename = "nan";
+    }
+    else {
+        filename = filename_char;
+    }
     std::string filename_check = filename;
     std::transform(filename_check.begin(), filename_check.end(), filename_check.begin(), ::tolower);
 
@@ -1428,7 +1569,14 @@ TransformMatrix_t* SceneContext_t::get_transform_matrix(std::string transform_ma
         if (xml_transform_matrices != nullptr){
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_transform_matrix = xml_transform_matrices->FirstChildElement("transform_matrix"); xml_transform_matrix; xml_transform_matrix = xml_transform_matrix->NextSiblingElement("transform_matrix")){
-                std::string name_transform_matrix = xml_transform_matrix->Attribute("name");
+                std::string name_transform_matrix;
+                const char* transform_matrix_char = xml_transform_matrix->Attribute("name");
+                if (transform_matrix_char == nullptr){
+                    name_transform_matrix = "";
+                }
+                else{
+                    name_transform_matrix = transform_matrix_char;
+                }
                 std::transform(name_transform_matrix.begin(), name_transform_matrix.end(), name_transform_matrix.begin(), ::tolower);
                 if (name_transform_matrix == transform_matrix){
                     return transform_matrices_[index];
@@ -1457,7 +1605,14 @@ std::list<unsigned int>* SceneContext_t::get_medium_index_list(std::string strin
             if (xml_materials != nullptr){
                 unsigned int index = 0;
                 for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
-                    std::string name_material = xml_material->Attribute("name");
+                    std::string name_material;
+                    const char* material_char = xml_material->Attribute("name");
+                    if (material_char == nullptr){
+                        name_material = "";
+                    }
+                    else{
+                        name_material = material_char;
+                    }
                     std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
                     if (name_material == token){
                         medium_list->push_back(index);
@@ -1478,7 +1633,14 @@ std::list<unsigned int>* SceneContext_t::get_medium_index_list(std::string strin
         if (xml_materials != nullptr){
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
-                std::string name_material = xml_material->Attribute("name");
+                std::string name_material;
+                const char* material_char = xml_material->Attribute("name");
+                if (material_char == nullptr){
+                    name_material = "";
+                }
+                else{
+                    name_material = material_char;
+                }
                 std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
                 if (name_material == string_medium_list){
                     medium_list->push_back(index);
@@ -1512,7 +1674,14 @@ std::list<Medium_t*> SceneContext_t::get_medium_list(std::string string_medium_l
             if (xml_materials != nullptr){
                 unsigned int index = 0;
                 for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
-                    std::string name_material = xml_material->Attribute("name");
+                    std::string name_material;
+                    const char* material_char = xml_material->Attribute("name");
+                    if (material_char == nullptr){
+                        name_material = "";
+                    }
+                    else{
+                        name_material = material_char;
+                    }
                     std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
                     if (name_material == token){
                         Medium_t* medium = dynamic_cast<Medium_t*>(materials_[index]);
@@ -1543,7 +1712,14 @@ std::list<Medium_t*> SceneContext_t::get_medium_list(std::string string_medium_l
         if (xml_materials != nullptr){
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
-                std::string name_material = xml_material->Attribute("name");
+                std::string name_material;
+                const char* material_char = xml_material->Attribute("name");
+                if (material_char == nullptr){
+                    name_material = "";
+                }
+                else{
+                    name_material = material_char;
+                }
                 std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
                 if (name_material == string_medium_list){
                     Medium_t* medium = dynamic_cast<Medium_t*>(materials_[index]);
@@ -1570,7 +1746,14 @@ Texture_t* SceneContext_t::get_texture(std::string texture, const tinyxml2::XMLE
             std::transform(texture.begin(), texture.end(), texture.begin(), ::tolower);
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_texture = xml_textures->FirstChildElement("texture"); xml_texture; xml_texture = xml_texture->NextSiblingElement("texture")){
-                std::string name_texture = xml_texture->Attribute("name");
+                std::string name_texture;
+                const char* name_char = xml_texture->Attribute("name");
+                if (name_char == nullptr){
+                    name_texture = "";
+                }
+                else{
+                    name_texture = name_char;
+                }
                 std::transform(name_texture.begin(), name_texture.end(), name_texture.begin(), ::tolower);
                 if (name_texture == texture){
                     return textures_[index];
@@ -1595,7 +1778,14 @@ unsigned int* SceneContext_t::get_material_mix(std::string material_refracted, s
             bool material_missing = true;
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
-                std::string name_material = xml_material->Attribute("name");
+                std::string name_material;
+                const char* name_char = xml_material->Attribute("name");
+                if (name_char == nullptr){
+                    name_material = "";
+                }
+                else{
+                    name_material = name_char;
+                }
                 std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
                 if (material_refracted == name_material){
                     output_materials[0] = index;
@@ -1624,7 +1814,14 @@ unsigned int* SceneContext_t::get_material_mix(std::string material_refracted, s
             bool material_missing = true;
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
-                std::string name_material = xml_material->Attribute("name");
+                std::string name_material;
+                const char* name_char = xml_material->Attribute("name");
+                if (name_char == nullptr){
+                    name_material = "";
+                }
+                else{
+                    name_material = name_char;
+                }
                 std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
                 if (material_reflected == name_material){
                     output_materials[1] = index;
@@ -1656,7 +1853,14 @@ ScatteringFunction_t* SceneContext_t::get_scatterer(std::string scatterer, const
             std::transform(scatterer.begin(), scatterer.end(), scatterer.begin(), ::tolower);
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_scatterer = xml_scatterers->FirstChildElement("scatterer"); xml_scatterer; xml_scatterer = xml_scatterer->NextSiblingElement("scatterer")){
-                std::string name_scatterer = xml_scatterer->Attribute("name");
+                std::string name_scatterer;
+                const char* name_char = xml_scatterer->Attribute("name");
+                if (name_char == nullptr){
+                    name_scatterer = "";
+                }
+                else{
+                    name_scatterer = name_char;
+                }
                 std::transform(name_scatterer.begin(), name_scatterer.end(), name_scatterer.begin(), ::tolower);
                 if (name_scatterer == scatterer){
                     return scatterers_[index];
@@ -1678,7 +1882,14 @@ MeshGeometry_t* SceneContext_t::get_mesh_geometry(std::string mesh_geometry, con
             std::transform(mesh_geometry.begin(), mesh_geometry.end(), mesh_geometry.begin(), ::tolower);
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_mesh_geometry = xml_mesh_geometries->FirstChildElement("mesh_geometry"); xml_mesh_geometry; xml_mesh_geometry = xml_mesh_geometry->NextSiblingElement("mesh_geometry")){
-                std::string name_mesh_geometry = xml_mesh_geometry->Attribute("name");
+                std::string name_mesh_geometry;
+                const char* name_char = xml_mesh_geometry->Attribute("name");
+                if (name_char == nullptr){
+                    name_mesh_geometry = "";
+                }
+                else{
+                    name_mesh_geometry = name_char;
+                }
                 std::transform(name_mesh_geometry.begin(), name_mesh_geometry.end(), name_mesh_geometry.begin(), ::tolower);
                 if (name_mesh_geometry == mesh_geometry){
                     return mesh_geometries_[index];
@@ -1700,7 +1911,14 @@ unsigned int SceneContext_t::get_material_index(std::string material, const tiny
             std::transform(material.begin(), material.end(), material.begin(), ::tolower);
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
-                std::string name_material = xml_material->Attribute("name");
+                std::string name_material;
+                const char* name_char = xml_material->Attribute("name");
+                if (name_char == nullptr){
+                    name_material = "";
+                }
+                else{
+                    name_material = name_char;
+                }
                 std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
                 if (name_material == material){
                     return index;
@@ -1722,7 +1940,14 @@ Material_t* SceneContext_t::get_material(std::string material, const tinyxml2::X
             std::transform(material.begin(), material.end(), material.begin(), ::tolower);
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
-                std::string name_material = xml_material->Attribute("name");
+                std::string name_material;
+                const char* name_char = xml_material->Attribute("name");
+                if (name_char == nullptr){
+                    name_material = "";
+                }
+                else{
+                    name_material = name_char;
+                }
                 std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
                 if (name_material == material){
                     return materials_[index];
@@ -1751,7 +1976,14 @@ void SceneContext_t::get_lights(std::string lights_string, DirectionalLight_t** 
             if (xml_directional_lights != nullptr){
                 unsigned int index = 0;
                 for (const tinyxml2::XMLElement* xml_directional_light = xml_directional_lights->FirstChildElement("directional_light"); xml_directional_light; xml_directional_light = xml_directional_light->NextSiblingElement("directional_light")){
-                    std::string name_light = xml_directional_light->Attribute("name");
+                    std::string name_light;
+                    const char* name_char = xml_directional_light->Attribute("name");
+                    if (name_char == nullptr){
+                        name_light = "";
+                    }
+                    else{
+                        name_light = name_char;
+                    }
                     std::transform(name_light.begin(), name_light.end(), name_light.begin(), ::tolower);
                     if (name_light == token){
                         lights_list.push_back(directional_lights_[index]);
@@ -1772,7 +2004,14 @@ void SceneContext_t::get_lights(std::string lights_string, DirectionalLight_t** 
         if (xml_directional_lights != nullptr){
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_directional_light = xml_directional_lights->FirstChildElement("directional_light"); xml_directional_light; xml_directional_light = xml_directional_light->NextSiblingElement("directional_light")){
-                std::string name_light = xml_directional_light->Attribute("name");
+                std::string name_light;
+                const char* name_char = xml_directional_light->Attribute("name");
+                if (name_char == nullptr){
+                    name_light = "";
+                }
+                else{
+                    name_light = name_char;
+                }
                 std::transform(name_light.begin(), name_light.end(), name_light.begin(), ::tolower);
                 if (name_light == lights_string){
                     lights_list.push_back(directional_lights_[index]);
@@ -1804,7 +2043,14 @@ ImgBuffer_t* SceneContext_t::get_imgbuffer(std::string imgbuffer, const tinyxml2
             std::transform(imgbuffer.begin(), imgbuffer.end(), imgbuffer.begin(), ::tolower);
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_imgbuffer = xml_imgbuffers->FirstChildElement("imgbuffer"); xml_imgbuffer; xml_imgbuffer = xml_imgbuffer->NextSiblingElement("imgbuffer")){
-                std::string name_imgbuffer = xml_imgbuffer->Attribute("name");
+                std::string name_imgbuffer;
+                const char* name_char = xml_imgbuffer->Attribute("name");
+                if (name_char == nullptr){
+                    name_imgbuffer = "";
+                }
+                else{
+                    name_imgbuffer = name_char;
+                }
                 std::transform(name_imgbuffer.begin(), name_imgbuffer.end(), name_imgbuffer.begin(), ::tolower);
                 if (name_imgbuffer == imgbuffer){
                     return imgbuffers_[index];
@@ -1826,7 +2072,14 @@ Skybox_t* SceneContext_t::get_skybox(std::string skybox, const tinyxml2::XMLElem
             std::transform(skybox.begin(), skybox.end(), skybox.begin(), ::tolower);
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_skybox = xml_skyboxes->FirstChildElement("skybox"); xml_skybox; xml_skybox = xml_skybox->NextSiblingElement("skybox")){
-                std::string name_skybox = xml_skybox->Attribute("name");
+                std::string name_skybox;
+                const char* name_char = xml_skybox->Attribute("name");
+                if (name_char == nullptr){
+                    name_skybox = "";
+                }
+                else{
+                    name_skybox = name_char;
+                }
                 std::transform(name_skybox.begin(), name_skybox.end(), name_skybox.begin(), ::tolower);
                 if (name_skybox == skybox){
                     return skyboxes_[index];
@@ -1855,7 +2108,14 @@ void SceneContext_t::get_shapes(std::string objects_string, Shape_t** &objects, 
             if (xml_objects != nullptr){
                 unsigned int index = 0;
                 for (const tinyxml2::XMLElement* xml_object = xml_objects->FirstChildElement("object"); xml_object; xml_object = xml_object->NextSiblingElement("object")){
-                    std::string name_object = xml_object->Attribute("name");
+                    std::string name_object;
+                    const char* name_char = xml_object->Attribute("name");
+                    if (name_char == nullptr){
+                        name_object = "";
+                    }
+                    else{
+                        name_object = name_char;
+                    }
                     std::transform(name_object.begin(), name_object.end(), name_object.begin(), ::tolower);
                     if (name_object == token){
                         objects_list.push_back(objects_[index]);
@@ -1876,7 +2136,14 @@ void SceneContext_t::get_shapes(std::string objects_string, Shape_t** &objects, 
         if (xml_objects != nullptr){
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_object = xml_objects->FirstChildElement("object"); xml_object; xml_object = xml_object->NextSiblingElement("object")){
-                std::string name_object = xml_object->Attribute("name");
+                std::string name_object;
+                const char* name_char = xml_object->Attribute("name");
+                if (name_char == nullptr){
+                    name_object = "";
+                }
+                else{
+                    name_object = name_char;
+                }
                 std::transform(name_object.begin(), name_object.end(), name_object.begin(), ::tolower);
                 if (name_object == objects_string){
                     objects_list.push_back(objects_[index]);
@@ -1915,7 +2182,14 @@ void SceneContext_t::get_meshes(std::string meshes_string, MeshTop_t** &meshes, 
             if (xml_objects != nullptr){
                 unsigned int index = 0;
                 for (const tinyxml2::XMLElement* xml_object = xml_objects->FirstChildElement("object"); xml_object; xml_object = xml_object->NextSiblingElement("object")){
-                    std::string name_object = xml_object->Attribute("name");
+                    std::string name_object;
+                    const char* name_char = xml_object->Attribute("name");
+                    if (name_char == nullptr){
+                        name_object = "";
+                    }
+                    else{
+                        name_object = name_char;
+                    }
                     std::transform(name_object.begin(), name_object.end(), name_object.begin(), ::tolower);
                     if (name_object == token){
                         objects_list.push_back(objects_[index]);
@@ -1936,7 +2210,14 @@ void SceneContext_t::get_meshes(std::string meshes_string, MeshTop_t** &meshes, 
         if (xml_objects != nullptr){
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_object = xml_objects->FirstChildElement("object"); xml_object; xml_object = xml_object->NextSiblingElement("object")){
-                std::string name_object = xml_object->Attribute("name");
+                std::string name_object;
+                const char* name_char = xml_object->Attribute("name");
+                if (name_char == nullptr){
+                    name_object = "";
+                }
+                else{
+                    name_object = name_char;
+                }
                 std::transform(name_object.begin(), name_object.end(), name_object.begin(), ::tolower);
                 if (name_object == meshes_string){
                     objects_list.push_back(objects_[index]);
@@ -2122,7 +2403,15 @@ bool is_number(const std::string& s) {
 }
 
 void apply_transformation(TransformMatrix_t* transform_matrix, const tinyxml2::XMLElement* transform) {
-    std::string type = transform->Attribute("type");
+    std::string type;
+    const char* type_char = transform->Attribute("type");
+    if (type_char == nullptr) {
+        std::cout << "Error: XML transforms should have a 'type' attribute. Ignoring." << std::endl;
+        return;
+    }
+    else {
+        type = type_char;
+    }
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
     if (type == "rotatexaxis"){
@@ -2155,8 +2444,14 @@ void apply_transformation(TransformMatrix_t* transform_matrix, const tinyxml2::X
     else if (type == "scaleaxis"){
         transform_matrix->scaleAxis(get_colour(transform->Attribute("value")));
     }
+    else if (type == "uniformscaleaxis"){
+        transform_matrix->scaleAxis(std::stod(transform->Attribute("value")));
+    }
     else if (type == "scale"){
         transform_matrix->scale(get_colour(transform->Attribute("value")));
+    }
+    else if (type == "uniformscale"){
+        transform_matrix->scale(std::stod(transform->Attribute("value")));
     }
     else if (type == "reflect"){
         transform_matrix->reflect(get_colour(transform->Attribute("value")));
@@ -2175,6 +2470,5 @@ void apply_transformation(TransformMatrix_t* transform_matrix, const tinyxml2::X
     }
     else{
         std::cout << "Error, transform type '" << type << "' not implemented. Ignoring." << std::endl; 
-        return;
     }
 }
