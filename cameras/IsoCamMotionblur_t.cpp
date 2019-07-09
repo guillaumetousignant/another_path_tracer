@@ -9,7 +9,7 @@
 
 #define PI 3.141592653589793238463
 
-IsoCamMotionblur_t::IsoCamMotionblur_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, const double (&fov)[2], const unsigned int (&subpix)[2], ImgBuffer_t* image, std::list<Medium_t*> &medium_list, Skybox_t* skybox, unsigned int max_bounces, double (&time)[2], double gammaind) 
+IsoCamMotionblur_t::IsoCamMotionblur_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, const double (&fov)[2], const unsigned int (&subpix)[2], ImgBuffer_t* image, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double (&time)[2], double gammaind) 
     : IsoCam_t(transformation, filename, up, fov, subpix, image, medium_list, skybox, max_bounces, gammaind),
     direction_last_(direction_), origin_last_(origin_), time_{time[0], time[1]}, up_last_(up_) {}
 
