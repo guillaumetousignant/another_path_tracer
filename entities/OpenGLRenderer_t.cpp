@@ -11,6 +11,8 @@
 #define GL_CLAMP_TO_EDGE 0x812F
 #endif
 
+OpenGLRenderer_t* openGL_renderer = nullptr;
+
 OpenGLRenderer_t::OpenGLRenderer_t() :
     camera_(nullptr), scene_(nullptr), imgbuffer_(nullptr), width_(0), height_(0), 
     right_x_pos_(0), right_y_pos_(0), left_x_pos_(0), left_y_pos_(0), middle_x_pos_(0), 

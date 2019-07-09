@@ -46,8 +46,6 @@ class OpenGLRenderer_t{
         void render();
 };
 
-OpenGLRenderer_t* openGL_renderer = nullptr;
-
 void openGL_dummyDisp();
 void openGL_raytrace();
 void openGL_resetDisplay(void);
