@@ -81,7 +81,7 @@
 #include "SkyboxTextureTransformationSun_t.h"
 
 SceneContext_t::SceneContext_t() :
-    use_gl_(false), scene_name_(""), opengl_renderer_(nullptr), n_transform_matrices_(0), n_textures_(0), 
+    use_gl_(false), scene_name_(""), opengl_renderer_(nullptr), opengl_imgbuffer_(nullptr), opengl_camera_(nullptr), n_transform_matrices_(0), n_textures_(0), 
     n_scatterers_(0), n_materials_(0), n_mesh_geometries_(0), n_objects_(0), n_directional_lights_(0), 
     n_skyboxes_(0), n_imgbuffers_(0), n_cameras_(0), index_transform_matrices_(0), index_textures_(0), 
     index_scatterers_(0), index_materials_(0), index_mesh_geometries_(0), index_objects_(0), 
@@ -598,11 +598,42 @@ void SceneContext_t::readXML(const std::string &filename){
             ++index;
         }
     }
-    
-
-    // GL stuff
 
     // Running
+    if (use_gl_) {
+        opengl_camera_ = cameras_[0]; // CHECK dunno how to fix this
+        opengl_renderer_ = new OpenGLRenderer_t(scene, opengl_camera_, opengl_imgbuffer_);
+        opengl_renderer_->initialise();
+        opengl_renderer_->render();
+    }
+    else {
+        if (xml_cameras != nullptr){
+            unsigned int index = 0;
+            for (tinyxml2::XMLElement* xml_camera = xml_cameras->FirstChildElement("camera"); xml_camera; xml_camera = xml_camera->NextSiblingElement("camera")){
+                std::string render_mode = xml_camera->Attribute("rendermode");
+                std::transform(render_mode.begin(), render_mode.end(), render_mode.begin(), ::tolower);
+                
+                if (render_mode == "accumulation") {
+                    cameras_[index]->accumulate(scene, std::stoi(xml_camera->Attribute("n_iter")));
+                }
+                else if (render_mode == "accumulation_write") {
+                    cameras_[index]->accumulateWrite(scene, std::stoi(xml_camera->Attribute("n_iter")), std::stoi(xml_camera->Attribute("write_interval")));
+                }
+                else if (render_mode == "single") {
+                    cameras_[index]->raytrace(scene);
+                }
+                else if (render_mode == "motion") {
+                    std::cout << "Error, motion render mode not implemented yet. Single frame render fallback." << std::endl;
+                    cameras_[index]->raytrace(scene);
+                }
+                else {
+                    std::cout << "Error, render mode '" << render_mode << "', used by camera #" << index << ", is unknown. Only 'accumulation', 'accumulation_write', 'single', and 'motion' exist for now. Ignoring." << std::endl;
+                }
+
+                ++index;
+            }
+        }
+    }
 }    
 
 void SceneContext_t::reset(){
@@ -616,6 +647,8 @@ void SceneContext_t::reset(){
     index_skyboxes_ = 0;
     index_imgbuffers_ = 0;
     index_cameras_ = 0;
+    opengl_imgbuffer_ = nullptr;
+    opengl_camera_ = nullptr;
 
     // Deleting buffers
     if (transform_matrices_ != nullptr){
@@ -1063,8 +1096,9 @@ ImgBuffer_t* SceneContext_t::create_imgbuffer(const tinyxml2::XMLElement* xml_im
         return new ImgBuffer_t(std::stod(xml_imgbuffer->Attribute("resx")), std::stod(xml_imgbuffer->Attribute("resy")));
     }
     else if (type == "imgbuffer_opengl"){
-        use_gl_ = true;
-        return new ImgBufferOpenGL_t(std::stod(xml_imgbuffer->Attribute("resx")), std::stod(xml_imgbuffer->Attribute("resy")));
+        use_gl_ = true; 
+        opengl_imgbuffer_ = new ImgBufferOpenGL_t(std::stod(xml_imgbuffer->Attribute("resx")), std::stod(xml_imgbuffer->Attribute("resy")));
+        return opengl_imgbuffer_;
     }
     else{
         std::cout << "Error, imgbuffer type '" << type << "' not implemented. Only 'imgbuffer', and 'imgbuffer_opengl' exist for now. Ignoring." << std::endl; 

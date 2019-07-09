@@ -18,6 +18,7 @@ class Skybox_t;
 class ImgBuffer_t;
 class Camera_t;
 class MaterialMap_t;
+class ImgBufferOpenGL_t;
 
 class OpenGLRenderer_t;
 
@@ -29,6 +30,8 @@ class SceneContext_t{
         bool use_gl_;
         std::string scene_name_;
         OpenGLRenderer_t* opengl_renderer_;
+        ImgBufferOpenGL_t* opengl_imgbuffer_;
+        Camera_t* opengl_camera_;
 
         unsigned int n_transform_matrices_;
         unsigned int n_textures_;
