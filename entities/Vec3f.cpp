@@ -182,6 +182,6 @@ Vec3f Vec3f::ceil() const {
     return Vec3f(std::ceil(v[0]), std::ceil(v[1]), std::ceil(v[2]));
 }
 ostream &operator<<(ostream &output, const Vec3f &v) {
-    cout << '(' << v[0] << ", " << v[1] << ", " << v[2] << ')';
+    cout << '[' << v[0] << ", " << v[1] << ", " << v[2] << ']';
     return output;
 } 
