@@ -24,7 +24,7 @@ void SphereMotionblur_t::update(){
     radius_ = transformation_->getScale();
     TransformMatrix_t transform_norm = transformation_->transformDir();
     Vec3f direction = transform_norm.multDir(Vec3f(0.0, 0.0, 1.0)).to_sph(); 
-    Vec3f direction2 = transform_norm.multDir(Vec3f(1.0, 0.0, 1.0)).to_sph();
+    Vec3f direction2 = transform_norm.multDir(Vec3f(1.0, 0.0, 0.0)).to_sph();
     direction_sph_ = Vec3f(1.0, direction[1], direction2[2]);
 }
 
