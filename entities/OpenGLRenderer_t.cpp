@@ -22,10 +22,10 @@ OpenGLRenderer_t::OpenGLRenderer_t() :
 }
 
 OpenGLRenderer_t::OpenGLRenderer_t(Scene_t* scene, Camera_t* camera, ImgBufferOpenGL_t* imgbuffer) :
-    camera_(camera), scene_(scene), imgbuffer_(imgbuffer), width_(0), height_(0), 
+    camera_(camera), scene_(scene), imgbuffer_(imgbuffer), width_(imgbuffer->size_x_), height_(imgbuffer->size_y_), 
     right_x_pos_(0), right_y_pos_(0), left_x_pos_(0), left_y_pos_(0), middle_x_pos_(0), 
     middle_y_pos_(0), right_clicked_(false), left_clicked_(false), middle_clicked_(false),
-    n_iter_gl_(0), focus_point_(Vec3f()), camera_dist_(0), updated_(false) {
+    n_iter_gl_(0), focus_point_(Vec3f()), camera_dist_((focus_point_ - camera_->origin_).magnitude()), updated_(false) {
         openGL_renderer = this;
 }
 
@@ -237,6 +237,27 @@ void OpenGLRenderer_t::initialise(){
 
 void OpenGLRenderer_t::render(){
     std::cout << "In OpenGLRenderer render function." << std::endl; // REMOVE
+    std::cout << "camera_: " << camera_ << std::endl; // REMOVE
+    std::cout << "scene_: " << scene_ << std::endl; // REMOVE
+    std::cout << "imgbuffer_: " << imgbuffer_ << std::endl; // REMOVE
+    std::cout << "width_: " << width_ << std::endl; // REMOVE
+    std::cout << "height_: " << height_ << std::endl; // REMOVE
+    std::cout << "right_x_pos_: " << right_x_pos_ << std::endl; // REMOVE
+    std::cout << "right_y_pos_: " << right_y_pos_ << std::endl; // REMOVE
+    std::cout << "left_x_pos_: " << left_x_pos_ << std::endl; // REMOVE
+    std::cout << "left_y_pos_: " << left_y_pos_ << std::endl; // REMOVE
+    std::cout << "middle_x_pos_: " << middle_x_pos_ << std::endl; // REMOVE
+    std::cout << "middle_y_pos_: " << middle_y_pos_ << std::endl; // REMOVE
+    std::cout << "right_clicked_: " << right_clicked_ << std::endl; // REMOVE
+    std::cout << "left_clicked_: " << left_clicked_ << std::endl; // REMOVE
+    std::cout << "middle_clicked_: " << middle_clicked_ << std::endl; // REMOVE
+    std::cout << "n_iter_gl_: " << n_iter_gl_ << std::endl; // REMOVE
+    std::cout << "focus_point_: " << focus_point_[0] << " " << focus_point_[1] << " " << focus_point_[2] << std::endl; // REMOVE
+    std::cout << "camera_dist_: " << camera_dist_ << std::endl; // REMOVE
+    std::cout << "updated_: " << updated_ << std::endl; // REMOVE
+
+
+
     glutMainLoop();
 }
 
