@@ -55,6 +55,9 @@ class Vec3f {
         Vec3f floor() const;
         Vec3f ceil() const;
 };
+
+ostream &operator<<(ostream &output, const Vec3f &v);
+
 /*int main()
 {
     Vec3f v1(2,3,-1);
