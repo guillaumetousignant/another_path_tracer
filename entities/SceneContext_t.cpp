@@ -604,16 +604,22 @@ void SceneContext_t::readXML(const std::string &filename){
         std::cout << "Meshes added." << std::endl;
     }
 
-    // Scene update
+    // Update
     scene_->update();
-    std::cout << std::endl << "Scene updated." << std::endl;
+    for (unsigned int i = 0; i < n_cameras_; i++){
+        cameras_[i]->update();
+    }
+    std::cout << std::endl << "Updated." << std::endl;
 
     // Updating post
     // CHECK fill
 
-    // Scene update
+    // Update
     scene_->update();
-    std::cout << "Scene updated." << std::endl;
+    for (unsigned int i = 0; i < n_cameras_; i++){
+        cameras_[i]->update();
+    }
+    std::cout << "Updated." << std::endl;
 
     // Acceleration structure build
     scene_->build_acc();
