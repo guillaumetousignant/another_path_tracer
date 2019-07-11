@@ -131,11 +131,13 @@ Vec3f Vec3f::cross(const Vec3f &other) const {
                  v[2] * other.v[0] - v[0] * other.v[2],
                  v[0] * other.v[1] - v[1] * other.v[0]);
 } 
-const Vec3f &Vec3f::to_sph(){
-    double temp = std::move(v[2]);
-    v[2] = std::atan2(v[1], v[0]);
+const Vec3f &Vec3f::to_sph(){ // CHECK outputs nan
+    // [r, theta, phi] (theta is polar angle)
+    double temp = std::atan2(v[1], v[0]);
     v[0] = magnitude();
-    v[1] = std::acos(temp/v[0]);
+    v[1] = std::acos(v[2]/v[0]);
+    v[1] = std::isnan(v[1]) ? 0.0 : v[1];
+    v[2] = temp;
     return *this;
 }
 const Vec3f &Vec3f::to_xyz(){
@@ -155,7 +157,8 @@ const Vec3f &Vec3f::to_xyz_offset(const Vec3f &ref1, const Vec3f &ref2, const Ve
 }
 Vec3f Vec3f::get_sph() const {
     double r = magnitude();
-    return Vec3f(r, std::acos(v[2]/r), std::atan2(v[1], v[0])); //CHECK acos might return NANs?
+    double temp = std::acos(v[2]/r);
+    return Vec3f(r, std::isnan(temp) ? 0.0 : temp, std::atan2(v[1], v[0]));
 }
 Vec3f Vec3f::get_xyz() const {
     return Vec3f(v[0]*std::sin(v[1])*std::cos(v[2]), v[0]*std::sin(v[1])*std::sin(v[2]), v[0]*std::cos(v[1]));
