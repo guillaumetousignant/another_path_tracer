@@ -27,6 +27,9 @@ OpenGLRenderer_t::OpenGLRenderer_t(Scene_t* scene, Camera_t* camera, ImgBufferOp
     middle_y_pos_(0), right_clicked_(false), left_clicked_(false), middle_clicked_(false),
     n_iter_gl_(0), focus_point_(Vec3f()), camera_dist_((focus_point_ - camera_->origin_).magnitude()), updated_(false) {
         openGL_renderer = this;
+        if (camera_dist_ < 0.1){
+            camera_dist_ = 2.0;
+        }
 }
 
 OpenGLRenderer_t::~OpenGLRenderer_t() {
