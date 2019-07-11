@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <scene mesh_list="airplane" name="airplane">
    <textures>
-      <texture filename=".\assets\A380\b737_800_2_T.tga" name="b737_800_2_T" type="texture"/>
-      <texture filename=".\assets\A380\a380_01.tga" name="a380_01" type="texture"/>
-      <texture filename=".\assets\A380\A380_mw.tga" name="A380_mw" type="texture"/>
-      <texture filename=".\assets\A380\A380_L.tga" name="A380_L" type="texture"/>
-      <texture filename=".\assets\A380\A380_R.tga" name="A380_R" type="texture"/>
-      <texture filename=".\assets\A380\A380_part1.tga" name="A380_part1" type="texture"/>
-      <texture filename=".\assets\A380\A380_part2.tga" name="A380_part2" type="texture"/>
-      <texture filename=".\assets\A380\A380_part3.tga" name="A380_part3" type="texture"/>
+      <texture filename="./assets/A380/b737_800_2_T.tga" name="b737_800_2_T" type="texture"/>
+      <texture filename="./assets/A380/a380_01.tga" name="a380_01" type="texture"/>
+      <texture filename="./assets/A380/A380_mw.tga" name="A380_mw" type="texture"/>
+      <texture filename="./assets/A380/A380_L.tga" name="A380_L" type="texture"/>
+      <texture filename="./assets/A380/A380_R.tga" name="A380_R" type="texture"/>
+      <texture filename="./assets/A380/A380_part1.tga" name="A380_part1" type="texture"/>
+      <texture filename="./assets/A380/A380_part2.tga" name="A380_part2" type="texture"/>
+      <texture filename="./assets/A380/A380_part3.tga" name="A380_part3" type="texture"/>
    </textures>
    <scatterers>
       <scatterer name="air_absorber" type="nonabsorber"/>
@@ -32,7 +32,7 @@
       <material ind="1.5" material_reflected="coating" material_refracted="a380_011" name="a380_01" type="fresnelmix"/>
    </materials>
    <mesh_geometries>
-      <mesh_geometry filename=".\assets\A380\A380_test3.obj" name="airplane_mesh" type="mesh_geometry"/>
+      <mesh_geometry filename="./assets/A380/A380_test3.obj" name="airplane_mesh" type="mesh_geometry"/>
    </mesh_geometries>
    <objects>
       <object material="difgrey" name="planegrey1" normals="NaN" points="-2 4 -0.5&#xA;-2 0 -0.5&#xA; 2 0 -0.5" texture_coordinates="NaN" transform_matrix="NaN" type="triangle"/>
@@ -59,7 +59,7 @@
       <skybox colour="0.804 0.8825 0.9765" lights="sun" name="day" type="skybox_flat_sun"/>
    </skyboxes>
    <imgbuffers>
-      <imgbuffer name="buffer1" resx="1920" resy="1080" type="imgbuffer"/>
+      <imgbuffer name="buffer1" resx="1920" resy="1080" type="imgbuffer_opengl"/>
    </imgbuffers>
    <cameras>
       <camera aperture="0.005" filename="NaN" focal_length="3.5" fov="0.7854 1.3963" gammaind="1" imgbuffer="1" max_bounces="8" medium_list="air, air" n_iter="Inf" name="camera1" rendermode="accumulation" skybox="day" subpix="1 1" transform_matrix="NaN" type="cam_aperture" up="0 0 1"/>

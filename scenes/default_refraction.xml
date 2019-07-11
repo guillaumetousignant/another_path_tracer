@@ -11,7 +11,7 @@
       <material colour="white" emission="black" ind="1.5" name="glass" priority="10" scattering_fn="glass_absorber" type="reflective_refractive"/>
    </materials>
    <mesh_geometries>
-      <mesh_geometry filename=".\assets\cube.obj" name="cube_mesh" type="mesh_geometry"/>
+      <mesh_geometry filename="./assets/cube.obj" name="cube_mesh" type="mesh_geometry"/>
    </mesh_geometries>
    <objects>
       <object material="glass" name="sphereglass1" transform_matrix="NaN" type="sphere">
@@ -59,7 +59,7 @@
       <skybox colour="0.804 0.8825 0.9765" lights="1" name="day" type="skybox_flat_sun"/>
    </skyboxes>
    <imgbuffers>
-      <imgbuffer name="buffer1" resx="300" resy="200" type="imgbuffer"/>
+      <imgbuffer name="buffer1" resx="600" resy="400" type="imgbuffer_opengl"/>
    </imgbuffers>
    <cameras>
       <camera filename="NaN" fov="0.93084 1.3963" gammaind="1" imgbuffer="buffer1" max_bounces="32" medium_list="air, air" n_iter="Inf" name="camera1" rendermode="accumulation" skybox="day" subpix="1 1" transform_matrix="NaN" type="cam" up="0 0 1"/>
