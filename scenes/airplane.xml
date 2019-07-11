@@ -27,7 +27,7 @@
       <material emission="black" name="a380_part1" roughness="1" texture="A380_part1" type="diffuse_tex"/>
       <material emission="black" name="a380_part2" roughness="1" texture="A380_part2" type="diffuse_tex"/>
       <material emission="black" name="a380_part3" roughness="1" texture="A380_part3" type="diffuse_tex"/>
-      <material materials_list="b737_800_2_t; b737_800_2_t; matte__ffffffff01; Material__57; b737_800_2_t; matte__ffffffff01; Material__57; black; black; a380_01; black; black; a380_01; a380_01; a380_01; a380_01; a380_01; a380_01; a380_01; black" materials_names="b737_800_2_t2SG; b737_800_2_tSG; matte__ffffffff02SG; Material__57; b737_800_2_t1SG; matte__ffffffff01SG; Material__68; blackSG; black2SG; a380_02SG; Material__46; black1SG; a380_01SG; a380_mwSG; a380_l_SG; a380_rSG; a380_part1SG; a380_part2SG; a380_part3SG; Material__35" name="airplane_mat" type="aggregate"/>
+      <material materials_list="b737_800_2_t, b737_800_2_t, matte__ffffffff01, Material__57, b737_800_2_t, matte__ffffffff01, Material__57, black, black, a380_01, black, black, a380_01, a380_01, a380_01, a380_01, a380_01, a380_01, a380_01, black" materials_names="b737_800_2_t2SG, b737_800_2_tSG, matte__ffffffff02SG, Material__57, b737_800_2_t1SG, matte__ffffffff01SG, Material__68, blackSG, black2SG, a380_02SG, Material__46, black1SG, a380_01SG, a380_mwSG, a380_l_SG, a380_rSG, a380_part1SG, a380_part2SG, a380_part3SG, Material__35" name="airplane_mat" type="aggregate"/>
       <material colour="white" emission="black" name="coating" type="reflective"/>
       <material ind="1.5" material_reflected="coating" material_refracted="a380_011" name="a380_01" type="fresnelmix"/>
    </materials>
@@ -62,6 +62,6 @@
       <imgbuffer name="buffer1" resx="1920" resy="1080" type="imgbuffer"/>
    </imgbuffers>
    <cameras>
-      <camera aperture="0.005" filename="NaN" focal_length="3.5" fov="0.7854 1.3963" gammaind="1" imgbuffer="1" max_bounces="8" medium_list="air; air" n_iter="Inf" name="camera1" rendermode="accumulation" skybox="day" subpix="1 1" transform_matrix="NaN" type="cam_aperture" up="0 0 1"/>
+      <camera aperture="0.005" filename="NaN" focal_length="3.5" fov="0.7854 1.3963" gammaind="1" imgbuffer="1" max_bounces="8" medium_list="air, air" n_iter="Inf" name="camera1" rendermode="accumulation" skybox="day" subpix="1 1" transform_matrix="NaN" type="cam_aperture" up="0 0 1"/>
    </cameras>
 </scene>

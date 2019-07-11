@@ -20,7 +20,7 @@
       <material colour="0.95 0.95 0.95" emission="black" name="mirror" type="reflective"/>
       <material emission="black" name="prop" roughness="1" texture="piper_diffuse" type="diffuse_tex"/>
       <material emission="black" name="tires" roughness="0.2" texture="piper_diffuse" type="diffuse_tex"/>
-      <material materials_list="base; base_NONE; glass; glass_NONE; internals_alu; internals_alu_NONE; internals_b; mirror; prop; tires" materials_names="base; base_NONE; glass; glass_NONE; internals_alu; internals_alu_NONE; internals_b; mirror; prop; tires" name="piper_mat" type="aggregate"/>
+      <material materials_list="base, base_NONE, glass, glass_NONE, internals_alu, internals_alu_NONE, internals_b, mirror, prop, tires" materials_names="base, base_NONE, glass, glass_NONE, internals_alu, internals_alu_NONE, internals_b, mirror, prop, tires" name="piper_mat" type="aggregate"/>
       <material colour="white" emission="black" name="coating" type="reflective"/>
       <material ind="1.5" material_reflected="coating" material_refracted="base" name="base" type="fresnelmix"/>
       <material ind="1.5" material_reflected="coating" material_refracted="base_NONE" name="base_NONE" type="fresnelmix"/>
@@ -57,7 +57,7 @@
       <imgbuffer name="buffer1" resx="1800" resy="1200" type="imgbuffer"/>
    </imgbuffers>
    <cameras>
-      <camera aperture="0.01" filename="NaN" focal_length="1.5" fov="0.93084 1.3963" gammaind="1" imgbuffer="1" max_bounces="8" medium_list="air; air" n_iter="Inf" name="camera1" rendermode="accumulation" skybox="day" subpix="1 1" transform_matrix="NaN" type="cam_aperture" up="0 0 1">
+      <camera aperture="0.01" filename="NaN" focal_length="1.5" fov="0.93084 1.3963" gammaind="1" imgbuffer="1" max_bounces="8" medium_list="air, air" n_iter="Inf" name="camera1" rendermode="accumulation" skybox="day" subpix="1 1" transform_matrix="NaN" type="cam_aperture" up="0 0 1">
          <transformations_pre>
             <transformation_pre type="rotatez" value="3.1416"/>
          </transformations_pre>
