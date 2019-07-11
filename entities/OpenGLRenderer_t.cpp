@@ -236,28 +236,6 @@ void OpenGLRenderer_t::initialise(){
 }
 
 void OpenGLRenderer_t::render(){
-    std::cout << "In OpenGLRenderer render function." << std::endl; // REMOVE
-    std::cout << "camera_: " << camera_ << std::endl; // REMOVE
-    std::cout << "scene_: " << scene_ << std::endl; // REMOVE
-    std::cout << "imgbuffer_: " << imgbuffer_ << std::endl; // REMOVE
-    std::cout << "width_: " << width_ << std::endl; // REMOVE
-    std::cout << "height_: " << height_ << std::endl; // REMOVE
-    std::cout << "right_x_pos_: " << right_x_pos_ << std::endl; // REMOVE
-    std::cout << "right_y_pos_: " << right_y_pos_ << std::endl; // REMOVE
-    std::cout << "left_x_pos_: " << left_x_pos_ << std::endl; // REMOVE
-    std::cout << "left_y_pos_: " << left_y_pos_ << std::endl; // REMOVE
-    std::cout << "middle_x_pos_: " << middle_x_pos_ << std::endl; // REMOVE
-    std::cout << "middle_y_pos_: " << middle_y_pos_ << std::endl; // REMOVE
-    std::cout << "right_clicked_: " << right_clicked_ << std::endl; // REMOVE
-    std::cout << "left_clicked_: " << left_clicked_ << std::endl; // REMOVE
-    std::cout << "middle_clicked_: " << middle_clicked_ << std::endl; // REMOVE
-    std::cout << "n_iter_gl_: " << n_iter_gl_ << std::endl; // REMOVE
-    std::cout << "focus_point_: " << focus_point_[0] << " " << focus_point_[1] << " " << focus_point_[2] << std::endl; // REMOVE
-    std::cout << "camera_dist_: " << camera_dist_ << std::endl; // REMOVE
-    std::cout << "updated_: " << updated_ << std::endl; // REMOVE
-
-
-
     glutMainLoop();
 }
 
