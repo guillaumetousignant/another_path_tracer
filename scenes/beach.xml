@@ -13,8 +13,8 @@
       <transform_matrix name="beach_matrix" value="NaN"/>
    </transform_matrices>
    <mesh_geometries>
-      <mesh_geometry filename=".\assets\sand.obj" name="sand_mesh" type="mesh_geometry"/>
-      <mesh_geometry filename=".\assets\water.obj" name="water_mesh" type="mesh_geometry"/>
+      <mesh_geometry filename="./assets/sand.obj" name="sand_mesh" type="mesh_geometry"/>
+      <mesh_geometry filename="./assets/water.obj" name="water_mesh" type="mesh_geometry"/>
    </mesh_geometries>
    <objects>
       <object material="sand_mat" mesh_geometry="sand_mesh" name="sand" transform_matrix="beach_matrix" type="mesh">
