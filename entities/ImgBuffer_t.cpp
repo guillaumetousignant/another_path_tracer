@@ -1,5 +1,5 @@
 #include "ImgBuffer_t.h"
-#include "pngwriter.h"
+#include "CImg.h"
 
 ImgBuffer_t::ImgBuffer_t(unsigned int size_x, unsigned int size_y): size_x_(size_x), size_y_(size_y), updates_(0) {
     img_ = new Vec3f*[size_y_];
@@ -64,15 +64,18 @@ void ImgBuffer_t::set(const Vec3f &colour, unsigned int pos_x, unsigned int pos_
 void ImgBuffer_t::write(std::string &filename) const {
     Vec3f colour;
 
-    double update_mult = 1/(double)updates_;
-    pngwriter png((int) size_x_, (int) size_y_, 0.0, filename.c_str());
+    double update_mult = 1.0/(double)updates_;
+    cimg_library::CImg<double> image(size_x_, size_y_, 1, 3);
+    unsigned int n = size_x_ * size_y_;
 
     for (unsigned int j = 0; j < size_y_; j++){
         for (unsigned int i = 0; i < size_x_; i++){
             colour = img_[j][i]*update_mult;
-            png.plot((int)i + 1, (int)size_y_ - (int)j, colour[0], colour[1], colour[2]);
+            image(i, j, 0, 0, n, n) = colour[0];
+            image(i, j, 0, 1, n, n) = colour[1];
+            image(i, j, 0, 2, n, n) = colour[2];
         }
     }
 
-    png.close();
+    image.save(filename.c_str());
 }
