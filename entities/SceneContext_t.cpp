@@ -1014,7 +1014,20 @@ Texture_t* SceneContext_t::create_texture(const tinyxml2::XMLElement* xml_textur
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
     if (type == "texture"){
-        return new Texture_t(xml_texture->Attribute("filename"));
+        std::string filename = xml_texture->Attribute("filename");
+        for (unsigned int i = 0; i < filename.size(); i++){
+            #ifdef _WIN32
+                if (filename[i] == '/') {
+                    filename[i] = '\\';
+                }
+            #else
+                if (filename[i] == '\\') {
+                    filename[i] = '/';
+                }
+            #endif
+        }  
+        
+        return new Texture_t(filename);
     }
     else{
         std::cout << "Error, texture type '" << type << "' not implemented. Only 'texture' exists for now. Exiting." << std::endl; 
@@ -1166,7 +1179,20 @@ MeshGeometry_t* SceneContext_t::create_mesh_geometry(const tinyxml2::XMLElement*
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
     if (type == "mesh_geometry"){
-        return new MeshGeometry_t(xml_mesh_geometry->Attribute("filename"));
+        std::string filename = xml_mesh_geometry->Attribute("filename");
+        for (unsigned int i = 0; i < filename.size(); i++){
+            #ifdef _WIN32
+                if (filename[i] == '/') {
+                    filename[i] = '\\';
+                }
+            #else
+                if (filename[i] == '\\') {
+                    filename[i] = '/';
+                }
+            #endif
+        } 
+
+        return new MeshGeometry_t(filename);
     }
     else{
         std::cout << "Error, mesh geometry type '" << type << "' not implemented. Only 'mesh_geometry' exists for now. Exiting." << std::endl; 
@@ -1380,6 +1406,17 @@ Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, 
     }
     else {
         filename = filename_char;
+        for (unsigned int i = 0; i < filename.size(); i++){
+            #ifdef _WIN32
+                if (filename[i] == '/') {
+                    filename[i] = '\\';
+                }
+            #else
+                if (filename[i] == '\\') {
+                    filename[i] = '/';
+                }
+            #endif
+        }
     }
     std::string filename_check = filename;
     std::transform(filename_check.begin(), filename_check.end(), filename_check.begin(), ::tolower);
