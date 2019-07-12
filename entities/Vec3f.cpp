@@ -101,10 +101,22 @@ Vec3f &Vec3f::min(const Vec3f &other){
     v[2] = std::min(v[2], other[2]);
     return *this;
 }
+Vec3f &Vec3f::min(double other){
+    v[0] = std::min(v[0], other);
+    v[1] = std::min(v[1], other);
+    v[2] = std::min(v[2], other);
+    return *this;
+}
 Vec3f &Vec3f::max(const Vec3f &other){
     v[0] = std::max(v[0], other[0]);
     v[1] = std::max(v[1], other[1]);
     v[2] = std::max(v[2], other[2]);
+    return *this;
+}
+Vec3f &Vec3f::max(double other){
+    v[0] = std::max(v[0], other);
+    v[1] = std::max(v[1], other);
+    v[2] = std::max(v[2], other);
     return *this;
 }
 Vec3f Vec3f::getMin(const Vec3f &other) const {
@@ -175,14 +187,31 @@ Vec3f Vec3f::sqrt() const {
 Vec3f Vec3f::exp() const {
     return Vec3f(std::exp(v[0]), std::exp(v[1]), std::exp(v[2]));
 }
-Vec3f Vec3f::pow(double exp) const{
+Vec3f Vec3f::pow(double exp) const {
     return Vec3f(std::pow(v[0], exp), std::pow(v[1], exp), std::pow(v[2], exp));
+}
+Vec3f &Vec3f::pow_inplace(double exp){
+    std::pow(v[0], exp);
+    std::pow(v[1], exp);
+    std::pow(v[2], exp);
+    return *this;
 }
 Vec3f Vec3f::floor() const {
     return Vec3f(std::floor(v[0]), std::floor(v[1]), std::floor(v[2]));
 }
 Vec3f Vec3f::ceil() const {
     return Vec3f(std::ceil(v[0]), std::ceil(v[1]), std::ceil(v[2]));
+}
+Vec3f &Vec3f::round_inplace(){
+    v[0] = std::round(v[0]);
+    v[1] = std::round(v[1]);
+    v[2] = std::round(v[2]);
+    return *this;
+}
+Vec3f &Vec3f::clamp(double minimum, double maximum){
+    min(maximum);
+    max(minimum);
+    return *this;
 }
 ostream &operator<<(ostream &output, const Vec3f &v) {
     cout << '[' << v[0] << ", " << v[1] << ", " << v[2] << ']';

@@ -34,7 +34,9 @@ class Vec3f {
         const Vec3f &operator-=(const Vec3f &other); 
         const Vec3f &operator-=(double factor);
         Vec3f &min(const Vec3f &other);
+        Vec3f &min(double other);
         Vec3f &max(const Vec3f &other);
+        Vec3f &max(double other);
         Vec3f getMin(const Vec3f &other) const;
         Vec3f getMax(const Vec3f &other) const;
         double magnitude() const;
@@ -52,8 +54,12 @@ class Vec3f {
         Vec3f sqrt() const;
         Vec3f exp() const;
         Vec3f pow(double exp) const;
+        Vec3f &pow_inplace(double exp);
         Vec3f floor() const;
         Vec3f ceil() const;
+        Vec3f &round_inplace();
+        Vec3f &clamp(double minimum, double maximum);
+
 };
 
 ostream &operator<<(ostream &output, const Vec3f &v);
