@@ -1,5 +1,4 @@
 #include "ImgBufferOpenGL_t.h"
-#include "pngwriter.h"
 #include <algorithm>
 
 #include "GL/glut.h"
