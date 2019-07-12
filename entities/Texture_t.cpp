@@ -3,7 +3,7 @@
 #include "CImg.h"
 
 Texture_t::Texture_t(const std::string &filename){
-    cimg_library::CImg<double> image(filename.c_str());
+    cimg_library::CImg<unsigned char> image(filename.c_str());
 
     size_x_ = image.width();
     size_y_ = image.height();
@@ -19,7 +19,7 @@ Texture_t::Texture_t(const std::string &filename){
     for (unsigned int j = 0; j < size_y_; j++){
         for (unsigned int i = 0; i < size_x_; i++){
             //img_[j][i] = Vec3f(image(i, j, 0), image(i, j, 1), image(i, j, 2));
-            img_[j][i] = Vec3f(image(i, j, 0, 0, n, n), image(i, j, 0, 1, n, n), image(i, j, 0, 2, n, n));
+            img_[j][i] = Vec3f(image(i, j, 0, 0, n, n)/255.0, image(i, j, 0, 1, n, n)/255.0, image(i, j, 0, 2, n, n)/255.0);
         }
     }
 }
