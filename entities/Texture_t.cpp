@@ -1,13 +1,12 @@
 #include "Texture_t.h"
 #include <string>
-#include "pngwriter.h"
+#include "CImg.h"
 
 Texture_t::Texture_t(const std::string &filename){
-    pngwriter png(1, 1, 0.0, "");
-    png.readfromfile(filename.c_str()); 
+    cimg_library::CImg<double> image(filename.c_str());
 
-    size_x_ = png.getwidth();
-    size_y_ = png.getheight();
+    size_x_ = image.width();
+    size_y_ = image.height();
 
     img_ = new Vec3f*[size_y_];
 
@@ -15,9 +14,12 @@ Texture_t::Texture_t(const std::string &filename){
         img_[j] = new Vec3f[size_x_];
     }
 
+    unsigned int n = size_x_ * size_y_;
+
     for (unsigned int j = 0; j < size_y_; j++){
         for (unsigned int i = 0; i < size_x_; i++){
-            img_[j][i] = Vec3f(png.dread((int)i+1, (int)j+1, 1), png.dread((int)i+1, (int)j+1, 2), png.dread((int)i+1, (int)j+1, 3));
+            //img_[j][i] = Vec3f(image(i, j, 0), image(i, j, 1), image(i, j, 2));
+            img_[j][i] = Vec3f(image(i, j, 0, 0, n, n), image(i, j, 0, 1, n, n), image(i, j, 0, 2, n, n));
         }
     }
 }
