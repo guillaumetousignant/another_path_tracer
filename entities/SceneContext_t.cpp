@@ -145,7 +145,6 @@ void SceneContext_t::readXML(const std::string &filename){
     unsigned int** materials_mix_list = nullptr;
     std::list<unsigned int>** materials_medium_list = nullptr;
     std::tuple<std::list<unsigned int>*, std::list<std::string>*>** materials_aggregate_list = nullptr;
-    MaterialMap_t** material_aggregates_ = nullptr;
 
     // Counts
     if (xml_transform_matrices != nullptr){
