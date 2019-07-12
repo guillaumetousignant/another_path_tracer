@@ -511,7 +511,7 @@ void SceneContext_t::readXML(const std::string &filename){
 
     // Image buffers (9)
     if (xml_imgbuffers != nullptr){
-        for (tinyxml2::XMLElement* xml_imgbuffer = xml_imgbuffers->FirstChildElement("imgbuffer"); xml_imgbuffer; xml_imgbuffer = xml_imgbuffer->NextSiblingElement("imgbuffers")){
+        for (tinyxml2::XMLElement* xml_imgbuffer = xml_imgbuffers->FirstChildElement("imgbuffer"); xml_imgbuffer; xml_imgbuffer = xml_imgbuffer->NextSiblingElement("imgbuffer")){
             imgbuffers_[index_imgbuffers_] = create_imgbuffer(xml_imgbuffer);
             ++index_imgbuffers_;
         }
