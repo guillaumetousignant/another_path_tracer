@@ -65,7 +65,7 @@ void Cam_t::write(std::string file_name /*= ""*/) {
     if (file_name.empty()){
         file_name = filename_;
     }
-    image_->write(file_name);
+    image_->write(file_name, gammaind_);
 }
 
 void Cam_t::show() const {

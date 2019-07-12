@@ -15,7 +15,7 @@ class ImgBuffer_t{
         virtual void update(const Vec3f &colour, unsigned int pos_x, unsigned int pos_y);
         virtual void set(const Vec3f** img, unsigned int size_x, unsigned int size_y);
         virtual void set(const Vec3f &colour, unsigned int pos_x, unsigned int pos_y);
-        virtual void write(std::string &filename) const;
+        virtual void write(std::string &filename, double gammaind = 1.0) const;
 
         unsigned int size_x_;
         unsigned int size_y_;
