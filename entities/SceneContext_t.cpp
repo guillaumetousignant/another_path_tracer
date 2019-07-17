@@ -615,9 +615,6 @@ void SceneContext_t::readXML(const std::string &filename){
 
     // Update
     scene_->update();
-    for (unsigned int i = 0; i < n_cameras_; i++){
-        cameras_[i]->update();
-    }
     std::cout << "Updated." << std::endl;
 
     // Acceleration structure build
@@ -650,6 +647,9 @@ void SceneContext_t::readXML(const std::string &filename){
             }
             ++index;
         }
+    }
+    for (unsigned int i = 0; i < n_cameras_; i++){
+        cameras_[i]->update();
     }
 
     // Running modes
