@@ -74,11 +74,10 @@ void ImgBuffer_t::write(std::string &filename, double gammaind /* = 1.0 */) cons
         for (unsigned int i = 0; i < size_x_; i++){
             colour = img_[j][i]*update_mult;
             colour.clamp(0.0, 1.0).pow_inplace(gammaind);
-            colour *= 255;
-            colour.round_inplace();
-            image(i, j, 0, 0, n, n) = (unsigned char)colour[0];
-            image(i, j, 0, 1, n, n) = (unsigned char)colour[1];
-            image(i, j, 0, 2, n, n) = (unsigned char)colour[2];
+            colour *= 255.0;
+            image(i, j, 0, 0, n, n) = std::lround(colour[0]);
+            image(i, j, 0, 1, n, n) = std::lround(colour[1]);
+            image(i, j, 0, 2, n, n) = std::lround(colour[2]);
         }
     }
 
