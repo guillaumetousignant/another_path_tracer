@@ -11,7 +11,7 @@
 
 Cam3DAperture_t::Cam3DAperture_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, const double (&fov)[2], const unsigned int (&subpix)[2], ImgBuffer_t* image, ImgBuffer_t* image_L, ImgBuffer_t* image_R, double eye_dist, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double focal_length, double aperture, double gammaind) :
     Camera_t(transformation, filename, up, fov, subpix, medium_list, skybox, max_bounces, gammaind), 
-    image_(image), unif_(0.0, 1.0), eye_dist_(eye_dist), focal_length_(focal_length), focal_length_buffer_(focal_length), aperture_(aperture) {
+    image_(image), unif_(0.0, 1.0), eye_dist_(eye_dist/2.0), focal_length_(focal_length), focal_length_buffer_(focal_length), aperture_(aperture) {
 
     std::string filename_S, filename_L, filename_R;
     size_t point;
@@ -37,14 +37,14 @@ Cam3DAperture_t::Cam3DAperture_t(TransformMatrix_t* transformation, const std::s
 
     horizontal = direction_.cross(up).normalize();
 
-    camera_L_->focal_length_ = std::sqrt(focal_length_*focal_length_ + eye_dist_*eye_dist_/4.0);
+    camera_L_->focal_length_ = std::sqrt(focal_length_*focal_length_ + eye_dist_*eye_dist_);
     camera_R_->focal_length_ = camera_L_->focal_length_;
 
-    camera_L_->origin_ = horizontal * -eye_dist_/2.0 + origin_;
-    camera_R_->origin_ = horizontal * eye_dist_/2.0 + origin_;
+    camera_L_->origin_ = horizontal * -eye_dist_ + origin_;
+    camera_R_->origin_ = horizontal * eye_dist_ + origin_;
     
-    camera_L_->direction_ = (direction_ * focal_length_ + horizontal * eye_dist_/2.0).normalize();
-    camera_R_->direction_ = (direction_ * focal_length_ - horizontal * eye_dist_/2.0).normalize();
+    camera_L_->direction_ = (direction_ * focal_length_ + horizontal * eye_dist_).normalize();
+    camera_R_->direction_ = (direction_ * focal_length_ - horizontal * eye_dist_).normalize();
 }
 
 Cam3DAperture_t::~Cam3DAperture_t() {
@@ -61,16 +61,16 @@ void Cam3DAperture_t::update() {
     focal_length_ = focal_length_buffer_;
     up_ = up_buffer_;
 
-    camera_L_->focal_length_ = std::sqrt(focal_length_*focal_length_ + eye_dist_*eye_dist_/4.0);
+    camera_L_->focal_length_ = std::sqrt(focal_length_*focal_length_ + eye_dist_*eye_dist_);
     camera_R_->focal_length_ = camera_L_->focal_length_;
     camera_L_->up_ = up_;
     camera_R_->up_ = up_;
 
     horizontal = direction_.cross(up_);
-    camera_L_->origin_ = horizontal * -eye_dist_/2.0 + origin_;
-    camera_R_->origin_ = horizontal * eye_dist_/2.0 + origin_;
-    camera_L_->direction_ = (direction_ * focal_length_ + horizontal * eye_dist_/2.0).normalize();
-    camera_R_->direction_ = (direction_ * focal_length_ - horizontal * eye_dist_/2.0).normalize();
+    camera_L_->origin_ = horizontal * -eye_dist_ + origin_;
+    camera_R_->origin_ = horizontal * eye_dist_ + origin_;
+    camera_L_->direction_ = (direction_ * focal_length_ + horizontal * eye_dist_).normalize();
+    camera_R_->direction_ = (direction_ * focal_length_ - horizontal * eye_dist_).normalize();
 }
 
 void Cam3DAperture_t::raytrace(const Scene_t* scene) {
