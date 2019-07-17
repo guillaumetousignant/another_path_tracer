@@ -37,8 +37,12 @@ Cam3DAperture_t::Cam3DAperture_t(TransformMatrix_t* transformation, const std::s
 
     horizontal = direction_.cross(up).normalize();
 
+    camera_L_->focal_length_ = std::sqrt(focal_length_*focal_length_ + eye_dist_*eye_dist_/4.0);
+    camera_R_->focal_length_ = camera_L_->focal_length_;
+
     camera_L_->origin_ = horizontal * -eye_dist_/2.0 + origin_;
     camera_R_->origin_ = horizontal * eye_dist_/2.0 + origin_;
+    
     camera_L_->direction_ = (direction_ * focal_length_ + horizontal * eye_dist_/2.0).normalize();
     camera_R_->direction_ = (direction_ * focal_length_ - horizontal * eye_dist_/2.0).normalize();
 }
@@ -57,6 +61,8 @@ void Cam3DAperture_t::update() {
     focal_length_ = focal_length_buffer_;
     up_ = up_buffer_;
 
+    camera_L_->focal_length_ = std::sqrt(focal_length_*focal_length_ + eye_dist_*eye_dist_/4.0);
+    camera_R_->focal_length_ = camera_L_->focal_length_;
     camera_L_->up_ = up_;
     camera_R_->up_ = up_;
 

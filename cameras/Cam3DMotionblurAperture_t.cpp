@@ -38,6 +38,9 @@ Cam3DMotionblurAperture_t::Cam3DMotionblurAperture_t(TransformMatrix_t* transfor
 
     horizontal = direction_.cross(up).normalize();
 
+    camera_L_->focal_length_ = std::sqrt(focal_length_*focal_length_ + eye_dist_*eye_dist_/4.0);
+    camera_R_->focal_length_ = camera_L_->focal_length_;
+
     camera_L_->origin_ = horizontal * -eye_dist_/2.0 + origin_;
     camera_R_->origin_ = horizontal * eye_dist_/2.0 + origin_;
     camera_L_->origin_last_ = camera_L_->origin_;
@@ -68,6 +71,8 @@ void Cam3DMotionblurAperture_t::update() {
     focal_length_ = focal_length_buffer_;
     up_ = up_buffer_;
 
+    camera_L_->focal_length_ = std::sqrt(focal_length_*focal_length_ + eye_dist_*eye_dist_/4.0);
+    camera_R_->focal_length_ = camera_L_->focal_length_;
     camera_L_->origin_last_ = camera_L_->origin_;
     camera_R_->origin_last_ = camera_R_->origin_;
     camera_L_->direction_last_ = camera_L_->direction_;
