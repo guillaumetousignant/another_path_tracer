@@ -48,7 +48,7 @@ void IsoCamAperture_t::raytrace(const Scene_t* scene) {
             for (unsigned int k = 0; k < subpix_[0]; k++){
                 for (unsigned int l = 0; l < subpix_[1]; l++){
                     double rand_theta = unif_(my_rand::rng) * 2.0 * PI;
-                    double rand_r = unif_(my_rand::rng) * aperture_;
+                    double rand_r = std::sqrt(unif_(my_rand::rng)) * aperture_;
                     double jitter_y = unif_(my_rand::rng);
                     double jitter_x = unif_(my_rand::rng);
 
