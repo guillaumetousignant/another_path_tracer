@@ -76,6 +76,7 @@ void OpenGLRenderer_t::mouseMovement(int x, int y){
         Vec3f vertical = horizontal.cross(camera_->direction_);
 
         focus_point_ += horizontal * -differential_x * camera_dist_ + vertical * differential_y * camera_dist_;
+        updated_ = true;
     }
     if (left_clicked_){
         //double differential_x = double(x - left_x_pos_)/double(width_);
@@ -84,6 +85,7 @@ void OpenGLRenderer_t::mouseMovement(int x, int y){
         left_y_pos_ = y;
 
         camera_dist_ *= std::pow(2.0, -differential_y);
+        updated_ = true;
     }
     if (right_clicked_){
         double differential_x = double(x - right_x_pos_)/double(width_);
@@ -96,6 +98,7 @@ void OpenGLRenderer_t::mouseMovement(int x, int y){
 
         camera_->transformation_->rotate(horizontal, differential_y/camera_->fov_[0]);
         camera_->transformation_->rotate(vertical, differential_x/camera_->fov_[1]);
+        updated_ = true;
 
         //TransformMatrix_t transform_norm = camera_->transformation_->transformDir();
         //newdir = transform_norm.multDir(Vec3f(0.0, 1.0, 0.0));
@@ -103,7 +106,7 @@ void OpenGLRenderer_t::mouseMovement(int x, int y){
 
     //Vec3f diff = focus_point_ - newdir * camera_dist_ - camera_->origin_;
     //camera_->transformation_->translate(diff);
-    updated_ = true;
+    //updated_ = true;
 }
 
 void OpenGLRenderer_t::mouseClick(int button, int state, int x, int y){
