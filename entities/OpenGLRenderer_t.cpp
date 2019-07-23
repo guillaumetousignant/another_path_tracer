@@ -55,7 +55,7 @@ void OpenGLRenderer_t::raytrace(){
     /*std::cout << "Iteration " << n_iter_gl_ << " done in " 
         << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
         << "s." << std::endl;*/
-    updated_ = false;
+        
     glutPostRedisplay(); // REMOVE but makes it work, soooooooo...
 }
 
