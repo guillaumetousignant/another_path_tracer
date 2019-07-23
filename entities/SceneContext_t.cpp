@@ -611,7 +611,51 @@ void SceneContext_t::readXML(const std::string &filename){
     std::cout << std::endl << "Updated." << std::endl;
 
     // Updating post
-    // CHECK fill
+    // Directional lights
+    if (xml_directional_lights != nullptr){
+        unsigned int index = 0;
+        for (tinyxml2::XMLElement* xml_directional_light = xml_directional_lights->FirstChildElement("directional_light"); xml_directional_light; xml_directional_light = xml_directional_light->NextSiblingElement("directional_light")){
+            tinyxml2::XMLElement* transformations_post = xml_directional_light->FirstChildElement("transformations_post");
+            if (transformations_post != nullptr){
+                for (tinyxml2::XMLElement* transformation_post = transformations_post->FirstChildElement("transformation_post"); transformation_post; transformation_post = transformation_post->NextSiblingElement("transformation_post")){
+                    apply_transformation(directional_lights_[index]->transformation_, transformation_post);
+                }
+            }
+            ++index;
+        }
+        std::cout << "Directional lights transformed post." << std::endl;
+    }
+
+    // Objects
+    if (xml_objects != nullptr){
+        unsigned int index = 0;
+        for (tinyxml2::XMLElement* xml_object = xml_objects->FirstChildElement("object"); xml_object; xml_object = xml_object->NextSiblingElement("object")){
+            tinyxml2::XMLElement* transformations_post = xml_object->FirstChildElement("transformations_post");
+            if (transformations_post != nullptr){
+                for (tinyxml2::XMLElement* transformation_post = transformations_post->FirstChildElement("transformation_post"); transformation_post; transformation_post = transformation_post->NextSiblingElement("transformation_post")){
+                    apply_transformation(objects_[index]->transformation_, transformation_post);
+                }
+            }
+            ++index;
+        }
+        std::cout << "Shapes transformed post." << std::endl;
+    }
+
+    // Cameras
+    if (xml_cameras != nullptr){
+        unsigned int index = 0;
+        for (tinyxml2::XMLElement* xml_camera = xml_cameras->FirstChildElement("camera"); xml_camera; xml_camera = xml_camera->NextSiblingElement("camera")){
+            tinyxml2::XMLElement* transformations_post = xml_camera->FirstChildElement("transformations_post");
+            if (transformations_post != nullptr){
+                for (tinyxml2::XMLElement* transformation_post = transformations_post->FirstChildElement("transformation_post"); transformation_post; transformation_post = transformation_post->NextSiblingElement("transformation_post")){
+                    apply_transformation(cameras_[index]->transformation_, transformation_post);
+                }
+            }
+            ++index;
+        }
+        std::cout << "Cameras transformed." << std::endl;
+    }
+    std::cout << std::endl;
 
     // Update
     scene_->update();
