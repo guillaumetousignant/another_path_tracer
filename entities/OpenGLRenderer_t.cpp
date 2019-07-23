@@ -67,8 +67,8 @@ void OpenGLRenderer_t::resetDisplay(void){
 void OpenGLRenderer_t::mouseMovement(int x, int y){
     //Vec3f newdir = camera_->direction_;
     if (middle_clicked_){
-        double differential_x = double(x - middle_x_pos_)/double(width_);
-        double differential_y = double(y - middle_y_pos_)/double(height_);
+        double differential_x = double(x - middle_x_pos_)/double(width_); // maybe change those to glut width/height?
+        double differential_y = double(y - middle_y_pos_)/double(height_); // maybe change those to glut width/height?
         middle_x_pos_ = x;
         middle_y_pos_ = y;
 
@@ -80,7 +80,7 @@ void OpenGLRenderer_t::mouseMovement(int x, int y){
     }
     if (left_clicked_){
         //double differential_x = double(x - left_x_pos_)/double(width_);
-        double differential_y = double(y - left_y_pos_)/double(height_);
+        double differential_y = double(y - left_y_pos_)/double(height_); // maybe change those to glut width/height?
         left_x_pos_ = x;
         left_y_pos_ = y;
 
@@ -88,8 +88,8 @@ void OpenGLRenderer_t::mouseMovement(int x, int y){
         updated_ = true;
     }
     if (right_clicked_){
-        double differential_x = double(x - right_x_pos_)/double(width_);
-        double differential_y = double(y - right_y_pos_)/double(height_);
+        double differential_x = double(x - right_x_pos_)/double(width_); // maybe change those to glut width/height?
+        double differential_y = double(y - right_y_pos_)/double(height_); // maybe change those to glut width/height?
         right_x_pos_ = x;
         right_y_pos_ = y;
 
@@ -196,8 +196,8 @@ void OpenGLRenderer_t::keyboard(unsigned char key, int x, int y){
         break;
 
     case 'f':
-        position[0] = std::min(std::max(double(x)/double(width_), 0.0), 1.0);
-        position[1] = std::min(std::max(double(y)/double(height_), 0.0), 1.0);
+        position[0] = std::min(std::max(double(x)/double(glutGet(GLUT_WINDOW_WIDTH)), 0.0), 1.0);
+        position[1] = std::min(std::max(double(y)/double(glutGet(GLUT_WINDOW_HEIGHT)), 0.0), 1.0);
         camera_->autoFocus(scene_, position);
         updated_ = true;
         break;
