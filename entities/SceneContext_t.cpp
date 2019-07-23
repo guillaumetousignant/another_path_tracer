@@ -776,16 +776,20 @@ void SceneContext_t::render(){
 
             if (render_mode == "accumulation") {
                 cameras_[i]->accumulate(scene_, camera_n_iter_[i]);
+                cameras_[i]->write();
             }
             else if (render_mode == "accumulation_write") {
                 cameras_[i]->accumulateWrite(scene_, camera_n_iter_[i], camera_write_interval_[i]);
+                cameras_[i]->write();
             }
             else if (render_mode == "single") {
                 cameras_[i]->raytrace(scene_);
+                cameras_[i]->write();
             }
             else if (render_mode == "motion") {
                 std::cout << "Error, motion render mode not implemented yet. Single frame render fallback." << std::endl;
                 cameras_[i]->raytrace(scene_);
+                cameras_[i]->write();
             }
             else if (render_mode == "") {
 
