@@ -3,13 +3,15 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <algorithm>
 
 MeshGeometry_t::MeshGeometry_t(const std::string &filename){
     std::string ext = filename.substr(filename.find_last_of(".") + 1);
+    std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
     if(ext == "obj") {
         readObj(filename);
     } 
-    else if((ext == "su2") || (ext == "SU2") || (ext == "Su2") || (ext == "sU2")){
+    else if(ext == "su2") {
         readSU2(filename);
     }
     
