@@ -53,7 +53,7 @@
       <imgbuffer name="bufferr" resx="1800" resy="1200" type="imgbuffer"/>
    </imgbuffers>
    <cameras>
-      <camera aperture="0.025" filename="NaN" focal_length="NaN" focus_position="0.5 0.5" fov="0.93084 1.3963" gammaind="1" imgbuffer="buffer1" imgbuffer_L="bufferl" imgbuffer_R="bufferr" max_bounces="32" medium_list="air, air" n_iter="Inf" name="camera1" rendermode="accumulation" skybox="sky" subpix="1 1" time="0 1" transform_matrix="NaN" type="cam_3d_aperture" up="0 0 1">
+      <camera aperture="0.025" eye_dist="0.065" filename="NaN" focal_length="NaN" focus_position="0.5 0.5" fov="0.93084 1.3963" gammaind="1" imgbuffer="buffer1" imgbuffer_L="bufferl" imgbuffer_R="bufferr" max_bounces="32" medium_list="air, air" n_iter="Inf" name="camera1" rendermode="accumulation" skybox="sky" subpix="1 1" time="0 1" transform_matrix="NaN" type="cam_3d_aperture" up="0 0 1">
          <transformations_pre>
             <transformation_pre type="translate" value="0 -2 0"/>
             <transformation_pre type="rotatezaxis" value="3.1416"/>
