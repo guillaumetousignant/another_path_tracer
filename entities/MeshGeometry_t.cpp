@@ -146,22 +146,23 @@ void MeshGeometry_t::readObj(const std::string &filename){
             liness >> tokens[0] >> tokens[1];
             while (liness >> tokens[2]){
                 for (unsigned int i = 0; i < 3; i++){
+                    value = tokens[i];
                     mat_[f_counter] = material;
-                    pos = tokens[i].find("/");
+                    pos = value.find("/");
                     if (pos == std::string::npos){
-                        v_[f_counter*3 + i] = v[std::stoi(tokens[i], nullptr)-1];
+                        v_[f_counter*3 + i] = v[std::stoi(value, nullptr)-1];
                         vt_[f_counter*3 + i][0] = 0.0;
                         vt_[f_counter*3 + i][1] = 0.0;
                         vn_[f_counter*3 + i] = Vec3f(NAN, NAN, NAN);
                     }
                     else{
-                        v_[f_counter*3 + i] = v[std::stoi(tokens[i].substr(0, pos), nullptr)-1];
-                        tokens[i].erase(0, pos + 1);
+                        v_[f_counter*3 + i] = v[std::stoi(value.substr(0, pos), nullptr)-1];
+                        value.erase(0, pos + 1);
 
-                        pos = tokens[i].find("/");
+                        pos = value.find("/");
                         if (pos == std::string::npos){
-                            vt_[f_counter*3 + i][0] = vt[std::stoi(tokens[i], nullptr)-1][0];
-                            vt_[f_counter*3 + i][1] = vt[std::stoi(tokens[i], nullptr)-1][1];
+                            vt_[f_counter*3 + i][0] = vt[std::stoi(value, nullptr)-1][0];
+                            vt_[f_counter*3 + i][1] = vt[std::stoi(value, nullptr)-1][1];
                             vn_[f_counter*3 + i] = Vec3f(NAN, NAN, NAN);
                         }
                         else{
@@ -170,11 +171,11 @@ void MeshGeometry_t::readObj(const std::string &filename){
                                 vt_[f_counter*3 + i][1] = 0; 
                             }
                             else{
-                                vt_[f_counter*3 + i][0] = vt[std::stoi(tokens[i].substr(0, pos), nullptr)-1][0];
-                                vt_[f_counter*3 + i][1] = vt[std::stoi(tokens[i].substr(0, pos), nullptr)-1][1];
+                                vt_[f_counter*3 + i][0] = vt[std::stoi(value.substr(0, pos), nullptr)-1][0];
+                                vt_[f_counter*3 + i][1] = vt[std::stoi(value.substr(0, pos), nullptr)-1][1];
                             }
-                            tokens[i].erase(0, pos + 1);
-                            vn_[f_counter*3 + i] = vn[std::stoi(tokens[i], nullptr)-1];
+                            value.erase(0, pos + 1);
+                            vn_[f_counter*3 + i] = vn[std::stoi(value, nullptr)-1];
                         }
                     }
                 }
