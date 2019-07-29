@@ -7,6 +7,7 @@ namespace my_colours{
         {"green", Vec3f(0.8, 0.95, 0.6)},
         {"white", Vec3f(1.0, 1.0, 1.0)},
         {"black", Vec3f(0.0, 0.0, 0.0)},
+        {"grey", Vec3f(0.25, 0.25, 0.25)},
         {"grey1", Vec3f(0.5, 0.5, 0.5)},
         {"grey2", Vec3f(0.75, 0.75, 0.75)},
         {"blue", Vec3f(0.1, 0.4, 0.8)},
