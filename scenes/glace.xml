@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<scene mesh_list="glace" name="glace" primitive_list="light1, light2, light3, light4, light5, light6, light7, light8">
+   <textures>
+      <texture filename="assets\Ocean from horn.jpg" name="background" type="texture"/>
+      <texture filename="assets\rink2.jpg" name="peinture" type="texture"/>
+   </textures>
+   <scatterers>
+      <scatterer name="air_absorber" type="nonabsorber"/>
+      <scatterer absorption_distance="1" colour="white" emission="black" emission_distance="1" name="glace_scatterer" scattering_distance="0.5" type="scatterer"/>
+   </scatterers>
+   <materials>
+      <material name="air" priority="0" scattering_fn="air_absorber" type="transparent"/>
+      <material colour="grey" emission="black" name="difgrey" roughness="1" type="diffuse"/>
+      <material colour="white" emission="5 5 5" name="diflight" roughness="0" type="diffuse"/>
+      <material colour="white" diffusivity="0.01" emission="black" ind="1.33" name="glace_mat1" order="1" priority="10" scattering_fn="glace_scatterer" type="reflective_refractive_fuzz"/>
+      <material colour="white" emission="black" name="coating" type="reflective"/>
+      <material ind="1.33" material_reflected="coating" material_refracted="glace_mat1" name="glace_mat" type="fresnelmix"/>
+      <material emission="black" name="peinture_mat" roughness="1" texture="peinture" type="diffuse_tex"/>
+      <material materials_list="glace_mat, peinture_mat, difgrey" materials_names="lambert2SG, lambert3SG, lambert4SG" name="glace_mats" type="aggregate"/>
+   </materials>
+   <mesh_geometries>
+      <mesh_geometry filename="assets\Glace.obj" name="glace_mesh" type="mesh_geometry"/>
+   </mesh_geometries>
+   <objects>
+      <object material="glace_mats" mesh_geometry="glace_mesh" name="glace" transform_matrix="NaN" type="mesh">
+         <transformations_pre>
+            <transformation_pre type="translate" value="0 0 -1"/>
+            <transformation_pre type="uniformscale" value="0.1"/>
+            <transformation_pre type="rotatex" value="1.5708"/>
+            <transformation_pre type="rotatez" value="0"/>
+            <transformation_pre type="rotatezaxis" value="0"/>
+         </transformations_pre>
+      </object>
+      <object material="diflight" name="light1" transform_matrix="NaN" type="sphere">
+         <transformations_pre>
+            <transformation_pre type="translate" value="0.2776 0.246 -0.5"/>
+            <transformation_pre type="uniformscale" value="0.1"/>
+         </transformations_pre>
+      </object>
+      <object material="diflight" name="light2" transform_matrix="NaN" type="sphere">
+         <transformations_pre>
+            <transformation_pre type="translate" value="0.2776 0.7381 -0.5"/>
+            <transformation_pre type="uniformscale" value="0.1"/>
+         </transformations_pre>
+      </object>
+      <object material="diflight" name="light3" transform_matrix="NaN" type="sphere">
+         <transformations_pre>
+            <transformation_pre type="translate" value="0.2776 -0.246 -0.5"/>
+            <transformation_pre type="uniformscale" value="0.1"/>
+         </transformations_pre>
+      </object>
+      <object material="diflight" name="light4" transform_matrix="NaN" type="sphere">
+         <transformations_pre>
+            <transformation_pre type="translate" value="0.2776 -0.7381 -0.5"/>
+            <transformation_pre type="uniformscale" value="0.1"/>
+         </transformations_pre>
+      </object>
+      <object material="diflight" name="light5" transform_matrix="NaN" type="sphere">
+         <transformations_pre>
+            <transformation_pre type="translate" value="-0.2776 0.246 -0.5"/>
+            <transformation_pre type="uniformscale" value="0.1"/>
+         </transformations_pre>
+      </object>
+      <object material="diflight" name="light6" transform_matrix="NaN" type="sphere">
+         <transformations_pre>
+            <transformation_pre type="translate" value="0.2776 0.246 -0.5"/>
+            <transformation_pre type="uniformscale" value="0.1"/>
+         </transformations_pre>
+      </object>
+      <object material="diflight" name="light7" transform_matrix="NaN" type="sphere">
+         <transformations_pre>
+            <transformation_pre type="translate" value="-0.2776 -0.246 -0.5"/>
+            <transformation_pre type="uniformscale" value="0.1"/>
+         </transformations_pre>
+      </object>
+      <object material="diflight" name="light8" transform_matrix="NaN" type="sphere">
+         <transformations_pre>
+            <transformation_pre type="translate" value="-0.2776 -0.7381 -0.5"/>
+            <transformation_pre type="uniformscale" value="0.1"/>
+         </transformations_pre>
+      </object>
+   </objects>
+   <skyboxes>
+      <skybox light_colour="12.6373 11.9395 11.6477" light_position="0.62093 0.77075" light_radius="0.035" name="sky" texture="background" type="skybox_texture_sun"/>
+   </skyboxes>
+   <imgbuffers>
+      <imgbuffer name="buffer1" resx="1800" resy="1200" type="imgbuffer_opengl"/>
+   </imgbuffers>
+   <cameras>
+      <camera aperture="0" filename="NaN" focal_length="2" fov="0.93084 1.3963" gammaind="1" imgbuffer="buffer1" max_bounces="16" medium_list="air, air" n_iter="Inf" name="camera1" rendermode="accumulation" skybox="sky" subpix="1 1" transform_matrix="NaN" type="cam_aperture" up="0 0 1">
+         <transformations_pre>
+            <transformation_pre type="translate" value="0 -2 0"/>
+            <transformation_pre type="rotatezaxis" value="0"/>
+         </transformations_pre>
+      </camera>
+   </cameras>
+</scene>
