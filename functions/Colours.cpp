@@ -1,7 +1,7 @@
 #include "Colours.h"
 
 namespace my_colours{
-    std::map<std::string, Vec3f> colours = {
+    const std::map<std::string, Vec3f> colours = {
         {"yellow", Vec3f(0.98, 1.0, 0.9)},
         {"purple", Vec3f(0.98, 0.7, 0.85)},
         {"green", Vec3f(0.8, 0.95, 0.6)},

@@ -6,6 +6,6 @@
 #include "Vec3f.h"
 
 namespace my_colours{
-    extern std::map<std::string, Vec3f> colours;
+    extern const std::map<std::string, Vec3f> colours;
 }
 #endif
