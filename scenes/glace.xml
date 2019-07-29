@@ -10,7 +10,7 @@
    </scatterers>
    <materials>
       <material name="air" priority="0" scattering_fn="air_absorber" type="transparent"/>
-      <material colour="grey" emission="black" name="difgrey" roughness="1" type="diffuse"/>
+      <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>
       <material colour="white" emission="5 5 5" name="diflight" roughness="0" type="diffuse"/>
       <material colour="white" diffusivity="0.01" emission="black" ind="1.33" name="glace_mat1" order="1" priority="10" scattering_fn="glace_scatterer" type="reflective_refractive_fuzz"/>
       <material colour="white" emission="black" name="coating" type="reflective"/>
