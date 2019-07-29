@@ -16,7 +16,7 @@
       <mesh_geometry filename="assets\cube.obj" name="cube_mesh" type="mesh_geometry"/>
    </mesh_geometries>
    <objects>
-      <object material="difgrey2" name="planegrey1" normals="NaN" points="-2 0 -0.5&#xA;-2 -2 -0.5&#xA; 2 -2 -0.5" texture_coordinates="NaN" transform_matrix="NaN" type="triangle">
+      <object material="difgrey2" name="planegrey1" normals="NaN" points="-2 2 -0.5&#xA;-2 -2 -0.5&#xA; 2 -2 -0.5" texture_coordinates="NaN" transform_matrix="NaN" type="triangle">
          <transformations_pre>
             <transformation_pre type="rotatezaxis" value="0"/>
          </transformations_pre>
