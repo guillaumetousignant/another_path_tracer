@@ -63,7 +63,7 @@
       </object>
       <object material="diflight" name="light6" transform_matrix="NaN" type="sphere">
          <transformations_pre>
-            <transformation_pre type="translate" value="0.2776 0.246 -0.5"/>
+            <transformation_pre type="translate" value="-0.2776 0.7381 -0.5"/>
             <transformation_pre type="uniformscale" value="0.1"/>
          </transformations_pre>
       </object>
