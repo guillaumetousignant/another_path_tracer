@@ -1,16 +1,8 @@
 #include "Vec3f.h"
 #include <algorithm>
 
-Vec3f::Vec3f() {
-    v[0] = 0;
-    v[1] = 0;
-    v[2] = 0; 
-} 
-Vec3f::Vec3f(double x, double y, double z) {
-    v[0] = x;
-    v[1] = y;
-    v[2] = z;
-} 
+Vec3f::Vec3f() : v{0, 0, 0} {} 
+Vec3f::Vec3f(double x, double y, double z) : v{x, y, z} {} 
 double &Vec3f::operator[](int index) {
     return v[index];
 } 
