@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<scene mesh_list="lamp" name="lamp" primitive_list="planegrey1, planegrey2, sphereair">
+   <scatterers>
+      <scatterer name="air_absorber" type="nonabsorber"/>
+      <scatterer absorption_distance="10000" colour="white" emission="black" emission_distance="10000" name="air_scatterer" scattering_distance="2" type="scatterer"/>
+   </scatterers>
+   <materials>
+      <material name="air" priority="0" scattering_fn="air_absorber" type="transparent"/>
+      <material name="air2" priority="2" scattering_fn="air_scatterer" type="transparent"/>
+      <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>
+      <material colour="grey1" diffusivity="1" emission="black" name="metal1" order="5" type="reflective_fuzz"/>
+      <material colour="white" emission="black" name="coating" type="reflective"/>
+      <material ind="1.5" material_reflected="coating" material_refracted="metal" name="metal" type="fresnelmix"/>
+      <material colour="white" emission="256 256 256" name="diflight" roughness="0" type="diffuse"/>
+      <material materials_list="diflight, metal" materials_names="initialShadingGroup, phong1SG" name="lamp_mats" type="aggregate"/>
+   </materials>
+   <mesh_geometries>
+      <mesh_geometry filename="assets\lamp.obj" name="lamp_mesh" type="mesh_geometry"/>
+   </mesh_geometries>
+   <objects>
+      <object material="lamp_mats" mesh_geometry="lamp_mesh" name="lamp" transform_matrix="NaN" type="mesh">
+         <transformations_pre>
+            <transformation_pre type="translate" value="0.5 0 -0.5"/>
+            <transformation_pre type="uniformscale" value="0.025"/>
+            <transformation_pre type="rotatex" value="1.5708"/>
+            <transformation_pre type="rotatez" value="-1.2566"/>
+            <transformation_pre type="rotatezaxis" value="0"/>
+         </transformations_pre>
+      </object>
+      <object material="difgrey" name="planegrey1" normals="NaN" points="-2 2 -0.5&#xA;-2 -6 -0.5&#xA; 2 -6 -0.5" texture_coordinates="NaN" transform_matrix="NaN" type="triangle">
+         <transformations_pre>
+            <transformation_pre type="rotatezaxis" value="0"/>
+         </transformations_pre>
+      </object>
+      <object material="difgrey" name="planegrey2" normals="NaN" points="-2 2 -0.5&#xA; 2 -6 -0.5&#xA; 2 2 -0.5" texture_coordinates="NaN" transform_matrix="NaN" type="triangle">
+         <transformations_pre>
+            <transformation_pre type="rotatezaxis" value="0"/>
+         </transformations_pre>
+      </object>
+      <object material="air2" name="sphereair" transform_matrix="NaN" type="sphere">
+         <transformations_pre>
+            <transformation_pre type="translate" value="0 0 0"/>
+            <transformation_pre type="uniformscale" value="5"/>
+         </transformations_pre>
+      </object>
+   </objects>
+   <directional_lights>
+      <directional_light colour="4.5 4.5 5" name="moon" transform_matrix="NaN" type="directional_light">
+         <transformations_pre>
+            <transformation_pre type="uniformscale" value="0.92"/>
+            <transformation_pre type="rotatez" value="2.3562"/>
+            <transformation_pre type="rotatex" value="0.7854"/>
+         </transformations_pre>
+      </directional_light>
+   </directional_lights>
+   <skyboxes>
+      <skybox colour="0.05 0.05 0.05" lights="moon" name="night" type="skybox_flat_sun"/>
+   </skyboxes>
+   <imgbuffers>
+      <imgbuffer name="buffer1" resx="1800" resy="1200" type="imgbuffer_opengl"/>
+   </imgbuffers>
+   <cameras>
+      <camera aperture="0.01" filename="NaN" focal_length="2" fov="0.93084 1.3963" gammaind="1" imgbuffer="buffer1" max_bounces="32" medium_list="air, air" n_iter="Inf" name="camera1" rendermode="accumulation" skybox="night" subpix="1 1" transform_matrix="NaN" type="cam_aperture" up="0 0 1">
+         <transformations_pre>
+            <transformation_pre type="translate" value="0 -2 0"/>
+            <transformation_pre type="rotatezaxis" value="0"/>
+         </transformations_pre>
+      </camera>
+   </cameras>
+</scene>
