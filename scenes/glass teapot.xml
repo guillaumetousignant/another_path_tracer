@@ -5,7 +5,7 @@
    </textures>
    <scatterers>
       <scatterer name="air_absorber" type="nonabsorber"/>
-      <scatterer absorption_distance="10000" colour="white" emission="black" emission_distance="10000" name="glass_scatterer" type="abrorber"/>
+      <scatterer absorption_distance="10000" colour="white" emission="black" emission_distance="10000" name="glass_scatterer" type="absorber"/>
    </scatterers>
    <materials>
       <material name="air" priority="0" scattering_fn="air_absorber" type="transparent"/>
