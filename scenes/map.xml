@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<scene name="map" primitive_list="ground, triangleearth1, triangleearth2">
+   <textures>
+      <texture filename="assets\earth_2048.png" name="earth_texture" type="texture"/>
+   </textures>
+   <scatterers>
+      <scatterer name="air_absorber" type="nonabsorber"/>
+   </scatterers>
+   <materials>
+      <material name="air" priority="0" scattering_fn="air_absorber" type="transparent"/>
+      <material colour="green" emission="black" name="difgreen" roughness="1" type="diffuse"/>
+      <material emission="black" name="earthmat" roughness="1" texture="earth_texture" type="diffuse_tex"/>
+   </materials>
+   <objects>
+      <object material="difgreen" name="ground" transform_matrix="NaN" type="sphere">
+         <transformations_pre>
+            <transformation_pre type="translate" value="0 0 -101"/>
+            <transformation_pre type="uniformscale" value="100"/>
+         </transformations_pre>
+      </object>
+      <object material="earthmat" name="triangleearth1" normals="0 -1 0&#xA;0 -1 0&#xA;0 -1 0" points="-1 4 1&#xA;-1 4 -1&#xA; 1 4 -1" texture_coordinates="0 1&#xA;0 0&#xA;1 0" transform_matrix="NaN" type="triangle">
+         <transformations_pre>
+            <transformation_pre type="rotatezaxis" value="0"/>
+         </transformations_pre>
+      </object>
+      <object material="earthmat" name="triangleearth2" normals="0 -1 0&#xA;0 -1 0&#xA;0 -1 0" points="-1 4 1&#xA; 1 4 -1&#xA; 1 4 1" texture_coordinates="0 1&#xA;1 0&#xA;1 1" transform_matrix="NaN" type="triangle">
+         <transformations_pre>
+            <transformation_pre type="rotatezaxis" value="0"/>
+         </transformations_pre>
+      </object>
+   </objects>
+   <directional_lights>
+      <directional_light colour="5 5 4" name="sun" transform_matrix="NaN" type="directional_light">
+         <transformations_pre>
+            <transformation_pre type="uniformscale" value="0.95"/>
+            <transformation_pre type="rotatez" value="-0.7854"/>
+            <transformation_pre type="rotatex" value="-1.1781"/>
+         </transformations_pre>
+      </directional_light>
+   </directional_lights>
+   <skyboxes>
+      <skybox colour="0.75 0.85 1" lights="sun" name="sky" type="skybox_flat_sun"/>
+   </skyboxes>
+   <imgbuffers>
+      <imgbuffer name="buffer1" resx="1800" resy="1200" type="imgbuffer_opengl"/>
+   </imgbuffers>
+   <cameras>
+      <camera aperture="0" filename="NaN" focal_length="2" fov="0.93084 1.3963" gammaind="1" imgbuffer="buffer1" max_bounces="8" medium_list="air, air" n_iter="Inf" name="camera1" rendermode="accumulation" skybox="sky" subpix="1 1" transform_matrix="NaN" type="cam_aperture" up="0 0 1">
+         <transformations_pre>
+            <transformation_pre type="translate" value="0 0 0"/>
+            <transformation_pre type="rotatezaxis" value="0"/>
+         </transformations_pre>
+      </camera>
+   </cameras>
+</scene>
