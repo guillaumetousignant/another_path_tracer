@@ -2363,8 +2363,8 @@ void SceneContext_t::get_meshes(std::string meshes_string, MeshTop_t** &meshes, 
 
 Vec3f get_colour(std::string colour) {
     std::transform(colour.begin(), colour.end(), colour.begin(), ::tolower);
-    std::map<std::string, Vec3f>::iterator it;
-    it = my_colours::colours.find(colour);
+    
+    auto it = my_colours::colours.find(colour);
     if (it != my_colours::colours.end()) {
 		return it->second;
 	} 
