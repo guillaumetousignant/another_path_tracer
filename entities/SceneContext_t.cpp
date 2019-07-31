@@ -529,6 +529,42 @@ void SceneContext_t::readXML(const std::string &filename){
     std::cout << std::endl;
 
     // Updating pre
+    // Transform matrices
+    if (xml_transform_matrices != nullptr){
+        unsigned int index = 0;
+        for (tinyxml2::XMLElement* xml_transform_matrix = xml_transform_matrices->FirstChildElement("transform_matrix"); xml_transform_matrix; xml_transform_matrix = xml_transform_matrix->NextSiblingElement("transform_matrix")){
+            tinyxml2::XMLElement* transformations_pre = xml_transform_matrix->FirstChildElement("transformations_pre");
+            if (transformations_pre != nullptr){
+                for (tinyxml2::XMLElement* transformation_pre = transformations_pre->FirstChildElement("transformation_pre"); transformation_pre; transformation_pre = transformation_pre->NextSiblingElement("transformation_pre")){
+                    apply_transformation(transform_matrices_[index], transformation_pre);
+                }
+            }
+            ++index;
+        }
+        std::cout << "Transform matrices transformed." << std::endl;
+    }
+
+    // Materials
+    if (xml_materials != nullptr){
+        unsigned int index = 0;
+        for (tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
+            tinyxml2::XMLElement* transformations_pre = xml_material->FirstChildElement("transformations_pre");
+            if (transformations_pre != nullptr){
+                PortalTop_t* portal = dynamic_cast<PortalTop_t*>(materials_[index]);
+                if (portal == nullptr){
+                    std::cout << "Error, material #" << index << " has transformations, but it is not convertible to a portal. Ignoring." << std::endl;
+                }
+                else{
+                    for (tinyxml2::XMLElement* transformation_pre = transformations_pre->FirstChildElement("transformation_pre"); transformation_pre; transformation_pre = transformation_pre->NextSiblingElement("transformation_pre")){
+                        apply_transformation(portal->transformation_, transformation_pre);
+                    }
+                }                
+            }
+            ++index;
+        }
+        std::cout << "Materials transformed." << std::endl;
+    }
+
     // Directional lights
     if (xml_directional_lights != nullptr){
         unsigned int index = 0;
@@ -611,6 +647,42 @@ void SceneContext_t::readXML(const std::string &filename){
     std::cout << std::endl << "Updated." << std::endl;
 
     // Updating post
+    // Transform matrices
+    if (xml_transform_matrices != nullptr){
+        unsigned int index = 0;
+        for (tinyxml2::XMLElement* xml_transform_matrix = xml_transform_matrices->FirstChildElement("transform_matrix"); xml_transform_matrix; xml_transform_matrix = xml_transform_matrix->NextSiblingElement("transform_matrix")){
+            tinyxml2::XMLElement* transformations_post = xml_transform_matrix->FirstChildElement("transformations_post");
+            if (transformations_post != nullptr){
+                for (tinyxml2::XMLElement* transformation_post = transformations_post->FirstChildElement("transformation_post"); transformation_post; transformation_post = transformation_post->NextSiblingElement("transformation_post")){
+                    apply_transformation(transform_matrices_[index], transformation_post);
+                }
+            }
+            ++index;
+        }
+        std::cout << "Transform matrices transformed post." << std::endl;
+    }
+
+    // Materials
+    if (xml_materials != nullptr){
+        unsigned int index = 0;
+        for (tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
+            tinyxml2::XMLElement* transformations_post = xml_material->FirstChildElement("transformations_post");
+            if (transformations_post != nullptr){
+                PortalTop_t* portal = dynamic_cast<PortalTop_t*>(materials_[index]);
+                if (portal == nullptr){
+                    std::cout << "Error, material #" << index << " has transformations, but it is not convertible to a portal. Ignoring." << std::endl;
+                }
+                else{
+                    for (tinyxml2::XMLElement* transformation_post = transformations_post->FirstChildElement("transformation_post"); transformation_post; transformation_post = transformation_post->NextSiblingElement("transformation_post")){
+                        apply_transformation(portal->transformation_, transformation_post);
+                    }
+                }                
+            }
+            ++index;
+        }
+        std::cout << "Materials transformed post." << std::endl;
+    }
+
     // Directional lights
     if (xml_directional_lights != nullptr){
         unsigned int index = 0;
