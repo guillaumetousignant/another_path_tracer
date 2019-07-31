@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<scene mesh_list="cube" name="portal room" primitive_list="portal">
+   <textures>
+      <texture filename="assets\Ocean from horn.jpg" name="background" type="texture"/>
+   </textures>
+   <scatterers>
+      <scatterer name="air_absorber" type="nonabsorber"/>
+   </scatterers>
+   <materials>
+      <material name="air" priority="0" scattering_fn="air_absorber" type="transparent"/>
+      <material colour="white" emission="black" name="difwhite" roughness="0.1" type="diffuse"/>
+      <material colour="white" emission="orange" name="diforange" roughness="0.1" type="diffuse"/>
+      <material medium_list="air, air" name="portalmat1" transform_matrix="NaN" type="portal">
+         <transformations_pre>
+            <transformation_pre type="rotatez" value="3.1416"/>
+            <transformation_pre type="translate" value="0 0 10"/>
+         </transformations_pre>
+      </material>
+      <material ind="1.5" material_reflected="diforange" material_refracted="portalmat1" name="portalmat" type="fresnelmix"/>
+   </materials>
+   <mesh_geometries>
+      <mesh_geometry filename="assets\cube.obj" name="cube_mesh" type="mesh_geometry"/>
+   </mesh_geometries>
+   <objects>
+      <object material="portalmat" name="portal" transform_matrix="NaN" type="sphere">
+         <transformations_pre>
+            <transformation_pre type="translate" value="0 0 0"/>
+            <transformation_pre type="uniformscale" value="1"/>
+         </transformations_pre>
+      </object>
+      <object material="difwhite" mesh_geometry="cube_mesh" name="cube" transform_matrix="NaN" type="mesh">
+         <transformations_pre>
+            <transformation_pre type="translate" value="0 -1 0"/>
+            <transformation_pre type="uniformscale" value="2.5"/>
+            <transformation_pre type="rotatex" value="0"/>
+            <transformation_pre type="rotatez" value="0"/>
+            <transformation_pre type="rotatezaxis" value="0"/>
+         </transformations_pre>
+      </object>
+   </objects>
+   <skyboxes>
+      <skybox light_colour="12.6373 11.9395 11.6477" light_position="0.62093 0.77075" light_radius="0.035" name="sky" texture="background" type="skybox_texture_sun"/>
+   </skyboxes>
+   <imgbuffers>
+      <imgbuffer name="buffer1" resx="1800" resy="1200" type="imgbuffer_opengl"/>
+   </imgbuffers>
+   <cameras>
+      <camera aperture="0" filename="NaN" focal_length="2" fov="0.93084 1.3963" gammaind="1" imgbuffer="buffer1" max_bounces="32" medium_list="air, air" n_iter="Inf" name="camera1" rendermode="accumulation" skybox="sky" subpix="1 1" time="0 1" transform_matrix="NaN" type="cam_aperture" up="0 0 1">
+         <transformations_pre>
+            <transformation_pre type="translate" value="0 -2 0"/>
+            <transformation_pre type="rotatezaxis" value="0"/>
+         </transformations_pre>
+      </camera>
+   </cameras>
+</scene>
