@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <scene name="motionblur" primitive_list="planegrey1, planegrey2, ball">
-   <textures>
-      <texture filename="assets\Ocean from horn.jpg" name="background" type="texture"/>
-   </textures>
    <scatterers>
       <scatterer name="air_absorber" type="nonabsorber"/>
    </scatterers>
