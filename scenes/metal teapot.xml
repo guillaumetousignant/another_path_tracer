@@ -11,7 +11,7 @@
       <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>
       <material colour="grey2" diffusivity="1" emission="black" name="metal1" order="1000" type="reflective_fuzz"/>
       <material colour="white" emission="black" name="coating" type="reflective"/>
-      <material ind="1.5" material_reflected="coating" material_refracted="metal" name="metal" type="fresnelmix"/>
+      <material ind="1.5" material_reflected="coating" material_refracted="metal1" name="metal" type="fresnelmix"/>
    </materials>
    <mesh_geometries>
       <mesh_geometry filename="assets\teapot2.obj" name="teapot_mesh" type="mesh_geometry"/>
