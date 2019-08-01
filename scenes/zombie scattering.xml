@@ -6,7 +6,7 @@
    </textures>
    <scatterers>
       <scatterer name="air_absorber" type="nonabsorber"/>
-      <scatterer absorption_distance="0.5" colour="green" emission="black" emission_distance="0.5" name="zombie_scatterer" scattering_distance="0.01" type="scatterer"/>
+      <scatterer absorption_distance="0.5" colour="green" emission="black" emission_distance="0.5" name="zombie_scatterer" scattering_distance="0.05" type="scatterer"/>
    </scatterers>
    <materials>
       <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>
