@@ -17,6 +17,7 @@ namespace my_colours{
         {"gemcolour", Vec3f(0.0, 0.9, 1.0)},
         {"orange", Vec3f(1.0, 0.6039, 0.0)},
         {"teal", Vec3f(0.1529, 0.6549, 0.8471)},
-        {"pink", Vec3f(1.0, 0.50196, 0.75294)}
+        {"pink", Vec3f(1.0, 0.50196, 0.75294)},
+        {"wood_colour", Vec3f(0.8549, 0.7882, 0.5882)}
     };
 }
