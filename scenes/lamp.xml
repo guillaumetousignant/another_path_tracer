@@ -10,7 +10,7 @@
       <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>
       <material colour="grey1" diffusivity="1" emission="black" name="metal1" order="5" type="reflective_fuzz"/>
       <material colour="white" emission="black" name="coating" type="reflective"/>
-      <material ind="1.5" material_reflected="coating" material_refracted="metal" name="metal" type="fresnelmix"/>
+      <material ind="1.5" material_reflected="coating" material_refracted="metal1" name="metal" type="fresnelmix"/>
       <material colour="white" emission="256 256 256" name="diflight" roughness="0" type="diffuse"/>
       <material materials_list="diflight, metal" materials_names="initialShadingGroup, phong1SG" name="lamp_mats" type="aggregate"/>
    </materials>
