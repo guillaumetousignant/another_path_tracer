@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<scene mesh_list="tie" name="tie">
+   <textures>
+      <texture filename="assets\Ocean from horn.jpg" name="background" type="texture"/>
+   </textures>
+   <scatterers>
+      <scatterer name="air_absorber" type="nonabsorber"/>
+   </scatterers>
+   <materials>
+      <material name="air" priority="0" scattering_fn="air_absorber" type="transparent"/>
+      <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>
+      <material colour="white" emission="black" name="coating" type="reflective"/>
+      <material colour="0.0471 0 0" emission="black" name="blackred" roughness="1" type="diffuse"/>
+      <material colour="0.7176 0.7804 0.7922" emission="black" name="hullblue1" roughness="1" type="diffuse"/>
+      <material ind="1.5" material_reflected="coating" material_refracted="hullblue1" name="hullblue" type="fresnelmix"/>
+      <material colour="0.5725 0.5725 0.5725" emission="black" name="graymat1" roughness="1" type="diffuse"/>
+      <material ind="1.5" material_reflected="coating" material_refracted="graymat1" name="graymat" type="fresnelmix"/>
+      <material colour="0.5412 0.5412 0.5412" emission="black" name="midgraymat1" roughness="1" type="diffuse"/>
+      <material ind="1.5" material_reflected="coating" material_refracted="midgraymat1" name="midgraymat" type="fresnelmix"/>
+      <material colour="0.3294 0.3294 0.3294" emission="black" name="rib_graymat1" roughness="1" type="diffuse"/>
+      <material ind="1.5" material_reflected="coating" material_refracted="rib_graymat1" name="rib_graymat" type="fresnelmix"/>
+      <material colour="0.4745 0.4745 0.4745" emission="black" name="drk_graymat1" roughness="1" type="diffuse"/>
+      <material ind="1.5" material_reflected="coating" material_refracted="drk_graymat1" name="drk_graymat" type="fresnelmix"/>
+      <material colour="0.0078 0.0078 0.0078" emission="black" name="panl_blk1" roughness="1" type="diffuse"/>
+      <material ind="1.5" material_reflected="coating" material_refracted="panl_blk1" name="panl_blk" type="fresnelmix"/>
+      <material colour="0.9882 0 0" emission="0.9882 0 0" name="englowred" roughness="0" type="diffuse"/>
+      <material colour="0.6784 0.3647 0.4" emission="0.6784 0.3647 0.4" name="lasered" roughness="0" type="diffuse"/>
+      <material materials_list="blackred, hullblue, graymat, midgraymat, englowred, drk_graymat, rib_graymat, panl_blk, lasered" materials_names="blackred, hullblue, gray, mid_gray, englored, drk_gray, rib_gray, panl_blk, lasered" name="tie_mats" type="aggregate"/>
+   </materials>
+   <mesh_geometries>
+      <mesh_geometry filename="assets\tie_fighter\TIE-fighter.obj" name="tie_mesh" type="mesh_geometry"/>
+   </mesh_geometries>
+   <objects>
+      <object material="tie_mats" mesh_geometry="tie_mesh" name="tie" transform_matrix="NaN" type="mesh">
+         <transformations_pre>
+            <transformation_pre type="translate" value="0 0 -0.3"/>
+            <transformation_pre type="uniformscale" value="0.005"/>
+            <transformation_pre type="rotatex" value="-1.5708"/>
+            <transformation_pre type="rotatez" value="0.19635"/>
+            <transformation_pre type="rotatezaxis" value="0"/>
+         </transformations_pre>
+      </object>
+   </objects>
+   <skyboxes>
+      <skybox light_colour="12.6373 11.9395 11.6477" light_position="0.62093 0.77075" light_radius="0.035" name="sky" texture="background" type="skybox_texture_sun"/>
+   </skyboxes>
+   <imgbuffers>
+      <imgbuffer name="buffer1" resx="1800" resy="1200" type="imgbuffer_opengl"/>
+   </imgbuffers>
+   <cameras>
+      <camera aperture="0.005" filename="NaN" focal_length="3" fov="0.93084 1.3963" gammaind="1" imgbuffer="buffer1" max_bounces="8" medium_list="air, air" n_iter="Inf" name="camera1" rendermode="accumulation" skybox="sky" subpix="1 1" time="0 1" transform_matrix="NaN" type="cam_aperture" up="0 0 1">
+         <transformations_pre>
+            <transformation_pre type="translate" value="0 -3 0"/>
+            <transformation_pre type="rotatezaxis" value="0"/>
+         </transformations_pre>
+      </camera>
+   </cameras>
+</scene>
