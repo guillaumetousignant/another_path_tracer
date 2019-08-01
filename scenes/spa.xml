@@ -16,7 +16,7 @@
       <material colour="yellow" emission="15.68 16 14.4" name="light2_mat" roughness="0" type="diffuse"/>
       <material colour="gemcolour" emission="black" name="tile_mat1" roughness="0.8" type="diffuse"/>
       <material ind="1.1" material_reflected="coating" material_refracted="tile_mat1" name="tile_mat" type="fresnelmix"/>
-      <material materials_list="light1_mat, light2_mat, metal, tile_mat, wood_mat" materials_names="lambert4SG, lambert5SG, blinn2SG, blinn1SG, lambert3SGv" name="spa_mats" type="aggregate"/>
+      <material materials_list="light1_mat, light2_mat, metal, tile_mat, wood_mat" materials_names="lambert4SG, lambert5SG, blinn2SG, blinn1SG, lambert3SG" name="spa_mats" type="aggregate"/>
    </materials>
    <mesh_geometries>
       <mesh_geometry filename="assets\Room.obj" name="room_mesh" type="mesh_geometry"/>
