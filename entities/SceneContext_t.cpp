@@ -5,6 +5,7 @@
 #include <sstream> 
 #include <tuple>
 #include <algorithm>
+#include <chrono>
 
 #include "Colours.h"
 #include "NextFilename.h"
@@ -255,16 +256,17 @@ void SceneContext_t::readXML(const std::string &filename){
         }
     }
 
-    std::cout << "Transform matrix count: " << n_transform_matrices_ << std::endl; // REMOVE
-    std::cout << "Texture count: " << n_textures_ << std::endl; // REMOVE
-    std::cout << "Scatterer count: " << n_scatterers_ << std::endl; // REMOVE
-    std::cout << "Material count: " << n_materials_ << std::endl; // REMOVE
-    std::cout << "Mesh count: " << n_mesh_geometries_ << std::endl; // REMOVE
-    std::cout << "Shape count: " << n_objects_ << std::endl; // REMOVE
-    std::cout << "Directional light count: " << n_directional_lights_ << std::endl; // REMOVE
-    std::cout << "Skybox count: " << n_skyboxes_ << std::endl; // REMOVE
-    std::cout << "Img buffers count: " << n_imgbuffers_ << std::endl; // REMOVE
-    std::cout << "Camera count: " << n_cameras_ << std::endl << std::endl; // REMOVE
+    std::cout << std::endl;
+    std::cout << "Transform matrix count: " << n_transform_matrices_ << std::endl;
+    std::cout << "Texture count: " << n_textures_ << std::endl;
+    std::cout << "Scatterer count: " << n_scatterers_ << std::endl;
+    std::cout << "Material count: " << n_materials_ << std::endl;
+    std::cout << "Mesh count: " << n_mesh_geometries_ << std::endl;
+    std::cout << "Shape count: " << n_objects_ << std::endl;
+    std::cout << "Directional light count: " << n_directional_lights_ << std::endl;
+    std::cout << "Skybox count: " << n_skyboxes_ << std::endl;
+    std::cout << "Img buffers count: " << n_imgbuffers_ << std::endl;
+    std::cout << "Camera count: " << n_cameras_ << std::endl << std::endl;
 
     // Buffer creation
     if (n_transform_matrices_){
@@ -312,7 +314,7 @@ void SceneContext_t::readXML(const std::string &filename){
         cameras_ = new Camera_t*[n_cameras_];
     }
 
-    std::cout << "Buffers created." << std::endl << std::endl;
+    std::cout << "Buffers allocated." << std::endl << std::endl;
 
     // Filling buffers
     // Transform matrices (1)
@@ -470,7 +472,7 @@ void SceneContext_t::readXML(const std::string &filename){
         delete [] materials_aggregate_list;
         materials_aggregate_list = nullptr;
     }
-    std::cout << std::endl << "Fixes done." << std::endl << std::endl;
+    std::cout << "\tFixes done." << std::endl;
 
     // Filling buffers again
     // Mesh geometries (5)
@@ -640,11 +642,16 @@ void SceneContext_t::readXML(const std::string &filename){
     }
 
     // Update
+    std::cout << std::endl << "Updating scene..." << std::endl;
+    auto t_start = std::chrono::high_resolution_clock::now();
     scene_->update();
     for (unsigned int i = 0; i < n_cameras_; i++){
         cameras_[i]->update();
     }
-    std::cout << std::endl << "Updated." << std::endl;
+    auto t_end = std::chrono::high_resolution_clock::now();
+    std::cout << "Scene updated in " 
+        << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
+        << "s." << std::endl << std::endl;
 
     // Updating post
     // Transform matrices
@@ -725,17 +732,27 @@ void SceneContext_t::readXML(const std::string &filename){
             }
             ++index;
         }
-        std::cout << "Cameras transformed." << std::endl;
+        std::cout << "Cameras transformed post." << std::endl;
     }
     std::cout << std::endl;
 
     // Update
+    std::cout << "Updating scene..." << std::endl;
+    t_start = std::chrono::high_resolution_clock::now();
     scene_->update();
-    std::cout << "Updated." << std::endl;
+    t_end = std::chrono::high_resolution_clock::now();
+    std::cout << "Scene updated in " 
+        << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
+        << "s." << std::endl << std::endl;
 
     // Acceleration structure build
+    std::cout << "Building acceleration structure..." << std::endl;
+    t_start = std::chrono::high_resolution_clock::now();
     scene_->build_acc();
-    std::cout << "Acceleration structure built." << std::endl << std::endl;
+    t_end = std::chrono::high_resolution_clock::now();
+    std::cout << "Acceleration structure built in " 
+        << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
+        << "s." << std::endl << std::endl;
 
     // Autofocus
     if (xml_cameras != nullptr){
