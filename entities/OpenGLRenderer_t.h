@@ -34,9 +34,12 @@ class OpenGLRenderer_t{
         Vec3f focus_point_;
         double camera_dist_;
         bool updated_;
+        unsigned int write_interval_;
+        //void() render_function_;
 
         void dummyDisp(){};
-        void raytrace();
+        void accumulate();
+        void accumulate_write();
         void resetDisplay(void);
         void mouseMovement(int x, int y);
         void mouseClick(int button, int state, int x, int y);
@@ -44,14 +47,13 @@ class OpenGLRenderer_t{
         void keyboard(unsigned char key, int x, int y);
         void initialise();
         void render();
+    
+        static void openGL_dummyDisp();
+        static void openGL_accumulate();
+        static void openGL_resetDisplay(void);
+        static void openGL_mouseMovement(int x, int y);
+        static void openGL_mouseClick(int button, int state, int x, int y);
+        static void openGL_keyboardPaused(unsigned char key, int x, int y);
+        static void openGL_keyboard(unsigned char key, int x, int y);
 };
-
-void openGL_dummyDisp();
-void openGL_raytrace();
-void openGL_resetDisplay(void);
-void openGL_mouseMovement(int x, int y);
-void openGL_mouseClick(int button, int state, int x, int y);
-void openGL_keyboardPaused(unsigned char key, int x, int y);
-void openGL_keyboard(unsigned char key, int x, int y);
-
 #endif

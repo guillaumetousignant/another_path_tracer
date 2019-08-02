@@ -17,7 +17,7 @@ OpenGLRenderer_t::OpenGLRenderer_t() :
     camera_(nullptr), scene_(nullptr), imgbuffer_(nullptr), width_(0), height_(0), 
     right_x_pos_(0), right_y_pos_(0), left_x_pos_(0), left_y_pos_(0), middle_x_pos_(0), 
     middle_y_pos_(0), right_clicked_(false), left_clicked_(false), middle_clicked_(false),
-    n_iter_gl_(0), focus_point_(Vec3f()), camera_dist_(0), updated_(false) {
+    n_iter_gl_(0), focus_point_(Vec3f()), camera_dist_(0), updated_(false), write_interval_(1) {
         openGL_renderer = this;
 }
 
@@ -25,7 +25,7 @@ OpenGLRenderer_t::OpenGLRenderer_t(Scene_t* scene, Camera_t* camera, ImgBufferOp
     camera_(camera), scene_(scene), imgbuffer_(imgbuffer), width_(imgbuffer->size_x_), height_(imgbuffer->size_y_), 
     right_x_pos_(0), right_y_pos_(0), left_x_pos_(0), left_y_pos_(0), middle_x_pos_(0), 
     middle_y_pos_(0), right_clicked_(false), left_clicked_(false), middle_clicked_(false),
-    n_iter_gl_(0), focus_point_(Vec3f()), camera_dist_((focus_point_ - camera_->origin_).magnitude()), updated_(false) {
+    n_iter_gl_(0), focus_point_(Vec3f()), camera_dist_((focus_point_ - camera_->origin_).magnitude()), updated_(false), write_interval_(1) {
         openGL_renderer = this;
         if (camera_dist_ < 0.1){
             camera_dist_ = 0.1;
@@ -36,7 +36,7 @@ OpenGLRenderer_t::~OpenGLRenderer_t() {
     openGL_renderer = nullptr;
 }
 
-void OpenGLRenderer_t::raytrace(){
+void OpenGLRenderer_t::accumulate(){
     if (updated_){
         TransformMatrix_t transform_norm = camera_->transformation_->transformDir();
         Vec3f newdir = transform_norm.multDir(Vec3f(0.0, 1.0, 0.0));
@@ -51,6 +51,40 @@ void OpenGLRenderer_t::raytrace(){
     //auto t_start = std::chrono::high_resolution_clock::now();
     camera_->raytrace(scene_);
     //auto t_end = std::chrono::high_resolution_clock::now();
+
+    /*std::cout << "Iteration " << n_iter_gl_ << " done in " 
+        << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
+        << "s." << std::endl;*/
+
+    glutPostRedisplay(); // REMOVE but makes it work, soooooooo...
+}
+
+void OpenGLRenderer_t::accumulate_write(){
+    if (updated_){
+        TransformMatrix_t transform_norm = camera_->transformation_->transformDir();
+        Vec3f newdir = transform_norm.multDir(Vec3f(0.0, 1.0, 0.0));
+        camera_->transformation_->translate(focus_point_ - newdir * camera_dist_ - camera_->origin_);
+    
+        updated_ = false;
+        camera_->update();     
+        camera_->reset();
+        n_iter_gl_ = 0;
+    }
+    n_iter_gl_++;
+    //auto t_start = std::chrono::high_resolution_clock::now();
+    camera_->raytrace(scene_);
+    //auto t_end = std::chrono::high_resolution_clock::now();
+
+    if (!(n_iter_gl_%write_interval_)){
+        std::cout << "Writing started." << std::endl;
+        auto t_start = std::chrono::high_resolution_clock::now();
+        camera_->write();
+        auto t_end = std::chrono::high_resolution_clock::now();
+
+        std::cout << "Writing done in "
+            << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
+            << "s." << std::endl;
+    }
 
     /*std::cout << "Iteration " << n_iter_gl_ << " done in " 
         << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
@@ -169,7 +203,7 @@ void OpenGLRenderer_t::keyboardPaused(unsigned char key, int x, int y){
 
     case 'p':
         std::cout << "Unpaused" << std::endl;
-        glutDisplayFunc(openGL_raytrace);
+        glutDisplayFunc(openGL_accumulate);
         glutMouseFunc(openGL_mouseClick);
         glutMotionFunc(openGL_mouseMovement);
         glutKeyboardFunc(openGL_keyboard);
@@ -226,7 +260,7 @@ void OpenGLRenderer_t::initialise(){
     glutInitWindowSize(imgbuffer_->size_x_, imgbuffer_->size_y_);
     glutInitWindowPosition(10,10);
     glutCreateWindow(gl_argv[0]);
-    glutDisplayFunc(openGL_raytrace);
+    glutDisplayFunc(openGL_accumulate);
     glutMouseFunc(openGL_mouseClick);
     glutMotionFunc(openGL_mouseMovement);
     glutKeyboardFunc(openGL_keyboard);
@@ -245,30 +279,30 @@ void OpenGLRenderer_t::render(){
     glutMainLoop();
 }
 
-void openGL_dummyDisp(){
+void OpenGLRenderer_t::openGL_dummyDisp(){
     openGL_renderer->dummyDisp();
 }
 
-void openGL_raytrace(){
-    openGL_renderer->raytrace();
+void OpenGLRenderer_t::openGL_accumulate(){
+    openGL_renderer->accumulate();
 }
 
-void openGL_resetDisplay(void){
+void OpenGLRenderer_t::openGL_resetDisplay(void){
     openGL_renderer->resetDisplay();
 }
 
-void openGL_mouseMovement(int x, int y){
+void OpenGLRenderer_t::openGL_mouseMovement(int x, int y){
     openGL_renderer->mouseMovement(std::forward<int>(x), std::forward<int>(y));
 }
 
-void openGL_mouseClick(int button, int state, int x, int y){
+void OpenGLRenderer_t::openGL_mouseClick(int button, int state, int x, int y){
     openGL_renderer->mouseClick(std::forward<int>(button), std::forward<int>(state), std::forward<int>(x), std::forward<int>(y));
 }
 
-void openGL_keyboardPaused(unsigned char key, int x, int y){
+void OpenGLRenderer_t::openGL_keyboardPaused(unsigned char key, int x, int y){
     openGL_renderer->keyboardPaused(std::forward<unsigned char>(key), std::forward<int>(x), std::forward<int>(y));
 }
 
-void openGL_keyboard(unsigned char key, int x, int y){
+void OpenGLRenderer_t::openGL_keyboard(unsigned char key, int x, int y){
     openGL_renderer->keyboard(std::forward<unsigned char>(key), std::forward<int>(x), std::forward<int>(y));
 }
