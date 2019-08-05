@@ -10,8 +10,8 @@
 #define PI 3.141592653589793238463
 
 IsoCamMotionblur_t::IsoCamMotionblur_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, const double (&fov)[2], const unsigned int (&subpix)[2], ImgBuffer_t* image, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double (&time)[2], double gammaind) 
-    : IsoCam_t(transformation, filename, up, fov, subpix, image, medium_list, skybox, max_bounces, gammaind),
-    direction_last_(direction_), origin_last_(origin_), time_{time[0], time[1]}, up_last_(up_) {}
+    : Camera_t(transformation, filename, up, fov, subpix, medium_list, skybox, max_bounces, gammaind),
+    image_(image), unif_(0.0, 1.0), direction_last_(direction_), origin_last_(origin_), time_{time[0], time[1]}, up_last_(up_) {}
 
 IsoCamMotionblur_t::~IsoCamMotionblur_t() {}
 
@@ -73,4 +73,19 @@ void IsoCamMotionblur_t::raytrace(const Scene_t* scene) {
             image_->update(col, i, j);
         }
     }
+}
+
+void IsoCamMotionblur_t::write(std::string file_name /*= ""*/) {
+    if (file_name.empty()){
+        file_name = filename_;
+    }
+    image_->write(file_name);
+}
+
+void IsoCamMotionblur_t::show() const {
+    // What to do here?
+}
+
+void IsoCamMotionblur_t::reset(){
+    image_->reset();
 }

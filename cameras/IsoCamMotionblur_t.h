@@ -1,7 +1,7 @@
 #ifndef ISOCAMMOTIONBLUR_T_H
 #define ISOCAMMOTIONBLUR_T_H
 
-#include "IsoCam_t.h"
+#include "Camera_t.h"
 #include "Vec3f.h"
 #include <string>
 #include <list>
@@ -13,11 +13,13 @@ class Scene_t;
 class Medium_t;
 class ImgBuffer_t;
 
-class IsoCamMotionblur_t : public IsoCam_t{
+class IsoCamMotionblur_t : public Camera_t{
     public:
         IsoCamMotionblur_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, const double (&fov)[2], const unsigned int (&subpix)[2], ImgBuffer_t* image, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double (&time)[2], double gammaind);
         virtual ~IsoCamMotionblur_t();
 
+        ImgBuffer_t* image_;
+        std::uniform_real_distribution<double> unif_;
         Vec3f direction_last_;
         Vec3f origin_last_;
         double time_[2];
@@ -25,5 +27,8 @@ class IsoCamMotionblur_t : public IsoCam_t{
 
         virtual void update();
         virtual void raytrace(const Scene_t* scene);
+        virtual void write(std::string file_name = "");
+        virtual void show() const;
+        virtual void reset();
 };
 #endif
