@@ -95,17 +95,17 @@ void CamAperture_t::autoFocus(const Scene_t* scene, const double (&position)[2])
     focus(t);
 }
 
-void Cam_t::write(std::string file_name /*= ""*/) {
+void CamAperture_t::write(std::string file_name /*= ""*/) {
     if (file_name.empty()){
         file_name = filename_;
     }
     image_->write(file_name, gammaind_);
 }
 
-void Cam_t::show() const {
+void CamAperture_t::show() const {
     // What to do here?
 }
 
-void Cam_t::reset(){
+void CamAperture_t::reset(){
     image_->reset();
 }
