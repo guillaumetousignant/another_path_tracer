@@ -30,11 +30,11 @@ class Camera_t{
         
         virtual void update() = 0;
         virtual void raytrace(const Scene_t* scene) = 0;
-        virtual void accumulate(const Scene_t* scene, unsigned int n_iter = 1000000000);
-        virtual void accumulateWrite(const Scene_t* scene, unsigned int n_iter = 1000000000, unsigned int interval = 1);
+        void accumulate(const Scene_t* scene, unsigned int n_iter = 1000000000);
+        void accumulateWrite(const Scene_t* scene, unsigned int n_iter = 1000000000, unsigned int interval = 1);
         virtual void focus(double focus_distance){};
         virtual void autoFocus(const Scene_t* scene, const double (&position)[2]){};
-        virtual void setUp(Vec3f &new_up);
+        void setUp(Vec3f &new_up);
         virtual void write(std::string file_name = "") = 0;
         virtual void show() const = 0;
         virtual void reset() = 0;
