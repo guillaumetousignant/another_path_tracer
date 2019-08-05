@@ -10,7 +10,8 @@
 #define PI 3.141592653589793238463
 
 RecCamMotionblurAperture_t::RecCamMotionblurAperture_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, const double (&fov)[2], const unsigned int (&subpix)[2], ImgBuffer_t* image, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double focal_length, double aperture, double (&time)[2], double gammaind) 
-    : RecCamMotionblur_t(transformation, filename, up, fov, subpix, image, medium_list, skybox, max_bounces, time, gammaind), 
+    : Camera_t(transformation, filename, up, fov, subpix, medium_list, skybox, max_bounces, gammaind), 
+    image_(image), unif_(0.0, 1.0), direction_last_(direction_), origin_last_(origin_), time_{time[0], time[1]}, up_last_(up_),
     focal_length_(focal_length), focal_length_last_(focal_length), aperture_(aperture), focal_length_buffer_(focal_length) {}
 
 RecCamMotionblurAperture_t::~RecCamMotionblurAperture_t() {}
@@ -124,4 +125,19 @@ void RecCamMotionblurAperture_t::autoFocus(const Scene_t* scene, const double (&
         t = 1000000.0;
     }
     focus(t);
+}
+
+void RecCamMotionblurAperture_t::write(std::string file_name /*= ""*/) {
+    if (file_name.empty()){
+        file_name = filename_;
+    }
+    image_->write(file_name);
+}
+
+void RecCamMotionblurAperture_t::show() const {
+    // What to do here?
+}
+
+void RecCamMotionblurAperture_t::reset(){
+    image_->reset();
 }
