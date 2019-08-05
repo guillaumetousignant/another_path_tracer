@@ -8,10 +8,10 @@
 class TransformMatrix_t;
 class Material_t;
 
-class Triangle_t : public Shape_t{
+class Triangle_t final : public Shape_t{
     public:
         Triangle_t(Material_t *material, TransformMatrix_t *transform_matrix, Vec3f* points, Vec3f* normals, double** texcoord);
-        virtual ~Triangle_t();
+        virtual ~Triangle_t() final;
 
         Vec3f points_orig_[3];
         Vec3f normals_orig_[3];
@@ -21,12 +21,12 @@ class Triangle_t : public Shape_t{
         Vec3f v0v1_;
         Vec3f v0v2_;
 
-        virtual void update();
-        virtual void intersection(const Ray_t &ray, bool &intersected, double &t, double (&uv)[2]) const; 
-        virtual void normaluv(const Ray_t &ray, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec) const;
-        virtual void normal(const Ray_t &ray, const double (&uv)[2], Vec3f &normalvec) const;
-        virtual void normal_face(const Ray_t &ray, Vec3f &normalvec) const;
-        virtual Vec3f mincoord() const;
-        virtual Vec3f maxcoord() const;
+        virtual void update() final;
+        virtual void intersection(const Ray_t &ray, bool &intersected, double &t, double (&uv)[2]) const final; 
+        virtual void normaluv(const Ray_t &ray, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec) const final;
+        virtual void normal(const Ray_t &ray, const double (&uv)[2], Vec3f &normalvec) const final;
+        virtual void normal_face(const Ray_t &ray, Vec3f &normalvec) const final;
+        virtual Vec3f mincoord() const final;
+        virtual Vec3f maxcoord() const final;
 };
 #endif
