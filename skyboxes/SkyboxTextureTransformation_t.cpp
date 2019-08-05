@@ -5,7 +5,7 @@
 #define PI 3.141592653589793238463
 
 SkyboxTextureTransformation_t::SkyboxTextureTransformation_t(Texture_t* texture, TransformMatrix_t* transformation) 
-    : SkyboxTexture_t(texture), transformation_(transformation) {}
+    : texture_(texture), transformation_(transformation) {}
 
 SkyboxTextureTransformation_t::~SkyboxTextureTransformation_t(){}
 

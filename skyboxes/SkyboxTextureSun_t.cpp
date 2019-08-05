@@ -5,7 +5,7 @@
 #define PI 3.141592653589793238463
 
 SkyboxTextureSun_t::SkyboxTextureSun_t(Texture_t* texture, const double (&sun_pos)[2], Vec3f sun_col, double sun_rad) 
-    : SkyboxTexture_t(texture), sun_pos_{sun_pos[0], sun_pos[1]}, sun_col_(sun_col), sun_rad_(sun_rad) {}
+    : texture_(texture), sun_pos_{sun_pos[0], sun_pos[1]}, sun_col_(sun_col), sun_rad_(sun_rad) {}
 
 SkyboxTextureSun_t::~SkyboxTextureSun_t(){}
 
