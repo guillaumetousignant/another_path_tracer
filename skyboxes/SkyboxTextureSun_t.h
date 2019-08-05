@@ -6,16 +6,16 @@
 
 class Texture_t;
 
-class SkyboxTextureSun_t : public Skybox_t{
+class SkyboxTextureSun_t final : public Skybox_t{
     public:
         SkyboxTextureSun_t(Texture_t* texture, const double (&sun_pos)[2], Vec3f sun_col, double sun_rad);
-        virtual ~SkyboxTextureSun_t();
+        virtual ~SkyboxTextureSun_t() final;
 
         Texture_t* texture_;
         double sun_pos_[2];
         Vec3f sun_col_;
         double sun_rad_;
 
-        virtual Vec3f get(const Vec3f &xyz) const;
+        virtual Vec3f get(const Vec3f &xyz) const final;
 };
 #endif

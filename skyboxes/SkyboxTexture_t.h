@@ -6,13 +6,13 @@
 
 class Texture_t;
 
-class SkyboxTexture_t : public Skybox_t{
+class SkyboxTexture_t final : public Skybox_t{
     public:
         SkyboxTexture_t(Texture_t* texture);
-        virtual ~SkyboxTexture_t();
+        virtual ~SkyboxTexture_t() final;
 
         Texture_t* texture_;
 
-        virtual Vec3f get(const Vec3f &xyz) const;
+        virtual Vec3f get(const Vec3f &xyz) const final;
 };
 #endif

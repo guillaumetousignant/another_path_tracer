@@ -4,13 +4,13 @@
 #include "Skybox_t.h"
 #include "Vec3f.h"
 
-class SkyboxFlat_t : public Skybox_t{
+class SkyboxFlat_t final : public Skybox_t{
     public:
         SkyboxFlat_t(const Vec3f &background);
-        virtual ~SkyboxFlat_t();
+        virtual ~SkyboxFlat_t() final;
 
         Vec3f background_;
 
-        virtual Vec3f get(const Vec3f &xyz) const;
+        virtual Vec3f get(const Vec3f &xyz) const final;
 };
 #endif

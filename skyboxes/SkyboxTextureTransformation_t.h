@@ -7,14 +7,14 @@
 class Texture_t;
 class TransformMatrix_t;
 
-class SkyboxTextureTransformation_t : public Skybox_t{
+class SkyboxTextureTransformation_t final : public Skybox_t{
     public:
         SkyboxTextureTransformation_t(Texture_t* texture, TransformMatrix_t* transformation);
-        virtual ~SkyboxTextureTransformation_t();
+        virtual ~SkyboxTextureTransformation_t() final;
 
         Texture_t* texture_;
         TransformMatrix_t* transformation_;
         
-        virtual Vec3f get(const Vec3f &xyz) const;
+        virtual Vec3f get(const Vec3f &xyz) const final;
 };
 #endif
