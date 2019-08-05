@@ -35,7 +35,7 @@ class OpenGLRenderer_t{
         double camera_dist_;
         bool updated_;
         unsigned int write_interval_;
-        //void() render_function_;
+        void (*render_function_)();
 
         void dummyDisp(){};
         void accumulate();
@@ -47,9 +47,11 @@ class OpenGLRenderer_t{
         void keyboard(unsigned char key, int x, int y);
         void initialise();
         void render();
+        void render_write(unsigned int write_interval = 1);
     
         static void openGL_dummyDisp();
         static void openGL_accumulate();
+        static void openGL_accumulate_write();
         static void openGL_resetDisplay(void);
         static void openGL_mouseMovement(int x, int y);
         static void openGL_mouseClick(int button, int state, int x, int y);

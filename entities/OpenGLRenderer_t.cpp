@@ -17,7 +17,8 @@ OpenGLRenderer_t::OpenGLRenderer_t() :
     camera_(nullptr), scene_(nullptr), imgbuffer_(nullptr), width_(0), height_(0), 
     right_x_pos_(0), right_y_pos_(0), left_x_pos_(0), left_y_pos_(0), middle_x_pos_(0), 
     middle_y_pos_(0), right_clicked_(false), left_clicked_(false), middle_clicked_(false),
-    n_iter_gl_(0), focus_point_(Vec3f()), camera_dist_(0), updated_(false), write_interval_(1) {
+    n_iter_gl_(0), focus_point_(Vec3f()), camera_dist_(0), updated_(false), write_interval_(1),
+    render_function_(openGL_accumulate) {
         openGL_renderer = this;
 }
 
@@ -25,7 +26,8 @@ OpenGLRenderer_t::OpenGLRenderer_t(Scene_t* scene, Camera_t* camera, ImgBufferOp
     camera_(camera), scene_(scene), imgbuffer_(imgbuffer), width_(imgbuffer->size_x_), height_(imgbuffer->size_y_), 
     right_x_pos_(0), right_y_pos_(0), left_x_pos_(0), left_y_pos_(0), middle_x_pos_(0), 
     middle_y_pos_(0), right_clicked_(false), left_clicked_(false), middle_clicked_(false),
-    n_iter_gl_(0), focus_point_(Vec3f()), camera_dist_((focus_point_ - camera_->origin_).magnitude()), updated_(false), write_interval_(1) {
+    n_iter_gl_(0), focus_point_(Vec3f()), camera_dist_((focus_point_ - camera_->origin_).magnitude()), updated_(false), 
+    write_interval_(1), render_function_(openGL_accumulate) {
         openGL_renderer = this;
         if (camera_dist_ < 0.1){
             camera_dist_ = 0.1;
@@ -203,7 +205,7 @@ void OpenGLRenderer_t::keyboardPaused(unsigned char key, int x, int y){
 
     case 'p':
         std::cout << "Unpaused" << std::endl;
-        glutDisplayFunc(openGL_accumulate);
+        glutDisplayFunc(render_function_);
         glutMouseFunc(openGL_mouseClick);
         glutMotionFunc(openGL_mouseMovement);
         glutKeyboardFunc(openGL_keyboard);
@@ -260,7 +262,7 @@ void OpenGLRenderer_t::initialise(){
     glutInitWindowSize(imgbuffer_->size_x_, imgbuffer_->size_y_);
     glutInitWindowPosition(10,10);
     glutCreateWindow(gl_argv[0]);
-    glutDisplayFunc(openGL_accumulate);
+    glutDisplayFunc(render_function_);
     glutMouseFunc(openGL_mouseClick);
     glutMotionFunc(openGL_mouseMovement);
     glutKeyboardFunc(openGL_keyboard);
@@ -279,12 +281,23 @@ void OpenGLRenderer_t::render(){
     glutMainLoop();
 }
 
+void OpenGLRenderer_t::render_write(unsigned int write_interval /* = 1 */){
+    write_interval_ = write_interval;
+    render_function_ = openGL_accumulate_write;
+    glutDisplayFunc(render_function_);
+    glutMainLoop();
+}
+
 void OpenGLRenderer_t::openGL_dummyDisp(){
     openGL_renderer->dummyDisp();
 }
 
 void OpenGLRenderer_t::openGL_accumulate(){
     openGL_renderer->accumulate();
+}
+
+void OpenGLRenderer_t::openGL_accumulate_write(){
+    openGL_renderer->accumulate_write();
 }
 
 void OpenGLRenderer_t::openGL_resetDisplay(void){
