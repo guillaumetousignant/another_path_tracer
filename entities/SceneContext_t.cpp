@@ -896,16 +896,40 @@ void SceneContext_t::readXML(const std::string &filename){
 
 void SceneContext_t::render(){
     std::cout << "In rendering function." << std::endl;
+
     // Running
     if (use_gl_) {
-        opengl_renderer_->render();
+        std::string render_mode = camera_rendermode_[0];
+        std::transform(render_mode.begin(), render_mode.end(), render_mode.begin(), ::tolower);
+
+        std::cout << "Camera #" << 0 << " rendering scene '" << scene_name_ << "' in '" <<  render_mode << "' mode." << std::endl;
+
+        if (render_mode == "accumulation") {
+            opengl_renderer_->render();
+        }
+        else if (render_mode == "accumulation_write") {
+            opengl_renderer_->render_write(camera_write_interval_[0]);
+        }
+        else if (render_mode == "single") {
+            opengl_renderer_->render_write();
+        }
+        else if (render_mode == "motion") {
+            std::cout << "Error, motion render mode not implemented yet. Accumulation render fallback." << std::endl;
+            opengl_renderer_->render();
+        }
+        else if (render_mode == "") {
+
+        }
+        else {
+            std::cout << "Error, render mode '" << render_mode << "', used by camera #" << 0 << ", is unknown. Only 'accumulation', 'accumulation_write', 'single', and 'motion' exist for now. Ignoring." << std::endl;
+        }
     }
     else {
         for (unsigned int i = 0; i < n_cameras_; i++){
             std::string render_mode = camera_rendermode_[i];
             std::transform(render_mode.begin(), render_mode.end(), render_mode.begin(), ::tolower);
 
-            std::cout << "Camera #" << i << " rendering scene '" << scene_ << "' in '" <<  render_mode << "' mode." << std::endl;
+            std::cout << "Camera #" << i << " rendering scene '" << scene_name_ << "' in '" <<  render_mode << "' mode." << std::endl;
 
             if (render_mode == "accumulation") {
                 cameras_[i]->accumulate(scene_, camera_n_iter_[i]);
