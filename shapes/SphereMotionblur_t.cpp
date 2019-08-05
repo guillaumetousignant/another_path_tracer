@@ -7,9 +7,15 @@
 
 #define PI 3.141592653589793238463
 
-SphereMotionblur_t::SphereMotionblur_t(Material_t *material, TransformMatrix_t *transform_matrix): Sphere_t(material, transform_matrix){
-    radius_last_ = radius_;
+SphereMotionblur_t::SphereMotionblur_t(Material_t *material, TransformMatrix_t *transform_matrix): Shape_t(material, transform_matrix){
+    origin_ = transformation_->multVec(Vec3f(0.0, 0.0, 0.0));
     origin_last_ = origin_;
+    radius_ = transformation_->getScale(); 
+    radius_last_ = radius_;
+    TransformMatrix_t transform_norm = transformation_->transformDir();
+    Vec3f direction = transform_norm.multDir(Vec3f(0.0, 0.0, 1.0)).to_sph(); 
+    Vec3f direction2 = transform_norm.multDir(Vec3f(1.0, 0.0, 0.0)).to_sph();
+    direction_sph_ = Vec3f(1.0, direction[1], direction2[2]);
     direction_sph_last_ = direction_sph_;
 }
 
@@ -99,6 +105,10 @@ void SphereMotionblur_t::normaluv(const Ray_t &ray, const double (&uv)[2], doubl
 
     tuv[0] = sph[2]/(2.0 * PI) + 0.5;
     tuv[1] = 1.0 - sph[1]/PI;
+}
+
+void SphereMotionblur_t::normal(const Ray_t &ray, const double (&uv)[2], Vec3f &normalvec) const {
+    normalvec = Vec3f(1.0, (1.0 - uv[1]) * PI, (uv[0] - 0.5) * 2.0 * PI).to_xyz();
 }
 
 Vec3f SphereMotionblur_t::mincoord() const {
