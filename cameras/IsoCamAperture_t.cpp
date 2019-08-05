@@ -10,8 +10,8 @@
 #define PI 3.141592653589793238463
 
 IsoCamAperture_t::IsoCamAperture_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, const double (&fov)[2], const unsigned int (&subpix)[2], ImgBuffer_t* image, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double focal_length, double aperture, double gammaind) 
-    : IsoCam_t(transformation, filename, up, fov, subpix, image, medium_list, skybox, max_bounces, gammaind), 
-    focal_length_(focal_length), aperture_(aperture), focal_length_buffer_(focal_length)  {}
+    : Camera_t(transformation, filename, up, fov, subpix, medium_list, skybox, max_bounces, gammaind), 
+    image_(image), unif_(0.0, 1.0), focal_length_(focal_length), aperture_(aperture), focal_length_buffer_(focal_length)  {}
 
 IsoCamAperture_t::~IsoCamAperture_t() {}
 
@@ -91,4 +91,19 @@ void IsoCamAperture_t::autoFocus(const Scene_t* scene, const double (&position)[
         t = 1000000.0;
     }
     focus(t);
+}
+
+void IsoCamAperture_t::write(std::string file_name /*= ""*/) {
+    if (file_name.empty()){
+        file_name = filename_;
+    }
+    image_->write(file_name);
+}
+
+void IsoCamAperture_t::show() const {
+    // What to do here?
+}
+
+void IsoCamAperture_t::reset(){
+    image_->reset();
 }
