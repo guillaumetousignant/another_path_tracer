@@ -9,9 +9,50 @@
 #define EPSILON 0.00000001
 
 TriangleMotionblur_t::TriangleMotionblur_t(Material_t *material, TransformMatrix_t *transform_matrix, Vec3f* points, Vec3f* normals, double** texcoord) 
-    : Triangle_t(material, transform_matrix, points, normals, texcoord),
-    points_last_{points_[0], points_[1], points_[2]}, normals_last_{normals_[0], normals_[1], normals_[2]}, 
-    v0v1_last_(v0v1_), v0v2_last_(v0v2_) {}
+    : Shape_t(material, transform_matrix), points_orig_{points[0], points[1], points[2]} {
+
+    if (normals == nullptr){
+        Vec3f nor = (points[1] - points[0]).cross(points[2] - points[0]).normalize(); 
+        // Loop or explicit?
+        for (unsigned int i = 0; i < 3; i++){
+            normals_orig_[i] = nor;
+        }
+    }
+    else{
+        for (unsigned int i = 0; i < 3; i++){
+            normals_orig_[i] = normals[i];
+        }
+    }
+
+    if (texcoord == nullptr){
+        for (unsigned int i = 0; i < 3; i++){
+            for (unsigned int j = 0; j < 2; j++){
+                texture_coordinates_[i][j] = 0;
+            }
+        }
+    }
+    else{
+        for (unsigned int i = 0; i < 3; i++){
+            for (unsigned int j = 0; j < 2; j++){
+                texture_coordinates_[i][j] = texcoord[i][j];
+            }
+        }
+    }
+
+    TransformMatrix_t transform_norm = transformation_->transformDir();
+
+    for (unsigned int i = 0; i < 3; i++){ // Loop or explicit?
+        points_[i] = transformation_->multVec(points_orig_[i]);
+        points_last_[i] = points_[i];
+        normals_[i] = transform_norm.multDir(normals_orig_[i]); // was transformation_ before
+        normals_last_[i] = normals_[i];
+    }
+
+    v0v1_ = points_[1] - points_[0];
+    v0v1_last_ = v0v1_;
+    v0v2_ = points_[2] - points_[0];
+    v0v2_last_ = v0v2_;
+}
 
 TriangleMotionblur_t::~TriangleMotionblur_t(){}
 
