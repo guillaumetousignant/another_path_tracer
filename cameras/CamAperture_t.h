@@ -1,7 +1,7 @@
 #ifndef CAMAPERTURE_T_H
 #define CAMAPERTURE_T_H
 
-#include "Cam_t.h"
+#include "Camera_t.h"
 #include "Vec3f.h"
 #include <string>
 #include <list>
