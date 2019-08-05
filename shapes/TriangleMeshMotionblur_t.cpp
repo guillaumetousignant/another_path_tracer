@@ -10,9 +10,22 @@
 #define EPSILON 0.00000001
 
 TriangleMeshMotionblur_t::TriangleMeshMotionblur_t(Material_t *material, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom, unsigned int index) 
-    : TriangleMesh_t(material, transform_matrix, geom, index),
-    points_last_{points_[0], points_[1], points_[2]}, normals_last_{normals_[0], normals_[1], normals_[2]}, 
-    v0v1_last_(v0v1_), v0v2_last_(v0v2_) {}
+    : Shape_t(material, transform_matrix), geom_(geom), index_(index) {
+
+    TransformMatrix_t transform_norm = transformation_->transformDir();
+
+    for (unsigned int i = 0; i < 3; i++){ // Loop or explicit?
+        points_[i] = transformation_->multVec(geom_->v_[3 * index_ + i]);
+        points_last_[i] = points_[i];
+        normals_[i] = transform_norm.multDir(geom_->vn_[3 * index_ + i]); // was transformation_
+        normals_last_[i] = normals_[i];
+    }
+
+    v0v1_ = points_[1] - points_[0];
+    v0v1_last_ = v0v1_;
+    v0v2_ = points_[2] - points_[0];
+    v0v2_last_ = v0v2_;
+}
 
 TriangleMeshMotionblur_t::~TriangleMeshMotionblur_t(){}
 

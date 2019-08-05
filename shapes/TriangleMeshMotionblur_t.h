@@ -3,17 +3,23 @@
 
 #include "Ray_t.h"
 #include "Vec3f.h"
-#include "TriangleMesh_t.h"
+#include "Shape_t.h"
 
 class TransformMatrix_t;
 class Material_t;
 class MeshGeometry_t;
 
-class TriangleMeshMotionblur_t : public TriangleMesh_t{
+class TriangleMeshMotionblur_t : public Shape_t{
     public:
         TriangleMeshMotionblur_t(Material_t *material, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom, unsigned int index);
         virtual ~TriangleMeshMotionblur_t();
 
+        Vec3f points_[3];
+        Vec3f normals_[3];
+        Vec3f v0v1_;
+        Vec3f v0v2_;
+        MeshGeometry_t* geom_;
+        unsigned int index_;
         Vec3f points_last_[3];
         Vec3f normals_last_[3];
         Vec3f v0v1_last_;
