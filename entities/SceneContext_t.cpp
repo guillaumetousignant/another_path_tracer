@@ -1555,9 +1555,13 @@ Skybox_t* SceneContext_t::create_skybox(const tinyxml2::XMLElement* xml_skybox, 
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
     if (type == "skybox_flat"){
+        const char* attributes[] = {"colour"};
+        require_attributes(xml_skybox, attributes, 1);
         return new SkyboxFlat_t(get_colour(xml_skybox->Attribute("colour")));
     }
     else if (type == "skybox_flat_sun"){
+        const char* attributes[] = {"colour", "lights"};
+        require_attributes(xml_skybox, attributes, 2);
         DirectionalLight_t** lights = nullptr;
         unsigned int n = 0;
 
@@ -1569,17 +1573,25 @@ Skybox_t* SceneContext_t::create_skybox(const tinyxml2::XMLElement* xml_skybox, 
         return skybox;
     }
     else if (type == "skybox_texture"){
+        const char* attributes[] = {"texture"};
+        require_attributes(xml_skybox, attributes, 1);
         return new SkyboxTexture_t(get_texture(xml_skybox->Attribute("texture"), xml_textures));
     }
     else if (type == "skybox_texture_sun"){
+        const char* attributes[] = {"texture", "light_position", "light_colour", "light_radius"};
+        require_attributes(xml_skybox, attributes, 4);
         double sun_pos[2];
         get_xy(xml_skybox->Attribute("light_position"), sun_pos);
         return new SkyboxTextureSun_t(get_texture(xml_skybox->Attribute("texture"), xml_textures), sun_pos, get_colour(xml_skybox->Attribute("light_colour")), std::stod(xml_skybox->Attribute("light_radius")));
     }
     else if (type == "skybox_texture_transformation"){
+        const char* attributes[] = {"texture", "transform_matrix"};
+        require_attributes(xml_skybox, attributes, 2);
         return new SkyboxTextureTransformation_t(get_texture(xml_skybox->Attribute("texture"), xml_textures), get_transform_matrix(xml_skybox->Attribute("transform_matrix"), xml_transform_matrices));
     }
     else if (type == "skybox_texture_transformation_sun"){
+        const char* attributes[] = {"texture", "light_position", "light_colour", "light_radius", "transform_matrix"};
+        require_attributes(xml_skybox, attributes, 5);
         double sun_pos[2];
         get_xy(xml_skybox->Attribute("light_position"), sun_pos);
         return new SkyboxTextureTransformationSun_t(get_texture(xml_skybox->Attribute("texture"), xml_textures), get_transform_matrix(xml_skybox->Attribute("transform_matrix"), xml_transform_matrices), sun_pos, get_colour(xml_skybox->Attribute("light_colour")), std::stod(xml_skybox->Attribute("light_radius")));
