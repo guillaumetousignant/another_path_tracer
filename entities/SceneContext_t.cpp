@@ -1175,7 +1175,7 @@ Texture_t* SceneContext_t::create_texture(const tinyxml2::XMLElement* xml_textur
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
     if (type == "texture"){
-        std::string attributes[] = {"filename"};
+        const char* attributes[] = {"filename"};
         require_attributes(xml_texture, attributes, 1);
         std::string filename = xml_texture->Attribute("filename");
         for (unsigned int i = 0; i < filename.size(); i++){
@@ -1211,6 +1211,8 @@ ScatteringFunction_t* SceneContext_t::create_scatterer(const tinyxml2::XMLElemen
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
     if (type == "absorber"){
+        const char* attributes[] = {"emission", "colour", "emission_distance", "absorption_distance"};
+        require_attributes(xml_scatterer, attributes, 4);
         return new Absorber_t(get_colour(xml_scatterer->Attribute("emission")), get_colour(xml_scatterer->Attribute("colour")), 
                                 std::stod(xml_scatterer->Attribute("emission_distance")), std::stod(xml_scatterer->Attribute("absorption_distance")));
     }
@@ -1219,16 +1221,22 @@ ScatteringFunction_t* SceneContext_t::create_scatterer(const tinyxml2::XMLElemen
     }
     else if (type == "portal_scatterer"){
         // CHECK add medium_list stuff
+        const char* attributes[] = {"medium_list", "transform_matrix", "scattering_distance"};
+        require_attributes(xml_scatterer, attributes, 3);
         scatterers_medium_list = get_medium_index_list(xml_scatterer->Attribute("medium_list"), xml_materials);
         return new PortalScatterer_t(get_transform_matrix(xml_scatterer->Attribute("transform_matrix"), xml_transform_matrices), std::stod(xml_scatterer->Attribute("scattering_distance")), std::list<Medium_t*>());
     }
     else if (type == "scatterer_exp"){
+        const char* attributes[] = {"emission", "colour", "emission_distance", "absorption_distance", "scattering_distance", "order", "scattering_angle"};
+        require_attributes(xml_scatterer, attributes, 7);
         return new ScattererExp_t(get_colour(xml_scatterer->Attribute("emission")), get_colour(xml_scatterer->Attribute("colour")),
                                 std::stod(xml_scatterer->Attribute("emission_distance")), std::stod(xml_scatterer->Attribute("absorption_distance")),
                                 std::stod(xml_scatterer->Attribute("scattering_distance")), std::stod(xml_scatterer->Attribute("order")), 
                                 std::stod(xml_scatterer->Attribute("scattering_angle")));
     }
     else if (type == "scatterer"){
+        const char* attributes[] = {"emission", "colour", "emission_distance", "absorption_distance", "scattering_distance"};
+        require_attributes(xml_scatterer, attributes, 5);
         return new Scatterer_t(get_colour(xml_scatterer->Attribute("emission")), get_colour(xml_scatterer->Attribute("colour")),
                                 std::stod(xml_scatterer->Attribute("emission_distance")), std::stod(xml_scatterer->Attribute("absorption_distance")),
                                 std::stod(xml_scatterer->Attribute("scattering_distance")));
@@ -1252,14 +1260,20 @@ Material_t* SceneContext_t::create_material(const tinyxml2::XMLElement* xml_mate
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
     if (type == "diffuse"){
+        const char* attributes[] = {"emission", "colour", "roughness"};
+        require_attributes(xml_material, attributes, 3);
         return new Diffuse_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), 
                                 std::stod(xml_material->Attribute("roughness")));
     }
     else if (type == "diffuse_full"){
+        const char* attributes[] = {"emission_map", "texture", "roughness"};
+        require_attributes(xml_material, attributes, 3);
         return new DiffuseFull_t(get_texture(xml_material->Attribute("emission_map"), xml_textures), get_texture(xml_material->Attribute("texture"), xml_textures), 
                                 std::stod(xml_material->Attribute("roughness")));
     }
     else if (type == "diffuse_tex"){
+        const char* attributes[] = {"emission", "texture", "roughness"};
+        require_attributes(xml_material, attributes, 3);
         return new DiffuseTex_t(get_colour(xml_material->Attribute("emission")), get_texture(xml_material->Attribute("texture"), xml_textures), 
                                 std::stod(xml_material->Attribute("roughness")));
     }
@@ -2646,11 +2660,11 @@ void apply_transformation(TransformMatrix_t* transform_matrix, const tinyxml2::X
     }
 }
 
-void require_attributes(const tinyxml2::XMLElement* element, std::string* attributes, unsigned int n) {
+void require_attributes(const tinyxml2::XMLElement* element, const char** attributes, unsigned int n) {
     bool missing = false;
 
     for (unsigned int i = 0; i < n; ++i){
-        const char* value = element->Attribute(attributes[i].c_str());
+        const char* value = element->Attribute(attributes[i]);
         if (value == nullptr){
             if (!missing){
                 missing = true;
