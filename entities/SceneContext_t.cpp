@@ -176,7 +176,7 @@ void SceneContext_t::readXML(const std::string &filename){
 
     if (xml_materials != nullptr){
         for (tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
-            ++ n_materials_;
+            ++n_materials_;
             const char* char_transform_matrix = xml_material->Attribute("transform_matrix");
             if (char_transform_matrix != nullptr){
                 std::string string_transform_matrix = char_transform_matrix;
