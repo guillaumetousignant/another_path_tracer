@@ -616,17 +616,16 @@ void SceneContext_t::readXML(const std::string &filename){
 
     // Scene building
     scene_ = new Scene_t();
-    const char* primitive_list = xml_top->Attribute("primitive_list");
-    const char* mesh_list = xml_top->Attribute("mesh_list");
+    const char* object_list = xml_top->Attribute("object_list");
     std::cout << "Scene created." << std::endl;
     
-    if (primitive_list != nullptr){
+    if (object_list != nullptr){
         Shape_t** shapes = nullptr;
         MeshTop_t** meshes = nullptr;
         unsigned int n_shapes = 0;
         unsigned int n_meshes = 0;
 
-        get_objects(primitive_list, shapes, n_shapes, meshes, n_meshes, xml_objects);
+        get_objects(object_list, shapes, n_shapes, meshes, n_meshes, xml_objects);
 
         scene_->add(shapes, n_shapes);
         scene_->add(meshes, n_meshes);
