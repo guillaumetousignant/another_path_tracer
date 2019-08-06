@@ -2643,3 +2643,26 @@ void apply_transformation(TransformMatrix_t* transform_matrix, const tinyxml2::X
         std::cout << "Error, transform type '" << type << "' not implemented. Ignoring." << std::endl; 
     }
 }
+
+void require_attributes(const tinyxml2::XMLElement* element, std::string* attributes, unsigned int n) {
+    bool missing = false;
+
+    for (unsigned int i = 0; i < n; ++i){
+        const char* value = element->Attribute(attributes[i].c_str());
+        if (value == nullptr){
+            if (!missing){
+                missing = true;
+                const char* name_char = element->Attribute("name");
+                const char* type_type = element->Attribute("type");
+                std::string name = (name_char == nullptr) ? "" : name_char;
+                std::string type = (type_type == nullptr) ? "" : type_type;
+                std::cout << "Error: " << element->Name() << " XML element with name '" << name << "' and type '" << type << "' has the following attributes missing:" << std::endl;
+            }
+        }
+        std::cout << attributes[i] << std::endl;
+    }
+
+    if (missing) {
+        exit(2); 
+    }
+}
