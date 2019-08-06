@@ -589,8 +589,9 @@ void SceneContext_t::readXML(const std::string &filename){
         for (tinyxml2::XMLElement* xml_object = xml_objects->FirstChildElement("object"); xml_object; xml_object = xml_object->NextSiblingElement("object")){
             tinyxml2::XMLElement* transformations_pre = xml_object->FirstChildElement("transformations_pre");
             if (transformations_pre != nullptr){
+                TransformMatrix_t* transform_matrix = (objects_[index] != nullptr) ? objects_[index]->transformation_ : meshes_[index]->transformation_;
                 for (tinyxml2::XMLElement* transformation_pre = transformations_pre->FirstChildElement("transformation_pre"); transformation_pre; transformation_pre = transformation_pre->NextSiblingElement("transformation_pre")){
-                    apply_transformation(objects_[index]->transformation_, transformation_pre);
+                    apply_transformation(transform_matrix, transformation_pre);
                 }
             }
             ++index;
@@ -705,8 +706,9 @@ void SceneContext_t::readXML(const std::string &filename){
         for (tinyxml2::XMLElement* xml_object = xml_objects->FirstChildElement("object"); xml_object; xml_object = xml_object->NextSiblingElement("object")){
             tinyxml2::XMLElement* transformations_post = xml_object->FirstChildElement("transformations_post");
             if (transformations_post != nullptr){
+                TransformMatrix_t* transform_matrix = (objects_[index] != nullptr) ? objects_[index]->transformation_ : meshes_[index]->transformation_;
                 for (tinyxml2::XMLElement* transformation_post = transformations_post->FirstChildElement("transformation_post"); transformation_post; transformation_post = transformation_post->NextSiblingElement("transformation_post")){
-                    apply_transformation(objects_[index]->transformation_, transformation_post);
+                    apply_transformation(transform_matrix, transformation_post);
                 }
             }
             ++index;
