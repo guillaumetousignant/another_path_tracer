@@ -7,14 +7,14 @@
 
 class Material_t;
 
-class RandomMix_t : public MaterialMix_t{
+class RandomMix_t final : public MaterialMix_t{
     public:
         RandomMix_t(Material_t* material_refracted, Material_t* material_reflected, double ratio);
-        virtual ~RandomMix_t();
+        virtual ~RandomMix_t() final;
 
         double ratio_;
         std::uniform_real_distribution<double> unif_;
 
-        virtual void bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray);
+        virtual void bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray) final;
 };
 #endif

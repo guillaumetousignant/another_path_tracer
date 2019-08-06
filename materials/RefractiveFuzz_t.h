@@ -7,10 +7,10 @@
 
 class ScatteringFunction_t;
 
-class RefractiveFuzz_t : public Medium_t{
+class RefractiveFuzz_t final : public Medium_t{
     public:
         RefractiveFuzz_t(const Vec3f &emission, const Vec3f &colour, double ind, unsigned int priority, double order, double diffusivity, ScatteringFunction_t* scattering);
-        virtual ~RefractiveFuzz_t();
+        virtual ~RefractiveFuzz_t() final;
 
         Vec3f emission_;
         Vec3f colour_;
@@ -18,6 +18,6 @@ class RefractiveFuzz_t : public Medium_t{
         double diffusivity_; // between 0 and 1, portion of the hemisphere reflected to.
         std::uniform_real_distribution<double> unif_;
 
-        virtual void bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray);
+        virtual void bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray) final;
 };
 #endif

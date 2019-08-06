@@ -13,7 +13,6 @@ class Medium_t : public Material_t{
         double ind_;
         unsigned int priority_;
         ScatteringFunction_t* scattering_;
-        
 };
 
 #endif

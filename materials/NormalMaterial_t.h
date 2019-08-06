@@ -5,11 +5,11 @@
 
 class Shape_t;
 
-class NormalMaterial_t : public Material_t{
+class NormalMaterial_t final : public Material_t{
     public:
         NormalMaterial_t();
-        virtual ~NormalMaterial_t();
+        virtual ~NormalMaterial_t() final;
 
-        virtual void bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray);
+        virtual void bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray) final;
 };
 #endif

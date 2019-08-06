@@ -5,10 +5,10 @@
 #include "Vec3f.h"
 #include <random>
 
-class ReflectiveFuzz_t : public Material_t{
+class ReflectiveFuzz_t final : public Material_t{
     public:
         ReflectiveFuzz_t(const Vec3f &emission, const Vec3f &colour, double order, double diffusivity);
-        virtual ~ReflectiveFuzz_t();
+        virtual ~ReflectiveFuzz_t() final;
 
         Vec3f emission_;
         Vec3f colour_;
@@ -16,6 +16,6 @@ class ReflectiveFuzz_t : public Material_t{
         double diffusivity_; // between 0 and 1, portion of the hemisphere reflected to.
         std::uniform_real_distribution<double> unif_;
 
-        virtual void bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray);
+        virtual void bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray) final;
 };
 #endif

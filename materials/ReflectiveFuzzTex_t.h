@@ -7,10 +7,10 @@
 
 class Texture_t;
 
-class ReflectiveFuzzTex_t : public Material_t{
+class ReflectiveFuzzTex_t final : public Material_t{
     public:
         ReflectiveFuzzTex_t(Texture_t* texture, const Vec3f &colour, double order, double diffusivity);
-        virtual ~ReflectiveFuzzTex_t();
+        virtual ~ReflectiveFuzzTex_t() final;
 
         Texture_t* texture_;
         Vec3f colour_;
@@ -18,6 +18,6 @@ class ReflectiveFuzzTex_t : public Material_t{
         double diffusivity_; // between 0 and 1, portion of the hemisphere reflected to.
         std::uniform_real_distribution<double> unif_;
 
-        virtual void bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray);
+        virtual void bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray) final;
 };
 #endif

@@ -4,11 +4,11 @@
 #include "ScatteringFunction_t.h"
 #include "Ray_t.h"
 
-class NonAbsorber_t : public ScatteringFunction_t{
+class NonAbsorber_t final : public ScatteringFunction_t{
     public:
         NonAbsorber_t();
-        virtual ~NonAbsorber_t();
+        virtual ~NonAbsorber_t() final;
 
-        virtual void scatter(Ray_t &ray, bool &intersected); 
+        virtual void scatter(Ray_t &ray, bool &intersected) final; 
 };
 #endif

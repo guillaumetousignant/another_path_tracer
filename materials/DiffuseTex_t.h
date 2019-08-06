@@ -7,16 +7,16 @@
 
 class Texture_t;
 
-class DiffuseTex_t : public Material_t{
+class DiffuseTex_t final : public Material_t{
     public:
         DiffuseTex_t(const Vec3f &emission, const Texture_t* texture, double roughness);
-        virtual ~DiffuseTex_t();
+        virtual ~DiffuseTex_t() final;
 
         Vec3f emission_;
         const Texture_t* texture_;
         double roughness_;
         std::uniform_real_distribution<double> unif_;
 
-        virtual void bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray);
+        virtual void bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray) final;
 };
 #endif
