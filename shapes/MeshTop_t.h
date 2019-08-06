@@ -3,18 +3,20 @@
 
 #include "Ray_t.h"
 #include "Vec3f.h"
-#include "Shape_t.h"
 
 class Material_t;
 class TransformMatrix_t;
 class MeshGeometry_t;
 class MaterialMap_t;
+class Shape_t;
 
-class MeshTop_t : public Shape_t{
+class MeshTop_t {
     public:
         MeshTop_t(Material_t *material, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom);
         virtual ~MeshTop_t();
 
+        Material_t *material_;
+        TransformMatrix_t *transformation_;
         MeshGeometry_t* geom_;
         unsigned int n_tris_;
         Shape_t** triangles_; // Maybe should be triangle**?

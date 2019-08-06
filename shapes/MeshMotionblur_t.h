@@ -10,13 +10,13 @@ class TransformMatrix_t;
 class MeshGeometry_t;
 class MaterialMap_t;
 
-class MeshMotionblur_t : public MeshTop_t{
+class MeshMotionblur_t final : public MeshTop_t{
     public:
         MeshMotionblur_t(Material_t *material, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom);
         MeshMotionblur_t(MaterialMap_t *materialmap, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom);
-        virtual ~MeshMotionblur_t();
+        virtual ~MeshMotionblur_t() final;
 
-        virtual void createTriangles();
-        virtual void createTriangles(MaterialMap_t *materialmap);
+        virtual void createTriangles() final;
+        virtual void createTriangles(MaterialMap_t *materialmap) final;
 };
 #endif

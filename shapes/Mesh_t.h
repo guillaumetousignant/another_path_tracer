@@ -10,13 +10,13 @@ class TransformMatrix_t;
 class MeshGeometry_t;
 class MaterialMap_t;
 
-class Mesh_t : public MeshTop_t{
+class Mesh_t final : public MeshTop_t{
     public:
         Mesh_t(Material_t *material, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom);
         Mesh_t(MaterialMap_t *materialmap, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom);
-        virtual ~Mesh_t();
+        virtual ~Mesh_t() final;
 
-        virtual void createTriangles();
-        virtual void createTriangles(MaterialMap_t *materialmap);
+        virtual void createTriangles() final;
+        virtual void createTriangles(MaterialMap_t *materialmap) final;
 };
 #endif

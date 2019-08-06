@@ -4,9 +4,10 @@
 #include "TriangleMesh_t.h"
 #include <iostream>
 #include <limits>
+#include "Shape_t.h"
 
 MeshTop_t::MeshTop_t(Material_t *material, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom) 
-    : Shape_t(material, transform_matrix), geom_(geom), n_tris_(geom->n_tris_) {
+    : material_(material), transformation_(transform_matrix), geom_(geom), n_tris_(geom->n_tris_) {
 }      
 
 MeshTop_t::~MeshTop_t(){
