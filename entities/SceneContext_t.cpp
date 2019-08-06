@@ -1671,6 +1671,8 @@ Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, 
     }
 
     if (type == "cam"){
+        const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind"};
+        require_attributes(xml_camera, attributes, 9);
         double fov[2];
         unsigned int subpix[2];
         get_xy(xml_camera->Attribute("fov"), fov);
@@ -1681,6 +1683,8 @@ Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, 
                             get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), std::stoi(xml_camera->Attribute("max_bounces")), std::stod(xml_camera->Attribute("gammaind")));
     }
     else if (type == "cam_aperture"){
+        const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "focal_length", "aperture"};
+        require_attributes(xml_camera, attributes, 11);
         double fov[2];
         unsigned int subpix[2];
         get_xy(xml_camera->Attribute("fov"), fov);
@@ -1692,6 +1696,8 @@ Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, 
                             std::stod(xml_camera->Attribute("aperture")), std::stod(xml_camera->Attribute("gammaind")));
     }
     else if (type == "cam_motionblur"){
+        const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "time"};
+        require_attributes(xml_camera, attributes, 10);
         double fov[2];
         unsigned int subpix[2];
         double time[2];
@@ -1704,6 +1710,8 @@ Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, 
                             get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), std::stoi(xml_camera->Attribute("max_bounces")), time, std::stod(xml_camera->Attribute("gammaind")));
     }
     else if (type == "cam_motionblur_aperture"){
+        const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "focal_length", "aperture", "time"};
+        require_attributes(xml_camera, attributes, 12);
         double fov[2];
         unsigned int subpix[2];
         double time[2];
@@ -1717,6 +1725,8 @@ Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, 
                             std::stod(xml_camera->Attribute("aperture")), time, std::stod(xml_camera->Attribute("gammaind")));
     }
     else if (type == "isocam"){
+        const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind"};
+        require_attributes(xml_camera, attributes, 9);
         double fov[2];
         unsigned int subpix[2];
         get_xy(xml_camera->Attribute("fov"), fov);
@@ -1727,6 +1737,8 @@ Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, 
                             get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), std::stoi(xml_camera->Attribute("max_bounces")), std::stod(xml_camera->Attribute("gammaind")));
     }
     else if (type == "isocam_aperture"){
+        const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "focal_length", "aperture"};
+        require_attributes(xml_camera, attributes, 11);
         double fov[2];
         unsigned int subpix[2];
         get_xy(xml_camera->Attribute("fov"), fov);
@@ -1738,6 +1750,8 @@ Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, 
                             std::stod(xml_camera->Attribute("aperture")), std::stod(xml_camera->Attribute("gammaind")));
     }
     else if (type == "isocam_motionblur"){
+        const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "time"};
+        require_attributes(xml_camera, attributes, 10);
         double fov[2];
         unsigned int subpix[2];
         double time[2];
@@ -1750,6 +1764,8 @@ Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, 
                             get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), std::stoi(xml_camera->Attribute("max_bounces")), time, std::stod(xml_camera->Attribute("gammaind")));
     }
     else if (type == "isocam_motionblur_aperture"){
+        const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "focal_length", "aperture", "time"};
+        require_attributes(xml_camera, attributes, 12);
         double fov[2];
         unsigned int subpix[2];
         double time[2];
@@ -1763,6 +1779,8 @@ Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, 
                             std::stod(xml_camera->Attribute("aperture")), time, std::stod(xml_camera->Attribute("gammaind")));
     }
     else if (type == "reccam"){
+        const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind"};
+        require_attributes(xml_camera, attributes, 9);
         double fov[2];
         unsigned int subpix[2];
         get_xy(xml_camera->Attribute("fov"), fov);
@@ -1773,6 +1791,8 @@ Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, 
                             get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), std::stoi(xml_camera->Attribute("max_bounces")), std::stod(xml_camera->Attribute("gammaind")));
     }
     else if (type == "reccam_aperture"){
+        const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "focal_length", "aperture"};
+        require_attributes(xml_camera, attributes, 11);
         double fov[2];
         unsigned int subpix[2];
         get_xy(xml_camera->Attribute("fov"), fov);
@@ -1784,6 +1804,8 @@ Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, 
                             std::stod(xml_camera->Attribute("aperture")), std::stod(xml_camera->Attribute("gammaind")));
     }
     else if (type == "reccam_motionblur"){
+        const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "time"};
+        require_attributes(xml_camera, attributes, 10);
         double fov[2];
         unsigned int subpix[2];
         double time[2];
@@ -1796,6 +1818,8 @@ Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, 
                             get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), std::stoi(xml_camera->Attribute("max_bounces")), time, std::stod(xml_camera->Attribute("gammaind")));
     }
     else if (type == "reccam_motionblur_aperture"){
+        const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "focal_length", "aperture", "time"};
+        require_attributes(xml_camera, attributes, 12);
         double fov[2];
         unsigned int subpix[2];
         double time[2];
@@ -1809,6 +1833,8 @@ Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, 
                             std::stod(xml_camera->Attribute("aperture")), time, std::stod(xml_camera->Attribute("gammaind")));
     }
     else if (type == "cam_3d"){
+        const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "imgbuffer_L", "imgbuffer_R", "eye_dist", "medium_list", "skybox", "max_bounces", "gammaind"};
+        require_attributes(xml_camera, attributes, 12);
         double fov[2];
         unsigned int subpix[2];
         get_xy(xml_camera->Attribute("fov"), fov);
@@ -1821,6 +1847,8 @@ Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, 
                             std::stoi(xml_camera->Attribute("max_bounces")), std::stod(xml_camera->Attribute("focal_length")), std::stod(xml_camera->Attribute("gammaind")));
     }
     else if (type == "cam_3d_aperture"){
+        const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "imgbuffer_L", "imgbuffer_R", "eye_dist", "medium_list", "skybox", "max_bounces", "gammaind", "focal_length", "aperture"};
+        require_attributes(xml_camera, attributes, 14);
         double fov[2];
         unsigned int subpix[2];
         get_xy(xml_camera->Attribute("fov"), fov);
@@ -1834,6 +1862,8 @@ Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, 
                             std::stod(xml_camera->Attribute("gammaind")));
     }
     else if (type == "cam_3d_motionblur"){
+        const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "imgbuffer_L", "imgbuffer_R", "eye_dist", "medium_list", "skybox", "max_bounces", "gammaind", "time"};
+        require_attributes(xml_camera, attributes, 13);
         double fov[2];
         unsigned int subpix[2];
         double time[2];
@@ -1848,6 +1878,8 @@ Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, 
                             std::stoi(xml_camera->Attribute("max_bounces")), std::stod(xml_camera->Attribute("focal_length")), time, std::stod(xml_camera->Attribute("gammaind")));
     }
     else if (type == "cam_3d_motionblur_aperture"){
+        const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "imgbuffer_L", "imgbuffer_R", "eye_dist", "medium_list", "skybox", "max_bounces", "gammaind", "focal_length", "aperture", "time"};
+        require_attributes(xml_camera, attributes, 15);
         double fov[2];
         unsigned int subpix[2];
         double time[2];
