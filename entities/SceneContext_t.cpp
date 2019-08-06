@@ -1384,6 +1384,8 @@ MeshGeometry_t* SceneContext_t::create_mesh_geometry(const tinyxml2::XMLElement*
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
     if (type == "mesh_geometry"){
+        const char* attributes[] = {"filename"};
+        require_attributes(xml_mesh_geometry, attributes, 1);
         std::string filename = xml_mesh_geometry->Attribute("filename");
         for (unsigned int i = 0; i < filename.size(); i++){
             #ifdef _WIN32
@@ -1418,6 +1420,8 @@ Shape_t* SceneContext_t::create_object(const tinyxml2::XMLElement* xml_object, M
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
     if (type == "mesh"){
+        const char* attributes[] = {"material", "transform_matrix", "mesh_geometry"};
+        require_attributes(xml_object, attributes, 3);
         unsigned int material_index = get_material_index(xml_object->Attribute("material"), xml_materials);
         if (material_aggregates_[material_index] != nullptr){
             mesh = new Mesh_t(material_aggregates_[material_index], get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries));
@@ -1429,6 +1433,8 @@ Shape_t* SceneContext_t::create_object(const tinyxml2::XMLElement* xml_object, M
         }
     }
     else if (type == "mesh_motionblur"){
+        const char* attributes[] = {"material", "transform_matrix", "mesh_geometry"};
+        require_attributes(xml_object, attributes, 3);
         unsigned int material_index = get_material_index(xml_object->Attribute("material"), xml_materials);
         if (material_aggregates_[material_index] != nullptr){
             mesh = new MeshMotionblur_t(material_aggregates_[material_index], get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries));
@@ -1440,12 +1446,18 @@ Shape_t* SceneContext_t::create_object(const tinyxml2::XMLElement* xml_object, M
         }
     }
     else if (type == "sphere"){
+        const char* attributes[] = {"material", "transform_matrix"};
+        require_attributes(xml_object, attributes, 2);
         return new Sphere_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices));
     }
     else if (type == "sphere_motionblur"){
+        const char* attributes[] = {"material", "transform_matrix"};
+        require_attributes(xml_object, attributes, 2);
         return new SphereMotionblur_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices));
     }
     else if (type == "triangle"){
+        const char* attributes[] = {"material", "transform_matrix", "points", "normals", "texture_coordinates"};
+        require_attributes(xml_object, attributes, 5);
         Vec3f* points = get_points(xml_object->Attribute("points"));
         Vec3f* normals = get_points(xml_object->Attribute("normals"));
         double** texture_coordinates = get_texture_coordinates(xml_object->Attribute("texture_coordinates"));
@@ -1468,6 +1480,8 @@ Shape_t* SceneContext_t::create_object(const tinyxml2::XMLElement* xml_object, M
         return triangle;
     }
     else if (type == "triangle_motionblur"){
+        const char* attributes[] = {"material", "transform_matrix", "points", "normals", "texture_coordinates"};
+        require_attributes(xml_object, attributes, 5);
         Vec3f* points = get_points(xml_object->Attribute("points"));
         Vec3f* normals = get_points(xml_object->Attribute("normals"));
         double** texture_coordinates = get_texture_coordinates(xml_object->Attribute("texture_coordinates"));
@@ -1490,9 +1504,13 @@ Shape_t* SceneContext_t::create_object(const tinyxml2::XMLElement* xml_object, M
         return triangle;
     }
     else if (type == "triangle_mesh"){
+        const char* attributes[] = {"material", "transform_matrix", "mesh_geometry", "index"};
+        require_attributes(xml_object, attributes, 4);
         return new TriangleMesh_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries), std::stoi(xml_object->Attribute("index")));
     }
     else if (type == "triangle_mesh_motionblur"){
+        const char* attributes[] = {"material", "transform_matrix", "mesh_geometry", "index"};
+        require_attributes(xml_object, attributes, 4);
         return new TriangleMeshMotionblur_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries), std::stoi(xml_object->Attribute("index")));
     }
     else{
