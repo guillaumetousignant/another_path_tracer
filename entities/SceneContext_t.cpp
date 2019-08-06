@@ -1278,10 +1278,14 @@ Material_t* SceneContext_t::create_material(const tinyxml2::XMLElement* xml_mate
                                 std::stod(xml_material->Attribute("roughness")));
     }
     else if (type == "fresnelmix"){
+        const char* attributes[] = {"material_refracted", "material_reflected", "ind"};
+        require_attributes(xml_material, attributes, 3);
         materials_mix_list = get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials);
         return new FresnelMix_t(nullptr, nullptr, std::stod(xml_material->Attribute("ind")));
     }
     else if (type == "fresnelmix_in"){
+        const char* attributes[] = {"material_refracted", "material_reflected", "ind"};
+        require_attributes(xml_material, attributes, 3);
         materials_mix_list = get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials);
         return new FresnelMixIn_t(nullptr, nullptr, std::stod(xml_material->Attribute("ind")));
     }
@@ -1289,6 +1293,8 @@ Material_t* SceneContext_t::create_material(const tinyxml2::XMLElement* xml_mate
         return new NormalMaterial_t();
     }
     else if (type == "portal"){
+        const char* attributes[] = {"medium_list", "transform_matrix"};
+        require_attributes(xml_material, attributes, 2);
         materials_medium_list = get_medium_index_list(xml_material->Attribute("medium_list"), xml_materials);
         return new Portal_t(get_transform_matrix(xml_material->Attribute("transform_matrix"), xml_transform_matrices), std::list<Medium_t*>());
     }
@@ -1297,21 +1303,31 @@ Material_t* SceneContext_t::create_material(const tinyxml2::XMLElement* xml_mate
         return new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.5, 0.5, 0.5), 1.0);
     }
     else if (type == "randommix"){
+        const char* attributes[] = {"material_refracted", "material_reflected", "ratio"};
+        require_attributes(xml_material, attributes, 3);
         materials_mix_list = get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials);
         return new RandomMix_t(nullptr, nullptr, std::stod(xml_material->Attribute("ratio")));
     }
     else if (type == "randommix_in"){
+        const char* attributes[] = {"material_refracted", "material_reflected", "ratio"};
+        require_attributes(xml_material, attributes, 3);
         materials_mix_list = get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials);
         return new RandomMixIn_t(nullptr, nullptr, std::stod(xml_material->Attribute("ratio")));
     }
     else if (type == "reflective"){
+        const char* attributes[] = {"emission", "colour"};
+        require_attributes(xml_material, attributes, 2);
         return new Reflective_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")));
     }
     else if (type == "reflective_fuzz"){
+        const char* attributes[] = {"emission", "colour", "order", "diffusivity"};
+        require_attributes(xml_material, attributes, 4);
         return new ReflectiveFuzz_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), std::stod(xml_material->Attribute("order")), std::stod(xml_material->Attribute("diffusivity")));
     }
     else if (type == "reflective_fuzz_tex"){
-        return new ReflectiveFuzzTex_t(get_texture(xml_material->Attribute("texture"), xml_textures), get_colour(xml_material->Attribute("emission")), std::stod(xml_material->Attribute("order")), std::stod(xml_material->Attribute("diffusivity")));
+        const char* attributes[] = {"emission", "texture", "order", "diffusivity"};
+        require_attributes(xml_material, attributes, 4);
+        return new ReflectiveFuzzTex_t(get_colour(xml_material->Attribute("emission")), get_texture(xml_material->Attribute("texture"), xml_textures), std::stod(xml_material->Attribute("order")), std::stod(xml_material->Attribute("diffusivity")));
     }
     else if (type == "reflective_refractive"){
         return new ReflectiveRefractive_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), std::stod(xml_material->Attribute("ind")), std::stoi(xml_material->Attribute("priority")), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers));
