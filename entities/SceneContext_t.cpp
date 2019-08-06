@@ -485,13 +485,13 @@ void SceneContext_t::readXML(const std::string &filename){
         std::cout << "Mesh geometries created." << std::endl;
     }
 
-    // Shapes (6)
+    // Objects (6)
     if (xml_objects != nullptr){
         for (tinyxml2::XMLElement* xml_object = xml_objects->FirstChildElement("object"); xml_object; xml_object = xml_object->NextSiblingElement("object")){
-            objects_[index_objects_] = create_object(xml_object, xml_transform_matrices, xml_materials, xml_mesh_geometries);
+            objects_[index_objects_] = create_object(xml_object, meshes_[index_objects_], xml_transform_matrices, xml_materials, xml_mesh_geometries);
             ++index_objects_;
         }
-        std::cout << "Shapes created." << std::endl;
+        std::cout << "Objects created." << std::endl;
     }
 
     // Directional lights (7)
@@ -1359,7 +1359,7 @@ MeshGeometry_t* SceneContext_t::create_mesh_geometry(const tinyxml2::XMLElement*
     }
 }
 
-Shape_t* SceneContext_t::create_object(const tinyxml2::XMLElement* xml_object, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_mesh_geometries) {
+Shape_t* SceneContext_t::create_object(const tinyxml2::XMLElement* xml_object, MeshTop_t* &mesh, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_mesh_geometries) {
     std::string type;
     const char* type_char = xml_object->Attribute("type");
     if (type_char == nullptr) {
@@ -1374,19 +1374,23 @@ Shape_t* SceneContext_t::create_object(const tinyxml2::XMLElement* xml_object, c
     if (type == "mesh"){
         unsigned int material_index = get_material_index(xml_object->Attribute("material"), xml_materials);
         if (material_aggregates_[material_index] != nullptr){
-            return new Mesh_t(material_aggregates_[material_index], get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries));
+            mesh = new Mesh_t(material_aggregates_[material_index], get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries));
+            return nullptr;
         }
         else {
-            return new Mesh_t(materials_[material_index], get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries));
+            mesh = new Mesh_t(materials_[material_index], get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries));
+            return nullptr;
         }
     }
     else if (type == "mesh_motionblur"){
         unsigned int material_index = get_material_index(xml_object->Attribute("material"), xml_materials);
         if (material_aggregates_[material_index] != nullptr){
-            return new MeshMotionblur_t(material_aggregates_[material_index], get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries));
+            mesh = new MeshMotionblur_t(material_aggregates_[material_index], get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries));
+            return nullptr;
         }
         else {
-            return new MeshMotionblur_t(materials_[material_index], get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries));
+            mesh = new MeshMotionblur_t(materials_[material_index], get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries));
+            return nullptr;
         }
     }
     else if (type == "sphere"){
