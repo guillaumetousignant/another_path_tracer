@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<scene mesh_list="glace" name="glace" primitive_list="light1, light2, light3, light4, light5, light6, light7, light8">
+<scene name="glace" object_list="glace, light1, light2, light3, light4, light5, light6, light7, light8">
    <textures>
       <texture filename="assets\Ocean from horn.jpg" name="background" type="texture"/>
       <texture filename="assets\rink2.jpg" name="peinture" type="texture"/>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<scene name="refractions" primitive_list="planegrey1, planegrey2, point1, point2, point3, point4, point5">
+<scene name="refractions" object_list="planegrey1, planegrey2, point1, point2, point3, point4, point5">
    <textures>
       <texture filename="assets\Ocean from horn.jpg" name="background" type="texture"/>
    </textures>

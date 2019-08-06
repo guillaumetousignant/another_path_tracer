@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<scene name="dof" primitive_list="point2, point3, point4, point5, point6, planegrey1, planegrey2">
+<scene name="dof" object_list="point2, point3, point4, point5, point6, planegrey1, planegrey2">
    <scatterers>
       <scatterer name="air_absorber" type="nonabsorber"/>
    </scatterers>

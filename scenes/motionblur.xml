@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<scene name="motionblur" primitive_list="planegrey1, planegrey2, ball">
+<scene name="motionblur" object_list="planegrey1, planegrey2, ball">
    <scatterers>
       <scatterer name="air_absorber" type="nonabsorber"/>
    </scatterers>

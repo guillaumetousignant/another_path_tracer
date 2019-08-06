@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<scene name="room" primitive_list="wallfront, wallback, walltop, wallbottom, wallleft, wallright, goo">
+<scene name="room" object_list="wallfront, wallback, walltop, wallbottom, wallleft, wallright, goo">
    <scatterers>
       <scatterer name="air_absorber" type="nonabsorber"/>
       <scatterer absorption_distance="100" colour="white" emission="turquoise" emission_distance="5" name="goo_absorber" type="absorber"/>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<scene name="triangleblur" primitive_list="planegrey1, planegrey2, triangle1">
+<scene name="triangleblur" object_list="planegrey1, planegrey2, triangle1">
    <textures>
       <texture filename="assets\Ocean from horn.jpg" name="background" type="texture"/>
    </textures>

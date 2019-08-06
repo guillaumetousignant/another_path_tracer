@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<scene name="ghost" primitive_list="planegrey1, planegrey2, airsphere">
+<scene name="ghost" object_list="planegrey1, planegrey2, airsphere">
    <textures>
       <texture filename=".\assets\Ocean from horn.jpg" name="background" type="texture"/>
    </textures>

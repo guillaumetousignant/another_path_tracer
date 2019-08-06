@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<scene name="diffuse" primitive_list="sphere1, planegrey1, planegrey2">
+<scene name="diffuse" object_list="sphere1, planegrey1, planegrey2">
    <scatterers>
       <scatterer name="air_absorber" type="nonabsorber"/>
    </scatterers>

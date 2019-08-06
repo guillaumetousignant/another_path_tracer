@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<scene mesh_list="cube" name="acceleration" primitive_list="planegrey1, planegrey2">
+<scene name="acceleration" object_list="cube, planegrey1, planegrey2">
    <scatterers>
       <scatterer name="air_absorber" type="nonabsorber"/>
    </scatterers>

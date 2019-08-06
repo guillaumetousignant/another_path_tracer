@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<scene mesh_list="flyer" name="flyer" primitive_list="planegrey1, planegrey2">
+<scene name="flyer" object_list="flyer, planegrey1, planegrey2">
    <textures>
       <texture filename=".\assets\Ocean from horn.jpg" name="background" type="texture"/>
    </textures>

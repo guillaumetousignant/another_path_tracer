@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<scene name="overlap" primitive_list="1, 2, 3, 4">
+<scene name="overlap" object_list="1, 2, 3, 4">
    <scatterers>
       <scatterer absorption_distance="2" colour="red" emission="black" emission_distance="1000" name="red_absorber" type="absorber"/>
       <scatterer absorption_distance="2" colour="watercolour" emission="black" emission_distance="1000" name="blue_absorber" type="absorber"/>

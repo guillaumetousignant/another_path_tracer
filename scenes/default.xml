@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<scene name="default" primitive_list="spherepurple, mirror, light, sphereglass, ground">
+<scene name="default" object_list="spherepurple, mirror, light, sphereglass, ground">
    <scatterers>
       <scatterer name="air_absorber" type="nonabsorber"/>
       <scatterer absorption_distance="32" colour="turquoise" emission="black" emission_distance="100" name="glass_absorber" type="absorber"/>

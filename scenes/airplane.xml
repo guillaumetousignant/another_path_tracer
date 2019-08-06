@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<scene mesh_list="airplane" name="airplane">
+<scene object_list="airplane" name="airplane">
    <textures>
       <texture filename="./assets/A380/b737_800_2_T.tga" name="b737_800_2_T" type="texture"/>
       <texture filename="./assets/A380/a380_01.tga" name="a380_01" type="texture"/>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<scene mesh_list="tie" name="tie">
+<scene object_list="tie" name="tie">
    <textures>
       <texture filename="assets\Ocean from horn.jpg" name="background" type="texture"/>
    </textures>

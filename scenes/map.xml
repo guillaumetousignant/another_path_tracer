@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<scene name="map" primitive_list="ground, triangleearth1, triangleearth2">
+<scene name="map" object_list="ground, triangleearth1, triangleearth2">
    <textures>
       <texture filename="assets\earth_2048.png" name="earth_texture" type="texture"/>
    </textures>

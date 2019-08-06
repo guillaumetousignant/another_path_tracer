@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<scene mesh_list="zombie" name="zombie teapot" primitive_list="planegrey1, planegrey2, light">
+<scene name="zombie teapot" object_list="zombie, planegrey1, planegrey2, light">
    <textures>
       <texture filename=".\assets\Zombie beast_texture5.jpg" name="zombie_texture" type="texture"/>
    </textures>

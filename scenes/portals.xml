@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<scene name="portals" primitive_list="portal1, portal2, planegrey1, planegrey2">
+<scene name="portals" object_list="portal1, portal2, planegrey1, planegrey2">
    <textures>
       <texture filename="assets\Ocean from horn.jpg" name="background" type="texture"/>
    </textures>

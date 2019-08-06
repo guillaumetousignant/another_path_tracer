@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<scene name="default_fuzz" primitive_list="spherepurple, mirror_fuzz, light, sphereglass_fuzz, ground">
+<scene name="default_fuzz" object_list="spherepurple, mirror_fuzz, light, sphereglass_fuzz, ground">
    <scatterers>
       <scatterer name="air_absorber" type="nonabsorber"/>
       <scatterer absorption_distance="32" colour="turquoise" emission="black" emission_distance="100" name="glass_absorber" type="absorber"/>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<scene mesh_list="cube" name="gem" primitive_list="planegrey1, planegrey2">
+<scene name="gem" object_list="cube, planegrey1, planegrey2">
    <textures>
       <texture filename=".\assets\Ocean from horn.jpg" name="background" type="texture"/>
    </textures>
