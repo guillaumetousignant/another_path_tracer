@@ -1615,9 +1615,13 @@ ImgBuffer_t* SceneContext_t::create_imgbuffer(const tinyxml2::XMLElement* xml_im
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
     if (type == "imgbuffer"){
+        const char* attributes[] = {"resx", "resy"};
+        require_attributes(xml_imgbuffer, attributes, 2);
         return new ImgBuffer_t(std::stod(xml_imgbuffer->Attribute("resx")), std::stod(xml_imgbuffer->Attribute("resy")));
     }
     else if (type == "imgbuffer_opengl"){
+        const char* attributes[] = {"resx", "resy"};
+        require_attributes(xml_imgbuffer, attributes, 2);
         use_gl_ = true; 
         opengl_imgbuffer_ = new ImgBufferOpenGL_t(std::stod(xml_imgbuffer->Attribute("resx")), std::stod(xml_imgbuffer->Attribute("resy")));
         return opengl_imgbuffer_;
