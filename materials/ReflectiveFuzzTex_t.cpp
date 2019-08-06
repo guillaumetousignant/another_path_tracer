@@ -7,8 +7,8 @@
 #define EPSILON 0.00000001
 #define PI 3.141592653589793238463
 
-ReflectiveFuzzTex_t::ReflectiveFuzzTex_t(Texture_t* texture, const Vec3f &colour, double order, double diffusivity)
-    : texture_(texture), colour_(colour), order_(order), diffusivity_(diffusivity), unif_(0, 1) {}
+ReflectiveFuzzTex_t::ReflectiveFuzzTex_t(const Vec3f &emission, Texture_t* texture, double order, double diffusivity)
+    : texture_(texture), emission_(emission), order_(order), diffusivity_(diffusivity), unif_(0, 1) {}
 
 ReflectiveFuzzTex_t::~ReflectiveFuzzTex_t(){}
 
@@ -39,6 +39,6 @@ void ReflectiveFuzzTex_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, 
     ray.origin_ += ray.direction_ * ray.dist_ + normal * EPSILON;
     ray.direction_ = ray.direction_ - normal_fuzz * 2.0 * ray.direction_.dot(normal_fuzz);
 
-    ray.colour_ += ray.mask_ * texture_->get(tuv);
-    ray.mask_ *= colour_;
+    ray.colour_ += ray.mask_ * emission_;
+    ray.mask_ *= texture_->get(tuv);
 }
