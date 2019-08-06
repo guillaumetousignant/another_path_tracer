@@ -119,8 +119,8 @@ void SceneContext_t::readXML(const std::string &filename){
     tinyxml2::XMLElement* xml_top = xml_scene.FirstChildElement();
     const char* temp_name = xml_top->Attribute("name");
     if (temp_name == nullptr) {
-        std::cout << "Scene name not found. XML scene should have a 'name' attribute. Using 'nullptr'." << std::endl;
-        scene_name_ = "nullptr";
+        std::cout << "Scene name not found. XML scene should have a 'name' attribute. Using 'null'." << std::endl;
+        scene_name_ = "null";
     }
     else {
         scene_name_ = temp_name;
