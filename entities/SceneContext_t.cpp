@@ -1175,6 +1175,8 @@ Texture_t* SceneContext_t::create_texture(const tinyxml2::XMLElement* xml_textur
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
     if (type == "texture"){
+        std::string attributes[] = {"filename"};
+        require_attributes(xml_texture, attributes, 1);
         std::string filename = xml_texture->Attribute("filename");
         for (unsigned int i = 0; i < filename.size(); i++){
             #ifdef _WIN32
