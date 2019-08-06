@@ -1914,18 +1914,14 @@ TransformMatrix_t* SceneContext_t::get_transform_matrix(std::string transform_ma
         if (xml_transform_matrices != nullptr){
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_transform_matrix = xml_transform_matrices->FirstChildElement("transform_matrix"); xml_transform_matrix; xml_transform_matrix = xml_transform_matrix->NextSiblingElement("transform_matrix")){
-                std::string name_transform_matrix;
                 const char* transform_matrix_char = xml_transform_matrix->Attribute("name");
-                if (transform_matrix_char == nullptr){
-                    name_transform_matrix = "";
-                }
-                else{
-                    name_transform_matrix = transform_matrix_char;
-                }
-                std::transform(name_transform_matrix.begin(), name_transform_matrix.end(), name_transform_matrix.begin(), ::tolower);
-                if (name_transform_matrix == transform_matrix){
-                    return transform_matrices_[index];
-                }
+                if (transform_matrix_char != nullptr){
+                    std::string name_transform_matrix = transform_matrix_char;
+                    std::transform(name_transform_matrix.begin(), name_transform_matrix.end(), name_transform_matrix.begin(), ::tolower);
+                    if (name_transform_matrix == transform_matrix){
+                        return transform_matrices_[index];
+                    }
+                }                
                 ++index;
             }
         }
@@ -1950,19 +1946,15 @@ std::list<unsigned int>* SceneContext_t::get_medium_index_list(std::string strin
             if (xml_materials != nullptr){
                 unsigned int index = 0;
                 for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
-                    std::string name_material;
                     const char* material_char = xml_material->Attribute("name");
-                    if (material_char == nullptr){
-                        name_material = "";
-                    }
-                    else{
-                        name_material = material_char;
-                    }
-                    std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
-                    if (name_material == token){
-                        medium_list->push_back(index);
-                        break;
-                    }
+                    if (material_char != nullptr){
+                        std::string name_material = material_char;
+                        std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
+                        if (name_material == token){
+                            medium_list->push_back(index);
+                            break;
+                        }
+                    }                    
                     ++index;
                 }
             }
@@ -1980,17 +1972,14 @@ std::list<unsigned int>* SceneContext_t::get_medium_index_list(std::string strin
             for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
                 std::string name_material;
                 const char* material_char = xml_material->Attribute("name");
-                if (material_char == nullptr){
-                    name_material = "";
-                }
-                else{
-                    name_material = material_char;
-                }
-                std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
-                if (name_material == string_medium_list){
-                    medium_list->push_back(index);
-                    break;
-                }
+                if (material_char != nullptr){
+                    std::string name_material = material_char;
+                    std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
+                    if (name_material == string_medium_list){
+                        medium_list->push_back(index);
+                        break;
+                    }
+                }                
                 ++index;
             }
         }
@@ -2019,23 +2008,19 @@ std::list<Medium_t*> SceneContext_t::get_medium_list(std::string string_medium_l
             if (xml_materials != nullptr){
                 unsigned int index = 0;
                 for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
-                    std::string name_material;
                     const char* material_char = xml_material->Attribute("name");
-                    if (material_char == nullptr){
-                        name_material = "";
-                    }
-                    else{
-                        name_material = material_char;
-                    }
-                    std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
-                    if (name_material == token){
-                        Medium_t* medium = dynamic_cast<Medium_t*>(materials_[index]);
-                        if (medium == nullptr){
-                            std::cout << "Error: material '" << token << "' is in a medium list, but it is not convertible to one. Exiting." << std::endl;
-                            exit(495);
+                    if (material_char != nullptr){
+                        std::string name_material = material_char;
+                        std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
+                        if (name_material == token){
+                            Medium_t* medium = dynamic_cast<Medium_t*>(materials_[index]);
+                            if (medium == nullptr){
+                                std::cout << "Error: material '" << token << "' is in a medium list, but it is not convertible to one. Exiting." << std::endl;
+                                exit(495);
+                            }
+                            medium_list.push_back(medium);
+                            break;
                         }
-                        medium_list.push_back(medium);
-                        break;
                     }
                     ++index;
                 }
@@ -2057,23 +2042,19 @@ std::list<Medium_t*> SceneContext_t::get_medium_list(std::string string_medium_l
         if (xml_materials != nullptr){
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
-                std::string name_material;
                 const char* material_char = xml_material->Attribute("name");
-                if (material_char == nullptr){
-                    name_material = "";
-                }
-                else{
-                    name_material = material_char;
-                }
-                std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
-                if (name_material == string_medium_list){
-                    Medium_t* medium = dynamic_cast<Medium_t*>(materials_[index]);
-                    if (medium == nullptr){
-                        std::cout << "Error: material '" << token << "' is in a medium list, but it is not convertible to one. Exiting." << std::endl;
-                        exit(495);
+                if (material_char != nullptr){
+                    std::string name_material = material_char;
+                    std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
+                    if (name_material == string_medium_list){
+                        Medium_t* medium = dynamic_cast<Medium_t*>(materials_[index]);
+                        if (medium == nullptr){
+                            std::cout << "Error: material '" << token << "' is in a medium list, but it is not convertible to one. Exiting." << std::endl;
+                            exit(495);
+                        }
+                        medium_list.push_back(medium);
+                        break;
                     }
-                    medium_list.push_back(medium);
-                    break;
                 }
                 ++index;
             }
@@ -2093,15 +2074,12 @@ Texture_t* SceneContext_t::get_texture(std::string texture, const tinyxml2::XMLE
             for (const tinyxml2::XMLElement* xml_texture = xml_textures->FirstChildElement("texture"); xml_texture; xml_texture = xml_texture->NextSiblingElement("texture")){
                 std::string name_texture;
                 const char* name_char = xml_texture->Attribute("name");
-                if (name_char == nullptr){
-                    name_texture = "";
-                }
-                else{
-                    name_texture = name_char;
-                }
-                std::transform(name_texture.begin(), name_texture.end(), name_texture.begin(), ::tolower);
-                if (name_texture == texture){
-                    return textures_[index];
+                if (name_char != nullptr){
+                    std::string name_texture = name_char;
+                    std::transform(name_texture.begin(), name_texture.end(), name_texture.begin(), ::tolower);
+                    if (name_texture == texture){
+                        return textures_[index];
+                    }
                 }
                 ++index;
             }
@@ -2123,20 +2101,16 @@ unsigned int* SceneContext_t::get_material_mix(std::string material_refracted, s
             bool material_missing = true;
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
-                std::string name_material;
                 const char* name_char = xml_material->Attribute("name");
-                if (name_char == nullptr){
-                    name_material = "";
-                }
-                else{
-                    name_material = name_char;
-                }
-                std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
-                if (material_refracted == name_material){
-                    output_materials[0] = index;
-                    material_missing = false;
-                    break;
-                }
+                if (name_char != nullptr){
+                    std::string name_material = name_char;
+                    std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
+                    if (material_refracted == name_material){
+                        output_materials[0] = index;
+                        material_missing = false;
+                        break;
+                    }
+                }                
                 ++index;
             }
             if (material_missing){
@@ -2159,19 +2133,15 @@ unsigned int* SceneContext_t::get_material_mix(std::string material_refracted, s
             bool material_missing = true;
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
-                std::string name_material;
                 const char* name_char = xml_material->Attribute("name");
-                if (name_char == nullptr){
-                    name_material = "";
-                }
-                else{
-                    name_material = name_char;
-                }
-                std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
-                if (material_reflected == name_material){
-                    output_materials[1] = index;
-                    material_missing = false;
-                    break;
+                if (name_char != nullptr){
+                    std::string name_material = name_char;
+                    std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
+                    if (material_reflected == name_material){
+                        output_materials[1] = index;
+                        material_missing = false;
+                        break;
+                    }
                 }
                 ++index;
             }
