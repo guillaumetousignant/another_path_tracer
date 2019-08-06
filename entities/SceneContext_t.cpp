@@ -1330,18 +1330,28 @@ Material_t* SceneContext_t::create_material(const tinyxml2::XMLElement* xml_mate
         return new ReflectiveFuzzTex_t(get_colour(xml_material->Attribute("emission")), get_texture(xml_material->Attribute("texture"), xml_textures), std::stod(xml_material->Attribute("order")), std::stod(xml_material->Attribute("diffusivity")));
     }
     else if (type == "reflective_refractive"){
+        const char* attributes[] = {"emission", "colour", "ind", "priority", "scattering_fn"};
+        require_attributes(xml_material, attributes, 5);
         return new ReflectiveRefractive_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), std::stod(xml_material->Attribute("ind")), std::stoi(xml_material->Attribute("priority")), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers));
     }
     else if (type == "reflective_refractive_fuzz"){
+        const char* attributes[] = {"emission", "colour", "ind", "priority", "scattering_fn", "order", "diffusivity"};
+        require_attributes(xml_material, attributes, 7);
         return new ReflectiveRefractiveFuzz_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), std::stod(xml_material->Attribute("ind")), std::stoi(xml_material->Attribute("priority")), std::stod(xml_material->Attribute("order")), std::stod(xml_material->Attribute("diffusivity")), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers));
     }
     else if (type == "refractive"){
+        const char* attributes[] = {"emission", "colour", "ind", "priority", "scattering_fn"};
+        require_attributes(xml_material, attributes, 5);
         return new Refractive_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), std::stod(xml_material->Attribute("ind")), std::stoi(xml_material->Attribute("priority")), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers));
     }
     else if (type == "refractive_fuzz"){
+        const char* attributes[] = {"emission", "colour", "ind", "priority", "scattering_fn", "order", "diffusivity"};
+        require_attributes(xml_material, attributes, 7);
         return new RefractiveFuzz_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), std::stod(xml_material->Attribute("ind")), std::stoi(xml_material->Attribute("priority")), std::stod(xml_material->Attribute("order")), std::stod(xml_material->Attribute("diffusivity")), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers));
     }
     else if (type == "transparent"){
+        const char* attributes[] = {"priority", "scattering_fn"};
+        require_attributes(xml_material, attributes, 2);
         return new Transparent_t(std::stoi(xml_material->Attribute("priority")), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers));
     }
     else if (type == "toon"){
@@ -1349,6 +1359,8 @@ Material_t* SceneContext_t::create_material(const tinyxml2::XMLElement* xml_mate
         return new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.5, 0.5, 0.5), 1.0);
     }
     else if (type == "aggregate"){
+        const char* attributes[] = {"materials_list", "materials_names"};
+        require_attributes(xml_material, attributes, 2);
         materials_aggregate_list = new std::tuple<std::list<unsigned int>*, std::list<std::string>*>(get_medium_index_list(xml_material->Attribute("materials_list"), xml_materials), get_medium_names(xml_material->Attribute("materials_names")));
         return nullptr;
         // CHECK add aggregates
