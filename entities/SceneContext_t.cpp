@@ -91,7 +91,7 @@ SceneContext_t::SceneContext_t() :
     index_imgbuffers_(0), index_cameras_(0), transform_matrices_(nullptr), textures_(nullptr), 
     scatterers_(nullptr), materials_(nullptr), mesh_geometries_(nullptr), objects_(nullptr), 
     directional_lights_(nullptr), skyboxes_(nullptr), imgbuffers_(nullptr), cameras_(nullptr), 
-    material_aggregates_(nullptr) 
+    material_aggregates_(nullptr), meshes_(nullptr) 
     {}
 
 SceneContext_t::~SceneContext_t() {
@@ -300,6 +300,7 @@ void SceneContext_t::readXML(const std::string &filename){
     }
     if (n_objects_){
         objects_ = new Shape_t*[n_objects_];
+        meshes_ = new MeshTop_t*[n_objects_];
     }
     if (n_directional_lights_){
         directional_lights_ = new DirectionalLight_t*[n_directional_lights_];
@@ -620,25 +621,19 @@ void SceneContext_t::readXML(const std::string &filename){
     std::cout << "Scene created." << std::endl;
     
     if (primitive_list != nullptr){
-        Shape_t** objects = nullptr;
-        unsigned int n = 0;
-        get_shapes(primitive_list, objects, n, xml_objects);
-
-        scene_->add(objects, n);
-
-        delete [] objects;
-        std::cout << "Shapes added." << std::endl;
-    }
-
-    if (mesh_list != nullptr){
+        Shape_t** shapes = nullptr;
         MeshTop_t** meshes = nullptr;
-        unsigned int n = 0;
-        get_meshes(mesh_list, meshes, n, xml_objects);
+        unsigned int n_shapes = 0;
+        unsigned int n_meshes = 0;
 
-        scene_->add(meshes, n);
+        get_objects(primitive_list, shapes, n_shapes, meshes, n_meshes, xml_objects);
 
+        scene_->add(shapes, n_shapes);
+        scene_->add(meshes, n_meshes);
+
+        delete [] shapes;
         delete [] meshes;
-        std::cout << "Meshes added." << std::endl;
+        std::cout << "Primitives added." << std::endl;
     }
 
     // Update
@@ -1042,9 +1037,14 @@ void SceneContext_t::reset(){
             if (objects_[i] != nullptr){
                 delete objects_[i];
             }
+            if (meshes_[i] != nullptr){
+                delete meshes_[i];
+            }
         }
         delete [] objects_;
+        delete [] meshes_;
         objects_ = nullptr;
+        meshes_ = nullptr;
     }
     n_objects_ = 0;
 
@@ -2320,17 +2320,19 @@ Skybox_t* SceneContext_t::get_skybox(std::string skybox, const tinyxml2::XMLElem
     exit(81); 
 }
 
-void SceneContext_t::get_shapes(std::string objects_string, Shape_t** &objects, unsigned int &n, const tinyxml2::XMLElement* xml_objects) const {
-    std::list<Shape_t*> objects_list = std::list<Shape_t*>();
+void SceneContext_t::get_objects(std::string objects_string, Shape_t** &shapes, unsigned int &n_shapes, MeshTop_t** &meshes, unsigned int &n_meshes, const tinyxml2::XMLElement* xml_objects) const {
+    std::list<unsigned int> objects_list = std::list<unsigned int>();
     std::string delimiter = ", ";
     size_t pos = 0;
     std::string token;
+    n_shapes = 0;
+    n_meshes = 0;
 
     while ((pos = objects_string.find(delimiter)) != std::string::npos) {
         token = objects_string.substr(0, pos);
 
         if (is_number(token)) {
-            objects_list.push_back(objects_[std::stoi(token) - 1]);
+            objects_list.push_back(std::stoi(token) - 1);
         }
         else {
             if (xml_objects != nullptr){
@@ -2346,7 +2348,7 @@ void SceneContext_t::get_shapes(std::string objects_string, Shape_t** &objects, 
                     }
                     std::transform(name_object.begin(), name_object.end(), name_object.begin(), ::tolower);
                     if (name_object == token){
-                        objects_list.push_back(objects_[index]);
+                        objects_list.push_back(index);
                         break;
                     }
                     ++index;
@@ -2358,7 +2360,7 @@ void SceneContext_t::get_shapes(std::string objects_string, Shape_t** &objects, 
         objects_string.erase(0, pos + delimiter.length());
     }
     if (is_number(objects_string)) {
-        objects_list.push_back(objects_[std::stoi(objects_string) - 1]);
+        objects_list.push_back(std::stoi(objects_string) - 1);
     }
     else {
         if (xml_objects != nullptr){
@@ -2374,7 +2376,7 @@ void SceneContext_t::get_shapes(std::string objects_string, Shape_t** &objects, 
                 }
                 std::transform(name_object.begin(), name_object.end(), name_object.begin(), ::tolower);
                 if (name_object == objects_string){
-                    objects_list.push_back(objects_[index]);
+                    objects_list.push_back(index);
                     break;
                 }
                 ++index;
@@ -2383,93 +2385,29 @@ void SceneContext_t::get_shapes(std::string objects_string, Shape_t** &objects, 
     }
 
     if (objects_list.size() > 0){
-        n = objects_list.size();
-        objects = new Shape_t*[n];
-        unsigned int index = 0;
+        for (auto it = objects_list.begin(); it != objects_list.end(); ++it){
+            if (objects_[*it] != nullptr){
+                ++n_shapes;
+            }
+            else {
+                ++n_meshes;
+            }
+        }
+
+        shapes = new Shape_t*[n_shapes];
+        meshes = new MeshTop_t*[n_meshes];
+        unsigned int index_shapes = 0;
+        unsigned int index_meshes = 0;
 
         for (auto it = objects_list.begin(); it != objects_list.end(); ++it){
-            objects[index] = *it;
-            ++index;
-        }
-    }
-}
-
-void SceneContext_t::get_meshes(std::string meshes_string, MeshTop_t** &meshes, unsigned int &n, const tinyxml2::XMLElement* xml_objects) const {
-    std::list<Shape_t*> objects_list = std::list<Shape_t*>();
-    std::string delimiter = ", ";
-    size_t pos = 0;
-    std::string token;
-
-    while ((pos = meshes_string.find(delimiter)) != std::string::npos) {
-        token = meshes_string.substr(0, pos);
-
-        if (is_number(token)) {
-            objects_list.push_back(objects_[std::stoi(token) - 1]);
-        }
-        else {
-            if (xml_objects != nullptr){
-                unsigned int index = 0;
-                for (const tinyxml2::XMLElement* xml_object = xml_objects->FirstChildElement("object"); xml_object; xml_object = xml_object->NextSiblingElement("object")){
-                    std::string name_object;
-                    const char* name_char = xml_object->Attribute("name");
-                    if (name_char == nullptr){
-                        name_object = "";
-                    }
-                    else{
-                        name_object = name_char;
-                    }
-                    std::transform(name_object.begin(), name_object.end(), name_object.begin(), ::tolower);
-                    if (name_object == token){
-                        objects_list.push_back(objects_[index]);
-                        break;
-                    }
-                    ++index;
-                }
+            if (objects_[*it] != nullptr){
+                shapes[index_shapes] = objects_[*it];
+                ++index_shapes;
             }
-        }
-        // CHECK this should check for errors.
-
-        meshes_string.erase(0, pos + delimiter.length());
-    }
-    if (is_number(meshes_string)) {
-        objects_list.push_back(objects_[std::stoi(meshes_string) - 1]);
-    }
-    else {
-        if (xml_objects != nullptr){
-            unsigned int index = 0;
-            for (const tinyxml2::XMLElement* xml_object = xml_objects->FirstChildElement("object"); xml_object; xml_object = xml_object->NextSiblingElement("object")){
-                std::string name_object;
-                const char* name_char = xml_object->Attribute("name");
-                if (name_char == nullptr){
-                    name_object = "";
-                }
-                else{
-                    name_object = name_char;
-                }
-                std::transform(name_object.begin(), name_object.end(), name_object.begin(), ::tolower);
-                if (name_object == meshes_string){
-                    objects_list.push_back(objects_[index]);
-                    break;
-                }
-                ++index;
+            else {
+                meshes[index_meshes] = meshes_[*it];
+                ++index_meshes;
             }
-        }
-    }
-
-    if (objects_list.size() > 0){
-        n = objects_list.size();
-        meshes = new MeshTop_t*[n];
-        unsigned int index = 0;
-
-        for (auto it = objects_list.begin(); it != objects_list.end(); ++it){
-            MeshTop_t* mesh = dynamic_cast<MeshTop_t*>(*it); // dynamic caaaast :(
-            if (mesh == nullptr){
-                std::cout << "Error: Mesh #" << index << " of scene was marked as a mesh but is not convertible to one. Exiting." << std::endl;
-                exit(691);
-            }
-
-            meshes[index] = mesh;
-            ++index;
         }
     }
 }
