@@ -1532,6 +1532,8 @@ DirectionalLight_t* SceneContext_t::create_directional_light(const tinyxml2::XML
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
     if (type == "directional_light"){
+        const char* attributes[] = {"colour", "transform_matrix"};
+        require_attributes(xml_directional_light, attributes, 2);
         return new DirectionalLight_t(get_colour(xml_directional_light->Attribute("colour")), get_transform_matrix(xml_directional_light->Attribute("transform_matrix"), xml_transform_matrices));
     }
     else{
