@@ -1231,7 +1231,7 @@ ScatteringFunction_t* SceneContext_t::create_scatterer(const tinyxml2::XMLElemen
         require_attributes(xml_scatterer, attributes, 7);
         return new ScattererExp_t(get_colour(xml_scatterer->Attribute("emission")), get_colour(xml_scatterer->Attribute("colour")),
                                 xml_scatterer->DoubleAttribute("emission_distance"), xml_scatterer->DoubleAttribute("absorption_distance"),
-                                xml_scatterer->DoubleAttribute("emission_distance"), xml_scatterer->DoubleAttribute("order"), 
+                                xml_scatterer->DoubleAttribute("scattering_distance"), xml_scatterer->DoubleAttribute("order"), 
                                 xml_scatterer->DoubleAttribute("scattering_angle"));
     }
     else if (type == "scatterer"){
@@ -1239,7 +1239,7 @@ ScatteringFunction_t* SceneContext_t::create_scatterer(const tinyxml2::XMLElemen
         require_attributes(xml_scatterer, attributes, 5);
         return new Scatterer_t(get_colour(xml_scatterer->Attribute("emission")), get_colour(xml_scatterer->Attribute("colour")),
                                 xml_scatterer->DoubleAttribute("emission_distance"), xml_scatterer->DoubleAttribute("absorption_distance"),
-                                xml_scatterer->DoubleAttribute("emission_distance"));
+                                xml_scatterer->DoubleAttribute("scattering_distance"));
     }
     else{
         std::cout << "Error, scatterer type '" << type << "' not implemented. Only 'absorber', 'nonabsorber', 'portal_scatterer', 'scatterer_exp', and 'scatterer' exists for now. Ignoring." << std::endl; 
