@@ -1214,7 +1214,7 @@ ScatteringFunction_t* SceneContext_t::create_scatterer(const tinyxml2::XMLElemen
         const char* attributes[] = {"emission", "colour", "emission_distance", "absorption_distance"};
         require_attributes(xml_scatterer, attributes, 4);
         return new Absorber_t(get_colour(xml_scatterer->Attribute("emission")), get_colour(xml_scatterer->Attribute("colour")), 
-                                std::stod(xml_scatterer->Attribute("emission_distance")), std::stod(xml_scatterer->Attribute("absorption_distance")));
+                                xml_scatterer->DoubleAttribute("emission_distance"), xml_scatterer->DoubleAttribute("absorption_distance"));
     }
     else if (type == "nonabsorber"){
         return new NonAbsorber_t();
@@ -1224,22 +1224,22 @@ ScatteringFunction_t* SceneContext_t::create_scatterer(const tinyxml2::XMLElemen
         const char* attributes[] = {"medium_list", "transform_matrix", "scattering_distance"};
         require_attributes(xml_scatterer, attributes, 3);
         scatterers_medium_list = get_medium_index_list(xml_scatterer->Attribute("medium_list"), xml_materials);
-        return new PortalScatterer_t(get_transform_matrix(xml_scatterer->Attribute("transform_matrix"), xml_transform_matrices), std::stod(xml_scatterer->Attribute("scattering_distance")), std::list<Medium_t*>());
+        return new PortalScatterer_t(get_transform_matrix(xml_scatterer->Attribute("transform_matrix"), xml_transform_matrices), xml_scatterer->DoubleAttribute("emission_distance"), std::list<Medium_t*>());
     }
     else if (type == "scatterer_exp"){
         const char* attributes[] = {"emission", "colour", "emission_distance", "absorption_distance", "scattering_distance", "order", "scattering_angle"};
         require_attributes(xml_scatterer, attributes, 7);
         return new ScattererExp_t(get_colour(xml_scatterer->Attribute("emission")), get_colour(xml_scatterer->Attribute("colour")),
-                                std::stod(xml_scatterer->Attribute("emission_distance")), std::stod(xml_scatterer->Attribute("absorption_distance")),
-                                std::stod(xml_scatterer->Attribute("scattering_distance")), std::stod(xml_scatterer->Attribute("order")), 
-                                std::stod(xml_scatterer->Attribute("scattering_angle")));
+                                xml_scatterer->DoubleAttribute("emission_distance"), xml_scatterer->DoubleAttribute("absorption_distance"),
+                                xml_scatterer->DoubleAttribute("emission_distance"), xml_scatterer->DoubleAttribute("order"), 
+                                xml_scatterer->DoubleAttribute("scattering_angle"));
     }
     else if (type == "scatterer"){
         const char* attributes[] = {"emission", "colour", "emission_distance", "absorption_distance", "scattering_distance"};
         require_attributes(xml_scatterer, attributes, 5);
         return new Scatterer_t(get_colour(xml_scatterer->Attribute("emission")), get_colour(xml_scatterer->Attribute("colour")),
-                                std::stod(xml_scatterer->Attribute("emission_distance")), std::stod(xml_scatterer->Attribute("absorption_distance")),
-                                std::stod(xml_scatterer->Attribute("scattering_distance")));
+                                xml_scatterer->DoubleAttribute("emission_distance"), xml_scatterer->DoubleAttribute("absorption_distance"),
+                                xml_scatterer->DoubleAttribute("emission_distance"));
     }
     else{
         std::cout << "Error, scatterer type '" << type << "' not implemented. Only 'absorber', 'nonabsorber', 'portal_scatterer', 'scatterer_exp', and 'scatterer' exists for now. Ignoring." << std::endl; 
@@ -1263,31 +1263,31 @@ Material_t* SceneContext_t::create_material(const tinyxml2::XMLElement* xml_mate
         const char* attributes[] = {"emission", "colour", "roughness"};
         require_attributes(xml_material, attributes, 3);
         return new Diffuse_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), 
-                                std::stod(xml_material->Attribute("roughness")));
+                                xml_material->DoubleAttribute("roughness"));
     }
     else if (type == "diffuse_full"){
         const char* attributes[] = {"emission_map", "texture", "roughness"};
         require_attributes(xml_material, attributes, 3);
         return new DiffuseFull_t(get_texture(xml_material->Attribute("emission_map"), xml_textures), get_texture(xml_material->Attribute("texture"), xml_textures), 
-                                std::stod(xml_material->Attribute("roughness")));
+                                xml_material->DoubleAttribute("roughness"));
     }
     else if (type == "diffuse_tex"){
         const char* attributes[] = {"emission", "texture", "roughness"};
         require_attributes(xml_material, attributes, 3);
         return new DiffuseTex_t(get_colour(xml_material->Attribute("emission")), get_texture(xml_material->Attribute("texture"), xml_textures), 
-                                std::stod(xml_material->Attribute("roughness")));
+                                xml_material->DoubleAttribute("roughness"));
     }
     else if (type == "fresnelmix"){
         const char* attributes[] = {"material_refracted", "material_reflected", "ind"};
         require_attributes(xml_material, attributes, 3);
         materials_mix_list = get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials);
-        return new FresnelMix_t(nullptr, nullptr, std::stod(xml_material->Attribute("ind")));
+        return new FresnelMix_t(nullptr, nullptr, xml_material->DoubleAttribute("ind"));
     }
     else if (type == "fresnelmix_in"){
         const char* attributes[] = {"material_refracted", "material_reflected", "ind"};
         require_attributes(xml_material, attributes, 3);
         materials_mix_list = get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials);
-        return new FresnelMixIn_t(nullptr, nullptr, std::stod(xml_material->Attribute("ind")));
+        return new FresnelMixIn_t(nullptr, nullptr, xml_material->DoubleAttribute("ind"));
     }
     else if (type == "normal_material"){
         return new NormalMaterial_t();
@@ -1306,13 +1306,13 @@ Material_t* SceneContext_t::create_material(const tinyxml2::XMLElement* xml_mate
         const char* attributes[] = {"material_refracted", "material_reflected", "ratio"};
         require_attributes(xml_material, attributes, 3);
         materials_mix_list = get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials);
-        return new RandomMix_t(nullptr, nullptr, std::stod(xml_material->Attribute("ratio")));
+        return new RandomMix_t(nullptr, nullptr, xml_material->DoubleAttribute("ratio"));
     }
     else if (type == "randommix_in"){
         const char* attributes[] = {"material_refracted", "material_reflected", "ratio"};
         require_attributes(xml_material, attributes, 3);
         materials_mix_list = get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials);
-        return new RandomMixIn_t(nullptr, nullptr, std::stod(xml_material->Attribute("ratio")));
+        return new RandomMixIn_t(nullptr, nullptr, xml_material->DoubleAttribute("ratio"));
     }
     else if (type == "reflective"){
         const char* attributes[] = {"emission", "colour"};
@@ -1322,37 +1322,37 @@ Material_t* SceneContext_t::create_material(const tinyxml2::XMLElement* xml_mate
     else if (type == "reflective_fuzz"){
         const char* attributes[] = {"emission", "colour", "order", "diffusivity"};
         require_attributes(xml_material, attributes, 4);
-        return new ReflectiveFuzz_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), std::stod(xml_material->Attribute("order")), std::stod(xml_material->Attribute("diffusivity")));
+        return new ReflectiveFuzz_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity"));
     }
     else if (type == "reflective_fuzz_tex"){
         const char* attributes[] = {"emission", "texture", "order", "diffusivity"};
         require_attributes(xml_material, attributes, 4);
-        return new ReflectiveFuzzTex_t(get_colour(xml_material->Attribute("emission")), get_texture(xml_material->Attribute("texture"), xml_textures), std::stod(xml_material->Attribute("order")), std::stod(xml_material->Attribute("diffusivity")));
+        return new ReflectiveFuzzTex_t(get_colour(xml_material->Attribute("emission")), get_texture(xml_material->Attribute("texture"), xml_textures), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity"));
     }
     else if (type == "reflective_refractive"){
         const char* attributes[] = {"emission", "colour", "ind", "priority", "scattering_fn"};
         require_attributes(xml_material, attributes, 5);
-        return new ReflectiveRefractive_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), std::stod(xml_material->Attribute("ind")), std::stoi(xml_material->Attribute("priority")), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers));
+        return new ReflectiveRefractive_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("ind"), xml_material->UnsignedAttribute("priority"), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers));
     }
     else if (type == "reflective_refractive_fuzz"){
         const char* attributes[] = {"emission", "colour", "ind", "priority", "scattering_fn", "order", "diffusivity"};
         require_attributes(xml_material, attributes, 7);
-        return new ReflectiveRefractiveFuzz_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), std::stod(xml_material->Attribute("ind")), std::stoi(xml_material->Attribute("priority")), std::stod(xml_material->Attribute("order")), std::stod(xml_material->Attribute("diffusivity")), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers));
+        return new ReflectiveRefractiveFuzz_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("ind"), xml_material->UnsignedAttribute("priority"), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity"), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers));
     }
     else if (type == "refractive"){
         const char* attributes[] = {"emission", "colour", "ind", "priority", "scattering_fn"};
         require_attributes(xml_material, attributes, 5);
-        return new Refractive_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), std::stod(xml_material->Attribute("ind")), std::stoi(xml_material->Attribute("priority")), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers));
+        return new Refractive_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("ind"), xml_material->UnsignedAttribute("priority"), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers));
     }
     else if (type == "refractive_fuzz"){
         const char* attributes[] = {"emission", "colour", "ind", "priority", "scattering_fn", "order", "diffusivity"};
         require_attributes(xml_material, attributes, 7);
-        return new RefractiveFuzz_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), std::stod(xml_material->Attribute("ind")), std::stoi(xml_material->Attribute("priority")), std::stod(xml_material->Attribute("order")), std::stod(xml_material->Attribute("diffusivity")), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers));
+        return new RefractiveFuzz_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("ind"), xml_material->UnsignedAttribute("priority"), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity"), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers));
     }
     else if (type == "transparent"){
         const char* attributes[] = {"priority", "scattering_fn"};
         require_attributes(xml_material, attributes, 2);
-        return new Transparent_t(std::stoi(xml_material->Attribute("priority")), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers));
+        return new Transparent_t(xml_material->UnsignedAttribute("priority"), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers));
     }
     else if (type == "toon"){
         std::cout << "Error, toon shader not implemented yet. Ignoring." << std::endl; 
@@ -1506,12 +1506,12 @@ Shape_t* SceneContext_t::create_object(const tinyxml2::XMLElement* xml_object, M
     else if (type == "triangle_mesh"){
         const char* attributes[] = {"material", "transform_matrix", "mesh_geometry", "index"};
         require_attributes(xml_object, attributes, 4);
-        return new TriangleMesh_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries), std::stoi(xml_object->Attribute("index")));
+        return new TriangleMesh_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries), xml_object->UnsignedAttribute("index"));
     }
     else if (type == "triangle_mesh_motionblur"){
         const char* attributes[] = {"material", "transform_matrix", "mesh_geometry", "index"};
         require_attributes(xml_object, attributes, 4);
-        return new TriangleMeshMotionblur_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries), std::stoi(xml_object->Attribute("index")));
+        return new TriangleMeshMotionblur_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries), xml_object->UnsignedAttribute("index"));
     }
     else{
         std::cout << "Error, object type '" << type << "' not implemented. Exiting." << std::endl; 
@@ -1582,7 +1582,7 @@ Skybox_t* SceneContext_t::create_skybox(const tinyxml2::XMLElement* xml_skybox, 
         require_attributes(xml_skybox, attributes, 4);
         double sun_pos[2];
         get_xy(xml_skybox->Attribute("light_position"), sun_pos);
-        return new SkyboxTextureSun_t(get_texture(xml_skybox->Attribute("texture"), xml_textures), sun_pos, get_colour(xml_skybox->Attribute("light_colour")), std::stod(xml_skybox->Attribute("light_radius")));
+        return new SkyboxTextureSun_t(get_texture(xml_skybox->Attribute("texture"), xml_textures), sun_pos, get_colour(xml_skybox->Attribute("light_colour")), xml_skybox->DoubleAttribute("light_radius"));
     }
     else if (type == "skybox_texture_transformation"){
         const char* attributes[] = {"texture", "transform_matrix"};
@@ -1594,7 +1594,7 @@ Skybox_t* SceneContext_t::create_skybox(const tinyxml2::XMLElement* xml_skybox, 
         require_attributes(xml_skybox, attributes, 5);
         double sun_pos[2];
         get_xy(xml_skybox->Attribute("light_position"), sun_pos);
-        return new SkyboxTextureTransformationSun_t(get_texture(xml_skybox->Attribute("texture"), xml_textures), get_transform_matrix(xml_skybox->Attribute("transform_matrix"), xml_transform_matrices), sun_pos, get_colour(xml_skybox->Attribute("light_colour")), std::stod(xml_skybox->Attribute("light_radius")));
+        return new SkyboxTextureTransformationSun_t(get_texture(xml_skybox->Attribute("texture"), xml_textures), get_transform_matrix(xml_skybox->Attribute("transform_matrix"), xml_transform_matrices), sun_pos, get_colour(xml_skybox->Attribute("light_colour")), xml_skybox->DoubleAttribute("light_radius"));
     }
     else{
         std::cout << "Error, skybox type '" << type << "' not implemented. Ignoring." << std::endl; 
@@ -1617,13 +1617,13 @@ ImgBuffer_t* SceneContext_t::create_imgbuffer(const tinyxml2::XMLElement* xml_im
     if (type == "imgbuffer"){
         const char* attributes[] = {"resx", "resy"};
         require_attributes(xml_imgbuffer, attributes, 2);
-        return new ImgBuffer_t(std::stod(xml_imgbuffer->Attribute("resx")), std::stod(xml_imgbuffer->Attribute("resy")));
+        return new ImgBuffer_t(xml_imgbuffer->UnsignedAttribute("resx"), xml_imgbuffer->UnsignedAttribute("resy"));
     }
     else if (type == "imgbuffer_opengl"){
         const char* attributes[] = {"resx", "resy"};
         require_attributes(xml_imgbuffer, attributes, 2);
         use_gl_ = true; 
-        opengl_imgbuffer_ = new ImgBufferOpenGL_t(std::stod(xml_imgbuffer->Attribute("resx")), std::stod(xml_imgbuffer->Attribute("resy")));
+        opengl_imgbuffer_ = new ImgBufferOpenGL_t(xml_imgbuffer->UnsignedAttribute("resx"), xml_imgbuffer->UnsignedAttribute("resy"));
         return opengl_imgbuffer_;
     }
     else{
@@ -1680,7 +1680,7 @@ Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, 
 
         return new Cam_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), 
                             fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), 
-                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), std::stoi(xml_camera->Attribute("max_bounces")), std::stod(xml_camera->Attribute("gammaind")));
+                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("gammaind"));
     }
     else if (type == "cam_aperture"){
         const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "focal_length", "aperture"};
@@ -1692,8 +1692,8 @@ Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, 
 
         return new CamAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), 
                             fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), 
-                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), std::stoi(xml_camera->Attribute("max_bounces")), std::stod(xml_camera->Attribute("focal_length")),
-                            std::stod(xml_camera->Attribute("aperture")), std::stod(xml_camera->Attribute("gammaind")));
+                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focal_length"),
+                            xml_camera->DoubleAttribute("aperture"), xml_camera->DoubleAttribute("gammaind"));
     }
     else if (type == "cam_motionblur"){
         const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "time"};
@@ -1707,7 +1707,7 @@ Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, 
         
         return new CamMotionblur_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), 
                             fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), 
-                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), std::stoi(xml_camera->Attribute("max_bounces")), time, std::stod(xml_camera->Attribute("gammaind")));
+                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), time, xml_camera->DoubleAttribute("gammaind"));
     }
     else if (type == "cam_motionblur_aperture"){
         const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "focal_length", "aperture", "time"};
@@ -1721,8 +1721,8 @@ Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, 
         
         return new CamMotionblurAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), 
                             fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), 
-                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), std::stoi(xml_camera->Attribute("max_bounces")), std::stod(xml_camera->Attribute("focal_length")),
-                            std::stod(xml_camera->Attribute("aperture")), time, std::stod(xml_camera->Attribute("gammaind")));
+                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focal_length"),
+                            xml_camera->DoubleAttribute("aperture"), time, xml_camera->DoubleAttribute("gammaind"));
     }
     else if (type == "isocam"){
         const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind"};
@@ -1734,7 +1734,7 @@ Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, 
 
         return new IsoCam_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), 
                             fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), 
-                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), std::stoi(xml_camera->Attribute("max_bounces")), std::stod(xml_camera->Attribute("gammaind")));
+                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("gammaind"));
     }
     else if (type == "isocam_aperture"){
         const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "focal_length", "aperture"};
@@ -1746,8 +1746,8 @@ Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, 
 
         return new IsoCamAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), 
                             fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), 
-                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), std::stoi(xml_camera->Attribute("max_bounces")), std::stod(xml_camera->Attribute("focal_length")),
-                            std::stod(xml_camera->Attribute("aperture")), std::stod(xml_camera->Attribute("gammaind")));
+                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focal_length"),
+                            xml_camera->DoubleAttribute("aperture"), xml_camera->DoubleAttribute("gammaind"));
     }
     else if (type == "isocam_motionblur"){
         const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "time"};
@@ -1761,7 +1761,7 @@ Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, 
         
         return new IsoCamMotionblur_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), 
                             fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), 
-                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), std::stoi(xml_camera->Attribute("max_bounces")), time, std::stod(xml_camera->Attribute("gammaind")));
+                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), time, xml_camera->DoubleAttribute("gammaind"));
     }
     else if (type == "isocam_motionblur_aperture"){
         const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "focal_length", "aperture", "time"};
@@ -1775,8 +1775,8 @@ Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, 
         
         return new IsoCamMotionblurAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), 
                             fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), 
-                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), std::stoi(xml_camera->Attribute("max_bounces")), std::stod(xml_camera->Attribute("focal_length")),
-                            std::stod(xml_camera->Attribute("aperture")), time, std::stod(xml_camera->Attribute("gammaind")));
+                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focal_length"),
+                            xml_camera->DoubleAttribute("aperture"), time, xml_camera->DoubleAttribute("gammaind"));
     }
     else if (type == "reccam"){
         const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind"};
@@ -1788,7 +1788,7 @@ Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, 
 
         return new RecCam_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), 
                             fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), 
-                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), std::stoi(xml_camera->Attribute("max_bounces")), std::stod(xml_camera->Attribute("gammaind")));
+                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("gammaind"));
     }
     else if (type == "reccam_aperture"){
         const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "focal_length", "aperture"};
@@ -1800,8 +1800,8 @@ Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, 
 
         return new RecCamAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), 
                             fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), 
-                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), std::stoi(xml_camera->Attribute("max_bounces")), std::stod(xml_camera->Attribute("focal_length")),
-                            std::stod(xml_camera->Attribute("aperture")), std::stod(xml_camera->Attribute("gammaind")));
+                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focal_length"),
+                            xml_camera->DoubleAttribute("aperture"), xml_camera->DoubleAttribute("gammaind"));
     }
     else if (type == "reccam_motionblur"){
         const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "time"};
@@ -1815,7 +1815,7 @@ Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, 
         
         return new RecCamMotionblur_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), 
                             fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), 
-                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), std::stoi(xml_camera->Attribute("max_bounces")), time, std::stod(xml_camera->Attribute("gammaind")));
+                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), time, xml_camera->DoubleAttribute("gammaind"));
     }
     else if (type == "reccam_motionblur_aperture"){
         const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "focal_length", "aperture", "time"};
@@ -1829,8 +1829,8 @@ Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, 
         
         return new RecCamMotionblurAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), 
                             fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), 
-                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), std::stoi(xml_camera->Attribute("max_bounces")), std::stod(xml_camera->Attribute("focal_length")),
-                            std::stod(xml_camera->Attribute("aperture")), time, std::stod(xml_camera->Attribute("gammaind")));
+                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focal_length"),
+                            xml_camera->DoubleAttribute("aperture"), time, xml_camera->DoubleAttribute("gammaind"));
     }
     else if (type == "cam_3d"){
         const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "imgbuffer_L", "imgbuffer_R", "eye_dist", "medium_list", "skybox", "max_bounces", "gammaind"};
@@ -1842,9 +1842,9 @@ Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, 
 
         return new Cam3D_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), fov, subpix, 
                             get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_imgbuffer(xml_camera->Attribute("imgbuffer_L"), xml_imgbuffers), 
-                            get_imgbuffer(xml_camera->Attribute("imgbuffer_R"), xml_imgbuffers), std::stod(xml_camera->Attribute("eye_dist")), 
+                            get_imgbuffer(xml_camera->Attribute("imgbuffer_R"), xml_imgbuffers), xml_camera->DoubleAttribute("eye_dist"), 
                             get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), 
-                            std::stoi(xml_camera->Attribute("max_bounces")), std::stod(xml_camera->Attribute("focal_length")), std::stod(xml_camera->Attribute("gammaind")));
+                            xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focal_length"), xml_camera->DoubleAttribute("gammaind"));
     }
     else if (type == "cam_3d_aperture"){
         const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "imgbuffer_L", "imgbuffer_R", "eye_dist", "medium_list", "skybox", "max_bounces", "gammaind", "focal_length", "aperture"};
@@ -1856,10 +1856,10 @@ Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, 
 
         return new Cam3DAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), fov, subpix, 
                             get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_imgbuffer(xml_camera->Attribute("imgbuffer_L"), xml_imgbuffers), 
-                            get_imgbuffer(xml_camera->Attribute("imgbuffer_R"), xml_imgbuffers), std::stod(xml_camera->Attribute("eye_dist")), 
+                            get_imgbuffer(xml_camera->Attribute("imgbuffer_R"), xml_imgbuffers), xml_camera->DoubleAttribute("eye_dist"), 
                             get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), 
-                            std::stoi(xml_camera->Attribute("max_bounces")), std::stod(xml_camera->Attribute("focal_length")), std::stod(xml_camera->Attribute("aperture")), 
-                            std::stod(xml_camera->Attribute("gammaind")));
+                            xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focal_length"), xml_camera->DoubleAttribute("aperture"), 
+                            xml_camera->DoubleAttribute("gammaind"));
     }
     else if (type == "cam_3d_motionblur"){
         const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "imgbuffer_L", "imgbuffer_R", "eye_dist", "medium_list", "skybox", "max_bounces", "gammaind", "time"};
@@ -1873,9 +1873,9 @@ Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, 
 
         return new Cam3DMotionblur_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), fov, subpix, 
                             get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_imgbuffer(xml_camera->Attribute("imgbuffer_L"), xml_imgbuffers), 
-                            get_imgbuffer(xml_camera->Attribute("imgbuffer_R"), xml_imgbuffers), std::stod(xml_camera->Attribute("eye_dist")), 
+                            get_imgbuffer(xml_camera->Attribute("imgbuffer_R"), xml_imgbuffers), xml_camera->DoubleAttribute("eye_dist"), 
                             get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), 
-                            std::stoi(xml_camera->Attribute("max_bounces")), std::stod(xml_camera->Attribute("focal_length")), time, std::stod(xml_camera->Attribute("gammaind")));
+                            xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focal_length"), time, xml_camera->DoubleAttribute("gammaind"));
     }
     else if (type == "cam_3d_motionblur_aperture"){
         const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "imgbuffer_L", "imgbuffer_R", "eye_dist", "medium_list", "skybox", "max_bounces", "gammaind", "focal_length", "aperture", "time"};
@@ -1889,10 +1889,10 @@ Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, 
 
         return new Cam3DMotionblurAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), fov, subpix, 
                             get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_imgbuffer(xml_camera->Attribute("imgbuffer_L"), xml_imgbuffers), 
-                            get_imgbuffer(xml_camera->Attribute("imgbuffer_R"), xml_imgbuffers), std::stod(xml_camera->Attribute("eye_dist")), 
+                            get_imgbuffer(xml_camera->Attribute("imgbuffer_R"), xml_imgbuffers), xml_camera->DoubleAttribute("eye_dist"), 
                             get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), 
-                            std::stoi(xml_camera->Attribute("max_bounces")), std::stod(xml_camera->Attribute("focal_length")), std::stod(xml_camera->Attribute("aperture")), 
-                            time, std::stod(xml_camera->Attribute("gammaind")));
+                            xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focal_length"), xml_camera->DoubleAttribute("aperture"), 
+                            time, xml_camera->DoubleAttribute("gammaind"));
     }
     else{
         std::cout << "Error, camera type '" << type << "' not implemented. Exiting." << std::endl; 
@@ -2630,42 +2630,42 @@ void apply_transformation(TransformMatrix_t* transform_matrix, const tinyxml2::X
     if (type == "rotatexaxis"){
         const char* attributes[] = {"value"};
         require_attributes(transform, attributes, 1);
-        transform_matrix->rotateXAxis(std::stod(transform->Attribute("value")));
+        transform_matrix->rotateXAxis(transform->DoubleAttribute("value"));
     }
     else if (type == "rotateyaxis"){
         const char* attributes[] = {"value"};
         require_attributes(transform, attributes, 1);
-        transform_matrix->rotateYAxis(std::stod(transform->Attribute("value")));
+        transform_matrix->rotateYAxis(transform->DoubleAttribute("value"));
     }
     else if (type == "rotatezaxis"){
         const char* attributes[] = {"value"};
         require_attributes(transform, attributes, 1);
-        transform_matrix->rotateZAxis(std::stod(transform->Attribute("value")));
+        transform_matrix->rotateZAxis(transform->DoubleAttribute("value"));
     }
     else if (type == "rotatex"){
         const char* attributes[] = {"value"};
         require_attributes(transform, attributes, 1);
-        transform_matrix->rotateX(std::stod(transform->Attribute("value")));
+        transform_matrix->rotateX(transform->DoubleAttribute("value"));
     }
     else if (type == "rotatey"){
         const char* attributes[] = {"value"};
         require_attributes(transform, attributes, 1);
-        transform_matrix->rotateY(std::stod(transform->Attribute("value")));
+        transform_matrix->rotateY(transform->DoubleAttribute("value"));
     }
     else if (type == "rotatez"){
         const char* attributes[] = {"value"};
         require_attributes(transform, attributes, 1);
-        transform_matrix->rotateZ(std::stod(transform->Attribute("value")));
+        transform_matrix->rotateZ(transform->DoubleAttribute("value"));
     }
     else if (type == "rotateaxis"){
         const char* attributes[] = {"value", "axis"};
         require_attributes(transform, attributes, 2);
-        transform_matrix->rotateAxis(get_colour(transform->Attribute("axis")), std::stod(transform->Attribute("value")));
+        transform_matrix->rotateAxis(get_colour(transform->Attribute("axis")), transform->DoubleAttribute("value"));
     }
     else if (type == "rotate"){
         const char* attributes[] = {"value", "axis"};
         require_attributes(transform, attributes, 2);
-        transform_matrix->rotate(get_colour(transform->Attribute("axis")), std::stod(transform->Attribute("value")));
+        transform_matrix->rotate(get_colour(transform->Attribute("axis")), transform->DoubleAttribute("value"));
     }
     else if (type == "translate"){
         const char* attributes[] = {"value"};
@@ -2680,7 +2680,7 @@ void apply_transformation(TransformMatrix_t* transform_matrix, const tinyxml2::X
     else if (type == "uniformscaleaxis"){
         const char* attributes[] = {"value"};
         require_attributes(transform, attributes, 1);
-        transform_matrix->scaleAxis(std::stod(transform->Attribute("value")));
+        transform_matrix->scaleAxis(transform->DoubleAttribute("value"));
     }
     else if (type == "scale"){
         const char* attributes[] = {"value"};
@@ -2690,7 +2690,7 @@ void apply_transformation(TransformMatrix_t* transform_matrix, const tinyxml2::X
     else if (type == "uniformscale"){
         const char* attributes[] = {"value"};
         require_attributes(transform, attributes, 1);
-        transform_matrix->scale(std::stod(transform->Attribute("value")));
+        transform_matrix->scale(transform->DoubleAttribute("value"));
     }
     else if (type == "reflect"){
         const char* attributes[] = {"value"};
