@@ -2168,18 +2168,14 @@ ScatteringFunction_t* SceneContext_t::get_scatterer(std::string scatterer, const
             std::transform(scatterer.begin(), scatterer.end(), scatterer.begin(), ::tolower);
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_scatterer = xml_scatterers->FirstChildElement("scatterer"); xml_scatterer; xml_scatterer = xml_scatterer->NextSiblingElement("scatterer")){
-                std::string name_scatterer;
                 const char* name_char = xml_scatterer->Attribute("name");
-                if (name_char == nullptr){
-                    name_scatterer = "";
-                }
-                else{
-                    name_scatterer = name_char;
-                }
-                std::transform(name_scatterer.begin(), name_scatterer.end(), name_scatterer.begin(), ::tolower);
-                if (name_scatterer == scatterer){
-                    return scatterers_[index];
-                }
+                if (name_char != nullptr){
+                    std::string name_scatterer = name_char;
+                    std::transform(name_scatterer.begin(), name_scatterer.end(), name_scatterer.begin(), ::tolower);
+                    if (name_scatterer == scatterer){
+                        return scatterers_[index];
+                    }
+                }                
                 ++index;
             }
         }
@@ -2197,18 +2193,14 @@ MeshGeometry_t* SceneContext_t::get_mesh_geometry(std::string mesh_geometry, con
             std::transform(mesh_geometry.begin(), mesh_geometry.end(), mesh_geometry.begin(), ::tolower);
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_mesh_geometry = xml_mesh_geometries->FirstChildElement("mesh_geometry"); xml_mesh_geometry; xml_mesh_geometry = xml_mesh_geometry->NextSiblingElement("mesh_geometry")){
-                std::string name_mesh_geometry;
                 const char* name_char = xml_mesh_geometry->Attribute("name");
-                if (name_char == nullptr){
-                    name_mesh_geometry = "";
-                }
-                else{
-                    name_mesh_geometry = name_char;
-                }
-                std::transform(name_mesh_geometry.begin(), name_mesh_geometry.end(), name_mesh_geometry.begin(), ::tolower);
-                if (name_mesh_geometry == mesh_geometry){
-                    return mesh_geometries_[index];
-                }
+                if (name_char != nullptr){
+                    std::string name_mesh_geometry = name_char;
+                    std::transform(name_mesh_geometry.begin(), name_mesh_geometry.end(), name_mesh_geometry.begin(), ::tolower);
+                    if (name_mesh_geometry == mesh_geometry){
+                        return mesh_geometries_[index];
+                    }
+                }                
                 ++index;
             }
         }
@@ -2226,18 +2218,14 @@ unsigned int SceneContext_t::get_material_index(std::string material, const tiny
             std::transform(material.begin(), material.end(), material.begin(), ::tolower);
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
-                std::string name_material;
                 const char* name_char = xml_material->Attribute("name");
-                if (name_char == nullptr){
-                    name_material = "";
-                }
-                else{
-                    name_material = name_char;
-                }
-                std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
-                if (name_material == material){
-                    return index;
-                }
+                if (name_char != nullptr){
+                    std::string name_material = name_char;
+                    std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
+                    if (name_material == material){
+                        return index;
+                    }
+                }                
                 ++index;
             }
         }
@@ -2255,17 +2243,13 @@ Material_t* SceneContext_t::get_material(std::string material, const tinyxml2::X
             std::transform(material.begin(), material.end(), material.begin(), ::tolower);
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
-                std::string name_material;
                 const char* name_char = xml_material->Attribute("name");
-                if (name_char == nullptr){
-                    name_material = "";
-                }
-                else{
-                    name_material = name_char;
-                }
-                std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
-                if (name_material == material){
-                    return materials_[index];
+                if (name_char != nullptr){
+                    std::string name_material = name_char;
+                    std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
+                    if (name_material == material){
+                        return materials_[index];
+                    }
                 }
                 ++index;
             }
@@ -2291,18 +2275,14 @@ void SceneContext_t::get_lights(std::string lights_string, DirectionalLight_t** 
             if (xml_directional_lights != nullptr){
                 unsigned int index = 0;
                 for (const tinyxml2::XMLElement* xml_directional_light = xml_directional_lights->FirstChildElement("directional_light"); xml_directional_light; xml_directional_light = xml_directional_light->NextSiblingElement("directional_light")){
-                    std::string name_light;
                     const char* name_char = xml_directional_light->Attribute("name");
-                    if (name_char == nullptr){
-                        name_light = "";
-                    }
-                    else{
-                        name_light = name_char;
-                    }
-                    std::transform(name_light.begin(), name_light.end(), name_light.begin(), ::tolower);
-                    if (name_light == token){
-                        lights_list.push_back(directional_lights_[index]);
-                        break;
+                    if (name_char != nullptr){
+                        std::string name_light = name_char;
+                        std::transform(name_light.begin(), name_light.end(), name_light.begin(), ::tolower);
+                        if (name_light == token){
+                            lights_list.push_back(directional_lights_[index]);
+                            break;
+                        }
                     }
                     ++index;
                 }
@@ -2319,19 +2299,15 @@ void SceneContext_t::get_lights(std::string lights_string, DirectionalLight_t** 
         if (xml_directional_lights != nullptr){
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_directional_light = xml_directional_lights->FirstChildElement("directional_light"); xml_directional_light; xml_directional_light = xml_directional_light->NextSiblingElement("directional_light")){
-                std::string name_light;
                 const char* name_char = xml_directional_light->Attribute("name");
-                if (name_char == nullptr){
-                    name_light = "";
-                }
-                else{
-                    name_light = name_char;
-                }
-                std::transform(name_light.begin(), name_light.end(), name_light.begin(), ::tolower);
-                if (name_light == lights_string){
-                    lights_list.push_back(directional_lights_[index]);
-                    break;
-                }
+                if (name_char != nullptr){
+                    std::string name_light = name_char;
+                    std::transform(name_light.begin(), name_light.end(), name_light.begin(), ::tolower);
+                    if (name_light == lights_string){
+                        lights_list.push_back(directional_lights_[index]);
+                        break;
+                    }
+                }                
                 ++index;
             }
         }
@@ -2358,17 +2334,13 @@ ImgBuffer_t* SceneContext_t::get_imgbuffer(std::string imgbuffer, const tinyxml2
             std::transform(imgbuffer.begin(), imgbuffer.end(), imgbuffer.begin(), ::tolower);
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_imgbuffer = xml_imgbuffers->FirstChildElement("imgbuffer"); xml_imgbuffer; xml_imgbuffer = xml_imgbuffer->NextSiblingElement("imgbuffer")){
-                std::string name_imgbuffer;
                 const char* name_char = xml_imgbuffer->Attribute("name");
-                if (name_char == nullptr){
-                    name_imgbuffer = "";
-                }
-                else{
-                    name_imgbuffer = name_char;
-                }
-                std::transform(name_imgbuffer.begin(), name_imgbuffer.end(), name_imgbuffer.begin(), ::tolower);
-                if (name_imgbuffer == imgbuffer){
-                    return imgbuffers_[index];
+                if (name_char != nullptr){
+                    std::string name_imgbuffer = name_char;
+                    std::transform(name_imgbuffer.begin(), name_imgbuffer.end(), name_imgbuffer.begin(), ::tolower);
+                    if (name_imgbuffer == imgbuffer){
+                        return imgbuffers_[index];
+                    }
                 }
                 ++index;
             }
@@ -2387,17 +2359,13 @@ Skybox_t* SceneContext_t::get_skybox(std::string skybox, const tinyxml2::XMLElem
             std::transform(skybox.begin(), skybox.end(), skybox.begin(), ::tolower);
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_skybox = xml_skyboxes->FirstChildElement("skybox"); xml_skybox; xml_skybox = xml_skybox->NextSiblingElement("skybox")){
-                std::string name_skybox;
                 const char* name_char = xml_skybox->Attribute("name");
-                if (name_char == nullptr){
-                    name_skybox = "";
-                }
-                else{
-                    name_skybox = name_char;
-                }
-                std::transform(name_skybox.begin(), name_skybox.end(), name_skybox.begin(), ::tolower);
-                if (name_skybox == skybox){
-                    return skyboxes_[index];
+                if (name_char != nullptr){
+                    std::string name_skybox = name_char;
+                    std::transform(name_skybox.begin(), name_skybox.end(), name_skybox.begin(), ::tolower);
+                    if (name_skybox == skybox){
+                        return skyboxes_[index];
+                    }
                 }
                 ++index;
             }
@@ -2425,18 +2393,14 @@ void SceneContext_t::get_objects(std::string objects_string, Shape_t** &shapes, 
             if (xml_objects != nullptr){
                 unsigned int index = 0;
                 for (const tinyxml2::XMLElement* xml_object = xml_objects->FirstChildElement("object"); xml_object; xml_object = xml_object->NextSiblingElement("object")){
-                    std::string name_object;
                     const char* name_char = xml_object->Attribute("name");
-                    if (name_char == nullptr){
-                        name_object = "";
-                    }
-                    else{
-                        name_object = name_char;
-                    }
-                    std::transform(name_object.begin(), name_object.end(), name_object.begin(), ::tolower);
-                    if (name_object == token){
-                        objects_list.push_back(index);
-                        break;
+                    if (name_char != nullptr){
+                        std::string name_object = name_char;
+                        std::transform(name_object.begin(), name_object.end(), name_object.begin(), ::tolower);
+                        if (name_object == token){
+                            objects_list.push_back(index);
+                            break;
+                        }
                     }
                     ++index;
                 }
@@ -2453,18 +2417,14 @@ void SceneContext_t::get_objects(std::string objects_string, Shape_t** &shapes, 
         if (xml_objects != nullptr){
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_object = xml_objects->FirstChildElement("object"); xml_object; xml_object = xml_object->NextSiblingElement("object")){
-                std::string name_object;
                 const char* name_char = xml_object->Attribute("name");
-                if (name_char == nullptr){
-                    name_object = "";
-                }
-                else{
-                    name_object = name_char;
-                }
-                std::transform(name_object.begin(), name_object.end(), name_object.begin(), ::tolower);
-                if (name_object == objects_string){
-                    objects_list.push_back(index);
-                    break;
+                if (name_char != nullptr){
+                    std::string name_object = name_char;
+                    std::transform(name_object.begin(), name_object.end(), name_object.begin(), ::tolower);
+                    if (name_object == objects_string){
+                        objects_list.push_back(index);
+                        break;
+                    }
                 }
                 ++index;
             }
@@ -2668,48 +2628,78 @@ void apply_transformation(TransformMatrix_t* transform_matrix, const tinyxml2::X
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
     if (type == "rotatexaxis"){
+        const char* attributes[] = {"value"};
+        require_attributes(transform, attributes, 1);
         transform_matrix->rotateXAxis(std::stod(transform->Attribute("value")));
     }
     else if (type == "rotateyaxis"){
+        const char* attributes[] = {"value"};
+        require_attributes(transform, attributes, 1);
         transform_matrix->rotateYAxis(std::stod(transform->Attribute("value")));
     }
     else if (type == "rotatezaxis"){
+        const char* attributes[] = {"value"};
+        require_attributes(transform, attributes, 1);
         transform_matrix->rotateZAxis(std::stod(transform->Attribute("value")));
     }
     else if (type == "rotatex"){
+        const char* attributes[] = {"value"};
+        require_attributes(transform, attributes, 1);
         transform_matrix->rotateX(std::stod(transform->Attribute("value")));
     }
     else if (type == "rotatey"){
+        const char* attributes[] = {"value"};
+        require_attributes(transform, attributes, 1);
         transform_matrix->rotateY(std::stod(transform->Attribute("value")));
     }
     else if (type == "rotatez"){
+        const char* attributes[] = {"value"};
+        require_attributes(transform, attributes, 1);
         transform_matrix->rotateZ(std::stod(transform->Attribute("value")));
     }
     else if (type == "rotateaxis"){
+        const char* attributes[] = {"value", "axis"};
+        require_attributes(transform, attributes, 2);
         transform_matrix->rotateAxis(get_colour(transform->Attribute("axis")), std::stod(transform->Attribute("value")));
     }
     else if (type == "rotate"){
+        const char* attributes[] = {"value", "axis"};
+        require_attributes(transform, attributes, 2);
         transform_matrix->rotate(get_colour(transform->Attribute("axis")), std::stod(transform->Attribute("value")));
     }
     else if (type == "translate"){
+        const char* attributes[] = {"value"};
+        require_attributes(transform, attributes, 1);
         transform_matrix->translate(get_colour(transform->Attribute("value")));
     }
     else if (type == "scaleaxis"){
+        const char* attributes[] = {"value"};
+        require_attributes(transform, attributes, 1);
         transform_matrix->scaleAxis(get_colour(transform->Attribute("value")));
     }
     else if (type == "uniformscaleaxis"){
+        const char* attributes[] = {"value"};
+        require_attributes(transform, attributes, 1);
         transform_matrix->scaleAxis(std::stod(transform->Attribute("value")));
     }
     else if (type == "scale"){
+        const char* attributes[] = {"value"};
+        require_attributes(transform, attributes, 1);
         transform_matrix->scale(get_colour(transform->Attribute("value")));
     }
     else if (type == "uniformscale"){
+        const char* attributes[] = {"value"};
+        require_attributes(transform, attributes, 1);
         transform_matrix->scale(std::stod(transform->Attribute("value")));
     }
     else if (type == "reflect"){
+        const char* attributes[] = {"value"};
+        require_attributes(transform, attributes, 1);
         transform_matrix->reflect(get_colour(transform->Attribute("value")));
     }
     else if (type == "shear"){
+        const char* attributes[] = {"value"};
+        require_attributes(transform, attributes, 1);
         transform_matrix->shear(get_colour(transform->Attribute("value")));
     }
     else if (type == "transpose"){
