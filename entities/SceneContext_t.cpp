@@ -2730,8 +2730,8 @@ void require_attributes(const tinyxml2::XMLElement* element, const char** attrib
                 std::string type = (type_type == nullptr) ? "" : type_type;
                 std::cout << "Error: " << element->Name() << " XML element with name '" << name << "' and type '" << type << "' has the following attributes missing:" << std::endl;
             }
-        }
-        std::cout << attributes[i] << std::endl;
+            std::cout << attributes[i] << std::endl;
+        }        
     }
 
     if (missing) {
