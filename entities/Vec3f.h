@@ -13,6 +13,7 @@ class Vec3f {
     public:
         Vec3f();
         Vec3f(double x, double y, double z); 
+        Vec3f(double x); 
         double &operator[](int index);
         double operator[](int index) const; 
         Vec3f operator*(double scale) const;
