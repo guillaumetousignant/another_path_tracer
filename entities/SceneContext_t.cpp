@@ -36,6 +36,8 @@
 #include "Absorber_t.h"
 #include "Scatterer_t.h"
 #include "ScattererExp_t.h"
+#include "ScattererFull_t.h"
+#include "ScattererExpFull_t.h"
 #include "PortalScattererTop_t.h"
 #include "PortalScatterer_t.h"
 
@@ -1234,10 +1236,27 @@ ScatteringFunction_t* SceneContext_t::create_scatterer(const tinyxml2::XMLElemen
                                 xml_scatterer->DoubleAttribute("scattering_distance"), xml_scatterer->DoubleAttribute("order"), 
                                 xml_scatterer->DoubleAttribute("scattering_angle"));
     }
+    else if (type == "scatterer_exp_full"){
+        const char* attributes[] = {"emission", "colour", "scattering_emission", "scattering_colour", "emission_distance", "absorption_distance", "scattering_distance", "order", "scattering_angle"};
+        require_attributes(xml_scatterer, attributes, 9);
+        return new ScattererExpFull_t(get_colour(xml_scatterer->Attribute("emission")), get_colour(xml_scatterer->Attribute("colour")),
+                                get_colour(xml_scatterer->Attribute("scattering_emission")), get_colour(xml_scatterer->Attribute("scattering_colour")),
+                                xml_scatterer->DoubleAttribute("emission_distance"), xml_scatterer->DoubleAttribute("absorption_distance"),
+                                xml_scatterer->DoubleAttribute("scattering_distance"), xml_scatterer->DoubleAttribute("order"), 
+                                xml_scatterer->DoubleAttribute("scattering_angle"));
+    }
     else if (type == "scatterer"){
         const char* attributes[] = {"emission", "colour", "emission_distance", "absorption_distance", "scattering_distance"};
         require_attributes(xml_scatterer, attributes, 5);
         return new Scatterer_t(get_colour(xml_scatterer->Attribute("emission")), get_colour(xml_scatterer->Attribute("colour")),
+                                xml_scatterer->DoubleAttribute("emission_distance"), xml_scatterer->DoubleAttribute("absorption_distance"),
+                                xml_scatterer->DoubleAttribute("scattering_distance"));
+    }
+    else if (type == "scatterer_full"){
+        const char* attributes[] = {"emission", "colour", "scattering_emission", "scattering_colour" "emission_distance", "absorption_distance", "scattering_distance"};
+        require_attributes(xml_scatterer, attributes, 7);
+        return new ScattererFull_t(get_colour(xml_scatterer->Attribute("emission")), get_colour(xml_scatterer->Attribute("colour")),
+                                get_colour(xml_scatterer->Attribute("scattering_emission")), get_colour(xml_scatterer->Attribute("scattering_colour")),
                                 xml_scatterer->DoubleAttribute("emission_distance"), xml_scatterer->DoubleAttribute("absorption_distance"),
                                 xml_scatterer->DoubleAttribute("scattering_distance"));
     }
