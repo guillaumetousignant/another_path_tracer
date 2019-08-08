@@ -1253,7 +1253,7 @@ ScatteringFunction_t* SceneContext_t::create_scatterer(const tinyxml2::XMLElemen
                                 xml_scatterer->DoubleAttribute("scattering_distance"));
     }
     else if (type == "scatterer_full"){
-        const char* attributes[] = {"emission", "colour", "scattering_emission", "scattering_colour" "emission_distance", "absorption_distance", "scattering_distance"};
+        const char* attributes[] = {"emission", "colour", "scattering_emission", "scattering_colour", "emission_distance", "absorption_distance", "scattering_distance"};
         require_attributes(xml_scatterer, attributes, 7);
         return new ScattererFull_t(get_colour(xml_scatterer->Attribute("emission")), get_colour(xml_scatterer->Attribute("colour")),
                                 get_colour(xml_scatterer->Attribute("scattering_emission")), get_colour(xml_scatterer->Attribute("scattering_colour")),
