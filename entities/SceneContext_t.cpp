@@ -30,6 +30,7 @@
 #include "FresnelMixIn_t.h"
 #include "RandomMix_t.h"
 #include "RandomMixIn_t.h"
+#include "BounceMaterial_t.h"
 #include "MaterialMap_t.h"
 
 #include "NonAbsorber_t.h"
@@ -1372,6 +1373,11 @@ Material_t* SceneContext_t::create_material(const tinyxml2::XMLElement* xml_mate
         const char* attributes[] = {"priority", "scattering_fn"};
         require_attributes(xml_material, attributes, 2);
         return new Transparent_t(xml_material->UnsignedAttribute("priority"), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers));
+    }
+    else if (type == "bounce_material"){
+        const char* attributes[] = {"max_bounces"};
+        require_attributes(xml_material, attributes, 1);
+        return new BounceMaterial_t(xml_material->UnsignedAttribute("max_bounces"));
     }
     else if (type == "toon"){
         std::cout << "Error, toon shader not implemented yet. Ignoring." << std::endl; 
