@@ -32,6 +32,7 @@
 #include "RandomMixIn_t.h"
 #include "BounceMaterial_t.h"
 #include "DistanceMaterial_t.h"
+#include "Toon_t.h"
 #include "MaterialMap_t.h"
 
 #include "NonAbsorber_t.h"
@@ -1386,8 +1387,9 @@ Material_t* SceneContext_t::create_material(const tinyxml2::XMLElement* xml_mate
         return new DistanceMaterial_t(xml_material->DoubleAttribute("focal_length"), xml_material->DoubleAttribute("exponent"));
     }
     else if (type == "toon"){
-        std::cout << "Error, toon shader not implemented yet. Ignoring." << std::endl; 
-        return new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.5, 0.5, 0.5), 1.0);
+        const char* attributes[] = {"colour"};
+        require_attributes(xml_material, attributes, 1);
+        return new Toon_t(get_colour(xml_material->Attribute("colour")));
     }
     else if (type == "aggregate"){
         const char* attributes[] = {"materials_list", "materials_names"};
