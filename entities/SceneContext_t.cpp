@@ -1224,7 +1224,7 @@ ScatteringFunction_t* SceneContext_t::create_scatterer(const tinyxml2::XMLElemen
         const char* attributes[] = {"medium_list", "transform_matrix", "scattering_distance"};
         require_attributes(xml_scatterer, attributes, 3);
         scatterers_medium_list = get_medium_index_list(xml_scatterer->Attribute("medium_list"), xml_materials);
-        return new PortalScatterer_t(get_transform_matrix(xml_scatterer->Attribute("transform_matrix"), xml_transform_matrices), xml_scatterer->DoubleAttribute("emission_distance"), std::list<Medium_t*>());
+        return new PortalScatterer_t(get_transform_matrix(xml_scatterer->Attribute("transform_matrix"), xml_transform_matrices), xml_scatterer->DoubleAttribute("scattering_distance"), std::list<Medium_t*>());
     }
     else if (type == "scatterer_exp"){
         const char* attributes[] = {"emission", "colour", "emission_distance", "absorption_distance", "scattering_distance", "order", "scattering_angle"};
