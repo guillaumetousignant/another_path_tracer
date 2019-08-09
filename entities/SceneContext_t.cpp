@@ -625,13 +625,18 @@ void SceneContext_t::readXML(const std::string &filename){
     const char* object_list = xml_top->Attribute("object_list");
     std::cout << "Scene created." << std::endl;
     
-    if (object_list != nullptr){
+    if (n_objects_ > 0){
         Shape_t** shapes = nullptr;
         MeshTop_t** meshes = nullptr;
         unsigned int n_shapes = 0;
         unsigned int n_meshes = 0;
 
-        get_objects(object_list, shapes, n_shapes, meshes, n_meshes, xml_objects);
+        if (object_list != nullptr){
+            get_objects(object_list, shapes, n_shapes, meshes, n_meshes, xml_objects);
+        }
+        else {
+            get_objects(shapes, n_shapes, meshes, n_meshes, xml_objects);
+        }
 
         scene_->add(shapes, n_shapes);
         scene_->add(meshes, n_meshes);
@@ -2488,6 +2493,36 @@ void SceneContext_t::get_objects(std::string objects_string, Shape_t** &shapes, 
                 meshes[index_meshes] = meshes_[*it];
                 ++index_meshes;
             }
+        }
+    }
+}
+
+void SceneContext_t::get_objects(Shape_t** &shapes, unsigned int &n_shapes, MeshTop_t** &meshes, unsigned int &n_meshes, const tinyxml2::XMLElement* xml_objects) const {
+    n_shapes = 0;
+    n_meshes = 0;
+
+    for (unsigned int i = 0; i < n_objects_; ++i){
+        if (objects_[i] != nullptr){
+            ++n_shapes;
+        }
+        else {
+            ++n_meshes;
+        }
+    }
+
+    shapes = new Shape_t*[n_shapes];
+    meshes = new MeshTop_t*[n_meshes];
+    unsigned int index_shapes = 0;
+    unsigned int index_meshes = 0;
+
+    for (unsigned int i = 0; i < n_objects_; ++i){
+        if (objects_[i] != nullptr){
+            shapes[index_shapes] = objects_[i];
+            ++index_shapes;
+        }
+        else {
+            meshes[index_meshes] = meshes_[i];
+            ++index_meshes;
         }
     }
 }
