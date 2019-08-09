@@ -19,7 +19,7 @@ void CamMotionblur_t::update() {
     direction_last_ = direction_;
     up_last_ = up_;
 
-    origin_ = transformation_->multVec(Vec3f(0.0, 0.0, 0.0));
+    origin_ = transformation_->multVec(Vec3f(0.0));
     TransformMatrix_t transform_norm = transformation_->transformDir();
     direction_ = transform_norm.multDir(Vec3f(0.0, 1.0, 0.0));
     up_ = up_buffer_;
@@ -57,14 +57,14 @@ void CamMotionblur_t::raytrace(const Scene_t* scene) {
                     double jitter_y = unif_(my_rand::rng);
                     double jitter_x = unif_(my_rand::rng);
 
-                    Vec3f direction_int = direction_ * rand_time + direction_last_ * (1.0 - rand_time);
-                    Vec3f horizontal_int = horizontal * rand_time + horizontal_last * (1.0 - rand_time);
-                    Vec3f vertical_int = vertical * rand_time + vertical_last * (1.0 - rand_time);
+                    Vec3f direction_int = direction_ * rand_time + direction_last_ * (1.0 - rand_time); // maybe should normalise this
+                    Vec3f horizontal_int = horizontal * rand_time + horizontal_last * (1.0 - rand_time); // maybe should normalise this
+                    Vec3f vertical_int = vertical * rand_time + vertical_last * (1.0 - rand_time); // maybe should normalise this
                     Vec3f origin_int = origin_ * rand_time + origin_last_ * (1.0 - rand_time);
 
                     Vec3f subpix_vec = pix_vec + Vec3f(0.0, ((double)k - (double)subpix_[0]/2.0 + jitter_y)*subpix_span_y, ((double)l - (double)subpix_[1]/2.0 + jitter_x)*subpix_span_x); // Is shit after this line
 
-                    Ray_t ray = Ray_t(origin_int, subpix_vec.to_xyz_offset(direction_int.normalize(), horizontal_int.normalize(), vertical_int.normalize()).normalize(), Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list_, rand_time);
+                    Ray_t ray = Ray_t(origin_int, subpix_vec.to_xyz_offset(direction_int, horizontal_int, vertical_int).normalize(), Vec3f(), Vec3f(1.0), medium_list_, rand_time);
                     ray.raycast(scene, max_bounces_, skybox_);
                     col += ray.colour_;
                 }
