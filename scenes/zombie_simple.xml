@@ -57,10 +57,10 @@
       </camera>
    </cameras>
    <textures>
-      <texture filename="./assets/Zombie beast_texture5.jpg" name="zombie_texture" type="texture"/>
-      <texture filename="./assets/Ocean from horn.jpg" name="beach_texture" type="texture"/>
+      <texture filename="assets/Zombie beast_texture5.jpg" name="zombie_texture" type="texture"/>
+      <texture filename="assets/Ocean from horn.jpg" name="beach_texture" type="texture"/>
    </textures>
    <mesh_geometries>
-      <mesh_geometry filename="./assets/Zombie_Beast4_test.obj" name="zombie_mesh" type="mesh_geometry"/>
+      <mesh_geometry filename="assets/Zombie_Beast4_test.obj" name="zombie_mesh" type="mesh_geometry"/>
    </mesh_geometries>
 </scene>
