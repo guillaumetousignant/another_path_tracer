@@ -1,5 +1,5 @@
-#ifndef ACCELERATIONMULTIGRID_T_H
-#define ACCELERATIONMULTIGRID_T_H
+#ifndef ACCELERATIONMULTIGRIDVECTOR_T_H
+#define ACCELERATIONMULTIGRIDVECTOR_T_H
 
 #include "Ray_t.h"
 #include "AccelerationStructure_t.h"
@@ -7,10 +7,10 @@
 class Shape_t;
 class Box_t;
 
-class AccelerationMultiGrid_t final : public AccelerationStructure_t{
+class AccelerationMultiGridVector_t final : public AccelerationStructure_t{
     public:
-        AccelerationMultiGrid_t(Shape_t** items, unsigned int n_items, Vec3f* coordinates = nullptr, unsigned int level = 0, unsigned int min_res = 1, unsigned int max_res = 128, unsigned int max_cell_content = 32, unsigned int max_grid_level = 1);
-        virtual ~AccelerationMultiGrid_t() final;
+        AccelerationMultiGridVector_t(Shape_t** items, unsigned int n_items, Vec3f* coordinates = nullptr, unsigned int level = 0, unsigned int min_res = 1, unsigned int max_res = 128, unsigned int max_cell_content = 32, unsigned int max_grid_level = 1);
+        virtual ~AccelerationMultiGridVector_t() final;
 
         AccelerationStructure_t** cells_;
         unsigned int cell_res_[3];
