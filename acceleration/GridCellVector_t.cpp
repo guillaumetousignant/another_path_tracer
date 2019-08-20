@@ -5,13 +5,13 @@
 
 #define CELLLIST
 
-GridCellVector_t::GridCellVector_t() : items_(std::vector<Shape_t*>()) {
+GridCellVector_t::GridCellVector_t() : items_(std::vector<Shape_t*>()), size_(0) {
     n_obj_ = 0;
 }
 
-GridCellVector_t::GridCellVector_t(unsigned int size) : items_(std::vector<Shape_t*>()) {
+GridCellVector_t::GridCellVector_t(unsigned int size) : items_(std::vector<Shape_t*>()), size_(size) {
     n_obj_ = 0;
-    items_.reserve(size);
+    items_.reserve(size_);
 }
 
 GridCellVector_t::~GridCellVector_t(){
@@ -55,4 +55,13 @@ void GridCellVector_t::remove(const Shape_t* item){
             break;
         }
     }
+}
+
+void GridCellVector_t::reserve(){
+    items_.reserve(size_);
+}
+
+GridCellVector_t& GridCellVector_t::operator++(){
+    ++size_;
+    return *this;
 }
