@@ -54,12 +54,9 @@ AccelerationMultiGrid_t::AccelerationMultiGrid_t(Shape_t** items, unsigned int n
 
     cell_size_ = grid_size/cell_res;
     cells_ = new AccelerationStructure_t*[cell_res_[0] *  cell_res_[1] * cell_res_[2]];
-    for (unsigned int i = 0; i < cell_res_[0] * cell_res_[1] * cell_res_[2]; i++){
-        cells_[i] = nullptr;
-    }
-
     temp_cells = new GridCell_t*[cell_res_[0] *  cell_res_[1] * cell_res_[2]];
     for (unsigned int i = 0; i < cell_res_[0] * cell_res_[1] * cell_res_[2]; i++){
+        cells_[i] = nullptr;
         temp_cells[i] = nullptr;
     }
 
@@ -72,15 +69,8 @@ AccelerationMultiGrid_t::AccelerationMultiGrid_t(Shape_t** items, unsigned int n
         min1 = ((min1 - coordinates_[0])/cell_size_).floor();
         max1 = ((max1 - coordinates_[0])/cell_size_).floor();
 
-        for (unsigned int i = 0; i < 3; i++){
-            if(min1[i] < 0){
-                min1[i] = 0;
-            }
-            if(max1[i] < 0){
-                max1[i] = 0;
-            }
-        }
-
+        min1.max(0.0);
+        max1.max(0.0);
         min1.min(cell_res-1.0);
         max1.min(cell_res-1.0);
         
