@@ -3,10 +3,11 @@
 
 #include "Ray_t.h"
 #include "AccelerationStructure_t.h"
+#include "Vec3f.h"
+#include "Box_t.h"
 
 class Shape_t;
 class GridCell_t;
-class Box_t;
 
 class AccelerationGrid_t final : public AccelerationStructure_t{
     public:
@@ -16,7 +17,7 @@ class AccelerationGrid_t final : public AccelerationStructure_t{
         GridCell_t** cells_;
         unsigned int cell_res_[3];
         Vec3f cell_size_;
-        Box_t* bounding_box_;
+        Box_t bounding_box_;
         Vec3f coordinates_[2];
         unsigned int level_;
         unsigned int min_res_;

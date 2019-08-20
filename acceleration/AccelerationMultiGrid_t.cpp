@@ -1,7 +1,6 @@
 #include "AccelerationMultiGrid_t.h"
 #include "Shape_t.h"
 #include "GridCell_t.h"
-#include "Box_t.h"
 #include <limits>
 #include <cmath>
 
@@ -34,7 +33,7 @@ AccelerationMultiGrid_t::AccelerationMultiGrid_t(Shape_t** items, unsigned int n
     }
 
     grid_size = coordinates_[1] - coordinates_[0];
-    bounding_box_ = new Box_t(coordinates_);
+    bounding_box_ = Box_t(coordinates_);
 
     cell_res = (grid_size * std::pow(n_obj_/(grid_size[0]*grid_size[1]*grid_size[2]), 1.0/3.0)).floor();
 
@@ -113,10 +112,6 @@ AccelerationMultiGrid_t::AccelerationMultiGrid_t(Shape_t** items, unsigned int n
 }
 
 AccelerationMultiGrid_t::~AccelerationMultiGrid_t(){
-    if (bounding_box_ != nullptr){
-        delete bounding_box_;
-    }
-
     if (cells_ != nullptr){
         for (unsigned int i = 0; i < (cell_res_[0]*cell_res_[1]*cell_res_[2]); i++){
             if (cells_[i] != nullptr){
@@ -151,7 +146,7 @@ void AccelerationMultiGrid_t::intersect(const Ray_t &ray, Shape_t* &hit_obj, dou
     t = std::numeric_limits<double>::infinity();
     invdir = Vec3f(1.0)/ray.direction_;
 
-    bounding_box_->intersection(ray, intersected, tbbox);
+    bounding_box_.intersection(ray, intersected, tbbox);
     if (!intersected){
         return;
     }
@@ -159,7 +154,7 @@ void AccelerationMultiGrid_t::intersect(const Ray_t &ray, Shape_t* &hit_obj, dou
     deltat = Vec3f();
     tnext = Vec3f();
 
-    raycellorigin = (ray.origin_ + ray.direction_ * tbbox) - bounding_box_->coordinates_[0];
+    raycellorigin = (ray.origin_ + ray.direction_ * tbbox) - bounding_box_.coordinates_[0];
     cellcoord = (raycellorigin / cell_size_).floor();
     for (unsigned int i = 0; i < 3; i++){
         if (cellcoord[i] < 0.0){
