@@ -5,11 +5,10 @@
 #include <limits>
 #include <cmath>
 
-#define GRIDMINRES 1
-#define GRIDMAXRES 128
 #define CELLLIST
 
-AccelerationGrid_t::AccelerationGrid_t(Shape_t** items, unsigned int n_items, Vec3f* coordinates/* = nullptr*/, unsigned int level /* = 0*/) : level_(level) {
+AccelerationGrid_t::AccelerationGrid_t(Shape_t** items, unsigned int n_items, Vec3f* coordinates/* = nullptr*/, unsigned int level /* = 0*/, unsigned int min_res /* = 1 */, unsigned int max_res /* = 128 */) : 
+        level_(level), min_res_(min_res), max_res_(max_res) {
     Vec3f grid_size;
     Vec3f min1, max1;
     Vec3f cell_res;
@@ -37,11 +36,11 @@ AccelerationGrid_t::AccelerationGrid_t(Shape_t** items, unsigned int n_items, Ve
     cell_res = (grid_size * std::pow(n_obj_/(grid_size[0]*grid_size[1]*grid_size[2]), 1.0/3.0)).floor();
 
     for (unsigned int i = 0; i < 3; i++){
-        if (cell_res[i] < GRIDMINRES){
-            cell_res[i] = GRIDMINRES;
+        if (cell_res[i] < min_res_){
+            cell_res[i] = min_res_;
         }
-        else if(cell_res[i] > GRIDMAXRES){
-            cell_res[i] = GRIDMAXRES;
+        else if(cell_res[i] > max_res_){
+            cell_res[i] = max_res_;
         }
         cell_res_[i] = (unsigned int)cell_res[i];
     }
