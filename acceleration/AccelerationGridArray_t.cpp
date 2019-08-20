@@ -1,10 +1,10 @@
-#include "AccelerationGridVector_t.h"
+#include "AccelerationGridArray_t.h"
 #include "Shape_t.h"
 #include "GridCellVector_t.h"
 #include <limits>
 #include <cmath>
 
-AccelerationGridVector_t::AccelerationGridVector_t(Shape_t** items, unsigned int n_items, Vec3f* coordinates/* = nullptr*/, unsigned int level /* = 0*/, unsigned int min_res /* = 1 */, unsigned int max_res /* = 128 */) : 
+AccelerationGridArray_t::AccelerationGridArray_t(Shape_t** items, unsigned int n_items, Vec3f* coordinates/* = nullptr*/, unsigned int level /* = 0*/, unsigned int min_res /* = 1 */, unsigned int max_res /* = 128 */) : 
         level_(level), min_res_(min_res), max_res_(max_res) {
     Vec3f grid_size;
     Vec3f min1, max1;
@@ -104,7 +104,7 @@ AccelerationGridVector_t::AccelerationGridVector_t(Shape_t** items, unsigned int
     }
 }
 
-AccelerationGridVector_t::~AccelerationGridVector_t(){
+AccelerationGridArray_t::~AccelerationGridArray_t(){
     if (cells_ != nullptr){
         for (unsigned int i = 0; i < (cell_res_[0]*cell_res_[1]*cell_res_[2]); i++){
             if (cells_[i] != nullptr){
@@ -115,13 +115,13 @@ AccelerationGridVector_t::~AccelerationGridVector_t(){
     }
 }
 
-void AccelerationGridVector_t::update(){
+void AccelerationGridArray_t::update(){
     for (unsigned int i = 0; i < (cell_res_[0]*cell_res_[1]*cell_res_[2]); i++){
         cells_[i]->update();
     }
 }
 
-void AccelerationGridVector_t::intersect(const Ray_t &ray, Shape_t* &hit_obj, double &t, double (&uv)[2]) const {
+void AccelerationGridArray_t::intersect(const Ray_t &ray, Shape_t* &hit_obj, double &t, double (&uv)[2]) const {
     Vec3f invdir;
     double tbbox;
     bool intersected;
@@ -194,7 +194,7 @@ void AccelerationGridVector_t::intersect(const Ray_t &ray, Shape_t* &hit_obj, do
     }
 }
 
-void AccelerationGridVector_t::add(Shape_t* item){
+void AccelerationGridArray_t::add(Shape_t* item){
     Vec3f min1, max1;
     Vec3f cell_res;
 
@@ -231,10 +231,10 @@ void AccelerationGridVector_t::add(Shape_t* item){
     }
 }
 
-void AccelerationGridVector_t::remove(const Shape_t* item){
+void AccelerationGridArray_t::remove(const Shape_t* item){
 
 }
 
-void AccelerationGridVector_t::move(Shape_t* item){
+void AccelerationGridArray_t::move(Shape_t* item){
 
 }

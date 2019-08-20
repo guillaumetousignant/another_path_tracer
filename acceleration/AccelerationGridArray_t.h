@@ -1,5 +1,5 @@
-#ifndef ACCELERATIONGRIDVECTOR_T_H
-#define ACCELERATIONGRIDVECTOR_T_H
+#ifndef ACCELERATIONGRIDARRAY_T_H
+#define ACCELERATIONGRIDAYYAY_T_H
 
 #include "Ray_t.h"
 #include "AccelerationStructure_t.h"
@@ -9,10 +9,10 @@
 class Shape_t;
 class GridCellVector_t;
 
-class AccelerationGridVector_t final : public AccelerationStructure_t{
+class AccelerationGridArray_t final : public AccelerationStructure_t{
     public:
-        AccelerationGridVector_t(Shape_t** items, unsigned int n_items, Vec3f* coordinates = nullptr, unsigned int level = 0, unsigned int min_res = 1, unsigned int max_res = 128);
-        virtual ~AccelerationGridVector_t() final;
+        AccelerationGridArray_t(Shape_t** items, unsigned int n_items, Vec3f* coordinates = nullptr, unsigned int level = 0, unsigned int min_res = 1, unsigned int max_res = 128);
+        virtual ~AccelerationGridArray_t() final;
 
         GridCellVector_t** cells_;
         unsigned int cell_res_[3];
