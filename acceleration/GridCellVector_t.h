@@ -5,6 +5,8 @@
 #include "AccelerationStructure_t.h"
 #include <list>
 
+#define CELLLIST
+
 class Shape_t;
 
 class GridCell_t final : public AccelerationStructure_t{
@@ -12,7 +14,11 @@ class GridCell_t final : public AccelerationStructure_t{
         GridCell_t();
         virtual ~GridCell_t() final;
 
+        #ifdef CELLLIST
         std::list<Shape_t*> items_; // Should be list or vector or array?
+        #else
+        Shape_t** items_;
+        #endif
 
         virtual void update() final;
         virtual void intersect(const Ray_t &ray, Shape_t* &hit_obj, double &t, double (&uv)[2]) const final;
