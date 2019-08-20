@@ -18,7 +18,7 @@ GridCellVector_t::~GridCellVector_t(){
 }
 
 void GridCellVector_t::update(){
-    for (unsigned int i = 0; i < n_obj_; i++){
+    for (unsigned int i = 0; i < items_.size(); i++){
         items_[i]->update();
     }
 }
@@ -48,7 +48,7 @@ void GridCellVector_t::add(Shape_t* item){
 }
 
 void GridCellVector_t::remove(const Shape_t* item){
-    for (unsigned int i = 0; i < n_obj_; i++){
+    for (unsigned int i = 0; i < items_.size(); i++){
         if (items_[i] == item){
             items_.erase(items_.begin() + i);
             n_obj_--;
