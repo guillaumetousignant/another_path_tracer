@@ -4,6 +4,7 @@
 #include "MeshTop_t.h"
 #include <limits>
 #include "AccelerationGrid_t.h"
+#include "AccelerationMultiGrid_t.h"
 
 Scene_t::Scene_t() : geometry_(nullptr), n_obj_(0), acc_(nullptr) {}
 
