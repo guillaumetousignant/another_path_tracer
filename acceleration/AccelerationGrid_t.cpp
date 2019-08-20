@@ -35,13 +35,10 @@ AccelerationGrid_t::AccelerationGrid_t(Shape_t** items, unsigned int n_items, Ve
 
     cell_res = (grid_size * std::pow(n_obj_/(grid_size[0]*grid_size[1]*grid_size[2]), 1.0/3.0)).floor();
 
+    cell_res.max(min_res_);
+    cell_res.min(max_res_);
+
     for (unsigned int i = 0; i < 3; i++){
-        if (cell_res[i] < min_res_){
-            cell_res[i] = min_res_;
-        }
-        else if(cell_res[i] > max_res_){
-            cell_res[i] = max_res_;
-        }
         cell_res_[i] = (unsigned int)cell_res[i];
     }
 
@@ -60,15 +57,8 @@ AccelerationGrid_t::AccelerationGrid_t(Shape_t** items, unsigned int n_items, Ve
         min1 = ((min1 - coordinates_[0])/cell_size_).floor();
         max1 = ((max1 - coordinates_[0])/cell_size_).floor();
 
-        for (unsigned int i = 0; i < 3; i++){
-            if(min1[i] < 0){
-                min1[i] = 0;
-            }
-            if(max1[i] < 0){
-                max1[i] = 0;
-            }
-        }
-
+        min1.max(0.0);
+        max1.max(0.0);
         min1.min(cell_res-1.0);
         max1.min(cell_res-1.0);
         
