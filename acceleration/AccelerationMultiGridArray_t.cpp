@@ -1,25 +1,18 @@
-#include "AccelerationMultiGrid_t.h"
+#include "AccelerationMultiGridArray_t.h"
 #include "Shape_t.h"
-#include "GridCell_t.h"
+#include "GridCellArray_t.h"
 #include "Box_t.h"
 #include <limits>
 #include <cmath>
 
-#define CELLLIST
-
-AccelerationMultiGrid_t::AccelerationMultiGrid_t(Shape_t** items, unsigned int n_items, Vec3f* coordinates/* = nullptr*/, unsigned int level /* = 0*/, unsigned int min_res /* = 1 */, unsigned int max_res /* = 128 */, unsigned int max_cell_content /* = 32 */, unsigned int max_grid_level /* = 1 */) : 
+AccelerationMultiGridArray_t::AccelerationMultiGridArray_t(Shape_t** items, unsigned int n_items, Vec3f* coordinates/* = nullptr*/, unsigned int level /* = 0*/, unsigned int min_res /* = 1 */, unsigned int max_res /* = 128 */, unsigned int max_cell_content /* = 32 */, unsigned int max_grid_level /* = 1 */) : 
         level_(level), min_res_(min_res), max_res_(max_res), max_cell_content_(max_cell_content), max_grid_level_(max_grid_level) {
     Vec3f grid_size;
     Vec3f min1, max1;
     Vec3f cell_res;
     unsigned int x, y, z;
-    GridCell_t** temp_cells;
+    GridCellArray_t** temp_cells;
     Vec3f cell_extent[2];
-
-    #if defined(CELLLIST)
-    Shape_t** temp_elements = nullptr;
-    unsigned int element_index;
-    #endif
 
     n_obj_ = n_items;
 
@@ -50,7 +43,7 @@ AccelerationMultiGrid_t::AccelerationMultiGrid_t(Shape_t** items, unsigned int n
 
     cell_size_ = grid_size/cell_res;
     cells_ = new AccelerationStructure_t*[cell_res_[0] *  cell_res_[1] * cell_res_[2]];
-    temp_cells = new GridCell_t*[cell_res_[0] *  cell_res_[1] * cell_res_[2]];
+    temp_cells = new GridCellArray_t*[cell_res_[0] *  cell_res_[1] * cell_res_[2]];
     for (unsigned int i = 0; i < cell_res_[0] * cell_res_[1] * cell_res_[2]; i++){
         cells_[i] = nullptr;
         temp_cells[i] = nullptr;
@@ -74,7 +67,7 @@ AccelerationMultiGrid_t::AccelerationMultiGrid_t(Shape_t** items, unsigned int n
             for (y = (unsigned int)min1[1]; y <= (unsigned int)max1[1]; y++){
                 for (x = (unsigned int)min1[0]; x <= (unsigned int)max1[0]; x++){
                     if (temp_cells[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] == nullptr){
-                        temp_cells[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] = new GridCell_t;
+                        temp_cells[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] = new GridCellArray_t;
                     }
                     temp_cells[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]]->add(items[i]);
                 }
@@ -85,14 +78,6 @@ AccelerationMultiGrid_t::AccelerationMultiGrid_t(Shape_t** items, unsigned int n
     for (unsigned int i = 0; i < (cell_res_[0]*cell_res_[1]*cell_res_[2]); i++){
         if (temp_cells[i] != nullptr){
             if ((temp_cells[i]->n_obj_ > max_cell_content_) && (level_ < max_grid_level_)){
-                #ifdef CELLLIST
-                temp_elements = new Shape_t*[temp_cells[i]->n_obj_];
-                element_index = 0;
-                for (auto it = temp_cells[i]->items_.begin(); it != temp_cells[i]->items_.end(); ++it){
-                    temp_elements[element_index] = *it;
-                    element_index++;
-                }
-                #endif
 
                 z = i/(cell_res_[0]*cell_res_[1]);
                 y = (i - z * cell_res_[0]*cell_res_[1])/cell_res_[0];
@@ -101,19 +86,10 @@ AccelerationMultiGrid_t::AccelerationMultiGrid_t(Shape_t** items, unsigned int n
                 cell_extent[0] = coordinates_[0] + grid_size*Vec3f(x, y, z)/cell_res;
                 cell_extent[1] = cell_extent[0] + cell_size_;
 
-                #ifdef CELLLIST
-                cells_[i] = new AccelerationMultiGrid_t(temp_elements, temp_cells[i]->n_obj_, &cell_extent[0], level_+1, min_res_, max_res_, max_cell_content_, max_grid_level_);
-                #else
-                cells_[i] = new AccelerationMultiGrid_t(temp_cells[i]->items_, temp_cells[i]->n_obj_, &cell_extent[0], level_+1, min_res_, max_res_, max_cell_content_, max_grid_level_);
-                #endif
+                cells_[i] = new AccelerationMultiGridArray_t(temp_cells[i]->items_, temp_cells[i]->n_obj_, &cell_extent[0], level_+1, min_res_, max_res_, max_cell_content_, max_grid_level_);
 
-                #ifdef CELLLIST
-                delete [] temp_elements;
-                temp_elements = nullptr;
-                #endif
                 delete temp_cells[i];
                 temp_cells[i] = nullptr;
-
             }
             else{
                 cells_[i] = temp_cells[i];
@@ -124,7 +100,7 @@ AccelerationMultiGrid_t::AccelerationMultiGrid_t(Shape_t** items, unsigned int n
     delete [] temp_cells;
 }
 
-AccelerationMultiGrid_t::~AccelerationMultiGrid_t(){
+AccelerationMultiGridArray_t::~AccelerationMultiGridArray_t(){
     if (bounding_box_ != nullptr){
         delete bounding_box_;
     }
@@ -139,13 +115,13 @@ AccelerationMultiGrid_t::~AccelerationMultiGrid_t(){
     }
 }
 
-void AccelerationMultiGrid_t::update(){
+void AccelerationMultiGridArray_t::update(){
     for (unsigned int i = 0; i < (cell_res_[0]*cell_res_[1]*cell_res_[2]); i++){
         cells_[i]->update();
     }
 }
 
-void AccelerationMultiGrid_t::intersect(const Ray_t &ray, Shape_t* &hit_obj, double &t, double (&uv)[2]) const {
+void AccelerationMultiGridArray_t::intersect(const Ray_t &ray, Shape_t* &hit_obj, double &t, double (&uv)[2]) const {
     Vec3f invdir;
     double tbbox;
     bool intersected;
@@ -218,7 +194,7 @@ void AccelerationMultiGrid_t::intersect(const Ray_t &ray, Shape_t* &hit_obj, dou
     }
 }
 
-void AccelerationMultiGrid_t::add(Shape_t* item){
+void AccelerationMultiGridArray_t::add(Shape_t* item){
     Vec3f min1, max1;
     Vec3f cell_res;
 
@@ -247,7 +223,7 @@ void AccelerationMultiGrid_t::add(Shape_t* item){
         for (unsigned int y = (unsigned int)min1[1]; y <= (unsigned int)max1[1]; y++){
             for (unsigned int x = (unsigned int)min1[0]; x <= (unsigned int)max1[0]; x++){
                 if (cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] == nullptr){
-                    cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] = new GridCell_t;
+                    cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] = new GridCellArray_t;
                 }
                 cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]]->add(item);
             }
@@ -255,10 +231,10 @@ void AccelerationMultiGrid_t::add(Shape_t* item){
     }
 }
 
-void AccelerationMultiGrid_t::remove(const Shape_t* item){
+void AccelerationMultiGridArray_t::remove(const Shape_t* item){
 
 }
 
-void AccelerationMultiGrid_t::move(Shape_t* item){
+void AccelerationMultiGridArray_t::move(Shape_t* item){
 
 }
