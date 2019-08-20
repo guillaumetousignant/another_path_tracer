@@ -86,6 +86,13 @@
 #include "SkyboxTextureTransformation_t.h"
 #include "SkyboxTextureTransformationSun_t.h"
 
+#include "AccelerationGrid_t.h"
+#include "AccelerationGridArray_t.h"
+#include "AccelerationGridVector_t.h"
+#include "AccelerationMultiGrid_t.h"
+#include "AccelerationMultiGridArray_t.h"
+#include "AccelerationMultiGridVector_t.h"
+
 SceneContext_t::SceneContext_t() :
     use_gl_(false), scene_name_(""), opengl_renderer_(nullptr), opengl_imgbuffer_(nullptr), 
     opengl_camera_(nullptr), scene_(nullptr), camera_rendermode_(nullptr), camera_n_iter_(nullptr), camera_write_interval_(nullptr), n_transform_matrices_(0), 
@@ -146,6 +153,7 @@ void SceneContext_t::readXML(const std::string &filename){
     tinyxml2::XMLElement* xml_skyboxes = xml_top->FirstChildElement("skyboxes");
     tinyxml2::XMLElement* xml_imgbuffers = xml_top->FirstChildElement("imgbuffers");
     tinyxml2::XMLElement* xml_cameras = xml_top->FirstChildElement("cameras");
+    tinyxml2::XMLElement* xml_acceleration_structures = xml_top->FirstChildElement("acceleration_structures");
 
     std::list<unsigned int>** scatterers_medium_list = nullptr;
     unsigned int** materials_mix_list = nullptr;
@@ -753,9 +761,19 @@ void SceneContext_t::readXML(const std::string &filename){
 
     // Acceleration structure build
     std::cout << "Building acceleration structure..." << std::endl;
+    tinyxml2::XMLElement* xml_acceleration_structure;
+    if (xml_acceleration_structures != nullptr){
+        xml_acceleration_structure = xml_acceleration_structures->FirstChildElement("acceleration_structure");
+              
+    }
+    else {
+        xml_acceleration_structure = nullptr;
+    }
+
     t_start = std::chrono::high_resolution_clock::now();
-    scene_->build_acc();
+    create_acceleration_structure(xml_acceleration_structure);
     t_end = std::chrono::high_resolution_clock::now();
+
     std::cout << "Acceleration structure built in " 
         << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
         << "s." << std::endl << std::endl;
@@ -1935,6 +1953,47 @@ Camera_t* SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, 
     else{
         std::cout << "Error, camera type '" << type << "' not implemented. Exiting." << std::endl; 
         exit(100);
+    }
+}
+
+void SceneContext_t::create_acceleration_structure(const tinyxml2::XMLElement* xml_acceleration_structure) {
+    if (xml_acceleration_structure == nullptr){
+        scene_->acc_ = new AccelerationGrid_t(scene_->geometry_, scene_->n_obj_);
+        return;
+    }
+
+    std::string type;
+    const char* type_char = xml_acceleration_structure->Attribute("type");
+    if (type_char == nullptr) {
+        std::cout << "Error: XML acceleration structures should have a 'type' attribute. Using 'grid'." << std::endl;
+        type = "grid";
+    }
+    else {
+        type = type_char;
+    }
+    std::transform(type.begin(), type.end(), type.begin(), ::tolower);
+
+    if (type == "grid"){
+        scene_->acc_ = new AccelerationGrid_t(scene_->geometry_, scene_->n_obj_, nullptr, 0, xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128));
+    }
+    else if (type == "grid_array"){
+        scene_->acc_ = new AccelerationGridArray_t(scene_->geometry_, scene_->n_obj_, nullptr, 0, xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128));
+    }
+    else if (type == "grid_vector"){
+        scene_->acc_ = new AccelerationGridVector_t(scene_->geometry_, scene_->n_obj_, nullptr, 0, xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128));
+    }
+    else if (type == "multi_grid"){
+        scene_->acc_ = new AccelerationMultiGrid_t(scene_->geometry_, scene_->n_obj_, nullptr, 0, xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128), xml_acceleration_structure->UnsignedAttribute("max_cell_content", 32), xml_acceleration_structure->UnsignedAttribute("max_grid_level", 1));
+    }
+    else if (type == "multi_grid_array"){
+        scene_->acc_ = new AccelerationMultiGridArray_t(scene_->geometry_, scene_->n_obj_, nullptr, 0, xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128), xml_acceleration_structure->UnsignedAttribute("max_cell_content", 32), xml_acceleration_structure->UnsignedAttribute("max_grid_level", 1));
+    }
+    else if (type == "multi_grid_vector"){
+        scene_->acc_ = new AccelerationMultiGridVector_t(scene_->geometry_, scene_->n_obj_, nullptr, 0, xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128), xml_acceleration_structure->UnsignedAttribute("max_cell_content", 32), xml_acceleration_structure->UnsignedAttribute("max_grid_level", 1));
+    }
+    else{
+        std::cout << "Error, acceleration structure type '" << type << "' not implemented. Using 'grid'." << std::endl; 
+        scene_->acc_ = new AccelerationGrid_t(scene_->geometry_, scene_->n_obj_);
     }
 }
 
