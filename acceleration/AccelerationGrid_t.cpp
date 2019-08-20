@@ -5,8 +5,6 @@
 #include <limits>
 #include <cmath>
 
-#define CELLLIST
-
 AccelerationGrid_t::AccelerationGrid_t(Shape_t** items, unsigned int n_items, Vec3f* coordinates/* = nullptr*/, unsigned int level /* = 0*/, unsigned int min_res /* = 1 */, unsigned int max_res /* = 128 */) : 
         level_(level), min_res_(min_res), max_res_(max_res) {
     Vec3f grid_size;
