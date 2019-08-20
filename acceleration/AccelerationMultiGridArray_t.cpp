@@ -69,6 +69,38 @@ AccelerationMultiGridArray_t::AccelerationMultiGridArray_t(Shape_t** items, unsi
                     if (temp_cells[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] == nullptr){
                         temp_cells[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] = new GridCellArray_t;
                     }
+                    ++(*temp_cells[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]]);
+                }
+            }
+        }
+    }
+
+    for (unsigned int i = 0; i < cell_res_[0] * cell_res_[1] * cell_res_[2]; i++){
+        if (temp_cells[i] != nullptr){
+            temp_cells[i]->reserve();
+        }
+    }
+
+    for (unsigned int i = 0; i < n_obj_; i++){
+        min1 = Vec3f(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
+        max1 = Vec3f(-std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity());
+    
+        min1.min(items[i]->mincoord());
+        max1.max(items[i]->maxcoord());
+        min1 = ((min1 - coordinates_[0])/cell_size_).floor();
+        max1 = ((max1 - coordinates_[0])/cell_size_).floor();
+
+        min1.max(0.0);
+        max1.max(0.0);
+        min1.min(cell_res-1.0);
+        max1.min(cell_res-1.0);
+        
+        for (z = (unsigned int)min1[2]; z <= (unsigned int)max1[2]; z++){
+            for (y = (unsigned int)min1[1]; y <= (unsigned int)max1[1]; y++){
+                for (x = (unsigned int)min1[0]; x <= (unsigned int)max1[0]; x++){
+                    if (temp_cells[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] == nullptr){
+                        temp_cells[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] = new GridCellArray_t;
+                    }
                     temp_cells[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]]->add(items[i]);
                 }
             }

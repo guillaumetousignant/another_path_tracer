@@ -66,14 +66,16 @@ AccelerationGridVector_t::AccelerationGridVector_t(Shape_t** items, unsigned int
                     if (cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] == nullptr){
                         cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] = new GridCellVector_t;
                     }
-                    ++cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]];
+                    ++(*cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]]);
                 }
             }
         }
     }
 
     for (unsigned int i = 0; i < cell_res_[0] * cell_res_[1] * cell_res_[2]; i++){
-        cells_[i].reserve();
+        if (cells_[i] != nullptr){
+            cells_[i]->reserve();
+        }
     }
 
     for (unsigned int i = 0; i < n_obj_; i++){
