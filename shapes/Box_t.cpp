@@ -2,6 +2,8 @@
 #include <limits>
 #include <algorithm>
 
+Box_t::Box_t() {}
+
 Box_t::Box_t(Vec3f (&coord)[2]) : coordinates_{coord[0], coord[1]} {}
 
 Box_t::~Box_t(){}
