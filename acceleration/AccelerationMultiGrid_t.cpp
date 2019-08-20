@@ -5,13 +5,10 @@
 #include <limits>
 #include <cmath>
 
-#define GRIDMINRES 1
-#define GRIDMAXRES 128
-#define MAXCELLCONTENT 32 // Segfaults if too low. 16 segfaults zombie
-#define MAXGRIDLEVEL 2
 #define CELLLIST
 
-AccelerationMultiGrid_t::AccelerationMultiGrid_t(Shape_t** items, unsigned int n_items, Vec3f* coordinates/* = nullptr*/, unsigned int level /* = 0*/) : level_(level) {
+AccelerationMultiGrid_t::AccelerationMultiGrid_t(Shape_t** items, unsigned int n_items, Vec3f* coordinates/* = nullptr*/, unsigned int level /* = 0*/, unsigned int min_res /* = 1 */, unsigned int max_res /* = 128 */, unsigned int max_cell_content /* = 32 */, unsigned int max_grid_level /* = 1 */) : 
+        level_(level), min_res_(min_res), max_res_(max_res), max_cell_content_(max_cell_content), max_grid_level_(max_grid_level) {
     Vec3f grid_size;
     Vec3f min1, max1;
     Vec3f cell_res;
@@ -46,11 +43,11 @@ AccelerationMultiGrid_t::AccelerationMultiGrid_t(Shape_t** items, unsigned int n
     cell_res = (grid_size * std::pow(n_obj_/(grid_size[0]*grid_size[1]*grid_size[2]), 1.0/3.0)).floor();
 
     for (unsigned int i = 0; i < 3; i++){
-        if (cell_res[i] < GRIDMINRES){
-            cell_res[i] = GRIDMINRES;
+        if (cell_res[i] < min_res_){
+            cell_res[i] = min_res_;
         }
-        else if(cell_res[i] > GRIDMAXRES){
-            cell_res[i] = GRIDMAXRES;
+        else if(cell_res[i] > max_res_){
+            cell_res[i] = max_res_;
         }
         cell_res_[i] = (unsigned int)cell_res[i];
     }
@@ -101,7 +98,7 @@ AccelerationMultiGrid_t::AccelerationMultiGrid_t(Shape_t** items, unsigned int n
 
     for (unsigned int i = 0; i < (cell_res_[0]*cell_res_[1]*cell_res_[2]); i++){
         if (temp_cells[i] != nullptr){
-            if ((temp_cells[i]->n_obj_ > MAXCELLCONTENT) && (level_ < MAXGRIDLEVEL)){
+            if ((temp_cells[i]->n_obj_ > max_cell_content_) && (level_ < max_grid_level_)){
                 #ifdef CELLLIST
                 temp_elements = new Shape_t*[temp_cells[i]->n_obj_];
                 element_index = 0;
@@ -119,9 +116,9 @@ AccelerationMultiGrid_t::AccelerationMultiGrid_t(Shape_t** items, unsigned int n
                 cell_extent[1] = cell_extent[0] + cell_size_;
 
                 #ifdef CELLLIST
-                cells_[i] = new AccelerationMultiGrid_t(temp_elements, temp_cells[i]->n_obj_, &cell_extent[0], level_+1);
+                cells_[i] = new AccelerationMultiGrid_t(temp_elements, temp_cells[i]->n_obj_, &cell_extent[0], level_+1, min_res_, max_res_, max_cell_content_, max_grid_level_);
                 #else
-                cells_[i] = new AccelerationMultiGrid_t(temp_cells[i]->items_, temp_cells[i]->n_obj_, &cell_extent[0], level_+1);
+                cells_[i] = new AccelerationMultiGrid_t(temp_cells[i]->items_, temp_cells[i]->n_obj_, &cell_extent[0], level_+1, min_res_, max_res_, max_cell_content_, max_grid_level_);
                 #endif
 
                 #ifdef CELLLIST
