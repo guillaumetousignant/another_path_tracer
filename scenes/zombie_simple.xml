@@ -63,4 +63,7 @@
    <mesh_geometries>
       <mesh_geometry filename="assets/Zombie_Beast4_test.obj" name="zombie_mesh" type="mesh_geometry"/>
    </mesh_geometries>
+   <acceleration_structures>
+      <acceleration_structure type="grid" min_resolution="1" max_resolution="128"/>
+   </acceleration_structures>
 </scene>
