@@ -7,7 +7,7 @@
 class Box_t {
     public:
         Box_t(Vec3f (&coord)[2]);
-        virtual ~Box_t();
+        ~Box_t();
 
         Vec3f coordinates_[2];
 
