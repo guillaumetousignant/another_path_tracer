@@ -5,7 +5,6 @@
 #include "AccelerationStructure_t.h"
 
 class Shape_t;
-class GridCell_t;
 class Box_t;
 
 class AccelerationMultiGrid_t final : public AccelerationStructure_t{
