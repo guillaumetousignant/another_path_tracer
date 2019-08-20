@@ -15,8 +15,14 @@ void Camera_t::accumulate(const Scene_t* scene, unsigned int n_iter /*= 10000000
     unsigned int n = 0;
     while (n < n_iter){
         n++;
+
+        auto t_start = std::chrono::high_resolution_clock::now();
         raytrace(scene);
-        std::cout << "Iteration " << n << " done." << std::endl;
+        auto t_end = std::chrono::high_resolution_clock::now();
+
+        std::cout << "Iteration " << n << " done in " 
+            << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
+            << "s." << std::endl;
     }
 }
 
