@@ -2041,6 +2041,7 @@ std::list<unsigned int>* SceneContext_t::get_medium_index_list(std::string strin
         }
         else {
             if (xml_materials != nullptr){
+                std::transform(token.begin(), token.end(), token.begin(), ::tolower);
                 unsigned int index = 0;
                 for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
                     const char* material_char = xml_material->Attribute("name");
@@ -2065,6 +2066,7 @@ std::list<unsigned int>* SceneContext_t::get_medium_index_list(std::string strin
     }
     else {
         if (xml_materials != nullptr){
+            std::transform(string_medium_list.begin(), string_medium_list.end(), string_medium_list.begin(), ::tolower);
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
                 std::string name_material;
@@ -2103,6 +2105,7 @@ std::list<Medium_t*> SceneContext_t::get_medium_list(std::string string_medium_l
         }
         else {
             if (xml_materials != nullptr){
+                std::transform(token.begin(), token.end(), token.begin(), ::tolower);
                 unsigned int index = 0;
                 for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
                     const char* material_char = xml_material->Attribute("name");
@@ -2137,6 +2140,7 @@ std::list<Medium_t*> SceneContext_t::get_medium_list(std::string string_medium_l
     }
     else {
         if (xml_materials != nullptr){
+            std::transform(string_medium_list.begin(), string_medium_list.end(), string_medium_list.begin(), ::tolower);
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
                 const char* material_char = xml_material->Attribute("name");
@@ -2370,6 +2374,7 @@ void SceneContext_t::get_lights(std::string lights_string, DirectionalLight_t** 
         }
         else {
             if (xml_directional_lights != nullptr){
+                std::transform(token.begin(), token.end(), token.begin(), ::tolower);
                 unsigned int index = 0;
                 for (const tinyxml2::XMLElement* xml_directional_light = xml_directional_lights->FirstChildElement("directional_light"); xml_directional_light; xml_directional_light = xml_directional_light->NextSiblingElement("directional_light")){
                     const char* name_char = xml_directional_light->Attribute("name");
@@ -2394,6 +2399,7 @@ void SceneContext_t::get_lights(std::string lights_string, DirectionalLight_t** 
     }
     else {
         if (xml_directional_lights != nullptr){
+            std::transform(lights_string.begin(), lights_string.end(), lights_string.begin(), ::tolower);
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_directional_light = xml_directional_lights->FirstChildElement("directional_light"); xml_directional_light; xml_directional_light = xml_directional_light->NextSiblingElement("directional_light")){
                 const char* name_char = xml_directional_light->Attribute("name");
@@ -2488,6 +2494,7 @@ void SceneContext_t::get_objects(std::string objects_string, Shape_t** &shapes, 
         }
         else {
             if (xml_objects != nullptr){
+                std::transform(token.begin(), token.end(), token.begin(), ::tolower);
                 unsigned int index = 0;
                 for (const tinyxml2::XMLElement* xml_object = xml_objects->FirstChildElement("object"); xml_object; xml_object = xml_object->NextSiblingElement("object")){
                     const char* name_char = xml_object->Attribute("name");
@@ -2512,6 +2519,7 @@ void SceneContext_t::get_objects(std::string objects_string, Shape_t** &shapes, 
     }
     else {
         if (xml_objects != nullptr){
+            std::transform(objects_string.begin(), objects_string.end(), objects_string.begin(), ::tolower);
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_object = xml_objects->FirstChildElement("object"); xml_object; xml_object = xml_object->NextSiblingElement("object")){
                 const char* name_char = xml_object->Attribute("name");
