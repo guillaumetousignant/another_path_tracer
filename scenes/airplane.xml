@@ -35,11 +35,11 @@
       <mesh_geometry filename="./assets/A380/A380_test3.obj" name="airplane_mesh" type="mesh_geometry"/>
    </mesh_geometries>
    <objects>
-      <object material="difgrey" name="planegrey1" normals="NaN" points="-2 4 -0.5&#xA;-2 0 -0.5&#xA; 2 0 -0.5" texture_coordinates="NaN" transform_matrix="NaN" type="triangle"/>
-      <object material="difgrey" name="planegrey2" normals="NaN" points="-2 4 -0.5&#xA; 2 0 -0.5&#xA; 2 4 -0.5" texture_coordinates="NaN" transform_matrix="NaN" type="triangle"/>
+      <object material="difgrey" name="planegrey1" normals="NaN" points="-2 4 -0.5&#xA;-2 -4 -0.5&#xA; 2 -4 -0.5" texture_coordinates="NaN" transform_matrix="NaN" type="triangle"/>
+      <object material="difgrey" name="planegrey2" normals="NaN" points="-2 4 -0.5&#xA; 2 -4 -0.5&#xA; 2 4 -0.5" texture_coordinates="NaN" transform_matrix="NaN" type="triangle"/>
       <object material="airplane_mat" mesh_geometry="airplane_mesh" name="airplane" transform_matrix="NaN" type="mesh">
          <transformations_pre>
-            <transformation_pre type="translate" value="0.1 4 -0.5"/>
+            <transformation_pre type="translate" value="0 0 0"/>
             <transformation_pre type="uniformscale" value="0.09"/>
             <transformation_pre type="rotatex" value="1.5708"/>
             <transformation_pre type="rotatez" value="3.5343"/>
@@ -62,7 +62,11 @@
       <imgbuffer name="buffer1" resx="1920" resy="1080" type="imgbuffer_opengl"/>
    </imgbuffers>
    <cameras>
-      <camera aperture="0.005" filename="NaN" focal_length="3.5" fov="0.7854 1.3963" gammaind="1" imgbuffer="1" max_bounces="8" medium_list="air, air" n_iter="Inf" name="camera1" rendermode="accumulation" skybox="day" subpix="1 1" transform_matrix="NaN" type="cam_aperture" up="0 0 1"/>
+      <camera aperture="0.005" filename="NaN" focal_length="3.5" fov="0.7854 1.3963" gammaind="1" imgbuffer="1" max_bounces="8" medium_list="air, air" n_iter="Inf" name="camera1" rendermode="accumulation" skybox="day" subpix="1 1" transform_matrix="NaN" type="cam_aperture" up="0 0 1">
+         <transformations_pre>
+            <transformation_pre type="translate" value="-0.1 -4 0.5"/>
+         </transformations_pre>
+      </camera>
    </cameras>
    <acceleration_structures>
       <acceleration_structure type="multi_grid" min_resolution="1" max_resolution="128" max_cell_content="32" max_grid_level="1"/>
