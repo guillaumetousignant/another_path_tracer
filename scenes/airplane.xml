@@ -64,4 +64,7 @@
    <cameras>
       <camera aperture="0.005" filename="NaN" focal_length="3.5" fov="0.7854 1.3963" gammaind="1" imgbuffer="1" max_bounces="8" medium_list="air, air" n_iter="Inf" name="camera1" rendermode="accumulation" skybox="day" subpix="1 1" transform_matrix="NaN" type="cam_aperture" up="0 0 1"/>
    </cameras>
+   <acceleration_structures>
+      <acceleration_structure type="multi_grid" min_resolution="1" max_resolution="128" max_cell_content="32" max_grid_level="1"/>
+   </acceleration_structures>
 </scene>
