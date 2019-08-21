@@ -2041,6 +2041,7 @@ std::list<unsigned int>* SceneContext_t::get_medium_index_list(std::string strin
         }
         else {
             if (xml_materials != nullptr){
+                bool missing = true;
                 std::transform(token.begin(), token.end(), token.begin(), ::tolower);
                 unsigned int index = 0;
                 for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
@@ -2050,11 +2051,20 @@ std::list<unsigned int>* SceneContext_t::get_medium_index_list(std::string strin
                         std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
                         if (name_material == token){
                             medium_list->push_back(index);
+                            missing = false;
                             break;
                         }
                     }                    
                     ++index;
                 }
+                if (missing){
+                    std::cout << "Error: medium '" << token << "' not found, exiting." << std::endl;
+                    exit(498);
+                }
+            }
+            else {
+                std::cout << "Error: no materials, medium '" << token << "' not found, exiting." << std::endl;
+                exit(499);
             }
         }
         // CHECK this should check for errors.
@@ -2066,6 +2076,7 @@ std::list<unsigned int>* SceneContext_t::get_medium_index_list(std::string strin
     }
     else {
         if (xml_materials != nullptr){
+            bool missing = true;
             std::transform(string_medium_list.begin(), string_medium_list.end(), string_medium_list.begin(), ::tolower);
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
@@ -2076,11 +2087,20 @@ std::list<unsigned int>* SceneContext_t::get_medium_index_list(std::string strin
                     std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
                     if (name_material == string_medium_list){
                         medium_list->push_back(index);
+                        missing = false;
                         break;
                     }
                 }                
                 ++index;
             }
+            if (missing){
+                std::cout << "Error: medium '" << string_medium_list << "' not found, exiting." << std::endl;
+                exit(498);
+            }
+        }
+        else {
+            std::cout << "Error: no materials, medium '" << string_medium_list << "' not found, exiting." << std::endl;
+            exit(499);
         }
     }
     return medium_list;
@@ -2105,6 +2125,7 @@ std::list<Medium_t*> SceneContext_t::get_medium_list(std::string string_medium_l
         }
         else {
             if (xml_materials != nullptr){
+                bool missing = true;
                 std::transform(token.begin(), token.end(), token.begin(), ::tolower);
                 unsigned int index = 0;
                 for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
@@ -2119,11 +2140,20 @@ std::list<Medium_t*> SceneContext_t::get_medium_list(std::string string_medium_l
                                 exit(495);
                             }
                             medium_list.push_back(medium);
+                            missing = false;
                             break;
                         }
                     }
                     ++index;
                 }
+                if (missing){
+                    std::cout << "Error: medium '" << token << "' not found, exiting." << std::endl;
+                    exit(496);
+                }
+            }
+            else {
+                std::cout << "Error: no materials, medium '" << token << "' not found, exiting." << std::endl;
+                exit(497);
             }
         }
         // CHECK this should check for errors.
@@ -2140,6 +2170,7 @@ std::list<Medium_t*> SceneContext_t::get_medium_list(std::string string_medium_l
     }
     else {
         if (xml_materials != nullptr){
+            bool missing = true;
             std::transform(string_medium_list.begin(), string_medium_list.end(), string_medium_list.begin(), ::tolower);
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
@@ -2154,11 +2185,20 @@ std::list<Medium_t*> SceneContext_t::get_medium_list(std::string string_medium_l
                             exit(495);
                         }
                         medium_list.push_back(medium);
+                        missing = false;
                         break;
                     }
                 }
                 ++index;
             }
+            if (missing){
+                std::cout << "Error: medium '" << string_medium_list << "' not found, exiting." << std::endl;
+                exit(496);
+            }
+        }
+        else {
+            std::cout << "Error: no materials, medium '" << string_medium_list << "' not found, exiting." << std::endl;
+            exit(497);
         }
     }
     return medium_list;
@@ -2374,6 +2414,7 @@ void SceneContext_t::get_lights(std::string lights_string, DirectionalLight_t** 
         }
         else {
             if (xml_directional_lights != nullptr){
+                bool missing = true;
                 std::transform(token.begin(), token.end(), token.begin(), ::tolower);
                 unsigned int index = 0;
                 for (const tinyxml2::XMLElement* xml_directional_light = xml_directional_lights->FirstChildElement("directional_light"); xml_directional_light; xml_directional_light = xml_directional_light->NextSiblingElement("directional_light")){
@@ -2383,12 +2424,19 @@ void SceneContext_t::get_lights(std::string lights_string, DirectionalLight_t** 
                         std::transform(name_light.begin(), name_light.end(), name_light.begin(), ::tolower);
                         if (name_light == token){
                             lights_list.push_back(directional_lights_[index]);
+                            missing = false;
                             break;
                         }
                     }
                     ++index;
                 }
+                if (missing){
+                    std::cout << "Error: light '" << token << "' not found, ignoring." << std::endl;
+                }
             }
+            else {
+                std::cout << "Error: no directional lights, light '" << token << "' not found, ignoring." << std::endl;
+            }            
         }
         // CHECK this should check for errors.
 
@@ -2399,6 +2447,7 @@ void SceneContext_t::get_lights(std::string lights_string, DirectionalLight_t** 
     }
     else {
         if (xml_directional_lights != nullptr){
+            bool missing = true;
             std::transform(lights_string.begin(), lights_string.end(), lights_string.begin(), ::tolower);
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_directional_light = xml_directional_lights->FirstChildElement("directional_light"); xml_directional_light; xml_directional_light = xml_directional_light->NextSiblingElement("directional_light")){
@@ -2408,11 +2457,18 @@ void SceneContext_t::get_lights(std::string lights_string, DirectionalLight_t** 
                     std::transform(name_light.begin(), name_light.end(), name_light.begin(), ::tolower);
                     if (name_light == lights_string){
                         lights_list.push_back(directional_lights_[index]);
+                        missing = false;
                         break;
                     }
                 }                
                 ++index;
             }
+            if (missing){
+                std::cout << "Error: light '" << lights_string << "' not found, ignoring." << std::endl;
+            }
+        }
+        else {
+            std::cout << "Error: no directional lights, light '" << lights_string << "' not found, ignoring." << std::endl;
         }
     }
 
@@ -2494,6 +2550,7 @@ void SceneContext_t::get_objects(std::string objects_string, Shape_t** &shapes, 
         }
         else {
             if (xml_objects != nullptr){
+                bool missing = true;
                 std::transform(token.begin(), token.end(), token.begin(), ::tolower);
                 unsigned int index = 0;
                 for (const tinyxml2::XMLElement* xml_object = xml_objects->FirstChildElement("object"); xml_object; xml_object = xml_object->NextSiblingElement("object")){
@@ -2503,11 +2560,18 @@ void SceneContext_t::get_objects(std::string objects_string, Shape_t** &shapes, 
                         std::transform(name_object.begin(), name_object.end(), name_object.begin(), ::tolower);
                         if (name_object == token){
                             objects_list.push_back(index);
+                            missing = false;
                             break;
                         }
                     }
                     ++index;
                 }
+                if (missing){
+                    std::cout << "Error: object '" << token << "' not found, ignoring." << std::endl;
+                }
+            }
+            else {
+                std::cout << "Error: no objects, object '" << token << "' not found, ignoring." << std::endl;
             }
         }
         // CHECK this should check for errors.
@@ -2519,6 +2583,7 @@ void SceneContext_t::get_objects(std::string objects_string, Shape_t** &shapes, 
     }
     else {
         if (xml_objects != nullptr){
+            bool missing = true;
             std::transform(objects_string.begin(), objects_string.end(), objects_string.begin(), ::tolower);
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_object = xml_objects->FirstChildElement("object"); xml_object; xml_object = xml_object->NextSiblingElement("object")){
@@ -2528,11 +2593,18 @@ void SceneContext_t::get_objects(std::string objects_string, Shape_t** &shapes, 
                     std::transform(name_object.begin(), name_object.end(), name_object.begin(), ::tolower);
                     if (name_object == objects_string){
                         objects_list.push_back(index);
+                        missing = false;
                         break;
                     }
                 }
                 ++index;
             }
+            if (missing){
+                std::cout << "Error: object '" << objects_string << "' not found, ignoring." << std::endl;
+            }
+        }
+        else {
+            std::cout << "Error: no objects, object '" << objects_string << "' not found, ignoring." << std::endl;
         }
     }
 
