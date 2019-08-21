@@ -29,11 +29,11 @@
       <mesh_geometry filename=".\assets\piper_pa18_obj\piper_pa18.obj" name="piper_mesh" type="mesh_geometry"/>
    </mesh_geometries>
    <objects>
-      <object material="difgrey" name="planegrey1" normals="NaN" points="-2 4 -0.5&#xA;-2 0 -0.5&#xA; 2 0 -0.5" texture_coordinates="NaN" transform_matrix="NaN" type="triangle"/>
-      <object material="difgrey" name="planegrey2" normals="NaN" points="-2 4 -0.5&#xA; 2 0 -0.5&#xA; 2 4 -0.5" texture_coordinates="NaN" transform_matrix="NaN" type="triangle"/>
+      <object material="difgrey" name="planegrey1" normals="NaN" points="-2 2 -0.5&#xA;-2 -2 -0.5&#xA; 2 -2 -0.5" texture_coordinates="NaN" transform_matrix="NaN" type="triangle"/>
+      <object material="difgrey" name="planegrey2" normals="NaN" points="-2 2 -0.5&#xA; 2 -2 -0.5&#xA; 2 2 -0.5" texture_coordinates="NaN" transform_matrix="NaN" type="triangle"/>
       <object material="piper_mat" mesh_geometry="piper_mesh" name="piper" transform_matrix="NaN" type="mesh">
          <transformations_pre>
-            <transformation_pre type="translate" value="0 1.75 -0.25"/>
+            <transformation_pre type="translate" value="0 0 -0.25"/>
             <transformation_pre type="uniformscale" value="0.2"/>
             <transformation_pre type="rotatex" value="1.5708"/>
             <transformation_pre type="rotatez" value="0.3927"/>
@@ -59,7 +59,7 @@
    <cameras>
       <camera aperture="0.01" filename="NaN" focal_length="1.5" fov="0.93084 1.3963" gammaind="1" imgbuffer="1" max_bounces="8" medium_list="air, air" n_iter="Inf" name="camera1" rendermode="accumulation" skybox="day" subpix="1 1" transform_matrix="NaN" type="cam_aperture" up="0 0 1">
          <transformations_pre>
-            <transformation_pre type="rotatez" value="3.1416"/>
+            <transformation_pre type="translate" value="0 -1.75 0"/>
          </transformations_pre>
       </camera>
    </cameras>
