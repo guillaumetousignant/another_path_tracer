@@ -54,7 +54,7 @@
       <skybox colour="0.804 0.8825 0.9765" lights="sun" name="day" type="skybox_flat_sun"/>
    </skyboxes>
    <imgbuffers>
-      <imgbuffer name="buffer1" resx="1800" resy="1200" type="imgbuffer"/>
+      <imgbuffer name="buffer1" resx="1800" resy="1200" type="imgbuffer_opengl"/>
    </imgbuffers>
    <cameras>
       <camera aperture="0.01" filename="NaN" focal_length="1.5" fov="0.93084 1.3963" gammaind="1" imgbuffer="1" max_bounces="8" medium_list="air, air" n_iter="Inf" name="camera1" rendermode="accumulation" skybox="day" subpix="1 1" transform_matrix="NaN" type="cam_aperture" up="0 0 1">
