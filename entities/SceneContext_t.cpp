@@ -1965,8 +1965,8 @@ void SceneContext_t::create_acceleration_structure(const tinyxml2::XMLElement* x
     std::string type;
     const char* type_char = xml_acceleration_structure->Attribute("type");
     if (type_char == nullptr) {
-        std::cout << "Error: XML acceleration structures should have a 'type' attribute. Using 'multi_grid'." << std::endl;
-        type = "multi_grid";
+        std::cout << "Error: XML acceleration structures should have a 'type' attribute. Using 'multi_grid_vector'." << std::endl;
+        type = "multi_grid_vector";
     }
     else {
         type = type_char;
@@ -1992,8 +1992,8 @@ void SceneContext_t::create_acceleration_structure(const tinyxml2::XMLElement* x
         scene_->acc_ = new AccelerationMultiGridVector_t(scene_->geometry_, scene_->n_obj_, nullptr, 0, xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128), xml_acceleration_structure->UnsignedAttribute("max_cell_content", 32), xml_acceleration_structure->UnsignedAttribute("max_grid_level", 1));
     }
     else{
-        std::cout << "Error, acceleration structure type '" << type << "' not implemented. Using 'multi_grid'." << std::endl; 
-        scene_->acc_ = new AccelerationMultiGrid_t(scene_->geometry_, scene_->n_obj_);
+        std::cout << "Error, acceleration structure type '" << type << "' not implemented. Using 'multi_grid_vector'." << std::endl; 
+        scene_->acc_ = new AccelerationMultiGridVector_t(scene_->geometry_, scene_->n_obj_);
     }
 }
 

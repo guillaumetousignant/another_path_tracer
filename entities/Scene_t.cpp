@@ -3,7 +3,7 @@
 #include "AccelerationStructure_t.h"
 #include "MeshTop_t.h"
 #include <limits>
-#include "AccelerationMultiGrid_t.h"
+#include "AccelerationMultiGridVector_t.h"
 
 Scene_t::Scene_t() : geometry_(nullptr), n_obj_(0), acc_(nullptr) {}
 
@@ -108,7 +108,7 @@ void Scene_t::build_acc() {
     if (acc_ != nullptr){
         delete acc_;
     }
-    acc_ = new AccelerationMultiGrid_t(geometry_, n_obj_);
+    acc_ = new AccelerationMultiGridVector_t(geometry_, n_obj_);
 }
 
 void Scene_t::intersect_brute(const Ray_t &ray, Shape_t* &hit_obj, double &t, double (&uv)[2]) const {
