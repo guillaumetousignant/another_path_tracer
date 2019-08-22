@@ -2686,7 +2686,7 @@ Vec3f get_colour(std::string colour) {
         }
 
         if (count == 1) {
-            return Vec3f(values[0);
+            return Vec3f(values[0]);
         }
         else if (count != 3) {
             std::cout << "Error, colour should be 1 or 3 values seperated by spaces, or a string. Current number of values is " << count << ", colour is '" << colour << "'. Ignoring." << std::endl;
