@@ -69,6 +69,6 @@
       </camera>
    </cameras>
    <acceleration_structures>
-      <acceleration_structure type="multi_grid" min_resolution="1" max_resolution="128" max_cell_content="32" max_grid_level="1"/>
+      <acceleration_structure type="multi_grid_vector" min_resolution="1" max_resolution="128" max_cell_content="32" max_grid_level="1"/>
    </acceleration_structures>
 </scene>
