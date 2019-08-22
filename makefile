@@ -115,7 +115,7 @@ DISPLAYLIBS += -lglut -lGL -lGLU -lX11
 #---------------------------------------------------------------------------------------------------+
 # Targets
 
-all : mpirelease $(MPIReleaseObjectFiles)
+all : release $(ReleaseObjectFiles)
 
 debug : .debug  begun $(DebugObjectFiles) $(ExecutableDebugObjectFile)q
 	@printf '   Linking Debug...'
