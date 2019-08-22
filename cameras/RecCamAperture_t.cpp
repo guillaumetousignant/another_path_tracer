@@ -17,7 +17,7 @@ RecCamAperture_t::RecCamAperture_t(TransformMatrix_t* transformation, const std:
 RecCamAperture_t::~RecCamAperture_t() {}
 
 void RecCamAperture_t::update() {
-    origin_ = transformation_->multVec(Vec3f(0.0, 0.0, 0.0));
+    origin_ = transformation_->multVec(Vec3f());
     TransformMatrix_t transform_norm = transformation_->transformDir();
     direction_ = transform_norm.multDir(Vec3f(0.0, 1.0, 0.0));
     focal_length_ = focal_length_buffer_;
@@ -61,7 +61,7 @@ void RecCamAperture_t::raytrace(const Scene_t* scene) {
                     subpix_vec -= origin2;
                     subpix_vec = subpix_vec.normalize();
 
-                    Ray_t ray = Ray_t(origin2, subpix_vec, Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list_);
+                    Ray_t ray = Ray_t(origin2, subpix_vec, Vec3f(), Vec3f(1.0), medium_list_);
                     ray.raycast(scene, max_bounces_, skybox_);
                     col += ray.colour_;
                 }
@@ -93,7 +93,7 @@ void RecCamAperture_t::autoFocus(const Scene_t* scene, const double (&position)[
     ray_vec -= span_y * (position[1] - 0.5) - span_x * (position[0] - 0.5);
     ray_vec -= origin_;
 
-    Ray_t focus_ray = Ray_t(origin_, ray_vec.normalize(), Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list_);
+    Ray_t focus_ray = Ray_t(origin_, ray_vec.normalize(), Vec3f(), Vec3f(1.0), medium_list_);
     
     scene->intersect(focus_ray, hit_obj, t, uv);
 

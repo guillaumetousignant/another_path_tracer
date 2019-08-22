@@ -15,7 +15,7 @@ void Box_t::intersection(const Ray_t &ray, bool &intersected, double &t) const {
     double tymin, tymax;
     double tzmin, tzmax;
 
-    invdir = Vec3f(1.0, 1.0, 1.0)/ray.direction_;
+    invdir = Vec3f(1.0)/ray.direction_;
     sign[0] = invdir[0] < 0;
     sign[1] = invdir[1] < 0;
     sign[2] = invdir[2] < 0;

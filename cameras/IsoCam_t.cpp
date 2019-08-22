@@ -15,7 +15,7 @@ IsoCam_t::IsoCam_t(TransformMatrix_t* transformation, const std::string &filenam
 IsoCam_t::~IsoCam_t() {}
 
 void IsoCam_t::update() {
-    origin_ = transformation_->multVec(Vec3f(0.0, 0.0, 0.0));
+    origin_ = transformation_->multVec(Vec3f());
     TransformMatrix_t transform_norm = transformation_->transformDir();
     direction_ = transform_norm.multDir(Vec3f(0.0, 1.0, 0.0));
     up_ = up_buffer_;
@@ -51,7 +51,7 @@ void IsoCam_t::raytrace(const Scene_t* scene) {
 
                     Vec3f subpix_ray_origin = ray_origin - vertical * subpix_span_y * ((double)k - (double)subpix_[0]/2.0 + jitter_y) + horizontal * subpix_span_x * ((double)l - (double)subpix_[1]/2.0 + jitter_x);;
 
-                    Ray_t ray = Ray_t(subpix_ray_origin, direction_, Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list_);
+                    Ray_t ray = Ray_t(subpix_ray_origin, direction_, Vec3f(), Vec3f(1.0), medium_list_);
                     ray.raycast(scene, max_bounces_, skybox_);
                     col += ray.colour_;
                 }

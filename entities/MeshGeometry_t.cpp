@@ -153,7 +153,7 @@ void MeshGeometry_t::readObj(const std::string &filename){
                         v_[f_counter*3 + i] = v[std::stoi(value, nullptr)-1];
                         vt_[f_counter*3 + i][0] = 0.0;
                         vt_[f_counter*3 + i][1] = 0.0;
-                        vn_[f_counter*3 + i] = Vec3f(NAN, NAN, NAN);
+                        vn_[f_counter*3 + i] = Vec3f(NAN);
                     }
                     else{
                         v_[f_counter*3 + i] = v[std::stoi(value.substr(0, pos), nullptr)-1];
@@ -163,7 +163,7 @@ void MeshGeometry_t::readObj(const std::string &filename){
                         if (pos == std::string::npos){
                             vt_[f_counter*3 + i][0] = vt[std::stoi(value, nullptr)-1][0];
                             vt_[f_counter*3 + i][1] = vt[std::stoi(value, nullptr)-1][1];
-                            vn_[f_counter*3 + i] = Vec3f(NAN, NAN, NAN);
+                            vn_[f_counter*3 + i] = Vec3f(NAN);
                         }
                         else{
                             if (pos == 0){
@@ -353,7 +353,7 @@ void MeshGeometry_t::readSU2(const std::string &filename){
                     mat_[f_counter] = material;
                     vt_[3*f_counter + i][0] = 0.0;
                     vt_[3*f_counter + i][1] = 0.0;
-                    vn_[3*f_counter + i] = Vec3f(NAN, NAN, NAN);
+                    vn_[3*f_counter + i] = Vec3f(NAN);
                 }
                 f_counter++;
             }
@@ -364,7 +364,7 @@ void MeshGeometry_t::readSU2(const std::string &filename){
                     mat_[f_counter] = material;
                     vt_[3*f_counter + i][0] = 0.0;
                     vt_[3*f_counter + i][1] = 0.0;
-                    vn_[3*f_counter + i] = Vec3f(NAN, NAN, NAN);
+                    vn_[3*f_counter + i] = Vec3f(NAN);
                 }
                 f_counter++;
                 tokens[1] = tokens[2];
@@ -374,7 +374,7 @@ void MeshGeometry_t::readSU2(const std::string &filename){
                     mat_[f_counter] = material;
                     vt_[3*f_counter + i][0] = 0.0;
                     vt_[3*f_counter + i][1] = 0.0;
-                    vn_[3*f_counter + i] = Vec3f(NAN, NAN, NAN);
+                    vn_[3*f_counter + i] = Vec3f(NAN);
                 }
                 f_counter++;
             }

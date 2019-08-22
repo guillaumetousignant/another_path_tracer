@@ -55,7 +55,7 @@ Cam3DAperture_t::~Cam3DAperture_t() {
 void Cam3DAperture_t::update() {
     Vec3f horizontal;
 
-    origin_ = transformation_->multVec(Vec3f(0.0, 0.0, 0.0));
+    origin_ = transformation_->multVec(Vec3f());
     TransformMatrix_t transform_norm = transformation_->transformDir();
     direction_ = transform_norm.multDir(Vec3f(0.0, 1.0, 0.0));
     focal_length_ = focal_length_buffer_;
@@ -133,7 +133,7 @@ void Cam3DAperture_t::autoFocus(const Scene_t* scene, const double (&position)[2
 
     ray_direction_sph = direction_.get_sph() + Vec3f(0, (position[1]-0.5)*fov_[0], (position[0]-0.5)*-fov_[1]); // 0, y, x
 
-    Ray_t focus_ray = Ray_t(origin_, ray_direction_sph.to_xyz(), Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list_);
+    Ray_t focus_ray = Ray_t(origin_, ray_direction_sph.to_xyz(), Vec3f(), Vec3f(1.0), medium_list_);
 
     scene->intersect(focus_ray, hit_obj, t, uv);
 

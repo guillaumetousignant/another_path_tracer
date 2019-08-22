@@ -48,7 +48,7 @@ void MeshTop_t::normal(const Ray_t &ray, const double (&uv)[2], Vec3f &normalvec
 }
 
 Vec3f MeshTop_t::mincoord() const {
-    Vec3f coord = Vec3f(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
+    Vec3f coord = Vec3f(std::numeric_limits<double>::infinity());
     for (unsigned int i = 0; i < n_tris_; i++){
         coord.min(triangles_[i]->mincoord());
     }    
@@ -56,7 +56,7 @@ Vec3f MeshTop_t::mincoord() const {
 }
 
 Vec3f MeshTop_t::maxcoord() const {
-    Vec3f coord = Vec3f(-std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity(), -std::numeric_limits<double>::infinity());
+    Vec3f coord = Vec3f(-std::numeric_limits<double>::infinity());
     for (unsigned int i = 0; i < n_tris_; i++){
         coord.max(triangles_[i]->maxcoord());
     }

@@ -1345,7 +1345,7 @@ Material_t* SceneContext_t::create_material(const tinyxml2::XMLElement* xml_mate
     }
     else if (type == "portal_refractive"){
         std::cout << "Error, refractive portal not implemented yet. Ignoring." << std::endl; 
-        return new Diffuse_t(Vec3f(0.0, 0.0, 0.0), Vec3f(0.5, 0.5, 0.5), 1.0);
+        return new Diffuse_t(Vec3f(), Vec3f(0.5), 1.0);
     }
     else if (type == "randommix"){
         const char* attributes[] = {"material_refracted", "material_reflected", "ratio"};
@@ -1654,7 +1654,7 @@ Skybox_t* SceneContext_t::create_skybox(const tinyxml2::XMLElement* xml_skybox, 
     }
     else{
         std::cout << "Error, skybox type '" << type << "' not implemented. Ignoring." << std::endl; 
-        return new SkyboxFlat_t(Vec3f(0.5, 0.5, 0.5));
+        return new SkyboxFlat_t(Vec3f(0.5));
     }
 }
 
@@ -2686,11 +2686,11 @@ Vec3f get_colour(std::string colour) {
         }
 
         if (count == 1) {
-            return Vec3f(values[0], values[0], values[0]);
+            return Vec3f(values[0);
         }
         else if (count != 3) {
             std::cout << "Error, colour should be 1 or 3 values seperated by spaces, or a string. Current number of values is " << count << ", colour is '" << colour << "'. Ignoring." << std::endl;
-            return Vec3f(0.5, 0.5, 0.5);
+            return Vec3f(0.5);
         }
         else{
             return Vec3f(values[0], values[1], values[2]);

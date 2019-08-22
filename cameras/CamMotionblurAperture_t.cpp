@@ -21,7 +21,7 @@ void CamMotionblurAperture_t::update() {
     up_last_ = up_;
     focal_length_last_ = focal_length_;
 
-    origin_ = transformation_->multVec(Vec3f(0.0, 0.0, 0.0));
+    origin_ = transformation_->multVec(Vec3f());
     TransformMatrix_t transform_norm = transformation_->transformDir();
     direction_ = transform_norm.multDir(Vec3f(0.0, 1.0, 0.0));
     focal_length_ = focal_length_buffer_;
@@ -73,7 +73,7 @@ void CamMotionblurAperture_t::raytrace(const Scene_t* scene) {
                     
                     subpix_vec = origin_int + subpix_vec.to_xyz_offset(direction_int, horizontal_int, vertical_int) * focal_length_int - origin2;
 
-                    Ray_t ray = Ray_t(origin2, subpix_vec.normalize(), Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list_, rand_time);
+                    Ray_t ray = Ray_t(origin2, subpix_vec.normalize(), Vec3f(), Vec3f(1.0), medium_list_, rand_time);
                     ray.raycast(scene, max_bounces_, skybox_);
                     col += ray.colour_;
                 }
@@ -100,7 +100,7 @@ void CamMotionblurAperture_t::autoFocus(const Scene_t* scene, const double (&pos
 
     ray_direction_sph = Vec3f(1.0, PI/2.0 + (position[1]-0.5)*fov_[0], (position[0]-0.5)*fov_[1]); // 0, y, x
 
-    Ray_t focus_ray = Ray_t(origin_, ray_direction_sph.to_xyz_offset(direction_, horizontal, vertical), Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list_);
+    Ray_t focus_ray = Ray_t(origin_, ray_direction_sph.to_xyz_offset(direction_, horizontal, vertical), Vec3f(), Vec3f(1.0), medium_list_);
 
     scene->intersect(focus_ray, hit_obj, t, uv);
 

@@ -22,7 +22,7 @@ void RecCamMotionblurAperture_t::update() {
     up_last_ = up_;
     focal_length_last_ = focal_length_;
 
-    origin_ = transformation_->multVec(Vec3f(0.0, 0.0, 0.0));
+    origin_ = transformation_->multVec(Vec3f());
     TransformMatrix_t transform_norm = transformation_->transformDir();
     direction_ = transform_norm.multDir(Vec3f(0.0, 1.0, 0.0));
     focal_length_ = focal_length_buffer_;
@@ -84,7 +84,7 @@ void RecCamMotionblurAperture_t::raytrace(const Scene_t* scene) {
                                  + horizontal_int * (pixel_span_x_int * ((double)i - (double)image_->size_x_/2.0 + 0.5) + subpix_span_x_int * ((double)l - (double)subpix_[1]/2.0 + jitter_x))
                                  - origin_int;
 
-                    Ray_t ray = Ray_t(origin_int, ray_vec.normalize(), Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list_, rand_time);
+                    Ray_t ray = Ray_t(origin_int, ray_vec.normalize(), Vec3f(), Vec3f(1.0), medium_list_, rand_time);
                     ray.raycast(scene, max_bounces_, skybox_);
 
                     col += ray.colour_;
@@ -117,7 +117,7 @@ void RecCamMotionblurAperture_t::autoFocus(const Scene_t* scene, const double (&
 
     ray_vec = focus_point - span_y * (position[1] - 0.5) + span_x * (position[0] - 0.5) - origin_;
 
-    Ray_t focus_ray = Ray_t(origin_, ray_vec.normalize(), Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list_);
+    Ray_t focus_ray = Ray_t(origin_, ray_vec.normalize(), Vec3f(), Vec3f(1.0), medium_list_);
 
     scene->intersect(focus_ray, hit_obj, t, uv);
 

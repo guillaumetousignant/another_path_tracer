@@ -16,7 +16,7 @@ IsoCamAperture_t::IsoCamAperture_t(TransformMatrix_t* transformation, const std:
 IsoCamAperture_t::~IsoCamAperture_t() {}
 
 void IsoCamAperture_t::update() {
-    origin_ = transformation_->multVec(Vec3f(0.0, 0.0, 0.0));
+    origin_ = transformation_->multVec(Vec3f());
     TransformMatrix_t transform_norm = transformation_->transformDir();
     direction_ = transform_norm.multDir(Vec3f(0.0, 1.0, 0.0));
     focal_length_ = focal_length_buffer_;
@@ -56,7 +56,7 @@ void IsoCamAperture_t::raytrace(const Scene_t* scene) {
                     Vec3f ray_origin2 = subpix_ray_origin + vertical * std::cos(rand_theta) * rand_r + horizontal * std::sin(rand_theta) * rand_r;
                     Vec3f direction2 = subpix_ray_origin + direction_ * focal_length_ - ray_origin2;
 
-                    Ray_t ray = Ray_t(ray_origin2, direction2.normalize(), Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list_);
+                    Ray_t ray = Ray_t(ray_origin2, direction2.normalize(), Vec3f(), Vec3f(1.0), medium_list_);
                     ray.raycast(scene, max_bounces_, skybox_);
                     col += ray.colour_;
                 }
@@ -83,7 +83,7 @@ void IsoCamAperture_t::autoFocus(const Scene_t* scene, const double (&position)[
 
     ray_origin = origin_ - vertical * (position[1] - 0.5) * fov_[0] - horizontal * (position[0] - 0.5) * fov_[1];
 
-    Ray_t focus_ray = Ray_t(ray_origin, direction_, Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list_);
+    Ray_t focus_ray = Ray_t(ray_origin, direction_, Vec3f(), Vec3f(1.0), medium_list_);
     
     scene->intersect(focus_ray, hit_obj, t, uv);
 

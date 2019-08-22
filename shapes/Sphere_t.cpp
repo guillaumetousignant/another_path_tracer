@@ -7,7 +7,7 @@
 #define PI 3.141592653589793238463
 
 Sphere_t::Sphere_t(Material_t *material, TransformMatrix_t *transform_matrix): Shape_t(material, transform_matrix){
-    origin_ = transformation_->multVec(Vec3f(0.0, 0.0, 0.0));
+    origin_ = transformation_->multVec(Vec3f());
     radius_ = transformation_->getScale(); 
     TransformMatrix_t transform_norm = transformation_->transformDir();
     Vec3f direction = transform_norm.multDir(Vec3f(0.0, 0.0, 1.0)).to_sph(); 
@@ -18,7 +18,7 @@ Sphere_t::Sphere_t(Material_t *material, TransformMatrix_t *transform_matrix): S
 Sphere_t::~Sphere_t(){}
 
 void Sphere_t::update(){
-    origin_ = transformation_->multVec(Vec3f(0.0, 0.0, 0.0));
+    origin_ = transformation_->multVec(Vec3f());
     radius_ = transformation_->getScale();
     TransformMatrix_t transform_norm = transformation_->transformDir();
     Vec3f direction = transform_norm.multDir(Vec3f(0.0, 0.0, 1.0)).to_sph(); 

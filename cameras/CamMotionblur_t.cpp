@@ -19,7 +19,7 @@ void CamMotionblur_t::update() {
     direction_last_ = direction_;
     up_last_ = up_;
 
-    origin_ = transformation_->multVec(Vec3f(0.0));
+    origin_ = transformation_->multVec(Vec3f());
     TransformMatrix_t transform_norm = transformation_->transformDir();
     direction_ = transform_norm.multDir(Vec3f(0.0, 1.0, 0.0));
     up_ = up_buffer_;

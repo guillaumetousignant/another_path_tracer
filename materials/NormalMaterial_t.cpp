@@ -10,6 +10,6 @@ void NormalMaterial_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray
     Vec3f normal;
 
     hit_obj->normal(ray, uv, normal);
-    ray.colour_ = Vec3f(normal)*0.5 + 0.5;
+    ray.colour_ = normal*0.5 + 0.5;
     ray.mask_ = Vec3f();
 }

@@ -22,7 +22,7 @@ void IsoCamMotionblurAperture_t::update() {
     up_last_ = up_;
     focal_length_last_ = focal_length_;
 
-    origin_ = transformation_->multVec(Vec3f(0.0, 0.0, 0.0));
+    origin_ = transformation_->multVec(Vec3f());
     TransformMatrix_t transform_norm = transformation_->transformDir();
     direction_ = transform_norm.multDir(Vec3f(0.0, 1.0, 0.0));
     focal_length_ = focal_length_buffer_;
@@ -72,7 +72,7 @@ void IsoCamMotionblurAperture_t::raytrace(const Scene_t* scene) {
                     Vec3f origin2 = ray_origin + vertical_int * std::cos(rand_theta) * rand_r + horizontal_int * std::sin(rand_theta) * rand_r;
                     ray_origin +=  direction_int * focal_length_int - origin2; // is actually now direction
 
-                    Ray_t ray = Ray_t(origin2, ray_origin.normalize(), Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list_, rand_time);
+                    Ray_t ray = Ray_t(origin2, ray_origin.normalize(), Vec3f(), Vec3f(1.0), medium_list_, rand_time);
                     ray.raycast(scene, max_bounces_, skybox_);
                     col += ray.colour_;
                 }
@@ -99,7 +99,7 @@ void IsoCamMotionblurAperture_t::autoFocus(const Scene_t* scene, const double (&
 
     pix_origin = origin_ - vertical * (position[1] - 0.5) * fov_[0] - horizontal * (position[0] - 0.5) * fov_[1];
 
-    Ray_t focus_ray = Ray_t(pix_origin, direction_, Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list_);
+    Ray_t focus_ray = Ray_t(pix_origin, direction_, Vec3f(), Vec3f(1.0), medium_list_);
 
     scene->intersect(focus_ray, hit_obj, t, uv);
 

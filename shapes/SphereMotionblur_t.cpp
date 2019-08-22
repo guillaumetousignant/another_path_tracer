@@ -8,7 +8,7 @@
 #define PI 3.141592653589793238463
 
 SphereMotionblur_t::SphereMotionblur_t(Material_t *material, TransformMatrix_t *transform_matrix): Shape_t(material, transform_matrix){
-    origin_ = transformation_->multVec(Vec3f(0.0, 0.0, 0.0));
+    origin_ = transformation_->multVec(Vec3f());
     origin_last_ = origin_;
     radius_ = transformation_->getScale(); 
     radius_last_ = radius_;
@@ -26,7 +26,7 @@ void SphereMotionblur_t::update(){
     origin_last_ = origin_;
     direction_sph_last_ = direction_sph_;
 
-    origin_ = transformation_->multVec(Vec3f(0.0, 0.0, 0.0));
+    origin_ = transformation_->multVec(Vec3f());
     radius_ = transformation_->getScale();
     TransformMatrix_t transform_norm = transformation_->transformDir();
     Vec3f direction = transform_norm.multDir(Vec3f(0.0, 0.0, 1.0)).to_sph(); 

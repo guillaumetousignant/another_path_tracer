@@ -20,7 +20,7 @@ void IsoCamMotionblur_t::update() {
     direction_last_ = direction_;
     up_last_ = up_;
 
-    origin_ = transformation_->multVec(Vec3f(0.0, 0.0, 0.0));
+    origin_ = transformation_->multVec(Vec3f());
     TransformMatrix_t transform_norm = transformation_->transformDir();
     direction_ = transform_norm.multDir(Vec3f(0.0, 1.0, 0.0));
     up_ = up_buffer_;
@@ -64,7 +64,7 @@ void IsoCamMotionblur_t::raytrace(const Scene_t* scene) {
 
                     ray_origin += origin_int - vertical_int * subpix_span_y * ((double)k - (double)subpix_[0]/2.0 + jitter_y) + horizontal_int * subpix_span_x * ((double)l - (double)subpix_[1]/2.0 + jitter_x);;
                     
-                    Ray_t ray = Ray_t(ray_origin, direction_int.normalize(), Vec3f(), Vec3f(1.0, 1.0, 1.0), medium_list_, rand_time);
+                    Ray_t ray = Ray_t(ray_origin, direction_int.normalize(), Vec3f(), Vec3f(1.0), medium_list_, rand_time);
                     ray.raycast(scene, max_bounces_, skybox_);
                     col += ray.colour_;
                 }
