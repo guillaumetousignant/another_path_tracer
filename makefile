@@ -130,7 +130,7 @@ RELEASEFLAGS += -O3 -fopenmp
 
 # Included Libraries
 DISPLAYLIBS += -lglut -lGL -lGLU -lX11
-WINDISPLAYLIBS += -lfreeglut -lglu32 -lopengl32 -lX11
+WINDISPLAYLIBS += -lfreeglut -lglu32 -lopengl32
 
 #--------------------------------------------------------------------------------------------------------------------------------------+
 #---------------------------------------------------------------------------------------------------+
