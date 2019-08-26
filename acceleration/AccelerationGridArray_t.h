@@ -1,5 +1,5 @@
 #ifndef ACCELERATIONGRIDARRAY_T_H
-#define ACCELERATIONGRIDAYYAY_T_H
+#define ACCELERATIONGRIDARRAY_T_H
 
 #include "Ray_t.h"
 #include "AccelerationStructure_t.h"
