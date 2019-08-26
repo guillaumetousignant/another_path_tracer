@@ -5,7 +5,11 @@
 #include "Vec3f.h"
 #include <string>
 
-#include "GL/glut.h"
+#ifdef _WIN32
+    #include "GL/freeglut.h"
+#else
+    #include "GL/glut.h"
+#endif
 #include "GL/gl.h"
 
 class ImgBufferOpenGL_t final : public ImgBuffer_t{

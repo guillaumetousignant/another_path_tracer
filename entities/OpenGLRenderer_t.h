@@ -1,8 +1,6 @@
 #ifndef OPENGLRENDERER_T_H
 #define OPENGLRENDERER_T_H
 
-#include "GL/glut.h"
-#include "GL/gl.h"
 #include <string>
 #include "Vec3f.h"
 

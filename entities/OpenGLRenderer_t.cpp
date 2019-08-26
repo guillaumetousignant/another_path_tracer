@@ -1,5 +1,12 @@
 #include "OpenGLRenderer_t.h"
 
+#ifdef _WIN32
+    #include "GL/freeglut.h"
+#else
+    #include "GL/glut.h"
+#endif
+#include "GL/gl.h"
+
 #include <chrono>
 #include <algorithm>
 #include "Camera_t.h"
@@ -8,7 +15,7 @@
 #include "TransformMatrix_t.h"
 
 #ifdef _WIN32
-#define GL_CLAMP_TO_EDGE 0x812F
+    #define GL_CLAMP_TO_EDGE 0x812F
 #endif
 
 OpenGLRenderer_t* openGL_renderer = nullptr;
