@@ -131,6 +131,7 @@ RELEASEFLAGS += -O3 -fopenmp
 # Included Libraries
 DISPLAYLIBS += -lglut -lGL -lGLU -lX11
 WINDISPLAYLIBS += -lfreeglut -lglu32 -lopengl32
+WINLIBS += -lstdc++ -lgdi32
 
 #--------------------------------------------------------------------------------------------------------------------------------------+
 #---------------------------------------------------------------------------------------------------+
@@ -164,13 +165,13 @@ mpirelease : .mpirelease begun $(MPIReleaseObjectFiles) $(ExecutableMPIReleaseOb
 
 windebug : .windebug  begun $(WINDebugObjectFiles) $(ExecutableWINDebugObjectFile)
 	@printf '   Linking WINDebug...'
-	@$(WINCXX) $(CXXFLAGS) $(DEBUGFLAGS) $(WINDebugObjectFiles) $(ExecutableWINDebugObjectFile) -o $(addprefix bin/,$(WINExecutable)) $(WINDISPLAYLIBS)
+	@$(WINCXX) $(CXXFLAGS) $(DEBUGFLAGS) $(WINDebugObjectFiles) $(ExecutableWINDebugObjectFile) -o $(addprefix bin/,$(WINExecutable)) $(WINLIBS) $(WINDISPLAYLIBS)
 	@printf 'Done'
 	@printf '\n'
 
 winrelease : .winrelease begun $(WINReleaseObjectFiles) $(ExecutableWINReleaseObjectFile)	
 	@printf '   Linking WINRelease...'
-	@$(WINCXX) $(CXXFLAGS) $(RELEASEFLAGS) $(WINReleaseObjectFiles) $(ExecutableWINReleaseObjectFile) -o $(addprefix bin/,$(WINExecutable)) $(WINDISPLAYLIBS)
+	@$(WINCXX) $(CXXFLAGS) $(RELEASEFLAGS) $(WINReleaseObjectFiles) $(ExecutableWINReleaseObjectFile) -o $(addprefix bin/,$(WINExecutable)) $(WINLIBS) $(WINDISPLAYLIBS)
 	@printf 'Done'
 	@printf '\n'
 
