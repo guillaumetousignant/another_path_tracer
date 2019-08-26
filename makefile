@@ -40,8 +40,14 @@ MPIDebugDirs := $(subst . ,,$(subst ./,.mpidebug/,$(SourceDirs)))
 # Determine the path for the source code folders in the .release folder (will mimic the visible root tree structure)
 MPIReleaseDirs := $(subst . ,,$(subst ./,.mpirelease/,$(SourceDirs)))
 
+# Determine the path for the source code folders in the .debug folder (will mimic the visible root tree structure)
+WINDebugDirs := $(subst . ,,$(subst ./,.windebug/,$(SourceDirs)))
+
+# Determine the path for the source code folders in the .release folder (will mimic the visible root tree structure)
+WINReleaseDirs := $(subst . ,,$(subst ./,.winrelease/,$(SourceDirs)))
+
 # Concatenate all of the previous 3 folder name variables
-AllDirs := $(SourceDirs) $(ReleaseDirs) $(DebugDirs) $(MPIReleaseDirs) $(MPIDebugDirs)
+AllDirs := $(SourceDirs) $(ReleaseDirs) $(DebugDirs) $(MPIReleaseDirs) $(MPIDebugDirs) $(WINReleaseDirs) $(WINDebugDirs)
 
 #-------------------------------------------------------------------------------------------------------------------+
 #-----------------------------------------------------------------------------------------------------+
@@ -51,6 +57,7 @@ AllDirs := $(SourceDirs) $(ReleaseDirs) $(DebugDirs) $(MPIReleaseDirs) $(MPIDebu
 current_dir := $(shell basename $(CURDIR))
 
 Executable = $(current_dir)
+WINExecutable = $(current_dir).exe
 
 ifdef VERIFY
 ExecutableSourceFile = main_test.cpp
@@ -70,6 +77,12 @@ ExecutableMPIDebugObjectFile = $(subst .cpp,.o,$(addprefix .mpidebug/,$(Executab
 # Executable release object file
 ExecutableMPIReleaseObjectFile = $(subst .cpp,.o,$(addprefix .mpirelease/,$(ExecutableSourceFile)))
 
+# Executable debug object file
+ExecutableWINDebugObjectFile = $(subst .cpp,.o,$(addprefix .windebug/,$(ExecutableSourceFile)))
+
+# Executable release object file
+ExecutableWINReleaseObjectFile = $(subst .cpp,.o,$(addprefix .winrelease/,$(ExecutableSourceFile)))
+
 # Source files (.cpp)
 SourceFiles := $(filter-out $(ExecutableSourceFile),$(subst ./,,$(subst .//,,$(shell find ./ -regex .*.cpp))))
 
@@ -86,7 +99,13 @@ ReleaseObjectFiles := $(addprefix .release/,$(subst .cpp,.o,$(ActiveSourceFiles)
 MPIDebugObjectFiles := $(addprefix .mpidebug/,$(subst .cpp,.o,$(ActiveSourceFiles))) 
 
 # Release object files (names of the object files that are produced by make release)
-MPIReleaseObjectFiles := $(addprefix .mpirelease/,$(subst .cpp,.o,$(ActiveSourceFiles))) 
+MPIReleaseObjectFiles := $(addprefix .mpirelease/,$(subst .cpp,.o,$(ActiveSourceFiles)))
+
+# Debug object files (names of the object files that are produced by make debug)
+WINDebugObjectFiles := $(addprefix .windebug/,$(subst .cpp,.o,$(ActiveSourceFiles))) 
+
+# Release object files (names of the object files that are produced by make release)
+WINReleaseObjectFiles := $(addprefix .winrelease/,$(subst .cpp,.o,$(ActiveSourceFiles)))
 
 # Concatenate all object files
 AnyObjectFiles := $(notdir $(shell find ./ -regex .*.o))
@@ -100,6 +119,7 @@ VPATH := $(AllDirs)
 
 # Default compilation configuration
 CXX = g++
+WINCXX = x86_64-w64-mingw32-gcc-win32
 MPICXX = mpic++
 CXXFLAGS += -std=c++11 -Wall -Wno-unused-function -Wno-strict-overflow
 
@@ -110,6 +130,7 @@ RELEASEFLAGS += -O3 -fopenmp
 
 # Included Libraries
 DISPLAYLIBS += -lglut -lGL -lGLU -lX11
+WINDISPLAYLIBS += -lfreeglut -lglu32 -lopengl32 -lX11
 
 #--------------------------------------------------------------------------------------------------------------------------------------+
 #---------------------------------------------------------------------------------------------------+
@@ -141,10 +162,22 @@ mpirelease : .mpirelease begun $(MPIReleaseObjectFiles) $(ExecutableMPIReleaseOb
 	@printf 'Done'
 	@printf '\n'
 
+windebug : .windebug  begun $(WINDebugObjectFiles) $(ExecutableWINDebugObjectFile)
+	@printf '   Linking WINDebug...'
+	@$(WINCXX) $(CXXFLAGS) $(DEBUGFLAGS) $(WINDebugObjectFiles) $(ExecutableWINDebugObjectFile) -o $(addprefix bin/,$(WINExecutable)) $(WINDISPLAYLIBS)
+	@printf 'Done'
+	@printf '\n'
+
+winrelease : .winrelease begun $(WINReleaseObjectFiles) $(ExecutableWINReleaseObjectFile)	
+	@printf '   Linking WINRelease...'
+	@$(WINCXX) $(CXXFLAGS) $(RELEASEFLAGS) $(WINReleaseObjectFiles) $(ExecutableWINReleaseObjectFile) -o $(addprefix bin/,$(WINExecutable)) $(WINDISPLAYLIBS)
+	@printf 'Done'
+	@printf '\n'
+
 reset : clean 
 	@$(shell reset)
 
-verify : mpirelease $(MPIReleaseObjectFiles)
+verify : release $(ReleaseObjectFiles)
 
 #---------------------------------------------------------------------------------------------------+
 #---------------------------------------------------------------------------------------+
@@ -166,15 +199,23 @@ verify : mpirelease $(MPIReleaseObjectFiles)
 	@$(MPICXX) -c $(CXXFLAGS) $(RELEASEFLAGS)  -I$(subst $(space), -I,$(AllDirs)) $< -o $@ 
 	@echo '   Pattern Rule | Compiling | '$(CXXFLAGS) $(RELEASEFLAGS) ' | ' $<' ... Done '
 
+.windebug/%.o : %.cpp
+	@$(WINCXX) -c $(CXXFLAGS) $(DEBUGFLAGS)  -I$(subst $(space), -I,$(AllDirs)) $< -o $@ 
+	@echo '   Pattern Rule | Compiling | '$(CXXFLAGS) $(DEBUGFLAGS) ' | ' $<' ... Done'
+
+.winrelease/%.o : %.cpp
+	@$(WINCXX) -c $(CXXFLAGS) $(RELEASEFLAGS)  -I$(subst $(space), -I,$(AllDirs)) $< -o $@ 
+	@echo '   Pattern Rule | Compiling | '$(CXXFLAGS) $(RELEASEFLAGS) ' | ' $<' ... Done '
+
 #---------------------------------------------------------------------------------------+
 #--------------------------------------------------------------------------------+
 # Phony Targets
 
-.PHONY : clean cleandebug cleanrelease cleanmpidebug cleanmpirelease begin end
+.PHONY : clean cleandebug cleanrelease cleanmpidebug cleanmpirelease cleanwindebug cleanwinrelease begin end
 
 begun :
 
-clean : cleandebug cleanrelease cleanmpidebug cleanmpirelease
+clean : cleandebug cleanrelease cleanmpidebug cleanmpirelease cleanwindebug cleanwinrelease
 	@-rm -rf $(AnyObjectFiles)
 	@-rm -f bin/$(current_dir)
 	
@@ -194,9 +235,19 @@ cleanmpirelease :
 	@-rm -rf .mpirelease .mpireleasetimestamp
 	@-rm -f $(addprefix .mpirelease/,$(Executable))
 
+cleanwindebug :
+	@-rm -rf .windebug .windebugtimestamp
+	@-rm -f $(addprefix .windebug/,$(WINExecutable))
+
+cleanwinrelease :
+	@-rm -rf .winrelease .winreleasetimestamp
+	@-rm -f $(addprefix .winrelease/,$(WINExecutable))
+
 .debug : .debugtimestamp
 
 .mpidebug : .mpidebugtimestamp
+
+.windebug : .windebugtimestamp
 
 .debugtimestamp :
 	@mkdir -p .debug $(DebugDirs)
@@ -206,11 +257,18 @@ cleanmpirelease :
 .mpidebugtimestamp :
 	@mkdir -p .mpidebug $(MPIDebugDirs)
 	@mkdir -p bin
-#	@touch .debugtimestamp
+#	@touch .mpidebugtimestamp
+
+.windebugtimestamp :
+	@mkdir -p .windebug $(WINDebugDirs)
+	@mkdir -p bin
+#	@touch .windebugtimestamp
 
 .release : .releasetimestamp
 
 .mpirelease : .mpireleasetimestamp
+
+.winrelease : .winreleasetimestamp
 
 .releasetimestamp :
 	@mkdir -p .release $(ReleaseDirs)
@@ -218,6 +276,10 @@ cleanmpirelease :
 
 .mpireleasetimestamp :
 	@mkdir -p .mpirelease $(MPIReleaseDirs)
+	@mkdir -p bin
+
+.winreleasetimestamp :
+	@mkdir -p .winrelease $(WINReleaseDirs)
 	@mkdir -p bin
 
 #--------------------------------------------------------------------------------+
@@ -247,6 +309,12 @@ mpidebugobjectfiles :
 
 mpireleaseobjectfiles :
 	@printf '%s\n' $(MPIReleaseObjectFiles)
+
+windebugobjectfiles :
+	@printf '%s\n' $(WINDebugObjectFiles)
+
+winreleaseobjectfiles :
+	@printf '%s\n' $(WINReleaseObjectFiles)
 
 os :
 	@echo $(OS)
