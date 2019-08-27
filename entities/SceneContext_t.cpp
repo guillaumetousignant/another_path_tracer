@@ -643,7 +643,7 @@ void SceneContext_t::readXML(const std::string &filename){
             get_objects(object_list, shapes, n_shapes, meshes, n_meshes, xml_objects);
         }
         else {
-            get_objects(shapes, n_shapes, meshes, n_meshes, xml_objects);
+            get_objects(shapes, n_shapes, meshes, n_meshes);
         }
 
         scene_->add(shapes, n_shapes);
@@ -2636,7 +2636,7 @@ void SceneContext_t::get_objects(std::string objects_string, Shape_t** &shapes, 
     }
 }
 
-void SceneContext_t::get_objects(Shape_t** &shapes, unsigned int &n_shapes, MeshTop_t** &meshes, unsigned int &n_meshes, const tinyxml2::XMLElement* xml_objects) const {
+void SceneContext_t::get_objects(Shape_t** &shapes, unsigned int &n_shapes, MeshTop_t** &meshes, unsigned int &n_meshes) const {
     n_shapes = 0;
     n_meshes = 0;
 
