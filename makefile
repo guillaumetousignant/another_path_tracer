@@ -132,6 +132,7 @@ RELEASEFLAGS += -O3 -fopenmp
 DISPLAYLIBS += -lglut -lGL -lGLU -lX11
 WINDISPLAYLIBS += -lfreeglut -lglu32 -lopengl32
 WINLIBS += -lstdc++ -lgdi32
+DEBUGLIBS += -lpthread
 
 #--------------------------------------------------------------------------------------------------------------------------------------+
 #---------------------------------------------------------------------------------------------------+
@@ -141,7 +142,7 @@ all : release $(ReleaseObjectFiles)
 
 debug : .debug  begun $(DebugObjectFiles) $(ExecutableDebugObjectFile)
 	@printf '   Linking Debug...'
-	@$(CXX) $(CXXFLAGS) $(DEBUGFLAGS) $(DebugObjectFiles) $(ExecutableDebugObjectFile) -o $(addprefix bin/,$(Executable)) $(DISPLAYLIBS)
+	@$(CXX) $(CXXFLAGS) $(DEBUGFLAGS) $(DebugObjectFiles) $(ExecutableDebugObjectFile) -o $(addprefix bin/,$(Executable)) $(DISPLAYLIBS) $(DEBUGLIBS)
 	@printf 'Done'
 	@printf '\n'
 
@@ -153,7 +154,7 @@ release : .release begun $(ReleaseObjectFiles) $(ExecutableReleaseObjectFile)
 
 mpidebug : .mpidebug  begun $(MPIDebugObjectFiles) $(ExecutableMPIDebugObjectFile)
 	@printf '   Linking MpiDebug...'
-	@$(MPICXX) $(CXXFLAGS) $(DEBUGFLAGS) $(MPIDebugObjectFiles) $(ExecutableMPIDebugObjectFile) -o $(addprefix bin/,$(Executable)) $(DISPLAYLIBS)
+	@$(MPICXX) $(CXXFLAGS) $(DEBUGFLAGS) $(MPIDebugObjectFiles) $(ExecutableMPIDebugObjectFile) -o $(addprefix bin/,$(Executable)) $(DISPLAYLIBS) $(DEBUGLIBS)
 	@printf 'Done'
 	@printf '\n'
 
