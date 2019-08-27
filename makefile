@@ -139,7 +139,7 @@ WINLIBS += -lstdc++ -lgdi32
 
 all : release $(ReleaseObjectFiles)
 
-debug : .debug  begun $(DebugObjectFiles) $(ExecutableDebugObjectFile)q
+debug : .debug  begun $(DebugObjectFiles) $(ExecutableDebugObjectFile)
 	@printf '   Linking Debug...'
 	@$(CXX) $(CXXFLAGS) $(DEBUGFLAGS) $(DebugObjectFiles) $(ExecutableDebugObjectFile) -o $(addprefix bin/,$(Executable)) $(DISPLAYLIBS)
 	@printf 'Done'
