@@ -119,8 +119,8 @@ VPATH := $(AllDirs)
 
 # Default compilation configuration
 CXX = g++
-WINCXX = x86_64-w64-mingw32-gcc-win32
 MPICXX = mpic++
+WINCXX = x86_64-w64-mingw32-gcc-win32
 CXXFLAGS += -std=c++11 -Wall -Wno-unused-function -Wno-strict-overflow
 
 DEBUGFLAGS += -Og -g -pg
