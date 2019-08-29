@@ -14,10 +14,8 @@ Cam3DAperture_t::Cam3DAperture_t(TransformMatrix_t* transformation, const std::s
     image_(image), unif_(0.0, 1.0), eye_dist_(eye_dist/2.0), focal_length_(focal_length), focal_length_buffer_(focal_length), aperture_(aperture) {
 
     std::string filename_S, filename_L, filename_R;
-    size_t point;
-    Vec3f horizontal;
-
-    point = filename.find_last_of(".");
+    
+    const size_t point = filename.find_last_of(".");
 
     if (point != std::string::npos){
         filename_L = filename.substr(0, point) + "_L" + filename.substr(point);
@@ -35,7 +33,7 @@ Cam3DAperture_t::Cam3DAperture_t(TransformMatrix_t* transformation, const std::s
 
     filename_ = filename_S;
 
-    horizontal = direction_.cross(up).normalize();
+    const Vec3f horizontal = direction_.cross(up).normalize();
 
     camera_L_->focal_length_ = std::sqrt(focal_length_*focal_length_ + eye_dist_*eye_dist_);
     camera_R_->focal_length_ = camera_L_->focal_length_;
@@ -53,10 +51,8 @@ Cam3DAperture_t::~Cam3DAperture_t() {
 }
 
 void Cam3DAperture_t::update() {
-    Vec3f horizontal;
-
     origin_ = transformation_->multVec(Vec3f());
-    TransformMatrix_t transform_norm = transformation_->transformDir();
+    const TransformMatrix_t transform_norm = transformation_->transformDir();
     direction_ = transform_norm.multDir(Vec3f(0.0, 1.0, 0.0));
     focal_length_ = focal_length_buffer_;
     up_ = up_buffer_;
@@ -66,7 +62,7 @@ void Cam3DAperture_t::update() {
     camera_L_->up_ = up_;
     camera_R_->up_ = up_;
 
-    horizontal = direction_.cross(up_);
+    const Vec3f horizontal = direction_.cross(up_);
     camera_L_->origin_ = horizontal * -eye_dist_ + origin_;
     camera_R_->origin_ = horizontal * eye_dist_ + origin_;
     camera_L_->direction_ = (direction_ * focal_length_ + horizontal * eye_dist_).normalize();
@@ -94,7 +90,7 @@ void Cam3DAperture_t::write(std::string file_name /*= ""*/) {
         filename_S = filename_;
     }
     else{
-        size_t point = file_name.find_last_of(".");
+        const size_t point = file_name.find_last_of(".");
         if (point != std::string::npos){
             filename_L = file_name.substr(0, point) + "_L" + file_name.substr(point);
             filename_R = file_name.substr(0, point) + "_R" + file_name.substr(point);
@@ -126,14 +122,13 @@ void Cam3DAperture_t::focus(double focus_distance){
 }
 
 void Cam3DAperture_t::autoFocus(const Scene_t* scene, const double (&position)[2]){
-    Vec3f ray_direction_sph;
     Shape_t* hit_obj = nullptr;
     double t = std::numeric_limits<double>::infinity();
     double uv[2];
 
-    ray_direction_sph = direction_.get_sph() + Vec3f(0, (position[1]-0.5)*fov_[0], (position[0]-0.5)*-fov_[1]); // 0, y, x
+    const Vec3f ray_direction_sph = (direction_.get_sph() + Vec3f(0, (position[1]-0.5)*fov_[0], (position[0]-0.5)*-fov_[1])).to_xyz(); // 0, y, x
 
-    Ray_t focus_ray = Ray_t(origin_, ray_direction_sph.to_xyz(), Vec3f(), Vec3f(1.0), medium_list_);
+    Ray_t focus_ray = Ray_t(origin_, ray_direction_sph, Vec3f(), Vec3f(1.0), medium_list_);
 
     scene->intersect(focus_ray, hit_obj, t, uv);
 

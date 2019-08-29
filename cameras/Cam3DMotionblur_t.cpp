@@ -15,10 +15,8 @@ Cam3DMotionblur_t::Cam3DMotionblur_t(TransformMatrix_t* transformation, const st
     direction_last_(direction_), origin_last_(origin_), focal_length_last_(focal_length_), time_{time[0], time[1]}, up_last_(up_) {
 
     std::string filename_S, filename_L, filename_R;
-    size_t point;
-    Vec3f horizontal;
 
-    point = filename.find_last_of(".");
+    const size_t point = filename.find_last_of(".");
 
     if (point != std::string::npos){
         filename_L = filename.substr(0, point) + "_L" + filename.substr(point);
@@ -36,7 +34,7 @@ Cam3DMotionblur_t::Cam3DMotionblur_t(TransformMatrix_t* transformation, const st
 
     filename_ = filename_S;
 
-    horizontal = direction_.cross(up).normalize();
+    const Vec3f horizontal = direction_.cross(up).normalize();
 
     camera_L_->origin_ = horizontal * -eye_dist_ + origin_;
     camera_R_->origin_ = horizontal * eye_dist_ + origin_;
@@ -55,15 +53,13 @@ Cam3DMotionblur_t::~Cam3DMotionblur_t() {
 }
 
 void Cam3DMotionblur_t::update() {
-    Vec3f horizontal;
-
     origin_last_ = origin_;
     direction_last_ = direction_;
     focal_length_last_ = focal_length_;
     up_last_ = up_;
 
     origin_ = transformation_->multVec(Vec3f());
-    TransformMatrix_t transform_norm = transformation_->transformDir();
+    const TransformMatrix_t transform_norm = transformation_->transformDir();
     direction_ = transform_norm.multDir(Vec3f(0.0, 1.0, 0.0));
     focal_length_ = focal_length_buffer_;
     up_ = up_buffer_;
@@ -77,7 +73,7 @@ void Cam3DMotionblur_t::update() {
 
     camera_L_->up_ = up_;
     camera_R_->up_ = up_;
-    horizontal = direction_.cross(up_);
+    const Vec3f horizontal = direction_.cross(up_);
     camera_L_->origin_ = horizontal * -eye_dist_ + origin_;
     camera_R_->origin_ = horizontal * eye_dist_ + origin_;
     camera_L_->direction_ = (direction_ * focal_length_ + horizontal * eye_dist_).normalize();
@@ -105,7 +101,7 @@ void Cam3DMotionblur_t::write(std::string file_name /*= ""*/) {
         filename_S = filename_;
     }
     else{
-        size_t point = file_name.find_last_of(".");
+        const size_t point = file_name.find_last_of(".");
         if (point != std::string::npos){
             filename_L = file_name.substr(0, point) + "_L" + file_name.substr(point);
             filename_R = file_name.substr(0, point) + "_R" + file_name.substr(point);
@@ -137,14 +133,13 @@ void Cam3DMotionblur_t::focus(double focus_distance){
 }
 
 void Cam3DMotionblur_t::autoFocus(const Scene_t* scene, const double (&position)[2]){
-    Vec3f ray_direction_sph;
     Shape_t* hit_obj = nullptr;
     double t = std::numeric_limits<double>::infinity();
     double uv[2];
 
-    ray_direction_sph = direction_.get_sph() + Vec3f(0, (position[1]-0.5)*fov_[0], (position[0]-0.5)*-fov_[1]); // 0, y, x
+    const Vec3f ray_direction_sph = (direction_.get_sph() + Vec3f(0, (position[1]-0.5)*fov_[0], (position[0]-0.5)*-fov_[1])).to_xyz(); // 0, y, x
 
-    Ray_t focus_ray = Ray_t(origin_, ray_direction_sph.to_xyz(), Vec3f(), Vec3f(1.0), medium_list_);
+    Ray_t focus_ray = Ray_t(origin_, ray_direction_sph, Vec3f(), Vec3f(1.0), medium_list_);
 
     scene->intersect(focus_ray, hit_obj, t, uv);
 
