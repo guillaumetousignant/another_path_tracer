@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{E8CF1B81-A28E-4A93-BDE1-C83EC7E9B150}</ProjectGuid>
+    <RootNamespace>anotherpathtracer</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)acceleration\;$(ProjectDir)cameras\;$(ProjectDir)entities\;$(ProjectDir)functions\;$(ProjectDir)materials\;$(ProjectDir)shapes\;$(ProjectDir)skyboxes\;$(ProjectDir)freeglut\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>$(ProjectDir)freeglut\lib\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>freeglut.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)acceleration\;$(ProjectDir)cameras\;$(ProjectDir)entities\;$(ProjectDir)functions\;$(ProjectDir)materials\;$(ProjectDir)shapes\;$(ProjectDir)skyboxes\;$(ProjectDir)freeglut\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>$(ProjectDir)freeglut\lib\x64\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>freeglut.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)acceleration\;$(ProjectDir)cameras\;$(ProjectDir)entities\;$(ProjectDir)functions\;$(ProjectDir)materials\;$(ProjectDir)shapes\;$(ProjectDir)skyboxes\;$(ProjectDir)freeglut\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(ProjectDir)freeglut\lib\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>freeglut.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)acceleration\;$(ProjectDir)cameras\;$(ProjectDir)entities\;$(ProjectDir)functions\;$(ProjectDir)materials\;$(ProjectDir)shapes\;$(ProjectDir)skyboxes\;$(ProjectDir)freeglut\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(ProjectDir)freeglut\lib\x64\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>freeglut.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="acceleration\AccelerationGridArray_t.h" />
+    <ClInclude Include="acceleration\AccelerationGridVector_t.h" />
+    <ClInclude Include="acceleration\AccelerationGrid_t.h" />
+    <ClInclude Include="acceleration\AccelerationMultiGridArray_t.h" />
+    <ClInclude Include="acceleration\AccelerationMultiGridVector_t.h" />
+    <ClInclude Include="acceleration\AccelerationMultiGrid_t.h" />
+    <ClInclude Include="acceleration\GridCellArray_t.h" />
+    <ClInclude Include="acceleration\GridCellVector_t.h" />
+    <ClInclude Include="acceleration\GridCell_t.h" />
+    <ClInclude Include="cameras\Cam3DAperture_t.h" />
+    <ClInclude Include="cameras\Cam3DMotionblurAperture_t.h" />
+    <ClInclude Include="cameras\Cam3DMotionblur_t.h" />
+    <ClInclude Include="cameras\Cam3D_t.h" />
+    <ClInclude Include="cameras\CamAperture_t.h" />
+    <ClInclude Include="cameras\CamMotionblurAperture_t.h" />
+    <ClInclude Include="cameras\CamMotionblur_t.h" />
+    <ClInclude Include="cameras\Cam_t.h" />
+    <ClInclude Include="cameras\IsoCamAperture_t.h" />
+    <ClInclude Include="cameras\IsoCamMotionblurAperture_t.h" />
+    <ClInclude Include="cameras\IsoCamMotionblur_t.h" />
+    <ClInclude Include="cameras\IsoCam_t.h" />
+    <ClInclude Include="cameras\RecCamAperture_t.h" />
+    <ClInclude Include="cameras\RecCamMotionblurAperture_t.h" />
+    <ClInclude Include="cameras\RecCamMotionblur_t.h" />
+    <ClInclude Include="cameras\RecCam_t.h" />
+    <ClInclude Include="entities\AccelerationStructure_t.h" />
+    <ClInclude Include="entities\Camera_t.h" />
+    <ClInclude Include="entities\DirectionalLight_t.h" />
+    <ClInclude Include="entities\ImgBufferOpenGL_t.h" />
+    <ClInclude Include="entities\ImgBuffer_t.h" />
+    <ClInclude Include="entities\MaterialMap_t.h" />
+    <ClInclude Include="entities\MaterialMix_t.h" />
+    <ClInclude Include="entities\Material_t.h" />
+    <ClInclude Include="entities\Medium_t.h" />
+    <ClInclude Include="entities\MeshGeometry_t.h" />
+    <ClInclude Include="entities\OpenGLRenderer_t.h" />
+    <ClInclude Include="entities\RandomGenerator_t.h" />
+    <ClInclude Include="entities\Ray_t.h" />
+    <ClInclude Include="entities\ScatteringFunction_t.h" />
+    <ClInclude Include="entities\SceneContext_t.h" />
+    <ClInclude Include="entities\Scene_t.h" />
+    <ClInclude Include="entities\Shape_t.h" />
+    <ClInclude Include="entities\Skybox_t.h" />
+    <ClInclude Include="entities\Texture_t.h" />
+    <ClInclude Include="entities\TransformMatrix_t.h" />
+    <ClInclude Include="entities\Vec3f.h" />
+    <ClInclude Include="functions\CImg.h" />
+    <ClInclude Include="functions\Colours.h" />
+    <ClInclude Include="functions\NextFilename.h" />
+    <ClInclude Include="functions\Slerp.h" />
+    <ClInclude Include="functions\tinyxml2.h" />
+    <ClInclude Include="materials\Absorber_t.h" />
+    <ClInclude Include="materials\BounceMaterial_t.h" />
+    <ClInclude Include="materials\DiffuseFull_t.h" />
+    <ClInclude Include="materials\DiffuseTex_t.h" />
+    <ClInclude Include="materials\Diffuse_t.h" />
+    <ClInclude Include="materials\DistanceMaterial_t.h" />
+    <ClInclude Include="materials\FresnelMixIn_t.h" />
+    <ClInclude Include="materials\FresnelMix_t.h" />
+    <ClInclude Include="materials\NonAbsorber_t.h" />
+    <ClInclude Include="materials\NormalMaterial_t.h" />
+    <ClInclude Include="materials\PortalScattererTop_t.h" />
+    <ClInclude Include="materials\PortalScatterer_t.h" />
+    <ClInclude Include="materials\PortalTop_t.h" />
+    <ClInclude Include="materials\Portal_t.h" />
+    <ClInclude Include="materials\RandomMixIn_t.h" />
+    <ClInclude Include="materials\RandomMix_t.h" />
+    <ClInclude Include="materials\ReflectiveFuzzTex_t.h" />
+    <ClInclude Include="materials\ReflectiveFuzz_t.h" />
+    <ClInclude Include="materials\ReflectiveRefractiveFuzz_t.h" />
+    <ClInclude Include="materials\ReflectiveRefractive_t.h" />
+    <ClInclude Include="materials\Reflective_t.h" />
+    <ClInclude Include="materials\RefractiveFuzz_t.h" />
+    <ClInclude Include="materials\Refractive_t.h" />
+    <ClInclude Include="materials\ScattererExpFull_t.h" />
+    <ClInclude Include="materials\ScattererExp_t.h" />
+    <ClInclude Include="materials\ScattererFull_t.h" />
+    <ClInclude Include="materials\Scatterer_t.h" />
+    <ClInclude Include="materials\Toon_t.h" />
+    <ClInclude Include="materials\Transparent_t.h" />
+    <ClInclude Include="shapes\Box_t.h" />
+    <ClInclude Include="shapes\MeshMotionblur_t.h" />
+    <ClInclude Include="shapes\MeshTop_t.h" />
+    <ClInclude Include="shapes\Mesh_t.h" />
+    <ClInclude Include="shapes\SphereMotionblur_t.h" />
+    <ClInclude Include="shapes\Sphere_t.h" />
+    <ClInclude Include="shapes\TriangleMeshMotionblur_t.h" />
+    <ClInclude Include="shapes\TriangleMesh_t.h" />
+    <ClInclude Include="shapes\TriangleMotionblur_t.h" />
+    <ClInclude Include="shapes\Triangle_t.h" />
+    <ClInclude Include="skyboxes\SkyboxFlatSun_t.h" />
+    <ClInclude Include="skyboxes\SkyboxFlat_t.h" />
+    <ClInclude Include="skyboxes\SkyboxTextureSun_t.h" />
+    <ClInclude Include="skyboxes\SkyboxTextureTransformationSun_t.h" />
+    <ClInclude Include="skyboxes\SkyboxTextureTransformation_t.h" />
+    <ClInclude Include="skyboxes\SkyboxTexture_t.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="acceleration\AccelerationGridArray_t.cpp" />
+    <ClCompile Include="acceleration\AccelerationGridVector_t.cpp" />
+    <ClCompile Include="acceleration\AccelerationGrid_t.cpp" />
+    <ClCompile Include="acceleration\AccelerationMultiGridArray_t.cpp" />
+    <ClCompile Include="acceleration\AccelerationMultiGridVector_t.cpp" />
+    <ClCompile Include="acceleration\AccelerationMultiGrid_t.cpp" />
+    <ClCompile Include="acceleration\GridCellArray_t.cpp" />
+    <ClCompile Include="acceleration\GridCellVector_t.cpp" />
+    <ClCompile Include="acceleration\GridCell_t.cpp" />
+    <ClCompile Include="cameras\Cam3DAperture_t.cpp" />
+    <ClCompile Include="cameras\Cam3DMotionblurAperture_t.cpp" />
+    <ClCompile Include="cameras\Cam3DMotionblur_t.cpp" />
+    <ClCompile Include="cameras\Cam3D_t.cpp" />
+    <ClCompile Include="cameras\CamAperture_t.cpp" />
+    <ClCompile Include="cameras\CamMotionblurAperture_t.cpp" />
+    <ClCompile Include="cameras\CamMotionblur_t.cpp" />
+    <ClCompile Include="cameras\Cam_t.cpp" />
+    <ClCompile Include="cameras\IsoCamAperture_t.cpp" />
+    <ClCompile Include="cameras\IsoCamMotionblurAperture_t.cpp" />
+    <ClCompile Include="cameras\IsoCamMotionblur_t.cpp" />
+    <ClCompile Include="cameras\IsoCam_t.cpp" />
+    <ClCompile Include="cameras\RecCamAperture_t.cpp" />
+    <ClCompile Include="cameras\RecCamMotionblurAperture_t.cpp" />
+    <ClCompile Include="cameras\RecCamMotionblur_t.cpp" />
+    <ClCompile Include="cameras\RecCam_t.cpp" />
+    <ClCompile Include="entities\Camera_t.cpp" />
+    <ClCompile Include="entities\DirectionalLight_t.cpp" />
+    <ClCompile Include="entities\ImgBufferOpenGL_t.cpp" />
+    <ClCompile Include="entities\ImgBuffer_t.cpp" />
+    <ClCompile Include="entities\MaterialMap_t.cpp" />
+    <ClCompile Include="entities\MeshGeometry_t.cpp" />
+    <ClCompile Include="entities\OpenGLRenderer_t.cpp" />
+    <ClCompile Include="entities\RandomGenerator_t.cpp" />
+    <ClCompile Include="entities\Ray_t.cpp" />
+    <ClCompile Include="entities\SceneContext_t.cpp" />
+    <ClCompile Include="entities\Scene_t.cpp" />
+    <ClCompile Include="entities\Texture_t.cpp" />
+    <ClCompile Include="entities\TransformMatrix_t.cpp" />
+    <ClCompile Include="entities\Vec3f.cpp" />
+    <ClCompile Include="functions\Colours.cpp" />
+    <ClCompile Include="functions\NextFilename.cpp" />
+    <ClCompile Include="functions\Slerp.cpp" />
+    <ClCompile Include="functions\tinyxml2.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="materials\Absorber_t.cpp" />
+    <ClCompile Include="materials\BounceMaterial_t.cpp" />
+    <ClCompile Include="materials\DiffuseFull_t.cpp" />
+    <ClCompile Include="materials\DiffuseTex_t.cpp" />
+    <ClCompile Include="materials\Diffuse_t.cpp" />
+    <ClCompile Include="materials\DistanceMaterial_t.cpp" />
+    <ClCompile Include="materials\FresnelMixIn_t.cpp" />
+    <ClCompile Include="materials\FresnelMix_t.cpp" />
+    <ClCompile Include="materials\NonAbsorber_t.cpp" />
+    <ClCompile Include="materials\NormalMaterial_t.cpp" />
+    <ClCompile Include="materials\PortalScattererTop_t.cpp" />
+    <ClCompile Include="materials\PortalScatterer_t.cpp" />
+    <ClCompile Include="materials\PortalTop_t.cpp" />
+    <ClCompile Include="materials\Portal_t.cpp" />
+    <ClCompile Include="materials\RandomMixIn_t.cpp" />
+    <ClCompile Include="materials\RandomMix_t.cpp" />
+    <ClCompile Include="materials\ReflectiveFuzzTex_t.cpp" />
+    <ClCompile Include="materials\ReflectiveFuzz_t.cpp" />
+    <ClCompile Include="materials\ReflectiveRefractiveFuzz_t.cpp" />
+    <ClCompile Include="materials\ReflectiveRefractive_t.cpp" />
+    <ClCompile Include="materials\Reflective_t.cpp" />
+    <ClCompile Include="materials\RefractiveFuzz_t.cpp" />
+    <ClCompile Include="materials\Refractive_t.cpp" />
+    <ClCompile Include="materials\ScattererExpFull_t.cpp" />
+    <ClCompile Include="materials\ScattererExp_t.cpp" />
+    <ClCompile Include="materials\ScattererFull_t.cpp" />
+    <ClCompile Include="materials\Scatterer_t.cpp" />
+    <ClCompile Include="materials\Toon_t.cpp" />
+    <ClCompile Include="materials\Transparent_t.cpp" />
+    <ClCompile Include="shapes\Box_t.cpp" />
+    <ClCompile Include="shapes\MeshMotionblur_t.cpp" />
+    <ClCompile Include="shapes\MeshTop_t.cpp" />
+    <ClCompile Include="shapes\Mesh_t.cpp" />
+    <ClCompile Include="shapes\SphereMotionblur_t.cpp" />
+    <ClCompile Include="shapes\Sphere_t.cpp" />
+    <ClCompile Include="shapes\TriangleMeshMotionblur_t.cpp" />
+    <ClCompile Include="shapes\TriangleMesh_t.cpp" />
+    <ClCompile Include="shapes\TriangleMotionblur_t.cpp" />
+    <ClCompile Include="shapes\Triangle_t.cpp" />
+    <ClCompile Include="skyboxes\SkyboxFlatSun_t.cpp" />
+    <ClCompile Include="skyboxes\SkyboxFlat_t.cpp" />
+    <ClCompile Include="skyboxes\SkyboxTextureSun_t.cpp" />
+    <ClCompile Include="skyboxes\SkyboxTextureTransformationSun_t.cpp" />
+    <ClCompile Include="skyboxes\SkyboxTextureTransformation_t.cpp" />
+    <ClCompile Include="skyboxes\SkyboxTexture_t.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
