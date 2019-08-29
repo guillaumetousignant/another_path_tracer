@@ -36,3 +36,5 @@
 /images/*
 /assets/*
 *.png
+/.vs/*
+*.user
