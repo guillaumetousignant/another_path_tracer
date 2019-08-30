@@ -3,7 +3,7 @@
 #include "CImg.h"
 
 Texture_t::Texture_t(const std::string &filename){
-    cimg_library::CImg<unsigned char> image(filename.c_str());
+    const cimg_library::CImg<unsigned char> image(filename.c_str());
 
     size_x_ = image.width();
     size_y_ = image.height();
@@ -14,7 +14,7 @@ Texture_t::Texture_t(const std::string &filename){
         img_[j] = new Vec3f[size_x_];
     }
 
-    unsigned int n = size_x_ * size_y_;
+    const unsigned int n = size_x_ * size_y_;
 
     for (unsigned int j = 0; j < size_y_; j++){
         for (unsigned int i = 0; i < size_x_; i++){
@@ -36,20 +36,16 @@ Texture_t::~Texture_t(){
 }
 
 Vec3f Texture_t::get(double (&xy)[2]) const {
-    double x, y;
-    double xd, yd;
-    unsigned int xlo, xhi, ylo, yhi;
+    const double x = ((double)size_x_ - 1.0) * xy[0];
+    const double y = ((double)size_y_ - 1.0) * xy[1];
 
-    x = ((double)size_x_ - 1.0) * xy[0];
-    y = ((double)size_y_ - 1.0) * xy[1];
+    const double xd = x - std::floor(x);
+    const double yd = y - std::floor(y);
 
-    xd = x - std::floor(x);
-    yd = y - std::floor(y);
-
-    xlo = (unsigned int)std::floor(x);
-    xhi = (unsigned int)std::ceil(x);
-    ylo = (unsigned int)std::floor(y);
-    yhi = (unsigned int)std::ceil(y);
+    const unsigned int xlo = (unsigned int)std::floor(x);
+    const unsigned int xhi = (unsigned int)std::ceil(x);
+    const unsigned int ylo = (unsigned int)std::floor(y);
+    const unsigned int yhi = (unsigned int)std::ceil(y);
 
 
     return  img_[ylo][xlo] * (1.0 - xd) * (1.0 - yd) +
