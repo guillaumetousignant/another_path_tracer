@@ -76,7 +76,7 @@ void IsoCamAperture_t::autoFocus(const Scene_t* scene, const double (&position)[
 
     const Vec3f ray_origin = origin_ - vertical * (position[1] - 0.5) * fov_[0] - horizontal * (position[0] - 0.5) * fov_[1];
 
-    Ray_t focus_ray = Ray_t(ray_origin, direction_, Vec3f(), Vec3f(1.0), medium_list_);
+    const Ray_t focus_ray = Ray_t(ray_origin, direction_, Vec3f(), Vec3f(1.0), medium_list_);
     
     scene->intersect(focus_ray, hit_obj, t, uv);
 

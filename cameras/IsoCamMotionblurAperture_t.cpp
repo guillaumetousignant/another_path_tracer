@@ -23,28 +23,22 @@ void IsoCamMotionblurAperture_t::update() {
     focal_length_last_ = focal_length_;
 
     origin_ = transformation_->multVec(Vec3f());
-    TransformMatrix_t transform_norm = transformation_->transformDir();
+    const TransformMatrix_t transform_norm = transformation_->transformDir();
     direction_ = transform_norm.multDir(Vec3f(0.0, 1.0, 0.0));
     focal_length_ = focal_length_buffer_;
     up_ = up_buffer_;
 }
 
 void IsoCamMotionblurAperture_t::raytrace(const Scene_t* scene) {
-    double tot_subpix;
-    double pixel_span_x, pixel_span_y;
-    double subpix_span_x, subpix_span_y;
-    Vec3f horizontal, vertical;
-    Vec3f horizontal_last, vertical_last;
-    
-    horizontal = direction_.cross(up_).normalize();
-    vertical = horizontal.cross(direction_).normalize();
-    horizontal_last = direction_last_.cross(up_last_).normalize();
-    vertical_last = horizontal_last.cross(direction_last_).normalize();
-    tot_subpix = subpix_[0]*subpix_[1];
-    pixel_span_y = fov_[0]/image_->size_y_;
-    pixel_span_x = fov_[1]/image_->size_x_;
-    subpix_span_y = pixel_span_y/subpix_[0];
-    subpix_span_x = pixel_span_x/subpix_[1];
+    const Vec3f horizontal = direction_.cross(up_).normalize();
+    const Vec3f vertical = horizontal.cross(direction_).normalize();
+    const Vec3f horizontal_last = direction_last_.cross(up_last_).normalize();
+    const Vec3f vertical_last = horizontal_last.cross(direction_last_).normalize();
+    const double tot_subpix = subpix_[0]*subpix_[1];
+    const double pixel_span_y = fov_[0]/image_->size_y_;
+    const double pixel_span_x = fov_[1]/image_->size_x_;
+    const double subpix_span_y = pixel_span_y/subpix_[0];
+    const double subpix_span_x = pixel_span_x/subpix_[1];
 
     image_->update();
 
@@ -54,22 +48,22 @@ void IsoCamMotionblurAperture_t::raytrace(const Scene_t* scene) {
             Vec3f col = Vec3f(); // Or declare above?
             for (unsigned int k = 0; k < subpix_[0]; k++){
                 for (unsigned int l = 0; l < subpix_[1]; l++){
-                    double rand_time = unif_(my_rand::rng) * (time_[1] - time_[0]) + time_[0];
-                    double rand_theta = unif_(my_rand::rng) * 2.0 * PI;
-                    double rand_r = std::sqrt(unif_(my_rand::rng)) * aperture_;
-                    double jitter_y = unif_(my_rand::rng);
-                    double jitter_x = unif_(my_rand::rng);
+                    const double rand_time = unif_(my_rand::rng) * (time_[1] - time_[0]) + time_[0];
+                    const double rand_theta = unif_(my_rand::rng) * 2.0 * PI;
+                    const double rand_r = std::sqrt(unif_(my_rand::rng)) * aperture_;
+                    const double jitter_y = unif_(my_rand::rng);
+                    const double jitter_x = unif_(my_rand::rng);
 
-                    Vec3f direction_int = direction_ * rand_time + direction_last_ * (1.0 - rand_time);
-                    Vec3f horizontal_int = horizontal * rand_time + horizontal_last * (1.0 - rand_time);
-                    Vec3f vertical_int = vertical * rand_time + vertical_last * (1.0 - rand_time);
-                    Vec3f origin_int = origin_ * rand_time + origin_last_ * (1.0 - rand_time);
+                    const Vec3f direction_int = direction_ * rand_time + direction_last_ * (1.0 - rand_time);
+                    const Vec3f horizontal_int = horizontal * rand_time + horizontal_last * (1.0 - rand_time);
+                    const Vec3f vertical_int = vertical * rand_time + vertical_last * (1.0 - rand_time);
+                    const Vec3f origin_int = origin_ * rand_time + origin_last_ * (1.0 - rand_time);
 
-                    double focal_length_int = focal_length_ * rand_time + focal_length_last_ * (1.0 - rand_time);
+                    const double focal_length_int = focal_length_ * rand_time + focal_length_last_ * (1.0 - rand_time);
                     
                     Vec3f ray_origin = origin_int -vertical_int * (pixel_span_y * ((double)j - (double)image_->size_y_/2.0 + 0.5) + subpix_span_y * ((double)k - (double)subpix_[0]/2.0 + jitter_y))
                                      + horizontal_int * (pixel_span_x * ((double)i - (double)image_->size_x_/2.0 + 0.5) + subpix_span_x * ((double)l - (double)subpix_[1]/2.0 + jitter_x));
-                    Vec3f origin2 = ray_origin + vertical_int * std::cos(rand_theta) * rand_r + horizontal_int * std::sin(rand_theta) * rand_r;
+                    const Vec3f origin2 = ray_origin + vertical_int * std::cos(rand_theta) * rand_r + horizontal_int * std::sin(rand_theta) * rand_r;
                     ray_origin +=  direction_int * focal_length_int - origin2; // is actually now direction
 
                     Ray_t ray = Ray_t(origin2, ray_origin.normalize(), Vec3f(), Vec3f(1.0), medium_list_, rand_time);
@@ -88,18 +82,16 @@ void IsoCamMotionblurAperture_t::focus(double focus_distance){
 }
 
 void IsoCamMotionblurAperture_t::autoFocus(const Scene_t* scene, const double (&position)[2]){
-    Vec3f horizontal, vertical;
-    Vec3f pix_origin;
     Shape_t* hit_obj = nullptr;
     double t = std::numeric_limits<double>::infinity();
     double uv[2];
 
-    horizontal = direction_.cross(up_);
-    vertical = horizontal.cross(direction_);
+    const Vec3f horizontal = direction_.cross(up_);
+    const Vec3f vertical = horizontal.cross(direction_);
 
-    pix_origin = origin_ - vertical * (position[1] - 0.5) * fov_[0] - horizontal * (position[0] - 0.5) * fov_[1];
+    const Vec3f pix_origin = origin_ - vertical * (position[1] - 0.5) * fov_[0] - horizontal * (position[0] - 0.5) * fov_[1];
 
-    Ray_t focus_ray = Ray_t(pix_origin, direction_, Vec3f(), Vec3f(1.0), medium_list_);
+    const Ray_t focus_ray = Ray_t(pix_origin, direction_, Vec3f(), Vec3f(1.0), medium_list_);
 
     scene->intersect(focus_ray, hit_obj, t, uv);
 
