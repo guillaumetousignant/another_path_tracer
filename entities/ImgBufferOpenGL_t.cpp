@@ -25,7 +25,7 @@ void ImgBufferOpenGL_t::reset(){
 }
 
 void ImgBufferOpenGL_t::update(const Vec3f** img, unsigned int size_x, unsigned int size_y){
-    updates_++;
+    ++updates_;
 
     for (unsigned int j = 0; j < size_y; j++){
         for (unsigned int i = 0; i < size_x; i++){
@@ -35,7 +35,7 @@ void ImgBufferOpenGL_t::update(const Vec3f** img, unsigned int size_x, unsigned 
 }
 
 void ImgBufferOpenGL_t::update() {
-    updates_++;
+    ++updates_;
     
     glClearColor(0.0, 0.0, 0.0, 0.0);
     glClear(GL_COLOR_BUFFER_BIT);

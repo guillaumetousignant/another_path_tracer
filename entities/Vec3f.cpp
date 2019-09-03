@@ -128,7 +128,7 @@ double Vec3f::magnitudeSquared() const {
     return v[0] * v[0] + v[1] * v[1] + v[2] * v[2];
 } 
 Vec3f Vec3f::normalize() const {
-    double m = std::sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+    const double m = std::sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
     return Vec3f(v[0] / m, v[1] / m, v[2] / m);
 } 
 double Vec3f::dot(const Vec3f &other) const {
@@ -141,7 +141,7 @@ Vec3f Vec3f::cross(const Vec3f &other) const {
 } 
 const Vec3f &Vec3f::to_sph(){ // CHECK outputs nan
     // [r, theta, phi] (theta is polar angle)
-    double temp = std::atan2(v[1], v[0]);
+    const double temp = std::atan2(v[1], v[0]);
     v[0] = magnitude();
     v[1] = std::acos(v[2]/v[0]);
     v[1] = std::isnan(v[1]) ? 0.0 : v[1];
@@ -149,23 +149,23 @@ const Vec3f &Vec3f::to_sph(){ // CHECK outputs nan
     return *this;
 }
 const Vec3f &Vec3f::to_xyz(){
-    double temp = std::move(v[2]);
+    const double temp = std::move(v[2]);
     v[2] = v[0]*std::cos(v[1]);
-    double temp2 = std::move(v[1]);
+    const double temp2 = std::move(v[1]);
     v[1] = v[0]*std::sin(temp2)*std::sin(temp);
     v[0] *= std::sin(temp2)*std::cos(temp);
     return *this;
 }
 const Vec3f &Vec3f::to_xyz_offset(const Vec3f &ref1, const Vec3f &ref2, const Vec3f &ref3){
-    Vec3f temp = Vec3f(v[0]*std::sin(v[1])*std::cos(v[2]), v[0]*std::sin(v[1])*std::sin(v[2]),  v[0]*std::cos(v[1])); // CHECK could be better
+    const Vec3f temp = Vec3f(v[0]*std::sin(v[1])*std::cos(v[2]), v[0]*std::sin(v[1])*std::sin(v[2]),  v[0]*std::cos(v[1])); // CHECK could be better
     v[0] = ref1[0] * temp[0] + ref2[0] * temp[1] + ref3[0] * temp[2];
     v[1] = ref1[1] * temp[0] + ref2[1] * temp[1] + ref3[1] * temp[2];
     v[2] = ref1[2] * temp[0] + ref2[2] * temp[1] + ref3[2] * temp[2];
     return *this;
 }
 Vec3f Vec3f::get_sph() const {
-    double r = magnitude();
-    double temp = std::acos(v[2]/r);
+    const double r = magnitude();
+    const double temp = std::acos(v[2]/r);
     return Vec3f(r, std::isnan(temp) ? 0.0 : temp, std::atan2(v[1], v[0]));
 }
 Vec3f Vec3f::get_xyz() const {

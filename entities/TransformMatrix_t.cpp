@@ -15,7 +15,7 @@ TransformMatrix_t::TransformMatrix_t(const TransformMatrix_t &other)
 TransformMatrix_t::~TransformMatrix_t(){}
 
 TransformMatrix_t&  TransformMatrix_t::rotateXAxis(double angle){
-    double other[16] = {1, 0, 0, 0,
+    const double other[16] = {1, 0, 0, 0,
                         0, cos(angle), sin(angle), 0,
                         0, -sin(angle), cos(angle), 0,
                         0, 0, 0, 1};
@@ -34,7 +34,7 @@ TransformMatrix_t&  TransformMatrix_t::rotateXAxis(double angle){
 }
 
 TransformMatrix_t&  TransformMatrix_t::rotateYAxis(double angle){
-    double other[16] = {cos(angle), 0, -sin(angle), 0,
+    const double other[16] = {cos(angle), 0, -sin(angle), 0,
                         0, 1, 0, 0,
                         sin(angle), 0, cos(angle), 0,
                         0, 0, 0, 1};
@@ -53,7 +53,7 @@ TransformMatrix_t&  TransformMatrix_t::rotateYAxis(double angle){
 }
 
 TransformMatrix_t&  TransformMatrix_t::rotateZAxis(double angle){
-    double other[16] = {cos(angle), sin(angle), 0, 0,
+    const double other[16] = {cos(angle), sin(angle), 0, 0,
                         -sin(angle), cos(angle), 0, 0,
                         0, 0, 1, 0,
                         0, 0, 0, 1};
@@ -72,7 +72,7 @@ TransformMatrix_t&  TransformMatrix_t::rotateZAxis(double angle){
 }
 
 TransformMatrix_t&  TransformMatrix_t::rotateX(double angle){
-    double other[16] = {1, 0, 0, 0, /* Dunno if those work, pre-multiplied them*/
+    const double other[16] = {1, 0, 0, 0, /* Dunno if those work, pre-multiplied them*/
                     0, cos(angle), sin(angle), 0,
                     0, -sin(angle), cos(angle), 0,
                     0, matrix_[13] - matrix_[13]*cos(angle) + matrix_[14]*sin(angle), matrix_[14] - matrix_[14]*cos(angle) - matrix_[13]*sin(angle), 1};
@@ -91,7 +91,7 @@ TransformMatrix_t&  TransformMatrix_t::rotateX(double angle){
 }
 
 TransformMatrix_t&  TransformMatrix_t::rotateY(double angle){
-    double other[16] = {cos(angle), 0, -sin(angle), 0,
+    const double other[16] = {cos(angle), 0, -sin(angle), 0,
                         0, 1, 0, 0,
                         sin(angle), 0, cos(angle), 0,
                         matrix_[12] - matrix_[12]*cos(angle) - matrix_[14]*sin(angle), 0, matrix_[14] - matrix_[14]*cos(angle) + matrix_[12]*sin(angle), 1};
@@ -110,7 +110,7 @@ TransformMatrix_t&  TransformMatrix_t::rotateY(double angle){
 }
 
 TransformMatrix_t&  TransformMatrix_t::rotateZ(double angle){
-    double other[16] = {cos(angle), sin(angle), 0, 0,
+    const double other[16] = {cos(angle), sin(angle), 0, 0,
                         -sin(angle), cos(angle), 0, 0,
                         0, 0, 1, 0,
                         matrix_[12] - matrix_[12]*cos(angle) + matrix_[13]*sin(angle), matrix_[13] - matrix_[13]*cos(angle) - matrix_[12]*sin(angle), 0, 1};
@@ -129,8 +129,8 @@ TransformMatrix_t&  TransformMatrix_t::rotateZ(double angle){
 }
 
 TransformMatrix_t&  TransformMatrix_t::rotateAxis(const Vec3f &vec, double angle){
-    Vec3f vec2 = vec.normalize(); // Dunno if needed
-    double other[16] = {vec2[0] * vec2[0] * (1 - cos(angle)) + cos(angle), vec2[1] * vec2[0] * (1 - cos(angle)) - vec2[2] * sin(angle), vec2[2] * vec2[0] * (1 - cos(angle)) + vec2[1] * sin(angle), 0,
+    const Vec3f vec2 = vec.normalize(); // Dunno if needed
+    const double other[16] = {vec2[0] * vec2[0] * (1 - cos(angle)) + cos(angle), vec2[1] * vec2[0] * (1 - cos(angle)) - vec2[2] * sin(angle), vec2[2] * vec2[0] * (1 - cos(angle)) + vec2[1] * sin(angle), 0,
                         vec2[0] * vec2[1] * (1 - cos(angle)) + vec2[2] * sin(angle), vec2[1] * vec2[1] * (1 - cos(angle)) + cos(angle), vec2[2] * vec2[1] * (1 - cos(angle)) - vec2[0] * sin(angle), 0,
                         vec2[0] * vec2[2] * (1 - cos(angle)) - vec2[0] * sin(angle), vec2[0] * vec2[1] * (1 - cos(angle)) + vec2[0] * sin(angle), vec2[2] * vec2[2] * (1 - cos(angle)) + cos(angle), 0,
                         0, 0, 0, 1};
@@ -149,8 +149,8 @@ TransformMatrix_t&  TransformMatrix_t::rotateAxis(const Vec3f &vec, double angle
 }
 
 TransformMatrix_t&  TransformMatrix_t::rotate(const Vec3f &vec, double angle){
-    Vec3f vec2 = vec.normalize(); // Dunno if needed
-    double other[16] = {vec2[0] * vec2[0] * (1 - cos(angle)) + cos(angle), vec2[1] * vec2[0] * (1 - cos(angle)) - vec2[2] * sin(angle), vec2[2] * vec2[0] * (1 - cos(angle)) + vec2[1] * sin(angle), 0,
+    const Vec3f vec2 = vec.normalize(); // Dunno if needed
+    const double other[16] = {vec2[0] * vec2[0] * (1 - cos(angle)) + cos(angle), vec2[1] * vec2[0] * (1 - cos(angle)) - vec2[2] * sin(angle), vec2[2] * vec2[0] * (1 - cos(angle)) + vec2[1] * sin(angle), 0,
                         vec2[0] * vec2[1] * (1 - cos(angle)) + vec2[2] * sin(angle), vec2[1] * vec2[1] * (1 - cos(angle)) + cos(angle), vec2[2] * vec2[1] * (1 - cos(angle)) - vec2[0] * sin(angle), 0,
                         vec2[0] * vec2[2] * (1 - cos(angle)) - vec2[0] * sin(angle), vec2[0] * vec2[1] * (1 - cos(angle)) + vec2[0] * sin(angle), vec2[2] * vec2[2] * (1 - cos(angle)) + cos(angle), 0,
                         matrix_[12] + matrix_[14]*(vec2[0]*sin(angle) + vec2[0]*vec2[2]*(cos(angle) - 1)) - matrix_[13]*(vec2[2]*sin(angle) - vec2[0]*vec2[1]*(cos(angle) - 1)) - matrix_[12]*((1 - cos(angle))*vec2[0]*vec2[0] + cos(angle)), matrix_[13] + matrix_[12]*(vec2[2]*sin(angle) + vec2[0]*vec2[1]*(cos(angle) - 1)) - matrix_[14]*(vec2[0]*sin(angle) - vec2[0]*vec2[1]*(cos(angle) - 1)) - matrix_[13]*((1 - cos(angle))*vec2[1]*vec2[1] + cos(angle)), matrix_[14] - matrix_[12]*(vec2[1]*sin(angle) - vec2[0]*vec2[2]*(cos(angle) - 1)) + matrix_[13]*(vec2[0]*sin(angle) + vec2[1]*vec2[2]*(cos(angle) - 1)) - matrix_[14]*((1 - cos(angle))*vec2[2]*vec2[2] + cos(angle)), 1};
@@ -170,7 +170,7 @@ TransformMatrix_t&  TransformMatrix_t::rotate(const Vec3f &vec, double angle){
 }
 
 TransformMatrix_t&  TransformMatrix_t::translate(const Vec3f &vec){
-    double other[16] = {1, 0, 0, 0,
+    const double other[16] = {1, 0, 0, 0,
                         0, 1, 0, 0,
                         0, 0, 1, 0,
                         vec[0], vec[1], vec[2], 1};
@@ -189,7 +189,7 @@ TransformMatrix_t&  TransformMatrix_t::translate(const Vec3f &vec){
 }
 
 TransformMatrix_t&  TransformMatrix_t::scaleAxis(const Vec3f &vec){
-    double other[16] = {vec[0], 0, 0, 0,
+    const double other[16] = {vec[0], 0, 0, 0,
                         0, vec[1], 0, 0,
                         0, 0, vec[2], 0,
                         0, 0, 0, 1};
@@ -208,7 +208,7 @@ TransformMatrix_t&  TransformMatrix_t::scaleAxis(const Vec3f &vec){
 }
 
 TransformMatrix_t&  TransformMatrix_t::scaleAxis(double fac){
-    double other[16] = {fac, 0, 0, 0,
+    const double other[16] = {fac, 0, 0, 0,
                         0, fac, 0, 0,
                         0, 0, fac, 0,
                         0, 0, 0, 1};
@@ -227,7 +227,7 @@ TransformMatrix_t&  TransformMatrix_t::scaleAxis(double fac){
 }
 
 TransformMatrix_t&  TransformMatrix_t::scale(const Vec3f &vec){
-    double other[16] = {vec[0], 0, 0, 0,
+    const double other[16] = {vec[0], 0, 0, 0,
                         0, vec[1], 0, 0,
                         0, 0, vec[2], 0,
                         matrix_[12] - vec[0]*matrix_[12], matrix_[13] - vec[1]*matrix_[13], matrix_[14] - vec[2]*matrix_[14], 1};
@@ -246,7 +246,7 @@ TransformMatrix_t&  TransformMatrix_t::scale(const Vec3f &vec){
 }
 
 TransformMatrix_t&  TransformMatrix_t::scale(double fac){
-    double other[16] = {fac, 0, 0, 0,
+    const double other[16] = {fac, 0, 0, 0,
                         0, fac, 0, 0,
                         0, 0, fac, 0,
                         matrix_[12] - fac*matrix_[12], matrix_[13] - fac*matrix_[13], matrix_[14] - fac*matrix_[14], 1};
@@ -286,7 +286,7 @@ TransformMatrix_t&  TransformMatrix_t::shear(const Vec3f &vec){ // who the hell 
 }
 
 TransformMatrix_t& TransformMatrix_t::transpose(){
-    double other[16] = {matrix_[0], matrix_[4], matrix_[8], matrix_[12],
+    const double other[16] = {matrix_[0], matrix_[4], matrix_[8], matrix_[12],
                         matrix_[1], matrix_[5], matrix_[9], matrix_[13],
                         matrix_[2], matrix_[6], matrix_[10], matrix_[14],
                         matrix_[3], matrix_[7], matrix_[11], matrix_[15]};
@@ -302,7 +302,7 @@ TransformMatrix_t&  TransformMatrix_t::invert(){ // oh boï
 
     double tmp[12]; /* temp array for pairs */
     double det; /* determinant */
-    double transpose[16] = {matrix_[0], matrix_[4], matrix_[8], matrix_[12],
+    const double transpose[16] = {matrix_[0], matrix_[4], matrix_[8], matrix_[12],
                             matrix_[1], matrix_[5], matrix_[9], matrix_[13],
                             matrix_[2], matrix_[6], matrix_[10], matrix_[14],
                             matrix_[3], matrix_[7], matrix_[11], matrix_[15]};
@@ -409,8 +409,8 @@ TransformMatrix_t TransformMatrix_t::transformDir() const{
 }
 
 double TransformMatrix_t::getScale() const{
-    double norm0 = Vec3f(matrix_[0], matrix_[1], matrix_[2]).magnitude();
-    double norm1 = Vec3f(matrix_[4], matrix_[5], matrix_[6]).magnitude();
-    double norm2 = Vec3f(matrix_[7], matrix_[8], matrix_[9]).magnitude();
+    const double norm0 = Vec3f(matrix_[0], matrix_[1], matrix_[2]).magnitude();
+    const double norm1 = Vec3f(matrix_[4], matrix_[5], matrix_[6]).magnitude();
+    const double norm2 = Vec3f(matrix_[7], matrix_[8], matrix_[9]).magnitude();
     return std::max(std::max(norm0, norm1), norm2);
 }

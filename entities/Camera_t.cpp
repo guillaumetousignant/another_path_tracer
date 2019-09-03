@@ -14,7 +14,7 @@ Camera_t::Camera_t(TransformMatrix_t* transformation, const std::string &filenam
 void Camera_t::accumulate(const Scene_t* scene, unsigned int n_iter /*= 1000000000*/) {
     unsigned int n = 0;
     while (n < n_iter){
-        n++;
+        ++n;
 
         auto t_start = std::chrono::high_resolution_clock::now();
         raytrace(scene);
@@ -29,9 +29,8 @@ void Camera_t::accumulate(const Scene_t* scene, unsigned int n_iter /*= 10000000
 void Camera_t::accumulateWrite(const Scene_t* scene, unsigned int n_iter /*= 1000000000*/, unsigned int interval /*=1*/) {
     //std::chrono::steady_clock::time_point t_start, t_end;
     unsigned int n = 0;
-
     while (n < n_iter){
-        n++;
+        ++n;
         
         auto t_start = std::chrono::high_resolution_clock::now();
         raytrace(scene);

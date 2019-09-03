@@ -64,15 +64,13 @@ void ImgBuffer_t::set(const Vec3f &colour, unsigned int pos_x, unsigned int pos_
 }
 
 void ImgBuffer_t::write(std::string &filename, double gammaind /* = 1.0 */) const {
-    Vec3f colour;
-
-    double update_mult = 1.0/(double)updates_;
+    const double update_mult = 1.0/(double)updates_;
     cimg_library::CImg<unsigned short> image(size_x_, size_y_, 1, 3);
-    unsigned int n = size_x_ * size_y_;
+    const unsigned int n = size_x_ * size_y_;
 
     for (unsigned int j = 0; j < size_y_; j++){
         for (unsigned int i = 0; i < size_x_; i++){
-            colour = img_[j][i]*update_mult;
+            Vec3f colour = img_[j][i]*update_mult;
             colour.clamp(0.0, 1.0).pow_inplace(gammaind);
             colour *= 65535.0;
             image(i, j, 0, 0, n, n) = std::lround(colour[0]);
