@@ -35,7 +35,7 @@ Texture_t::~Texture_t(){
     }
 }
 
-Vec3f Texture_t::get(double (&xy)[2]) const {
+Vec3f Texture_t::get(const double (&xy)[2]) const {
     const double x = ((double)size_x_ - 1.0) * xy[0];
     const double y = ((double)size_y_ - 1.0) * xy[1];
 
@@ -54,6 +54,6 @@ Vec3f Texture_t::get(double (&xy)[2]) const {
             img_[ yhi][xhi] * xd * yd;
 }
 
-Vec3f Texture_t::get_nn(double (&xy)[2]) const {
+Vec3f Texture_t::get_nn(const double (&xy)[2]) const {
     return img_[(unsigned int)std::round(((double)size_x_ - 1.0) * xy[0])][(unsigned int)std::round(((double)size_y_ - 1.0) * xy[1])];
 }

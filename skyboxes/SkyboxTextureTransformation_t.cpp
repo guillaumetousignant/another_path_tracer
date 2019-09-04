@@ -10,9 +10,9 @@ SkyboxTextureTransformation_t::SkyboxTextureTransformation_t(Texture_t* texture,
 SkyboxTextureTransformation_t::~SkyboxTextureTransformation_t(){}
 
 Vec3f SkyboxTextureTransformation_t::get(const Vec3f &xyz) const{
-    TransformMatrix_t transform_norm = transformation_->transformDir(); // CHECK do this on transformation itself?
+    const TransformMatrix_t transform_norm = transformation_->transformDir(); // CHECK do this on transformation itself?
 
-    Vec3f sph = transform_norm.multDir(xyz).to_sph();
-    double xy[2] = {sph[2]/(2.0 * PI) + 0.5, 1.0 - sph[1]/PI};
+    const Vec3f sph = transform_norm.multDir(xyz).to_sph();
+    const double xy[2] = {sph[2]/(2.0 * PI) + 0.5, 1.0 - sph[1]/PI};
     return texture_->get(xy);
 }

@@ -10,10 +10,10 @@ SkyboxTextureTransformationSun_t::SkyboxTextureTransformationSun_t(Texture_t* te
 SkyboxTextureTransformationSun_t::~SkyboxTextureTransformationSun_t(){}
 
 Vec3f SkyboxTextureTransformationSun_t::get(const Vec3f &xyz) const{
-    TransformMatrix_t transform_norm = transformation_->transformDir(); // CHECK do this on transformation itself?
+    const TransformMatrix_t transform_norm = transformation_->transformDir(); // CHECK do this on transformation itself?
 
-    Vec3f sph = transform_norm.multDir(xyz).to_sph();
-    double xy[2] = {sph[2]/(2.0 * PI) + 0.5, 1.0 - sph[1]/PI};
+    const Vec3f sph = transform_norm.multDir(xyz).to_sph();
+    const double xy[2] = {sph[2]/(2.0 * PI) + 0.5, 1.0 - sph[1]/PI};
 
     if ((std::pow(xy[0] - sun_pos_[0], 2) + std::pow(xy[1] - sun_pos_[1], 2)) < (std::pow(sun_rad_, 2))) {
         return sun_col_;
