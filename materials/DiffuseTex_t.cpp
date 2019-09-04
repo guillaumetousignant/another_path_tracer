@@ -13,30 +13,25 @@ DiffuseTex_t::DiffuseTex_t(const Vec3f &emission, const Texture_t* texture, doub
 DiffuseTex_t::~DiffuseTex_t(){}
 
 void DiffuseTex_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray) {
-    Vec3f axis;
     Vec3f normal;
-    Vec3f u, v;
-    Vec3f newdir;
-    double rand1, rand2, rand2s;
     double tuv[2];
 
     hit_obj->normaluv(ray, uv, tuv, normal);
 
-    rand1 = unif_(my_rand::rng)*2*PI;
-    rand2 = unif_(my_rand::rng);
-    rand2s = sqrt(rand2);
+    const double rand1 = unif_(my_rand::rng)*2*PI;
+    const double rand2 = unif_(my_rand::rng);
+    const double rand2s = sqrt(rand2);
 
     if (normal.dot(ray.direction_) > 0.0){
         normal *= -1.0;
     }
 
-    axis = std::abs(normal[0]) > 0.1 ? Vec3f(0.0, 1.0, 0.0) : Vec3f(1.0, 0.0, 0.0);
+    const Vec3f axis = std::abs(normal[0]) > 0.1 ? Vec3f(0.0, 1.0, 0.0) : Vec3f(1.0, 0.0, 0.0);
 
-    u = axis.cross(normal).normalize();
-    v = normal.cross(u).normalize(); // wasn't normalized before
+    const Vec3f u = axis.cross(normal).normalize();
+    const Vec3f v = normal.cross(u).normalize(); // wasn't normalized before
 
-    newdir = u*cos(rand1)*rand2s + v*sin(rand1)*rand2s + normal*sqrt(1.0-rand2);
-    newdir = newdir.normalize();
+    const Vec3f newdir = (u*cos(rand1)*rand2s + v*sin(rand1)*rand2s + normal*sqrt(1.0-rand2)).normalize();
 
     ray.origin_ += ray.direction_ * ray.dist_ + normal * EPSILON;
     ray.direction_ = newdir;
