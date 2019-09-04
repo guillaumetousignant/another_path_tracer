@@ -12,7 +12,7 @@
 TriangleMeshMotionblur_t::TriangleMeshMotionblur_t(Material_t *material, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom, unsigned int index) 
     : Shape_t(material, transform_matrix), geom_(geom), index_(index) {
 
-    TransformMatrix_t transform_norm = transformation_->transformDir();
+    const TransformMatrix_t transform_norm = transformation_->transformDir();
 
     for (unsigned int i = 0; i < 3; i++){ // Loop or explicit?
         points_[i] = transformation_->multVec(geom_->v_[3 * index_ + i]);
@@ -30,7 +30,7 @@ TriangleMeshMotionblur_t::TriangleMeshMotionblur_t(Material_t *material, Transfo
 TriangleMeshMotionblur_t::~TriangleMeshMotionblur_t(){}
 
 void TriangleMeshMotionblur_t::update() {
-    TransformMatrix_t transform_norm = transformation_->transformDir();
+    const TransformMatrix_t transform_norm = transformation_->transformDir();
 
     for (unsigned int i = 0; i < 3; i++){ // Loop or explicit?
         points_last_[i] = points_[i];
@@ -46,20 +46,14 @@ void TriangleMeshMotionblur_t::update() {
 }
 
 void TriangleMeshMotionblur_t::intersection(const Ray_t &ray, bool &intersected, double &t, double (&uv)[2]) const {
-    Vec3f pvec, tvec, qvec;
-    double det, invdet;
-    double u, v;
-    Vec3f v0v1_int, v0v2_int;
-    Vec3f points_int[3];
+const Vec3f v0v1_int = v0v1_ * ray.time_ + v0v1_last_ * (1.0 - ray.time_);
+    const Vec3f v0v2_int = v0v2_ * ray.time_ + v0v2_last_ * (1.0 - ray.time_);
+    const Vec3f points_int[3] = {points_[0] * ray.time_ + points_last_[0] * (1.0 - ray.time_),
+                                    points_[1] * ray.time_ + points_last_[1] * (1.0 - ray.time_),
+                                    points_[2] * ray.time_ + points_last_[2] * (1.0 - ray.time_)};
 
-    v0v1_int = v0v1_ * ray.time_ + v0v1_last_ * (1.0 - ray.time_);
-    v0v2_int = v0v2_ * ray.time_ + v0v2_last_ * (1.0 - ray.time_);
-    for (unsigned int i = 0; i < 3; i++){
-        points_int[i] = points_[i] * ray.time_ + points_last_[i] * (1.0 - ray.time_);
-    }
-
-    pvec = ray.direction_.cross(v0v2_int);
-    det = v0v1_int.dot(pvec);
+    const Vec3f pvec = ray.direction_.cross(v0v2_int);
+    const double det = v0v1_int.dot(pvec);
 
     if (std::abs(det) < EPSILON){
         t = std::numeric_limits<double>::infinity();
@@ -69,9 +63,9 @@ void TriangleMeshMotionblur_t::intersection(const Ray_t &ray, bool &intersected,
         return;
     }
 
-    invdet = 1.0/det;
-    tvec = ray.origin_ - points_int[0];
-    u = tvec.dot(pvec) * invdet;
+    const double invdet = 1.0/det;
+    const Vec3f tvec = ray.origin_ - points_int[0];
+    const double u = tvec.dot(pvec) * invdet;
     uv[0] = u;
 
     if ((u < 0.0) || (u > 1.0)){
@@ -81,8 +75,8 @@ void TriangleMeshMotionblur_t::intersection(const Ray_t &ray, bool &intersected,
         return;
     }
 
-    qvec = tvec.cross(v0v1_int);
-    v = ray.direction_.dot(qvec) * invdet;
+    const Vec3f qvec = tvec.cross(v0v1_int);
+    const double v = ray.direction_.dot(qvec) * invdet;
     uv[1] = v;
 
     if ((v < 0.0) || ((u+v) > 1.0)){
@@ -103,12 +97,11 @@ void TriangleMeshMotionblur_t::intersection(const Ray_t &ray, bool &intersected,
 }
 
 void TriangleMeshMotionblur_t::normaluv(const Ray_t &ray, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec) const {
-    Vec3f normals_int[3];
-    for (unsigned int i = 0; i < 3; i++){
-        normals_int[i] = normals_[i] * ray.time_ + normals_last_[i] * (1.0 - ray.time_);
-    }
+    const Vec3f normals_int[3] = {normals_[0] * ray.time_ + normals_last_[0] * (1.0 - ray.time_),
+                                    normals_[1] * ray.time_ + normals_last_[1] * (1.0 - ray.time_),
+                                    normals_[2] * ray.time_ + normals_last_[2] * (1.0 - ray.time_)};
 
-    Vec3f distance = Vec3f(1.0 - uv[0] - uv[1], uv[0], uv[1]);
+    const Vec3f distance = Vec3f(1.0 - uv[0] - uv[1], uv[0], uv[1]);
     normalvec = Vec3f(distance[0] * normals_int[0][0] + distance[1] * normals_int[1][0] + distance[2] * normals_int[2][0], 
         distance[0] * normals_int[0][1] + distance[1] * normals_int[1][1] + distance[2] * normals_int[2][1],
         distance[0] * normals_int[0][2] + distance[1] * normals_int[1][2] + distance[2] * normals_int[2][2]);
@@ -118,12 +111,11 @@ void TriangleMeshMotionblur_t::normaluv(const Ray_t &ray, const double (&uv)[2],
 }
 
 void TriangleMeshMotionblur_t::normal(const Ray_t &ray, const double (&uv)[2], Vec3f &normalvec) const {
-    Vec3f normals_int[3];
-    for (unsigned int i = 0; i < 3; i++){
-        normals_int[i] = normals_[i] * ray.time_ + normals_last_[i] * (1.0 - ray.time_);
-    }
+    const Vec3f normals_int[3] = {normals_[0] * ray.time_ + normals_last_[0] * (1.0 - ray.time_),
+                                    normals_[1] * ray.time_ + normals_last_[1] * (1.0 - ray.time_),
+                                    normals_[2] * ray.time_ + normals_last_[2] * (1.0 - ray.time_)};
 
-    Vec3f distance = Vec3f(1.0 - uv[0] - uv[1], uv[0], uv[1]);
+    const Vec3f distance = Vec3f(1.0 - uv[0] - uv[1], uv[0], uv[1]);
     normalvec = Vec3f(distance[0] * normals_int[0][0] + distance[1] * normals_int[1][0] + distance[2] * normals_int[2][0], 
         distance[0] * normals_int[0][1] + distance[1] * normals_int[1][1] + distance[2] * normals_int[2][1],
         distance[0] * normals_int[0][2] + distance[1] * normals_int[1][2] + distance[2] * normals_int[2][2]);
@@ -131,10 +123,8 @@ void TriangleMeshMotionblur_t::normal(const Ray_t &ray, const double (&uv)[2], V
 }
 
 void TriangleMeshMotionblur_t::normal_face(const Ray_t &ray, Vec3f &normalvec) const{
-    Vec3f v0v1_int, v0v2_int;
-
-    v0v1_int = v0v1_ * ray.time_ + v0v1_last_ * (1.0 - ray.time_);
-    v0v2_int = v0v2_ * ray.time_ + v0v2_last_ * (1.0 - ray.time_);
+    const Vec3f v0v1_int = v0v1_ * ray.time_ + v0v1_last_ * (1.0 - ray.time_);
+    const Vec3f v0v2_int = v0v2_ * ray.time_ + v0v2_last_ * (1.0 - ray.time_);
 
     normalvec = v0v1_int.cross(v0v2_int).normalize();
 }

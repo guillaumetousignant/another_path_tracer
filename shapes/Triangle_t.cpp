@@ -12,7 +12,7 @@ Triangle_t::Triangle_t(Material_t *material, TransformMatrix_t *transform_matrix
     : Shape_t(material, transform_matrix), points_orig_{points[0], points[1], points[2]} {
 
     if (normals == nullptr){
-        Vec3f nor = (points[1] - points[0]).cross(points[2] - points[0]).normalize(); 
+        const Vec3f nor = (points[1] - points[0]).cross(points[2] - points[0]).normalize(); 
         // Loop or explicit?
         for (unsigned int i = 0; i < 3; i++){
             normals_orig_[i] = nor;
@@ -39,7 +39,7 @@ Triangle_t::Triangle_t(Material_t *material, TransformMatrix_t *transform_matrix
         }
     }
 
-    TransformMatrix_t transform_norm = transformation_->transformDir();
+    const TransformMatrix_t transform_norm = transformation_->transformDir();
 
     for (unsigned int i = 0; i < 3; i++){ // Loop or explicit?
         points_[i] = transformation_->multVec(points_orig_[i]);
@@ -53,7 +53,7 @@ Triangle_t::Triangle_t(Material_t *material, TransformMatrix_t *transform_matrix
 Triangle_t::~Triangle_t(){}
 
 void Triangle_t::update() {
-    TransformMatrix_t transform_norm = transformation_->transformDir();
+    const TransformMatrix_t transform_norm = transformation_->transformDir();
 
     for (unsigned int i = 0; i < 3; i++){ // Loop or explicit?
         points_[i] = transformation_->multVec(points_orig_[i]);
@@ -65,12 +65,8 @@ void Triangle_t::update() {
 }
 
 void Triangle_t::intersection(const Ray_t &ray, bool &intersected, double &t, double (&uv)[2]) const {
-    Vec3f pvec, tvec, qvec;
-    double det, invdet;
-    double u, v;
-
-    pvec = ray.direction_.cross(v0v2_);
-    det = v0v1_.dot(pvec);
+    const Vec3f pvec = ray.direction_.cross(v0v2_);
+    const double det = v0v1_.dot(pvec);
 
     if (std::abs(det) < EPSILON){
         t = std::numeric_limits<double>::infinity();
@@ -80,9 +76,9 @@ void Triangle_t::intersection(const Ray_t &ray, bool &intersected, double &t, do
         return;
     }
 
-    invdet = 1.0/det;
-    tvec = ray.origin_ - points_[0];
-    u = tvec.dot(pvec) * invdet;
+    const double invdet = 1.0/det;
+    const Vec3f tvec = ray.origin_ - points_[0];
+    const double u = tvec.dot(pvec) * invdet;
     uv[0] = u;
 
     if ((u < 0.0) || (u > 1.0)){
@@ -92,8 +88,8 @@ void Triangle_t::intersection(const Ray_t &ray, bool &intersected, double &t, do
         return;
     }
 
-    qvec = tvec.cross(v0v1_);
-    v = ray.direction_.dot(qvec) * invdet;
+    const Vec3f qvec = tvec.cross(v0v1_);
+    const double v = ray.direction_.dot(qvec) * invdet;
     uv[1] = v;
 
     if ((v < 0.0) || ((u+v) > 1.0)){
@@ -114,7 +110,7 @@ void Triangle_t::intersection(const Ray_t &ray, bool &intersected, double &t, do
 }
 
 void Triangle_t::normaluv(const Ray_t &ray, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec) const {
-    Vec3f distance = Vec3f(1.0 - uv[0] - uv[1], uv[0], uv[1]);
+    const Vec3f distance = Vec3f(1.0 - uv[0] - uv[1], uv[0], uv[1]);
     normalvec = Vec3f(distance[0] * normals_[0][0] + distance[1] * normals_[1][0] + distance[2] * normals_[2][0], 
         distance[0] * normals_[0][1] + distance[1] * normals_[1][1] + distance[2] * normals_[2][1],
         distance[0] * normals_[0][2] + distance[1] * normals_[1][2] + distance[2] * normals_[2][2]);
@@ -124,7 +120,7 @@ void Triangle_t::normaluv(const Ray_t &ray, const double (&uv)[2], double (&tuv)
 }
 
 void Triangle_t::normal(const Ray_t &ray, const double (&uv)[2], Vec3f &normalvec) const {
-    Vec3f distance = Vec3f(1.0 - uv[0] - uv[1], uv[0], uv[1]);
+    const Vec3f distance = Vec3f(1.0 - uv[0] - uv[1], uv[0], uv[1]);
     normalvec = Vec3f(distance[0] * normals_[0][0] + distance[1] * normals_[1][0] + distance[2] * normals_[2][0], 
         distance[0] * normals_[0][1] + distance[1] * normals_[1][1] + distance[2] * normals_[2][1],
         distance[0] * normals_[0][2] + distance[1] * normals_[1][2] + distance[2] * normals_[2][2]);

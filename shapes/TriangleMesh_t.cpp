@@ -12,7 +12,7 @@
 TriangleMesh_t::TriangleMesh_t(Material_t *material, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom, unsigned int index) 
     : Shape_t(material, transform_matrix), geom_(geom), index_(index) {
 
-    TransformMatrix_t transform_norm = transformation_->transformDir();
+    const TransformMatrix_t transform_norm = transformation_->transformDir();
 
     for (unsigned int i = 0; i < 3; i++){ // Loop or explicit?
         points_[i] = transformation_->multVec(geom_->v_[3 * index_ + i]);
@@ -26,7 +26,7 @@ TriangleMesh_t::TriangleMesh_t(Material_t *material, TransformMatrix_t *transfor
 TriangleMesh_t::~TriangleMesh_t(){}
 
 void TriangleMesh_t::update() {
-    TransformMatrix_t transform_norm = transformation_->transformDir();
+    const TransformMatrix_t transform_norm = transformation_->transformDir();
 
     for (unsigned int i = 0; i < 3; i++){ // Loop or explicit?
         points_[i] = transformation_->multVec(geom_->v_[3 * index_ + i]);
@@ -38,12 +38,8 @@ void TriangleMesh_t::update() {
 }
 
 void TriangleMesh_t::intersection(const Ray_t &ray, bool &intersected, double &t, double (&uv)[2]) const {
-    Vec3f pvec, tvec, qvec;
-    double det, invdet;
-    double u, v;
-
-    pvec = ray.direction_.cross(v0v2_);
-    det = v0v1_.dot(pvec);
+    const Vec3f pvec = ray.direction_.cross(v0v2_);
+    const double det = v0v1_.dot(pvec);
 
     if (std::abs(det) < EPSILON){
         t = std::numeric_limits<double>::infinity();
@@ -53,9 +49,9 @@ void TriangleMesh_t::intersection(const Ray_t &ray, bool &intersected, double &t
         return;
     }
 
-    invdet = 1.0/det;
-    tvec = ray.origin_ - points_[0];
-    u = tvec.dot(pvec) * invdet;
+    const double invdet = 1.0/det;
+    const Vec3f tvec = ray.origin_ - points_[0];
+    const double u = tvec.dot(pvec) * invdet;
     uv[0] = u;
 
     if ((u < 0.0) || (u > 1.0)){
@@ -65,8 +61,8 @@ void TriangleMesh_t::intersection(const Ray_t &ray, bool &intersected, double &t
         return;
     }
 
-    qvec = tvec.cross(v0v1_);
-    v = ray.direction_.dot(qvec) * invdet;
+    const Vec3f qvec = tvec.cross(v0v1_);
+    const double v = ray.direction_.dot(qvec) * invdet;
     uv[1] = v;
 
     if ((v < 0.0) || ((u+v) > 1.0)){
@@ -87,7 +83,7 @@ void TriangleMesh_t::intersection(const Ray_t &ray, bool &intersected, double &t
 }
 
 void TriangleMesh_t::normaluv(const Ray_t &ray, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec) const {
-    Vec3f distance = Vec3f(1.0 - uv[0] - uv[1], uv[0], uv[1]);
+    const Vec3f distance = Vec3f(1.0 - uv[0] - uv[1], uv[0], uv[1]);
     normalvec = Vec3f(distance[0] * normals_[0][0] + distance[1] * normals_[1][0] + distance[2] * normals_[2][0], 
         distance[0] * normals_[0][1] + distance[1] * normals_[1][1] + distance[2] * normals_[2][1],
         distance[0] * normals_[0][2] + distance[1] * normals_[1][2] + distance[2] * normals_[2][2]);
@@ -97,7 +93,7 @@ void TriangleMesh_t::normaluv(const Ray_t &ray, const double (&uv)[2], double (&
 }
 
 void TriangleMesh_t::normal(const Ray_t &ray, const double (&uv)[2], Vec3f &normalvec) const {
-    Vec3f distance = Vec3f(1.0 - uv[0] - uv[1], uv[0], uv[1]);
+    const Vec3f distance = Vec3f(1.0 - uv[0] - uv[1], uv[0], uv[1]);
     normalvec = Vec3f(distance[0] * normals_[0][0] + distance[1] * normals_[1][0] + distance[2] * normals_[2][0], 
         distance[0] * normals_[0][1] + distance[1] * normals_[1][1] + distance[2] * normals_[2][1],
         distance[0] * normals_[0][2] + distance[1] * normals_[1][2] + distance[2] * normals_[2][2]);
