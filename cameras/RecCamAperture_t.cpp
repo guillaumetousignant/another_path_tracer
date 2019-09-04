@@ -69,9 +69,6 @@ void RecCamAperture_t::focus(double focus_distance){
 }
 
 void RecCamAperture_t::autoFocus(const Scene_t* scene, const double (&position)[2]){
-    Vec3f horizontal, vertical;
-    Vec3f ray_vec;
-    Vec3f span_x, span_y;
     Shape_t* hit_obj = nullptr;
     double t = std::numeric_limits<double>::infinity();
     double uv[2];
