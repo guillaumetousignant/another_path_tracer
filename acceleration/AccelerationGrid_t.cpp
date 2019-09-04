@@ -33,7 +33,7 @@ AccelerationGrid_t::AccelerationGrid_t(Shape_t** items, unsigned int n_items, Ve
                             .min(max_res_) - 1.0;
 
     for (unsigned int i = 0; i < 3; i++){
-        cell_res_[i] = unsigned int(cell_res[i]+1.0);
+        cell_res_[i] = (unsigned int)(cell_res[i]+1.0);
     }
 
     cell_size_ = grid_size/(cell_res+1.0);
