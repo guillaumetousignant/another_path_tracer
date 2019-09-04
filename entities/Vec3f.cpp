@@ -13,6 +13,12 @@ double &Vec3f::operator[](int index) {
 double Vec3f::operator[](int index) const {
     return v[index];
 } 
+double &Vec3f::operator[](unsigned int index) {
+    return v[index];
+} 
+double Vec3f::operator[](unsigned int index) const {
+    return v[index];
+} 
 Vec3f Vec3f::operator*(double scale) const {
     return Vec3f(v[0] * scale, v[1] * scale, v[2] * scale);
 } 

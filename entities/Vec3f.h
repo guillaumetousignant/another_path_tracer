@@ -16,6 +16,8 @@ class Vec3f {
         Vec3f(double x); 
         double &operator[](int index);
         double operator[](int index) const; 
+        double &operator[](unsigned int index);
+        double operator[](unsigned int index) const; 
         Vec3f operator*(double scale) const;
         Vec3f operator*(const Vec3f &other) const;
         Vec3f operator/(double scale) const;
