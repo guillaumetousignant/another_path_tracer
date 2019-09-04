@@ -12,28 +12,24 @@ FresnelMix_t::~FresnelMix_t(){}
 
 void FresnelMix_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray) {
     Vec3f normal;
-    double cosi;
-    double etai, etat;
-    double sint, cost;
     double kr;
-    double Rs, Rp;
 
     hit_obj->normal(ray, uv, normal);
 
-    cosi = std::abs(ray.direction_.dot(normal));
+    const double cosi = std::abs(ray.direction_.dot(normal));
 
-    etai = ray.medium_list_.front()->ind_;
-    etat = ind_;
+    const double etai = ray.medium_list_.front()->ind_;
+    const double etat = ind_;
 
-    sint = etai/etat * std::sqrt(1 - cosi * cosi);
+    const double sint = etai/etat * std::sqrt(1 - cosi * cosi);
 
     if (sint >= 1){
         kr = 1.0;
     }
     else{
-        cost = std::sqrt(1 - sint * sint);
-        Rs = ((etat * cosi) - (etai * cost))/((etat * cosi) + (etai * cost));
-        Rp = ((etai * cosi) - (etat * cost))/((etai * cosi) + (etat * cost));
+        const double cost = std::sqrt(1 - sint * sint);
+        const double Rs = ((etat * cosi) - (etai * cost))/((etat * cosi) + (etai * cost));
+        const double Rp = ((etai * cosi) - (etat * cost))/((etai * cosi) + (etat * cost));
         kr = (Rs * Rs + Rp * Rp)/2.0;
     }
 

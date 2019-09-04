@@ -12,19 +12,15 @@ RefractiveFuzz_t::RefractiveFuzz_t(const Vec3f &emission, const Vec3f &colour, d
 RefractiveFuzz_t::~RefractiveFuzz_t(){}
 
 void RefractiveFuzz_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray) {
-    Vec3f normal, n, normal_fuzz;
+    Vec3f normal;
     Vec3f newdir;
-    Vec3f axis;
-    Vec3f u, v;
-    double cosi;
-    double etai, etat, eta;
-    double k;
-    double rand1, rand2, rand2s;
 
     hit_obj->normal(ray, uv, normal);
-    cosi = ray.direction_.dot(normal);
+    double cosi = ray.direction_.dot(normal);
 
     if (priority_ >= ray.medium_list_.front()->priority_){ // CHECK also discard if priority is equal, but watch for going out case
+        Vec3f n;
+        double etai, etat;
         if (cosi < 0.0){ // Coming in
             etai = ray.medium_list_.front()->ind_;
             etat = ind_;
@@ -37,21 +33,21 @@ void RefractiveFuzz_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray
             n = -normal;
         }
 
-        rand1 = unif_(my_rand::rng)*2.0*PI;
-        rand2 = std::pow(unif_(my_rand::rng), order_) * diffusivity_;
-        rand2s = sqrt(rand2);
+        const double rand1 = unif_(my_rand::rng)*2.0*PI;
+        const double rand2 = std::pow(unif_(my_rand::rng), order_) * diffusivity_;
+        const double rand2s = sqrt(rand2);
 
-        axis = std::abs(n[0]) > 0.1 ? Vec3f(0.0, 1.0, 0.0) : Vec3f(1.0, 0.0, 0.0);
+        const Vec3f axis = std::abs(n[0]) > 0.1 ? Vec3f(0.0, 1.0, 0.0) : Vec3f(1.0, 0.0, 0.0);
 
-        u = axis.cross(normal).normalize();
-        v = normal.cross(u).normalize(); // wasn't normalized before
+        const Vec3f u = axis.cross(normal).normalize();
+        const Vec3f v = normal.cross(u).normalize(); // wasn't normalized before
 
-        normal_fuzz = (u * std::cos(rand1)*rand2s + v*std::sin(rand1)*rand2s + normal*std::sqrt(1.0-rand2)).normalize();
+        const Vec3f normal_fuzz = (u * std::cos(rand1)*rand2s + v*std::sin(rand1)*rand2s + normal*std::sqrt(1.0-rand2)).normalize();
     
         cosi = ray.direction_.dot(normal_fuzz);
 
-        eta = etai/etat;
-        k = 1.0 - eta*eta * (1.0 - cosi*cosi);
+        const double eta = etai/etat;
+        const double k = 1.0 - eta*eta * (1.0 - cosi*cosi);
 
         //newdir = k < 0 ? Vec3f() : (ray.direction_*eta + normal_fuzz * (eta*cosi - std::sqrt(k))).normalize();
         newdir = k < 0.0 ? (ray.direction_ - normal_fuzz * 2.0 * cosi).normalize() : (ray.direction_*eta + normal_fuzz * (eta*cosi - std::sqrt(k))).normalize();

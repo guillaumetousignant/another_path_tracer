@@ -9,7 +9,7 @@ PortalScatterer_t::PortalScatterer_t(TransformMatrix_t* transformation, double s
 PortalScatterer_t::~PortalScatterer_t() {}
 
 void PortalScatterer_t::scatter(Ray_t &ray, bool &intersected) {
-    double distance = -std::log(unif_(my_rand::rng))/scattering_coefficient_;
+    const double distance = -std::log(unif_(my_rand::rng))/scattering_coefficient_;
 
     if (distance >= ray.dist_){
         intersected = false;
@@ -18,7 +18,7 @@ void PortalScatterer_t::scatter(Ray_t &ray, bool &intersected) {
         intersected = true;
         ray.dist_ = distance;
 
-        TransformMatrix_t transform_norm = transformation_->transformDir();
+        const TransformMatrix_t transform_norm = transformation_->transformDir();
 
         ray.origin_ = transformation_->multVec(ray.origin_ + ray.direction_ * ray.dist_);
         ray.direction_ = transform_norm.multDir(ray.direction_).normalize();

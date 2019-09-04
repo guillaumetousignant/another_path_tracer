@@ -13,13 +13,7 @@ Scatterer_t::Scatterer_t(Vec3f emi_vol, Vec3f col_vol, double abs_dist_emi, doub
 Scatterer_t::~Scatterer_t() {}
 
 void Scatterer_t::scatter(Ray_t &ray, bool &intersected) {
-    double distance;
-    double rand1, rand2;
-    Vec3f axis;
-    Vec3f u, v;
-    Vec3f direction_fuzz;
-
-    distance = -std::log(unif_(my_rand::rng))/scattering_coefficient_;
+    const double distance = -std::log(unif_(my_rand::rng))/scattering_coefficient_;
 
     if (distance >= ray.dist_){
         intersected = false;
@@ -29,15 +23,15 @@ void Scatterer_t::scatter(Ray_t &ray, bool &intersected) {
         ray.dist_ = distance;
         ray.origin_ += ray.direction_ * distance;
 
-        rand1 = unif_(my_rand::rng) * 2 * PI;
-        rand2 = unif_(my_rand::rng) * PI;
+        const double rand1 = unif_(my_rand::rng) * 2 * PI;
+        const double rand2 = unif_(my_rand::rng) * PI;
 
-        axis = ray.direction_[0] > 0.1 ? Vec3f(0.0, 1.0, 0.0) : Vec3f(1.0, 0.0, 0.0);
+        const Vec3f axis = ray.direction_[0] > 0.1 ? Vec3f(0.0, 1.0, 0.0) : Vec3f(1.0, 0.0, 0.0);
 
-        u = axis.cross(ray.direction_).normalize();
-        v = ray.direction_.cross(u).normalize();
+        const Vec3f u = axis.cross(ray.direction_).normalize();
+        const Vec3f v = ray.direction_.cross(u).normalize();
 
-        direction_fuzz = u * std::cos(rand1) * std::sin(rand2) + v * std::sin(rand1) * std::sin(rand2) + ray.direction_ * std::cos(rand2);
+        const Vec3f direction_fuzz = u * std::cos(rand1) * std::sin(rand2) + v * std::sin(rand1) * std::sin(rand2) + ray.direction_ * std::cos(rand2);
 
         ray.direction_ = direction_fuzz.normalize(); //is this needed? prob because of the cross() calls.
     }

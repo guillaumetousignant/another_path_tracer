@@ -11,19 +11,18 @@ ReflectiveRefractive_t::ReflectiveRefractive_t(const Vec3f &emission, const Vec3
 ReflectiveRefractive_t::~ReflectiveRefractive_t(){}
 
 void ReflectiveRefractive_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray) {
-    Vec3f normal, n;
+    Vec3f normal;
     Vec3f newdir;
-    double cosi;
-    double etai, etat, eta;
-    double k, kr;
     //bool coming_out;
-    double sint, cost;
-    double Rs, Rp;
 
     hit_obj->normal(ray, uv, normal);
-    cosi = ray.direction_.dot(normal);
+    double cosi = ray.direction_.dot(normal);
 
     if (priority_ >= ray.medium_list_.front()->priority_){ // CHECK also discard if priority is equal, but watch for going out case
+        Vec3f n;
+        double etai, etat;
+        double kr;
+        
         if (cosi < 0.0){ // Coming in
             etai = ray.medium_list_.front()->ind_;
             etat = ind_;
@@ -38,22 +37,22 @@ void ReflectiveRefractive_t::bounce(const double (&uv)[2], const Shape_t* hit_ob
             //coming_out = true;
         }
 
-        eta = etai/etat;
-        sint = eta * std::sqrt(1.0 - cosi * cosi);
+        const double eta = etai/etat;
+        const double sint = eta * std::sqrt(1.0 - cosi * cosi);
 
         if (sint >= 1.0){
             kr = 1.0;
         }
         else{
-            cost = std::sqrt(1.0 - sint * sint);
+            const double cost = std::sqrt(1.0 - sint * sint);
             cosi = std::abs(cosi);
-            Rs = ((etat * cosi) - (etai * cost))/((etat * cosi) + (etai * cost));
-            Rp = ((etai * cosi) - (etat * cost))/((etai * cosi) + (etat * cost));
+            const double Rs = ((etat * cosi) - (etai * cost))/((etat * cosi) + (etai * cost));
+            const double Rp = ((etai * cosi) - (etat * cost))/((etai * cosi) + (etat * cost));
             kr = (Rs * Rs + Rp * Rp)/2.0;
         }
 
         if (unif_(my_rand::rng) > kr){ //|| coming_out){ // refracted. Not sure if should always be refracted when going out.
-            k = 1.0 - sint*sint;
+            const double k = 1.0 - sint*sint;
 
             //newdir = k < 0 ? Vec3f() : (ray.direction_ * eta + n * (eta * cosi - std::sqrt(k))).normalize(); // k shouldn't be smaller than 0 if sint >= 1
             newdir = (ray.direction_ * eta + n * (eta * cosi - std::sqrt(k))).normalize();

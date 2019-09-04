@@ -12,22 +12,18 @@ ReflectiveRefractiveFuzz_t::ReflectiveRefractiveFuzz_t(const Vec3f &emission, co
 ReflectiveRefractiveFuzz_t::~ReflectiveRefractiveFuzz_t(){}
 
 void ReflectiveRefractiveFuzz_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray) {
-    Vec3f normal, n, normal_fuzz;
+    Vec3f normal;
     Vec3f newdir;
-    Vec3f axis;
-    Vec3f u, v;
-    double cosi;
-    double etai, etat, eta;
-    double k, kr;
     //bool coming_out;
-    double sint, cost;
-    double Rs, Rp;
-    double rand1, rand2, rand2s;
 
     hit_obj->normal(ray, uv, normal);
-    cosi = ray.direction_.dot(normal);
+    double cosi = ray.direction_.dot(normal);
 
     if (priority_ >= ray.medium_list_.front()->priority_){ // CHECK also discard if priority is equal, but watch for going out case
+        Vec3f n;
+        double etai, etat;
+        double kr;
+        
         if (cosi < 0.0){ // Coming in
             etai = ray.medium_list_.front()->ind_;
             etat = ind_;
@@ -42,34 +38,34 @@ void ReflectiveRefractiveFuzz_t::bounce(const double (&uv)[2], const Shape_t* hi
             //coming_out = true;
         }
 
-        rand1 = unif_(my_rand::rng)*2.0*PI;
-        rand2 = std::pow(unif_(my_rand::rng), order_) * diffusivity_;
-        rand2s = sqrt(rand2);
+        const double rand1 = unif_(my_rand::rng)*2.0*PI;
+        const double rand2 = std::pow(unif_(my_rand::rng), order_) * diffusivity_;
+        const double rand2s = sqrt(rand2);
 
-        axis = std::abs(n[0]) > 0.1 ? Vec3f(0.0, 1.0, 0.0) : Vec3f(1.0, 0.0, 0.0);
+        const Vec3f axis = std::abs(n[0]) > 0.1 ? Vec3f(0.0, 1.0, 0.0) : Vec3f(1.0, 0.0, 0.0);
 
-        u = axis.cross(normal).normalize();
-        v = normal.cross(u).normalize(); // wasn't normalized before
+        const Vec3f u = axis.cross(normal).normalize();
+        const Vec3f v = normal.cross(u).normalize(); // wasn't normalized before
 
-        normal_fuzz = (u * std::cos(rand1)*rand2s + v*std::sin(rand1)*rand2s + normal*std::sqrt(1.0-rand2)).normalize();
+        const Vec3f normal_fuzz = (u * std::cos(rand1)*rand2s + v*std::sin(rand1)*rand2s + normal*std::sqrt(1.0-rand2)).normalize();
 
         cosi = ray.direction_.dot(normal_fuzz);
-        eta = etai/etat;
-        sint = eta * std::sqrt(1.0 - cosi * cosi);
+        const double eta = etai/etat;
+        const double sint = eta * std::sqrt(1.0 - cosi * cosi);
 
         if (sint >= 1.0){
             kr = 1.0;
         }
         else{
-            cost = std::sqrt(1.0 - sint * sint);
+            const double cost = std::sqrt(1.0 - sint * sint);
             cosi = std::abs(cosi);
-            Rs = ((etat * cosi) - (etai * cost))/((etat * cosi) + (etai * cost));
-            Rp = ((etai * cosi) - (etat * cost))/((etai * cosi) + (etat * cost));
+            const double Rs = ((etat * cosi) - (etai * cost))/((etat * cosi) + (etai * cost));
+            const double Rp = ((etai * cosi) - (etat * cost))/((etai * cosi) + (etat * cost));
             kr = (Rs * Rs + Rp * Rp)/2.0;
         }
 
         if (unif_(my_rand::rng) > kr){// || coming_out){ // refracted. Not sure if should always be refracted when going out.
-            k = 1.0 - sint*sint;
+            const double k = 1.0 - sint*sint;
 
             //newdir = k < 0 ? Vec3f() : (ray.direction_ * eta + normal_fuzz * (eta * cosi - std::sqrt(k))).normalize();
             newdir = (ray.direction_ * eta + normal_fuzz * (eta * cosi - std::sqrt(k))).normalize(); // k shouldn't be smaller than zero if kr is smaller than 1
