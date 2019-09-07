@@ -583,23 +583,19 @@ void SceneContext_t::readXML(const std::string &filename){
     std::cout << "Scene created." << std::endl;
     
     if (objects_.size() > 0){
-        Shape_t** shapes = nullptr;
-        MeshTop_t** meshes = nullptr;
-        unsigned int n_shapes = 0;
-        unsigned int n_meshes = 0;
+        std::vector<Shape_t*> shapes;
+        std::vector<MeshTop_t*> meshes;
 
         if (object_list != nullptr){
-            get_objects(object_list, shapes, n_shapes, meshes, n_meshes, xml_objects);
+            get_objects(object_list, shapes, meshes, xml_objects);
         }
         else {
-            get_objects(shapes, n_shapes, meshes, n_meshes);
+            get_objects(shapes, meshes);
         }
 
-        scene_->add(shapes, n_shapes);
-        scene_->add(meshes, n_meshes);
+        scene_->add(shapes.data(), shapes.size());
+        scene_->add(meshes.data(), meshes.size());
 
-        delete [] shapes;
-        delete [] meshes;
         std::cout << "Primitives added." << std::endl;
     }
 
@@ -2386,13 +2382,13 @@ Skybox_t* SceneContext_t::get_skybox(std::string skybox, const tinyxml2::XMLElem
     exit(81); 
 }
 
-void SceneContext_t::get_objects(std::string objects_string, Shape_t** &shapes, unsigned int &n_shapes, MeshTop_t** &meshes, unsigned int &n_meshes, const tinyxml2::XMLElement* xml_objects) const {
+void SceneContext_t::get_objects(std::string objects_string, std::vector<Shape_t*> &shapes, std::vector<MeshTop_t*> &meshes, const tinyxml2::XMLElement* xml_objects) const {
     std::list<unsigned int> objects_list = std::list<unsigned int>();
     std::string delimiter = ", ";
     size_t pos = 0;
     std::string token;
-    n_shapes = 0;
-    n_meshes = 0;
+    unsigned int n_shapes = 0;
+    unsigned int n_meshes = 0;
 
     while ((pos = objects_string.find(delimiter)) != std::string::npos) {
         token = objects_string.substr(0, pos);
@@ -2470,8 +2466,8 @@ void SceneContext_t::get_objects(std::string objects_string, Shape_t** &shapes, 
             }
         }
 
-        shapes = new Shape_t*[n_shapes];
-        meshes = new MeshTop_t*[n_meshes];
+        shapes = std::vector<Shape_t*>(n_shapes);
+        meshes = std::vector<MeshTop_t*>(n_meshes);
         unsigned int index_shapes = 0;
         unsigned int index_meshes = 0;
 
@@ -2488,9 +2484,9 @@ void SceneContext_t::get_objects(std::string objects_string, Shape_t** &shapes, 
     }
 }
 
-void SceneContext_t::get_objects(Shape_t** &shapes, unsigned int &n_shapes, MeshTop_t** &meshes, unsigned int &n_meshes) const {
-    n_shapes = 0;
-    n_meshes = 0;
+void SceneContext_t::get_objects(std::vector<Shape_t*> &shapes, std::vector<MeshTop_t*> &meshes) const {
+    unsigned int n_shapes = 0;
+    unsigned int n_meshes = 0;
 
     for (unsigned int i = 0; i < objects_.size(); ++i){
         if (objects_[i]){
@@ -2501,8 +2497,8 @@ void SceneContext_t::get_objects(Shape_t** &shapes, unsigned int &n_shapes, Mesh
         }
     }
 
-    shapes = new Shape_t*[n_shapes];
-    meshes = new MeshTop_t*[n_meshes];
+    shapes = std::vector<Shape_t*>(n_shapes);
+    meshes = std::vector<MeshTop_t*>(n_meshes);
     unsigned int index_shapes = 0;
     unsigned int index_meshes = 0;
 

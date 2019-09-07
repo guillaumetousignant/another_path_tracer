@@ -97,8 +97,8 @@ class SceneContext_t{
         void get_lights(std::string lights_string, DirectionalLight_t** &lights, unsigned int &n, const tinyxml2::XMLElement* xml_directional_lights) const;
         ImgBuffer_t* get_imgbuffer(std::string imgbuffer, const tinyxml2::XMLElement* xml_imgbuffers) const;
         Skybox_t* get_skybox(std::string skybox, const tinyxml2::XMLElement* xml_skyboxes) const;
-        void get_objects(std::string objects_string, Shape_t** &shapes, unsigned int &n_shapes, MeshTop_t** &meshes, unsigned int &n_meshes, const tinyxml2::XMLElement* xml_objects) const;
-        void get_objects(Shape_t** &shapes, unsigned int &n_shapes, MeshTop_t** &meshes, unsigned int &n_meshes) const;
+        void get_objects(std::string objects_string, std::vector<Shape_t*> &shapes, std::vector<MeshTop_t*> &meshes, const tinyxml2::XMLElement* xml_objects) const;
+        void get_objects(std::vector<Shape_t*> &shapes, std::vector<MeshTop_t*> &meshes) const;
 };
 
 Vec3f get_colour(std::string colour); // copies string :(
