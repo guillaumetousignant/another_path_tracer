@@ -6,6 +6,7 @@
 #include <tuple>
 #include <algorithm>
 #include <chrono>
+#include <vector>
 
 #include "Colours.h"
 #include "NextFilename.h"
@@ -453,8 +454,8 @@ void SceneContext_t::readXML(const std::string &filename){
     for (unsigned int i = 0; i < n_materials_; i++){
         if (materials_aggregate_list[i] != nullptr) {
             unsigned int n = std::get<0>(*materials_aggregate_list[i])->size();
-            std::string* names = new std::string[n];
-            Material_t** materials = new Material_t*[n];
+            std::vector<std::string> names(n);
+            std::vector<Material_t*> materials(n);
 
             unsigned int index = 0;
             for (auto it = std::get<0>(*materials_aggregate_list[i])->begin(); it != std::get<0>(*materials_aggregate_list[i])->end(); ++it){
@@ -467,11 +468,8 @@ void SceneContext_t::readXML(const std::string &filename){
                 ++index;
             }
             
-            material_aggregates_[i] = new MaterialMap_t(names, materials, n);
+            material_aggregates_[i] = new MaterialMap_t(names.data(), materials.data(), n);
             materials_[i] = material_aggregates_[i]->getFirst();
-
-            delete [] names;
-            delete [] materials;
         }
     }
 
