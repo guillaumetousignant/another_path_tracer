@@ -430,7 +430,8 @@ void SceneContext_t::readXML(const std::string &filename){
             }
             
             material_aggregates_[i] = std::unique_ptr<MaterialMap_t>(new MaterialMap_t(names.data(), materials.data(), n));
-            materials_[i] = std::unique_ptr<Material_t>(material_aggregates_[i]->getFirst()); // CHECK this is not intended, will delete stuff from material list
+            //materials_[i] = std::unique_ptr<Material_t>(material_aggregates_[i]->getFirst()); // CHECK this is not intended, will delete stuff from material list
+            materials_[i] = std::unique_ptr<Material_t>();
         }
     }
 
