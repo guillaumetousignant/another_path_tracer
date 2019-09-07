@@ -303,8 +303,8 @@ void SceneContext_t::readXML(const std::string &filename){
     materials_ = std::vector<std::unique_ptr<Material_t>>(n_materials);
     material_aggregates_ = std::vector<std::unique_ptr<MaterialMap_t>>(n_materials);
     mesh_geometries_ = std::vector<std::unique_ptr<MeshGeometry_t>>(n_mesh_geometries);
-    objects_ = std::vector<Shape_t*>(n_objects);
-    meshes_ = std::vector<MeshTop_t*>(n_objects);
+    objects_ = std::vector<std::unique_ptr<Shape_t>>(n_objects);
+    meshes_ = std::vector<std::unique_ptr<MeshTop_t>>(n_objects);
     directional_lights_ = std::vector<std::unique_ptr<DirectionalLight_t>>(n_directional_lights);
     skyboxes_ = std::vector<std::unique_ptr<Skybox_t>>(n_skyboxes);
     imgbuffers_ = std::vector<std::unique_ptr<ImgBuffer_t>>(n_imgbuffers);
@@ -550,7 +550,7 @@ void SceneContext_t::readXML(const std::string &filename){
         for (tinyxml2::XMLElement* xml_object = xml_objects->FirstChildElement("object"); xml_object; xml_object = xml_object->NextSiblingElement("object")){
             tinyxml2::XMLElement* transformations_pre = xml_object->FirstChildElement("transformations_pre");
             if (transformations_pre != nullptr){
-                TransformMatrix_t* transform_matrix = (objects_[index] != nullptr) ? objects_[index]->transformation_ : meshes_[index]->transformation_;
+                TransformMatrix_t* transform_matrix = (objects_[index]) ? objects_[index]->transformation_ : meshes_[index]->transformation_;
                 for (tinyxml2::XMLElement* transformation_pre = transformations_pre->FirstChildElement("transformation_pre"); transformation_pre; transformation_pre = transformation_pre->NextSiblingElement("transformation_pre")){
                     apply_transformation(transform_matrix, transformation_pre);
                 }
@@ -672,7 +672,7 @@ void SceneContext_t::readXML(const std::string &filename){
         for (tinyxml2::XMLElement* xml_object = xml_objects->FirstChildElement("object"); xml_object; xml_object = xml_object->NextSiblingElement("object")){
             tinyxml2::XMLElement* transformations_post = xml_object->FirstChildElement("transformations_post");
             if (transformations_post != nullptr){
-                TransformMatrix_t* transform_matrix = (objects_[index] != nullptr) ? objects_[index]->transformation_ : meshes_[index]->transformation_;
+                TransformMatrix_t* transform_matrix = (objects_[index]) ? objects_[index]->transformation_ : meshes_[index]->transformation_;
                 for (tinyxml2::XMLElement* transformation_post = transformations_post->FirstChildElement("transformation_post"); transformation_post; transformation_post = transformation_post->NextSiblingElement("transformation_post")){
                     apply_transformation(transform_matrix, transformation_post);
                 }
@@ -937,18 +937,6 @@ void SceneContext_t::reset(){
     index_cameras_ = 0;
     opengl_imgbuffer_ = nullptr;
     opengl_camera_ = nullptr;
-
-    // Deleting buffers
-
-    
-    for (unsigned int i = 0; i < objects_.size(); i++){
-        if (objects_[i] != nullptr){
-            delete objects_[i];
-        }
-        if (meshes_[i] != nullptr){
-            delete meshes_[i];
-        }
-    }
 
     use_gl_ = false;
     scene_name_ = "";
@@ -1292,7 +1280,7 @@ std::unique_ptr<MeshGeometry_t> SceneContext_t::create_mesh_geometry(const tinyx
     }
 }
 
-Shape_t* SceneContext_t::create_object(const tinyxml2::XMLElement* xml_object, MeshTop_t* &mesh, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_mesh_geometries) {
+std::unique_ptr<Shape_t> SceneContext_t::create_object(const tinyxml2::XMLElement* xml_object, std::unique_ptr<MeshTop_t> &mesh, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_mesh_geometries) {
     std::string type;
     const char* type_char = xml_object->Attribute("type");
     if (type_char == nullptr) {
@@ -1309,11 +1297,13 @@ Shape_t* SceneContext_t::create_object(const tinyxml2::XMLElement* xml_object, M
         require_attributes(xml_object, attributes, 3);
         unsigned int material_index = get_material_index(xml_object->Attribute("material"), xml_materials);
         if (material_aggregates_[material_index]){
-            mesh = new Mesh_t(material_aggregates_[material_index].get(), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries));
+            mesh = std::unique_ptr<MeshTop_t>(
+                        new Mesh_t(material_aggregates_[material_index].get(), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries)));
             return nullptr;
         }
         else {
-            mesh = new Mesh_t(materials_[material_index].get(), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries));
+            mesh = std::unique_ptr<MeshTop_t>(
+                        new Mesh_t(materials_[material_index].get(), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries)));
             return nullptr;
         }
     }
@@ -1322,23 +1312,27 @@ Shape_t* SceneContext_t::create_object(const tinyxml2::XMLElement* xml_object, M
         require_attributes(xml_object, attributes, 3);
         unsigned int material_index = get_material_index(xml_object->Attribute("material"), xml_materials);
         if (material_aggregates_[material_index]){
-            mesh = new MeshMotionblur_t(material_aggregates_[material_index].get(), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries));
+            mesh = std::unique_ptr<MeshTop_t>(
+                        new MeshMotionblur_t(material_aggregates_[material_index].get(), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries)));
             return nullptr;
         }
         else {
-            mesh = new MeshMotionblur_t(materials_[material_index].get(), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries));
+            mesh = std::unique_ptr<MeshTop_t>(
+                        new MeshMotionblur_t(materials_[material_index].get(), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries)));
             return nullptr;
         }
     }
     else if (type == "sphere"){
         const char* attributes[] = {"material", "transform_matrix"};
         require_attributes(xml_object, attributes, 2);
-        return new Sphere_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices));
+        return std::unique_ptr<Shape_t>(
+                    new Sphere_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices)));
     }
     else if (type == "sphere_motionblur"){
         const char* attributes[] = {"material", "transform_matrix"};
         require_attributes(xml_object, attributes, 2);
-        return new SphereMotionblur_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices));
+        return std::unique_ptr<Shape_t>(
+                    new SphereMotionblur_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices)));
     }
     else if (type == "triangle"){
         const char* attributes[] = {"material", "transform_matrix", "points", "normals", "texture_coordinates"};
@@ -1347,7 +1341,8 @@ Shape_t* SceneContext_t::create_object(const tinyxml2::XMLElement* xml_object, M
         Vec3f* normals = get_points(xml_object->Attribute("normals"));
         double** texture_coordinates = get_texture_coordinates(xml_object->Attribute("texture_coordinates"));
 
-        Shape_t* triangle = new Triangle_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), points, normals, texture_coordinates);
+        std::unique_ptr<Shape_t> triangle = std::unique_ptr<Shape_t>(
+                    new Triangle_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), points, normals, texture_coordinates));
 
         if (points != nullptr){
             delete [] points;
@@ -1371,7 +1366,8 @@ Shape_t* SceneContext_t::create_object(const tinyxml2::XMLElement* xml_object, M
         Vec3f* normals = get_points(xml_object->Attribute("normals"));
         double** texture_coordinates = get_texture_coordinates(xml_object->Attribute("texture_coordinates"));
 
-        Shape_t* triangle = new TriangleMotionblur_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), points, normals, texture_coordinates);
+        std::unique_ptr<Shape_t> triangle = std::unique_ptr<Shape_t>(
+                    new TriangleMotionblur_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), points, normals, texture_coordinates));
 
         if (points != nullptr){
             delete [] points;
@@ -1391,12 +1387,14 @@ Shape_t* SceneContext_t::create_object(const tinyxml2::XMLElement* xml_object, M
     else if (type == "triangle_mesh"){
         const char* attributes[] = {"material", "transform_matrix", "mesh_geometry", "index"};
         require_attributes(xml_object, attributes, 4);
-        return new TriangleMesh_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries), xml_object->UnsignedAttribute("index"));
+        return std::unique_ptr<Shape_t>(
+                    new TriangleMesh_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries), xml_object->UnsignedAttribute("index")));
     }
     else if (type == "triangle_mesh_motionblur"){
         const char* attributes[] = {"material", "transform_matrix", "mesh_geometry", "index"};
         require_attributes(xml_object, attributes, 4);
-        return new TriangleMeshMotionblur_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries), xml_object->UnsignedAttribute("index"));
+        return std::unique_ptr<Shape_t>(
+                    new TriangleMeshMotionblur_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries), xml_object->UnsignedAttribute("index")));
     }
     else{
         std::cout << "Error, object type '" << type << "' not implemented. Exiting." << std::endl; 
@@ -2463,7 +2461,7 @@ void SceneContext_t::get_objects(std::string objects_string, Shape_t** &shapes, 
 
     if (objects_list.size() > 0){
         for (auto it = objects_list.begin(); it != objects_list.end(); ++it){
-            if (objects_[*it] != nullptr){
+            if (objects_[*it]){
                 ++n_shapes;
             }
             else {
@@ -2477,12 +2475,12 @@ void SceneContext_t::get_objects(std::string objects_string, Shape_t** &shapes, 
         unsigned int index_meshes = 0;
 
         for (auto it = objects_list.begin(); it != objects_list.end(); ++it){
-            if (objects_[*it] != nullptr){
-                shapes[index_shapes] = objects_[*it];
+            if (objects_[*it]){
+                shapes[index_shapes] = objects_[*it].get();
                 ++index_shapes;
             }
             else {
-                meshes[index_meshes] = meshes_[*it];
+                meshes[index_meshes] = meshes_[*it].get();
                 ++index_meshes;
             }
         }
@@ -2494,7 +2492,7 @@ void SceneContext_t::get_objects(Shape_t** &shapes, unsigned int &n_shapes, Mesh
     n_meshes = 0;
 
     for (unsigned int i = 0; i < objects_.size(); ++i){
-        if (objects_[i] != nullptr){
+        if (objects_[i]){
             ++n_shapes;
         }
         else {
@@ -2508,12 +2506,12 @@ void SceneContext_t::get_objects(Shape_t** &shapes, unsigned int &n_shapes, Mesh
     unsigned int index_meshes = 0;
 
     for (unsigned int i = 0; i < objects_.size(); ++i){
-        if (objects_[i] != nullptr){
-            shapes[index_shapes] = objects_[i];
+        if (objects_[i]){
+            shapes[index_shapes] = objects_[i].get();
             ++index_shapes;
         }
         else {
-            meshes[index_meshes] = meshes_[i];
+            meshes[index_meshes] = meshes_[i].get();
             ++index_meshes;
         }
     }
