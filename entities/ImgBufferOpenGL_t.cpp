@@ -1,4 +1,5 @@
 #include "ImgBufferOpenGL_t.h"
+#include <cmath>
 #include <algorithm>
 
 ImgBufferOpenGL_t::ImgBufferOpenGL_t(unsigned int size_x, unsigned int size_y): ImgBuffer_t(size_x, size_y) {

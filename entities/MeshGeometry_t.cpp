@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <cmath>
 #include <algorithm>
 
 MeshGeometry_t::MeshGeometry_t(const std::string &filename){
