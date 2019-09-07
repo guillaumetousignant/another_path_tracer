@@ -38,9 +38,9 @@ class SceneContext_t{
         Camera_t* opengl_camera_;
         Scene_t* scene_;
 
-        std::string* camera_rendermode_;
-        unsigned int* camera_n_iter_;
-        unsigned int* camera_write_interval_;
+        std::vector<std::string> camera_rendermode_;
+        std::vector<unsigned int> camera_n_iter_;
+        std::vector<unsigned int> camera_write_interval_;
 
         unsigned int index_transform_matrices_;
         unsigned int index_textures_;

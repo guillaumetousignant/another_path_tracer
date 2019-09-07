@@ -95,7 +95,7 @@
 
 SceneContext_t::SceneContext_t() :
     use_gl_(false), scene_name_(""), opengl_renderer_(nullptr), opengl_imgbuffer_(nullptr), 
-    opengl_camera_(nullptr), scene_(nullptr), camera_rendermode_(nullptr), camera_n_iter_(nullptr), camera_write_interval_(nullptr), 
+    opengl_camera_(nullptr), scene_(nullptr), camera_rendermode_(), camera_n_iter_(), camera_write_interval_(), 
     index_transform_matrices_(0), index_textures_(0), index_scatterers_(0), index_materials_(0), 
     index_mesh_geometries_(0), index_objects_(0), index_directional_lights_(0), index_skyboxes_(0), 
     index_imgbuffers_(0), index_cameras_(0), transform_matrices_(), textures_(), 
@@ -810,15 +810,9 @@ void SceneContext_t::readXML(const std::string &filename){
             std::cout << "OpenGL initialised." << std::endl;
         }
 
-        camera_rendermode_ = new std::string[cameras_.size()];
-        camera_n_iter_ = new unsigned int[cameras_.size()];
-        camera_write_interval_ = new unsigned int[cameras_.size()];
-
-        for (unsigned int i = 0; i < cameras_.size(); i++){
-            camera_rendermode_[i] = "";
-            camera_n_iter_[i] = 0;
-            camera_write_interval_[i] = 0;
-        }
+        camera_rendermode_ = std::vector<std::string>(cameras_.size(), "");
+        camera_n_iter_ = std::vector<unsigned int>(cameras_.size(), 0);
+        camera_write_interval_ = std::vector<unsigned int>(cameras_.size(), 0);
 
         unsigned int index = 0;
         for (tinyxml2::XMLElement* xml_camera = xml_cameras->FirstChildElement("camera"); xml_camera; xml_camera = xml_camera->NextSiblingElement("camera")){
@@ -1057,6 +1051,7 @@ void SceneContext_t::reset(){
             delete cameras_[i];
         }
     }
+    
 
     if (opengl_renderer_ != nullptr){
         delete opengl_renderer_;
@@ -1066,21 +1061,6 @@ void SceneContext_t::reset(){
     if (scene_ != nullptr){
         delete scene_;
         scene_ = nullptr;
-    }
-
-    if (camera_rendermode_ != nullptr){
-        delete [] camera_rendermode_;
-        camera_rendermode_ = nullptr;
-    }
-
-    if (camera_n_iter_ != nullptr){
-        delete [] camera_n_iter_;
-        camera_n_iter_ = nullptr;
-    }
-
-    if (camera_write_interval_ != nullptr){
-        delete [] camera_write_interval_;
-        camera_write_interval_ = nullptr;
     }
 
     use_gl_ = false;
