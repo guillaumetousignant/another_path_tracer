@@ -164,10 +164,10 @@ void SceneContext_t::readXML(const std::string &filename){
     unsigned int n_imgbuffers;
     unsigned int n_cameras;
 
-    std::list<unsigned int>** scatterers_medium_list = nullptr;
-    unsigned int** materials_mix_list = nullptr;
-    std::list<unsigned int>** materials_medium_list = nullptr;
-    std::tuple<std::list<unsigned int>*, std::list<std::string>*>** materials_aggregate_list = nullptr;
+    std::vector<std::list<unsigned int>*> scatterers_medium_list;
+    std::vector<unsigned int*> materials_mix_list;
+    std::vector<std::list<unsigned int>*> materials_medium_list;
+    std::vector<std::tuple<std::list<unsigned int>*, std::list<std::string>*>*> materials_aggregate_list;
 
     // Counts
     if (xml_transform_matrices != nullptr){
@@ -296,7 +296,7 @@ void SceneContext_t::readXML(const std::string &filename){
     textures_ =  std::vector<Texture_t*>(n_textures);
     scatterers_ =  std::vector<ScatteringFunction_t*>(n_scatterers);
     materials_ =  std::vector<Material_t*>(n_materials);
-    material_aggregates_ =  std::vector<MaterialMap_t*>(n_materials);
+    material_aggregates_ =  std::vector<MaterialMap_t*>(n_materials, nullptr);
     mesh_geometries_ =  std::vector<MeshGeometry_t*>(n_mesh_geometries);
     objects_ =  std::vector<Shape_t*>(n_objects);
     meshes_ =  std::vector<MeshTop_t*>(n_objects);
@@ -304,24 +304,11 @@ void SceneContext_t::readXML(const std::string &filename){
     skyboxes_ =  std::vector<Skybox_t*>(n_skyboxes);
     imgbuffers_ =  std::vector<ImgBuffer_t*>(n_imgbuffers);
     cameras_ =  std::vector<Camera_t*>(n_cameras);
-
-    if (n_scatterers){        
-        scatterers_medium_list = new std::list<unsigned int>*[n_scatterers];
-        for (unsigned int i = 0; i < n_scatterers; i++){
-            scatterers_medium_list[i] = nullptr;
-        }
-    }
-    if (n_materials){        
-        materials_mix_list = new unsigned int*[n_materials];
-        materials_medium_list = new std::list<unsigned int>*[n_materials];
-        materials_aggregate_list = new std::tuple<std::list<unsigned int>*, std::list<std::string>*>*[n_materials];
-        for (unsigned int i = 0; i < n_materials; i++){
-            materials_mix_list[i] = nullptr;
-            materials_medium_list[i] = nullptr;
-            materials_aggregate_list[i] = nullptr;
-            material_aggregates_[i] = nullptr;
-        }
-    }
+ 
+    scatterers_medium_list = std::vector<std::list<unsigned int>*>(n_scatterers, nullptr);     
+    materials_mix_list = std::vector<unsigned int*>(n_materials, nullptr);
+    materials_medium_list = std::vector<std::list<unsigned int>*>(n_materials, nullptr);
+    materials_aggregate_list = std::vector<std::tuple<std::list<unsigned int>*, std::list<std::string>*>*>(n_materials, nullptr);
 
     std::cout << "Buffers allocated." << std::endl << std::endl;
 
@@ -376,14 +363,10 @@ void SceneContext_t::readXML(const std::string &filename){
         }
     }
 
-    if (materials_mix_list != nullptr){
-        for (unsigned int i = 0; i < materials_.size(); i++){
-            if (materials_mix_list[i] != nullptr){
-                delete [] materials_mix_list[i];
-            }
+    for (unsigned int i = 0; i < materials_.size(); i++){
+        if (materials_mix_list[i] != nullptr){
+            delete [] materials_mix_list[i];
         }
-        delete [] materials_mix_list;
-        materials_mix_list = nullptr;
     }
 
     // Materials medium list fix
@@ -405,14 +388,10 @@ void SceneContext_t::readXML(const std::string &filename){
         }
     }
 
-    if (materials_medium_list != nullptr){
-        for (unsigned int i = 0; i < materials_.size(); i++){
-            if (materials_medium_list[i] != nullptr){
-                delete materials_medium_list[i];
-            }
+    for (unsigned int i = 0; i < materials_.size(); i++){
+        if (materials_medium_list[i] != nullptr){
+            delete materials_medium_list[i];
         }
-        delete [] materials_medium_list;
-        materials_medium_list = nullptr;
     }
 
     // Scatterers medium list fix
@@ -434,14 +413,10 @@ void SceneContext_t::readXML(const std::string &filename){
         }
     }
 
-    if (scatterers_medium_list != nullptr){
-        for (unsigned int i = 0; i < scatterers_.size(); i++){
-            if (scatterers_medium_list[i] != nullptr){
-                delete scatterers_medium_list[i];
-            }
+    for (unsigned int i = 0; i < scatterers_medium_list.size(); i++){
+        if (scatterers_medium_list[i] != nullptr){
+            delete scatterers_medium_list[i];
         }
-        delete [] scatterers_medium_list;
-        scatterers_medium_list = nullptr;
     }
 
     // Material aggregates fix
@@ -467,17 +442,14 @@ void SceneContext_t::readXML(const std::string &filename){
         }
     }
 
-    if (materials_aggregate_list != nullptr){
-        for (unsigned int i = 0; i < materials_.size(); i++){
-            if (materials_aggregate_list[i] != nullptr){
-                delete std::get<0>(*materials_aggregate_list[i]);
-                delete std::get<1>(*materials_aggregate_list[i]);
-                delete materials_aggregate_list[i]; // CHECK is this right? should delete both members?
-            }
+    for (unsigned int i = 0; i < materials_.size(); i++){
+        if (materials_aggregate_list[i] != nullptr){
+            delete std::get<0>(*materials_aggregate_list[i]);
+            delete std::get<1>(*materials_aggregate_list[i]);
+            delete materials_aggregate_list[i]; // CHECK is this right? should delete both members?
         }
-        delete [] materials_aggregate_list;
-        materials_aggregate_list = nullptr;
     }
+
     std::cout << "\tFixes done." << std::endl;
 
     // Filling buffers again
