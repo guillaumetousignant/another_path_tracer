@@ -75,8 +75,8 @@ class SceneContext_t{
 
         std::unique_ptr<TransformMatrix_t> create_transform_matrix(const tinyxml2::XMLElement* xml_transform_matrix) const;
         std::unique_ptr<Texture_t> create_texture(const tinyxml2::XMLElement* xml_texture) const;
-        std::unique_ptr<ScatteringFunction_t> create_scatterer(const tinyxml2::XMLElement* xml_scatterer, std::list<unsigned int>* &scatterers_medium_list, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials);
-        std::unique_ptr<Material_t> create_material(const tinyxml2::XMLElement* xml_material, std::list<unsigned int>* &materials_medium_list, unsigned int* &materials_mix_list, std::tuple<std::list<unsigned int>*, std::list<std::string>*>* &materials_aggregate_list, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_scatterers);
+        std::unique_ptr<ScatteringFunction_t> create_scatterer(const tinyxml2::XMLElement* xml_scatterer, std::unique_ptr<std::list<unsigned int>> &scatterers_medium_list, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials);
+        std::unique_ptr<Material_t> create_material(const tinyxml2::XMLElement* xml_material, std::unique_ptr<std::list<unsigned int>> &materials_medium_list, std::unique_ptr<unsigned int> &materials_mix_list, std::unique_ptr<std::tuple<std::unique_ptr<std::list<unsigned int>>, std::unique_ptr<std::list<std::string>>>> &materials_aggregate_list, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_scatterers);
         MeshGeometry_t* create_mesh_geometry(const tinyxml2::XMLElement* xml_mesh_geometry) const;
         Shape_t* create_object(const tinyxml2::XMLElement* xml_object, MeshTop_t* &mesh, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_mesh_geometries);
         DirectionalLight_t* create_directional_light(const tinyxml2::XMLElement* xml_directional_light, const tinyxml2::XMLElement* xml_transform_matrices);
@@ -86,10 +86,10 @@ class SceneContext_t{
         void create_acceleration_structure(const tinyxml2::XMLElement* xml_acceleration_structure);
 
         TransformMatrix_t* get_transform_matrix(std::string transform_matrix, const tinyxml2::XMLElement* xml_transform_matrices);
-        std::list<unsigned int>* get_medium_index_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_materials) const;
+        std::unique_ptr<std::list<unsigned int>> get_medium_index_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_materials) const;
         std::list<Medium_t*> get_medium_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_materials) const;
         Texture_t* get_texture(std::string texture, const tinyxml2::XMLElement* xml_textures) const;
-        unsigned int* get_material_mix(std::string material_refracted, std::string material_reflected, const tinyxml2::XMLElement* xml_materials) const;
+        std::unique_ptr<unsigned int> get_material_mix(std::string material_refracted, std::string material_reflected, const tinyxml2::XMLElement* xml_materials) const;
         ScatteringFunction_t* get_scatterer(std::string scatterer, const tinyxml2::XMLElement* xml_scatterers) const;
         MeshGeometry_t* get_mesh_geometry(std::string mesh_geometry, const tinyxml2::XMLElement* xml_mesh_geometries) const;
         unsigned int get_material_index(std::string material, const tinyxml2::XMLElement* xml_materials) const;
@@ -104,7 +104,7 @@ class SceneContext_t{
 Vec3f get_colour(std::string colour); // copies string :(
 Vec3f* get_points(std::string points_string);
 double** get_texture_coordinates(std::string texture_coordinates_string);    
-std::list<std::string>* get_medium_names(std::string string_medium_names);
+std::unique_ptr<std::list<std::string>> get_medium_names(std::string string_medium_names);
 void get_xy(const std::string &string_value, double (&value)[2]);
 void get_xy(const std::string &string_value, unsigned int (&value)[2]);
 

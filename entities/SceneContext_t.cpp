@@ -164,11 +164,16 @@ void SceneContext_t::readXML(const std::string &filename){
     unsigned int n_imgbuffers;
     unsigned int n_cameras;
 
-    std::vector<std::list<unsigned int>*> scatterers_medium_list;
-    std::vector<unsigned int*> materials_mix_list;
-    std::vector<std::list<unsigned int>*> materials_medium_list;
-    std::vector<std::tuple<std::list<unsigned int>*, std::list<std::string>*>*> materials_aggregate_list;
-
+    std::vector<std::unique_ptr<std::list<unsigned int>>> scatterers_medium_list;
+    std::vector<std::unique_ptr<unsigned int>> materials_mix_list;
+    std::vector<std::unique_ptr<std::list<unsigned int>>> materials_medium_list;
+    std::vector<
+        std::unique_ptr<std::tuple<
+            std::unique_ptr<std::list<unsigned int>>, 
+            std::unique_ptr<std::list<std::string>>
+        >>
+    > materials_aggregate_list;            
+    
     // Counts
     if (xml_transform_matrices != nullptr){
         for (tinyxml2::XMLElement* xml_transform_matrix = xml_transform_matrices->FirstChildElement("transform_matrix"); xml_transform_matrix; xml_transform_matrix = xml_transform_matrix->NextSiblingElement("transform_matrix")){
@@ -305,10 +310,15 @@ void SceneContext_t::readXML(const std::string &filename){
     imgbuffers_ =  std::vector<ImgBuffer_t*>(n_imgbuffers);
     cameras_ =  std::vector<Camera_t*>(n_cameras);
  
-    scatterers_medium_list = std::vector<std::list<unsigned int>*>(n_scatterers, nullptr);     
-    materials_mix_list = std::vector<unsigned int*>(n_materials, nullptr);
-    materials_medium_list = std::vector<std::list<unsigned int>*>(n_materials, nullptr);
-    materials_aggregate_list = std::vector<std::tuple<std::list<unsigned int>*, std::list<std::string>*>*>(n_materials, nullptr);
+    scatterers_medium_list = std::vector<std::unique_ptr<std::list<unsigned int>>>(n_scatterers);     
+    materials_mix_list = std::vector<std::unique_ptr<unsigned int>>(n_materials);
+    materials_medium_list = std::vector<std::unique_ptr<std::list<unsigned int>>>(n_materials);
+    materials_aggregate_list = std::vector<
+                                    std::unique_ptr<std::tuple<
+                                        std::unique_ptr<std::list<unsigned int>>, 
+                                        std::unique_ptr<std::list<std::string>>
+                                    >>
+                                >(n_materials);
 
     std::cout << "Buffers allocated." << std::endl << std::endl;
 
@@ -358,14 +368,8 @@ void SceneContext_t::readXML(const std::string &filename){
                 std::cout << "Error: material #" << i << " was marked as a material mix but is not convertible to one. Exiting." << std::endl;
                 exit(491);
             }
-            material_mix->material_refracted_ = materials_[materials_mix_list[i][0]].get();
-            material_mix->material_reflected_ = materials_[materials_mix_list[i][1]].get();
-        }
-    }
-
-    for (unsigned int i = 0; i < materials_.size(); i++){
-        if (materials_mix_list[i] != nullptr){
-            delete [] materials_mix_list[i];
+            material_mix->material_refracted_ = materials_[materials_mix_list[i].get()[0]].get();
+            material_mix->material_reflected_ = materials_[materials_mix_list[i].get()[1]].get();
         }
     }
 
@@ -388,12 +392,6 @@ void SceneContext_t::readXML(const std::string &filename){
         }
     }
 
-    for (unsigned int i = 0; i < materials_.size(); i++){
-        if (materials_medium_list[i] != nullptr){
-            delete materials_medium_list[i];
-        }
-    }
-
     // Scatterers medium list fix
     for (unsigned int i = 0; i < scatterers_.size(); i++){
         if (scatterers_medium_list[i] != nullptr) {
@@ -410,12 +408,6 @@ void SceneContext_t::readXML(const std::string &filename){
                 }
                 portal_scatterer->medium_list_.push_back(medium);
             }
-        }
-    }
-
-    for (unsigned int i = 0; i < scatterers_medium_list.size(); i++){
-        if (scatterers_medium_list[i] != nullptr){
-            delete scatterers_medium_list[i];
         }
     }
 
@@ -439,14 +431,6 @@ void SceneContext_t::readXML(const std::string &filename){
             
             material_aggregates_[i] = std::unique_ptr<MaterialMap_t>(new MaterialMap_t(names.data(), materials.data(), n));
             materials_[i] = std::unique_ptr<Material_t>(material_aggregates_[i]->getFirst()); // CHECK this is not intended, will delete stuff from material list
-        }
-    }
-
-    for (unsigned int i = 0; i < materials_.size(); i++){
-        if (materials_aggregate_list[i] != nullptr){
-            delete std::get<0>(*materials_aggregate_list[i]);
-            delete std::get<1>(*materials_aggregate_list[i]);
-            delete materials_aggregate_list[i]; // CHECK is this right? should delete both members?
         }
     }
 
@@ -1076,7 +1060,7 @@ std::unique_ptr<Texture_t> SceneContext_t::create_texture(const tinyxml2::XMLEle
     }
 }
 
-std::unique_ptr<ScatteringFunction_t> SceneContext_t::create_scatterer(const tinyxml2::XMLElement* xml_scatterer, std::list<unsigned int>* &scatterers_medium_list, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials) {
+std::unique_ptr<ScatteringFunction_t> SceneContext_t::create_scatterer(const tinyxml2::XMLElement* xml_scatterer, std::unique_ptr<std::list<unsigned int>> &scatterers_medium_list, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials) {
     std::string type;
     const char* type_char = xml_scatterer->Attribute("type");
     if (type_char == nullptr) {
@@ -1148,7 +1132,7 @@ std::unique_ptr<ScatteringFunction_t> SceneContext_t::create_scatterer(const tin
     }
 }
 
-std::unique_ptr<Material_t> SceneContext_t::create_material(const tinyxml2::XMLElement* xml_material, std::list<unsigned int>* &materials_medium_list, unsigned int* &materials_mix_list, std::tuple<std::list<unsigned int>*, std::list<std::string>*>* &materials_aggregate_list, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_scatterers) {
+std::unique_ptr<Material_t> SceneContext_t::create_material(const tinyxml2::XMLElement* xml_material, std::unique_ptr<std::list<unsigned int>> &materials_medium_list, std::unique_ptr<unsigned int> &materials_mix_list, std::unique_ptr<std::tuple<std::unique_ptr<std::list<unsigned int>>, std::unique_ptr<std::list<std::string>>>> &materials_aggregate_list, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_scatterers) {
     std::string type;
     const char* type_char = xml_material->Attribute("type");
     if (type_char == nullptr) {
@@ -1290,7 +1274,8 @@ std::unique_ptr<Material_t> SceneContext_t::create_material(const tinyxml2::XMLE
     else if (type == "aggregate"){
         const char* attributes[] = {"materials_list", "materials_names"};
         require_attributes(xml_material, attributes, 2);
-        materials_aggregate_list = new std::tuple<std::list<unsigned int>*, std::list<std::string>*>(get_medium_index_list(xml_material->Attribute("materials_list"), xml_materials), get_medium_names(xml_material->Attribute("materials_names")));
+        materials_aggregate_list = std::unique_ptr<std::tuple<std::unique_ptr<std::list<unsigned int>>, std::unique_ptr<std::list<std::string>>>>(
+                    new std::tuple<std::unique_ptr<std::list<unsigned int>>, std::unique_ptr<std::list<std::string>>>(get_medium_index_list(xml_material->Attribute("materials_list"), xml_materials), get_medium_names(xml_material->Attribute("materials_names")))); // wtf
         return std::unique_ptr<Material_t>();
         // CHECK add aggregates
     }
@@ -1900,8 +1885,8 @@ TransformMatrix_t* SceneContext_t::get_transform_matrix(std::string transform_ma
     return new TransformMatrix_t();
 }
 
-std::list<unsigned int>* SceneContext_t::get_medium_index_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_materials) const {
-    std::list<unsigned int>* medium_list = new std::list<unsigned int>();
+std::unique_ptr<std::list<unsigned int>> SceneContext_t::get_medium_index_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_materials) const {
+    std::unique_ptr<std::list<unsigned int>> medium_list = std::unique_ptr<std::list<unsigned int>>(new std::list<unsigned int>());
     std::string delimiter = ", ";
     size_t pos = 0;
     std::string token;
@@ -2103,12 +2088,12 @@ Texture_t* SceneContext_t::get_texture(std::string texture, const tinyxml2::XMLE
     exit(21); 
 }
 
-unsigned int* SceneContext_t::get_material_mix(std::string material_refracted, std::string material_reflected, const tinyxml2::XMLElement* xml_materials) const {
-    unsigned int* output_materials = new unsigned int[2];
+std::unique_ptr<unsigned int> SceneContext_t::get_material_mix(std::string material_refracted, std::string material_reflected, const tinyxml2::XMLElement* xml_materials) const {
+    std::unique_ptr<unsigned int> output_materials = std::unique_ptr<unsigned int>(new unsigned int[2]);
     
     if (is_number(material_refracted)) {
-        output_materials[0] = std::stoi(material_refracted) - 1;
-    }
+        output_materials.get()[0] = std::stoi(material_refracted) - 1;
+    } 
     else {
         if (xml_materials != nullptr){
             std::transform(material_refracted.begin(), material_refracted.end(), material_refracted.begin(), ::tolower);
@@ -2120,7 +2105,7 @@ unsigned int* SceneContext_t::get_material_mix(std::string material_refracted, s
                     std::string name_material = name_char;
                     std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
                     if (material_refracted == name_material){
-                        output_materials[0] = index;
+                        output_materials.get()[0] = index;
                         material_missing = false;
                         break;
                     }
@@ -2139,7 +2124,7 @@ unsigned int* SceneContext_t::get_material_mix(std::string material_refracted, s
     }
 
     if (is_number(material_reflected)) {
-        output_materials[1] = std::stoi(material_reflected) - 1;
+        output_materials.get()[1] = std::stoi(material_reflected) - 1;
     }
     else {
         if (xml_materials != nullptr){
@@ -2152,7 +2137,7 @@ unsigned int* SceneContext_t::get_material_mix(std::string material_refracted, s
                     std::string name_material = name_char;
                     std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
                     if (material_reflected == name_material){
-                        output_materials[1] = index;
+                        output_materials.get()[1] = index;
                         material_missing = false;
                         break;
                     }
@@ -2644,8 +2629,8 @@ double** get_texture_coordinates(std::string texture_coordinates_string) {
     return texture_coordinates;
 }
 
-std::list<std::string>* get_medium_names(std::string string_medium_names) {
-    std::list<std::string>* medium_names = new std::list<std::string>();
+std::unique_ptr<std::list<std::string>> get_medium_names(std::string string_medium_names) {
+    std::unique_ptr<std::list<std::string>> medium_names = std::unique_ptr<std::list<std::string>>(new std::list<std::string>());
     std::string delimiter = ", ";
     size_t pos = 0;
 
