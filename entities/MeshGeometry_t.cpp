@@ -33,7 +33,7 @@ MeshGeometry_t::~MeshGeometry_t(){
     }
 
     if (vt_ != nullptr){
-        for (unsigned int i = 0; i < 3*n_tris_; i++){
+        for (unsigned int i = 0; i < 3*n_tris_; ++i){
             if (vt_[i] != nullptr){
                 delete [] vt_[i];
             }
@@ -65,18 +65,18 @@ void MeshGeometry_t::readObj(const std::string &filename){
         liness >> token;
 
         if (token == "v"){
-            nv++;
+            ++nv;
         }
         else if (token == "vt"){
-            nvt++;
+            ++nvt;
         }
         else if (token == "vn"){
-            nvn++;
+            ++nvn;
         }
         else if (token == "f"){
             nsides = 0;
             while (liness >> dummy){
-                nsides++;
+                ++nsides;
             }
             nf += nsides - 2;
         }
@@ -90,7 +90,7 @@ void MeshGeometry_t::readObj(const std::string &filename){
 
     Vec3f* v = new Vec3f[nv];
     double** vt = new double*[nvt];
-    for (unsigned int i = 0; i < nvt; i++){
+    for (unsigned int i = 0; i < nvt; ++i){
         vt[i] = new double[2];
     }
     Vec3f* vn = new Vec3f[nvn];
@@ -106,18 +106,18 @@ void MeshGeometry_t::readObj(const std::string &filename){
         if (token == "v"){
             liness >> val0 >> val1 >> val2;
             v[v_counter] = Vec3f(val0, val1, val2);
-            v_counter++;
+            ++v_counter;
         }
         else if (token == "vt"){
             liness >> val0 >> val1;
             vt[vt_counter][0] = val0;
             vt[vt_counter][1] = val1;
-            vt_counter++;
+            ++vt_counter;
         }
         else if (token == "vn"){
             liness >> val0 >> val1 >> val2;
             vn[vn_counter] = Vec3f(val0, val1, val2);
-            vn_counter++;
+            ++vn_counter;
         }
     }   
 
@@ -132,7 +132,7 @@ void MeshGeometry_t::readObj(const std::string &filename){
     mat_ = new std::string[n_tris_];
     v_ = new Vec3f[3*n_tris_];
     vt_ = new double*[3*n_tris_];
-    for (unsigned int i = 0; i < 3*n_tris_; i++){
+    for (unsigned int i = 0; i < 3*n_tris_; ++i){
         vt_[i] = new double[2];
     }
     vn_ = new Vec3f[3*n_tris_];
@@ -146,7 +146,7 @@ void MeshGeometry_t::readObj(const std::string &filename){
         if (token == "f"){
             liness >> tokens[0] >> tokens[1];
             while (liness >> tokens[2]){
-                for (unsigned int i = 0; i < 3; i++){
+                for (unsigned int i = 0; i < 3; ++i){
                     value = tokens[i];
                     mat_[f_counter] = material;
                     pos = value.find("/");
@@ -180,7 +180,7 @@ void MeshGeometry_t::readObj(const std::string &filename){
                         }
                     }
                 }
-                f_counter++;
+                ++f_counter;
                 tokens[1] = tokens[2];
             }
             
@@ -199,7 +199,7 @@ void MeshGeometry_t::readObj(const std::string &filename){
 
 
     delete [] v;
-    for (unsigned int i = 0; i < nvt; i++){
+    for (unsigned int i = 0; i < nvt; ++i){
         delete [] vt[i];
     }
     delete [] vt;
@@ -245,7 +245,7 @@ void MeshGeometry_t::readSU2(const std::string &filename){
         }
         else if (token == "5"){
             if (wall_started){
-                nf++;
+                ++nf;
             }
         }
         else if (token == "9"){
@@ -292,7 +292,7 @@ void MeshGeometry_t::readSU2(const std::string &filename){
             std::istringstream liness2(line);
             liness2 >> val0 >> val1 >> val2;
             v[v_counter] = Vec3f(val0, val1, val2);
-            v_counter++;
+            ++v_counter;
         }
     } 
 
@@ -307,7 +307,7 @@ void MeshGeometry_t::readSU2(const std::string &filename){
     mat_ = new std::string[n_tris_];
     v_ = new Vec3f[3*n_tris_];
     vt_ = new double*[3*n_tris_];
-    for (unsigned int i = 0; i < 3*n_tris_; i++){
+    for (unsigned int i = 0; i < 3*n_tris_; ++i){
         vt_[i] = new double[2];
     }
     vn_ = new Vec3f[3*n_tris_];
@@ -348,7 +348,7 @@ void MeshGeometry_t::readSU2(const std::string &filename){
 
         if (wall_started){
             if (token == "5"){
-                for (unsigned int i = 0; i < 3; i++){
+                for (unsigned int i = 0; i < 3; ++i){
                     liness >> tokens[i];
                     v_[3*f_counter + i] = v[tokens[i]];
                     mat_[f_counter] = material;
@@ -356,10 +356,10 @@ void MeshGeometry_t::readSU2(const std::string &filename){
                     vt_[3*f_counter + i][1] = 0.0;
                     vn_[3*f_counter + i] = Vec3f(NAN);
                 }
-                f_counter++;
+                ++f_counter;
             }
             else if (token == "9"){
-                for (unsigned int i = 0; i < 3; i++){
+                for (unsigned int i = 0; i < 3; ++i){
                     liness >> tokens[i];
                     v_[3*f_counter + i] = v[tokens[i]];
                     mat_[f_counter] = material;
@@ -367,17 +367,17 @@ void MeshGeometry_t::readSU2(const std::string &filename){
                     vt_[3*f_counter + i][1] = 0.0;
                     vn_[3*f_counter + i] = Vec3f(NAN);
                 }
-                f_counter++;
+                ++f_counter;
                 tokens[1] = tokens[2];
                 liness >> tokens[2];
-                for (unsigned int i = 0; i < 3; i++){
+                for (unsigned int i = 0; i < 3; ++i){
                     v_[3*f_counter + i] = v[tokens[i]];
                     mat_[f_counter] = material;
                     vt_[3*f_counter + i][0] = 0.0;
                     vt_[3*f_counter + i][1] = 0.0;
                     vn_[3*f_counter + i] = Vec3f(NAN);
                 }
-                f_counter++;
+                ++f_counter;
             }
         }   
 
@@ -394,8 +394,8 @@ void MeshGeometry_t::readSU2(const std::string &filename){
 }
 
 void MeshGeometry_t::deNan(){
-    for (unsigned int i = 0; i < n_tris_; i++){
-        for (unsigned int j = 0; j < 3; j++){
+    for (unsigned int i = 0; i < n_tris_; ++i){
+        for (unsigned int j = 0; j < 3; ++j){
             if (std::isnan(vn_[3*i + j][0])){ // Just checking first value, maybe add isnan to vec3f class?
                 vn_[3*i + j] = (v_[3*i + 1] - v_[3*i]).cross(v_[3*i + 2] - v_[3*i]).normalize();
             }
