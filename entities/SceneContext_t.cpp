@@ -619,7 +619,7 @@ void SceneContext_t::readXML(const std::string &filename){
             tinyxml2::XMLElement* transformations_post = xml_transform_matrix->FirstChildElement("transformations_post");
             if (transformations_post != nullptr){
                 for (tinyxml2::XMLElement* transformation_post = transformations_post->FirstChildElement("transformation_post"); transformation_post; transformation_post = transformation_post->NextSiblingElement("transformation_post")){
-                    apply_transformation(transform_matrices_[index].get, transformation_post);
+                    apply_transformation(transform_matrices_[index].get(), transformation_post);
                 }
             }
             ++index;
