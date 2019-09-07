@@ -153,16 +153,16 @@ void SceneContext_t::readXML(const std::string &filename){
     tinyxml2::XMLElement* xml_cameras = xml_top->FirstChildElement("cameras");
     tinyxml2::XMLElement* xml_acceleration_structures = xml_top->FirstChildElement("acceleration_structures");
 
-    unsigned int n_transform_matrices;
-    unsigned int n_textures;
-    unsigned int n_scatterers;
-    unsigned int n_materials;
-    unsigned int n_mesh_geometries;
-    unsigned int n_objects;
-    unsigned int n_directional_lights;
-    unsigned int n_skyboxes;
-    unsigned int n_imgbuffers;
-    unsigned int n_cameras;
+    unsigned int n_transform_matrices = 0;
+    unsigned int n_textures = 0;
+    unsigned int n_scatterers = 0;
+    unsigned int n_materials = 0;
+    unsigned int n_mesh_geometries = 0;
+    unsigned int n_objects = 0;
+    unsigned int n_directional_lights = 0;
+    unsigned int n_skyboxes = 0;
+    unsigned int n_imgbuffers = 0;
+    unsigned int n_cameras = 0;
 
     std::vector<std::unique_ptr<std::list<unsigned int>>> scatterers_medium_list;
     std::vector<std::unique_ptr<unsigned int>> materials_mix_list;
@@ -302,11 +302,11 @@ void SceneContext_t::readXML(const std::string &filename){
     scatterers_ =  std::vector<std::unique_ptr<ScatteringFunction_t>>(n_scatterers);
     materials_ =  std::vector<std::unique_ptr<Material_t>>(n_materials);
     material_aggregates_ =  std::vector<std::unique_ptr<MaterialMap_t>>(n_materials);
-    mesh_geometries_ =  std::vector<MeshGeometry_t*>(n_mesh_geometries);
+    mesh_geometries_ =  std::vector<std::unique_ptr<MeshGeometry_t>>(n_mesh_geometries);
     objects_ =  std::vector<Shape_t*>(n_objects);
     meshes_ =  std::vector<MeshTop_t*>(n_objects);
-    directional_lights_ =  std::vector<DirectionalLight_t*>(n_directional_lights);
-    skyboxes_ =  std::vector<Skybox_t*>(n_skyboxes);
+    directional_lights_ = std::vector<std::unique_ptr<DirectionalLight_t>>(n_directional_lights);
+    skyboxes_ =  std::vector<std::unique_ptr<Skybox_t>>(n_skyboxes);
     imgbuffers_ =  std::vector<ImgBuffer_t*>(n_imgbuffers);
     cameras_ =  std::vector<Camera_t*>(n_cameras);
  
@@ -939,12 +939,7 @@ void SceneContext_t::reset(){
     opengl_camera_ = nullptr;
 
     // Deleting buffers
-    
-    for (unsigned int i = 0; i < mesh_geometries_.size(); i++){
-        if (mesh_geometries_[i] != nullptr){
-            delete mesh_geometries_[i];
-        }
-    }
+
     
     for (unsigned int i = 0; i < objects_.size(); i++){
         if (objects_[i] != nullptr){
@@ -955,17 +950,6 @@ void SceneContext_t::reset(){
         }
     }
     
-    for (unsigned int i = 0; i < directional_lights_.size(); i++){
-        if (directional_lights_[i] != nullptr){
-            delete directional_lights_[i];
-        }
-    }
-    
-    for (unsigned int i = 0; i < skyboxes_.size(); i++){
-        if (skyboxes_[i] != nullptr){
-            delete skyboxes_[i];
-        }
-    }
     
     for (unsigned int i = 0; i < imgbuffers_.size(); i++){
         if (imgbuffers_[i] != nullptr){
@@ -1285,7 +1269,7 @@ std::unique_ptr<Material_t> SceneContext_t::create_material(const tinyxml2::XMLE
     }
 }
 
-MeshGeometry_t* SceneContext_t::create_mesh_geometry(const tinyxml2::XMLElement* xml_mesh_geometry) const {
+std::unique_ptr<MeshGeometry_t> SceneContext_t::create_mesh_geometry(const tinyxml2::XMLElement* xml_mesh_geometry) const {
     std::string type;
     const char* type_char = xml_mesh_geometry->Attribute("type");
     if (type_char == nullptr) {
@@ -1313,7 +1297,7 @@ MeshGeometry_t* SceneContext_t::create_mesh_geometry(const tinyxml2::XMLElement*
             #endif
         } 
 
-        return new MeshGeometry_t(filename);
+        return std::unique_ptr<MeshGeometry_t>(new MeshGeometry_t(filename));
     }
     else{
         std::cout << "Error, mesh geometry type '" << type << "' not implemented. Only 'mesh_geometry' exists for now. Exiting." << std::endl; 
@@ -1433,7 +1417,7 @@ Shape_t* SceneContext_t::create_object(const tinyxml2::XMLElement* xml_object, M
     }
 }
 
-DirectionalLight_t* SceneContext_t::create_directional_light(const tinyxml2::XMLElement* xml_directional_light, const tinyxml2::XMLElement* xml_transform_matrices){
+std::unique_ptr<DirectionalLight_t> SceneContext_t::create_directional_light(const tinyxml2::XMLElement* xml_directional_light, const tinyxml2::XMLElement* xml_transform_matrices){
     std::string type;
     const char* type_char = xml_directional_light->Attribute("type");
     if (type_char == nullptr) {
@@ -1448,7 +1432,8 @@ DirectionalLight_t* SceneContext_t::create_directional_light(const tinyxml2::XML
     if (type == "directional_light"){
         const char* attributes[] = {"colour", "transform_matrix"};
         require_attributes(xml_directional_light, attributes, 2);
-        return new DirectionalLight_t(get_colour(xml_directional_light->Attribute("colour")), get_transform_matrix(xml_directional_light->Attribute("transform_matrix"), xml_transform_matrices));
+        return std::unique_ptr<DirectionalLight_t>(
+                    new DirectionalLight_t(get_colour(xml_directional_light->Attribute("colour")), get_transform_matrix(xml_directional_light->Attribute("transform_matrix"), xml_transform_matrices)));
     }
     else{
         std::cout << "Error, directional light type '" << type << "' not implemented. Only 'directional_light' exists for now. Exiting." << std::endl; 
@@ -1456,7 +1441,7 @@ DirectionalLight_t* SceneContext_t::create_directional_light(const tinyxml2::XML
     }
 }
 
-Skybox_t* SceneContext_t::create_skybox(const tinyxml2::XMLElement* xml_skybox, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_directional_lights) {
+std::unique_ptr<Skybox_t> SceneContext_t::create_skybox(const tinyxml2::XMLElement* xml_skybox, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_directional_lights) {
     std::string type;
     const char* type_char = xml_skybox->Attribute("type");
     if (type_char == nullptr) {
@@ -1471,7 +1456,8 @@ Skybox_t* SceneContext_t::create_skybox(const tinyxml2::XMLElement* xml_skybox, 
     if (type == "skybox_flat"){
         const char* attributes[] = {"colour"};
         require_attributes(xml_skybox, attributes, 1);
-        return new SkyboxFlat_t(get_colour(xml_skybox->Attribute("colour")));
+        return std::unique_ptr<Skybox_t>(
+                    new SkyboxFlat_t(get_colour(xml_skybox->Attribute("colour"))));
     }
     else if (type == "skybox_flat_sun"){
         const char* attributes[] = {"colour", "lights"};
@@ -1481,7 +1467,8 @@ Skybox_t* SceneContext_t::create_skybox(const tinyxml2::XMLElement* xml_skybox, 
 
         get_lights(xml_skybox->Attribute("lights"), lights, n, xml_directional_lights);
 
-        Skybox_t* skybox = new SkyboxFlatSun_t(get_colour(xml_skybox->Attribute("colour")), lights, n);
+        std::unique_ptr<Skybox_t> skybox = std::unique_ptr<Skybox_t>(
+                    new SkyboxFlatSun_t(get_colour(xml_skybox->Attribute("colour")), lights, n));
         
         delete [] lights;        
         return skybox;
@@ -1489,30 +1476,34 @@ Skybox_t* SceneContext_t::create_skybox(const tinyxml2::XMLElement* xml_skybox, 
     else if (type == "skybox_texture"){
         const char* attributes[] = {"texture"};
         require_attributes(xml_skybox, attributes, 1);
-        return new SkyboxTexture_t(get_texture(xml_skybox->Attribute("texture"), xml_textures));
+        return std::unique_ptr<Skybox_t>(
+                    new SkyboxTexture_t(get_texture(xml_skybox->Attribute("texture"), xml_textures)));
     }
     else if (type == "skybox_texture_sun"){
         const char* attributes[] = {"texture", "light_position", "light_colour", "light_radius"};
         require_attributes(xml_skybox, attributes, 4);
         double sun_pos[2];
         get_xy(xml_skybox->Attribute("light_position"), sun_pos);
-        return new SkyboxTextureSun_t(get_texture(xml_skybox->Attribute("texture"), xml_textures), sun_pos, get_colour(xml_skybox->Attribute("light_colour")), xml_skybox->DoubleAttribute("light_radius"));
+        return std::unique_ptr<Skybox_t>(
+                    new SkyboxTextureSun_t(get_texture(xml_skybox->Attribute("texture"), xml_textures), sun_pos, get_colour(xml_skybox->Attribute("light_colour")), xml_skybox->DoubleAttribute("light_radius")));
     }
     else if (type == "skybox_texture_transformation"){
         const char* attributes[] = {"texture", "transform_matrix"};
         require_attributes(xml_skybox, attributes, 2);
-        return new SkyboxTextureTransformation_t(get_texture(xml_skybox->Attribute("texture"), xml_textures), get_transform_matrix(xml_skybox->Attribute("transform_matrix"), xml_transform_matrices));
+        return std::unique_ptr<Skybox_t>(
+                    new SkyboxTextureTransformation_t(get_texture(xml_skybox->Attribute("texture"), xml_textures), get_transform_matrix(xml_skybox->Attribute("transform_matrix"), xml_transform_matrices)));
     }
     else if (type == "skybox_texture_transformation_sun"){
         const char* attributes[] = {"texture", "light_position", "light_colour", "light_radius", "transform_matrix"};
         require_attributes(xml_skybox, attributes, 5);
         double sun_pos[2];
         get_xy(xml_skybox->Attribute("light_position"), sun_pos);
-        return new SkyboxTextureTransformationSun_t(get_texture(xml_skybox->Attribute("texture"), xml_textures), get_transform_matrix(xml_skybox->Attribute("transform_matrix"), xml_transform_matrices), sun_pos, get_colour(xml_skybox->Attribute("light_colour")), xml_skybox->DoubleAttribute("light_radius"));
+        return std::unique_ptr<Skybox_t>(
+                    new SkyboxTextureTransformationSun_t(get_texture(xml_skybox->Attribute("texture"), xml_textures), get_transform_matrix(xml_skybox->Attribute("transform_matrix"), xml_transform_matrices), sun_pos, get_colour(xml_skybox->Attribute("light_colour")), xml_skybox->DoubleAttribute("light_radius")));
     }
     else{
         std::cout << "Error, skybox type '" << type << "' not implemented. Ignoring." << std::endl; 
-        return new SkyboxFlat_t(Vec3f(0.5));
+        return std::unique_ptr<Skybox_t>(new SkyboxFlat_t(Vec3f(0.5)));
     }
 }
 
@@ -2185,7 +2176,7 @@ ScatteringFunction_t* SceneContext_t::get_scatterer(std::string scatterer, const
 
 MeshGeometry_t* SceneContext_t::get_mesh_geometry(std::string mesh_geometry, const tinyxml2::XMLElement* xml_mesh_geometries) const {
     if (is_number(mesh_geometry)) {
-        return mesh_geometries_[std::stoi(mesh_geometry) - 1];
+        return mesh_geometries_[std::stoi(mesh_geometry) - 1].get();
     }
     else {
         if (xml_mesh_geometries != nullptr){
@@ -2197,7 +2188,7 @@ MeshGeometry_t* SceneContext_t::get_mesh_geometry(std::string mesh_geometry, con
                     std::string name_mesh_geometry = name_char;
                     std::transform(name_mesh_geometry.begin(), name_mesh_geometry.end(), name_mesh_geometry.begin(), ::tolower);
                     if (name_mesh_geometry == mesh_geometry){
-                        return mesh_geometries_[index];
+                        return mesh_geometries_[index].get();
                     }
                 }                
                 ++index;
@@ -2268,7 +2259,7 @@ void SceneContext_t::get_lights(std::string lights_string, DirectionalLight_t** 
         token = lights_string.substr(0, pos);
 
         if (is_number(token)) {
-            lights_list.push_back(directional_lights_[std::stoi(token) - 1]);
+            lights_list.push_back(directional_lights_[std::stoi(token) - 1].get());
         }
         else {
             if (xml_directional_lights != nullptr){
@@ -2281,7 +2272,7 @@ void SceneContext_t::get_lights(std::string lights_string, DirectionalLight_t** 
                         std::string name_light = name_char;
                         std::transform(name_light.begin(), name_light.end(), name_light.begin(), ::tolower);
                         if (name_light == token){
-                            lights_list.push_back(directional_lights_[index]);
+                            lights_list.push_back(directional_lights_[index].get());
                             missing = false;
                             break;
                         }
@@ -2301,7 +2292,7 @@ void SceneContext_t::get_lights(std::string lights_string, DirectionalLight_t** 
         lights_string.erase(0, pos + delimiter.length());
     }
     if (is_number(lights_string)) {
-        lights_list.push_back(directional_lights_[std::stoi(lights_string) - 1]);
+        lights_list.push_back(directional_lights_[std::stoi(lights_string) - 1].get());
     }
     else {
         if (xml_directional_lights != nullptr){
@@ -2314,7 +2305,7 @@ void SceneContext_t::get_lights(std::string lights_string, DirectionalLight_t** 
                     std::string name_light = name_char;
                     std::transform(name_light.begin(), name_light.end(), name_light.begin(), ::tolower);
                     if (name_light == lights_string){
-                        lights_list.push_back(directional_lights_[index]);
+                        lights_list.push_back(directional_lights_[index].get());
                         missing = false;
                         break;
                     }
@@ -2369,7 +2360,7 @@ ImgBuffer_t* SceneContext_t::get_imgbuffer(std::string imgbuffer, const tinyxml2
 
 Skybox_t* SceneContext_t::get_skybox(std::string skybox, const tinyxml2::XMLElement* xml_skyboxes) const {
     if (is_number(skybox)) {
-        return skyboxes_[std::stoi(skybox) - 1];
+        return skyboxes_[std::stoi(skybox) - 1].get();
     }
     else {
         if (xml_skyboxes != nullptr){
@@ -2381,7 +2372,7 @@ Skybox_t* SceneContext_t::get_skybox(std::string skybox, const tinyxml2::XMLElem
                     std::string name_skybox = name_char;
                     std::transform(name_skybox.begin(), name_skybox.end(), name_skybox.begin(), ::tolower);
                     if (name_skybox == skybox){
-                        return skyboxes_[index];
+                        return skyboxes_[index].get();
                     }
                 }
                 ++index;
