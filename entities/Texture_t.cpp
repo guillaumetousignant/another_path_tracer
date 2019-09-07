@@ -44,9 +44,8 @@ Vec3f Texture_t::get(const double (&xy)[2]) const {
 
     const int xlo = x;      // floor
     const int xhi = x + 1.0;// ceil
-    const int ylo = x;      // floor
-    const int yhi = x + 1.0;// ceil
-
+    const int ylo = y;      // floor
+    const int yhi = y + 1.0;// ceil
 
     return  img_[ylo][xlo] * (1.0 - xd) * (1.0 - yd) +
             img_[ylo][xhi] * xd * (1.0 - yd) + 
