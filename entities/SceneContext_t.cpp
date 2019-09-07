@@ -362,7 +362,7 @@ void SceneContext_t::readXML(const std::string &filename){
     // Fixes 
     // Material mixes fix
     for (unsigned int i = 0; i < materials_.size(); i++){
-        if (materials_mix_list[i] != nullptr){
+        if (materials_mix_list[i]){
             MaterialMix_t* material_mix = dynamic_cast<MaterialMix_t*>(materials_[i].get()); // dynamic caaaast :(
             if (material_mix == nullptr){
                 std::cout << "Error: material #" << i << " was marked as a material mix but is not convertible to one. Exiting." << std::endl;
@@ -375,7 +375,7 @@ void SceneContext_t::readXML(const std::string &filename){
 
     // Materials medium list fix
     for (unsigned int i = 0; i < materials_.size(); i++){
-        if (materials_medium_list[i] != nullptr) {
+        if (materials_medium_list[i]) {
             PortalTop_t* portal = dynamic_cast<PortalTop_t*>(materials_[i].get());
             if (portal == nullptr){
                 std::cout << "Error: material #" << i << " was marked as a portal but is not convertible to one. Exiting." << std::endl;
@@ -394,7 +394,7 @@ void SceneContext_t::readXML(const std::string &filename){
 
     // Scatterers medium list fix
     for (unsigned int i = 0; i < scatterers_.size(); i++){
-        if (scatterers_medium_list[i] != nullptr) {
+        if (scatterers_medium_list[i]) {
             PortalScattererTop_t* portal_scatterer = dynamic_cast<PortalScattererTop_t*>(scatterers_[i].get());
             if (portal_scatterer == nullptr){
                 std::cout << "Error: scatterer #" << i << " was marked as a portal but is not convertible to one. Exiting." << std::endl;
@@ -413,7 +413,7 @@ void SceneContext_t::readXML(const std::string &filename){
 
     // Material aggregates fix
     for (unsigned int i = 0; i < materials_.size(); i++){
-        if (materials_aggregate_list[i] != nullptr) {
+        if (materials_aggregate_list[i]) {
             unsigned int n = std::get<0>(*materials_aggregate_list[i])->size();
             std::vector<std::string> names(n);
             std::vector<Material_t*> materials(n);
