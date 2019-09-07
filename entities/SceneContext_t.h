@@ -64,7 +64,7 @@ class SceneContext_t{
         std::vector<Skybox_t*> skyboxes_;
         std::vector<ImgBuffer_t*> imgbuffers_;
         std::vector<Camera_t*> cameras_;
-        std::vector<MaterialMap_t*> material_aggregates_;
+        std::vector<std::unique_ptr<MaterialMap_t>> material_aggregates_;
         std::vector<MeshTop_t*> meshes_;
 
         void readXML(const std::string &filename);
