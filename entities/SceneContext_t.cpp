@@ -292,10 +292,10 @@ void SceneContext_t::readXML(const std::string &filename){
 
     // Buffer creation
     
-    transform_matrices_ = std::vector<TransformMatrix_t*>(n_transform_matrices);
-    textures_ =  std::vector<Texture_t*>(n_textures);
-    scatterers_ =  std::vector<ScatteringFunction_t*>(n_scatterers);
-    materials_ =  std::vector<Material_t*>(n_materials);
+    transform_matrices_ = std::vector<std::unique_ptr<TransformMatrix_t>>(n_transform_matrices);
+    textures_ =  std::vector<std::unique_ptr<Texture_t>>(n_textures);
+    scatterers_ =  std::vector<std::unique_ptr<ScatteringFunction_t>>(n_scatterers);
+    materials_ =  std::vector<std::unique_ptr<Material_t>>(n_materials);
     material_aggregates_ =  std::vector<std::unique_ptr<MaterialMap_t>>(n_materials);
     mesh_geometries_ =  std::vector<MeshGeometry_t*>(n_mesh_geometries);
     objects_ =  std::vector<Shape_t*>(n_objects);
@@ -353,13 +353,13 @@ void SceneContext_t::readXML(const std::string &filename){
     // Material mixes fix
     for (unsigned int i = 0; i < materials_.size(); i++){
         if (materials_mix_list[i] != nullptr){
-            MaterialMix_t* material_mix = dynamic_cast<MaterialMix_t*>(materials_[i]); // dynamic caaaast :(
+            MaterialMix_t* material_mix = dynamic_cast<MaterialMix_t*>(materials_[i].get()); // dynamic caaaast :(
             if (material_mix == nullptr){
                 std::cout << "Error: material #" << i << " was marked as a material mix but is not convertible to one. Exiting." << std::endl;
                 exit(491);
             }
-            material_mix->material_refracted_ = materials_[materials_mix_list[i][0]];
-            material_mix->material_reflected_ = materials_[materials_mix_list[i][1]];
+            material_mix->material_refracted_ = materials_[materials_mix_list[i][0]].get();
+            material_mix->material_reflected_ = materials_[materials_mix_list[i][1]].get();
         }
     }
 
@@ -372,13 +372,13 @@ void SceneContext_t::readXML(const std::string &filename){
     // Materials medium list fix
     for (unsigned int i = 0; i < materials_.size(); i++){
         if (materials_medium_list[i] != nullptr) {
-            PortalTop_t* portal = dynamic_cast<PortalTop_t*>(materials_[i]);
+            PortalTop_t* portal = dynamic_cast<PortalTop_t*>(materials_[i].get());
             if (portal == nullptr){
                 std::cout << "Error: material #" << i << " was marked as a portal but is not convertible to one. Exiting." << std::endl;
                 exit(492);
             }
             for (auto it = materials_medium_list[i]->begin(); it != materials_medium_list[i]->end(); ++it){
-                Medium_t* medium = dynamic_cast<Medium_t*>(materials_[*it]); // CHECK I don't like those either
+                Medium_t* medium = dynamic_cast<Medium_t*>(materials_[*it].get()); // CHECK I don't like those either
                 if (medium == nullptr){
                     std::cout << "Error: material #" << i << " had material #" << *it << " in its medium list, but it is not convertible to one. Exiting." << std::endl;
                     exit(493);
@@ -397,13 +397,13 @@ void SceneContext_t::readXML(const std::string &filename){
     // Scatterers medium list fix
     for (unsigned int i = 0; i < scatterers_.size(); i++){
         if (scatterers_medium_list[i] != nullptr) {
-            PortalScattererTop_t* portal_scatterer = dynamic_cast<PortalScattererTop_t*>(scatterers_[i]);
+            PortalScattererTop_t* portal_scatterer = dynamic_cast<PortalScattererTop_t*>(scatterers_[i].get());
             if (portal_scatterer == nullptr){
                 std::cout << "Error: scatterer #" << i << " was marked as a portal but is not convertible to one. Exiting." << std::endl;
                 exit(392);
             }
             for (auto it = scatterers_medium_list[i]->begin(); it != scatterers_medium_list[i]->end(); ++it){
-                Medium_t* medium = dynamic_cast<Medium_t*>(materials_[*it]); // CHECK I don't like those either
+                Medium_t* medium = dynamic_cast<Medium_t*>(materials_[*it].get()); // CHECK I don't like those either
                 if (medium == nullptr){
                     std::cout << "Error: scatterer #" << i << " had material #" << *it << " in its medium list, but it is not convertible to one. Exiting." << std::endl;
                     exit(393);
@@ -428,7 +428,7 @@ void SceneContext_t::readXML(const std::string &filename){
 
             unsigned int index = 0;
             for (auto it = std::get<0>(*materials_aggregate_list[i])->begin(); it != std::get<0>(*materials_aggregate_list[i])->end(); ++it){
-                materials[index] = materials_[*it];
+                materials[index] = materials_[*it].get();
                 ++index;
             }
             index = 0;
@@ -438,7 +438,7 @@ void SceneContext_t::readXML(const std::string &filename){
             }
             
             material_aggregates_[i] = std::unique_ptr<MaterialMap_t>(new MaterialMap_t(names.data(), materials.data(), n));
-            materials_[i] = material_aggregates_[i]->getFirst();
+            materials_[i] = std::unique_ptr<Material_t>(material_aggregates_[i]->getFirst()); // CHECK this is not intended, will delete stuff from material list
         }
     }
 
@@ -516,7 +516,7 @@ void SceneContext_t::readXML(const std::string &filename){
             tinyxml2::XMLElement* transformations_pre = xml_transform_matrix->FirstChildElement("transformations_pre");
             if (transformations_pre != nullptr){
                 for (tinyxml2::XMLElement* transformation_pre = transformations_pre->FirstChildElement("transformation_pre"); transformation_pre; transformation_pre = transformation_pre->NextSiblingElement("transformation_pre")){
-                    apply_transformation(transform_matrices_[index], transformation_pre);
+                    apply_transformation(transform_matrices_[index].get(), transformation_pre);
                 }
             }
             ++index;
@@ -530,7 +530,7 @@ void SceneContext_t::readXML(const std::string &filename){
         for (tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
             tinyxml2::XMLElement* transformations_pre = xml_material->FirstChildElement("transformations_pre");
             if (transformations_pre != nullptr){
-                PortalTop_t* portal = dynamic_cast<PortalTop_t*>(materials_[index]);
+                PortalTop_t* portal = dynamic_cast<PortalTop_t*>(materials_[index].get());
                 if (portal == nullptr){
                     std::cout << "Error, material #" << index << " has transformations, but it is not convertible to a portal. Ignoring." << std::endl;
                 }
@@ -638,7 +638,7 @@ void SceneContext_t::readXML(const std::string &filename){
             tinyxml2::XMLElement* transformations_post = xml_transform_matrix->FirstChildElement("transformations_post");
             if (transformations_post != nullptr){
                 for (tinyxml2::XMLElement* transformation_post = transformations_post->FirstChildElement("transformation_post"); transformation_post; transformation_post = transformation_post->NextSiblingElement("transformation_post")){
-                    apply_transformation(transform_matrices_[index], transformation_post);
+                    apply_transformation(transform_matrices_[index].get, transformation_post);
                 }
             }
             ++index;
@@ -652,7 +652,7 @@ void SceneContext_t::readXML(const std::string &filename){
         for (tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
             tinyxml2::XMLElement* transformations_post = xml_material->FirstChildElement("transformations_post");
             if (transformations_post != nullptr){
-                PortalTop_t* portal = dynamic_cast<PortalTop_t*>(materials_[index]);
+                PortalTop_t* portal = dynamic_cast<PortalTop_t*>(materials_[index].get());
                 if (portal == nullptr){
                     std::cout << "Error, material #" << index << " has transformations, but it is not convertible to a portal. Ignoring." << std::endl;
                 }
@@ -955,29 +955,6 @@ void SceneContext_t::reset(){
     opengl_camera_ = nullptr;
 
     // Deleting buffers
-    for (unsigned int i = 0; i < transform_matrices_.size(); i++){
-        if (transform_matrices_[i] != nullptr){
-            delete transform_matrices_[i];
-        }
-    }
-
-    for (unsigned int i = 0; i < textures_.size(); i++){
-        if (textures_[i] != nullptr){
-            delete textures_[i];
-        }
-    }
-    
-    for (unsigned int i = 0; i < scatterers_.size(); i++){
-        if (scatterers_[i] != nullptr){
-            delete scatterers_[i];
-        }
-    }
-
-    for (unsigned int i = 0; i < materials_.size(); i++){
-        if (materials_[i] != nullptr){
-            delete materials_[i];
-        }
-    }
     
     for (unsigned int i = 0; i < mesh_geometries_.size(); i++){
         if (mesh_geometries_[i] != nullptr){
@@ -1022,7 +999,7 @@ void SceneContext_t::reset(){
     scene_name_ = "";
 }
 
-TransformMatrix_t* SceneContext_t::create_transform_matrix(const tinyxml2::XMLElement* xml_transform_matrix) const {
+std::unique_ptr<TransformMatrix_t> SceneContext_t::create_transform_matrix(const tinyxml2::XMLElement* xml_transform_matrix) const {
     std::string string_transform_matrix;
     const char* transform_matrix_char = xml_transform_matrix->Attribute("value");
     if (transform_matrix_char == nullptr){
@@ -1036,7 +1013,7 @@ TransformMatrix_t* SceneContext_t::create_transform_matrix(const tinyxml2::XMLEl
     std::transform(string_transform_matrix.begin(), string_transform_matrix.end(), string_transform_matrix.begin(), ::tolower);
 
     if (string_transform_matrix == "nan"){
-        return new TransformMatrix_t();
+        return std::unique_ptr<TransformMatrix_t>(new TransformMatrix_t());
     }
     else{
         double values[16];
@@ -1051,18 +1028,19 @@ TransformMatrix_t* SceneContext_t::create_transform_matrix(const tinyxml2::XMLEl
         }
         if (count != 16) {
             std::cout << "Error, transform matrix value should be 16 values seperated by spaces, or nan. Current number of values is " << count << ". Ignoring." << std::endl;
-            return new TransformMatrix_t();
+            return std::unique_ptr<TransformMatrix_t>(new TransformMatrix_t());
         }
         else{
-            return new TransformMatrix_t(values[0], values[1], values[2], values[3],
+            return std::unique_ptr<TransformMatrix_t>(
+                  new TransformMatrix_t(values[0], values[1], values[2], values[3],
                                         values[4], values[5], values[6], values[7],
                                         values[8], values[9], values[10], values[11],
-                                        values[12], values[13], values[14], values[15]);
+                                        values[12], values[13], values[14], values[15]));
         }
     }
 }
 
-Texture_t* SceneContext_t::create_texture(const tinyxml2::XMLElement* xml_texture) const {
+std::unique_ptr<Texture_t> SceneContext_t::create_texture(const tinyxml2::XMLElement* xml_texture) const {
     std::string type;
     const char* type_char = xml_texture->Attribute("type");
     if (type_char == nullptr) {
@@ -1090,7 +1068,7 @@ Texture_t* SceneContext_t::create_texture(const tinyxml2::XMLElement* xml_textur
             #endif
         }  
         
-        return new Texture_t(filename);
+        return std::unique_ptr<Texture_t>(new Texture_t(filename));
     }
     else{
         std::cout << "Error, texture type '" << type << "' not implemented. Only 'texture' exists for now. Exiting." << std::endl; 
@@ -1098,7 +1076,7 @@ Texture_t* SceneContext_t::create_texture(const tinyxml2::XMLElement* xml_textur
     }
 }
 
-ScatteringFunction_t* SceneContext_t::create_scatterer(const tinyxml2::XMLElement* xml_scatterer, std::list<unsigned int>* &scatterers_medium_list, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials) {
+std::unique_ptr<ScatteringFunction_t> SceneContext_t::create_scatterer(const tinyxml2::XMLElement* xml_scatterer, std::list<unsigned int>* &scatterers_medium_list, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials) {
     std::string type;
     const char* type_char = xml_scatterer->Attribute("type");
     if (type_char == nullptr) {
@@ -1113,58 +1091,64 @@ ScatteringFunction_t* SceneContext_t::create_scatterer(const tinyxml2::XMLElemen
     if (type == "absorber"){
         const char* attributes[] = {"emission", "colour", "emission_distance", "absorption_distance"};
         require_attributes(xml_scatterer, attributes, 4);
-        return new Absorber_t(get_colour(xml_scatterer->Attribute("emission")), get_colour(xml_scatterer->Attribute("colour")), 
-                                xml_scatterer->DoubleAttribute("emission_distance"), xml_scatterer->DoubleAttribute("absorption_distance"));
+        return std::unique_ptr<ScatteringFunction_t>(
+                    new Absorber_t(get_colour(xml_scatterer->Attribute("emission")), get_colour(xml_scatterer->Attribute("colour")), 
+                                    xml_scatterer->DoubleAttribute("emission_distance"), xml_scatterer->DoubleAttribute("absorption_distance")));
     }
     else if (type == "nonabsorber"){
-        return new NonAbsorber_t();
+        return std::unique_ptr<ScatteringFunction_t>(new NonAbsorber_t());
     }
     else if (type == "portal_scatterer"){
         // CHECK add medium_list stuff
         const char* attributes[] = {"medium_list", "transform_matrix", "scattering_distance"};
         require_attributes(xml_scatterer, attributes, 3);
         scatterers_medium_list = get_medium_index_list(xml_scatterer->Attribute("medium_list"), xml_materials);
-        return new PortalScatterer_t(get_transform_matrix(xml_scatterer->Attribute("transform_matrix"), xml_transform_matrices), xml_scatterer->DoubleAttribute("scattering_distance"), std::list<Medium_t*>());
+        return std::unique_ptr<ScatteringFunction_t>(
+                    new PortalScatterer_t(get_transform_matrix(xml_scatterer->Attribute("transform_matrix"), xml_transform_matrices), xml_scatterer->DoubleAttribute("scattering_distance"), std::list<Medium_t*>()));
     }
     else if (type == "scatterer_exp"){
         const char* attributes[] = {"emission", "colour", "emission_distance", "absorption_distance", "scattering_distance", "order", "scattering_angle"};
         require_attributes(xml_scatterer, attributes, 7);
-        return new ScattererExp_t(get_colour(xml_scatterer->Attribute("emission")), get_colour(xml_scatterer->Attribute("colour")),
+        return std::unique_ptr<ScatteringFunction_t>(
+                    new ScattererExp_t(get_colour(xml_scatterer->Attribute("emission")), get_colour(xml_scatterer->Attribute("colour")),
                                 xml_scatterer->DoubleAttribute("emission_distance"), xml_scatterer->DoubleAttribute("absorption_distance"),
                                 xml_scatterer->DoubleAttribute("scattering_distance"), xml_scatterer->DoubleAttribute("order"), 
-                                xml_scatterer->DoubleAttribute("scattering_angle"));
+                                xml_scatterer->DoubleAttribute("scattering_angle")));
     }
     else if (type == "scatterer_exp_full"){
         const char* attributes[] = {"emission", "colour", "scattering_emission", "scattering_colour", "emission_distance", "absorption_distance", "scattering_distance", "order", "scattering_angle"};
         require_attributes(xml_scatterer, attributes, 9);
-        return new ScattererExpFull_t(get_colour(xml_scatterer->Attribute("emission")), get_colour(xml_scatterer->Attribute("colour")),
+        return std::unique_ptr<ScatteringFunction_t>(
+                    new ScattererExpFull_t(get_colour(xml_scatterer->Attribute("emission")), get_colour(xml_scatterer->Attribute("colour")),
                                 get_colour(xml_scatterer->Attribute("scattering_emission")), get_colour(xml_scatterer->Attribute("scattering_colour")),
                                 xml_scatterer->DoubleAttribute("emission_distance"), xml_scatterer->DoubleAttribute("absorption_distance"),
                                 xml_scatterer->DoubleAttribute("scattering_distance"), xml_scatterer->DoubleAttribute("order"), 
-                                xml_scatterer->DoubleAttribute("scattering_angle"));
+                                xml_scatterer->DoubleAttribute("scattering_angle")));
     }
     else if (type == "scatterer"){
         const char* attributes[] = {"emission", "colour", "emission_distance", "absorption_distance", "scattering_distance"};
         require_attributes(xml_scatterer, attributes, 5);
-        return new Scatterer_t(get_colour(xml_scatterer->Attribute("emission")), get_colour(xml_scatterer->Attribute("colour")),
+        return std::unique_ptr<ScatteringFunction_t>(
+                    new Scatterer_t(get_colour(xml_scatterer->Attribute("emission")), get_colour(xml_scatterer->Attribute("colour")),
                                 xml_scatterer->DoubleAttribute("emission_distance"), xml_scatterer->DoubleAttribute("absorption_distance"),
-                                xml_scatterer->DoubleAttribute("scattering_distance"));
+                                xml_scatterer->DoubleAttribute("scattering_distance")));
     }
     else if (type == "scatterer_full"){
         const char* attributes[] = {"emission", "colour", "scattering_emission", "scattering_colour", "emission_distance", "absorption_distance", "scattering_distance"};
         require_attributes(xml_scatterer, attributes, 7);
-        return new ScattererFull_t(get_colour(xml_scatterer->Attribute("emission")), get_colour(xml_scatterer->Attribute("colour")),
+        return std::unique_ptr<ScatteringFunction_t>(
+                    new ScattererFull_t(get_colour(xml_scatterer->Attribute("emission")), get_colour(xml_scatterer->Attribute("colour")),
                                 get_colour(xml_scatterer->Attribute("scattering_emission")), get_colour(xml_scatterer->Attribute("scattering_colour")),
                                 xml_scatterer->DoubleAttribute("emission_distance"), xml_scatterer->DoubleAttribute("absorption_distance"),
-                                xml_scatterer->DoubleAttribute("scattering_distance"));
+                                xml_scatterer->DoubleAttribute("scattering_distance")));
     }
     else{
         std::cout << "Error, scatterer type '" << type << "' not implemented. Only 'absorber', 'nonabsorber', 'portal_scatterer', 'scatterer_exp', and 'scatterer' exists for now. Ignoring." << std::endl; 
-        return new NonAbsorber_t();
+        return std::unique_ptr<ScatteringFunction_t>(new NonAbsorber_t());
     }
 }
 
-Material_t* SceneContext_t::create_material(const tinyxml2::XMLElement* xml_material, std::list<unsigned int>* &materials_medium_list, unsigned int* &materials_mix_list, std::tuple<std::list<unsigned int>*, std::list<std::string>*>* &materials_aggregate_list, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_scatterers) {
+std::unique_ptr<Material_t> SceneContext_t::create_material(const tinyxml2::XMLElement* xml_material, std::list<unsigned int>* &materials_medium_list, unsigned int* &materials_mix_list, std::tuple<std::list<unsigned int>*, std::list<std::string>*>* &materials_aggregate_list, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_scatterers) {
     std::string type;
     const char* type_char = xml_material->Attribute("type");
     if (type_char == nullptr) {
@@ -1179,123 +1163,140 @@ Material_t* SceneContext_t::create_material(const tinyxml2::XMLElement* xml_mate
     if (type == "diffuse"){
         const char* attributes[] = {"emission", "colour", "roughness"};
         require_attributes(xml_material, attributes, 3);
-        return new Diffuse_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), 
-                                xml_material->DoubleAttribute("roughness"));
+        return std::unique_ptr<Material_t>(
+                    new Diffuse_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), 
+                                xml_material->DoubleAttribute("roughness")));
     }
     else if (type == "diffuse_full"){
         const char* attributes[] = {"emission_map", "texture", "roughness"};
         require_attributes(xml_material, attributes, 3);
-        return new DiffuseFull_t(get_texture(xml_material->Attribute("emission_map"), xml_textures), get_texture(xml_material->Attribute("texture"), xml_textures), 
-                                xml_material->DoubleAttribute("roughness"));
+        return std::unique_ptr<Material_t>(
+                    new DiffuseFull_t(get_texture(xml_material->Attribute("emission_map"), xml_textures), get_texture(xml_material->Attribute("texture"), xml_textures), 
+                                xml_material->DoubleAttribute("roughness")));
     }
     else if (type == "diffuse_tex"){
         const char* attributes[] = {"emission", "texture", "roughness"};
         require_attributes(xml_material, attributes, 3);
-        return new DiffuseTex_t(get_colour(xml_material->Attribute("emission")), get_texture(xml_material->Attribute("texture"), xml_textures), 
-                                xml_material->DoubleAttribute("roughness"));
+        return std::unique_ptr<Material_t>(
+                    new DiffuseTex_t(get_colour(xml_material->Attribute("emission")), get_texture(xml_material->Attribute("texture"), xml_textures), 
+                                xml_material->DoubleAttribute("roughness")));
     }
     else if (type == "fresnelmix"){
         const char* attributes[] = {"material_refracted", "material_reflected", "ind"};
         require_attributes(xml_material, attributes, 3);
         materials_mix_list = get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials);
-        return new FresnelMix_t(nullptr, nullptr, xml_material->DoubleAttribute("ind"));
+        return std::unique_ptr<Material_t>(
+                    new FresnelMix_t(nullptr, nullptr, xml_material->DoubleAttribute("ind")));
     }
     else if (type == "fresnelmix_in"){
         const char* attributes[] = {"material_refracted", "material_reflected", "ind"};
         require_attributes(xml_material, attributes, 3);
         materials_mix_list = get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials);
-        return new FresnelMixIn_t(nullptr, nullptr, xml_material->DoubleAttribute("ind"));
+        return std::unique_ptr<Material_t>(
+                    new FresnelMixIn_t(nullptr, nullptr, xml_material->DoubleAttribute("ind")));
     }
     else if (type == "normal_material"){
-        return new NormalMaterial_t();
+        return std::unique_ptr<Material_t>(new NormalMaterial_t());
     }
     else if (type == "portal"){
         const char* attributes[] = {"medium_list", "transform_matrix"};
         require_attributes(xml_material, attributes, 2);
         materials_medium_list = get_medium_index_list(xml_material->Attribute("medium_list"), xml_materials);
-        return new Portal_t(get_transform_matrix(xml_material->Attribute("transform_matrix"), xml_transform_matrices), std::list<Medium_t*>());
+        return std::unique_ptr<Material_t>(
+                    new Portal_t(get_transform_matrix(xml_material->Attribute("transform_matrix"), xml_transform_matrices), std::list<Medium_t*>()));
     }
     else if (type == "portal_refractive"){
         std::cout << "Error, refractive portal not implemented yet. Ignoring." << std::endl; 
-        return new Diffuse_t(Vec3f(), Vec3f(0.5), 1.0);
+        return std::unique_ptr<Material_t>(new Diffuse_t(Vec3f(), Vec3f(0.5), 1.0));
     }
     else if (type == "randommix"){
         const char* attributes[] = {"material_refracted", "material_reflected", "ratio"};
         require_attributes(xml_material, attributes, 3);
         materials_mix_list = get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials);
-        return new RandomMix_t(nullptr, nullptr, xml_material->DoubleAttribute("ratio"));
+        return std::unique_ptr<Material_t>(new RandomMix_t(nullptr, nullptr, xml_material->DoubleAttribute("ratio")));
     }
     else if (type == "randommix_in"){
         const char* attributes[] = {"material_refracted", "material_reflected", "ratio"};
         require_attributes(xml_material, attributes, 3);
         materials_mix_list = get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials);
-        return new RandomMixIn_t(nullptr, nullptr, xml_material->DoubleAttribute("ratio"));
+        return std::unique_ptr<Material_t>(new RandomMixIn_t(nullptr, nullptr, xml_material->DoubleAttribute("ratio")));
     }
     else if (type == "reflective"){
         const char* attributes[] = {"emission", "colour"};
         require_attributes(xml_material, attributes, 2);
-        return new Reflective_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")));
+        return std::unique_ptr<Material_t>(
+                    new Reflective_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour"))));
     }
     else if (type == "reflective_fuzz"){
         const char* attributes[] = {"emission", "colour", "order", "diffusivity"};
         require_attributes(xml_material, attributes, 4);
-        return new ReflectiveFuzz_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity"));
+        return std::unique_ptr<Material_t>(
+                    new ReflectiveFuzz_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity")));
     }
     else if (type == "reflective_fuzz_tex"){
         const char* attributes[] = {"emission", "texture", "order", "diffusivity"};
         require_attributes(xml_material, attributes, 4);
-        return new ReflectiveFuzzTex_t(get_colour(xml_material->Attribute("emission")), get_texture(xml_material->Attribute("texture"), xml_textures), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity"));
+        return std::unique_ptr<Material_t>(
+                    new ReflectiveFuzzTex_t(get_colour(xml_material->Attribute("emission")), get_texture(xml_material->Attribute("texture"), xml_textures), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity")));
     }
     else if (type == "reflective_refractive"){
         const char* attributes[] = {"emission", "colour", "ind", "priority", "scattering_fn"};
         require_attributes(xml_material, attributes, 5);
-        return new ReflectiveRefractive_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("ind"), xml_material->UnsignedAttribute("priority"), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers));
+        return std::unique_ptr<Material_t>(
+                    new ReflectiveRefractive_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("ind"), xml_material->UnsignedAttribute("priority"), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers)));
     }
     else if (type == "reflective_refractive_fuzz"){
         const char* attributes[] = {"emission", "colour", "ind", "priority", "scattering_fn", "order", "diffusivity"};
         require_attributes(xml_material, attributes, 7);
-        return new ReflectiveRefractiveFuzz_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("ind"), xml_material->UnsignedAttribute("priority"), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity"), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers));
+        return std::unique_ptr<Material_t>(
+                    new ReflectiveRefractiveFuzz_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("ind"), xml_material->UnsignedAttribute("priority"), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity"), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers)));
     }
     else if (type == "refractive"){
         const char* attributes[] = {"emission", "colour", "ind", "priority", "scattering_fn"};
         require_attributes(xml_material, attributes, 5);
-        return new Refractive_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("ind"), xml_material->UnsignedAttribute("priority"), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers));
+        return std::unique_ptr<Material_t>(
+                    new Refractive_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("ind"), xml_material->UnsignedAttribute("priority"), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers)));
     }
     else if (type == "refractive_fuzz"){
         const char* attributes[] = {"emission", "colour", "ind", "priority", "scattering_fn", "order", "diffusivity"};
         require_attributes(xml_material, attributes, 7);
-        return new RefractiveFuzz_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("ind"), xml_material->UnsignedAttribute("priority"), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity"), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers));
+        return std::unique_ptr<Material_t>(
+                    new RefractiveFuzz_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("ind"), xml_material->UnsignedAttribute("priority"), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity"), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers)));
     }
     else if (type == "transparent"){
         const char* attributes[] = {"priority", "scattering_fn"};
         require_attributes(xml_material, attributes, 2);
-        return new Transparent_t(xml_material->UnsignedAttribute("priority"), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers));
+        return std::unique_ptr<Material_t>(
+                    new Transparent_t(xml_material->UnsignedAttribute("priority"), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers)));
     }
     else if (type == "bounce_material"){
         const char* attributes[] = {"max_bounces"};
         require_attributes(xml_material, attributes, 1);
-        return new BounceMaterial_t(xml_material->UnsignedAttribute("max_bounces"));
+        return std::unique_ptr<Material_t>(
+                    new BounceMaterial_t(xml_material->UnsignedAttribute("max_bounces")));
     }
     else if (type == "distance_material"){
         const char* attributes[] = {"focal_length", "exponent"};
         require_attributes(xml_material, attributes, 2);
-        return new DistanceMaterial_t(xml_material->DoubleAttribute("focal_length"), xml_material->DoubleAttribute("exponent"));
+        return std::unique_ptr<Material_t>(
+                    new DistanceMaterial_t(xml_material->DoubleAttribute("focal_length"), xml_material->DoubleAttribute("exponent")));
     }
     else if (type == "toon"){
         const char* attributes[] = {"colour"};
         require_attributes(xml_material, attributes, 1);
-        return new Toon_t(get_colour(xml_material->Attribute("colour")));
+        return std::unique_ptr<Material_t>(
+                    new Toon_t(get_colour(xml_material->Attribute("colour"))));
     }
     else if (type == "aggregate"){
         const char* attributes[] = {"materials_list", "materials_names"};
         require_attributes(xml_material, attributes, 2);
         materials_aggregate_list = new std::tuple<std::list<unsigned int>*, std::list<std::string>*>(get_medium_index_list(xml_material->Attribute("materials_list"), xml_materials), get_medium_names(xml_material->Attribute("materials_names")));
-        return nullptr;
+        return std::unique_ptr<Material_t>();
         // CHECK add aggregates
     }
     else{
         std::cout << "Error, material type '" << type << "' not implemented. Ignoring." << std::endl; 
-        return new NormalMaterial_t();
+        return std::unique_ptr<Material_t>(new NormalMaterial_t());
     }
 }
 
@@ -1356,7 +1357,7 @@ Shape_t* SceneContext_t::create_object(const tinyxml2::XMLElement* xml_object, M
             return nullptr;
         }
         else {
-            mesh = new Mesh_t(materials_[material_index], get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries));
+            mesh = new Mesh_t(materials_[material_index].get(), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries));
             return nullptr;
         }
     }
@@ -1369,7 +1370,7 @@ Shape_t* SceneContext_t::create_object(const tinyxml2::XMLElement* xml_object, M
             return nullptr;
         }
         else {
-            mesh = new MeshMotionblur_t(materials_[material_index], get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries));
+            mesh = new MeshMotionblur_t(materials_[material_index].get(), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries));
             return nullptr;
         }
     }
@@ -1872,12 +1873,12 @@ void SceneContext_t::create_acceleration_structure(const tinyxml2::XMLElement* x
 TransformMatrix_t* SceneContext_t::get_transform_matrix(std::string transform_matrix, const tinyxml2::XMLElement* xml_transform_matrices){
     std::transform(transform_matrix.begin(), transform_matrix.end(), transform_matrix.begin(), ::tolower);
     if (transform_matrix == "nan"){
-        transform_matrices_[index_transform_matrices_] = new TransformMatrix_t();
+        transform_matrices_[index_transform_matrices_] = std::unique_ptr<TransformMatrix_t>(new TransformMatrix_t());
         ++index_transform_matrices_;
-        return transform_matrices_[index_transform_matrices_ - 1];
+        return transform_matrices_[index_transform_matrices_ - 1].get();
     }
     else if (is_number(transform_matrix)) {
-        return transform_matrices_[std::stoi(transform_matrix) - 1];
+        return transform_matrices_[std::stoi(transform_matrix) - 1].get();
     }
     else {
         if (xml_transform_matrices != nullptr){
@@ -1888,7 +1889,7 @@ TransformMatrix_t* SceneContext_t::get_transform_matrix(std::string transform_ma
                     std::string name_transform_matrix = transform_matrix_char;
                     std::transform(name_transform_matrix.begin(), name_transform_matrix.end(), name_transform_matrix.begin(), ::tolower);
                     if (name_transform_matrix == transform_matrix){
-                        return transform_matrices_[index];
+                        return transform_matrices_[index].get();
                     }
                 }                
                 ++index;
@@ -1988,7 +1989,7 @@ std::list<Medium_t*> SceneContext_t::get_medium_list(std::string string_medium_l
         token = string_medium_list.substr(0, pos);
 
         if (is_number(token)) {
-            Medium_t* medium = dynamic_cast<Medium_t*>(materials_[std::stoi(token) - 1]);
+            Medium_t* medium = dynamic_cast<Medium_t*>(materials_[std::stoi(token) - 1].get());
             if (medium == nullptr){
                 std::cout << "Error: material #" << token << " is in a medium list, but it is not convertible to one. Exiting." << std::endl;
                 exit(494);
@@ -2006,7 +2007,7 @@ std::list<Medium_t*> SceneContext_t::get_medium_list(std::string string_medium_l
                         std::string name_material = material_char;
                         std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
                         if (name_material == token){
-                            Medium_t* medium = dynamic_cast<Medium_t*>(materials_[index]);
+                            Medium_t* medium = dynamic_cast<Medium_t*>(materials_[index].get());
                             if (medium == nullptr){
                                 std::cout << "Error: material '" << token << "' is in a medium list, but it is not convertible to one. Exiting." << std::endl;
                                 exit(495);
@@ -2033,7 +2034,7 @@ std::list<Medium_t*> SceneContext_t::get_medium_list(std::string string_medium_l
         string_medium_list.erase(0, pos + delimiter.length());
     }
     if (is_number(string_medium_list)) {
-        Medium_t* medium = dynamic_cast<Medium_t*>(materials_[std::stoi(string_medium_list) - 1]);
+        Medium_t* medium = dynamic_cast<Medium_t*>(materials_[std::stoi(string_medium_list) - 1].get());
         if (medium == nullptr){
             std::cout << "Error: material #" << token << " is in a medium list, but it is not convertible to one. Exiting." << std::endl;
             exit(494);
@@ -2051,7 +2052,7 @@ std::list<Medium_t*> SceneContext_t::get_medium_list(std::string string_medium_l
                     std::string name_material = material_char;
                     std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
                     if (name_material == string_medium_list){
-                        Medium_t* medium = dynamic_cast<Medium_t*>(materials_[index]);
+                        Medium_t* medium = dynamic_cast<Medium_t*>(materials_[index].get());
                         if (medium == nullptr){
                             std::cout << "Error: material '" << token << "' is in a medium list, but it is not convertible to one. Exiting." << std::endl;
                             exit(495);
@@ -2078,7 +2079,7 @@ std::list<Medium_t*> SceneContext_t::get_medium_list(std::string string_medium_l
 
 Texture_t* SceneContext_t::get_texture(std::string texture, const tinyxml2::XMLElement* xml_textures) const {
     if (is_number(texture)) {
-        return textures_[std::stoi(texture) - 1];
+        return textures_[std::stoi(texture) - 1].get();
     }
     else {
         if (xml_textures != nullptr){
@@ -2091,7 +2092,7 @@ Texture_t* SceneContext_t::get_texture(std::string texture, const tinyxml2::XMLE
                     std::string name_texture = name_char;
                     std::transform(name_texture.begin(), name_texture.end(), name_texture.begin(), ::tolower);
                     if (name_texture == texture){
-                        return textures_[index];
+                        return textures_[index].get();
                     }
                 }
                 ++index;
@@ -2174,7 +2175,7 @@ unsigned int* SceneContext_t::get_material_mix(std::string material_refracted, s
 
 ScatteringFunction_t* SceneContext_t::get_scatterer(std::string scatterer, const tinyxml2::XMLElement* xml_scatterers) const {
     if (is_number(scatterer)) {
-        return scatterers_[std::stoi(scatterer) - 1];
+        return scatterers_[std::stoi(scatterer) - 1].get();
     }
     else {
         if (xml_scatterers != nullptr){
@@ -2186,7 +2187,7 @@ ScatteringFunction_t* SceneContext_t::get_scatterer(std::string scatterer, const
                     std::string name_scatterer = name_char;
                     std::transform(name_scatterer.begin(), name_scatterer.end(), name_scatterer.begin(), ::tolower);
                     if (name_scatterer == scatterer){
-                        return scatterers_[index];
+                        return scatterers_[index].get();
                     }
                 }                
                 ++index;
@@ -2249,7 +2250,7 @@ unsigned int SceneContext_t::get_material_index(std::string material, const tiny
 
 Material_t* SceneContext_t::get_material(std::string material, const tinyxml2::XMLElement* xml_materials) const {
     if (is_number(material)) {
-        return materials_[std::stoi(material) - 1];
+        return materials_[std::stoi(material) - 1].get();
     }
     else {
         if (xml_materials != nullptr){
@@ -2261,7 +2262,7 @@ Material_t* SceneContext_t::get_material(std::string material, const tinyxml2::X
                     std::string name_material = name_char;
                     std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
                     if (name_material == material){
-                        return materials_[index];
+                        return materials_[index].get();
                     }
                 }
                 ++index;

@@ -54,10 +54,10 @@ class SceneContext_t{
         unsigned int index_imgbuffers_;
         unsigned int index_cameras_;
         
-        std::vector<TransformMatrix_t*> transform_matrices_;
-        std::vector<Texture_t*> textures_;
-        std::vector<ScatteringFunction_t*> scatterers_;
-        std::vector<Material_t*> materials_;
+        std::vector<std::unique_ptr<TransformMatrix_t>> transform_matrices_;
+        std::vector<std::unique_ptr<Texture_t>> textures_;
+        std::vector<std::unique_ptr<ScatteringFunction_t>> scatterers_;
+        std::vector<std::unique_ptr<Material_t>> materials_;
         std::vector<MeshGeometry_t*> mesh_geometries_;
         std::vector<Shape_t*> objects_;
         std::vector<DirectionalLight_t*> directional_lights_;
@@ -73,10 +73,10 @@ class SceneContext_t{
     private:
         void reset();
 
-        TransformMatrix_t* create_transform_matrix(const tinyxml2::XMLElement* xml_transform_matrix) const;
-        Texture_t* create_texture(const tinyxml2::XMLElement* xml_texture) const;
-        ScatteringFunction_t* create_scatterer(const tinyxml2::XMLElement* xml_scatterer, std::list<unsigned int>* &scatterers_medium_list, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials);
-        Material_t* create_material(const tinyxml2::XMLElement* xml_material, std::list<unsigned int>* &materials_medium_list, unsigned int* &materials_mix_list, std::tuple<std::list<unsigned int>*, std::list<std::string>*>* &materials_aggregate_list, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_scatterers);
+        std::unique_ptr<TransformMatrix_t> create_transform_matrix(const tinyxml2::XMLElement* xml_transform_matrix) const;
+        std::unique_ptr<Texture_t> create_texture(const tinyxml2::XMLElement* xml_texture) const;
+        std::unique_ptr<ScatteringFunction_t> create_scatterer(const tinyxml2::XMLElement* xml_scatterer, std::list<unsigned int>* &scatterers_medium_list, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials);
+        std::unique_ptr<Material_t> create_material(const tinyxml2::XMLElement* xml_material, std::list<unsigned int>* &materials_medium_list, unsigned int* &materials_mix_list, std::tuple<std::list<unsigned int>*, std::list<std::string>*>* &materials_aggregate_list, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_scatterers);
         MeshGeometry_t* create_mesh_geometry(const tinyxml2::XMLElement* xml_mesh_geometry) const;
         Shape_t* create_object(const tinyxml2::XMLElement* xml_object, MeshTop_t* &mesh, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_mesh_geometries);
         DirectionalLight_t* create_directional_light(const tinyxml2::XMLElement* xml_directional_light, const tinyxml2::XMLElement* xml_transform_matrices);
