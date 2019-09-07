@@ -1,5 +1,6 @@
 #include "Vec3f.h"
 #include <algorithm>
+#include <cmath>
 
 Vec3f::Vec3f() : v{0, 0, 0} {
 } 
@@ -215,7 +216,7 @@ Vec3f &Vec3f::clamp(double minimum, double maximum){
     max(minimum);
     return *this;
 }
-ostream &operator<<(ostream &output, const Vec3f &v) {
-    cout << '[' << v[0] << ", " << v[1] << ", " << v[2] << ']';
+std::ostream &operator<<(std::ostream &output, const Vec3f &v) {
+    std::cout << '[' << v[0] << ", " << v[1] << ", " << v[2] << ']';
     return output;
 } 

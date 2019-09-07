@@ -2,11 +2,7 @@
 #define VEC3F_H
 
 #include <iostream>
-#include <cmath>
-using std::ostream;
-using std::cout;
-using std::cin;
-using std::endl; 
+
 class Vec3f {
     public:
         double v[3];
@@ -62,24 +58,23 @@ class Vec3f {
         Vec3f ceil() const;
         Vec3f &round_inplace();
         Vec3f &clamp(double minimum, double maximum);
-
 };
 
-ostream &operator<<(ostream &output, const Vec3f &v);
+std::ostream &operator<<(std::ostream &output, const Vec3f &v);
 
 /*int main()
 {
     Vec3f v1(2,3,-1);
     Vec3f v2(2,5,6);
-    cout<<"v1 = "<<v1<<endl;
-    cout<<"v2 = "<<v2<<endl;
-    cout<<"v1 * 2 = "<<v1*2<<" and v1 / 2 = "<<v1/2<<endl;
-    cout<<"v1 + v2 = "<<v1+v2<<endl;
-    cout<<"v1 - v2 = "<<v1-v2<<endl;
-    cout<<"-v1 = "<<-v1<<endl;
-    cout<<"|v1| = "<<v1.magnitude()<<endl;
-    cout<<"Normalized v1 = "<<v1.normalize()<<endl;
-    cout<<"v1.v2 = "<<v1.dot(v2)<<endl;
-    cout<<"v1xv2 = "<<v1.cross(v2)<<endl; 
+    std::cout<<"v1 = "<<v1<<std::endl;
+    std::cout<<"v2 = "<<v2<<std::endl;
+    std::cout<<"v1 * 2 = "<<v1*2<<" and v1 / 2 = "<<v1/2<<std::endl;
+    std::cout<<"v1 + v2 = "<<v1+v2<<std::endl;
+    std::cout<<"v1 - v2 = "<<v1-v2<<std::endl;
+    std::cout<<"-v1 = "<<-v1<<std::endl;
+    std::cout<<"|v1| = "<<v1.magnitude()<<std::endl;
+    std::cout<<"Normalized v1 = "<<v1.normalize()<<std::endl;
+    std::cout<<"v1.v2 = "<<v1.dot(v2)<<std::endl;
+    std::cout<<"v1xv2 = "<<v1.cross(v2)<<std::endl; 
 }*/
 #endif
