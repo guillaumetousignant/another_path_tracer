@@ -94,8 +94,8 @@
 #include "AccelerationMultiGridVector_t.h"
 
 SceneContext_t::SceneContext_t() :
-    use_gl_(false), scene_name_(""), opengl_renderer_(nullptr), opengl_imgbuffer_(nullptr), 
-    opengl_camera_(nullptr), scene_(nullptr), camera_rendermode_(), camera_n_iter_(), camera_write_interval_(), 
+    use_gl_(false), scene_name_(""), opengl_renderer_(), opengl_imgbuffer_(nullptr), 
+    opengl_camera_(nullptr), scene_(), camera_rendermode_(), camera_n_iter_(), camera_write_interval_(), 
     index_transform_matrices_(0), index_textures_(0), index_scatterers_(0), index_materials_(0), 
     index_mesh_geometries_(0), index_objects_(0), index_directional_lights_(0), index_skyboxes_(0), 
     index_imgbuffers_(0), index_cameras_(0), transform_matrices_(), textures_(), 
@@ -621,7 +621,7 @@ void SceneContext_t::readXML(const std::string &filename){
     std::cout << std::endl;
 
     // Scene building
-    scene_ = new Scene_t();
+    scene_ = std::unique_ptr<Scene_t>(new Scene_t());
     const char* object_list = xml_top->Attribute("object_list");
     std::cout << "Scene created." << std::endl;
     
@@ -790,7 +790,7 @@ void SceneContext_t::readXML(const std::string &filename){
                         focus_position = focus_position_char;
                     }
                     get_xy(focus_position, position);
-                    cameras_[index]->autoFocus(scene_, position);
+                    cameras_[index]->autoFocus(scene_.get(), position);
                     std::cout << "Camera #" << index << " autofocus." << std::endl;
                 }
             }
@@ -805,7 +805,7 @@ void SceneContext_t::readXML(const std::string &filename){
     if (xml_cameras != nullptr){
         if (use_gl_) {
             opengl_camera_ = cameras_[0]; // CHECK dunno how to fix this
-            opengl_renderer_ = new OpenGLRenderer_t(scene_, opengl_camera_, opengl_imgbuffer_);
+            opengl_renderer_ = std::unique_ptr<OpenGLRenderer_t>(new OpenGLRenderer_t(scene_.get(), opengl_camera_, opengl_imgbuffer_));
             opengl_renderer_->initialise();
             std::cout << "OpenGL initialised." << std::endl;
         }
@@ -942,20 +942,20 @@ void SceneContext_t::render(){
             std::cout << "Camera #" << i << " rendering scene '" << scene_name_ << "' in '" <<  render_mode << "' mode." << std::endl;
 
             if (render_mode == "accumulation") {
-                cameras_[i]->accumulate(scene_, camera_n_iter_[i]);
+                cameras_[i]->accumulate(scene_.get(), camera_n_iter_[i]);
                 cameras_[i]->write();
             }
             else if (render_mode == "accumulation_write") {
-                cameras_[i]->accumulateWrite(scene_, camera_n_iter_[i], camera_write_interval_[i]);
+                cameras_[i]->accumulateWrite(scene_.get(), camera_n_iter_[i], camera_write_interval_[i]);
                 cameras_[i]->write();
             }
             else if (render_mode == "single") {
-                cameras_[i]->raytrace(scene_);
+                cameras_[i]->raytrace(scene_.get());
                 cameras_[i]->write();
             }
             else if (render_mode == "motion") {
                 std::cout << "Error, motion render mode not implemented yet. Single frame render fallback." << std::endl;
-                cameras_[i]->raytrace(scene_);
+                cameras_[i]->raytrace(scene_.get());
                 cameras_[i]->write();
             }
             else if (render_mode == "") {
@@ -1050,17 +1050,6 @@ void SceneContext_t::reset(){
         if (cameras_[i] != nullptr){
             delete cameras_[i];
         }
-    }
-    
-
-    if (opengl_renderer_ != nullptr){
-        delete opengl_renderer_;
-        opengl_renderer_= nullptr;
-    }
-
-    if (scene_ != nullptr){
-        delete scene_;
-        scene_ = nullptr;
     }
 
     use_gl_ = false;

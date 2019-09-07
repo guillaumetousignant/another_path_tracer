@@ -5,6 +5,7 @@
 #include <list>
 #include <tuple>
 #include <vector>
+#include <memory>
 #include "tinyxml2.h"
 #include "Vec3f.h"
 
@@ -33,10 +34,10 @@ class SceneContext_t{
 
         bool use_gl_;
         std::string scene_name_;
-        OpenGLRenderer_t* opengl_renderer_;
-        ImgBufferOpenGL_t* opengl_imgbuffer_;
-        Camera_t* opengl_camera_;
-        Scene_t* scene_;
+        std::unique_ptr<OpenGLRenderer_t> opengl_renderer_;
+        ImgBufferOpenGL_t* opengl_imgbuffer_; // weak ptr
+        Camera_t* opengl_camera_; // weak ptr
+        std::unique_ptr<Scene_t> scene_;
 
         std::vector<std::string> camera_rendermode_;
         std::vector<unsigned int> camera_n_iter_;
