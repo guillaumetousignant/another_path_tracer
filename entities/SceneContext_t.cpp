@@ -6,7 +6,6 @@
 #include <tuple>
 #include <algorithm>
 #include <chrono>
-#include <vector>
 
 #include "Colours.h"
 #include "NextFilename.h"
@@ -96,15 +95,13 @@
 
 SceneContext_t::SceneContext_t() :
     use_gl_(false), scene_name_(""), opengl_renderer_(nullptr), opengl_imgbuffer_(nullptr), 
-    opengl_camera_(nullptr), scene_(nullptr), camera_rendermode_(nullptr), camera_n_iter_(nullptr), camera_write_interval_(nullptr), n_transform_matrices_(0), 
-    n_textures_(0), n_scatterers_(0), n_materials_(0), n_mesh_geometries_(0), n_objects_(0), 
-    n_directional_lights_(0), n_skyboxes_(0), n_imgbuffers_(0), n_cameras_(0), 
+    opengl_camera_(nullptr), scene_(nullptr), camera_rendermode_(nullptr), camera_n_iter_(nullptr), camera_write_interval_(nullptr), 
     index_transform_matrices_(0), index_textures_(0), index_scatterers_(0), index_materials_(0), 
     index_mesh_geometries_(0), index_objects_(0), index_directional_lights_(0), index_skyboxes_(0), 
-    index_imgbuffers_(0), index_cameras_(0), transform_matrices_(nullptr), textures_(nullptr), 
-    scatterers_(nullptr), materials_(nullptr), mesh_geometries_(nullptr), objects_(nullptr), 
-    directional_lights_(nullptr), skyboxes_(nullptr), imgbuffers_(nullptr), cameras_(nullptr), 
-    material_aggregates_(nullptr), meshes_(nullptr) 
+    index_imgbuffers_(0), index_cameras_(0), transform_matrices_(), textures_(), 
+    scatterers_(), materials_(), mesh_geometries_(), objects_(), 
+    directional_lights_(), skyboxes_(), imgbuffers_(), cameras_(), 
+    material_aggregates_(), meshes_() 
     {}
 
 SceneContext_t::~SceneContext_t() {
@@ -156,6 +153,17 @@ void SceneContext_t::readXML(const std::string &filename){
     tinyxml2::XMLElement* xml_cameras = xml_top->FirstChildElement("cameras");
     tinyxml2::XMLElement* xml_acceleration_structures = xml_top->FirstChildElement("acceleration_structures");
 
+    unsigned int n_transform_matrices;
+    unsigned int n_textures;
+    unsigned int n_scatterers;
+    unsigned int n_materials;
+    unsigned int n_mesh_geometries;
+    unsigned int n_objects;
+    unsigned int n_directional_lights;
+    unsigned int n_skyboxes;
+    unsigned int n_imgbuffers;
+    unsigned int n_cameras;
+
     std::list<unsigned int>** scatterers_medium_list = nullptr;
     unsigned int** materials_mix_list = nullptr;
     std::list<unsigned int>** materials_medium_list = nullptr;
@@ -164,25 +172,25 @@ void SceneContext_t::readXML(const std::string &filename){
     // Counts
     if (xml_transform_matrices != nullptr){
         for (tinyxml2::XMLElement* xml_transform_matrix = xml_transform_matrices->FirstChildElement("transform_matrix"); xml_transform_matrix; xml_transform_matrix = xml_transform_matrix->NextSiblingElement("transform_matrix")){
-            ++n_transform_matrices_;
+            ++n_transform_matrices;
         }
     }
 
     if (xml_textures != nullptr){
         for (tinyxml2::XMLElement* xml_texture = xml_textures->FirstChildElement("texture"); xml_texture; xml_texture = xml_texture->NextSiblingElement("texture")){
-            ++n_textures_;
+            ++n_textures;
         }
     }
 
     if (xml_scatterers != nullptr){
         for (tinyxml2::XMLElement* xml_scatterer = xml_scatterers->FirstChildElement("scatterer"); xml_scatterer; xml_scatterer = xml_scatterer->NextSiblingElement("scatterer")){
-            ++n_scatterers_;
+            ++n_scatterers;
             const char* char_transform_matrix = xml_scatterer->Attribute("transform_matrix");
             if (char_transform_matrix != nullptr){
                 std::string string_transform_matrix = char_transform_matrix;
                 std::transform(string_transform_matrix.begin(), string_transform_matrix.end(), string_transform_matrix.begin(), ::tolower);
                 if (string_transform_matrix == "nan"){
-                    ++n_transform_matrices_;
+                    ++n_transform_matrices;
                 }
             }
         }
@@ -190,13 +198,13 @@ void SceneContext_t::readXML(const std::string &filename){
 
     if (xml_materials != nullptr){
         for (tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
-            ++n_materials_;
+            ++n_materials;
             const char* char_transform_matrix = xml_material->Attribute("transform_matrix");
             if (char_transform_matrix != nullptr){
                 std::string string_transform_matrix = char_transform_matrix;
                 std::transform(string_transform_matrix.begin(), string_transform_matrix.end(), string_transform_matrix.begin(), ::tolower);
                 if (string_transform_matrix == "nan"){
-                    ++n_transform_matrices_;
+                    ++n_transform_matrices;
                 }
             }
         }
@@ -204,19 +212,19 @@ void SceneContext_t::readXML(const std::string &filename){
 
     if (xml_mesh_geometries != nullptr){
         for (tinyxml2::XMLElement* xml_mesh_geometry = xml_mesh_geometries->FirstChildElement("mesh_geometry"); xml_mesh_geometry; xml_mesh_geometry = xml_mesh_geometry->NextSiblingElement("mesh_geometry")){
-            ++n_mesh_geometries_;
+            ++n_mesh_geometries;
         }
     }
 
     if (xml_objects != nullptr){
         for (tinyxml2::XMLElement* xml_object = xml_objects->FirstChildElement("object"); xml_object; xml_object = xml_object->NextSiblingElement("object")){
-            ++n_objects_;
+            ++n_objects;
             const char* char_transform_matrix = xml_object->Attribute("transform_matrix");
             if (char_transform_matrix != nullptr){
                 std::string string_transform_matrix = char_transform_matrix;
                 std::transform(string_transform_matrix.begin(), string_transform_matrix.end(), string_transform_matrix.begin(), ::tolower);
                 if (string_transform_matrix == "nan"){
-                    ++n_transform_matrices_;
+                    ++n_transform_matrices;
                 }
             }
         }
@@ -224,13 +232,13 @@ void SceneContext_t::readXML(const std::string &filename){
 
     if (xml_directional_lights != nullptr){
         for (tinyxml2::XMLElement* xml_directional_light = xml_directional_lights->FirstChildElement("directional_light"); xml_directional_light; xml_directional_light = xml_directional_light->NextSiblingElement("directional_light")){
-            ++n_directional_lights_;
+            ++n_directional_lights;
             const char* char_transform_matrix = xml_directional_light->Attribute("transform_matrix");
             if (char_transform_matrix != nullptr){
                 std::string string_transform_matrix = char_transform_matrix;
                 std::transform(string_transform_matrix.begin(), string_transform_matrix.end(), string_transform_matrix.begin(), ::tolower);
                 if (string_transform_matrix == "nan"){
-                    ++n_transform_matrices_;
+                    ++n_transform_matrices;
                 }
             }
         }
@@ -238,13 +246,13 @@ void SceneContext_t::readXML(const std::string &filename){
 
     if (xml_skyboxes != nullptr){
         for (tinyxml2::XMLElement* xml_skybox = xml_skyboxes->FirstChildElement("skybox"); xml_skybox; xml_skybox = xml_skybox->NextSiblingElement("skybox")){
-            ++n_skyboxes_;
+            ++n_skyboxes;
             const char* char_transform_matrix = xml_skybox->Attribute("transform_matrix");
             if (char_transform_matrix != nullptr){
                 std::string string_transform_matrix = char_transform_matrix;
                 std::transform(string_transform_matrix.begin(), string_transform_matrix.end(), string_transform_matrix.begin(), ::tolower);
                 if (string_transform_matrix == "nan"){
-                    ++n_transform_matrices_;
+                    ++n_transform_matrices;
                 }
             }
         }
@@ -252,81 +260,67 @@ void SceneContext_t::readXML(const std::string &filename){
 
     if (xml_imgbuffers != nullptr){
         for (tinyxml2::XMLElement* xml_imgbuffer = xml_imgbuffers->FirstChildElement("imgbuffer"); xml_imgbuffer; xml_imgbuffer = xml_imgbuffer->NextSiblingElement("imgbuffer")){
-            ++n_imgbuffers_;
+            ++n_imgbuffers;
         }
     }
 
     if (xml_cameras != nullptr){
         for (tinyxml2::XMLElement* xml_camera = xml_cameras->FirstChildElement("camera"); xml_camera; xml_camera = xml_camera->NextSiblingElement("camera")){
-            ++n_cameras_;
+            ++n_cameras;
             const char* char_transform_matrix = xml_camera->Attribute("transform_matrix");
             if (char_transform_matrix != nullptr){
                 std::string string_transform_matrix = char_transform_matrix;
                 std::transform(string_transform_matrix.begin(), string_transform_matrix.end(), string_transform_matrix.begin(), ::tolower);
                 if (string_transform_matrix == "nan"){
-                    ++n_transform_matrices_;
+                    ++n_transform_matrices;
                 }
             }
         }
     }
 
     std::cout << std::endl;
-    std::cout << "Transform matrix count: " << n_transform_matrices_ << std::endl;
-    std::cout << "Texture count: " << n_textures_ << std::endl;
-    std::cout << "Scatterer count: " << n_scatterers_ << std::endl;
-    std::cout << "Material count: " << n_materials_ << std::endl;
-    std::cout << "Mesh count: " << n_mesh_geometries_ << std::endl;
-    std::cout << "Shape count: " << n_objects_ << std::endl;
-    std::cout << "Directional light count: " << n_directional_lights_ << std::endl;
-    std::cout << "Skybox count: " << n_skyboxes_ << std::endl;
-    std::cout << "Img buffers count: " << n_imgbuffers_ << std::endl;
-    std::cout << "Camera count: " << n_cameras_ << std::endl << std::endl;
+    std::cout << "Transform matrix count: " << n_transform_matrices << std::endl;
+    std::cout << "Texture count: " << n_textures << std::endl;
+    std::cout << "Scatterer count: " << n_scatterers << std::endl;
+    std::cout << "Material count: " << n_materials << std::endl;
+    std::cout << "Mesh count: " << n_mesh_geometries << std::endl;
+    std::cout << "Shape count: " << n_objects << std::endl;
+    std::cout << "Directional light count: " << n_directional_lights << std::endl;
+    std::cout << "Skybox count: " << n_skyboxes << std::endl;
+    std::cout << "Img buffers count: " << n_imgbuffers << std::endl;
+    std::cout << "Camera count: " << n_cameras << std::endl << std::endl;
 
     // Buffer creation
-    if (n_transform_matrices_){
-        transform_matrices_ = new TransformMatrix_t*[n_transform_matrices_];
-    }
-    if (n_textures_){
-        textures_ = new Texture_t*[n_textures_];
-    }
-    if (n_scatterers_){
-        scatterers_ = new ScatteringFunction_t*[n_scatterers_];
-        scatterers_medium_list = new std::list<unsigned int>*[n_scatterers_];
-        for (unsigned int i = 0; i < n_scatterers_; i++){
+    
+    transform_matrices_ = std::vector<TransformMatrix_t*>(n_transform_matrices);
+    textures_ =  std::vector<Texture_t*>(n_textures);
+    scatterers_ =  std::vector<ScatteringFunction_t*>(n_scatterers);
+    materials_ =  std::vector<Material_t*>(n_materials);
+    material_aggregates_ =  std::vector<MaterialMap_t*>(n_materials);
+    mesh_geometries_ =  std::vector<MeshGeometry_t*>(n_mesh_geometries);
+    objects_ =  std::vector<Shape_t*>(n_objects);
+    meshes_ =  std::vector<MeshTop_t*>(n_objects);
+    directional_lights_ =  std::vector<DirectionalLight_t*>(n_directional_lights);
+    skyboxes_ =  std::vector<Skybox_t*>(n_skyboxes);
+    imgbuffers_ =  std::vector<ImgBuffer_t*>(n_imgbuffers);
+    cameras_ =  std::vector<Camera_t*>(n_cameras);
+
+    if (n_scatterers){        
+        scatterers_medium_list = new std::list<unsigned int>*[n_scatterers];
+        for (unsigned int i = 0; i < n_scatterers; i++){
             scatterers_medium_list[i] = nullptr;
         }
     }
-    if (n_materials_){
-        materials_ = new Material_t*[n_materials_];
-        materials_mix_list = new unsigned int*[n_materials_];
-        materials_medium_list = new std::list<unsigned int>*[n_materials_];
-        materials_aggregate_list = new std::tuple<std::list<unsigned int>*, std::list<std::string>*>*[n_materials_];
-        material_aggregates_ = new MaterialMap_t*[n_materials_];
-        for (unsigned int i = 0; i < n_materials_; i++){
+    if (n_materials){        
+        materials_mix_list = new unsigned int*[n_materials];
+        materials_medium_list = new std::list<unsigned int>*[n_materials];
+        materials_aggregate_list = new std::tuple<std::list<unsigned int>*, std::list<std::string>*>*[n_materials];
+        for (unsigned int i = 0; i < n_materials; i++){
             materials_mix_list[i] = nullptr;
             materials_medium_list[i] = nullptr;
             materials_aggregate_list[i] = nullptr;
             material_aggregates_[i] = nullptr;
         }
-    }
-    if (n_mesh_geometries_){
-        mesh_geometries_ = new MeshGeometry_t*[n_mesh_geometries_];
-    }
-    if (n_objects_){
-        objects_ = new Shape_t*[n_objects_];
-        meshes_ = new MeshTop_t*[n_objects_];
-    }
-    if (n_directional_lights_){
-        directional_lights_ = new DirectionalLight_t*[n_directional_lights_];
-    }
-    if (n_skyboxes_){
-        skyboxes_ = new Skybox_t*[n_skyboxes_];
-    }
-    if (n_imgbuffers_){
-        imgbuffers_ = new ImgBuffer_t*[n_imgbuffers_];
-    }
-    if (n_cameras_){
-        cameras_ = new Camera_t*[n_cameras_];
     }
 
     std::cout << "Buffers allocated." << std::endl << std::endl;
@@ -370,7 +364,7 @@ void SceneContext_t::readXML(const std::string &filename){
 
     // Fixes 
     // Material mixes fix
-    for (unsigned int i = 0; i < n_materials_; i++){
+    for (unsigned int i = 0; i < materials_.size(); i++){
         if (materials_mix_list[i] != nullptr){
             MaterialMix_t* material_mix = dynamic_cast<MaterialMix_t*>(materials_[i]); // dynamic caaaast :(
             if (material_mix == nullptr){
@@ -383,7 +377,7 @@ void SceneContext_t::readXML(const std::string &filename){
     }
 
     if (materials_mix_list != nullptr){
-        for (unsigned int i = 0; i < n_materials_; i++){
+        for (unsigned int i = 0; i < materials_.size(); i++){
             if (materials_mix_list[i] != nullptr){
                 delete [] materials_mix_list[i];
             }
@@ -393,7 +387,7 @@ void SceneContext_t::readXML(const std::string &filename){
     }
 
     // Materials medium list fix
-    for (unsigned int i = 0; i < n_materials_; i++){
+    for (unsigned int i = 0; i < materials_.size(); i++){
         if (materials_medium_list[i] != nullptr) {
             PortalTop_t* portal = dynamic_cast<PortalTop_t*>(materials_[i]);
             if (portal == nullptr){
@@ -412,7 +406,7 @@ void SceneContext_t::readXML(const std::string &filename){
     }
 
     if (materials_medium_list != nullptr){
-        for (unsigned int i = 0; i < n_materials_; i++){
+        for (unsigned int i = 0; i < materials_.size(); i++){
             if (materials_medium_list[i] != nullptr){
                 delete materials_medium_list[i];
             }
@@ -422,7 +416,7 @@ void SceneContext_t::readXML(const std::string &filename){
     }
 
     // Scatterers medium list fix
-    for (unsigned int i = 0; i < n_scatterers_; i++){
+    for (unsigned int i = 0; i < scatterers_.size(); i++){
         if (scatterers_medium_list[i] != nullptr) {
             PortalScattererTop_t* portal_scatterer = dynamic_cast<PortalScattererTop_t*>(scatterers_[i]);
             if (portal_scatterer == nullptr){
@@ -441,7 +435,7 @@ void SceneContext_t::readXML(const std::string &filename){
     }
 
     if (scatterers_medium_list != nullptr){
-        for (unsigned int i = 0; i < n_scatterers_; i++){
+        for (unsigned int i = 0; i < scatterers_.size(); i++){
             if (scatterers_medium_list[i] != nullptr){
                 delete scatterers_medium_list[i];
             }
@@ -451,7 +445,7 @@ void SceneContext_t::readXML(const std::string &filename){
     }
 
     // Material aggregates fix
-    for (unsigned int i = 0; i < n_materials_; i++){
+    for (unsigned int i = 0; i < materials_.size(); i++){
         if (materials_aggregate_list[i] != nullptr) {
             unsigned int n = std::get<0>(*materials_aggregate_list[i])->size();
             std::vector<std::string> names(n);
@@ -474,7 +468,7 @@ void SceneContext_t::readXML(const std::string &filename){
     }
 
     if (materials_aggregate_list != nullptr){
-        for (unsigned int i = 0; i < n_materials_; i++){
+        for (unsigned int i = 0; i < materials_.size(); i++){
             if (materials_aggregate_list[i] != nullptr){
                 delete std::get<0>(*materials_aggregate_list[i]);
                 delete std::get<1>(*materials_aggregate_list[i]);
@@ -631,7 +625,7 @@ void SceneContext_t::readXML(const std::string &filename){
     const char* object_list = xml_top->Attribute("object_list");
     std::cout << "Scene created." << std::endl;
     
-    if (n_objects_ > 0){
+    if (objects_.size() > 0){
         Shape_t** shapes = nullptr;
         MeshTop_t** meshes = nullptr;
         unsigned int n_shapes = 0;
@@ -656,7 +650,7 @@ void SceneContext_t::readXML(const std::string &filename){
     std::cout << std::endl << "Updating scene..." << std::endl;
     auto t_start = std::chrono::high_resolution_clock::now();
     scene_->update();
-    for (unsigned int i = 0; i < n_cameras_; i++){
+    for (unsigned int i = 0; i < cameras_.size(); i++){
         cameras_[i]->update();
     }
     auto t_end = std::chrono::high_resolution_clock::now();
@@ -803,7 +797,7 @@ void SceneContext_t::readXML(const std::string &filename){
             ++index;
         }
     }
-    for (unsigned int i = 0; i < n_cameras_; i++){
+    for (unsigned int i = 0; i < cameras_.size(); i++){
         cameras_[i]->update();
     }
 
@@ -816,11 +810,11 @@ void SceneContext_t::readXML(const std::string &filename){
             std::cout << "OpenGL initialised." << std::endl;
         }
 
-        camera_rendermode_ = new std::string[n_cameras_];
-        camera_n_iter_ = new unsigned int[n_cameras_];
-        camera_write_interval_ = new unsigned int[n_cameras_];
+        camera_rendermode_ = new std::string[cameras_.size()];
+        camera_n_iter_ = new unsigned int[cameras_.size()];
+        camera_write_interval_ = new unsigned int[cameras_.size()];
 
-        for (unsigned int i = 0; i < n_cameras_; i++){
+        for (unsigned int i = 0; i < cameras_.size(); i++){
             camera_rendermode_[i] = "";
             camera_n_iter_[i] = 0;
             camera_write_interval_[i] = 0;
@@ -947,7 +941,7 @@ void SceneContext_t::render(){
         }
     }
     else {
-        for (unsigned int i = 0; i < n_cameras_; i++){
+        for (unsigned int i = 0; i < cameras_.size(); i++){
             std::string render_mode = camera_rendermode_[i];
             std::transform(render_mode.begin(), render_mode.end(), render_mode.begin(), ::tolower);
 
@@ -995,129 +989,74 @@ void SceneContext_t::reset(){
     opengl_camera_ = nullptr;
 
     // Deleting buffers
-    if (transform_matrices_ != nullptr){
-        for (unsigned int i = 0; i < n_transform_matrices_; i++){
-            if (transform_matrices_[i] != nullptr){
-                delete transform_matrices_[i];
-            }
+    for (unsigned int i = 0; i < transform_matrices_.size(); i++){
+        if (transform_matrices_[i] != nullptr){
+            delete transform_matrices_[i];
         }
-        delete [] transform_matrices_;
-        transform_matrices_ = nullptr;
     }
-    n_transform_matrices_ = 0;
 
-    if (textures_ != nullptr){
-        for (unsigned int i = 0; i < n_textures_; i++){
-            if (textures_[i] != nullptr){
-                delete textures_[i];
-            }
+    for (unsigned int i = 0; i < textures_.size(); i++){
+        if (textures_[i] != nullptr){
+            delete textures_[i];
         }
-        delete [] textures_;
-        textures_ = nullptr;
     }
-    n_textures_ = 0;
     
-    if (scatterers_ != nullptr){
-        for (unsigned int i = 0; i < n_scatterers_; i++){
-            if (scatterers_[i] != nullptr){
-                delete scatterers_[i];
-            }
+    for (unsigned int i = 0; i < scatterers_.size(); i++){
+        if (scatterers_[i] != nullptr){
+            delete scatterers_[i];
         }
-        delete [] scatterers_;
-        scatterers_ = nullptr;
     }
-    n_scatterers_ = 0;
 
-    if (materials_ != nullptr){
-        for (unsigned int i = 0; i < n_materials_; i++){
-            if (materials_[i] != nullptr){
-                delete materials_[i];
-            }
+    for (unsigned int i = 0; i < materials_.size(); i++){
+        if (materials_[i] != nullptr){
+            delete materials_[i];
         }
-        delete [] materials_;
-        materials_ = nullptr;
     }
-    if (material_aggregates_ != nullptr){
-        for (unsigned int i = 0; i < n_materials_; i++){
-            if (material_aggregates_[i] != nullptr){
-                delete material_aggregates_[i];
-            }
+    
+    for (unsigned int i = 0; i < materials_.size(); i++){
+        if (material_aggregates_[i] != nullptr){
+            delete material_aggregates_[i];
         }
-        delete [] material_aggregates_;
-        material_aggregates_ = nullptr;
     }
-    n_materials_ = 0;
-
-    if (mesh_geometries_ != nullptr){
-        for (unsigned int i = 0; i < n_mesh_geometries_; i++){
-            if (mesh_geometries_[i] != nullptr){
-                delete mesh_geometries_[i];
-            }
+    
+    for (unsigned int i = 0; i < mesh_geometries_.size(); i++){
+        if (mesh_geometries_[i] != nullptr){
+            delete mesh_geometries_[i];
         }
-        delete [] mesh_geometries_;
-        mesh_geometries_ = nullptr;
     }
-    n_mesh_geometries_ = 0;
-
-    if (objects_ != nullptr){
-        for (unsigned int i = 0; i < n_objects_; i++){
-            if (objects_[i] != nullptr){
-                delete objects_[i];
-            }
-            if (meshes_[i] != nullptr){
-                delete meshes_[i];
-            }
+    
+    for (unsigned int i = 0; i < objects_.size(); i++){
+        if (objects_[i] != nullptr){
+            delete objects_[i];
         }
-        delete [] objects_;
-        delete [] meshes_;
-        objects_ = nullptr;
-        meshes_ = nullptr;
-    }
-    n_objects_ = 0;
-
-    if (directional_lights_ != nullptr){
-        for (unsigned int i = 0; i < n_directional_lights_; i++){
-            if (directional_lights_[i] != nullptr){
-                delete directional_lights_[i];
-            }
+        if (meshes_[i] != nullptr){
+            delete meshes_[i];
         }
-        delete [] directional_lights_;
-        directional_lights_ = nullptr;
     }
-    n_directional_lights_ = 0;
-
-    if (skyboxes_ != nullptr){
-        for (unsigned int i = 0; i < n_skyboxes_; i++){
-            if (skyboxes_[i] != nullptr){
-                delete skyboxes_[i];
-            }
+    
+    for (unsigned int i = 0; i < directional_lights_.size(); i++){
+        if (directional_lights_[i] != nullptr){
+            delete directional_lights_[i];
         }
-        delete [] skyboxes_;
-        skyboxes_ = nullptr;
     }
-    n_skyboxes_ = 0;
-
-    if (imgbuffers_ != nullptr){
-        for (unsigned int i = 0; i < n_imgbuffers_; i++){
-            if (imgbuffers_[i] != nullptr){
-                delete imgbuffers_[i];
-            }
+    
+    for (unsigned int i = 0; i < skyboxes_.size(); i++){
+        if (skyboxes_[i] != nullptr){
+            delete skyboxes_[i];
         }
-        delete [] imgbuffers_;
-        imgbuffers_ = nullptr;
     }
-    n_imgbuffers_ = 0;
-
-    if (cameras_ != nullptr){
-        for (unsigned int i = 0; i < n_cameras_; i++){
-            if (cameras_[i] != nullptr){
-                delete cameras_[i];
-            }
+    
+    for (unsigned int i = 0; i < imgbuffers_.size(); i++){
+        if (imgbuffers_[i] != nullptr){
+            delete imgbuffers_[i];
         }
-        delete [] cameras_;
-        cameras_ = nullptr;
     }
-    n_cameras_ = 0;
+    
+    for (unsigned int i = 0; i < cameras_.size(); i++){
+        if (cameras_[i] != nullptr){
+            delete cameras_[i];
+        }
+    }
 
     if (opengl_renderer_ != nullptr){
         delete opengl_renderer_;
@@ -2638,7 +2577,7 @@ void SceneContext_t::get_objects(Shape_t** &shapes, unsigned int &n_shapes, Mesh
     n_shapes = 0;
     n_meshes = 0;
 
-    for (unsigned int i = 0; i < n_objects_; ++i){
+    for (unsigned int i = 0; i < objects_.size(); ++i){
         if (objects_[i] != nullptr){
             ++n_shapes;
         }
@@ -2652,7 +2591,7 @@ void SceneContext_t::get_objects(Shape_t** &shapes, unsigned int &n_shapes, Mesh
     unsigned int index_shapes = 0;
     unsigned int index_meshes = 0;
 
-    for (unsigned int i = 0; i < n_objects_; ++i){
+    for (unsigned int i = 0; i < objects_.size(); ++i){
         if (objects_[i] != nullptr){
             shapes[index_shapes] = objects_[i];
             ++index_shapes;

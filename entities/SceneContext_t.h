@@ -4,6 +4,7 @@
 #include <string>
 #include <list>
 #include <tuple>
+#include <vector>
 #include "tinyxml2.h"
 #include "Vec3f.h"
 
@@ -41,17 +42,6 @@ class SceneContext_t{
         unsigned int* camera_n_iter_;
         unsigned int* camera_write_interval_;
 
-        unsigned int n_transform_matrices_;
-        unsigned int n_textures_;
-        unsigned int n_scatterers_;
-        unsigned int n_materials_;
-        unsigned int n_mesh_geometries_;
-        unsigned int n_objects_;
-        unsigned int n_directional_lights_;
-        unsigned int n_skyboxes_;
-        unsigned int n_imgbuffers_;
-        unsigned int n_cameras_;
-
         unsigned int index_transform_matrices_;
         unsigned int index_textures_;
         unsigned int index_scatterers_;
@@ -63,18 +53,18 @@ class SceneContext_t{
         unsigned int index_imgbuffers_;
         unsigned int index_cameras_;
         
-        TransformMatrix_t** transform_matrices_;
-        Texture_t** textures_;
-        ScatteringFunction_t** scatterers_;
-        Material_t** materials_;
-        MeshGeometry_t** mesh_geometries_;
-        Shape_t** objects_;
-        DirectionalLight_t** directional_lights_;
-        Skybox_t** skyboxes_;
-        ImgBuffer_t** imgbuffers_;
-        Camera_t** cameras_;
-        MaterialMap_t** material_aggregates_;
-        MeshTop_t** meshes_;
+        std::vector<TransformMatrix_t*> transform_matrices_;
+        std::vector<Texture_t*> textures_;
+        std::vector<ScatteringFunction_t*> scatterers_;
+        std::vector<Material_t*> materials_;
+        std::vector<MeshGeometry_t*> mesh_geometries_;
+        std::vector<Shape_t*> objects_;
+        std::vector<DirectionalLight_t*> directional_lights_;
+        std::vector<Skybox_t*> skyboxes_;
+        std::vector<ImgBuffer_t*> imgbuffers_;
+        std::vector<Camera_t*> cameras_;
+        std::vector<MaterialMap_t*> material_aggregates_;
+        std::vector<MeshTop_t*> meshes_;
 
         void readXML(const std::string &filename);
         void render();
