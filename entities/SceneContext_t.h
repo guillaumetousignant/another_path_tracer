@@ -62,8 +62,8 @@ class SceneContext_t{
         std::vector<Shape_t*> objects_;
         std::vector<std::unique_ptr<DirectionalLight_t>> directional_lights_;
         std::vector<std::unique_ptr<Skybox_t>> skyboxes_;
-        std::vector<ImgBuffer_t*> imgbuffers_;
-        std::vector<Camera_t*> cameras_;
+        std::vector<std::unique_ptr<ImgBuffer_t>> imgbuffers_;
+        std::vector<std::unique_ptr<Camera_t>> cameras_;
         std::vector<std::unique_ptr<MaterialMap_t>> material_aggregates_;
         std::vector<MeshTop_t*> meshes_;
 
@@ -81,8 +81,8 @@ class SceneContext_t{
         Shape_t* create_object(const tinyxml2::XMLElement* xml_object, MeshTop_t* &mesh, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_mesh_geometries);
         std::unique_ptr<DirectionalLight_t> create_directional_light(const tinyxml2::XMLElement* xml_directional_light, const tinyxml2::XMLElement* xml_transform_matrices);
         std::unique_ptr<Skybox_t> create_skybox(const tinyxml2::XMLElement* xml_skybox, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_directional_lights);
-        ImgBuffer_t* create_imgbuffer(const tinyxml2::XMLElement* xml_imgbuffer);
-        Camera_t* create_camera(const tinyxml2::XMLElement* xml_camera, const std::string &next_filename, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_imgbuffers, const tinyxml2::XMLElement* xml_skyboxes);
+        std::unique_ptr<ImgBuffer_t> create_imgbuffer(const tinyxml2::XMLElement* xml_imgbuffer);
+        std::unique_ptr<Camera_t> create_camera(const tinyxml2::XMLElement* xml_camera, const std::string &next_filename, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_imgbuffers, const tinyxml2::XMLElement* xml_skyboxes);
         void create_acceleration_structure(const tinyxml2::XMLElement* xml_acceleration_structure);
 
         TransformMatrix_t* get_transform_matrix(std::string transform_matrix, const tinyxml2::XMLElement* xml_transform_matrices);
