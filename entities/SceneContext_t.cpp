@@ -2451,7 +2451,7 @@ void SceneContext_t::get_objects(std::string objects_string, std::vector<Shape_t
     }
 
     for (auto object_list_item : objects_list){
-        if (object_list_item){
+        if (objects_[object_list_item]){
             ++n_shapes;
         }
         else {
