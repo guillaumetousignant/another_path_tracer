@@ -1334,52 +1334,52 @@ std::unique_ptr<Shape_t> SceneContext_t::create_object(const tinyxml2::XMLElemen
     else if (type == "triangle"){
         const char* attributes[] = {"material", "transform_matrix", "points", "normals", "texture_coordinates"};
         require_attributes(xml_object, attributes, 5);
-        Vec3f* points = get_points(xml_object->Attribute("points"));
-        Vec3f* normals = get_points(xml_object->Attribute("normals"));
-        double** texture_coordinates = get_texture_coordinates(xml_object->Attribute("texture_coordinates"));
+        std::vector<Vec3f> points = get_points(xml_object->Attribute("points"));
+        std::vector<Vec3f> normals = get_points(xml_object->Attribute("normals"));
+        std::vector<std::vector<double>> texture_coordinates = get_texture_coordinates(xml_object->Attribute("texture_coordinates"));
 
-        std::unique_ptr<Shape_t> triangle = std::unique_ptr<Shape_t>(
-                    new Triangle_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), points, normals, texture_coordinates));
+        Vec3f* points_ptr = points.empty() ? nullptr : points.data();
+        Vec3f* normals_ptr = normals.empty() ? nullptr : normals.data();
 
-        if (points != nullptr){
-            delete [] points;
+        double** texture_coordinates_ptr;
+        double* texture_coordinates_data[3];
+        if (texture_coordinates.empty()){
+            texture_coordinates_ptr = nullptr;
         }
-        if (normals != nullptr){
-            delete [] normals;
-        }
-        if (texture_coordinates != nullptr){
-            delete [] texture_coordinates[0];
-            delete [] texture_coordinates[1];
-            delete [] texture_coordinates[2];
-            delete [] texture_coordinates;
+        else {
+            texture_coordinates_data[0] = texture_coordinates[0].data();
+            texture_coordinates_data[1] = texture_coordinates[1].data();
+            texture_coordinates_data[2] = texture_coordinates[2].data();
+            texture_coordinates_ptr = &(texture_coordinates_data[0]);
         }
 
-        return triangle;
+        return std::unique_ptr<Shape_t>(
+                    new Triangle_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), points_ptr, normals_ptr, texture_coordinates_ptr));
     }
     else if (type == "triangle_motionblur"){
         const char* attributes[] = {"material", "transform_matrix", "points", "normals", "texture_coordinates"};
         require_attributes(xml_object, attributes, 5);
-        Vec3f* points = get_points(xml_object->Attribute("points"));
-        Vec3f* normals = get_points(xml_object->Attribute("normals"));
-        double** texture_coordinates = get_texture_coordinates(xml_object->Attribute("texture_coordinates"));
+        std::vector<Vec3f> points = get_points(xml_object->Attribute("points"));
+        std::vector<Vec3f> normals = get_points(xml_object->Attribute("normals"));
+        std::vector<std::vector<double>> texture_coordinates = get_texture_coordinates(xml_object->Attribute("texture_coordinates"));
 
-        std::unique_ptr<Shape_t> triangle = std::unique_ptr<Shape_t>(
-                    new TriangleMotionblur_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), points, normals, texture_coordinates));
+        Vec3f* points_ptr = points.empty() ? nullptr : points.data();
+        Vec3f* normals_ptr = normals.empty() ? nullptr : normals.data();
 
-        if (points != nullptr){
-            delete [] points;
+        double** texture_coordinates_ptr;
+        double* texture_coordinates_data[3];
+        if (texture_coordinates.empty()){
+            texture_coordinates_ptr = nullptr;
         }
-        if (normals != nullptr){
-            delete [] normals;
-        }
-        if (texture_coordinates != nullptr){
-            delete [] texture_coordinates[0];
-            delete [] texture_coordinates[1];
-            delete [] texture_coordinates[2];
-            delete [] texture_coordinates;
+        else {
+            texture_coordinates_data[0] = texture_coordinates[0].data();
+            texture_coordinates_data[1] = texture_coordinates[1].data();
+            texture_coordinates_data[2] = texture_coordinates[2].data();
+            texture_coordinates_ptr = &(texture_coordinates_data[0]);
         }
 
-        return triangle;
+        return std::unique_ptr<Shape_t>(
+                    new TriangleMotionblur_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), points_ptr, normals_ptr, texture_coordinates_ptr));
     }
     else if (type == "triangle_mesh"){
         const char* attributes[] = {"material", "transform_matrix", "mesh_geometry", "index"};
@@ -1444,16 +1444,14 @@ std::unique_ptr<Skybox_t> SceneContext_t::create_skybox(const tinyxml2::XMLEleme
     else if (type == "skybox_flat_sun"){
         const char* attributes[] = {"colour", "lights"};
         require_attributes(xml_skybox, attributes, 2);
-        DirectionalLight_t** lights = nullptr;
-        unsigned int n = 0;
+        std::vector<DirectionalLight_t*> lights;
 
-        get_lights(xml_skybox->Attribute("lights"), lights, n, xml_directional_lights);
+        get_lights(xml_skybox->Attribute("lights"), lights, xml_directional_lights);
 
-        std::unique_ptr<Skybox_t> skybox = std::unique_ptr<Skybox_t>(
-                    new SkyboxFlatSun_t(get_colour(xml_skybox->Attribute("colour")), lights, n));
-        
-        delete [] lights;        
-        return skybox;
+        DirectionalLight_t** lights_ptr = lights.empty() ? nullptr : lights.data();
+               
+        return std::unique_ptr<Skybox_t>(
+                    new SkyboxFlatSun_t(get_colour(xml_skybox->Attribute("colour")), lights_ptr, lights.size()));
     }
     else if (type == "skybox_texture"){
         const char* attributes[] = {"texture"};
@@ -2248,7 +2246,7 @@ Material_t* SceneContext_t::get_material(std::string material, const tinyxml2::X
     exit(41);
 }
 
-void SceneContext_t::get_lights(std::string lights_string, DirectionalLight_t** &lights, unsigned int &n, const tinyxml2::XMLElement* xml_directional_lights) const {
+void SceneContext_t::get_lights(std::string lights_string, std::vector<DirectionalLight_t*> &lights, const tinyxml2::XMLElement* xml_directional_lights) const {
     std::list<DirectionalLight_t*> lights_list = std::list<DirectionalLight_t*>();
     std::string delimiter = ", ";
     size_t pos = 0;
@@ -2320,15 +2318,12 @@ void SceneContext_t::get_lights(std::string lights_string, DirectionalLight_t** 
         }
     }
 
-    if (lights_list.size() > 0){
-        n = lights_list.size();
-        lights = new DirectionalLight_t*[n];
-        unsigned int index = 0;
+    lights = std::vector<DirectionalLight_t*>(lights_list.size());
+    unsigned int index = 0;
 
-        for (auto it = lights_list.begin(); it != lights_list.end(); ++it){
-            lights[index] = *it;
-            ++index;
-        }
+    for (auto it = lights_list.begin(); it != lights_list.end(); ++it){
+        lights[index] = *it;
+        ++index;
     }
 }
 
@@ -2546,12 +2541,12 @@ Vec3f get_colour(std::string colour) {
 	}
 }
 
-Vec3f* get_points(std::string points_string) {
-    Vec3f* points = nullptr;
+std::vector<Vec3f> get_points(std::string points_string) {
+    std::vector<Vec3f> points;
     std::transform(points_string.begin(), points_string.end(), points_string.begin(), ::tolower);
 
     if (points_string != "nan"){
-        points = new Vec3f[3];
+        points = std::vector<Vec3f>(3);
         double values[9];
         unsigned int count = 0;
         std::stringstream ss(points_string);
@@ -2582,16 +2577,16 @@ Vec3f* get_points(std::string points_string) {
     return points;
 }
 
-double** get_texture_coordinates(std::string texture_coordinates_string) {
-    double** texture_coordinates = nullptr;
+std::vector<std::vector<double>> get_texture_coordinates(std::string texture_coordinates_string) {
+    std::vector<std::vector<double>> texture_coordinates;
 
     std::transform(texture_coordinates_string.begin(), texture_coordinates_string.end(), texture_coordinates_string.begin(), ::tolower);
 
     if (texture_coordinates_string != "nan"){
-        texture_coordinates = new double*[3];
-        texture_coordinates[0] = new double[2];
-        texture_coordinates[1] = new double[2];
-        texture_coordinates[2] = new double[2];
+        texture_coordinates = std::vector<std::vector<double>>(3);
+        texture_coordinates[0] =std::vector<double>(2);
+        texture_coordinates[1] = std::vector<double>(2);
+        texture_coordinates[2] = std::vector<double>(2);
         double values[6];
         unsigned int count = 0;
         std::stringstream ss(texture_coordinates_string);

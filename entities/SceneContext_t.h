@@ -94,7 +94,7 @@ class SceneContext_t{
         MeshGeometry_t* get_mesh_geometry(std::string mesh_geometry, const tinyxml2::XMLElement* xml_mesh_geometries) const;
         unsigned int get_material_index(std::string material, const tinyxml2::XMLElement* xml_materials) const;
         Material_t* get_material(std::string material, const tinyxml2::XMLElement* xml_materials) const;
-        void get_lights(std::string lights_string, DirectionalLight_t** &lights, unsigned int &n, const tinyxml2::XMLElement* xml_directional_lights) const;
+        void get_lights(std::string lights_string, std::vector<DirectionalLight_t*> &lights, const tinyxml2::XMLElement* xml_directional_lights) const;
         ImgBuffer_t* get_imgbuffer(std::string imgbuffer, const tinyxml2::XMLElement* xml_imgbuffers) const;
         Skybox_t* get_skybox(std::string skybox, const tinyxml2::XMLElement* xml_skyboxes) const;
         void get_objects(std::string objects_string, std::vector<Shape_t*> &shapes, std::vector<MeshTop_t*> &meshes, const tinyxml2::XMLElement* xml_objects) const;
@@ -102,8 +102,8 @@ class SceneContext_t{
 };
 
 Vec3f get_colour(std::string colour); // copies string :(
-Vec3f* get_points(std::string points_string);
-double** get_texture_coordinates(std::string texture_coordinates_string);    
+std::vector<Vec3f> get_points(std::string points_string);
+std::vector<std::vector<double>> get_texture_coordinates(std::string texture_coordinates_string);    
 std::unique_ptr<std::list<std::string>> get_medium_names(std::string string_medium_names);
 void get_xy(const std::string &string_value, double (&value)[2]);
 void get_xy(const std::string &string_value, unsigned int (&value)[2]);
