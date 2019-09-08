@@ -11,7 +11,7 @@ class Texture_t{
 
         unsigned int size_x_;
         unsigned int size_y_;
-        Vec3f** img_;
+        Vec3f* img_;
 
         Vec3f get(const double (&xy)[2]) const;
         Vec3f get_nn(const double (&xy)[2]) const;

@@ -8,29 +8,20 @@ Texture_t::Texture_t(const std::string &filename){
     size_x_ = image.width();
     size_y_ = image.height();
 
-    img_ = new Vec3f*[size_y_];
-
-    for (unsigned int j = 0; j < size_y_; ++j){
-        img_[j] = new Vec3f[size_x_];
-    }
+    img_ = new Vec3f[size_y_*size_x_];
 
     const unsigned int n = size_x_ * size_y_;
 
     for (unsigned int j = 0; j < size_y_; ++j){
         for (unsigned int i = 0; i < size_x_; ++i){
             //img_[j][i] = Vec3f(image(i, j, 0), image(i, j, 1), image(i, j, 2));
-            img_[size_y_ - j - 1][i] = Vec3f(image(i, j, 0, 0, n, n)/255.0, image(i, j, 0, 1, n, n)/255.0, image(i, j, 0, 2, n, n)/255.0);
+            img_[(size_y_ - j - 1)*size_y_ + i] = Vec3f(image(i, j, 0, 0, n, n)/255.0, image(i, j, 0, 1, n, n)/255.0, image(i, j, 0, 2, n, n)/255.0);
         }
     }
 }
 
 Texture_t::~Texture_t(){
     if (img_ != nullptr){
-        for (unsigned int j = 0; j < size_y_; ++j){
-            if (img_[j] != nullptr){
-                delete [] img_[j];
-            }
-        }
         delete [] img_;
     }
 }
@@ -47,12 +38,12 @@ Vec3f Texture_t::get(const double (&xy)[2]) const {
     const int ylo = y;      // floor
     const int yhi = y + 1.0;// ceil
 
-    return  img_[ylo][xlo] * (1.0 - xd) * (1.0 - yd) +
-            img_[ylo][xhi] * xd * (1.0 - yd) + 
-            img_[yhi][xlo] * (1.0 - xd) * yd +
-            img_[ yhi][xhi] * xd * yd;
+    return  img_[ylo*size_y_ + xlo] * (1.0 - xd) * (1.0 - yd) +
+            img_[ylo*size_y_ + xhi] * xd * (1.0 - yd) + 
+            img_[yhi*size_y_ + xlo] * (1.0 - xd) * yd +
+            img_[ yhi*size_y_ + xhi] * xd * yd;
 }
 
 Vec3f Texture_t::get_nn(const double (&xy)[2]) const {
-    return img_[std::lround((size_x_ - 1) * xy[0])][std::lround((size_y_ - 1) * xy[1])];
+    return img_[std::lround((size_x_ - 1) * xy[0])* size_y_ + std::lround((size_y_ - 1) * xy[1])];
 }
