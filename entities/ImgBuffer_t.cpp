@@ -35,7 +35,7 @@ void ImgBuffer_t::update() {
 
 void ImgBuffer_t::update(const Vec3f &colour, unsigned int pos_x, unsigned int pos_y) {
     //img_[pos_y][pos_x] = img_[pos_y][pos_x] * (1.0 - 1.0/(double)updates_) + colour/(double)updates_;
-    img_[pos_y*size_y_ + pos_x] += colour;
+    img_[pos_y*size_x_ + pos_x] += colour;
 }
 
 void ImgBuffer_t::set(const Vec3f* img, unsigned int size_x, unsigned int size_y){
@@ -46,7 +46,7 @@ void ImgBuffer_t::set(const Vec3f* img, unsigned int size_x, unsigned int size_y
 }
 
 void ImgBuffer_t::set(const Vec3f &colour, unsigned int pos_x, unsigned int pos_y){
-    img_[pos_y*size_y_ + pos_x] = colour;
+    img_[pos_y*size_x_ + pos_x] = colour;
 }
 
 void ImgBuffer_t::write(std::string &filename, double gammaind /* = 1.0 */) const {
@@ -56,7 +56,7 @@ void ImgBuffer_t::write(std::string &filename, double gammaind /* = 1.0 */) cons
 
     for (unsigned int j = 0; j < size_y_; ++j){
         for (unsigned int i = 0; i < size_x_; ++i){
-            Vec3f colour = img_[j*size_y_ + i]*update_mult;
+            Vec3f colour = img_[j*size_x_ + i]*update_mult;
             colour.clamp(0.0, 1.0).pow_inplace(gammaind);
             colour *= 65535.0;
             image(i, j, 0, 0, n, n) = std::lround(colour[0]);

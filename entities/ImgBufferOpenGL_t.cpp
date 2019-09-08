@@ -71,10 +71,10 @@ void ImgBufferOpenGL_t::update() {
 
 void ImgBufferOpenGL_t::update(const Vec3f &colour, unsigned int pos_x, unsigned int pos_y) {
     //img_[pos_y][pos_x] = img_[pos_y][pos_x] * (1.0 - 1.0/(double)updates_) + colour/(double)updates_;
-    img_[pos_y*size_y_ + pos_x] += colour;
-    img_gl_[((size_y_-1-pos_y)*size_x_ + pos_x)*3] = std::lround(std::max(std::min(1.0, img_[pos_y*size_y_ + pos_x][0]/updates_), 0.0) * 255.0);
-    img_gl_[((size_y_-1-pos_y)*size_x_ + pos_x)*3+1] = std::lround(std::max(std::min(1.0, img_[pos_y*size_y_ + pos_x][1]/updates_), 0.0) * 255.0);
-    img_gl_[((size_y_-1-pos_y)*size_x_ + pos_x)*3+2] = std::lround(std::max(std::min(1.0, img_[pos_y*size_y_ + pos_x][2]/updates_), 0.0) * 255.0);
+    img_[pos_y*size_x_ + pos_x] += colour;
+    img_gl_[((size_y_-1-pos_y)*size_x_ + pos_x)*3] = std::lround(std::max(std::min(1.0, img_[pos_y*size_x_ + pos_x][0]/updates_), 0.0) * 255.0);
+    img_gl_[((size_y_-1-pos_y)*size_x_ + pos_x)*3+1] = std::lround(std::max(std::min(1.0, img_[pos_y*size_x_ + pos_x][1]/updates_), 0.0) * 255.0);
+    img_gl_[((size_y_-1-pos_y)*size_x_ + pos_x)*3+2] = std::lround(std::max(std::min(1.0, img_[pos_y*size_x_ + pos_x][2]/updates_), 0.0) * 255.0);
 }
 
 void ImgBufferOpenGL_t::set(const Vec3f* img, unsigned int size_x, unsigned int size_y){
@@ -85,8 +85,8 @@ void ImgBufferOpenGL_t::set(const Vec3f* img, unsigned int size_x, unsigned int 
 }
 
 void ImgBufferOpenGL_t::set(const Vec3f &colour, unsigned int pos_x, unsigned int pos_y){
-    img_[pos_y*size_y_ + pos_x] = colour;
-    img_gl_[((size_y_-1-pos_y)*size_x_ + pos_x)*3] = std::lround(std::max(std::min(1.0, img_[pos_y*size_y_ + pos_x][0]/updates_), 0.0) * 255.0 );
-    img_gl_[((size_y_-1-pos_y)*size_x_ + pos_x)*3+1] = std::lround(std::max(std::min(1.0, img_[pos_y*size_y_ + pos_x][1]/updates_), 0.0) * 255.0 );
-    img_gl_[((size_y_-1-pos_y)*size_x_ + pos_x)*3+2] = std::lround(std::max(std::min(1.0, img_[pos_y*size_y_ + pos_x][2]/updates_), 0.0) * 255.0 );
+    img_[pos_y*size_x_ + pos_x] = colour;
+    img_gl_[((size_y_-1-pos_y)*size_x_ + pos_x)*3] = std::lround(std::max(std::min(1.0, img_[pos_y*size_x_ + pos_x][0]/updates_), 0.0) * 255.0 );
+    img_gl_[((size_y_-1-pos_y)*size_x_ + pos_x)*3+1] = std::lround(std::max(std::min(1.0, img_[pos_y*size_x_ + pos_x][1]/updates_), 0.0) * 255.0 );
+    img_gl_[((size_y_-1-pos_y)*size_x_ + pos_x)*3+2] = std::lround(std::max(std::min(1.0, img_[pos_y*size_x_ + pos_x][2]/updates_), 0.0) * 255.0 );
 }
