@@ -18,7 +18,7 @@ int main(int argc, char **argv){
         filename = argv[1];
     }
 
-    SceneContext_t scene_context = SceneContext_t();
+    SceneContext_t scene_context;
 
     scene_context.readXML(filename);
     scene_context.render();
