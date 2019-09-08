@@ -18,10 +18,10 @@ class ImgBufferOpenGL_t final : public ImgBuffer_t{
         virtual ~ImgBufferOpenGL_t() final;
 
         virtual void reset() final;
-        virtual void update(const Vec3f** img, unsigned int size_x, unsigned int size_y) final;
+        virtual void update(const Vec3f* img, unsigned int size_x, unsigned int size_y) final;
         virtual void update() final;
         virtual void update(const Vec3f &colour, unsigned int pos_x, unsigned int pos_y) final;
-        virtual void set(const Vec3f** img, unsigned int size_x, unsigned int size_y) final;
+        virtual void set(const Vec3f* img, unsigned int size_x, unsigned int size_y) final;
         virtual void set(const Vec3f &colour, unsigned int pos_x, unsigned int pos_y) final;
 
         unsigned char* img_gl_;
