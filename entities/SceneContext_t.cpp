@@ -2480,7 +2480,7 @@ void SceneContext_t::get_objects(std::vector<Shape_t*> &shapes, std::vector<Mesh
     unsigned int n_shapes = 0;
     unsigned int n_meshes = 0;
 
-    for (auto &object: objects_){
+    for (auto const &object: objects_){
         if (object){
             ++n_shapes;
         }
