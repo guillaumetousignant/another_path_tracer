@@ -16,7 +16,7 @@
       <material colour="white" emission="black" name="bonemat" roughness="0.25" type="diffuse"/>
       <material ind="1.5" material_reflected="coating" material_refracted="eyemat1" name="eyemat" type="fresnelmix"/>
       <material colour="pink" emission="black" name="lungmat" roughness="1" type="diffuse"/>
-      <material colour="gemcolor" emission="black" name="intmat" roughness="1" type="diffuse"/>
+      <material colour="gemcolour" emission="black" name="intmat" roughness="1" type="diffuse"/>
       <material colour="red" emission="black" name="heartmat" roughness="1" type="diffuse"/>
       <material materials_list="skinmat, bonemat, eyemat, lungmat, intmat, heartmat" materials_names="blinn1SG, lambert2SG, lambert3SG, lambert4SG, phong1SG, phongE1SG" name="flyermats" type="aggregate"/>
    </materials>
