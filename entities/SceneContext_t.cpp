@@ -365,7 +365,7 @@ void SceneContext_t::readXML(const std::string &filename){
         if (materials_mix_list[i]){
             MaterialMix_t* material_mix = dynamic_cast<MaterialMix_t*>(materials_[i].get()); // dynamic caaaast :(
             if (material_mix == nullptr){
-                std::cout << "Error: material #" << i << " was marked as a material mix but is not convertible to one. Exiting." << std::endl;
+                std::cerr << "Error: material #" << i << " was marked as a material mix but is not convertible to one. Exiting." << std::endl;
                 exit(491);
             }
             material_mix->material_refracted_ = materials_[materials_mix_list[i].get()[0]].get();
@@ -378,13 +378,13 @@ void SceneContext_t::readXML(const std::string &filename){
         if (materials_medium_list[i]) {
             PortalTop_t* portal = dynamic_cast<PortalTop_t*>(materials_[i].get());
             if (portal == nullptr){
-                std::cout << "Error: material #" << i << " was marked as a portal but is not convertible to one. Exiting." << std::endl;
+                std::cerr << "Error: material #" << i << " was marked as a portal but is not convertible to one. Exiting." << std::endl;
                 exit(492);
             }
             for (auto it = materials_medium_list[i]->begin(); it != materials_medium_list[i]->end(); ++it){
                 Medium_t* medium = dynamic_cast<Medium_t*>(materials_[*it].get()); // CHECK I don't like those either
                 if (medium == nullptr){
-                    std::cout << "Error: material #" << i << " had material #" << *it << " in its medium list, but it is not convertible to one. Exiting." << std::endl;
+                    std::cerr << "Error: material #" << i << " had material #" << *it << " in its medium list, but it is not convertible to one. Exiting." << std::endl;
                     exit(493);
                 }
                 portal->medium_list_.push_back(medium);
@@ -397,13 +397,13 @@ void SceneContext_t::readXML(const std::string &filename){
         if (scatterers_medium_list[i]) {
             PortalScattererTop_t* portal_scatterer = dynamic_cast<PortalScattererTop_t*>(scatterers_[i].get());
             if (portal_scatterer == nullptr){
-                std::cout << "Error: scatterer #" << i << " was marked as a portal but is not convertible to one. Exiting." << std::endl;
+                std::cerr << "Error: scatterer #" << i << " was marked as a portal but is not convertible to one. Exiting." << std::endl;
                 exit(392);
             }
             for (auto it = scatterers_medium_list[i]->begin(); it != scatterers_medium_list[i]->end(); ++it){
                 Medium_t* medium = dynamic_cast<Medium_t*>(materials_[*it].get()); // CHECK I don't like those either
                 if (medium == nullptr){
-                    std::cout << "Error: scatterer #" << i << " had material #" << *it << " in its medium list, but it is not convertible to one. Exiting." << std::endl;
+                    std::cerr << "Error: scatterer #" << i << " had material #" << *it << " in its medium list, but it is not convertible to one. Exiting." << std::endl;
                     exit(393);
                 }
                 portal_scatterer->medium_list_.push_back(medium);
@@ -517,7 +517,7 @@ void SceneContext_t::readXML(const std::string &filename){
             if (transformations_pre != nullptr){
                 PortalTop_t* portal = dynamic_cast<PortalTop_t*>(materials_[index].get());
                 if (portal == nullptr){
-                    std::cout << "Error, material #" << index << " has transformations, but it is not convertible to a portal. Ignoring." << std::endl;
+                    std::cerr << "Error, material #" << index << " has transformations, but it is not convertible to a portal. Ignoring." << std::endl;
                 }
                 else{
                     for (tinyxml2::XMLElement* transformation_pre = transformations_pre->FirstChildElement("transformation_pre"); transformation_pre; transformation_pre = transformation_pre->NextSiblingElement("transformation_pre")){
@@ -635,7 +635,7 @@ void SceneContext_t::readXML(const std::string &filename){
             if (transformations_post != nullptr){
                 PortalTop_t* portal = dynamic_cast<PortalTop_t*>(materials_[index].get());
                 if (portal == nullptr){
-                    std::cout << "Error, material #" << index << " has transformations, but it is not convertible to a portal. Ignoring." << std::endl;
+                    std::cerr << "Error, material #" << index << " has transformations, but it is not convertible to a portal. Ignoring." << std::endl;
                 }
                 else{
                     for (tinyxml2::XMLElement* transformation_post = transformations_post->FirstChildElement("transformation_post"); transformation_post; transformation_post = transformation_post->NextSiblingElement("transformation_post")){
@@ -736,7 +736,7 @@ void SceneContext_t::readXML(const std::string &filename){
                     const char* focus_position_char = xml_camera->Attribute("focus_position");
                     std::string focus_position;
                     if (focus_position_char == nullptr) {
-                        std::cout << "Error: Cameras with nan as 'focal_length' attribute should have a 'focus_position' attribute. Using 0.5 0.5." << std::endl;
+                        std::cerr << "Error: Cameras with nan as 'focal_length' attribute should have a 'focus_position' attribute. Using 0.5 0.5." << std::endl;
                         focus_position = "0.5 0.5";
                     }
                     else {
@@ -772,7 +772,7 @@ void SceneContext_t::readXML(const std::string &filename){
             std::string render_mode;
             const char* render_mode_char = xml_camera->Attribute("rendermode");
             if (render_mode_char == nullptr){
-                std::cout << "Error: XML cameras should have a 'rendermode' attribute. Using 'single'." << std::endl;
+                std::cerr << "Error: XML cameras should have a 'rendermode' attribute. Using 'single'." << std::endl;
                 render_mode = "single";
             }
             else{
@@ -786,7 +786,7 @@ void SceneContext_t::readXML(const std::string &filename){
                 std::string n_iter;
                 const char* n_iter_char = xml_camera->Attribute("n_iter");
                 if (n_iter_char == nullptr){
-                    std::cout << "Error: XML cameras in accumulation mode should have a 'n_iter' attribute. Using 1." << std::endl;
+                    std::cerr << "Error: XML cameras in accumulation mode should have a 'n_iter' attribute. Using 1." << std::endl;
                     n_iter = "1";
                 }
                 else {
@@ -806,14 +806,14 @@ void SceneContext_t::readXML(const std::string &filename){
                 const char* n_iter_char = xml_camera->Attribute("n_iter");
                 const char* write_interval_char = xml_camera->Attribute("write_interval");
                 if (n_iter_char == nullptr){
-                    std::cout << "Error: XML cameras in accumulation mode should have a 'n_iter' attribute. Using 1." << std::endl;
+                    std::cerr << "Error: XML cameras in accumulation mode should have a 'n_iter' attribute. Using 1." << std::endl;
                     n_iter = "1";
                 }
                 else {
                     n_iter = n_iter_char;
                 }
                 if (write_interval_char == nullptr){
-                    std::cout << "Error: XML cameras in accumulation_write mode should have a 'write_interval' attribute. Using 1." << std::endl;
+                    std::cerr << "Error: XML cameras in accumulation_write mode should have a 'write_interval' attribute. Using 1." << std::endl;
                     write_interval = "1";
                 }
                 else {
@@ -842,11 +842,11 @@ void SceneContext_t::readXML(const std::string &filename){
                 camera_rendermode_[index] = "single";
             }
             else if (render_mode == "motion") {
-                std::cout << "Error, motion render mode not implemented yet. Single frame render fallback." << std::endl;
+                std::cerr << "Error, motion render mode not implemented yet. Single frame render fallback." << std::endl;
                 camera_rendermode_[index] = "single";
             }
             else {
-                std::cout << "Error, render mode '" << render_mode << "', used by camera #" << index << ", is unknown. Only 'accumulation', 'accumulation_write', 'single', and 'motion' exist for now. Ignoring." << std::endl;
+                std::cerr << "Error, render mode '" << render_mode << "', used by camera #" << index << ", is unknown. Only 'accumulation', 'accumulation_write', 'single', and 'motion' exist for now. Ignoring." << std::endl;
                 camera_rendermode_[index] = "";
             }
 
@@ -877,14 +877,14 @@ void SceneContext_t::render(){
             opengl_renderer_->render_write();
         }
         else if (render_mode == "motion") {
-            std::cout << "Error, motion render mode not implemented yet. Accumulation render fallback." << std::endl;
+            std::cerr << "Error, motion render mode not implemented yet. Accumulation render fallback." << std::endl;
             opengl_renderer_->render();
         }
         else if (render_mode == "") {
 
         }
         else {
-            std::cout << "Error, render mode '" << render_mode << "', used by camera #" << 0 << ", is unknown. Only 'accumulation', 'accumulation_write', 'single', and 'motion' exist for now. Ignoring." << std::endl;
+            std::cerr << "Error, render mode '" << render_mode << "', used by camera #" << 0 << ", is unknown. Only 'accumulation', 'accumulation_write', 'single', and 'motion' exist for now. Ignoring." << std::endl;
         }
     }
     else {
@@ -907,7 +907,7 @@ void SceneContext_t::render(){
                 cameras_[i]->write();
             }
             else if (render_mode == "motion") {
-                std::cout << "Error, motion render mode not implemented yet. Single frame render fallback." << std::endl;
+                std::cerr << "Error, motion render mode not implemented yet. Single frame render fallback." << std::endl;
                 cameras_[i]->raytrace(scene_.get());
                 cameras_[i]->write();
             }
@@ -915,7 +915,7 @@ void SceneContext_t::render(){
 
             }
             else {
-                std::cout << "Error, render mode '" << render_mode << "', used by camera #" << i << ", is unknown. Only 'accumulation', 'accumulation_write', 'single', and 'motion' exist for now. Ignoring." << std::endl;
+                std::cerr << "Error, render mode '" << render_mode << "', used by camera #" << i << ", is unknown. Only 'accumulation', 'accumulation_write', 'single', and 'motion' exist for now. Ignoring." << std::endl;
             }
         }
     }
@@ -943,7 +943,7 @@ std::unique_ptr<TransformMatrix_t> SceneContext_t::create_transform_matrix(const
     std::string string_transform_matrix;
     const char* transform_matrix_char = xml_transform_matrix->Attribute("value");
     if (transform_matrix_char == nullptr){
-        std::cout << "Error: XML transform matrices should have a 'value' attribute. Using identity." << std::endl;
+        std::cerr << "Error: XML transform matrices should have a 'value' attribute. Using identity." << std::endl;
         string_transform_matrix = "nan";
     }
     else {
@@ -967,7 +967,7 @@ std::unique_ptr<TransformMatrix_t> SceneContext_t::create_transform_matrix(const
             ++count;
         }
         if (count != 16) {
-            std::cout << "Error, transform matrix value should be 16 values seperated by spaces, or nan. Current number of values is " << count << ". Ignoring." << std::endl;
+            std::cerr << "Error, transform matrix value should be 16 values seperated by spaces, or nan. Current number of values is " << count << ". Ignoring." << std::endl;
             return std::unique_ptr<TransformMatrix_t>(new TransformMatrix_t());
         }
         else{
@@ -984,7 +984,7 @@ std::unique_ptr<Texture_t> SceneContext_t::create_texture(const tinyxml2::XMLEle
     std::string type;
     const char* type_char = xml_texture->Attribute("type");
     if (type_char == nullptr) {
-        std::cout << "Error: XML textures should have a 'type' attribute. Using 'texture'." << std::endl;
+        std::cerr << "Error: XML textures should have a 'type' attribute. Using 'texture'." << std::endl;
         type = "texture";
     }
     else {
@@ -1011,7 +1011,7 @@ std::unique_ptr<Texture_t> SceneContext_t::create_texture(const tinyxml2::XMLEle
         return std::unique_ptr<Texture_t>(new Texture_t(filename));
     }
     else{
-        std::cout << "Error, texture type '" << type << "' not implemented. Only 'texture' exists for now. Exiting." << std::endl; 
+        std::cerr << "Error, texture type '" << type << "' not implemented. Only 'texture' exists for now. Exiting." << std::endl; 
         exit(20);
     }
 }
@@ -1020,7 +1020,7 @@ std::unique_ptr<ScatteringFunction_t> SceneContext_t::create_scatterer(const tin
     std::string type;
     const char* type_char = xml_scatterer->Attribute("type");
     if (type_char == nullptr) {
-        std::cout << "Error: XML scatterers should have a 'type' attribute. Using 'nonabsorber'." << std::endl;
+        std::cerr << "Error: XML scatterers should have a 'type' attribute. Using 'nonabsorber'." << std::endl;
         type = "nonabsorber";
     }
     else {
@@ -1083,7 +1083,7 @@ std::unique_ptr<ScatteringFunction_t> SceneContext_t::create_scatterer(const tin
                                 xml_scatterer->DoubleAttribute("scattering_distance")));
     }
     else{
-        std::cout << "Error, scatterer type '" << type << "' not implemented. Only 'absorber', 'nonabsorber', 'portal_scatterer', 'scatterer_exp', and 'scatterer' exists for now. Ignoring." << std::endl; 
+        std::cerr << "Error, scatterer type '" << type << "' not implemented. Only 'absorber', 'nonabsorber', 'portal_scatterer', 'scatterer_exp', and 'scatterer' exists for now. Ignoring." << std::endl; 
         return std::unique_ptr<ScatteringFunction_t>(new NonAbsorber_t());
     }
 }
@@ -1092,7 +1092,7 @@ std::unique_ptr<Material_t> SceneContext_t::create_material(const tinyxml2::XMLE
     std::string type;
     const char* type_char = xml_material->Attribute("type");
     if (type_char == nullptr) {
-        std::cout << "Error: XML materials should have a 'type' attribute. Using 'normal_material'." << std::endl;
+        std::cerr << "Error: XML materials should have a 'type' attribute. Using 'normal_material'." << std::endl;
         type = "normal_material";
     }
     else {
@@ -1146,7 +1146,7 @@ std::unique_ptr<Material_t> SceneContext_t::create_material(const tinyxml2::XMLE
                     new Portal_t(get_transform_matrix(xml_material->Attribute("transform_matrix"), xml_transform_matrices), std::list<Medium_t*>()));
     }
     else if (type == "portal_refractive"){
-        std::cout << "Error, refractive portal not implemented yet. Ignoring." << std::endl; 
+        std::cerr << "Error, refractive portal not implemented yet. Ignoring." << std::endl; 
         return std::unique_ptr<Material_t>(new Diffuse_t(Vec3f(), Vec3f(0.5), 1.0));
     }
     else if (type == "randommix"){
@@ -1236,7 +1236,7 @@ std::unique_ptr<Material_t> SceneContext_t::create_material(const tinyxml2::XMLE
         // CHECK add aggregates
     }
     else{
-        std::cout << "Error, material type '" << type << "' not implemented. Ignoring." << std::endl; 
+        std::cerr << "Error, material type '" << type << "' not implemented. Ignoring." << std::endl; 
         return std::unique_ptr<Material_t>(new NormalMaterial_t());
     }
 }
@@ -1245,7 +1245,7 @@ std::unique_ptr<MeshGeometry_t> SceneContext_t::create_mesh_geometry(const tinyx
     std::string type;
     const char* type_char = xml_mesh_geometry->Attribute("type");
     if (type_char == nullptr) {
-        std::cout << "Error: XML mesh geometries should have a 'type' attribute. Using 'mesh_geometry'." << std::endl;
+        std::cerr << "Error: XML mesh geometries should have a 'type' attribute. Using 'mesh_geometry'." << std::endl;
         type = "mesh_geometry";
     }
     else {
@@ -1272,7 +1272,7 @@ std::unique_ptr<MeshGeometry_t> SceneContext_t::create_mesh_geometry(const tinyx
         return std::unique_ptr<MeshGeometry_t>(new MeshGeometry_t(filename));
     }
     else{
-        std::cout << "Error, mesh geometry type '" << type << "' not implemented. Only 'mesh_geometry' exists for now. Exiting." << std::endl; 
+        std::cerr << "Error, mesh geometry type '" << type << "' not implemented. Only 'mesh_geometry' exists for now. Exiting." << std::endl; 
         exit(50);
     }
 }
@@ -1281,7 +1281,7 @@ std::unique_ptr<Shape_t> SceneContext_t::create_object(const tinyxml2::XMLElemen
     std::string type;
     const char* type_char = xml_object->Attribute("type");
     if (type_char == nullptr) {
-        std::cout << "Error: XML objects should have a 'type' attribute. Using 'sphere'." << std::endl;
+        std::cerr << "Error: XML objects should have a 'type' attribute. Using 'sphere'." << std::endl;
         type = "sphere";
     }
     else {
@@ -1394,7 +1394,7 @@ std::unique_ptr<Shape_t> SceneContext_t::create_object(const tinyxml2::XMLElemen
                     new TriangleMeshMotionblur_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries), xml_object->UnsignedAttribute("index")));
     }
     else{
-        std::cout << "Error, object type '" << type << "' not implemented. Exiting." << std::endl; 
+        std::cerr << "Error, object type '" << type << "' not implemented. Exiting." << std::endl; 
         exit(60);
     }
 }
@@ -1403,7 +1403,7 @@ std::unique_ptr<DirectionalLight_t> SceneContext_t::create_directional_light(con
     std::string type;
     const char* type_char = xml_directional_light->Attribute("type");
     if (type_char == nullptr) {
-        std::cout << "Error: XML directional lights should have a 'type' attribute. Using 'directional_light'." << std::endl;
+        std::cerr << "Error: XML directional lights should have a 'type' attribute. Using 'directional_light'." << std::endl;
         type = "directional_light";
     }
     else {
@@ -1418,7 +1418,7 @@ std::unique_ptr<DirectionalLight_t> SceneContext_t::create_directional_light(con
                     new DirectionalLight_t(get_colour(xml_directional_light->Attribute("colour")), get_transform_matrix(xml_directional_light->Attribute("transform_matrix"), xml_transform_matrices)));
     }
     else{
-        std::cout << "Error, directional light type '" << type << "' not implemented. Only 'directional_light' exists for now. Exiting." << std::endl; 
+        std::cerr << "Error, directional light type '" << type << "' not implemented. Only 'directional_light' exists for now. Exiting." << std::endl; 
         exit(70);
     }
 }
@@ -1427,7 +1427,7 @@ std::unique_ptr<Skybox_t> SceneContext_t::create_skybox(const tinyxml2::XMLEleme
     std::string type;
     const char* type_char = xml_skybox->Attribute("type");
     if (type_char == nullptr) {
-        std::cout << "Error: XML skyboxes should have a 'type' attribute. Using 'skybox_flat'." << std::endl;
+        std::cerr << "Error: XML skyboxes should have a 'type' attribute. Using 'skybox_flat'." << std::endl;
         type = "skybox_flat";
     }
     else {
@@ -1482,7 +1482,7 @@ std::unique_ptr<Skybox_t> SceneContext_t::create_skybox(const tinyxml2::XMLEleme
                     new SkyboxTextureTransformationSun_t(get_texture(xml_skybox->Attribute("texture"), xml_textures), get_transform_matrix(xml_skybox->Attribute("transform_matrix"), xml_transform_matrices), sun_pos, get_colour(xml_skybox->Attribute("light_colour")), xml_skybox->DoubleAttribute("light_radius")));
     }
     else{
-        std::cout << "Error, skybox type '" << type << "' not implemented. Ignoring." << std::endl; 
+        std::cerr << "Error, skybox type '" << type << "' not implemented. Ignoring." << std::endl; 
         return std::unique_ptr<Skybox_t>(new SkyboxFlat_t(Vec3f(0.5)));
     }
 }
@@ -1491,7 +1491,7 @@ std::unique_ptr<ImgBuffer_t> SceneContext_t::create_imgbuffer(const tinyxml2::XM
     std::string type;
     const char* type_char = xml_imgbuffer->Attribute("type");
     if (type_char == nullptr) {
-        std::cout << "Error: XML imgbuffers should have a 'type' attribute. Using 'imgbuffer'." << std::endl;
+        std::cerr << "Error: XML imgbuffers should have a 'type' attribute. Using 'imgbuffer'." << std::endl;
         type = "imgbuffer";
     }
     else {
@@ -1513,7 +1513,7 @@ std::unique_ptr<ImgBuffer_t> SceneContext_t::create_imgbuffer(const tinyxml2::XM
         return std::unique_ptr<ImgBuffer_t>(opengl_imgbuffer_);
     }
     else{
-        std::cout << "Error, imgbuffer type '" << type << "' not implemented. Only 'imgbuffer', and 'imgbuffer_opengl' exist for now. Ignoring." << std::endl; 
+        std::cerr << "Error, imgbuffer type '" << type << "' not implemented. Only 'imgbuffer', and 'imgbuffer_opengl' exist for now. Ignoring." << std::endl; 
         return std::unique_ptr<ImgBuffer_t>(new ImgBuffer_t(300, 200));
     }
 }
@@ -1522,7 +1522,7 @@ std::unique_ptr<Camera_t> SceneContext_t::create_camera(const tinyxml2::XMLEleme
     std::string type;
     const char* type_char = xml_camera->Attribute("type");
     if (type_char == nullptr) {
-        std::cout << "Error: XML cameras should have a 'type' attribute. Using 'cam'." << std::endl;
+        std::cerr << "Error: XML cameras should have a 'type' attribute. Using 'cam'." << std::endl;
         type = "cam";
     }
     else {
@@ -1532,7 +1532,7 @@ std::unique_ptr<Camera_t> SceneContext_t::create_camera(const tinyxml2::XMLEleme
     std::string filename;
     const char* filename_char = xml_camera->Attribute("filename");
     if (filename_char == nullptr){
-        std::cout << "Error: XML cameras should have a 'filename' attribute. Using 'nan'." << std::endl;
+        std::cerr << "Error: XML cameras should have a 'filename' attribute. Using 'nan'." << std::endl;
         filename = "nan";
     }
     else {
@@ -1797,7 +1797,7 @@ std::unique_ptr<Camera_t> SceneContext_t::create_camera(const tinyxml2::XMLEleme
                             time, xml_camera->DoubleAttribute("gammaind")));
     }
     else{
-        std::cout << "Error, camera type '" << type << "' not implemented. Exiting." << std::endl; 
+        std::cerr << "Error, camera type '" << type << "' not implemented. Exiting." << std::endl; 
         exit(100);
     }
 }
@@ -1811,7 +1811,7 @@ void SceneContext_t::create_acceleration_structure(const tinyxml2::XMLElement* x
     std::string type;
     const char* type_char = xml_acceleration_structure->Attribute("type");
     if (type_char == nullptr) {
-        std::cout << "Error: XML acceleration structures should have a 'type' attribute. Using 'multi_grid_vector'." << std::endl;
+        std::cerr << "Error: XML acceleration structures should have a 'type' attribute. Using 'multi_grid_vector'." << std::endl;
         type = "multi_grid_vector";
     }
     else {
@@ -1838,7 +1838,7 @@ void SceneContext_t::create_acceleration_structure(const tinyxml2::XMLElement* x
         scene_->acc_ = new AccelerationMultiGridVector_t(scene_->geometry_, scene_->n_obj_, nullptr, 0, xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128), xml_acceleration_structure->UnsignedAttribute("max_cell_content", 32), xml_acceleration_structure->UnsignedAttribute("max_grid_level", 1));
     }
     else{
-        std::cout << "Error, acceleration structure type '" << type << "' not implemented. Using 'multi_grid_vector'." << std::endl; 
+        std::cerr << "Error, acceleration structure type '" << type << "' not implemented. Using 'multi_grid_vector'." << std::endl; 
         scene_->acc_ = new AccelerationMultiGridVector_t(scene_->geometry_, scene_->n_obj_);
     }
 }
@@ -1869,7 +1869,7 @@ TransformMatrix_t* SceneContext_t::get_transform_matrix(std::string transform_ma
             }
         }
     }
-    std::cout << "Error, transformation matrix '" << transform_matrix << "' not found. Ignoring. This causes a memory leak." << std::endl;
+    std::cerr << "Error, transformation matrix '" << transform_matrix << "' not found. Ignoring. This causes a memory leak." << std::endl;
     return new TransformMatrix_t();
 }
 
@@ -1904,12 +1904,12 @@ std::unique_ptr<std::list<unsigned int>> SceneContext_t::get_medium_index_list(s
                     ++index;
                 }
                 if (missing){
-                    std::cout << "Error: medium '" << token << "' not found, exiting." << std::endl;
+                    std::cerr << "Error: medium '" << token << "' not found, exiting." << std::endl;
                     exit(498);
                 }
             }
             else {
-                std::cout << "Error: no materials, medium '" << token << "' not found, exiting." << std::endl;
+                std::cerr << "Error: no materials, medium '" << token << "' not found, exiting." << std::endl;
                 exit(499);
             }
         }
@@ -1940,12 +1940,12 @@ std::unique_ptr<std::list<unsigned int>> SceneContext_t::get_medium_index_list(s
                 ++index;
             }
             if (missing){
-                std::cout << "Error: medium '" << string_medium_list << "' not found, exiting." << std::endl;
+                std::cerr << "Error: medium '" << string_medium_list << "' not found, exiting." << std::endl;
                 exit(498);
             }
         }
         else {
-            std::cout << "Error: no materials, medium '" << string_medium_list << "' not found, exiting." << std::endl;
+            std::cerr << "Error: no materials, medium '" << string_medium_list << "' not found, exiting." << std::endl;
             exit(499);
         }
     }
@@ -1964,7 +1964,7 @@ std::list<Medium_t*> SceneContext_t::get_medium_list(std::string string_medium_l
         if (is_number(token)) {
             Medium_t* medium = dynamic_cast<Medium_t*>(materials_[std::stoi(token) - 1].get());
             if (medium == nullptr){
-                std::cout << "Error: material #" << token << " is in a medium list, but it is not convertible to one. Exiting." << std::endl;
+                std::cerr << "Error: material #" << token << " is in a medium list, but it is not convertible to one. Exiting." << std::endl;
                 exit(494);
             }
             medium_list.push_back(medium);
@@ -1982,7 +1982,7 @@ std::list<Medium_t*> SceneContext_t::get_medium_list(std::string string_medium_l
                         if (name_material == token){
                             Medium_t* medium = dynamic_cast<Medium_t*>(materials_[index].get());
                             if (medium == nullptr){
-                                std::cout << "Error: material '" << token << "' is in a medium list, but it is not convertible to one. Exiting." << std::endl;
+                                std::cerr << "Error: material '" << token << "' is in a medium list, but it is not convertible to one. Exiting." << std::endl;
                                 exit(495);
                             }
                             medium_list.push_back(medium);
@@ -1993,12 +1993,12 @@ std::list<Medium_t*> SceneContext_t::get_medium_list(std::string string_medium_l
                     ++index;
                 }
                 if (missing){
-                    std::cout << "Error: medium '" << token << "' not found, exiting." << std::endl;
+                    std::cerr << "Error: medium '" << token << "' not found, exiting." << std::endl;
                     exit(496);
                 }
             }
             else {
-                std::cout << "Error: no materials, medium '" << token << "' not found, exiting." << std::endl;
+                std::cerr << "Error: no materials, medium '" << token << "' not found, exiting." << std::endl;
                 exit(497);
             }
         }
@@ -2009,7 +2009,7 @@ std::list<Medium_t*> SceneContext_t::get_medium_list(std::string string_medium_l
     if (is_number(string_medium_list)) {
         Medium_t* medium = dynamic_cast<Medium_t*>(materials_[std::stoi(string_medium_list) - 1].get());
         if (medium == nullptr){
-            std::cout << "Error: material #" << token << " is in a medium list, but it is not convertible to one. Exiting." << std::endl;
+            std::cerr << "Error: material #" << token << " is in a medium list, but it is not convertible to one. Exiting." << std::endl;
             exit(494);
         }
         medium_list.push_back(medium);
@@ -2027,7 +2027,7 @@ std::list<Medium_t*> SceneContext_t::get_medium_list(std::string string_medium_l
                     if (name_material == string_medium_list){
                         Medium_t* medium = dynamic_cast<Medium_t*>(materials_[index].get());
                         if (medium == nullptr){
-                            std::cout << "Error: material '" << token << "' is in a medium list, but it is not convertible to one. Exiting." << std::endl;
+                            std::cerr << "Error: material '" << token << "' is in a medium list, but it is not convertible to one. Exiting." << std::endl;
                             exit(495);
                         }
                         medium_list.push_back(medium);
@@ -2038,12 +2038,12 @@ std::list<Medium_t*> SceneContext_t::get_medium_list(std::string string_medium_l
                 ++index;
             }
             if (missing){
-                std::cout << "Error: medium '" << string_medium_list << "' not found, exiting." << std::endl;
+                std::cerr << "Error: medium '" << string_medium_list << "' not found, exiting." << std::endl;
                 exit(496);
             }
         }
         else {
-            std::cout << "Error: no materials, medium '" << string_medium_list << "' not found, exiting." << std::endl;
+            std::cerr << "Error: no materials, medium '" << string_medium_list << "' not found, exiting." << std::endl;
             exit(497);
         }
     }
@@ -2072,7 +2072,7 @@ Texture_t* SceneContext_t::get_texture(std::string texture, const tinyxml2::XMLE
             }
         }
     }
-    std::cout << "Error, texture '" << texture << "' not found. Exiting." << std::endl;
+    std::cerr << "Error, texture '" << texture << "' not found. Exiting." << std::endl;
     exit(21); 
 }
 
@@ -2101,12 +2101,12 @@ std::unique_ptr<unsigned int> SceneContext_t::get_material_mix(std::string mater
                 ++index;
             }
             if (material_missing){
-                std::cout << "Error, material '" << material_refracted << "' not found. Exiting." << std::endl;
+                std::cerr << "Error, material '" << material_refracted << "' not found. Exiting." << std::endl;
                 exit(41); 
             }
         }
         else{
-            std::cout << "Error, no materials, '" << material_refracted << "' not found. Exiting." << std::endl;
+            std::cerr << "Error, no materials, '" << material_refracted << "' not found. Exiting." << std::endl;
             exit(47);
         }        
     }
@@ -2133,12 +2133,12 @@ std::unique_ptr<unsigned int> SceneContext_t::get_material_mix(std::string mater
                 ++index;
             }
             if (material_missing){
-                std::cout << "Error, material '" << material_reflected << "' not found. Exiting." << std::endl;
+                std::cerr << "Error, material '" << material_reflected << "' not found. Exiting." << std::endl;
                 exit(41); 
             }
         }
         else{
-            std::cout << "Error, no materials, '" << material_reflected << "' not found. Exiting." << std::endl;
+            std::cerr << "Error, no materials, '" << material_reflected << "' not found. Exiting." << std::endl;
             exit(47);
         }        
     }
@@ -2167,7 +2167,7 @@ ScatteringFunction_t* SceneContext_t::get_scatterer(std::string scatterer, const
             }
         }
     }
-    std::cout << "Error, scatterer '" << scatterer << "' not found. Ignoring. This Causes a memory leak." << std::endl;
+    std::cerr << "Error, scatterer '" << scatterer << "' not found. Ignoring. This Causes a memory leak." << std::endl;
     return new NonAbsorber_t();
 }
 
@@ -2192,7 +2192,7 @@ MeshGeometry_t* SceneContext_t::get_mesh_geometry(std::string mesh_geometry, con
             }
         }
     }
-    std::cout << "Error, mesh geometry '" << mesh_geometry << "' not found. Exiting." << std::endl;
+    std::cerr << "Error, mesh geometry '" << mesh_geometry << "' not found. Exiting." << std::endl;
     exit(51);
 }
 
@@ -2217,7 +2217,7 @@ unsigned int SceneContext_t::get_material_index(std::string material, const tiny
             }
         }
     }
-    std::cout << "Error, material '" << material << "' not found. Exiting." << std::endl;
+    std::cerr << "Error, material '" << material << "' not found. Exiting." << std::endl;
     exit(41);
 }
 
@@ -2242,7 +2242,7 @@ Material_t* SceneContext_t::get_material(std::string material, const tinyxml2::X
             }
         }
     }
-    std::cout << "Error, material '" << material << "' not found. Exiting." << std::endl;
+    std::cerr << "Error, material '" << material << "' not found. Exiting." << std::endl;
     exit(41);
 }
 
@@ -2277,11 +2277,11 @@ void SceneContext_t::get_lights(std::string lights_string, std::vector<Direction
                     ++index;
                 }
                 if (missing){
-                    std::cout << "Error: light '" << token << "' not found, ignoring." << std::endl;
+                    std::cerr << "Error: light '" << token << "' not found, ignoring." << std::endl;
                 }
             }
             else {
-                std::cout << "Error: no directional lights, light '" << token << "' not found, ignoring." << std::endl;
+                std::cerr << "Error: no directional lights, light '" << token << "' not found, ignoring." << std::endl;
             }            
         }
         // CHECK this should check for errors.
@@ -2310,11 +2310,11 @@ void SceneContext_t::get_lights(std::string lights_string, std::vector<Direction
                 ++index;
             }
             if (missing){
-                std::cout << "Error: light '" << lights_string << "' not found, ignoring." << std::endl;
+                std::cerr << "Error: light '" << lights_string << "' not found, ignoring." << std::endl;
             }
         }
         else {
-            std::cout << "Error: no directional lights, light '" << lights_string << "' not found, ignoring." << std::endl;
+            std::cerr << "Error: no directional lights, light '" << lights_string << "' not found, ignoring." << std::endl;
         }
     }
 
@@ -2348,7 +2348,7 @@ ImgBuffer_t* SceneContext_t::get_imgbuffer(std::string imgbuffer, const tinyxml2
             }
         }
     }
-    std::cout << "Error, image buffer '" << imgbuffer << "' not found. Exiting." << std::endl;
+    std::cerr << "Error, image buffer '" << imgbuffer << "' not found. Exiting." << std::endl;
     exit(91); 
 }
 
@@ -2373,7 +2373,7 @@ Skybox_t* SceneContext_t::get_skybox(std::string skybox, const tinyxml2::XMLElem
             }
         }
     }
-    std::cout << "Error, skybox '" << skybox << "' not found. Exiting." << std::endl;
+    std::cerr << "Error, skybox '" << skybox << "' not found. Exiting." << std::endl;
     exit(81); 
 }
 
@@ -2410,11 +2410,11 @@ void SceneContext_t::get_objects(std::string objects_string, std::vector<Shape_t
                     ++index;
                 }
                 if (missing){
-                    std::cout << "Error: object '" << token << "' not found, ignoring." << std::endl;
+                    std::cerr << "Error: object '" << token << "' not found, ignoring." << std::endl;
                 }
             }
             else {
-                std::cout << "Error: no objects, object '" << token << "' not found, ignoring." << std::endl;
+                std::cerr << "Error: no objects, object '" << token << "' not found, ignoring." << std::endl;
             }
         }
         // CHECK this should check for errors.
@@ -2443,11 +2443,11 @@ void SceneContext_t::get_objects(std::string objects_string, std::vector<Shape_t
                 ++index;
             }
             if (missing){
-                std::cout << "Error: object '" << objects_string << "' not found, ignoring." << std::endl;
+                std::cerr << "Error: object '" << objects_string << "' not found, ignoring." << std::endl;
             }
         }
         else {
-            std::cout << "Error: no objects, object '" << objects_string << "' not found, ignoring." << std::endl;
+            std::cerr << "Error: no objects, object '" << objects_string << "' not found, ignoring." << std::endl;
         }
     }
 
@@ -2532,7 +2532,7 @@ Vec3f get_colour(std::string colour) {
             return Vec3f(values[0]);
         }
         else if (count != 3) {
-            std::cout << "Error, colour should be 1 or 3 values seperated by spaces, or a string. Current number of values is " << count << ", colour is '" << colour << "'. Ignoring." << std::endl;
+            std::cerr << "Error, colour should be 1 or 3 values seperated by spaces, or a string. Current number of values is " << count << ", colour is '" << colour << "'. Ignoring." << std::endl;
             return Vec3f(0.5);
         }
         else{
@@ -2558,7 +2558,7 @@ std::vector<Vec3f> get_points(std::string points_string) {
             ++count;
         }
         if (count != 9) {
-            std::cout << "Error, triangle points should be 9 values seperated by spaces, or nan. Current number of values is " << count << ". Exiting." << std::endl;
+            std::cerr << "Error, triangle points should be 9 values seperated by spaces, or nan. Current number of values is " << count << ". Exiting." << std::endl;
             exit(67);
         }
         else{
@@ -2598,7 +2598,7 @@ std::vector<std::vector<double>> get_texture_coordinates(std::string texture_coo
             ++count;
         }
         if (count != 6) {
-            std::cout << "Error, triangle texture coordinates should be 6 values seperated by spaces, or nan. Current number of values is " << count << ". Exiting." << std::endl;
+            std::cerr << "Error, triangle texture coordinates should be 6 values seperated by spaces, or nan. Current number of values is " << count << ". Exiting." << std::endl;
             exit(68);
         }
         else{
@@ -2640,7 +2640,7 @@ void get_xy(const std::string &string_value, double (&value)[2]) {
     }
 
     if (count != 2) {
-        std::cout << "Error, xy should be 2 values seperated by spaces. Current number of values is " << count << ", string is '" << string_value << "'. Ignoring." << std::endl;
+        std::cerr << "Error, xy should be 2 values seperated by spaces. Current number of values is " << count << ", string is '" << string_value << "'. Ignoring." << std::endl;
     }
 }
 
@@ -2656,7 +2656,7 @@ void get_xy(const std::string &string_value, unsigned int (&value)[2]) {
     }
 
     if (count != 2) {
-        std::cout << "Error, xy should be 2 values seperated by spaces. Current number of values is " << count << ", string is '" << string_value << "'. Ignoring." << std::endl;
+        std::cerr << "Error, xy should be 2 values seperated by spaces. Current number of values is " << count << ", string is '" << string_value << "'. Ignoring." << std::endl;
     }
 }
 
@@ -2669,7 +2669,7 @@ void apply_transformation(TransformMatrix_t* transform_matrix, const tinyxml2::X
     std::string type;
     const char* type_char = transform->Attribute("type");
     if (type_char == nullptr) {
-        std::cout << "Error: XML transforms should have a 'type' attribute. Ignoring." << std::endl;
+        std::cerr << "Error: XML transforms should have a 'type' attribute. Ignoring." << std::endl;
         return;
     }
     else {
@@ -2762,7 +2762,7 @@ void apply_transformation(TransformMatrix_t* transform_matrix, const tinyxml2::X
         transform_matrix->neg();
     }
     else{
-        std::cout << "Error, transform type '" << type << "' not implemented. Ignoring." << std::endl; 
+        std::cerr << "Error, transform type '" << type << "' not implemented. Ignoring." << std::endl; 
     }
 }
 
@@ -2778,7 +2778,7 @@ void require_attributes(const tinyxml2::XMLElement* element, const char** attrib
                 const char* type_type = element->Attribute("type");
                 std::string name = (name_char == nullptr) ? "" : name_char;
                 std::string type = (type_type == nullptr) ? "" : type_type;
-                std::cout << "Error: " << element->Name() << " XML element with name '" << name << "' and type '" << type << "' has the following attributes missing:" << std::endl;
+                std::cerr << "Error, " << element->Name() << " XML element with name '" << name << "' and type '" << type << "' has the following attributes missing:" << std::endl;
             }
             std::cout << attributes[i] << std::endl;
         }        
