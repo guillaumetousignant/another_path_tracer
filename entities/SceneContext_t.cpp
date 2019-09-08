@@ -295,8 +295,7 @@ void SceneContext_t::readXML(const std::string &filename){
     std::cout << "Img buffers count: " << n_imgbuffers << std::endl;
     std::cout << "Camera count: " << n_cameras << std::endl << std::endl;
 
-    // Buffer creation
-    
+    // Buffer creation    
     transform_matrices_ = std::vector<std::unique_ptr<TransformMatrix_t>>(n_transform_matrices);
     textures_ = std::vector<std::unique_ptr<Texture_t>>(n_textures);
     scatterers_ = std::vector<std::unique_ptr<ScatteringFunction_t>>(n_scatterers);
@@ -603,8 +602,8 @@ void SceneContext_t::readXML(const std::string &filename){
     std::cout << std::endl << "Updating scene..." << std::endl;
     auto t_start = std::chrono::high_resolution_clock::now();
     scene_->update();
-    for (unsigned int i = 0; i < cameras_.size(); i++){
-        cameras_[i]->update();
+    for (auto &camera : cameras_){
+        camera->update();
     }
     auto t_end = std::chrono::high_resolution_clock::now();
     std::cout << "Scene updated in " 
@@ -750,8 +749,8 @@ void SceneContext_t::readXML(const std::string &filename){
             ++index;
         }
     }
-    for (unsigned int i = 0; i < cameras_.size(); i++){
-        cameras_[i]->update();
+    for (auto &camera : cameras_){
+        camera->update();
     }
 
     // Running modes
@@ -2451,30 +2450,28 @@ void SceneContext_t::get_objects(std::string objects_string, std::vector<Shape_t
         }
     }
 
-    if (objects_list.size() > 0){
-        for (auto it = objects_list.begin(); it != objects_list.end(); ++it){
-            if (objects_[*it]){
-                ++n_shapes;
-            }
-            else {
-                ++n_meshes;
-            }
+    for (auto object_list_item : objects_list){
+        if (object_list_item){
+            ++n_shapes;
         }
+        else {
+            ++n_meshes;
+        }
+    }
 
-        shapes = std::vector<Shape_t*>(n_shapes);
-        meshes = std::vector<MeshTop_t*>(n_meshes);
-        unsigned int index_shapes = 0;
-        unsigned int index_meshes = 0;
+    shapes = std::vector<Shape_t*>(n_shapes);
+    meshes = std::vector<MeshTop_t*>(n_meshes);
+    unsigned int index_shapes = 0;
+    unsigned int index_meshes = 0;
 
-        for (auto it = objects_list.begin(); it != objects_list.end(); ++it){
-            if (objects_[*it]){
-                shapes[index_shapes] = objects_[*it].get();
-                ++index_shapes;
-            }
-            else {
-                meshes[index_meshes] = meshes_[*it].get();
-                ++index_meshes;
-            }
+    for (auto objects_list_item : objects_list){
+        if (objects_[objects_list_item]){
+            shapes[index_shapes] = objects_[objects_list_item].get();
+            ++index_shapes;
+        }
+        else {
+            meshes[index_meshes] = meshes_[objects_list_item].get();
+            ++index_meshes;
         }
     }
 }
@@ -2483,8 +2480,8 @@ void SceneContext_t::get_objects(std::vector<Shape_t*> &shapes, std::vector<Mesh
     unsigned int n_shapes = 0;
     unsigned int n_meshes = 0;
 
-    for (unsigned int i = 0; i < objects_.size(); ++i){
-        if (objects_[i]){
+    for (auto &object: objects_){
+        if (object){
             ++n_shapes;
         }
         else {
