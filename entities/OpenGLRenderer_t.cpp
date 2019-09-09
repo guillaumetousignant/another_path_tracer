@@ -85,7 +85,7 @@ void OpenGLRenderer_t::accumulate_write(){
     //auto t_end = std::chrono::high_resolution_clock::now();
 
     if (!(n_iter_gl_%write_interval_)){
-        std::cout << "Writing started." << std::endl;
+        std::cout << "Writing started at " << n_iter_gl_ << " iterations." << std::endl;
         auto t_start = std::chrono::high_resolution_clock::now();
         camera_->write();
         auto t_end = std::chrono::high_resolution_clock::now();
