@@ -127,6 +127,16 @@ void Triangle_t::normal(const Ray_t &ray, const double (&uv)[2], Vec3f &normalve
     // Matrix multiplication, optimise.
 }
 
+void Triangle_t::normal_uv_tangent(const Ray_t &ray, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec, Vec3f &tangentvec) const {
+    const Vec3f distance = Vec3f(1.0 - uv[0] - uv[1], uv[0], uv[1]);
+    normalvec = Vec3f(distance[0] * normals_[0][0] + distance[1] * normals_[1][0] + distance[2] * normals_[2][0], 
+        distance[0] * normals_[0][1] + distance[1] * normals_[1][1] + distance[2] * normals_[2][1],
+        distance[0] * normals_[0][2] + distance[1] * normals_[1][2] + distance[2] * normals_[2][2]);
+    // Matrix multiplication, optimise.
+
+    
+}        
+
 void Triangle_t::normal_face(const Ray_t &ray, Vec3f &normalvec) const{
     normalvec = v0v1_.cross(v0v2_).normalize();
 }
