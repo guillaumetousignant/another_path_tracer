@@ -6,6 +6,7 @@
 #include <tuple>
 #include <algorithm>
 #include <chrono>
+#include <memory>
 
 #include "Colours.h"
 #include "NextFilename.h"
