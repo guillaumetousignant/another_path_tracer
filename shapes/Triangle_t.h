@@ -20,6 +20,7 @@ class Triangle_t final : public Shape_t{
         Vec3f normals_[3];
         Vec3f v0v1_;
         Vec3f v0v2_;
+        Vec3f tangent_vec_; // Points up
 
         virtual void update() final;
         virtual void intersection(const Ray_t &ray, bool &intersected, double &t, double (&uv)[2]) const final; 

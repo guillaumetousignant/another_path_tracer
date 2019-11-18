@@ -13,55 +13,74 @@ Triangle_t::Triangle_t(Material_t *material, TransformMatrix_t *transform_matrix
 
     if (normals == nullptr){
         const Vec3f nor = (points[1] - points[0]).cross(points[2] - points[0]).normalize(); 
-        // Loop or explicit?
-        for (unsigned int i = 0; i < 3; i++){
-            normals_orig_[i] = nor;
-        }
+
+        normals_orig_[0] = nor;
+        normals_orig_[1] = nor;
+        normals_orig_[2] = nor;
     }
     else{
-        for (unsigned int i = 0; i < 3; i++){
-            normals_orig_[i] = normals[i];
-        }
+        normals_orig_[0] = normals[0];
+        normals_orig_[1] = normals[1];
+        normals_orig_[2] = normals[2];
     }
 
     if (texcoord == nullptr){
-        for (unsigned int i = 0; i < 3; i++){
-            for (unsigned int j = 0; j < 2; j++){
-                texture_coordinates_[i][j] = 0;
-            }
-        }
+        texture_coordinates_[0][0] = 0;
+        texture_coordinates_[0][1] = 1;
+        texture_coordinates_[1][0] = 0;
+        texture_coordinates_[1][1] = 0;
+        texture_coordinates_[2][0] = 1;
+        texture_coordinates_[2][1] = 0;
     }
     else{
-        for (unsigned int i = 0; i < 3; i++){
-            for (unsigned int j = 0; j < 2; j++){
-                texture_coordinates_[i][j] = texcoord[i][j];
-            }
-        }
+        texture_coordinates_[0][0] = texcoord[0][0];
+        texture_coordinates_[0][1] = texcoord[0][1];
+        texture_coordinates_[1][0] = texcoord[1][0];
+        texture_coordinates_[1][1] = texcoord[1][1];
+        texture_coordinates_[2][0] = texcoord[2][0];
+        texture_coordinates_[3][1] = texcoord[2][1];
     }
 
+    points_[0] = transformation_->multVec(points_orig_[0]);
+    points_[1] = transformation_->multVec(points_orig_[1]);
+    points_[2] = transformation_->multVec(points_orig_[2]);
+
+    
     const TransformMatrix_t transform_norm = transformation_->transformDir();
-
-    for (unsigned int i = 0; i < 3; i++){ // Loop or explicit?
-        points_[i] = transformation_->multVec(points_orig_[i]);
-        normals_[i] = transform_norm.multDir(normals_orig_[i]); // was transformation_ before
-    }
+    normals_[0] = transform_norm.multDir(normals_orig_[0]); // was transformation_ before
+    normals_[1] = transform_norm.multDir(normals_orig_[1]); // was transformation_ before
+    normals_[2] = transform_norm.multDir(normals_orig_[2]); // was transformation_ before
 
     v0v1_ = points_[1] - points_[0];
     v0v2_ = points_[2] - points_[0];
+
+    const double tuv0v1[2] = {texture_coordinates_[1][0] - texture_coordinates_[0][0], texture_coordinates_[1][1] - texture_coordinates_[0][1]};
+    const double tuv0v2[2] = {texture_coordinates_[2][0] - texture_coordinates_[0][0], texture_coordinates_[2][1] - texture_coordinates_[0][1]};    
+
+    const double invdet = 1.0/(tuv0v1[0] * tuv0v2[1] - tuv0v1[1] * tuv0v2[0]);
+    tangent_vec_ = v0v1_ * invdet * -tuv0v2[0] + v0v2_ * invdet * tuv0v1[0];
 }
 
 Triangle_t::~Triangle_t(){}
 
 void Triangle_t::update() {
-    const TransformMatrix_t transform_norm = transformation_->transformDir();
+    points_[0] = transformation_->multVec(points_orig_[0]);
+    points_[1] = transformation_->multVec(points_orig_[1]);
+    points_[2] = transformation_->multVec(points_orig_[2]);
 
-    for (unsigned int i = 0; i < 3; i++){ // Loop or explicit?
-        points_[i] = transformation_->multVec(points_orig_[i]);
-        normals_[i] = transform_norm.multDir(normals_orig_[i]);
-    }
+    const TransformMatrix_t transform_norm = transformation_->transformDir();
+    normals_[0] = transform_norm.multDir(normals_orig_[0]);
+    normals_[1] = transform_norm.multDir(normals_orig_[1]);
+    normals_[2] = transform_norm.multDir(normals_orig_[2]);
 
     v0v1_ = points_[1] - points_[0];
     v0v2_ = points_[2] - points_[0];
+
+    const double tuv0v1[2] = {texture_coordinates_[1][0] - texture_coordinates_[0][0], texture_coordinates_[1][1] - texture_coordinates_[0][1]};
+    const double tuv0v2[2] = {texture_coordinates_[2][0] - texture_coordinates_[0][0], texture_coordinates_[2][1] - texture_coordinates_[0][1]};    
+
+    const double invdet = 1.0/(tuv0v1[0] * tuv0v2[1] - tuv0v1[1] * tuv0v2[0]);
+    tangent_vec_ = v0v1_ * invdet * -tuv0v2[0] + v0v2_ * invdet * tuv0v1[0];
 }
 
 void Triangle_t::intersection(const Ray_t &ray, bool &intersected, double &t, double (&uv)[2]) const {
@@ -134,7 +153,7 @@ void Triangle_t::normal_uv_tangent(const Ray_t &ray, const double (&uv)[2], doub
         distance[0] * normals_[0][2] + distance[1] * normals_[1][2] + distance[2] * normals_[2][2]);
     // Matrix multiplication, optimise.
 
-    
+    tangentvec = tangent_vec_.cross(normalvec).normalize();
 }        
 
 void Triangle_t::normal_face(const Ray_t &ray, Vec3f &normalvec) const{
