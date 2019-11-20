@@ -129,6 +129,7 @@ RELEASEFLAGS += -O3 -fopenmp
 # Include search paths
 
 # Included Libraries
+IMAGELIBS += -lpng -ljpeg -ltiff
 DISPLAYLIBS += -lglut -lGL -lGLU -lX11
 WINDISPLAYLIBS += -lfreeglut -lglu32 -lopengl32
 WINLIBS += -lstdc++ -lgdi32
@@ -142,37 +143,37 @@ all : release $(ReleaseObjectFiles)
 
 debug : .debug  begun $(DebugObjectFiles) $(ExecutableDebugObjectFile)
 	@printf '   Linking Debug...'
-	@$(CXX) $(CXXFLAGS) $(DEBUGFLAGS) $(DebugObjectFiles) $(ExecutableDebugObjectFile) -o $(addprefix bin/,$(Executable)) $(DISPLAYLIBS) $(DEBUGLIBS)
+	@$(CXX) $(CXXFLAGS) $(DEBUGFLAGS) $(DebugObjectFiles) $(ExecutableDebugObjectFile) -o $(addprefix bin/,$(Executable)) $(IMAGELIBS) $(DISPLAYLIBS) $(DEBUGLIBS)
 	@printf 'Done'
 	@printf '\n'
 
 release : .release begun $(ReleaseObjectFiles) $(ExecutableReleaseObjectFile)
 	@printf '   Linking Release...'
-	@$(CXX) $(CXXFLAGS) $(RELEASEFLAGS) $(ReleaseObjectFiles) $(ExecutableReleaseObjectFile) -o $(addprefix bin/,$(Executable)) $(DISPLAYLIBS)
+	@$(CXX) $(CXXFLAGS) $(RELEASEFLAGS) $(ReleaseObjectFiles) $(ExecutableReleaseObjectFile) -o $(addprefix bin/,$(Executable)) $(IMAGELIBS) $(DISPLAYLIBS)
 	@printf 'Done'
 	@printf '\n'
 
 mpidebug : .mpidebug  begun $(MPIDebugObjectFiles) $(ExecutableMPIDebugObjectFile)
 	@printf '   Linking MpiDebug...'
-	@$(MPICXX) $(CXXFLAGS) $(DEBUGFLAGS) $(MPIDebugObjectFiles) $(ExecutableMPIDebugObjectFile) -o $(addprefix bin/,$(Executable)) $(DISPLAYLIBS) $(DEBUGLIBS)
+	@$(MPICXX) $(CXXFLAGS) $(DEBUGFLAGS) $(MPIDebugObjectFiles) $(ExecutableMPIDebugObjectFile) -o $(addprefix bin/,$(Executable)) $(IMAGELIBS) $(DISPLAYLIBS) $(DEBUGLIBS)
 	@printf 'Done'
 	@printf '\n'
 
 mpirelease : .mpirelease begun $(MPIReleaseObjectFiles) $(ExecutableMPIReleaseObjectFile)	
 	@printf '   Linking MpiRelease...'
-	@$(MPICXX) $(CXXFLAGS) $(RELEASEFLAGS) $(MPIReleaseObjectFiles) $(ExecutableMPIReleaseObjectFile) -o $(addprefix bin/,$(Executable)) $(DISPLAYLIBS)
+	@$(MPICXX) $(CXXFLAGS) $(RELEASEFLAGS) $(MPIReleaseObjectFiles) $(ExecutableMPIReleaseObjectFile) -o $(addprefix bin/,$(Executable)) $(IMAGELIBS) $(DISPLAYLIBS)
 	@printf 'Done'
 	@printf '\n'
 
 windebug : .windebug  begun $(WINDebugObjectFiles) $(ExecutableWINDebugObjectFile)
 	@printf '   Linking WINDebug...'
-	@$(WINCXX) $(CXXFLAGS) $(DEBUGFLAGS) $(WINDebugObjectFiles) $(ExecutableWINDebugObjectFile) -o $(addprefix bin/,$(WINExecutable)) $(WINLIBS) $(WINDISPLAYLIBS)
+	@$(WINCXX) $(CXXFLAGS) $(DEBUGFLAGS) $(WINDebugObjectFiles) $(ExecutableWINDebugObjectFile) -o $(addprefix bin/,$(WINExecutable)) $(IMAGELIBS) $(WINLIBS) $(WINDISPLAYLIBS)
 	@printf 'Done'
 	@printf '\n'
 
 winrelease : .winrelease begun $(WINReleaseObjectFiles) $(ExecutableWINReleaseObjectFile)	
 	@printf '   Linking WINRelease...'
-	@$(WINCXX) $(CXXFLAGS) $(RELEASEFLAGS) $(WINReleaseObjectFiles) $(ExecutableWINReleaseObjectFile) -o $(addprefix bin/,$(WINExecutable)) $(WINLIBS) $(WINDISPLAYLIBS)
+	@$(WINCXX) $(CXXFLAGS) $(RELEASEFLAGS) $(WINReleaseObjectFiles) $(ExecutableWINReleaseObjectFile) -o $(addprefix bin/,$(WINExecutable)) $(IMAGELIBS) $(WINLIBS) $(WINDISPLAYLIBS)
 	@printf 'Done'
 	@printf '\n'
 

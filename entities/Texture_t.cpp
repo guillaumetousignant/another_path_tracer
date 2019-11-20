@@ -1,5 +1,8 @@
 #include "Texture_t.h"
 #include <string>
+#define cimg_use_jpeg
+#define cimg_use_png
+#define cimg_use_tiff
 #include "CImg.h"
 
 Texture_t::Texture_t(const std::string &filename){
