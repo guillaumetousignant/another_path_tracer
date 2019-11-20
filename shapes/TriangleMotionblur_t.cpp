@@ -13,45 +13,61 @@ TriangleMotionblur_t::TriangleMotionblur_t(Material_t *material, TransformMatrix
 
     if (normals == nullptr){
         const Vec3f nor = (points[1] - points[0]).cross(points[2] - points[0]).normalize(); 
-        // Loop or explicit?
-        for (unsigned int i = 0; i < 3; i++){
-            normals_orig_[i] = nor;
-        }
+        normals_orig_[0] = nor;
+        normals_orig_[1] = nor;
+        normals_orig_[2] = nor;
     }
     else{
-        for (unsigned int i = 0; i < 3; i++){
-            normals_orig_[i] = normals[i];
-        }
+        normals_orig_[0] = normals[0];
+        normals_orig_[1] = normals[1];
+        normals_orig_[2] = normals[2];
     }
 
     if (texcoord == nullptr){
-        for (unsigned int i = 0; i < 3; i++){
-            for (unsigned int j = 0; j < 2; j++){
-                texture_coordinates_[i][j] = 0;
-            }
-        }
+        texture_coordinates_[0][0] = 0;
+        texture_coordinates_[0][1] = 1;
+        texture_coordinates_[1][0] = 0;
+        texture_coordinates_[1][1] = 0;
+        texture_coordinates_[2][0] = 1;
+        texture_coordinates_[2][1] = 0;
     }
     else{
-        for (unsigned int i = 0; i < 3; i++){
-            for (unsigned int j = 0; j < 2; j++){
-                texture_coordinates_[i][j] = texcoord[i][j];
-            }
-        }
+        texture_coordinates_[0][0] = texcoord[0][0];
+        texture_coordinates_[0][1] = texcoord[0][1];
+        texture_coordinates_[1][0] = texcoord[1][0];
+        texture_coordinates_[1][1] = texcoord[1][1];
+        texture_coordinates_[2][0] = texcoord[2][0];
+        texture_coordinates_[2][1] = texcoord[2][1];
     }
 
     const TransformMatrix_t transform_norm = transformation_->transformDir();
 
-    for (unsigned int i = 0; i < 3; i++){ // Loop or explicit?
-        points_[i] = transformation_->multVec(points_orig_[i]);
-        points_last_[i] = points_[i];
-        normals_[i] = transform_norm.multDir(normals_orig_[i]); // was transformation_ before
-        normals_last_[i] = normals_[i];
-    }
+    points_[0] = transformation_->multVec(points_orig_[0]);
+    points_[1] = transformation_->multVec(points_orig_[1]);
+    points_[2] = transformation_->multVec(points_orig_[2]);
+    normals_[0] = transform_norm.multDir(normals_orig_[0]);
+    normals_[1] = transform_norm.multDir(normals_orig_[1]);
+    normals_[2] = transform_norm.multDir(normals_orig_[2]);
+    points_last_[0] = points_[0];
+    points_last_[1] = points_[1];
+    points_last_[2] = points_[2];
+    normals_last_[0] = normals_[0];
+    normals_last_[1] = normals_[1];
+    normals_last_[2] = normals_[2];
 
     v0v1_ = points_[1] - points_[0];
     v0v1_last_ = v0v1_;
     v0v2_ = points_[2] - points_[0];
     v0v2_last_ = v0v2_;
+
+    const double tuv0v1[2] = {texture_coordinates_[1][0] - texture_coordinates_[0][0], texture_coordinates_[1][1] - texture_coordinates_[0][1]};
+    const double tuv0v2[2] = {texture_coordinates_[2][0] - texture_coordinates_[0][0], texture_coordinates_[2][1] - texture_coordinates_[0][1]};    
+    const double invdet = 1.0/(tuv0v1[0] * tuv0v2[1] - tuv0v1[1] * tuv0v2[0]); 
+    tuv_to_world_[0] = invdet * -tuv0v2[0];
+    tuv_to_world_[1] = invdet * tuv0v1[0];
+
+    tangent_vec_ = v0v1_ * tuv_to_world_[0] + v0v2_ * tuv_to_world_[1];
+    tangent_vec_last_ = tangent_vec_;
 }
 
 TriangleMotionblur_t::~TriangleMotionblur_t(){}
@@ -59,17 +75,26 @@ TriangleMotionblur_t::~TriangleMotionblur_t(){}
 void TriangleMotionblur_t::update() {    
     const TransformMatrix_t transform_norm = transformation_->transformDir();
 
-    for (unsigned int i = 0; i < 3; i++){ // Loop or explicit?
-        points_last_[i] = points_[i];
-        normals_last_[i] = normals_[i];
-        points_[i] = transformation_->multVec(points_orig_[i]);
-        normals_[i] = transform_norm.multDir(normals_orig_[i]);
-    }
+    points_last_[0] = points_[0];
+    points_last_[1] = points_[1];
+    points_last_[2] = points_[2];
+    normals_last_[0] = normals_[0];
+    normals_last_[1] = normals_[1];
+    normals_last_[2] = normals_[2];
+    points_[0] = transformation_->multVec(points_orig_[0]);
+    points_[1] = transformation_->multVec(points_orig_[1]);
+    points_[2] = transformation_->multVec(points_orig_[2]);
+    normals_[0] = transform_norm.multDir(normals_orig_[0]);
+    normals_[1] = transform_norm.multDir(normals_orig_[1]);
+    normals_[2] = transform_norm.multDir(normals_orig_[2]);
 
     v0v1_last_ = v0v1_;
     v0v2_last_ = v0v2_;
     v0v1_ = points_[1] - points_[0];
     v0v2_ = points_[2] - points_[0];
+
+    tangent_vec_last_ = tangent_vec_;
+    tangent_vec_ = v0v1_ * tuv_to_world_[0] + v0v2_ * tuv_to_world_[1];
 }
 
 void TriangleMotionblur_t::intersection(const Ray_t &ray, bool &intersected, double &t, double (&uv)[2]) const {
@@ -149,6 +174,21 @@ void TriangleMotionblur_t::normal(const Ray_t &ray, const double (&uv)[2], Vec3f
         distance[0] * normals_int[0][2] + distance[1] * normals_int[1][2] + distance[2] * normals_int[2][2]);
     // Matrix multiplication, optimise.
 }
+
+void TriangleMotionblur_t::normal_uv_tangent(const Ray_t &ray, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec, Vec3f &tangentvec) const {
+    const Vec3f normals_int[3] = {normals_[0] * ray.time_ + normals_last_[0] * (1.0 - ray.time_),
+                                    normals_[1] * ray.time_ + normals_last_[1] * (1.0 - ray.time_),
+                                    normals_[2] * ray.time_ + normals_last_[2] * (1.0 - ray.time_)};
+
+    const Vec3f distance = Vec3f(1.0 - uv[0] - uv[1], uv[0], uv[1]);
+    normalvec = Vec3f(distance[0] * normals_int[0][0] + distance[1] * normals_int[1][0] + distance[2] * normals_int[2][0], 
+        distance[0] * normals_int[0][1] + distance[1] * normals_int[1][1] + distance[2] * normals_int[2][1],
+        distance[0] * normals_int[0][2] + distance[1] * normals_int[1][2] + distance[2] * normals_int[2][2]);
+    // Matrix multiplication, optimise.
+
+    const Vec3f tangent_vec_int = tangent_vec_ * ray.time_ + tangent_vec_last_ * (1.0 - ray.time_);
+    tangentvec = tangent_vec_int.cross(normalvec).normalize();
+} 
 
 void TriangleMotionblur_t::normal_face(const Ray_t &ray, Vec3f &normalvec) const{
     const Vec3f v0v1_int = v0v1_ * ray.time_ + v0v1_last_ * (1.0 - ray.time_);

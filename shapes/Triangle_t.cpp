@@ -58,7 +58,9 @@ Triangle_t::Triangle_t(Material_t *material, TransformMatrix_t *transform_matrix
     const double tuv0v2[2] = {texture_coordinates_[2][0] - texture_coordinates_[0][0], texture_coordinates_[2][1] - texture_coordinates_[0][1]};    
 
     const double invdet = 1.0/(tuv0v1[0] * tuv0v2[1] - tuv0v1[1] * tuv0v2[0]);
-    tangent_vec_ = v0v1_ * invdet * -tuv0v2[0] + v0v2_ * invdet * tuv0v1[0];
+    tuv_to_world_[0] = invdet * -tuv0v2[0];
+    tuv_to_world_[1] = invdet * tuv0v1[0];
+    tangent_vec_ = v0v1_ * tuv_to_world_[0] + v0v2_ * tuv_to_world_[1];
 }
 
 Triangle_t::~Triangle_t(){}
@@ -76,11 +78,7 @@ void Triangle_t::update() {
     v0v1_ = points_[1] - points_[0];
     v0v2_ = points_[2] - points_[0];
 
-    const double tuv0v1[2] = {texture_coordinates_[1][0] - texture_coordinates_[0][0], texture_coordinates_[1][1] - texture_coordinates_[0][1]};
-    const double tuv0v2[2] = {texture_coordinates_[2][0] - texture_coordinates_[0][0], texture_coordinates_[2][1] - texture_coordinates_[0][1]};    
-
-    const double invdet = 1.0/(tuv0v1[0] * tuv0v2[1] - tuv0v1[1] * tuv0v2[0]);
-    tangent_vec_ = v0v1_ * invdet * -tuv0v2[0] + v0v2_ * invdet * tuv0v1[0];
+    tangent_vec_ = v0v1_ * tuv_to_world_[0] + v0v2_ * tuv_to_world_[1];
 }
 
 void Triangle_t::intersection(const Ray_t &ray, bool &intersected, double &t, double (&uv)[2]) const {

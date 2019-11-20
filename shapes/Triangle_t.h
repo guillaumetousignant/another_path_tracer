@@ -20,6 +20,7 @@ class Triangle_t final : public Shape_t{
         Vec3f normals_[3];
         Vec3f v0v1_;
         Vec3f v0v2_;
+        double tuv_to_world_[2];
         Vec3f tangent_vec_; // Points up
 
         virtual void update() final;
