@@ -57,16 +57,19 @@ void ImgBuffer_t::write(std::string &filename, double gammaind /* = 1.0 */) cons
     cimg_library::CImg<unsigned short> image(size_x_, size_y_, 1, 3);
     const unsigned int n = size_x_ * size_y_;
 
+    constexpr unsigned int bit_depth = 10;
+    constexpr double bit_multiplier = std::pow(2.0, bit_depth) - 1.0;
+
     for (unsigned int j = 0; j < size_y_; ++j){
         for (unsigned int i = 0; i < size_x_; ++i){
             Vec3f colour = img_[j*size_x_ + i]*update_mult;
             colour.clamp(0.0, 1.0).pow_inplace(gammaind);
-            colour *= 65535.0;
+            colour *= bit_multiplier;
             image(i, j, 0, 0, n, n) = std::lround(colour[0]);
             image(i, j, 0, 1, n, n) = std::lround(colour[1]);
             image(i, j, 0, 2, n, n) = std::lround(colour[2]);
         }
     }
 
-    image.save_png(filename.c_str(), 16);
+    image.save_png(filename.c_str(), bit_depth);
 }
