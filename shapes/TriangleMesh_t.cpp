@@ -14,13 +14,23 @@ TriangleMesh_t::TriangleMesh_t(Material_t *material, TransformMatrix_t *transfor
 
     const TransformMatrix_t transform_norm = transformation_->transformDir();
 
-    for (unsigned int i = 0; i < 3; i++){ // Loop or explicit?
-        points_[i] = transformation_->multVec(geom_->v_[3 * index_ + i]);
-        normals_[i] = transform_norm.multDir(geom_->vn_[3 * index_ + i]); // was transformation_
-    }
+    points_[0] = transformation_->multVec(geom_->v_[3 * index_]);
+    points_[1] = transformation_->multVec(geom_->v_[3 * index_ + 1]);
+    points_[2] = transformation_->multVec(geom_->v_[3 * index_ + 2]);
+    normals_[0] = transform_norm.multDir(geom_->vn_[3 * index_]);
+    normals_[1] = transform_norm.multDir(geom_->vn_[3 * index_ + 1]);
+    normals_[2] = transform_norm.multDir(geom_->vn_[3 * index_ + 2]);
 
     v0v1_ = points_[1] - points_[0];
     v0v2_ = points_[2] - points_[0];
+
+    const double tuv0v1[2] = {geom->vt_[3 * index_ + 1][0] - geom->vt_[3 * index_][0], geom->vt_[3 * index_ + 1][1] - geom->vt_[3 * index_][1]};
+    const double tuv0v2[2] = {geom->vt_[3 * index_ + 2][0] - geom->vt_[3 * index_][0], geom->vt_[3 * index_ + 2][1] - geom->vt_[3 * index_][1]};    
+
+    const double invdet = 1.0/(tuv0v1[0] * tuv0v2[1] - tuv0v1[1] * tuv0v2[0]);
+    tuv_to_world_[0] = invdet * -tuv0v2[0];
+    tuv_to_world_[1] = invdet * tuv0v1[0];
+    tangent_vec_ = v0v1_ * tuv_to_world_[0] + v0v2_ * tuv_to_world_[1];
 }
 
 TriangleMesh_t::~TriangleMesh_t(){}
@@ -28,13 +38,17 @@ TriangleMesh_t::~TriangleMesh_t(){}
 void TriangleMesh_t::update() {
     const TransformMatrix_t transform_norm = transformation_->transformDir();
 
-    for (unsigned int i = 0; i < 3; i++){ // Loop or explicit?
-        points_[i] = transformation_->multVec(geom_->v_[3 * index_ + i]);
-        normals_[i] = transform_norm.multDir(geom_->vn_[3 * index_ + i]); // was transformation_
-    }
+    points_[0] = transformation_->multVec(geom_->v_[3 * index_]);
+    points_[1] = transformation_->multVec(geom_->v_[3 * index_ + 1]);
+    points_[2] = transformation_->multVec(geom_->v_[3 * index_ + 2]);
+    normals_[0] = transform_norm.multDir(geom_->vn_[3 * index_]);
+    normals_[1] = transform_norm.multDir(geom_->vn_[3 * index_ + 1]);
+    normals_[2] = transform_norm.multDir(geom_->vn_[3 * index_ + 2]);
 
     v0v1_ = points_[1] - points_[0];
     v0v2_ = points_[2] - points_[0];
+
+    tangent_vec_ = v0v1_ * tuv_to_world_[0] + v0v2_ * tuv_to_world_[1];
 }
 
 void TriangleMesh_t::intersection(const Ray_t &ray, bool &intersected, double &t, double (&uv)[2]) const {
@@ -99,6 +113,18 @@ void TriangleMesh_t::normal(const Ray_t &ray, const double (&uv)[2], Vec3f &norm
         distance[0] * normals_[0][2] + distance[1] * normals_[1][2] + distance[2] * normals_[2][2]);
     // Matrix multiplication, optimise.
 }
+
+void TriangleMesh_t::normal_uv_tangent(const Ray_t &ray, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec, Vec3f &tangentvec) const {
+    const Vec3f distance = Vec3f(1.0 - uv[0] - uv[1], uv[0], uv[1]);
+    normalvec = Vec3f(distance[0] * normals_[0][0] + distance[1] * normals_[1][0] + distance[2] * normals_[2][0], 
+        distance[0] * normals_[0][1] + distance[1] * normals_[1][1] + distance[2] * normals_[2][1],
+        distance[0] * normals_[0][2] + distance[1] * normals_[1][2] + distance[2] * normals_[2][2]);
+    // Matrix multiplication, optimise.
+    tuv[0] = distance[0] * geom_->vt_[3*index_][0] + distance[1] * geom_->vt_[3*index_ + 1][0] + distance[2] * geom_->vt_[3*index_ + 2][0];
+    tuv[1] = distance[0] * geom_->vt_[3*index_][1] + distance[1] * geom_->vt_[3*index_ + 1][1] + distance[2] * geom_->vt_[3*index_ + 2][1];
+
+    tangentvec = tangent_vec_.cross(normalvec).normalize();
+}  
 
 void TriangleMesh_t::normal_face(const Ray_t &ray, Vec3f &normalvec) const{
     normalvec = v0v1_.cross(v0v2_).normalize();
