@@ -57,7 +57,7 @@ void ImgBuffer_t::write(std::string &filename, double gammaind /* = 1.0 */) cons
     cimg_library::CImg<unsigned short> image(size_x_, size_y_, 1, 3);
     const unsigned int n = size_x_ * size_y_;
 
-    constexpr unsigned int bit_depth = 10;
+    constexpr unsigned int bit_depth = 16;
     constexpr double bit_multiplier = std::pow(2.0, bit_depth) - 1.0;
 
     for (unsigned int j = 0; j < size_y_; ++j){
@@ -71,5 +71,5 @@ void ImgBuffer_t::write(std::string &filename, double gammaind /* = 1.0 */) cons
         }
     }
 
-    image.save_png(filename.c_str(), bit_depth);
+    image.save_png(filename.c_str());
 }
