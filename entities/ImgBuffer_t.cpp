@@ -1,4 +1,7 @@
 #include "ImgBuffer_t.h"
+#define cimg_use_jpeg
+#define cimg_use_png
+#define cimg_use_tiff
 #include "CImg.h"
 #include <cmath>
 #include <algorithm>
