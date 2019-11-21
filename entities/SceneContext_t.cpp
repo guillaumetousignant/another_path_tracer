@@ -17,6 +17,7 @@
 #include "DiffuseTexNormal_t.h"
 #include "Reflective_t.h"
 #include "ReflectiveFuzz_t.h"
+#include "ReflectiveFuzzNormal_t.h"
 #include "ReflectiveFuzzTex_t.h"
 #include "ReflectiveRefractive_t.h"
 #include "ReflectiveRefractiveFuzz_t.h"
@@ -1179,6 +1180,13 @@ std::unique_ptr<Material_t> SceneContext_t::create_material(const tinyxml2::XMLE
         require_attributes(xml_material, attributes, 4);
         return std::unique_ptr<Material_t>(
                     new ReflectiveFuzz_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity")));
+    }
+    else if (type == "reflective_fuzz_normal"){
+        const char* attributes[] = {"emission", "colour", "normal_map", "order", "diffusivity"};
+        require_attributes(xml_material, attributes, 5);
+        return std::unique_ptr<Material_t>(
+                    new ReflectiveFuzzNormal_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), 
+                    get_texture(xml_material->Attribute("normal_map"), xml_textures), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity")));
     }
     else if (type == "reflective_fuzz_tex"){
         const char* attributes[] = {"emission", "texture", "order", "diffusivity"};
