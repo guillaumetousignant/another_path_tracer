@@ -14,16 +14,16 @@
       <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>
       <material emission="black" name="base1" roughness="1" texture="piper_diffuse" normal_map="piper_normal" type="diffuse_tex_normal"/>
       <material emission="black" name="base_NONE1" roughness="1" texture="piper_diffuse" normal_map="piper_normal" type="diffuse_tex_normal"/>
-      <material colour="0.95 0.95 0.95" emission="black" normal_map="piper_normal" ind="1.5" name="glass" priority="10" scattering_fn="glass_absorber" type="reflective_refractive_normal"/>
-      <material colour="0.95 0.95 0.95" emission="black" normal_map="piper_normal" ind="1.5" name="glass_NONE" priority="11" scattering_fn="glass_absorber" type="reflective_refractive_normal"/>
-      <material diffusivity="0.04" emission="black" name="internals_alu" order="1" texture="piper_diffuse" normal_map="piper_normal" type="reflective_fuzz_tex_normal"/>
-      <material colour="0.33602 0.33602 0.33602" diffusivity="0.04" emission="black" normal_map="piper_normal" name="internals_alu_NONE" order="1" type="reflective_fuzz_normal"/>
+      <material colour="0.95 0.95 0.95" emission="black" normal_map="piper_normal" ind="1.5" name="glass" priority="10" scattering_fn="glass_absorber" type="reflective_refractive"/>
+      <material colour="0.95 0.95 0.95" emission="black" normal_map="piper_normal" ind="1.5" name="glass_NONE" priority="11" scattering_fn="glass_absorber" type="reflective_refractive"/>
+      <material diffusivity="0.04" emission="black" name="internals_alu" order="1" texture="piper_diffuse" normal_map="piper_normal" type="reflective_fuzz_tex"/>
+      <material colour="0.33602 0.33602 0.33602" diffusivity="0.04" emission="black" normal_map="piper_normal" name="internals_alu_NONE" order="1" type="reflective_fuzz"/>
       <material colour="0.007214 0.007214 0.007214" emission="black" normal_map="piper_normal" name="internals_b" roughness="1" type="diffuse_normal"/>
-      <material colour="0.95 0.95 0.95" emission="black" normal_map="piper_normal" name="mirror" type="reflective_normal"/>
+      <material colour="0.95 0.95 0.95" emission="black" normal_map="piper_normal" name="mirror" type="reflective"/>
       <material emission="black" name="prop" roughness="1" texture="piper_diffuse" normal_map="piper_normal" type="diffuse_tex_normal"/>
       <material emission="black" name="tires" roughness="0.2" texture="piper_diffuse" normal_map="piper_normal" type="diffuse_tex_normal"/>
       <material materials_list="base, base_NONE, glass, glass_NONE, internals_alu, internals_alu_NONE, internals_b, mirror, prop, tires" materials_names="base, base_NONE, glass, glass_NONE, internals_alu, internals_alu_NONE, internals_b, mirror, prop, tires" name="piper_mat" type="aggregate"/>
-      <material colour="white" emission="black" normal_map="piper_normal" name="coating" type="reflective_normal"/>
+      <material colour="white" emission="black" normal_map="piper_normal" name="coating" type="reflective"/>
       <material ind="1.5" material_reflected="coating" material_refracted="base1" normal_map="piper_normal" name="base" type="fresnelmix_normal"/>
       <material ind="1.5" material_reflected="coating" material_refracted="base_NONE1" normal_map="piper_normal" name="base_NONE" type="fresnelmix_normal"/>
    </materials>
