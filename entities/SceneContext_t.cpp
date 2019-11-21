@@ -23,6 +23,7 @@
 #include "ReflectiveFuzzTex_t.h"
 #include "ReflectiveFuzzTexNormal_t.h"
 #include "ReflectiveRefractive_t.h"
+#include "ReflectiveRefractiveNormal_t.h"
 #include "ReflectiveRefractiveFuzz_t.h"
 #include "Refractive_t.h"
 #include "RefractiveFuzz_t.h"
@@ -1230,6 +1231,13 @@ std::unique_ptr<Material_t> SceneContext_t::create_material(const tinyxml2::XMLE
         require_attributes(xml_material, attributes, 5);
         return std::unique_ptr<Material_t>(
                     new ReflectiveRefractive_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("ind"), xml_material->UnsignedAttribute("priority"), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers)));
+    }
+    else if (type == "reflective_refractive_normal"){
+        const char* attributes[] = {"emission", "colour", "normal_map", "ind", "priority", "scattering_fn"};
+        require_attributes(xml_material, attributes, 6);
+        return std::unique_ptr<Material_t>(
+                    new ReflectiveRefractiveNormal_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), get_texture(xml_material->Attribute("normal_map"), xml_textures),
+                    xml_material->DoubleAttribute("ind"), xml_material->UnsignedAttribute("priority"), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers)));
     }
     else if (type == "reflective_refractive_fuzz"){
         const char* attributes[] = {"emission", "colour", "ind", "priority", "scattering_fn", "order", "diffusivity"};
