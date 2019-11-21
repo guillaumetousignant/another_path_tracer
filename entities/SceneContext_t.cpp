@@ -16,6 +16,7 @@
 #include "DiffuseTex_t.h"
 #include "DiffuseTexNormal_t.h"
 #include "Reflective_t.h"
+#include "ReflectiveNormal_t.h"
 #include "ReflectiveFuzz_t.h"
 #include "ReflectiveFuzzNormal_t.h"
 #include "ReflectiveFuzzTex_t.h"
@@ -29,6 +30,7 @@
 #include "NormalMaterial_t.h"
 #include "MaterialMix_t.h"
 #include "FresnelMix_t.h"
+#include "FresnelMixNormal_t.h"
 #include "FresnelMixIn_t.h"
 #include "RandomMix_t.h"
 #include "RandomMixIn_t.h"
@@ -1136,6 +1138,13 @@ std::unique_ptr<Material_t> SceneContext_t::create_material(const tinyxml2::XMLE
         return std::unique_ptr<Material_t>(
                     new FresnelMix_t(nullptr, nullptr, xml_material->DoubleAttribute("ind")));
     }
+    else if (type == "fresnelmix_normal"){
+        const char* attributes[] = {"material_refracted", "material_reflected", "ind", "normal_map"};
+        require_attributes(xml_material, attributes, 4);
+        materials_mix_list = get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials);
+        return std::unique_ptr<Material_t>(
+                    new FresnelMixNormal_t(nullptr, nullptr, xml_material->DoubleAttribute("ind"), get_texture(xml_material->Attribute("normal_map"), xml_textures)));
+    }
     else if (type == "fresnelmix_in"){
         const char* attributes[] = {"material_refracted", "material_reflected", "ind"};
         require_attributes(xml_material, attributes, 3);
@@ -1174,6 +1183,12 @@ std::unique_ptr<Material_t> SceneContext_t::create_material(const tinyxml2::XMLE
         require_attributes(xml_material, attributes, 2);
         return std::unique_ptr<Material_t>(
                     new Reflective_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour"))));
+    }
+    else if (type == "reflective_normal"){
+        const char* attributes[] = {"emission", "colour", "normal_map"};
+        require_attributes(xml_material, attributes, 3);
+        return std::unique_ptr<Material_t>(
+                    new ReflectiveNormal_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), get_texture(xml_material->Attribute("normal_map"), xml_textures)));
     }
     else if (type == "reflective_fuzz"){
         const char* attributes[] = {"emission", "colour", "order", "diffusivity"};
