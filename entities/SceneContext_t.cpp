@@ -14,6 +14,7 @@
 #include "Diffuse_t.h"
 #include "DiffuseFull_t.h"
 #include "DiffuseTex_t.h"
+#include "DiffuseTexNormal_t.h"
 #include "Reflective_t.h"
 #include "ReflectiveFuzz_t.h"
 #include "ReflectiveFuzzTex_t.h"
@@ -1119,6 +1120,13 @@ std::unique_ptr<Material_t> SceneContext_t::create_material(const tinyxml2::XMLE
         return std::unique_ptr<Material_t>(
                     new DiffuseTex_t(get_colour(xml_material->Attribute("emission")), get_texture(xml_material->Attribute("texture"), xml_textures), 
                                 xml_material->DoubleAttribute("roughness")));
+    }
+    else if (type == "diffuse_tex_normal"){
+        const char* attributes[] = {"emission", "texture", "normal_map", "roughness"};
+        require_attributes(xml_material, attributes, 4);
+        return std::unique_ptr<Material_t>(
+                    new DiffuseTexNormal_t(get_colour(xml_material->Attribute("emission")), get_texture(xml_material->Attribute("texture"), xml_textures), 
+                                get_texture(xml_material->Attribute("normal_map"), xml_textures), xml_material->DoubleAttribute("roughness")));
     }
     else if (type == "fresnelmix"){
         const char* attributes[] = {"material_refracted", "material_reflected", "ind"};
