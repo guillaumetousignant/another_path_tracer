@@ -24,9 +24,6 @@ void ReflectiveFuzzNormal_t::bounce(const double (&uv)[2], const Shape_t* hit_ob
     tangent_weights = normal_map_->get(tuv) * 2.0 - 1.0;
     normal = (tangent * tangent_weights[0] + bitangent * tangent_weights[1] + normal * tangent_weights[2]).normalize();
 
-
-    hit_obj->normal(ray, uv, normal);
-
     if (normal.dot(ray.direction_) > 0.0){
         normal *= -1.0;
     }
