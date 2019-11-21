@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<scene name="sphere" object_list="sphere, planegrey1, planegrey2">
+   <textures>
+      <texture filename="assets\Ocean from horn.jpg" name="background" type="texture"/>
+      <texture filename="assets\Terracotta\Terracotta_Tiles_002_Base_Color.jpg" name="brick_colour" type="texture"/>
+      <texture filename="assets\Terracotta\Terracotta_Tiles_002_Normal.jpg" name="brick_normal" type="texture"/>
+   </textures>
+   <scatterers>
+      <scatterer name="air_absorber" type="nonabsorber"/>
+   </scatterers>
+   <materials>
+      <material name="air" priority="0" scattering_fn="air_absorber" type="transparent"/>
+      <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>      
+      <material emission="black" name="brick_mat" roughness="1" texture="brick_colour" normal_map="brick_normal" type="diffuse_tex_normal"/>
+   </materials>brick_mat
+   <objects>
+    <object material="brick_mat" name="sphere" transform_matrix="NaN" type="sphere">
+         <transformations_pre>
+            <transformation_pre type="translate" value="0 0 0"/>
+            <transformation_pre type="uniformscale" value="1"/>
+         </transformations_pre>
+      </object>
+      <object material="difgrey" name="planegrey1" normals="NaN" points="-2 2 -0.5&#xA;-2 -2 -0.5&#xA; 2 -2 -0.5" texture_coordinates="NaN" transform_matrix="NaN" type="triangle">
+         <transformations_pre>
+            <transformation_pre type="rotatezaxis" value="0"/>
+         </transformations_pre>
+      </object>
+      <object material="difgrey" name="planegrey2" normals="NaN" points="-2 2 -0.5&#xA; 2 -2 -0.5&#xA; 2 2 -0.5" texture_coordinates="NaN" transform_matrix="NaN" type="triangle">
+         <transformations_pre>
+            <transformation_pre type="rotatezaxis" value="0"/>
+         </transformations_pre>
+      </object>
+   </objects>
+   <skyboxes>
+      <skybox light_colour="12.6373 11.9395 11.6477" light_position="0.62093 0.77075" light_radius="0.035" name="sky" texture="background" type="skybox_texture_sun"/>
+   </skyboxes>
+   <imgbuffers>
+      <imgbuffer name="buffer1" resx="600" resy="400" type="imgbuffer_opengl"/>
+   </imgbuffers>
+   <cameras>
+      <camera aperture="0.005" filename="NaN" focal_length="3" fov="0.93084 1.3963" gammaind="1" imgbuffer="buffer1" max_bounces="8" medium_list="air, air" n_iter="Inf" name="camera1" rendermode="accumulation" write_interval="100" skybox="sky" subpix="1 1" transform_matrix="NaN" type="cam" up="0 0 1">
+         <transformations_pre>
+            <transformation_pre type="translate" value="0 -2 0"/>
+            <transformation_pre type="rotatezaxis" value="0"/>
+         </transformations_pre>
+      </camera>
+   </cameras>
+</scene>
