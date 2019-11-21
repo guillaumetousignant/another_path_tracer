@@ -24,7 +24,6 @@ void FresnelMixNormal_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, R
     tangent_weights = normal_map_->get(tuv) * 2.0 - 1.0;
     normal = (tangent * tangent_weights[0] + bitangent * tangent_weights[1] + normal * tangent_weights[2]).normalize();
 
-
     const double cosi = std::abs(ray.direction_.dot(normal));
 
     const double etai = ray.medium_list_.front()->ind_;
