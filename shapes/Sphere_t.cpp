@@ -64,7 +64,7 @@ void Sphere_t::normaluv(const Ray_t &ray, const double (&uv)[2], double (&tuv)[2
     Vec3f sph = Vec3f(1.0, (1.0 - uv[1]) * PI, (uv[0] - 0.5) * 2.0 * PI);
     normalvec = sph.get_xyz();
 
-    sph = normalvec.get_sph() - direction_sph_;
+    sph -= direction_sph_;
 
     // CHECK change
     if (sph[1] < 0.0){
@@ -91,6 +91,36 @@ void Sphere_t::normaluv(const Ray_t &ray, const double (&uv)[2], double (&tuv)[2
 void Sphere_t::normal(const Ray_t &ray, const double (&uv)[2], Vec3f &normalvec) const {
     normalvec = Vec3f(1.0, (1.0 - uv[1]) * PI, (uv[0] - 0.5) * 2.0 * PI).to_xyz();
 }
+
+void Sphere_t::normal_uv_tangent(const Ray_t &ray, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec, Vec3f &tangentvec) const {
+    Vec3f sph = Vec3f(1.0, (1.0 - uv[1]) * PI, (uv[0] - 0.5) * 2.0 * PI);
+    normalvec = sph.get_xyz();
+
+    sph -= direction_sph_;
+
+    // CHECK change
+    if (sph[1] < 0.0){
+        sph[1] = -sph[1];
+        sph[2] += PI;
+    }
+    else if (sph[1] > PI){
+        sph[1] = 2.0*PI - sph[1];
+        sph[2] += PI;
+    }
+
+    // CHECK change
+    if (sph[2] < -PI){
+        sph[2] += 2.0*PI;
+    }
+    else if (sph[2] > PI){
+        sph[2] -= 2.0*PI;
+    }
+
+    tuv[0] = sph[2]/(2.0 * PI) + 0.5;
+    tuv[1] = 1.0 - sph[1]/PI;
+
+    tangentvec = direction_sph_.get_xyz().cross(normalvec).normalize();
+} 
 
 Vec3f Sphere_t::mincoord() const {
     return origin_ - radius_;
