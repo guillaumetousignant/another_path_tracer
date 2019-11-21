@@ -38,7 +38,7 @@ Triangle_t::Triangle_t(Material_t *material, TransformMatrix_t *transform_matrix
         texture_coordinates_[1][0] = texcoord[1][0];
         texture_coordinates_[1][1] = texcoord[1][1];
         texture_coordinates_[2][0] = texcoord[2][0];
-        texture_coordinates_[3][1] = texcoord[2][1];
+        texture_coordinates_[2][1] = texcoord[2][1];
     }
 
     points_[0] = transformation_->multVec(points_orig_[0]);
