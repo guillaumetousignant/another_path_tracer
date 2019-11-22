@@ -156,6 +156,8 @@ void Triangle_t::normal_uv_tangent(const Ray_t &ray, const double (&uv)[2], doub
         distance[0] * normals_[0][1] + distance[1] * normals_[1][1] + distance[2] * normals_[2][1],
         distance[0] * normals_[0][2] + distance[1] * normals_[1][2] + distance[2] * normals_[2][2]);
     // Matrix multiplication, optimise.
+    tuv[0] = distance[0] * texture_coordinates_[0][0] + distance[1] * texture_coordinates_[1][0] + distance[2] * texture_coordinates_[2][0];
+    tuv[1] = distance[0] * texture_coordinates_[0][1] + distance[1] * texture_coordinates_[1][1] + distance[2] * texture_coordinates_[2][1];
 
     tangentvec = tangent_vec_.cross(normalvec).normalize();
 }        
