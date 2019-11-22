@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <scene object_list="piper" name="piper">
    <textures>
-      <texture filename=".\assets\piper_pa18_obj\piper_diffuse.jpg" name="piper_diffuse" type="texture"/>
-      <texture filename=".\assets\piper_pa18_obj\piper_normal.png" name="piper_normal" type="texture"/>
+      <texture filename="assets\piper_pa18_obj\piper_diffuse.jpg" name="piper_diffuse" type="texture"/>
+      <texture filename="assets\piper_pa18_obj\piper_normal.png" name="piper_normal" type="texture"/>
       <texture filename="assets\Ocean from horn.jpg" name="background" type="texture"/>
    </textures>
    <scatterers>
@@ -28,7 +28,7 @@
       <material ind="1.5" material_reflected="coating" material_refracted="base_NONE1" normal_map="piper_normal" name="base_NONE" type="fresnelmix_normal"/>
    </materials>
    <mesh_geometries>
-      <mesh_geometry filename=".\assets\piper_pa18_obj\piper_pa18.obj" name="piper_mesh" type="mesh_geometry"/>
+      <mesh_geometry filename="assets\piper_pa18_obj\piper_pa18.obj" name="piper_mesh" type="mesh_geometry"/>
    </mesh_geometries>
    <objects>
       <object material="difgrey" name="planegrey1" normals="NaN" points="-2 2 -0.5&#xA;-2 -2 -0.5&#xA; 2 -2 -0.5" texture_coordinates="NaN" transform_matrix="NaN" type="triangle"/>
