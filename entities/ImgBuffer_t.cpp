@@ -57,8 +57,9 @@ void ImgBuffer_t::write(std::string &filename, double gammaind /* = 1.0 */) cons
     cimg_library::CImg<unsigned short> image(size_x_, size_y_, 1, 3);
     const unsigned int n = size_x_ * size_y_;
 
-    constexpr unsigned int bit_depth = 16;
-    constexpr double bit_multiplier = std::pow(2.0, bit_depth) - 1.0;
+    //constexpr unsigned int bit_depth = 16;
+    //constexpr double bit_multiplier = std::pow(2.0, bit_depth) - 1.0;
+    constexpr double bit_multiplier = 65535.0; // 16 bits, with msvc std::pow is not constexpr :(
 
     for (unsigned int j = 0; j < size_y_; ++j){
         for (unsigned int i = 0; i < size_x_; ++i){
