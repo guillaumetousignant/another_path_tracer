@@ -172,7 +172,7 @@ void SceneContext_t::readXML(const std::string &filename){
     unsigned int n_cameras = 0;
 
     std::vector<std::unique_ptr<std::list<unsigned int>>> scatterers_medium_list;
-    std::vector<std::unique_ptr<unsigned int>> materials_mix_list;
+    std::vector<std::vector<unsigned int>> materials_mix_list;
     std::vector<std::unique_ptr<std::list<unsigned int>>> materials_medium_list;
     std::vector<
         std::unique_ptr<std::tuple<
@@ -317,7 +317,7 @@ void SceneContext_t::readXML(const std::string &filename){
     cameras_ = std::vector<std::unique_ptr<Camera_t>>(n_cameras);
  
     scatterers_medium_list = std::vector<std::unique_ptr<std::list<unsigned int>>>(n_scatterers);     
-    materials_mix_list = std::vector<std::unique_ptr<unsigned int>>(n_materials);
+    materials_mix_list = std::vector<std::vector<unsigned int>>(n_materials);
     materials_medium_list = std::vector<std::unique_ptr<std::list<unsigned int>>>(n_materials);
     materials_aggregate_list = std::vector<
                                     std::unique_ptr<std::tuple<
@@ -368,14 +368,14 @@ void SceneContext_t::readXML(const std::string &filename){
     // Fixes 
     // Material mixes fix
     for (unsigned int i = 0; i < materials_.size(); i++){
-        if (materials_mix_list[i]){
+        if (!materials_mix_list[i].empty()){
             MaterialMix_t* material_mix = dynamic_cast<MaterialMix_t*>(materials_[i].get()); // dynamic caaaast :(
             if (material_mix == nullptr){
                 std::cerr << "Error: material #" << i << " was marked as a material mix but is not convertible to one. Exiting." << std::endl;
                 exit(491);
             }
-            material_mix->material_refracted_ = materials_[materials_mix_list[i].get()[0]].get();
-            material_mix->material_reflected_ = materials_[materials_mix_list[i].get()[1]].get();
+            material_mix->material_refracted_ = materials_[materials_mix_list[i][0]].get();
+            material_mix->material_reflected_ = materials_[materials_mix_list[i][1]].get();
         }
     }
 
@@ -1094,7 +1094,7 @@ std::unique_ptr<ScatteringFunction_t> SceneContext_t::create_scatterer(const tin
     }
 }
 
-std::unique_ptr<Material_t> SceneContext_t::create_material(const tinyxml2::XMLElement* xml_material, std::unique_ptr<std::list<unsigned int>> &materials_medium_list, std::unique_ptr<unsigned int> &materials_mix_list, std::unique_ptr<std::tuple<std::unique_ptr<std::list<unsigned int>>, std::unique_ptr<std::list<std::string>>>> &materials_aggregate_list, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_scatterers) {
+std::unique_ptr<Material_t> SceneContext_t::create_material(const tinyxml2::XMLElement* xml_material, std::unique_ptr<std::list<unsigned int>> &materials_medium_list, std::vector<unsigned int> &materials_mix_list, std::unique_ptr<std::tuple<std::unique_ptr<std::list<unsigned int>>, std::unique_ptr<std::list<std::string>>>> &materials_aggregate_list, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_scatterers) {
     std::string type;
     const char* type_char = xml_material->Attribute("type");
     if (type_char == nullptr) {
@@ -2130,11 +2130,12 @@ Texture_t* SceneContext_t::get_texture(std::string texture, const tinyxml2::XMLE
     exit(21); 
 }
 
-std::unique_ptr<unsigned int> SceneContext_t::get_material_mix(std::string material_refracted, std::string material_reflected, const tinyxml2::XMLElement* xml_materials) const {
-    std::unique_ptr<unsigned int> output_materials = std::unique_ptr<unsigned int>(new unsigned int[2]);
+std::vector<unsigned int> SceneContext_t::get_material_mix(std::string material_refracted, std::string material_reflected, const tinyxml2::XMLElement* xml_materials) const {
+    //std::unique_ptr<unsigned int> output_materials = std::unique_ptr<unsigned int>(new unsigned int[2]);
+    std::vector<unsigned int> output_materials = std::vector<unsigned int>(2);
     
     if (is_number(material_refracted)) {
-        output_materials.get()[0] = std::stoi(material_refracted) - 1;
+        output_materials[0] = std::stoi(material_refracted) - 1;
     } 
     else {
         if (xml_materials != nullptr){
@@ -2147,7 +2148,7 @@ std::unique_ptr<unsigned int> SceneContext_t::get_material_mix(std::string mater
                     std::string name_material = name_char;
                     std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
                     if (material_refracted == name_material){
-                        output_materials.get()[0] = index;
+                        output_materials[0] = index;
                         material_missing = false;
                         break;
                     }
@@ -2166,7 +2167,7 @@ std::unique_ptr<unsigned int> SceneContext_t::get_material_mix(std::string mater
     }
 
     if (is_number(material_reflected)) {
-        output_materials.get()[1] = std::stoi(material_reflected) - 1;
+        output_materials[1] = std::stoi(material_reflected) - 1;
     }
     else {
         if (xml_materials != nullptr){
@@ -2179,7 +2180,7 @@ std::unique_ptr<unsigned int> SceneContext_t::get_material_mix(std::string mater
                     std::string name_material = name_char;
                     std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
                     if (material_reflected == name_material){
-                        output_materials.get()[1] = index;
+                        output_materials[1] = index;
                         material_missing = false;
                         break;
                     }
