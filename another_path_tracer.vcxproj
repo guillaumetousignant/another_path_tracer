@@ -127,7 +127,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)acceleration\;$(ProjectDir)cameras\;$(ProjectDir)entities\;$(ProjectDir)functions\;$(ProjectDir)materials\;$(ProjectDir)shapes\;$(ProjectDir)skyboxes\;$(ProjectDir)freeglut\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)acceleration\;$(ProjectDir)cameras\;$(ProjectDir)entities\;$(ProjectDir)functions\;$(ProjectDir)materials\;$(ProjectDir)shapes\;$(ProjectDir)skyboxes\;$(ProjectDir)freeglut\include\;C:\Program Files (x86)\GnuWin32\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
@@ -138,8 +138,8 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(ProjectDir)freeglut\lib\x64\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>freeglut.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Program Files (x86)\GnuWin32\lib;$(ProjectDir)freeglut\lib\x64\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>freeglut.lib;jpeg.lib;libpng.lib;libtiff.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
