@@ -42,39 +42,39 @@ void CamMotionblurAperture_t::raytrace(const Scene_t* scene) {
 
     image_->update();
 
-    #pragma omp parallel for collapse(2) schedule(guided)
-    for (unsigned int j = 0; j < image_->size_y_; j++){
-        for (unsigned int i = 0; i < image_->size_x_; i++){
-            Vec3f col = Vec3f(); // Or declare above?
-            const Vec3f pix_vec = Vec3f(1.0, PI/2.0 + ((double)j - (double)image_->size_y_/2.0 + 0.5)*pixel_span_y, ((double)i - (double)image_->size_x_/2.0 + 0.5)*pixel_span_x);
-            
-            for (unsigned int k = 0; k < subpix_[0]; k++){
-                for (unsigned int l = 0; l < subpix_[1]; l++){                    
-                    const double rand_time = unif_(my_rand::rng) * (time_[1] - time_[0]) + time_[0];
-                    const double rand_theta = unif_(my_rand::rng) * 2.0 * PI;
-                    const double rand_r = std::sqrt(unif_(my_rand::rng)) * aperture_;
-                    const double jitter_y = unif_(my_rand::rng);
-                    const double jitter_x = unif_(my_rand::rng);
+    #pragma omp parallel for schedule(guided)
+    for (size_t index = 0; index < image_->size_y_ * image_->size_x_; ++index){
+        const size_t i = index%image_->size_y_;
+        const size_t j = index/image_->size_y_;
+        Vec3f col = Vec3f(); // Or declare above?
+        const Vec3f pix_vec = Vec3f(1.0, PI/2.0 + ((double)j - (double)image_->size_y_/2.0 + 0.5)*pixel_span_y, ((double)i - (double)image_->size_x_/2.0 + 0.5)*pixel_span_x);
+        
+        for (unsigned int k = 0; k < subpix_[0]; k++){
+            for (unsigned int l = 0; l < subpix_[1]; l++){                    
+                const double rand_time = unif_(my_rand::rng) * (time_[1] - time_[0]) + time_[0];
+                const double rand_theta = unif_(my_rand::rng) * 2.0 * PI;
+                const double rand_r = std::sqrt(unif_(my_rand::rng)) * aperture_;
+                const double jitter_y = unif_(my_rand::rng);
+                const double jitter_x = unif_(my_rand::rng);
 
-                    const double focal_length_int = focal_length_ * rand_time + focal_length_last_ * (1.0 - rand_time);
-                    const Vec3f direction_int = direction_ * rand_time + direction_last_ * (1.0 - rand_time);
-                    const Vec3f horizontal_int = horizontal * rand_time + horizontal_last * (1.0 - rand_time);
-                    const Vec3f vertical_int = vertical * rand_time + vertical_last * (1.0 - rand_time);
-                    const Vec3f origin_int = origin_ * rand_time + origin_last_ * (1.0 - rand_time);
+                const double focal_length_int = focal_length_ * rand_time + focal_length_last_ * (1.0 - rand_time);
+                const Vec3f direction_int = direction_ * rand_time + direction_last_ * (1.0 - rand_time);
+                const Vec3f horizontal_int = horizontal * rand_time + horizontal_last * (1.0 - rand_time);
+                const Vec3f vertical_int = vertical * rand_time + vertical_last * (1.0 - rand_time);
+                const Vec3f origin_int = origin_ * rand_time + origin_last_ * (1.0 - rand_time);
 
-                    Vec3f subpix_vec = pix_vec + Vec3f(0.0, ((double)k - (double)subpix_[0]/2.0 + jitter_y)*subpix_span_y, ((double)l - (double)subpix_[1]/2.0 + jitter_x)*subpix_span_x);
-                    const Vec3f origin2 = origin_int + vertical_int * std::cos(rand_theta) * rand_r + horizontal_int * std::sin(rand_theta) * rand_r;
-                    
-                    subpix_vec = origin_int + subpix_vec.to_xyz_offset(direction_int, horizontal_int, vertical_int) * focal_length_int - origin2;
+                Vec3f subpix_vec = pix_vec + Vec3f(0.0, ((double)k - (double)subpix_[0]/2.0 + jitter_y)*subpix_span_y, ((double)l - (double)subpix_[1]/2.0 + jitter_x)*subpix_span_x);
+                const Vec3f origin2 = origin_int + vertical_int * std::cos(rand_theta) * rand_r + horizontal_int * std::sin(rand_theta) * rand_r;
+                
+                subpix_vec = origin_int + subpix_vec.to_xyz_offset(direction_int, horizontal_int, vertical_int) * focal_length_int - origin2;
 
-                    Ray_t ray = Ray_t(origin2, subpix_vec.normalize(), Vec3f(), Vec3f(1.0), medium_list_, rand_time);
-                    ray.raycast(scene, max_bounces_, skybox_);
-                    col += ray.colour_;
-                }
+                Ray_t ray = Ray_t(origin2, subpix_vec.normalize(), Vec3f(), Vec3f(1.0), medium_list_, rand_time);
+                ray.raycast(scene, max_bounces_, skybox_);
+                col += ray.colour_;
             }
-            col = col/tot_subpix;
-            image_->update(col, i, j);
         }
+        col = col/tot_subpix;
+        image_->update(col, i, j);        
     }
 }
 

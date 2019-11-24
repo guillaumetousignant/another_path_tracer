@@ -33,27 +33,27 @@ void RecCam_t::raytrace(const Scene_t* scene) {
 
     image_->update();
 
-    #pragma omp parallel for collapse(2) schedule(guided)
-    for (unsigned int j = 0; j < image_->size_y_; j++){
-        for (unsigned int i = 0; i < image_->size_x_; i++){
-            Vec3f col = Vec3f(); // Or declare above?
-            const Vec3f pix_vec = focus_point - pixel_span_y * ((double)j - (double)image_->size_y_/2.0 + 0.5) + pixel_span_x * ((double)i - (double)image_->size_x_/2.0 + 0.5);
+    #pragma omp parallel for schedule(guided)
+    for (size_t index = 0; index < image_->size_y_ * image_->size_x_; ++index){
+        const size_t i = index%image_->size_y_;
+        const size_t j = index/image_->size_y_;
+        Vec3f col = Vec3f(); // Or declare above?
+        const Vec3f pix_vec = focus_point - pixel_span_y * ((double)j - (double)image_->size_y_/2.0 + 0.5) + pixel_span_x * ((double)i - (double)image_->size_x_/2.0 + 0.5);
 
-            for (unsigned int k = 0; k < subpix_[0]; k++){
-                for (unsigned int l = 0; l < subpix_[1]; l++){ 
-                    const double jitter_y = unif_(my_rand::rng);
-                    const double jitter_x = unif_(my_rand::rng);
+        for (unsigned int k = 0; k < subpix_[0]; k++){
+            for (unsigned int l = 0; l < subpix_[1]; l++){ 
+                const double jitter_y = unif_(my_rand::rng);
+                const double jitter_x = unif_(my_rand::rng);
 
-                    const Vec3f subpix_vec = (pix_vec - subpix_span_y * ((double)k - (double)subpix_[0]/2.0 + jitter_y) + subpix_span_x * ((double)l - (double)subpix_[1]/2.0 + jitter_x) - origin_).normalize();
-                    
-                    Ray_t ray = Ray_t(origin_, subpix_vec, Vec3f(), Vec3f(1.0), medium_list_);
-                    ray.raycast(scene, max_bounces_, skybox_);
-                    col += ray.colour_;
-                }
+                const Vec3f subpix_vec = (pix_vec - subpix_span_y * ((double)k - (double)subpix_[0]/2.0 + jitter_y) + subpix_span_x * ((double)l - (double)subpix_[1]/2.0 + jitter_x) - origin_).normalize();
+                
+                Ray_t ray = Ray_t(origin_, subpix_vec, Vec3f(), Vec3f(1.0), medium_list_);
+                ray.raycast(scene, max_bounces_, skybox_);
+                col += ray.colour_;
             }
-            col = col/tot_subpix;
-            image_->update(col, i, j);
         }
+        col = col/tot_subpix;
+        image_->update(col, i, j);
     }
 }
 
