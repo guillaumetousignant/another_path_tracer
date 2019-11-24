@@ -42,9 +42,9 @@ void RecCamMotionblur_t::raytrace(const Scene_t* scene) {
     image_->update();
 
     #pragma omp parallel for schedule(guided)
-    for (size_t index = 0; index < image_->size_y_ * image_->size_x_; ++index){
-        const size_t i = index%image_->size_y_;
-        const size_t j = index/image_->size_y_;
+    for (unsigned int index = 0; index < image_->size_y_ * image_->size_x_; ++index){
+        const unsigned int i = index%image_->size_y_;
+        const unsigned int j = index/image_->size_y_;
         Vec3f col = Vec3f(); // Or declare above?//std::cout << "noot " << i << " " << j << std::endl; // REMOVE
         
         for (unsigned int k = 0; k < subpix_[0]; k++){

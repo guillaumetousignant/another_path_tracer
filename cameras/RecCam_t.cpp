@@ -34,9 +34,9 @@ void RecCam_t::raytrace(const Scene_t* scene) {
     image_->update();
 
     #pragma omp parallel for schedule(guided)
-    for (size_t index = 0; index < image_->size_y_ * image_->size_x_; ++index){
-        const size_t i = index%image_->size_y_;
-        const size_t j = index/image_->size_y_;
+    for (unsigned int index = 0; index < image_->size_y_ * image_->size_x_; ++index){
+        const unsigned int i = index%image_->size_y_;
+        const unsigned int j = index/image_->size_y_;
         Vec3f col = Vec3f(); // Or declare above?
         const Vec3f pix_vec = focus_point - pixel_span_y * ((double)j - (double)image_->size_y_/2.0 + 0.5) + pixel_span_x * ((double)i - (double)image_->size_x_/2.0 + 0.5);
 
