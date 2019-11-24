@@ -33,31 +33,36 @@ void RecCamAperture_t::raytrace(const Scene_t* scene) {
     const Vec3f pixel_span_x = horizontal * focal_length_ * std::tan(fov_[1]/2.0) * 2.0/image_->size_x_;
     const Vec3f subpix_span_y = pixel_span_y/subpix_[0];
     const Vec3f subpix_span_x = pixel_span_x/subpix_[1];
+    #ifdef _WIN32
+        int index; // Openmp on windows can't use unsigned index.
+    #else
+        unsigned int index;
+    #endif
 
     image_->update();
 
     #pragma omp parallel for schedule(guided)
-    for (unsigned int index = 0; index < image_->size_y_ * image_->size_x_; ++index){
+    for (index = 0; index < image_->size_y_ * image_->size_x_; ++index){
         const unsigned int i = index%image_->size_y_;
         const unsigned int j = index/image_->size_y_;
         Vec3f col = Vec3f(); // Or declare above?
         const Vec3f pix_vec = focus_point - pixel_span_y * ((double)j - (double)image_->size_y_/2.0 + 0.5) + pixel_span_x * ((double)i - (double)image_->size_x_/2.0 + 0.5);
         
-        for (unsigned int k = 0; k < subpix_[0]; k++){
-            for (unsigned int l = 0; l < subpix_[1]; l++){
-                const double rand_theta = unif_(my_rand::rng) * 2.0 * PI;
-                const double rand_r = std::sqrt(unif_(my_rand::rng)) * aperture_;
-                const double jitter_y = unif_(my_rand::rng);
-                const double jitter_x = unif_(my_rand::rng);
+        for (unsigned int subindex = 0; subindex < subpix_[0] * subpix_[1]; ++subindex){
+            const unsigned int l = subindex%subpix_[0]; // x
+            const unsigned int k = subindex/subpix_[0]; // y
+            const double rand_theta = unif_(my_rand::rng) * 2.0 * PI;
+            const double rand_r = std::sqrt(unif_(my_rand::rng)) * aperture_;
+            const double jitter_y = unif_(my_rand::rng);
+            const double jitter_x = unif_(my_rand::rng);
 
-                const Vec3f origin2 = origin_ + vertical * std::cos(rand_theta) * rand_r + horizontal * std::sin(rand_theta) * rand_r;
+            const Vec3f origin2 = origin_ + vertical * std::cos(rand_theta) * rand_r + horizontal * std::sin(rand_theta) * rand_r;
 
-                const Vec3f subpix_vec = (pix_vec - subpix_span_y * ((double)k - (double)subpix_[0]/2.0 + jitter_y) + subpix_span_x * ((double)l - (double)subpix_[1]/2.0 + jitter_x) - origin2).normalize();
-                
-                Ray_t ray = Ray_t(origin2, subpix_vec, Vec3f(), Vec3f(1.0), medium_list_);
-                ray.raycast(scene, max_bounces_, skybox_);
-                col += ray.colour_;
-            }
+            const Vec3f subpix_vec = (pix_vec - subpix_span_y * ((double)k - (double)subpix_[0]/2.0 + jitter_y) + subpix_span_x * ((double)l - (double)subpix_[1]/2.0 + jitter_x) - origin2).normalize();
+            
+            Ray_t ray = Ray_t(origin2, subpix_vec, Vec3f(), Vec3f(1.0), medium_list_);
+            ray.raycast(scene, max_bounces_, skybox_);
+            col += ray.colour_;
         }
         col = col/tot_subpix;
         image_->update(col, i, j);
