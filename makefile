@@ -46,8 +46,14 @@ WINDebugDirs := $(subst . ,,$(subst ./,.windebug/,$(SourceDirs)))
 # Determine the path for the source code folders in the .release folder (will mimic the visible root tree structure)
 WINReleaseDirs := $(subst . ,,$(subst ./,.winrelease/,$(SourceDirs)))
 
+# Determine the path for the source code folders in the .debug folder (will mimic the visible root tree structure)
+ANDROIDDebugDirs := $(subst . ,,$(subst ./,.androiddebug/,$(SourceDirs)))
+
+# Determine the path for the source code folders in the .release folder (will mimic the visible root tree structure)
+ANDROIDReleaseDirs := $(subst . ,,$(subst ./,.androidrelease/,$(SourceDirs)))
+
 # Concatenate all of the previous 3 folder name variables
-AllDirs := $(SourceDirs) $(ReleaseDirs) $(DebugDirs) $(MPIReleaseDirs) $(MPIDebugDirs) $(WINReleaseDirs) $(WINDebugDirs)
+AllDirs := $(SourceDirs) $(ReleaseDirs) $(DebugDirs) $(MPIReleaseDirs) $(MPIDebugDirs) $(WINReleaseDirs) $(WINDebugDirs) $(ANDROIDReleaseDirs) $(ANDROIDDebugDirs)
 
 #-------------------------------------------------------------------------------------------------------------------+
 #-----------------------------------------------------------------------------------------------------+
