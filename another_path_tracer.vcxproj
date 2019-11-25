@@ -127,7 +127,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)acceleration\;$(ProjectDir)cameras\;$(ProjectDir)entities\;$(ProjectDir)functions\;$(ProjectDir)materials\;$(ProjectDir)shapes\;$(ProjectDir)skyboxes\;$(ProjectDir)freeglut\include\;C:\Program Files (x86)\GnuWin32\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)acceleration\;$(ProjectDir)cameras\;$(ProjectDir)entities\;$(ProjectDir)functions\;$(ProjectDir)materials\;$(ProjectDir)shapes\;$(ProjectDir)skyboxes\;$(ProjectDir)winlibs\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
@@ -138,8 +138,8 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\Program Files (x86)\GnuWin32\lib;$(ProjectDir)freeglut\lib\x64\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>freeglut.lib;jpeg.lib;libpng.lib;libtiff.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)winlibs\lib\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>freeglut.lib;libjpeg_a.lib;libpng_a.lib;tiff.lib;zlib_a.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -197,10 +197,13 @@
     <ClInclude Include="materials\Absorber_t.h" />
     <ClInclude Include="materials\BounceMaterial_t.h" />
     <ClInclude Include="materials\DiffuseFull_t.h" />
+    <ClInclude Include="materials\DiffuseNormal_t.h" />
+    <ClInclude Include="materials\DiffuseTexNormal_t.h" />
     <ClInclude Include="materials\DiffuseTex_t.h" />
     <ClInclude Include="materials\Diffuse_t.h" />
     <ClInclude Include="materials\DistanceMaterial_t.h" />
     <ClInclude Include="materials\FresnelMixIn_t.h" />
+    <ClInclude Include="materials\FresnelMixNormal_t.h" />
     <ClInclude Include="materials\FresnelMix_t.h" />
     <ClInclude Include="materials\NonAbsorber_t.h" />
     <ClInclude Include="materials\NormalMaterial_t.h" />
@@ -210,9 +213,13 @@
     <ClInclude Include="materials\Portal_t.h" />
     <ClInclude Include="materials\RandomMixIn_t.h" />
     <ClInclude Include="materials\RandomMix_t.h" />
+    <ClInclude Include="materials\ReflectiveFuzzNormal_t.h" />
+    <ClInclude Include="materials\ReflectiveFuzzTexNormal_t.h" />
     <ClInclude Include="materials\ReflectiveFuzzTex_t.h" />
     <ClInclude Include="materials\ReflectiveFuzz_t.h" />
+    <ClInclude Include="materials\ReflectiveNormal_t.h" />
     <ClInclude Include="materials\ReflectiveRefractiveFuzz_t.h" />
+    <ClInclude Include="materials\ReflectiveRefractiveNormal_t.h" />
     <ClInclude Include="materials\ReflectiveRefractive_t.h" />
     <ClInclude Include="materials\Reflective_t.h" />
     <ClInclude Include="materials\RefractiveFuzz_t.h" />
@@ -288,10 +295,13 @@
     <ClCompile Include="materials\Absorber_t.cpp" />
     <ClCompile Include="materials\BounceMaterial_t.cpp" />
     <ClCompile Include="materials\DiffuseFull_t.cpp" />
+    <ClCompile Include="materials\DiffuseNormal_t.cpp" />
+    <ClCompile Include="materials\DiffuseTexNormal_t.cpp" />
     <ClCompile Include="materials\DiffuseTex_t.cpp" />
     <ClCompile Include="materials\Diffuse_t.cpp" />
     <ClCompile Include="materials\DistanceMaterial_t.cpp" />
     <ClCompile Include="materials\FresnelMixIn_t.cpp" />
+    <ClCompile Include="materials\FresnelMixNormal_t.cpp" />
     <ClCompile Include="materials\FresnelMix_t.cpp" />
     <ClCompile Include="materials\NonAbsorber_t.cpp" />
     <ClCompile Include="materials\NormalMaterial_t.cpp" />
@@ -301,9 +311,13 @@
     <ClCompile Include="materials\Portal_t.cpp" />
     <ClCompile Include="materials\RandomMixIn_t.cpp" />
     <ClCompile Include="materials\RandomMix_t.cpp" />
+    <ClCompile Include="materials\ReflectiveFuzzNormal_t.cpp" />
+    <ClCompile Include="materials\ReflectiveFuzzTexNormal_t.cpp" />
     <ClCompile Include="materials\ReflectiveFuzzTex_t.cpp" />
     <ClCompile Include="materials\ReflectiveFuzz_t.cpp" />
+    <ClCompile Include="materials\ReflectiveNormal_t.cpp" />
     <ClCompile Include="materials\ReflectiveRefractiveFuzz_t.cpp" />
+    <ClCompile Include="materials\ReflectiveRefractiveNormal_t.cpp" />
     <ClCompile Include="materials\ReflectiveRefractive_t.cpp" />
     <ClCompile Include="materials\Reflective_t.cpp" />
     <ClCompile Include="materials\RefractiveFuzz_t.cpp" />

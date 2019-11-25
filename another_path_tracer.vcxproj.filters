@@ -345,6 +345,27 @@
     <ClInclude Include="skyboxes\SkyboxTextureTransformationSun_t.h">
       <Filter>Fichiers d%27en-tête\skyboxes</Filter>
     </ClInclude>
+    <ClInclude Include="materials\DiffuseNormal_t.h">
+      <Filter>Fichiers d%27en-tête\materials</Filter>
+    </ClInclude>
+    <ClInclude Include="materials\DiffuseTexNormal_t.h">
+      <Filter>Fichiers d%27en-tête\materials</Filter>
+    </ClInclude>
+    <ClInclude Include="materials\FresnelMixNormal_t.h">
+      <Filter>Fichiers d%27en-tête\materials</Filter>
+    </ClInclude>
+    <ClInclude Include="materials\ReflectiveFuzzNormal_t.h">
+      <Filter>Fichiers d%27en-tête\materials</Filter>
+    </ClInclude>
+    <ClInclude Include="materials\ReflectiveFuzzTexNormal_t.h">
+      <Filter>Fichiers d%27en-tête\materials</Filter>
+    </ClInclude>
+    <ClInclude Include="materials\ReflectiveRefractiveNormal_t.h">
+      <Filter>Fichiers d%27en-tête\materials</Filter>
+    </ClInclude>
+    <ClInclude Include="materials\ReflectiveNormal_t.h">
+      <Filter>Fichiers d%27en-tête\materials</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="acceleration\AccelerationGrid_t.cpp">
@@ -613,6 +634,27 @@
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="materials\DiffuseNormal_t.cpp">
+      <Filter>Fichiers sources\materials</Filter>
+    </ClCompile>
+    <ClCompile Include="materials\DiffuseTexNormal_t.cpp">
+      <Filter>Fichiers sources\materials</Filter>
+    </ClCompile>
+    <ClCompile Include="materials\FresnelMixNormal_t.cpp">
+      <Filter>Fichiers sources\materials</Filter>
+    </ClCompile>
+    <ClCompile Include="materials\ReflectiveFuzzNormal_t.cpp">
+      <Filter>Fichiers sources\materials</Filter>
+    </ClCompile>
+    <ClCompile Include="materials\ReflectiveFuzzTexNormal_t.cpp">
+      <Filter>Fichiers sources\materials</Filter>
+    </ClCompile>
+    <ClCompile Include="materials\ReflectiveRefractiveNormal_t.cpp">
+      <Filter>Fichiers sources\materials</Filter>
+    </ClCompile>
+    <ClCompile Include="materials\ReflectiveNormal_t.cpp">
+      <Filter>Fichiers sources\materials</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
