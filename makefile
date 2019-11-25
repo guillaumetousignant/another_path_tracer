@@ -149,7 +149,7 @@ debug : .debug  begun $(DebugObjectFiles) $(ExecutableDebugObjectFile)
 
 release : .release begun $(ReleaseObjectFiles) $(ExecutableReleaseObjectFile)
 	@printf '   Linking Release...'
-	@$(CXX) $(CXXFLAGS) $(RELEASEFLAGS) $(ReleaseObjectFiles) $(ExecutableReleaseObjectFile) -o $(addprefix bin/,$(Executable)) $(IMAGELIBS) $(DISPLAYLIBS)
+	@$(CXX) $(CXXFLAGS) $(RELEASEFLAGS) $(ReleaseObjectFiles) $(ExecutableReleaseObjectFile) -o $(addprefix bin/,$(Executable)) $(IMAGELIBS) $(DISPLAYLIBS) -D cimg_use_openmp=1
 	@printf 'Done'
 	@printf '\n'
 
@@ -161,7 +161,7 @@ mpidebug : .mpidebug  begun $(MPIDebugObjectFiles) $(ExecutableMPIDebugObjectFil
 
 mpirelease : .mpirelease begun $(MPIReleaseObjectFiles) $(ExecutableMPIReleaseObjectFile)	
 	@printf '   Linking MpiRelease...'
-	@$(MPICXX) $(CXXFLAGS) $(RELEASEFLAGS) $(MPIReleaseObjectFiles) $(ExecutableMPIReleaseObjectFile) -o $(addprefix bin/,$(Executable)) $(IMAGELIBS) $(DISPLAYLIBS)
+	@$(MPICXX) $(CXXFLAGS) $(RELEASEFLAGS) $(MPIReleaseObjectFiles) $(ExecutableMPIReleaseObjectFile) -o $(addprefix bin/,$(Executable)) $(IMAGELIBS) $(DISPLAYLIBS) -D cimg_use_openmp=1
 	@printf 'Done'
 	@printf '\n'
 
@@ -173,7 +173,7 @@ windebug : .windebug  begun $(WINDebugObjectFiles) $(ExecutableWINDebugObjectFil
 
 winrelease : .winrelease begun $(WINReleaseObjectFiles) $(ExecutableWINReleaseObjectFile)	
 	@printf '   Linking WINRelease...'
-	@$(WINCXX) $(CXXFLAGS) $(RELEASEFLAGS) $(WINReleaseObjectFiles) $(ExecutableWINReleaseObjectFile) -o $(addprefix bin/,$(WINExecutable)) $(IMAGELIBS) $(WINLIBS) $(WINDISPLAYLIBS)
+	@$(WINCXX) $(CXXFLAGS) $(RELEASEFLAGS) $(WINReleaseObjectFiles) $(ExecutableWINReleaseObjectFile) -o $(addprefix bin/,$(WINExecutable)) $(IMAGELIBS) $(WINLIBS) $(WINDISPLAYLIBS) -D cimg_use_openmp=1
 	@printf 'Done'
 	@printf '\n'
 
