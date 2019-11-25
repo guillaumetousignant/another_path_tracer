@@ -83,6 +83,12 @@ ExecutableWINDebugObjectFile = $(subst .cpp,.o,$(addprefix .windebug/,$(Executab
 # Executable release object file
 ExecutableWINReleaseObjectFile = $(subst .cpp,.o,$(addprefix .winrelease/,$(ExecutableSourceFile)))
 
+# Executable debug object file
+ExecutableANDROIDDebugObjectFile = $(subst .cpp,.o,$(addprefix .androiddebug/,$(ExecutableSourceFile)))
+
+# Executable release object file
+ExecutableANDROIDReleaseObjectFile = $(subst .cpp,.o,$(addprefix .androidrelease/,$(ExecutableSourceFile)))
+
 # Source files (.cpp)
 SourceFiles := $(filter-out $(ExecutableSourceFile),$(subst ./,,$(subst .//,,$(shell find ./ -regex .*.cpp))))
 
@@ -107,6 +113,12 @@ WINDebugObjectFiles := $(addprefix .windebug/,$(subst .cpp,.o,$(ActiveSourceFile
 # Release object files (names of the object files that are produced by make release)
 WINReleaseObjectFiles := $(addprefix .winrelease/,$(subst .cpp,.o,$(ActiveSourceFiles)))
 
+# Debug object files (names of the object files that are produced by make debug)
+ANDROIDDebugObjectFiles := $(addprefix .androiddebug/,$(subst .cpp,.o,$(ActiveSourceFiles))) 
+
+# Release object files (names of the object files that are produced by make release)
+ANDROIDReleaseObjectFiles := $(addprefix .androidrelease/,$(subst .cpp,.o,$(ActiveSourceFiles)))
+
 # Concatenate all object files
 AnyObjectFiles := $(notdir $(shell find ./ -regex .*.o))
 
@@ -121,6 +133,7 @@ VPATH := $(AllDirs)
 CXX = g++
 MPICXX = mpic++
 WINCXX = x86_64-w64-mingw32-gcc-win32
+ANDROIDCXX = clang++
 CXXFLAGS += -std=c++11 -Wall -Wno-unused-function -Wno-strict-overflow
 
 DEBUGFLAGS += -Og -g -pg
@@ -133,6 +146,7 @@ IMAGELIBS += -lpng -ljpeg -ltiff
 DISPLAYLIBS += -lglut -lGL
 WINDISPLAYLIBS += -lfreeglut -lglu32 -lopengl32
 WINLIBS += -lstdc++ -lgdi32
+ANDROIDLIBS += -lm
 DEBUGLIBS += -lpthread
 
 #--------------------------------------------------------------------------------------------------------------------------------------+
@@ -177,6 +191,18 @@ winrelease : .winrelease begun $(WINReleaseObjectFiles) $(ExecutableWINReleaseOb
 	@printf 'Done'
 	@printf '\n'
 
+androiddebug : .androiddebug  begun $(ANDROIDDebugObjectFiles) $(ExecutableANDROIDDebugObjectFile)
+	@printf '   Linking ANDROIDDebug...'
+	@$(ANDROIDCXX) $(CXXFLAGS) $(DEBUGFLAGS) $(ANDROIDDebugObjectFiles) $(ExecutableANDROIDDebugObjectFile) -o $(addprefix bin/,$(Executable)) $(IMAGELIBS) $(ANDROIDLIBS) $(DISPLAYLIBS)
+	@printf 'Done'
+	@printf '\n'
+
+androidrelease : .androidrelease begun $(ANDROIDReleaseObjectFiles) $(ExecutableANDROIDReleaseObjectFile)	
+	@printf '   Linking ANDROIDRelease...'
+	@$(ANDROIDCXX) $(CXXFLAGS) $(RELEASEFLAGS) $(ANDROIDReleaseObjectFiles) $(ExecutableANDROIDReleaseObjectFile) -o $(addprefix bin/,$(Executable)) $(IMAGELIBS) $(ANDROIDLIBS) $(DISPLAYLIBS) -D cimg_use_openmp=1
+	@printf 'Done'
+	@printf '\n'
+
 reset : clean 
 	@$(shell reset)
 
@@ -210,15 +236,23 @@ verify : release $(ReleaseObjectFiles)
 	@$(WINCXX) -c $(CXXFLAGS) $(RELEASEFLAGS)  -I$(subst $(space), -I,$(AllDirs)) $< -o $@ 
 	@echo '   Pattern Rule | Compiling | '$(CXXFLAGS) $(RELEASEFLAGS) ' | ' $<' ... Done '
 
+.androiddebug/%.o : %.cpp
+	@$(ANDROIDCXX) -c $(CXXFLAGS) $(DEBUGFLAGS)  -I$(subst $(space), -I,$(AllDirs)) $< -o $@ 
+	@echo '   Pattern Rule | Compiling | '$(CXXFLAGS) $(DEBUGFLAGS) ' | ' $<' ... Done'
+
+.androidrelease/%.o : %.cpp
+	@$(ANDROIDCXX) -c $(CXXFLAGS) $(RELEASEFLAGS)  -I$(subst $(space), -I,$(AllDirs)) $< -o $@ 
+	@echo '   Pattern Rule | Compiling | '$(CXXFLAGS) $(RELEASEFLAGS) ' | ' $<' ... Done '
+
 #---------------------------------------------------------------------------------------+
 #--------------------------------------------------------------------------------+
 # Phony Targets
 
-.PHONY : clean cleandebug cleanrelease cleanmpidebug cleanmpirelease cleanwindebug cleanwinrelease begin end
+.PHONY : clean cleandebug cleanrelease cleanmpidebug cleanmpirelease cleanwindebug cleanwinrelease cleanandroiddebug cleanandroidrelease begin end
 
 begun :
 
-clean : cleandebug cleanrelease cleanmpidebug cleanmpirelease cleanwindebug cleanwinrelease
+clean : cleandebug cleanrelease cleanmpidebug cleanmpirelease cleanwindebug cleanwinrelease cleanandroiddebug cleanandroidrelease
 	@-rm -rf $(AnyObjectFiles)
 	@-rm -f bin/$(current_dir)
 	
@@ -246,11 +280,21 @@ cleanwinrelease :
 	@-rm -rf .winrelease .winreleasetimestamp
 	@-rm -f $(addprefix .winrelease/,$(WINExecutable))
 
+cleanandroiddebug :
+	@-rm -rf .androiddebug .androiddebugtimestamp
+	@-rm -f $(addprefix .androiddebug/,$(Executable))
+
+cleanandroidrelease :
+	@-rm -rf .androidrelease .androidreleasetimestamp
+	@-rm -f $(addprefix .androidrelease/,$(Executable))
+
 .debug : .debugtimestamp
 
 .mpidebug : .mpidebugtimestamp
 
 .windebug : .windebugtimestamp
+
+.androiddebug : .androiddebugtimestamp
 
 .debugtimestamp :
 	@mkdir -p .debug $(DebugDirs)
@@ -267,11 +311,18 @@ cleanwinrelease :
 	@mkdir -p bin
 #	@touch .windebugtimestamp
 
+.androiddebugtimestamp :
+	@mkdir -p .androiddebug $(ANDROIDDebugDirs)
+	@mkdir -p bin
+#	@touch .androiddebugtimestamp
+
 .release : .releasetimestamp
 
 .mpirelease : .mpireleasetimestamp
 
 .winrelease : .winreleasetimestamp
+
+.androidrelease : .androidreleasetimestamp
 
 .releasetimestamp :
 	@mkdir -p .release $(ReleaseDirs)
@@ -283,6 +334,10 @@ cleanwinrelease :
 
 .winreleasetimestamp :
 	@mkdir -p .winrelease $(WINReleaseDirs)
+	@mkdir -p bin
+
+.androidreleasetimestamp :
+	@mkdir -p .androidrelease $(ANDROIDReleaseDirs)
 	@mkdir -p bin
 
 #--------------------------------------------------------------------------------+
@@ -318,6 +373,12 @@ windebugobjectfiles :
 
 winreleaseobjectfiles :
 	@printf '%s\n' $(WINReleaseObjectFiles)
+
+androiddebugobjectfiles :
+	@printf '%s\n' $(ANDROIDDebugObjectFiles)
+
+androidreleaseobjectfiles :
+	@printf '%s\n' $(ANDROIDReleaseObjectFiles)
 
 os :
 	@echo $(OS)
