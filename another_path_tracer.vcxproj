@@ -79,12 +79,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)acceleration\;$(ProjectDir)cameras\;$(ProjectDir)entities\;$(ProjectDir)functions\;$(ProjectDir)materials\;$(ProjectDir)shapes\;$(ProjectDir)skyboxes\;$(ProjectDir)freeglut\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)acceleration\;$(ProjectDir)cameras\;$(ProjectDir)entities\;$(ProjectDir)functions\;$(ProjectDir)materials\;$(ProjectDir)shapes\;$(ProjectDir)skyboxes\;$(ProjectDir)winlibs\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>$(ProjectDir)freeglut\lib\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>freeglut.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)winlibs\lib\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>freeglut.lib;libjpeg_a.lib;libpng_a.lib;tiff.lib;zlib_a.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -93,12 +93,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)acceleration\;$(ProjectDir)cameras\;$(ProjectDir)entities\;$(ProjectDir)functions\;$(ProjectDir)materials\;$(ProjectDir)shapes\;$(ProjectDir)skyboxes\;$(ProjectDir)freeglut\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)acceleration\;$(ProjectDir)cameras\;$(ProjectDir)entities\;$(ProjectDir)functions\;$(ProjectDir)materials\;$(ProjectDir)shapes\;$(ProjectDir)skyboxes\;$(ProjectDir)winlibs\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>$(ProjectDir)freeglut\lib\x64\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>freeglut.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)winlibs\lib\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>freeglut.lib;libjpeg_a.lib;libpng_a.lib;tiff.lib;zlib_a.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -109,14 +109,15 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)acceleration\;$(ProjectDir)cameras\;$(ProjectDir)entities\;$(ProjectDir)functions\;$(ProjectDir)materials\;$(ProjectDir)shapes\;$(ProjectDir)skyboxes\;$(ProjectDir)freeglut\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)acceleration\;$(ProjectDir)cameras\;$(ProjectDir)entities\;$(ProjectDir)functions\;$(ProjectDir)materials\;$(ProjectDir)shapes\;$(ProjectDir)skyboxes\;$(ProjectDir)winlibs\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_MBCS;cimg_use_openmp=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(ProjectDir)freeglut\lib\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>freeglut.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)winlibs\lib\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>freeglut.lib;libjpeg_a.lib;libpng_a.lib;tiff.lib;zlib_a.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -133,6 +134,8 @@
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <OpenMPSupport>true</OpenMPSupport>
       <AdditionalOptions>/Zc:twoPhase- %(AdditionalOptions)</AdditionalOptions>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <PreprocessorDefinitions>_MBCS;cimg_use_openmp=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
