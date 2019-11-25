@@ -3,6 +3,7 @@
 #define cimg_use_jpeg
 #define cimg_use_png
 #define cimg_use_tiff
+#define cimg_display 0
 #include "CImg.h"
 
 Texture_t::Texture_t(const std::string &filename){

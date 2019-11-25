@@ -130,7 +130,7 @@ RELEASEFLAGS += -O3 -fopenmp
 
 # Included Libraries
 IMAGELIBS += -lpng -ljpeg -ltiff
-DISPLAYLIBS += -lglut -lGL -lGLU -lX11
+DISPLAYLIBS += -lglut -lGL
 WINDISPLAYLIBS += -lfreeglut -lglu32 -lopengl32
 WINLIBS += -lstdc++ -lgdi32
 DEBUGLIBS += -lpthread
