@@ -5,6 +5,7 @@ before_install:
   - test -n $CXX && unset CXX
   - sudo apt update
   - apt search libpng
+  - sudo apt update -y
   - sudo apt install -y tree openssh-client openssh-server openmpi-bin openmpi-common libopenmpi-dev cppcheck imagemagick freeglut3 freeglut3-dev libtiff-dev libpng-dev libjpeg-dev
 script: 
   - make VERIFY=true
