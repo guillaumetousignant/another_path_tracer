@@ -194,7 +194,7 @@ int main(int argc, char **argv){
     std::string folder = "images/";
     std::string scene_name = "data";
     std::string filename = next_filename(folder + scene_name + ".png");
-    std::unique_ptr<Camera_t> camera(new Cam_t(new TransformMatrix_t, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer.get(), medium_list, skybox.get(), 8, 1.0));
+    std::unique_ptr<Camera_t> camera(new Cam_t(new TransformMatrix_t, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer.get(), medium_list, skybox.get(), 1, 1.0));
 
     camera->transformation_->translate(Vec3f(0.0, -2.0, 0.0));
     camera->update();
