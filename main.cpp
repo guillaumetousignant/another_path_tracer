@@ -90,7 +90,6 @@ int main(int argc, char **argv){
     }
 
     std::vector<Vec3f> data(K * p_Np);
-    std::vector<Vec3f> edata(K * p_Np);
     std::unique_ptr<DataMaterial_t> material(new DataMaterial_t(data.data()));
     std::vector<Shape_t*> spheres(K * p_Np);
     double sphere_size = 0.01;
@@ -164,7 +163,8 @@ int main(int argc, char **argv){
             zline.erase(0, zpos + delimiter.length());
 
             data[p + p_Np*k] = Vec3f(std::stod(hxtoken), std::stod(hytoken), std::stod(hztoken))*10.0 + 0.5;
-            edata[p + p_Np*k] = Vec3f(std::stod(extoken), std::stod(eytoken), std::stod(eztoken))*1.0+ 0.5;
+            //data[p + p_Np*k] = Vec3f(std::stod(extoken), std::stod(eytoken), std::stod(eztoken))*1.0+ 0.5;
+            //data[p + p_Np*k] = Vec3f(std::stod(xtoken), std::stod(ytoken), std::stod(ztoken));
             spheres[p + p_Np*k] = new Sphere_t(material.get(), new TransformMatrix_t(), p + p_Np*k);
             spheres[p + p_Np*k]->transformation_->translate(Vec3f(std::stod(xtoken), std::stod(ytoken), std::stod(ztoken)));
             spheres[p + p_Np*k]->transformation_->scale(sphere_size);
