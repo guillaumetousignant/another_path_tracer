@@ -9,8 +9,8 @@
 #define PI 3.141592653589793238463
 #define EPSILON 0.00000001
 
-TriangleMeshMotionblur_t::TriangleMeshMotionblur_t(Material_t *material, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom, unsigned int index) 
-    : Shape_t(material, transform_matrix), geom_(geom), index_(index) {
+TriangleMeshMotionblur_t::TriangleMeshMotionblur_t(Material_t *material, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom, unsigned int index, unsigned int id) 
+    : Shape_t(material, transform_matrix, id), geom_(geom), index_(index) {
 
     const TransformMatrix_t transform_norm = transformation_->transformDir();
 

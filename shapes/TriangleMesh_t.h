@@ -11,7 +11,7 @@ class MeshGeometry_t;
 
 class TriangleMesh_t final : public Shape_t{
     public:
-        TriangleMesh_t(Material_t *material, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom, unsigned int index);
+        TriangleMesh_t(Material_t *material, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom, unsigned int index, unsigned int id);
         virtual ~TriangleMesh_t() final;
 
         Vec3f points_[3];

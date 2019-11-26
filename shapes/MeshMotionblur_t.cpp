@@ -20,13 +20,13 @@ MeshMotionblur_t::~MeshMotionblur_t(){}
 void MeshMotionblur_t::createTriangles(){
     triangles_ = new Shape_t*[n_tris_];
     for (unsigned int i = 0; i < n_tris_; i++){
-        triangles_[i] = new TriangleMeshMotionblur_t(material_, transformation_, geom_, i);
+        triangles_[i] = new TriangleMeshMotionblur_t(material_, transformation_, geom_, i, 0);
     }
 }
 
 void MeshMotionblur_t::createTriangles(MaterialMap_t *materialmap){
     triangles_ = new Shape_t*[n_tris_];
     for (unsigned int i = 0; i < n_tris_; i++){
-        triangles_[i] = new TriangleMeshMotionblur_t(materialmap->getMaterial(geom_->mat_[i]), transformation_, geom_, i);
+        triangles_[i] = new TriangleMeshMotionblur_t(materialmap->getMaterial(geom_->mat_[i]), transformation_, geom_, i, 0);
     }
 }

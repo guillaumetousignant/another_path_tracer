@@ -10,7 +10,7 @@ class Material_t;
 
 class Sphere_t final : public Shape_t{
     public:
-        Sphere_t(Material_t *material, TransformMatrix_t *transform_matrix);
+        Sphere_t(Material_t *material, TransformMatrix_t *transform_matrix, unsigned int id);
         virtual ~Sphere_t() final;
 
         double radius_;

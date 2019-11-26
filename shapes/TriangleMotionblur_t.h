@@ -10,7 +10,7 @@ class Material_t;
 
 class TriangleMotionblur_t final : public Shape_t{
     public:
-        TriangleMotionblur_t(Material_t *material, TransformMatrix_t *transform_matrix, Vec3f* points, Vec3f* normals, double** texcoord);
+        TriangleMotionblur_t(Material_t *material, TransformMatrix_t *transform_matrix, Vec3f* points, Vec3f* normals, double** texcoord, unsigned int id);
         virtual ~TriangleMotionblur_t() final;
 
         Vec3f points_orig_[3];

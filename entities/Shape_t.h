@@ -9,7 +9,7 @@ class TransformMatrix_t;
 
 class Shape_t{
     public:
-        Shape_t(Material_t *material, TransformMatrix_t *transform_matrix): material_(material), transformation_(transform_matrix){};
+        Shape_t(Material_t *material, TransformMatrix_t *transform_matrix, unsigned int id): material_(material), transformation_(transform_matrix), id_(id) {};
         virtual ~Shape_t(){};
 
         virtual void update() = 0;
@@ -22,5 +22,6 @@ class Shape_t{
 
         Material_t *material_;
         TransformMatrix_t *transformation_;
+        unsigned int id_;
 };
 #endif

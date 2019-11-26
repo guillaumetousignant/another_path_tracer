@@ -6,7 +6,7 @@
 
 #define PI 3.141592653589793238463
 
-Sphere_t::Sphere_t(Material_t *material, TransformMatrix_t *transform_matrix): Shape_t(material, transform_matrix){
+Sphere_t::Sphere_t(Material_t *material, TransformMatrix_t *transform_matrix, unsigned int id): Shape_t(material, transform_matrix, id){
     origin_ = transformation_->multVec(Vec3f());
     radius_ = transformation_->getScale(); 
     const TransformMatrix_t transform_norm = transformation_->transformDir();

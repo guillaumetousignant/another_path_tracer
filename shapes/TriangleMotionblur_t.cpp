@@ -8,8 +8,8 @@
 #define PI 3.141592653589793238463
 #define EPSILON 0.00000001
 
-TriangleMotionblur_t::TriangleMotionblur_t(Material_t *material, TransformMatrix_t *transform_matrix, Vec3f* points, Vec3f* normals, double** texcoord) 
-    : Shape_t(material, transform_matrix), points_orig_{points[0], points[1], points[2]} {
+TriangleMotionblur_t::TriangleMotionblur_t(Material_t *material, TransformMatrix_t *transform_matrix, Vec3f* points, Vec3f* normals, double** texcoord, unsigned int id) 
+    : Shape_t(material, transform_matrix, id), points_orig_{points[0], points[1], points[2]} {
 
     if (normals == nullptr){
         const Vec3f nor = (points[1] - points[0]).cross(points[2] - points[0]).normalize(); 

@@ -11,7 +11,7 @@ class MeshGeometry_t;
 
 class TriangleMeshMotionblur_t final : public Shape_t{
     public:
-        TriangleMeshMotionblur_t(Material_t *material, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom, unsigned int index);
+        TriangleMeshMotionblur_t(Material_t *material, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom, unsigned int index, unsigned int id);
         virtual ~TriangleMeshMotionblur_t() final;
 
         Vec3f points_[3];

@@ -10,7 +10,7 @@ class Material_t;
 
 class SphereMotionblur_t final : public Shape_t{
     public:
-        SphereMotionblur_t(Material_t *material, TransformMatrix_t *transform_matrix);
+        SphereMotionblur_t(Material_t *material, TransformMatrix_t *transform_matrix, unsigned int id);
         virtual ~SphereMotionblur_t() final;
 
         double radius_;
