@@ -18,6 +18,7 @@
 #include "Transparent_t.h"
 #include "NonAbsorber_t.h"
 #include "OpenGLRenderer_t.h"
+#include "NextFilename.h"
 
 #define PI 3.1416
 
@@ -190,7 +191,9 @@ int main(int argc, char **argv){
 
     double fov[2] = {40.0 * PI / 180.0, 60.0 * PI / 180.0};
     unsigned int subpix[2] = {1, 1};
-    std::string filename = "images/data.png";
+    std::string folder = "images/";
+    std::string scene_name = "data";
+    std::string filename = next_filename(folder + scene_name + ".png");
     std::unique_ptr<Camera_t> camera(new Cam_t(new TransformMatrix_t, filename, Vec3f(0.0, 0.0, 1.0), fov, subpix, imgbuffer.get(), medium_list, skybox.get(), 8, 1.0));
 
     camera->transformation_->translate(Vec3f(0.0, -2.0, 0.0));
