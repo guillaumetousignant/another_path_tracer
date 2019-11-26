@@ -5,6 +5,7 @@
 #include <vector>
 #include <memory>
 #include <list>
+#include <math.h>
 #include "RandomGenerator_t.h"
 #include "Shape_t.h"
 #include "Sphere_t.h"
@@ -163,7 +164,7 @@ int main(int argc, char **argv){
             zline.erase(0, zpos + delimiter.length());
 
             data[p + p_Np*k] = Vec3f(std::stod(hxtoken), std::stod(hytoken), std::stod(hztoken))*10.0 + 0.5;
-            edata[p + p_Np*k] = Vec3f(std::stod(extoken), std::stod(eytoken), std::stod(eztoken))*10.0 + 0.5;
+            edata[p + p_Np*k] = Vec3f(std::stod(extoken), std::stod(eytoken), std::stod(eztoken))*1.0+ 0.5;
             spheres[p + p_Np*k] = new Sphere_t(material.get(), new TransformMatrix_t(), p + p_Np*k);
             spheres[p + p_Np*k]->transformation_->translate(Vec3f(std::stod(xtoken), std::stod(ytoken), std::stod(ztoken)));
             spheres[p + p_Np*k]->transformation_->scale(sphere_size);
