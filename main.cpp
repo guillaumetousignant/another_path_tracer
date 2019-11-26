@@ -178,7 +178,7 @@ int main(int argc, char **argv){
 
     unsigned int resx = 600;
     unsigned int resy = 400;
-    if (argc < 5){
+    if (argc > 4){
         resx = std::stoi(argv[3]);
         resy = std::stoi(argv[4]);
     }
