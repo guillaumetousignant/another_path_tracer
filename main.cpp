@@ -33,59 +33,17 @@ int main(int argc, char **argv){
     K = std::stoi(argv[1]);
     p_Np = std::stoi(argv[2]);
 
-    std::string ex_filename = "assets/ex_out.csv";
-    std::string ey_filename = "assets/ey_out.csv";
-    std::string ez_filename = "assets/ez_out.csv";
-    std::string hx_filename = "assets/hx_out.csv";
-    std::string hy_filename = "assets/hy_out.csv";
-    std::string hz_filename = "assets/hz_out.csv";
-    std::string x_filename = "assets/x_out.csv";
-    std::string y_filename = "assets/y_out.csv";
-    std::string z_filename = "assets/z_out.csv";
+    std::string e_filename = "assets/e_out.csv";
+    std::string xyz_filename = "assets/xyz_out.csv";
 
-    std::ifstream exfile(ex_filename);
-    if (!exfile.is_open()) {
-        std::cerr << "Error: file '" << ex_filename << "' could not be opened. Exiting." << std::endl;
+    std::ifstream efile(e_filename);
+    if (!efile.is_open()) {
+        std::cerr << "Error: file '" << e_filename << "' could not be opened. Exiting." << std::endl;
         exit(-2);
     }
-    std::ifstream eyfile(ey_filename);
-    if (!eyfile.is_open()) {
-        std::cerr << "Error: file '" << ey_filename << "' could not be opened. Exiting." << std::endl;
-        exit(-2);
-    }
-    std::ifstream ezfile(ez_filename);
-    if (!ezfile.is_open()) {
-        std::cerr << "Error: file '" << ez_filename << "' could not be opened. Exiting." << std::endl;
-        exit(-2);
-    }
-    std::ifstream hxfile(hx_filename);
-    if (!hxfile.is_open()) {
-        std::cerr << "Error: file '" << hx_filename << "' could not be opened. Exiting." << std::endl;
-        exit(-2);
-    }
-    std::ifstream hyfile(hy_filename);
-    if (!hyfile.is_open()) {
-        std::cerr << "Error: file '" << hy_filename << "' could not be opened. Exiting." << std::endl;
-        exit(-2);
-    }
-    std::ifstream hzfile(hz_filename);
-    if (!hzfile.is_open()) {
-        std::cerr << "Error: file '" << hz_filename << "' could not be opened. Exiting." << std::endl;
-        exit(-2);
-    }
-    std::ifstream xfile(x_filename);
-    if (!xfile.is_open()) {
-        std::cerr << "Error: file '" << x_filename << "' could not be opened. Exiting." << std::endl;
-        exit(-2);
-    }
-    std::ifstream yfile(y_filename);
-    if (!yfile.is_open()) {
-        std::cerr << "Error: file '" << y_filename << "' could not be opened. Exiting." << std::endl;
-        exit(-2);
-    }
-    std::ifstream zfile(z_filename);
-    if (!zfile.is_open()) {
-        std::cerr << "Error: file '" << z_filename << "' could not be opened. Exiting." << std::endl;
+    std::ifstream xyzfile(xyz_filename);
+    if (!xyzfile.is_open()) {
+        std::cerr << "Error: file '" << xyz_filename << "' could not be opened. Exiting." << std::endl;
         exit(-2);
     }
 
@@ -94,82 +52,61 @@ int main(int argc, char **argv){
     std::vector<Shape_t*> spheres(K * p_Np);
     double sphere_size = 0.01;
 
-    std::string exline;
-    std::string eyline;
-    std::string ezline;
-    std::string hxline;
-    std::string hyline;
-    std::string hzline;
-    std::string xline;
-    std::string yline;
-    std::string zline;
+    std::string eline;
+    std::string xyzline;
+    std::string etoken;
     std::string extoken;
     std::string eytoken;
     std::string eztoken;
-    std::string hxtoken;
-    std::string hytoken;
-    std::string hztoken;
+    std::string xyztoken;
     std::string xtoken;
     std::string ytoken;
     std::string ztoken;
     std::string delimiter = ";";
+    std::string dimdelimiter = ",";
 
     for (unsigned int k = 0; k < K; ++k){
-        std::getline(exfile, exline);
-        std::getline(eyfile, eyline);
-        std::getline(ezfile, ezline);
-        std::getline(hxfile, hxline);
-        std::getline(hyfile, hyline);
-        std::getline(hzfile, hzline);
-        std::getline(xfile, xline);
-        std::getline(yfile, yline);
-        std::getline(zfile, zline);
-        unsigned int expos = 0;
-        unsigned int eypos = 0;
-        unsigned int ezpos = 0;
-        unsigned int hxpos = 0;
-        unsigned int hypos = 0;
-        unsigned int hzpos = 0;
-        unsigned int xpos = 0;
-        unsigned int ypos = 0;
-        unsigned int zpos = 0;
+        std::getline(efile, eline);
+        std::getline(xyzfile, xyzline);
+        unsigned int epos = 0;
+        unsigned int xyzpos = 0;
         for (unsigned int p = 0; p < p_Np; ++p){
-            expos = exline.find(delimiter);
-            eypos = eyline.find(delimiter);
-            ezpos = ezline.find(delimiter);
-            hxpos = hxline.find(delimiter);
-            hypos = hyline.find(delimiter);
-            hzpos = hzline.find(delimiter);
-            xpos = xline.find(delimiter);
-            ypos = yline.find(delimiter);
-            zpos = zline.find(delimiter);
-            extoken = exline.substr(0, expos);
-            eytoken = eyline.substr(0, eypos);
-            eztoken = ezline.substr(0, ezpos);
-            hxtoken = hxline.substr(0, hxpos);
-            hytoken = hyline.substr(0, hypos);
-            hztoken = hzline.substr(0, hzpos);
-            xtoken = xline.substr(0, xpos);
-            ytoken = yline.substr(0, ypos);
-            ztoken = zline.substr(0, zpos);
-            exline.erase(0, expos + delimiter.length());
-            eyline.erase(0, eypos + delimiter.length());
-            ezline.erase(0, ezpos + delimiter.length());
-            hxline.erase(0, hxpos + delimiter.length());
-            hyline.erase(0, hypos + delimiter.length());
-            hzline.erase(0, hzpos + delimiter.length());
-            xline.erase(0, xpos + delimiter.length());
-            yline.erase(0, ypos + delimiter.length());
-            zline.erase(0, zpos + delimiter.length());
+            epos = eline.find(delimiter);
+            xyzpos = xyzline.find(delimiter);
+            etoken = eline.substr(0, epos);
+            xyztoken = xyzline.substr(0, xyzpos);         
+            eline.erase(0, epos + delimiter.length());
+            xyzline.erase(0, xyzpos + delimiter.length());
 
-            data[p + p_Np*k] = Vec3f(std::stod(hxtoken), std::stod(hytoken), std::stod(hztoken))*10.0 + 0.5;
-            //data[p + p_Np*k] = Vec3f(std::stod(extoken), std::stod(eytoken), std::stod(eztoken))*1.0+ 0.5;
+            epos = etoken.find(dimdelimiter);
+            xyzpos = xyztoken.find(dimdelimiter);
+            extoken = etoken.substr(0, epos);
+            xtoken = etoken.substr(0, xyzpos);
+            etoken.erase(0, epos + dimdelimiter.length());
+            xyztoken.erase(0, xyzpos + dimdelimiter.length());
+            epos = etoken.find(dimdelimiter);
+            xyzpos = xyztoken.find(dimdelimiter);
+            eytoken = etoken.substr(0, epos);
+            ytoken = etoken.substr(0, xyzpos);
+            etoken.erase(0, epos + dimdelimiter.length());
+            xyztoken.erase(0, xyzpos + dimdelimiter.length());
+            epos = etoken.find(dimdelimiter);
+            xyzpos = xyztoken.find(dimdelimiter);
+            eztoken = etoken.substr(0, epos);
+            ztoken = etoken.substr(0, xyzpos);
+            etoken.erase(0, epos + dimdelimiter.length());
+            xyztoken.erase(0, xyzpos + dimdelimiter.length());
+
+            data[p + p_Np*k] = Vec3f(std::stod(extoken), std::stod(eytoken), std::stod(eztoken))*1.0+ 0.5;
             //data[p + p_Np*k] = Vec3f(std::stod(xtoken), std::stod(ytoken), std::stod(ztoken));
             spheres[p + p_Np*k] = new Sphere_t(material.get(), new TransformMatrix_t(), p + p_Np*k);
             spheres[p + p_Np*k]->transformation_->translate(Vec3f(std::stod(xtoken), std::stod(ytoken), std::stod(ztoken)));
             spheres[p + p_Np*k]->transformation_->scale(sphere_size);
         }
     }
+
+    efile.close();
+    xyzfile.close();
 
     std::unique_ptr<Scene_t> scene(new Scene_t());
     scene->add(spheres.data(), spheres.size());
@@ -203,16 +140,6 @@ int main(int argc, char **argv){
     std::unique_ptr<OpenGLRenderer_t> opengl_renderer(new OpenGLRenderer_t(scene.get(), camera.get(), imgbuffer.get()));
     opengl_renderer->initialise();
     opengl_renderer->render();
-
-    exfile.close();
-    eyfile.close();
-    ezfile.close();
-    hxfile.close();
-    hyfile.close();
-    hzfile.close();
-    xfile.close();
-    yfile.close();
-    zfile.close();
 
     delete camera->transformation_;
     for (unsigned int i = 0; i < spheres.size(); ++i){
