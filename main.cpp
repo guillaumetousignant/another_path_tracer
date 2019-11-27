@@ -44,6 +44,8 @@ int main(int argc, char **argv){
     std::string e_filename = "assets/h_out.csv";
     std::string xyz_filename = "assets/xyz_out.csv";
     double sphere_size = 0.01;
+    double factor = 10.0;
+    double offset = 0.5;
 
     if (argc > 1) {
         e_filename = argv[1];
@@ -53,6 +55,12 @@ int main(int argc, char **argv){
     }
     if (argc > 3) {
         sphere_size = std::stod(argv[3]);
+    }
+    if (argc > 4) {
+        factor = std::stod(argv[4]);
+    }
+    if (argc > 5) {
+        offset = std::stod(argv[5]);
     }
 
     std::ifstream efile(e_filename);
@@ -100,23 +108,23 @@ int main(int argc, char **argv){
             epos = etoken.find(dimdelimiter);
             xyzpos = xyztoken.find(dimdelimiter);
             extoken = etoken.substr(0, epos);
-            xtoken = etoken.substr(0, xyzpos);
+            xtoken = xyztoken.substr(0, xyzpos);
             etoken.erase(0, epos + dimdelimiter.length());
             xyztoken.erase(0, xyzpos + dimdelimiter.length());
             epos = etoken.find(dimdelimiter);
             xyzpos = xyztoken.find(dimdelimiter);
             eytoken = etoken.substr(0, epos);
-            ytoken = etoken.substr(0, xyzpos);
+            ytoken = xyztoken.substr(0, xyzpos);
             etoken.erase(0, epos + dimdelimiter.length());
             xyztoken.erase(0, xyzpos + dimdelimiter.length());
             epos = etoken.find(dimdelimiter);
             xyzpos = xyztoken.find(dimdelimiter);
             eztoken = etoken.substr(0, epos);
-            ztoken = etoken.substr(0, xyzpos);
+            ztoken = xyztoken.substr(0, xyzpos);
             etoken.erase(0, epos + dimdelimiter.length());
             xyztoken.erase(0, xyzpos + dimdelimiter.length());
 
-            data[p + p_Np*k] = Vec3f(std::stod(extoken), std::stod(eytoken), std::stod(eztoken))*1.0+ 0.5;
+            data[p + p_Np*k] = Vec3f(std::stod(extoken), std::stod(eytoken), std::stod(eztoken))*factor + offset;
             //data[p + p_Np*k] = Vec3f(std::stod(xtoken), std::stod(ytoken), std::stod(ztoken));
             spheres[p + p_Np*k] = new Sphere_t(material.get(), new TransformMatrix_t(), p + p_Np*k);
             spheres[p + p_Np*k]->transformation_->translate(Vec3f(std::stod(xtoken), std::stod(ytoken), std::stod(ztoken)));
