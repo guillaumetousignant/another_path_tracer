@@ -26,17 +26,8 @@
 int main(int argc, char **argv){
     unsigned int K;
     unsigned int p_Np;
-    if (argc < 3){
-        std::cout << "Arguments: K p_Np" << std::endl;
-        exit(-1);
-    }
-    K = std::stoi(argv[1]);
-    p_Np = std::stoi(argv[2]);
-
-    std::vector<Vec3f> data(K * p_Np);
-    std::unique_ptr<DataMaterial_t> material(new DataMaterial_t(data.data()));
-    std::vector<Shape_t*> spheres(K * p_Np);
-    double sphere_size = 0.01;
+    unsigned int K_xyz;
+    unsigned int p_Np_xyz;
 
     std::string eline;
     std::string xyzline;
@@ -50,9 +41,19 @@ int main(int argc, char **argv){
     std::string ztoken;
     std::string delimiter = ";";
     std::string dimdelimiter = ",";
-
     std::string e_filename = "assets/h_out.csv";
     std::string xyz_filename = "assets/xyz_out.csv";
+    double sphere_size = 0.01;
+
+    if (argc > 0) {
+        e_filename = argv[1];
+    }
+    if (argc > 1) {
+        xyz_filename = argv[2];
+    }
+    if (argc > 2) {
+        sphere_size = std::stod(argv[3]);
+    }
 
     std::ifstream efile(e_filename);
     if (!efile.is_open()) {
@@ -64,6 +65,24 @@ int main(int argc, char **argv){
         std::cerr << "Error: file '" << xyz_filename << "' could not be opened. Exiting." << std::endl;
         exit(-2);
     }
+
+    std::string e_header_string;
+    std::string xyz_header_string;
+    std::getline(efile, e_header_string);
+    std::getline(xyzfile, xyz_header_string);
+    std::stringstream e_header(e_header_string);
+    std::stringstream xyz_header(xyz_header_string);
+    e_header >> K >> p_Np;
+    xyz_header >> K_xyz >> p_Np_xyz;
+
+    if (K != K_xyz || p_Np != p_Np_xyz){
+        std::cout << "Error: K or p_Np not equal in data and position file." << std::endl;
+        exit(-3);
+    }
+
+    std::vector<Vec3f> data(K * p_Np);
+    std::unique_ptr<DataMaterial_t> material(new DataMaterial_t(data.data()));
+    std::vector<Shape_t*> spheres(K * p_Np);
 
     for (unsigned int k = 0; k < K; ++k){
         std::getline(efile, eline);
