@@ -45,13 +45,13 @@ int main(int argc, char **argv){
     std::string xyz_filename = "assets/xyz_out.csv";
     double sphere_size = 0.01;
 
-    if (argc > 0) {
+    if (argc > 1) {
         e_filename = argv[1];
     }
-    if (argc > 1) {
+    if (argc > 2) {
         xyz_filename = argv[2];
     }
-    if (argc > 2) {
+    if (argc > 3) {
         sphere_size = std::stod(argv[3]);
     }
 
