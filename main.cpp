@@ -33,20 +33,6 @@ int main(int argc, char **argv){
     K = std::stoi(argv[1]);
     p_Np = std::stoi(argv[2]);
 
-    std::string e_filename = "assets/e_out.csv";
-    std::string xyz_filename = "assets/xyz_out.csv";
-
-    std::ifstream efile(e_filename);
-    if (!efile.is_open()) {
-        std::cerr << "Error: file '" << e_filename << "' could not be opened. Exiting." << std::endl;
-        exit(-2);
-    }
-    std::ifstream xyzfile(xyz_filename);
-    if (!xyzfile.is_open()) {
-        std::cerr << "Error: file '" << xyz_filename << "' could not be opened. Exiting." << std::endl;
-        exit(-2);
-    }
-
     std::vector<Vec3f> data(K * p_Np);
     std::unique_ptr<DataMaterial_t> material(new DataMaterial_t(data.data()));
     std::vector<Shape_t*> spheres(K * p_Np);
@@ -64,6 +50,20 @@ int main(int argc, char **argv){
     std::string ztoken;
     std::string delimiter = ";";
     std::string dimdelimiter = ",";
+
+    std::string e_filename = "assets/h_out.csv";
+    std::string xyz_filename = "assets/xyz_out.csv";
+
+    std::ifstream efile(e_filename);
+    if (!efile.is_open()) {
+        std::cerr << "Error: file '" << e_filename << "' could not be opened. Exiting." << std::endl;
+        exit(-2);
+    }
+    std::ifstream xyzfile(xyz_filename);
+    if (!xyzfile.is_open()) {
+        std::cerr << "Error: file '" << xyz_filename << "' could not be opened. Exiting." << std::endl;
+        exit(-2);
+    }
 
     for (unsigned int k = 0; k < K; ++k){
         std::getline(efile, eline);
