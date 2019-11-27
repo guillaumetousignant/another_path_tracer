@@ -44,7 +44,7 @@ int main(int argc, char **argv){
     std::string e_filename = "assets/h_out.csv";
     std::string xyz_filename = "assets/xyz_out.csv";
     double sphere_size = 0.01;
-    double factor = 10.0;
+    double multiplier = 10.0;
     double offset = 0.5;
 
     if (argc > 1) {
@@ -57,11 +57,14 @@ int main(int argc, char **argv){
         sphere_size = std::stod(argv[3]);
     }
     if (argc > 4) {
-        factor = std::stod(argv[4]);
+        multiplier = std::stod(argv[4]);
     }
     if (argc > 5) {
         offset = std::stod(argv[5]);
     }
+
+    std::cout << "Datafile    Positionfile    spheresize    multiplier    offset" << std::endl;
+    std::cout << e_filename << "    " << xyz_filename << "    " << sphere_size << "    " << multiplier << "    " << offset << std::endl;
 
     std::ifstream efile(e_filename);
     if (!efile.is_open()) {
@@ -124,7 +127,7 @@ int main(int argc, char **argv){
             etoken.erase(0, epos + dimdelimiter.length());
             xyztoken.erase(0, xyzpos + dimdelimiter.length());
 
-            data[p + p_Np*k] = Vec3f(std::stod(extoken), std::stod(eytoken), std::stod(eztoken))*factor + offset;
+            data[p + p_Np*k] = Vec3f(std::stod(extoken), std::stod(eytoken), std::stod(eztoken))*multiplier + offset;
             //data[p + p_Np*k] = Vec3f(std::stod(xtoken), std::stod(ytoken), std::stod(ztoken));
             spheres[p + p_Np*k] = new Sphere_t(material.get(), new TransformMatrix_t(), p + p_Np*k);
             spheres[p + p_Np*k]->transformation_->translate(Vec3f(std::stod(xtoken), std::stod(ytoken), std::stod(ztoken)));
