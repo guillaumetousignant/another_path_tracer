@@ -43,8 +43,10 @@ int main(int argc, char **argv){
     std::string dimdelimiter = ",";
     std::string e_filename = "assets/h_out.csv";
     std::string xyz_filename = "assets/xyz_out.csv";
+    unsigned int resx = 600;
+    unsigned int resy = 400;
     double sphere_size = 0.01;
-    double multiplier = 10.0;
+    double multiplier = 1.0;
     double offset = 0.5;
 
     if (argc > 1) {
@@ -54,17 +56,23 @@ int main(int argc, char **argv){
         xyz_filename = argv[2];
     }
     if (argc > 3) {
-        sphere_size = std::stod(argv[3]);
+        resx = std::stoi(argv[3]);
     }
     if (argc > 4) {
-        multiplier = std::stod(argv[4]);
+        resy = std::stoi(argv[4]);
     }
     if (argc > 5) {
-        offset = std::stod(argv[5]);
+        sphere_size = std::stod(argv[5]);
+    }
+    if (argc > 6) {
+        multiplier = std::stod(argv[6]);
+    }
+    if (argc > 7) {
+        offset = std::stod(argv[7]);
     }
 
-    std::cout << "Datafile    Positionfile    spheresize    multiplier    offset" << std::endl;
-    std::cout << e_filename << "    " << xyz_filename << "    " << sphere_size << "    " << multiplier << "    " << offset << std::endl;
+    std::cout << "Datafile    Positionfile    resx    resy    spheresize    multiplier    offset" << std::endl;
+    std::cout << e_filename << "    " << xyz_filename << "    " << resx << "    " << resy << "    " << sphere_size << "    " << multiplier << "    " << offset << std::endl;
 
     std::ifstream efile(e_filename);
     if (!efile.is_open()) {
@@ -144,13 +152,6 @@ int main(int argc, char **argv){
     scene->build_acc();
 
     std::unique_ptr<Skybox_t> skybox(new SkyboxFlat_t(Vec3f(1.0)));
-
-    unsigned int resx = 600;
-    unsigned int resy = 400;
-    if (argc > 4){
-        resx = std::stoi(argv[3]);
-        resy = std::stoi(argv[4]);
-    }
     std::unique_ptr<ImgBufferOpenGL_t> imgbuffer(new ImgBufferOpenGL_t(resx, resy));
 
     std::unique_ptr<ScatteringFunction_t> scatterer(new NonAbsorber_t());
