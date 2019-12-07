@@ -26,10 +26,10 @@ void ReflectiveFuzz_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray
 
     const Vec3f axis = std::abs(normal[0]) > 0.1 ? Vec3f(0.0, 1.0, 0.0) : Vec3f(1.0, 0.0, 0.0);
 
-    const Vec3f u = axis.cross(normal).normalize();
-    const Vec3f v = normal.cross(u).normalize(); // wasn't normalized before
+    const Vec3f u = axis.cross(normal).normalize_inplace();
+    const Vec3f v = normal.cross(u).normalize_inplace(); // wasn't normalized before
 
-    const Vec3f normal_fuzz = (u * std::cos(rand1)*rand2s + v*std::sin(rand1)*rand2s + normal*std::sqrt(1.0-rand2)).normalize();
+    const Vec3f normal_fuzz = (u * std::cos(rand1)*rand2s + v*std::sin(rand1)*rand2s + normal*std::sqrt(1.0-rand2)).normalize_inplace();
     
     ray.origin_ += ray.direction_ * ray.dist_ + normal * EPSILON;
     ray.direction_ = ray.direction_ - normal_fuzz * 2.0 * ray.direction_.dot(normal_fuzz);

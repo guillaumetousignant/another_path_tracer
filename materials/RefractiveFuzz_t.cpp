@@ -39,18 +39,18 @@ void RefractiveFuzz_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray
 
         const Vec3f axis = std::abs(n[0]) > 0.1 ? Vec3f(0.0, 1.0, 0.0) : Vec3f(1.0, 0.0, 0.0);
 
-        const Vec3f u = axis.cross(normal).normalize();
-        const Vec3f v = normal.cross(u).normalize(); // wasn't normalized before
+        const Vec3f u = axis.cross(normal).normalize_inplace();
+        const Vec3f v = normal.cross(u).normalize_inplace(); // wasn't normalized before
 
-        const Vec3f normal_fuzz = (u * std::cos(rand1)*rand2s + v*std::sin(rand1)*rand2s + normal*std::sqrt(1.0-rand2)).normalize();
+        const Vec3f normal_fuzz = (u * std::cos(rand1)*rand2s + v*std::sin(rand1)*rand2s + normal*std::sqrt(1.0-rand2)).normalize_inplace();
     
         cosi = ray.direction_.dot(normal_fuzz);
 
         const double eta = etai/etat;
         const double k = 1.0 - eta*eta * (1.0 - cosi*cosi);
 
-        //newdir = k < 0 ? Vec3f() : (ray.direction_*eta + normal_fuzz * (eta*cosi - std::sqrt(k))).normalize();
-        newdir = k < 0.0 ? (ray.direction_ - normal_fuzz * 2.0 * cosi).normalize() : (ray.direction_*eta + normal_fuzz * (eta*cosi - std::sqrt(k))).normalize();
+        //newdir = k < 0 ? Vec3f() : (ray.direction_*eta + normal_fuzz * (eta*cosi - std::sqrt(k))).normalize_inplace();
+        newdir = k < 0.0 ? (ray.direction_ - normal_fuzz * 2.0 * cosi).normalize_inplace() : (ray.direction_*eta + normal_fuzz * (eta*cosi - std::sqrt(k))).normalize_inplace();
         // set to 0, 0, 0? maybe mask to 0, 0, 0 also? 
         // Normalize newdir?
 

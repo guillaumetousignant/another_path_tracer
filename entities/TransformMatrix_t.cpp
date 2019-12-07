@@ -400,7 +400,7 @@ Vec3f TransformMatrix_t::multDir(const Vec3f &vec) const{ // Different than matl
     for (unsigned int i = 0; i < 4; i++){
         vec2[i] = vec[0] * matrix_[i] + vec[1] * matrix_[i + 4] + vec[2] * matrix_[i + 8];
     }
-    return Vec3f(vec2[0], vec2[1], vec2[2]).normalize(); ///vec2[3]; // vec2[3] will probably always be 0. website puts at 1 then. if vec2[3] < 0, inverts result.
+    return Vec3f(vec2[0], vec2[1], vec2[2]).normalize_inplace(); ///vec2[3]; // vec2[3] will probably always be 0. website puts at 1 then. if vec2[3] < 0, inverts result.
     // Will maybe have to normalise this. (was not normalised)
 }
 

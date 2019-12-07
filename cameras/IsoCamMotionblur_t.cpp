@@ -27,10 +27,10 @@ void IsoCamMotionblur_t::update() {
 }
 
 void IsoCamMotionblur_t::raytrace(const Scene_t* scene) {
-    const Vec3f horizontal = direction_.cross(up_).normalize();
-    const Vec3f vertical = horizontal.cross(direction_).normalize();
-    const Vec3f horizontal_last = direction_last_.cross(up_last_).normalize();
-    const Vec3f vertical_last = horizontal_last.cross(direction_last_).normalize();
+    const Vec3f horizontal = direction_.cross(up_).normalize_inplace();
+    const Vec3f vertical = horizontal.cross(direction_).normalize_inplace();
+    const Vec3f horizontal_last = direction_last_.cross(up_last_).normalize_inplace();
+    const Vec3f vertical_last = horizontal_last.cross(direction_last_).normalize_inplace();
     const double tot_subpix = subpix_[0]*subpix_[1];
     const double pixel_span_y = fov_[0]/image_->size_y_;
     const double pixel_span_x = fov_[1]/image_->size_x_;
@@ -56,7 +56,7 @@ void IsoCamMotionblur_t::raytrace(const Scene_t* scene) {
             const double jitter_y = unif_(my_rand::rng);
             const double jitter_x = unif_(my_rand::rng);
 
-            const Vec3f direction_int = (direction_ * rand_time + direction_last_ * (1.0 - rand_time)).normalize();
+            const Vec3f direction_int = (direction_ * rand_time + direction_last_ * (1.0 - rand_time)).normalize_inplace();
             const Vec3f horizontal_int = horizontal * rand_time + horizontal_last * (1.0 - rand_time);
             const Vec3f vertical_int = vertical * rand_time + vertical_last * (1.0 - rand_time);
             const Vec3f origin_int = origin_ * rand_time + origin_last_ * (1.0 - rand_time);

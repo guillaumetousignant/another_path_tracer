@@ -25,8 +25,8 @@ void RecCamAperture_t::update() {
 }
 
 void RecCamAperture_t::raytrace(const Scene_t* scene) {
-    const Vec3f horizontal = direction_.cross(up_).normalize();
-    const Vec3f vertical = horizontal.cross(direction_).normalize();
+    const Vec3f horizontal = direction_.cross(up_).normalize_inplace();
+    const Vec3f vertical = horizontal.cross(direction_).normalize_inplace();
     const Vec3f focus_point = origin_ + direction_ * focal_length_;
     const double tot_subpix = subpix_[0]*subpix_[1];
     const Vec3f pixel_span_y = vertical * focal_length_ * std::tan(fov_[0]/2.0) * 2.0/image_->size_y_;
@@ -58,7 +58,7 @@ void RecCamAperture_t::raytrace(const Scene_t* scene) {
 
             const Vec3f origin2 = origin_ + vertical * std::cos(rand_theta) * rand_r + horizontal * std::sin(rand_theta) * rand_r;
 
-            const Vec3f subpix_vec = (pix_vec - subpix_span_y * ((double)k - (double)subpix_[0]/2.0 + jitter_y) + subpix_span_x * ((double)l - (double)subpix_[1]/2.0 + jitter_x) - origin2).normalize();
+            const Vec3f subpix_vec = (pix_vec - subpix_span_y * ((double)k - (double)subpix_[0]/2.0 + jitter_y) + subpix_span_x * ((double)l - (double)subpix_[1]/2.0 + jitter_x) - origin2).normalize_inplace();
             
             Ray_t ray = Ray_t(origin2, subpix_vec, Vec3f(), Vec3f(1.0), medium_list_);
             ray.raycast(scene, max_bounces_, skybox_);
@@ -84,7 +84,7 @@ void RecCamAperture_t::autoFocus(const Scene_t* scene, const double (&position)[
     const Vec3f span_x = horizontal * focal_length_ * std::tan(fov_[1]/2.0) * 2.0;
     const Vec3f ray_vec = (origin_ + direction_ * focal_length_
                             - span_y * (position[1] - 0.5) + span_x * (position[0] - 0.5)
-                            - origin_).normalize();
+                            - origin_).normalize_inplace();
 
     const Ray_t focus_ray = Ray_t(origin_, ray_vec, Vec3f(), Vec3f(1.0), medium_list_);
     

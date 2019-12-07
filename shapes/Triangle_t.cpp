@@ -12,7 +12,7 @@ Triangle_t::Triangle_t(Material_t *material, TransformMatrix_t *transform_matrix
     : Shape_t(material, transform_matrix), points_orig_{points[0], points[1], points[2]} {
 
     if (normals == nullptr){
-        const Vec3f nor = (points[1] - points[0]).cross(points[2] - points[0]).normalize(); 
+        const Vec3f nor = (points[1] - points[0]).cross(points[2] - points[0]).normalize_inplace(); 
 
         normals_orig_[0] = nor;
         normals_orig_[1] = nor;
@@ -159,11 +159,11 @@ void Triangle_t::normal_uv_tangent(const Ray_t &ray, const double (&uv)[2], doub
     tuv[0] = distance[0] * texture_coordinates_[0][0] + distance[1] * texture_coordinates_[1][0] + distance[2] * texture_coordinates_[2][0];
     tuv[1] = distance[0] * texture_coordinates_[0][1] + distance[1] * texture_coordinates_[1][1] + distance[2] * texture_coordinates_[2][1];
 
-    tangentvec = tangent_vec_.cross(normalvec).normalize();
+    tangentvec = tangent_vec_.cross(normalvec).normalize_inplace();
 }        
 
 void Triangle_t::normal_face(const Ray_t &ray, Vec3f &normalvec) const{
-    normalvec = v0v1_.cross(v0v2_).normalize();
+    normalvec = v0v1_.cross(v0v2_).normalize_inplace();
 }
 
 Vec3f Triangle_t::mincoord() const {

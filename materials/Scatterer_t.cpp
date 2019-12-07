@@ -28,12 +28,12 @@ void Scatterer_t::scatter(Ray_t &ray, bool &intersected) {
 
         const Vec3f axis = ray.direction_[0] > 0.1 ? Vec3f(0.0, 1.0, 0.0) : Vec3f(1.0, 0.0, 0.0);
 
-        const Vec3f u = axis.cross(ray.direction_).normalize();
-        const Vec3f v = ray.direction_.cross(u).normalize();
+        const Vec3f u = axis.cross(ray.direction_).normalize_inplace();
+        const Vec3f v = ray.direction_.cross(u).normalize_inplace();
 
-        const Vec3f direction_fuzz = u * std::cos(rand1) * std::sin(rand2) + v * std::sin(rand1) * std::sin(rand2) + ray.direction_ * std::cos(rand2);
+        const Vec3f direction_fuzz = (u * std::cos(rand1) * std::sin(rand2) + v * std::sin(rand1) * std::sin(rand2) + ray.direction_ * std::cos(rand2)).normalize_inplace();
 
-        ray.direction_ = direction_fuzz.normalize(); //is this needed? prob because of the cross() calls.
+        ray.direction_ = direction_fuzz; //is this [normalize] needed? prob because of the cross() calls.
     }
 
     ray.colour_ += ray.mask_ * (emission_vol_ * ray.dist_).sqrt(); // sqrt may be slow

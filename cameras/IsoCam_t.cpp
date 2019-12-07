@@ -22,8 +22,8 @@ void IsoCam_t::update() {
 }
 
 void IsoCam_t::raytrace(const Scene_t* scene) {
-    const Vec3f horizontal = direction_.cross(up_).normalize();
-    const Vec3f vertical = horizontal.cross(direction_).normalize();
+    const Vec3f horizontal = direction_.cross(up_).normalize_inplace();
+    const Vec3f vertical = horizontal.cross(direction_).normalize_inplace();
     const double tot_subpix = subpix_[0]*subpix_[1];
     const double pixel_span_y = fov_[0]/image_->size_y_;
     const double pixel_span_x = fov_[1]/image_->size_x_;

@@ -44,10 +44,10 @@ void ReflectiveRefractiveFuzz_t::bounce(const double (&uv)[2], const Shape_t* hi
 
         const Vec3f axis = std::abs(n[0]) > 0.1 ? Vec3f(0.0, 1.0, 0.0) : Vec3f(1.0, 0.0, 0.0);
 
-        const Vec3f u = axis.cross(normal).normalize();
-        const Vec3f v = normal.cross(u).normalize(); // wasn't normalized before
+        const Vec3f u = axis.cross(normal).normalize_inplace();
+        const Vec3f v = normal.cross(u).normalize_inplace(); // wasn't normalized before
 
-        const Vec3f normal_fuzz = (u * std::cos(rand1)*rand2s + v*std::sin(rand1)*rand2s + normal*std::sqrt(1.0-rand2)).normalize();
+        const Vec3f normal_fuzz = (u * std::cos(rand1)*rand2s + v*std::sin(rand1)*rand2s + normal*std::sqrt(1.0-rand2)).normalize_inplace();
 
         cosi = ray.direction_.dot(normal_fuzz);
         const double eta = etai/etat;
@@ -67,8 +67,8 @@ void ReflectiveRefractiveFuzz_t::bounce(const double (&uv)[2], const Shape_t* hi
         if (unif_(my_rand::rng) > kr){// || coming_out){ // refracted. Not sure if should always be refracted when going out.
             const double k = 1.0 - sint*sint;
 
-            //newdir = k < 0 ? Vec3f() : (ray.direction_ * eta + normal_fuzz * (eta * cosi - std::sqrt(k))).normalize();
-            newdir = (ray.direction_ * eta + normal_fuzz * (eta * cosi - std::sqrt(k))).normalize(); // k shouldn't be smaller than zero if kr is smaller than 1
+            //newdir = k < 0 ? Vec3f() : (ray.direction_ * eta + normal_fuzz * (eta * cosi - std::sqrt(k))).normalize_inplace();
+            newdir = (ray.direction_ * eta + normal_fuzz * (eta * cosi - std::sqrt(k))).normalize_inplace(); // k shouldn't be smaller than zero if kr is smaller than 1
 
             if (newdir.dot(normal) < 0.0){ // coming in
                 ray.origin_ += ray.direction_ * ray.dist_ - normal * EPSILON; // use n or normal?

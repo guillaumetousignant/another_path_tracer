@@ -166,14 +166,14 @@ void TriangleMeshMotionblur_t::normal_uv_tangent(const Ray_t &ray, const double 
     tuv[1] = distance[0] * geom_->vt_[3*index_][1] + distance[1] * geom_->vt_[3*index_ + 1][1] + distance[2] * geom_->vt_[3*index_ + 2][1];
 
     const Vec3f tangent_vec_int = tangent_vec_ * ray.time_ + tangent_vec_last_ * (1.0 - ray.time_);
-    tangentvec = tangent_vec_int.cross(normalvec).normalize();
+    tangentvec = tangent_vec_int.cross(normalvec).normalize_inplace();
 } 
 
 void TriangleMeshMotionblur_t::normal_face(const Ray_t &ray, Vec3f &normalvec) const{
     const Vec3f v0v1_int = v0v1_ * ray.time_ + v0v1_last_ * (1.0 - ray.time_);
     const Vec3f v0v2_int = v0v2_ * ray.time_ + v0v2_last_ * (1.0 - ray.time_);
 
-    normalvec = v0v1_int.cross(v0v2_int).normalize();
+    normalvec = v0v1_int.cross(v0v2_int).normalize_inplace();
 }
 
 Vec3f TriangleMeshMotionblur_t::mincoord() const {

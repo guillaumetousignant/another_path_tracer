@@ -27,10 +27,10 @@ void RecCamMotionblur_t::update() {
 }
 
 void RecCamMotionblur_t::raytrace(const Scene_t* scene) {
-    const Vec3f horizontal = direction_.cross(up_).normalize();
-    const Vec3f vertical = horizontal.cross(direction_).normalize();
-    const Vec3f horizontal_last = direction_last_.cross(up_last_).normalize();
-    const Vec3f vertical_last = horizontal_last.cross(direction_last_).normalize();
+    const Vec3f horizontal = direction_.cross(up_).normalize_inplace();
+    const Vec3f vertical = horizontal.cross(direction_).normalize_inplace();
+    const Vec3f horizontal_last = direction_last_.cross(up_last_).normalize_inplace();
+    const Vec3f vertical_last = horizontal_last.cross(direction_last_).normalize_inplace();
     const Vec3f focus_point = origin_ + direction_;
     const Vec3f focus_point_last = origin_last_ + direction_last_;
     const double tot_subpix = subpix_[0]*subpix_[1];
@@ -66,7 +66,7 @@ void RecCamMotionblur_t::raytrace(const Scene_t* scene) {
             
             const Vec3f ray_vec = (focus_point_int - vertical_int * (pixel_span_y * ((double)j - (double)image_->size_y_/2.0 + 0.5) + subpix_span_y * ((double)k - (double)subpix_[0]/2.0 + jitter_y))
                             + horizontal_int * (pixel_span_x * ((double)i - (double)image_->size_x_/2.0 + 0.5) + subpix_span_x * ((double)l - (double)subpix_[1]/2.0 + jitter_x))
-                            - origin_int).normalize();
+                            - origin_int).normalize_inplace();
 
             Ray_t ray = Ray_t(origin_int, ray_vec, Vec3f(), Vec3f(1.0), medium_list_, rand_time);
             ray.raycast(scene, max_bounces_, skybox_);

@@ -138,7 +138,7 @@ void SphereMotionblur_t::normal_uv_tangent(const Ray_t &ray, const double (&uv)[
     tuv[0] = sph[2]/(2.0 * PI) + 0.5;
     tuv[1] = 1.0 - sph[1]/PI;
 
-    tangentvec = direction_int.cross(normalvec).normalize();
+    tangentvec = direction_int.cross(normalvec).normalize_inplace();
 } 
 
 Vec3f SphereMotionblur_t::mincoord() const {

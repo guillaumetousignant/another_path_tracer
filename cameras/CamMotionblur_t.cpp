@@ -32,10 +32,10 @@ void CamMotionblur_t::raytrace(const Scene_t* scene) {
     const double subpix_span_y = pixel_span_y/subpix_[0];
     const double subpix_span_x = pixel_span_x/subpix_[1];
 
-    const Vec3f horizontal_last = direction_last_.cross(up_last_).normalize();
-    const Vec3f vertical_last = horizontal_last.cross(direction_last_).normalize();
-    const Vec3f horizontal = direction_.cross(up_).normalize();
-    const Vec3f vertical = horizontal.cross(direction_).normalize();
+    const Vec3f horizontal_last = direction_last_.cross(up_last_).normalize_inplace();
+    const Vec3f vertical_last = horizontal_last.cross(direction_last_).normalize_inplace();
+    const Vec3f horizontal = direction_.cross(up_).normalize_inplace();
+    const Vec3f vertical = horizontal.cross(direction_).normalize_inplace();
 
     #ifdef _WIN32
         int index; // Openmp on windows can't use unsigned index.
@@ -64,7 +64,7 @@ void CamMotionblur_t::raytrace(const Scene_t* scene) {
             const Vec3f vertical_int = vertical * rand_time + vertical_last * (1.0 - rand_time); // maybe should normalise this
             const Vec3f origin_int = origin_ * rand_time + origin_last_ * (1.0 - rand_time);
 
-            Vec3f subpix_vec = (pix_vec + Vec3f(0.0, ((double)k - (double)subpix_[0]/2.0 + jitter_y)*subpix_span_y, ((double)l - (double)subpix_[1]/2.0 + jitter_x)*subpix_span_x)).to_xyz_offset(direction_int, horizontal_int, vertical_int).normalize();
+            Vec3f subpix_vec = (pix_vec + Vec3f(0.0, ((double)k - (double)subpix_[0]/2.0 + jitter_y)*subpix_span_y, ((double)l - (double)subpix_[1]/2.0 + jitter_x)*subpix_span_x)).to_xyz_offset(direction_int, horizontal_int, vertical_int).normalize_inplace();
 
             Ray_t ray = Ray_t(origin_int, subpix_vec, Vec3f(), Vec3f(1.0), medium_list_, rand_time);
             ray.raycast(scene, max_bounces_, skybox_);

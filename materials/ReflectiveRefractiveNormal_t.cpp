@@ -23,7 +23,7 @@ void ReflectiveRefractiveNormal_t::bounce(const double (&uv)[2], const Shape_t* 
     hit_obj->normal_uv_tangent(ray, uv, tuv, normal, tangent);
     bitangent = normal.cross(tangent);
     tangent_weights = normal_map_->get(tuv) * 2.0 - 1.0;
-    normal = (tangent * tangent_weights[0] + bitangent * tangent_weights[1] + normal * tangent_weights[2]).normalize();
+    normal = (tangent * tangent_weights[0] + bitangent * tangent_weights[1] + normal * tangent_weights[2]).normalize_inplace();
 
     double cosi = ray.direction_.dot(normal);
 
@@ -63,8 +63,8 @@ void ReflectiveRefractiveNormal_t::bounce(const double (&uv)[2], const Shape_t* 
         if (unif_(my_rand::rng) > kr){ //|| coming_out){ // refracted. Not sure if should always be refracted when going out.
             const double k = 1.0 - sint*sint;
 
-            //newdir = k < 0 ? Vec3f() : (ray.direction_ * eta + n * (eta * cosi - std::sqrt(k))).normalize(); // k shouldn't be smaller than 0 if sint >= 1
-            newdir = (ray.direction_ * eta + n * (eta * cosi - std::sqrt(k))).normalize();
+            //newdir = k < 0 ? Vec3f() : (ray.direction_ * eta + n * (eta * cosi - std::sqrt(k))).normalize_inplace(); // k shouldn't be smaller than 0 if sint >= 1
+            newdir = (ray.direction_ * eta + n * (eta * cosi - std::sqrt(k))).normalize_inplace();
 
             if (newdir.dot(normal) < 0.0){ // coming in
                 ray.origin_ += ray.direction_ * ray.dist_ - normal * EPSILON; // use n or normal?

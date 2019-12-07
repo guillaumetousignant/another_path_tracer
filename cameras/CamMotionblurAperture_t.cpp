@@ -35,10 +35,10 @@ void CamMotionblurAperture_t::raytrace(const Scene_t* scene) {
     const double subpix_span_y = pixel_span_y/subpix_[0];
     const double subpix_span_x = pixel_span_x/subpix_[1];
 
-    const Vec3f horizontal_last = direction_last_.cross(up_last_).normalize();
-    const Vec3f vertical_last = horizontal_last.cross(direction_last_).normalize();
-    const Vec3f horizontal = direction_.cross(up_).normalize();
-    const Vec3f vertical = horizontal.cross(direction_).normalize();
+    const Vec3f horizontal_last = direction_last_.cross(up_last_).normalize_inplace();
+    const Vec3f vertical_last = horizontal_last.cross(direction_last_).normalize_inplace();
+    const Vec3f horizontal = direction_.cross(up_).normalize_inplace();
+    const Vec3f vertical = horizontal.cross(direction_).normalize_inplace();
 
     #ifdef _WIN32
         int index; // Openmp on windows can't use unsigned index.
@@ -75,7 +75,7 @@ void CamMotionblurAperture_t::raytrace(const Scene_t* scene) {
             
             subpix_vec = origin_int + subpix_vec.to_xyz_offset(direction_int, horizontal_int, vertical_int) * focal_length_int - origin2;
 
-            Ray_t ray = Ray_t(origin2, subpix_vec.normalize(), Vec3f(), Vec3f(1.0), medium_list_, rand_time);
+            Ray_t ray = Ray_t(origin2, subpix_vec.normalize_inplace(), Vec3f(), Vec3f(1.0), medium_list_, rand_time);
             ray.raycast(scene, max_bounces_, skybox_);
             col += ray.colour_;
         }

@@ -119,7 +119,7 @@ void Sphere_t::normal_uv_tangent(const Ray_t &ray, const double (&uv)[2], double
     tuv[0] = sph[2]/(2.0 * PI) + 0.5;
     tuv[1] = 1.0 - sph[1]/PI;
 
-    tangentvec = direction_sph_.get_xyz().cross(normalvec).normalize();
+    tangentvec = direction_sph_.get_xyz().cross(normalvec).normalize_inplace();
 } 
 
 Vec3f Sphere_t::mincoord() const {

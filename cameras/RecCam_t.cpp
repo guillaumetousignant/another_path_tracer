@@ -22,8 +22,8 @@ void RecCam_t::update() {
 }
 
 void RecCam_t::raytrace(const Scene_t* scene) {
-    const Vec3f horizontal = direction_.cross(up_).normalize();
-    const Vec3f vertical = horizontal.cross(direction_).normalize();
+    const Vec3f horizontal = direction_.cross(up_).normalize_inplace();
+    const Vec3f vertical = horizontal.cross(direction_).normalize_inplace();
     const Vec3f focus_point = origin_ + direction_;
     const double tot_subpix = subpix_[0]*subpix_[1];
     const Vec3f pixel_span_y = vertical * std::tan(fov_[0]/2.0) * 2.0/image_->size_y_;
@@ -51,7 +51,7 @@ void RecCam_t::raytrace(const Scene_t* scene) {
             const double jitter_y = unif_(my_rand::rng);
             const double jitter_x = unif_(my_rand::rng);
 
-            const Vec3f subpix_vec = (pix_vec - subpix_span_y * ((double)k - (double)subpix_[0]/2.0 + jitter_y) + subpix_span_x * ((double)l - (double)subpix_[1]/2.0 + jitter_x) - origin_).normalize();
+            const Vec3f subpix_vec = (pix_vec - subpix_span_y * ((double)k - (double)subpix_[0]/2.0 + jitter_y) + subpix_span_x * ((double)l - (double)subpix_[1]/2.0 + jitter_x) - origin_).normalize_inplace();
             
             Ray_t ray = Ray_t(origin_, subpix_vec, Vec3f(), Vec3f(1.0), medium_list_);
             ray.raycast(scene, max_bounces_, skybox_);

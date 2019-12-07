@@ -21,7 +21,7 @@ void PortalScatterer_t::scatter(Ray_t &ray, bool &intersected) {
         const TransformMatrix_t transform_norm = transformation_->transformDir();
 
         ray.origin_ = transformation_->multVec(ray.origin_ + ray.direction_ * ray.dist_);
-        ray.direction_ = transform_norm.multDir(ray.direction_).normalize();
+        ray.direction_ = transform_norm.multDir(ray.direction_).normalize_inplace();
 
         ray.medium_list_ = medium_list_;
     }

@@ -12,7 +12,7 @@ TriangleMotionblur_t::TriangleMotionblur_t(Material_t *material, TransformMatrix
     : Shape_t(material, transform_matrix), points_orig_{points[0], points[1], points[2]} {
 
     if (normals == nullptr){
-        const Vec3f nor = (points[1] - points[0]).cross(points[2] - points[0]).normalize(); 
+        const Vec3f nor = (points[1] - points[0]).cross(points[2] - points[0]).normalize_inplace(); 
         normals_orig_[0] = nor;
         normals_orig_[1] = nor;
         normals_orig_[2] = nor;
@@ -195,14 +195,14 @@ void TriangleMotionblur_t::normal_uv_tangent(const Ray_t &ray, const double (&uv
     tuv[1] = distance[0] * texture_coordinates_[0][1] + distance[1] * texture_coordinates_[1][1] + distance[2] * texture_coordinates_[2][1];
 
     const Vec3f tangent_vec_int = tangent_vec_ * ray.time_ + tangent_vec_last_ * (1.0 - ray.time_);
-    tangentvec = tangent_vec_int.cross(normalvec).normalize();
+    tangentvec = tangent_vec_int.cross(normalvec).normalize_inplace();
 } 
 
 void TriangleMotionblur_t::normal_face(const Ray_t &ray, Vec3f &normalvec) const{
     const Vec3f v0v1_int = v0v1_ * ray.time_ + v0v1_last_ * (1.0 - ray.time_);
     const Vec3f v0v2_int = v0v2_ * ray.time_ + v0v2_last_ * (1.0 - ray.time_);
 
-    normalvec = v0v1_int.cross(v0v2_int).normalize();
+    normalvec = v0v1_int.cross(v0v2_int).normalize_inplace();
 }
 
 Vec3f TriangleMotionblur_t::mincoord() const {

@@ -26,8 +26,8 @@ void Cam_t::raytrace(const Scene_t* scene) {
     const double pixel_span_x = fov_[1]/image_->size_x_;
     const double subpix_span_y = pixel_span_y/subpix_[0];
     const double subpix_span_x = pixel_span_x/subpix_[1];
-    const Vec3f horizontal = direction_.cross(up_).normalize();
-    const Vec3f vertical = horizontal.cross(direction_).normalize();
+    const Vec3f horizontal = direction_.cross(up_).normalize_inplace();
+    const Vec3f vertical = horizontal.cross(direction_).normalize_inplace();
     #ifdef _WIN32
         int index; // Openmp on windows can't use unsigned index.
     #else

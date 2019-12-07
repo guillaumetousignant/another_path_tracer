@@ -24,8 +24,8 @@ void IsoCamAperture_t::update() {
 }
 
 void IsoCamAperture_t::raytrace(const Scene_t* scene) {
-    const Vec3f horizontal = direction_.cross(up_).normalize();
-    const Vec3f vertical = horizontal.cross(direction_).normalize();
+    const Vec3f horizontal = direction_.cross(up_).normalize_inplace();
+    const Vec3f vertical = horizontal.cross(direction_).normalize_inplace();
     const double tot_subpix = subpix_[0]*subpix_[1];
     const double pixel_span_y = fov_[0]/image_->size_y_;
     const double pixel_span_x = fov_[1]/image_->size_x_;
@@ -56,7 +56,7 @@ void IsoCamAperture_t::raytrace(const Scene_t* scene) {
 
             const Vec3f subpix_ray_origin = ray_origin - vertical * subpix_span_y * ((double)k - (double)subpix_[0]/2.0 + jitter_y) + horizontal * subpix_span_x * ((double)l - (double)subpix_[1]/2.0 + jitter_x);;
             const Vec3f ray_origin2 = subpix_ray_origin + vertical * std::cos(rand_theta) * rand_r + horizontal * std::sin(rand_theta) * rand_r;
-            const Vec3f direction2 = (subpix_ray_origin + direction_ * focal_length_ - ray_origin2).normalize();
+            const Vec3f direction2 = (subpix_ray_origin + direction_ * focal_length_ - ray_origin2).normalize_inplace();
 
             Ray_t ray = Ray_t(ray_origin2, direction2, Vec3f(), Vec3f(1.0), medium_list_);
             ray.raycast(scene, max_bounces_, skybox_);

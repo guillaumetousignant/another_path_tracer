@@ -30,10 +30,10 @@ void IsoCamMotionblurAperture_t::update() {
 }
 
 void IsoCamMotionblurAperture_t::raytrace(const Scene_t* scene) {
-    const Vec3f horizontal = direction_.cross(up_).normalize();
-    const Vec3f vertical = horizontal.cross(direction_).normalize();
-    const Vec3f horizontal_last = direction_last_.cross(up_last_).normalize();
-    const Vec3f vertical_last = horizontal_last.cross(direction_last_).normalize();
+    const Vec3f horizontal = direction_.cross(up_).normalize_inplace();
+    const Vec3f vertical = horizontal.cross(direction_).normalize_inplace();
+    const Vec3f horizontal_last = direction_last_.cross(up_last_).normalize_inplace();
+    const Vec3f vertical_last = horizontal_last.cross(direction_last_).normalize_inplace();
     const double tot_subpix = subpix_[0]*subpix_[1];
     const double pixel_span_y = fov_[0]/image_->size_y_;
     const double pixel_span_x = fov_[1]/image_->size_x_;
@@ -73,7 +73,7 @@ void IsoCamMotionblurAperture_t::raytrace(const Scene_t* scene) {
             const Vec3f origin2 = ray_origin + vertical_int * std::cos(rand_theta) * rand_r + horizontal_int * std::sin(rand_theta) * rand_r;
             ray_origin +=  direction_int * focal_length_int - origin2; // is actually now direction
 
-            Ray_t ray = Ray_t(origin2, ray_origin.normalize(), Vec3f(), Vec3f(1.0), medium_list_, rand_time);
+            Ray_t ray = Ray_t(origin2, ray_origin.normalize_inplace(), Vec3f(), Vec3f(1.0), medium_list_, rand_time);
             ray.raycast(scene, max_bounces_, skybox_);
             col += ray.colour_;
         }

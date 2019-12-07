@@ -30,10 +30,10 @@ void RecCamMotionblurAperture_t::update() {
 }
 
 void RecCamMotionblurAperture_t::raytrace(const Scene_t* scene) {
-    const Vec3f horizontal = direction_.cross(up_).normalize();
-    const Vec3f vertical = horizontal.cross(direction_).normalize();
-    const Vec3f horizontal_last = direction_last_.cross(up_last_).normalize();
-    const Vec3f vertical_last = horizontal_last.cross(direction_last_).normalize();
+    const Vec3f horizontal = direction_.cross(up_).normalize_inplace();
+    const Vec3f vertical = horizontal.cross(direction_).normalize_inplace();
+    const Vec3f horizontal_last = direction_last_.cross(up_last_).normalize_inplace();
+    const Vec3f vertical_last = horizontal_last.cross(direction_last_).normalize_inplace();
     const Vec3f focus_point = origin_ + direction_ * focal_length_;
     const Vec3f focus_point_last = origin_last_ + direction_last_ * focal_length_last_;
     const double tot_subpix = subpix_[0]*subpix_[1];
@@ -84,7 +84,7 @@ void RecCamMotionblurAperture_t::raytrace(const Scene_t* scene) {
 
             const Vec3f ray_vec = (focus_point_int - vertical_int * (pixel_span_y_int * ((double)j - (double)image_->size_y_/2.0 + 0.5) + subpix_span_y_int * ((double)k - (double)subpix_[0]/2.0 + jitter_y))
                             + horizontal_int * (pixel_span_x_int * ((double)i - (double)image_->size_x_/2.0 + 0.5) + subpix_span_x_int * ((double)l - (double)subpix_[1]/2.0 + jitter_x))
-                            - origin_int).normalize();
+                            - origin_int).normalize_inplace();
 
             Ray_t ray = Ray_t(origin_int, ray_vec, Vec3f(), Vec3f(1.0), medium_list_, rand_time);
             ray.raycast(scene, max_bounces_, skybox_);
@@ -111,7 +111,7 @@ void RecCamMotionblurAperture_t::autoFocus(const Scene_t* scene, const double (&
     const Vec3f span_x = horizontal * focal_length_ * std::tan(fov_[1]/2.0) * 2.0;
     const Vec3f span_y = vertical * focal_length_ * std::tan(fov_[0]/2.0) * 2.0;
 
-    const Vec3f ray_vec = (focus_point - span_y * (position[1] - 0.5) + span_x * (position[0] - 0.5) - origin_).normalize();
+    const Vec3f ray_vec = (focus_point - span_y * (position[1] - 0.5) + span_x * (position[0] - 0.5) - origin_).normalize_inplace();
 
     const Ray_t focus_ray = Ray_t(origin_, ray_vec, Vec3f(), Vec3f(1.0), medium_list_);
 

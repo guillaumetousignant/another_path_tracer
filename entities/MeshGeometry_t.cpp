@@ -397,7 +397,7 @@ void MeshGeometry_t::deNan(){
     for (unsigned int i = 0; i < n_tris_; ++i){
         for (unsigned int j = 0; j < 3; ++j){
             if (std::isnan(vn_[3*i + j][0])){ // Just checking first value, maybe add isnan to vec3f class?
-                vn_[3*i + j] = (v_[3*i + 1] - v_[3*i]).cross(v_[3*i + 2] - v_[3*i]).normalize();
+                vn_[3*i + j] = (v_[3*i + 1] - v_[3*i]).cross(v_[3*i + 2] - v_[3*i]).normalize_inplace();
             }
         }
     }

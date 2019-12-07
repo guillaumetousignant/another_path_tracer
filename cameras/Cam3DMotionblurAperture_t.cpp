@@ -34,7 +34,7 @@ Cam3DMotionblurAperture_t::Cam3DMotionblurAperture_t(TransformMatrix_t* transfor
 
     filename_ = filename_S;
 
-    const Vec3f horizontal = direction_.cross(up).normalize();
+    const Vec3f horizontal = direction_.cross(up).normalize_inplace();
 
     camera_L_->focal_length_ = std::sqrt(focal_length_*focal_length_ + eye_dist_*eye_dist_);
     camera_R_->focal_length_ = camera_L_->focal_length_;
@@ -44,8 +44,8 @@ Cam3DMotionblurAperture_t::Cam3DMotionblurAperture_t(TransformMatrix_t* transfor
     camera_L_->origin_last_ = camera_L_->origin_;
     camera_R_->origin_last_ = camera_R_->origin_;
     
-    camera_L_->direction_ = (direction_ * focal_length_ + horizontal * eye_dist_).normalize();
-    camera_R_->direction_ = (direction_ * focal_length_ - horizontal * eye_dist_).normalize();
+    camera_L_->direction_ = (direction_ * focal_length_ + horizontal * eye_dist_).normalize_inplace();
+    camera_R_->direction_ = (direction_ * focal_length_ - horizontal * eye_dist_).normalize_inplace();
     camera_L_->direction_last_ = camera_L_->direction_;
     camera_R_->direction_last_ = camera_R_->direction_;
 }
@@ -81,8 +81,8 @@ void Cam3DMotionblurAperture_t::update() {
     const Vec3f horizontal = direction_.cross(up_);
     camera_L_->origin_ = horizontal * -eye_dist_ + origin_;
     camera_R_->origin_ = horizontal * eye_dist_ + origin_;
-    camera_L_->direction_ = (direction_ * focal_length_ + horizontal * eye_dist_).normalize();
-    camera_R_->direction_ = (direction_ * focal_length_ - horizontal * eye_dist_).normalize();
+    camera_L_->direction_ = (direction_ * focal_length_ + horizontal * eye_dist_).normalize_inplace();
+    camera_R_->direction_ = (direction_ * focal_length_ - horizontal * eye_dist_).normalize_inplace();
 }
 
 void Cam3DMotionblurAperture_t::raytrace(const Scene_t* scene) {

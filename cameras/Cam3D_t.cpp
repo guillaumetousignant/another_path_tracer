@@ -33,12 +33,12 @@ Cam3D_t::Cam3D_t(TransformMatrix_t* transformation, const std::string &filename,
 
     filename_ = filename_S;
 
-    const Vec3f horizontal = direction_.cross(up).normalize();
+    const Vec3f horizontal = direction_.cross(up).normalize_inplace();
 
     camera_L_->origin_ = horizontal * -eye_dist_ + origin_;
     camera_R_->origin_ = horizontal * eye_dist_ + origin_;
-    camera_L_->direction_ = (direction_ * focal_length_ + horizontal * eye_dist_).normalize();
-    camera_R_->direction_ = (direction_ * focal_length_ - horizontal * eye_dist_).normalize();
+    camera_L_->direction_ = (direction_ * focal_length_ + horizontal * eye_dist_).normalize_inplace();
+    camera_R_->direction_ = (direction_ * focal_length_ - horizontal * eye_dist_).normalize_inplace();
 }
 
 Cam3D_t::~Cam3D_t() {
@@ -59,8 +59,8 @@ void Cam3D_t::update() {
     const Vec3f horizontal = direction_.cross(up_);
     camera_L_->origin_ = horizontal * -eye_dist_ + origin_;
     camera_R_->origin_ = horizontal * eye_dist_ + origin_;
-    camera_L_->direction_ = (direction_ * focal_length_ + horizontal * eye_dist_).normalize();
-    camera_R_->direction_ = (direction_ * focal_length_ - horizontal * eye_dist_).normalize();
+    camera_L_->direction_ = (direction_ * focal_length_ + horizontal * eye_dist_).normalize_inplace();
+    camera_R_->direction_ = (direction_ * focal_length_ - horizontal * eye_dist_).normalize_inplace();
 }
 
 void Cam3D_t::raytrace(const Scene_t* scene) {

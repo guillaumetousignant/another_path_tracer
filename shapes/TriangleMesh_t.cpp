@@ -129,11 +129,11 @@ void TriangleMesh_t::normal_uv_tangent(const Ray_t &ray, const double (&uv)[2], 
     tuv[0] = distance[0] * geom_->vt_[3*index_][0] + distance[1] * geom_->vt_[3*index_ + 1][0] + distance[2] * geom_->vt_[3*index_ + 2][0];
     tuv[1] = distance[0] * geom_->vt_[3*index_][1] + distance[1] * geom_->vt_[3*index_ + 1][1] + distance[2] * geom_->vt_[3*index_ + 2][1];
 
-    tangentvec = tangent_vec_.cross(normalvec).normalize();
+    tangentvec = tangent_vec_.cross(normalvec).normalize_inplace();
 }  
 
 void TriangleMesh_t::normal_face(const Ray_t &ray, Vec3f &normalvec) const{
-    normalvec = v0v1_.cross(v0v2_).normalize();
+    normalvec = v0v1_.cross(v0v2_).normalize_inplace();
 }
 
 Vec3f TriangleMesh_t::mincoord() const {

@@ -35,8 +35,8 @@ void Refractive_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &
         const double eta = etai/etat;
         const double k = 1.0 - eta*eta * (1.0 - cosi*cosi);
 
-        //newdir = k < 0 ? Vec3f() : (ray.direction_*eta + n * (eta*cosi - std::sqrt(k))).normalize();
-        newdir = k < 0.0 ? (ray.direction_ - n * 2.0 * cosi).normalize() : (ray.direction_*eta + n * (eta*cosi - std::sqrt(k))).normalize(); // Now reflects completely if k < 0
+        //newdir = k < 0 ? Vec3f() : (ray.direction_*eta + n * (eta*cosi - std::sqrt(k))).normalize_inplace();
+        newdir = k < 0.0 ? (ray.direction_ - n * 2.0 * cosi).normalize_inplace() : (ray.direction_*eta + n * (eta*cosi - std::sqrt(k))).normalize_inplace(); // Now reflects completely if k < 0
         // set to 0, 0, 0? maybe mask to 0, 0, 0 also? 
         // Normalize newdir?
 
