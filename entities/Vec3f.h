@@ -41,6 +41,7 @@ class Vec3f {
         double magnitude() const;
         double magnitudeSquared() const;
         Vec3f normalize() const;
+        const Vec3f &normalize_inplace();
         double dot(const Vec3f &other) const;
         Vec3f cross(const Vec3f &other) const;
         const Vec3f &to_sph();

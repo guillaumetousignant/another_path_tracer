@@ -138,6 +138,13 @@ Vec3f Vec3f::normalize() const {
     const double m = std::sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
     return Vec3f(v[0] / m, v[1] / m, v[2] / m);
 } 
+const Vec3f &Vec3f::normalize_inplace() {
+    const double m = std::sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+    v[0] /= m;
+    v[1] /= m;
+    v[2] /= m;
+    return *this;
+}
 double Vec3f::dot(const Vec3f &other) const {
     return v[0] * other.v[0] + v[1] * other.v[1] + v[2] * other.v[2];
 } 
