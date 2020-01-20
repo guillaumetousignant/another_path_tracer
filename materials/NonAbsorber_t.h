@@ -9,6 +9,6 @@ class NonAbsorber_t final : public ScatteringFunction_t{
         NonAbsorber_t();
         virtual ~NonAbsorber_t() final;
 
-        virtual void scatter(Ray_t &ray, bool &intersected) final; 
+        virtual bool scatter(Ray_t &ray) final; 
 };
 #endif

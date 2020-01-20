@@ -13,13 +13,10 @@ ScattererExp_t::ScattererExp_t(Vec3f emi_vol, Vec3f col_vol, double abs_dist_emi
 
 ScattererExp_t::~ScattererExp_t() {}
 
-void ScattererExp_t::scatter(Ray_t &ray, bool &intersected) {
+bool ScattererExp_t::scatter(Ray_t &ray) {
     const double distance = -std::log(unif_(my_rand::rng))/scattering_coefficient_;
-
-    if (distance >= ray.dist_){
-        intersected = false;
-    }
-    else{
+    bool intersected = false;
+    if (distance < ray.dist_){
         intersected = true;
         ray.dist_ = distance;
         ray.origin_ += ray.direction_ * distance;
@@ -39,4 +36,5 @@ void ScattererExp_t::scatter(Ray_t &ray, bool &intersected) {
 
     ray.colour_ += ray.mask_ * (emission_vol_ * ray.dist_).sqrt(); // sqrt may be slow
     ray.mask_ *= (-colour_vol_ * ray.dist_).exp();
+    return intersected;
 }

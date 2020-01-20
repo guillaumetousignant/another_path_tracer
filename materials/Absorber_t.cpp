@@ -8,9 +8,9 @@ Absorber_t::Absorber_t(Vec3f emi_vol, Vec3f col_vol, double abs_dist_emi, double
 
 Absorber_t::~Absorber_t() {}
 
-void Absorber_t::scatter(Ray_t &ray, bool &intersected) {
-    intersected = false;
+bool Absorber_t::scatter(Ray_t &ray) {
     //aray.colour = aray.colour + aray.mask .* exp(-obj.emission_vol * aray.dist);
     ray.colour_ += ray.mask_ * (emission_vol_ * ray.dist_).sqrt(); // sqrt may be slow
     ray.mask_ *= (-colour_vol_ * ray.dist_).exp();
+    return false;
 }

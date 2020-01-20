@@ -20,6 +20,6 @@ class ScattererExpFull_t final : public ScatteringFunction_t{
         double scattering_angle_; // between 0 and 1, portion of the hemisphere reflected to.
         std::uniform_real_distribution<double> unif_;
 
-        virtual void scatter(Ray_t &ray, bool &intersected) final; 
+        virtual bool scatter(Ray_t &ray) final; 
 };
 #endif

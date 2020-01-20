@@ -13,6 +13,6 @@ class Absorber_t final : public ScatteringFunction_t{
         Vec3f emission_vol_;
         Vec3f colour_vol_;
 
-        virtual void scatter(Ray_t &ray, bool &intersected) final; 
+        virtual bool scatter(Ray_t &ray) final; 
 };
 #endif

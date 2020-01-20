@@ -4,6 +4,6 @@ NonAbsorber_t::NonAbsorber_t() {}
 
 NonAbsorber_t::~NonAbsorber_t() {}
 
-void NonAbsorber_t::scatter(Ray_t &ray, bool &intersected) {
-    intersected = false;
+bool NonAbsorber_t::scatter(Ray_t &ray) {
+    return false;
 }

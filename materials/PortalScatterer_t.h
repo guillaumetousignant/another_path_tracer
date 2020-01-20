@@ -17,6 +17,6 @@ class PortalScatterer_t final : public PortalScattererTop_t{
         double scattering_coefficient_;
         std::uniform_real_distribution<double> unif_;
 
-        virtual void scatter(Ray_t &ray, bool &intersected) final; 
+        virtual bool scatter(Ray_t &) final; 
 };
 #endif
