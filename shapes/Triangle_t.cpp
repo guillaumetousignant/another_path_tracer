@@ -87,16 +87,15 @@ void Triangle_t::update() {
     tangent_vec_ = v0v1_ * tuv_to_world_[0] + v0v2_ * tuv_to_world_[1];
 }
 
-void Triangle_t::intersection(const Ray_t &ray, bool &intersected, double &t, double (&uv)[2]) const {
+bool Triangle_t::intersection(const Ray_t &ray, double &t, double (&uv)[2]) const {
     const Vec3f pvec = ray.direction_.cross(v0v2_);
     const double det = v0v1_.dot(pvec);
 
     if (std::abs(det) < EPSILON){
         t = std::numeric_limits<double>::infinity();
-        intersected = false;
         uv[0] = NAN;
         uv[1] = NAN;
-        return;
+        return false;
     }
 
     const double invdet = 1.0/det;
@@ -106,9 +105,8 @@ void Triangle_t::intersection(const Ray_t &ray, bool &intersected, double &t, do
 
     if ((u < 0.0) || (u > 1.0)){
         t = std::numeric_limits<double>::infinity();
-        intersected = false;
         uv[1] = NAN;
-        return;
+        return false;
     }
 
     const Vec3f qvec = tvec.cross(v0v1_);
@@ -117,19 +115,17 @@ void Triangle_t::intersection(const Ray_t &ray, bool &intersected, double &t, do
 
     if ((v < 0.0) || ((u+v) > 1.0)){
         t = std::numeric_limits<double>::infinity();
-        intersected = false;
-        return;
+        return false;
     }
 
     t = v0v2_.dot(qvec) * invdet;
 
     if (t < 0.0){
         t = std::numeric_limits<double>::infinity();
-        intersected = false;
-        return;
+        return false;
     }
 
-    intersected = true;
+    return true;
 }
 
 void Triangle_t::normaluv(const Ray_t &ray, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec) const {

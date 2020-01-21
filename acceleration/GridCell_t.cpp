@@ -20,15 +20,13 @@ void GridCell_t::update(){
 
 void GridCell_t::intersect(const Ray_t &ray, Shape_t* &hit_obj, double &t, double (&uv)[2]) const {
     double t_temp;
-    bool intersected;
     double uv_temp[2];
 
     hit_obj = nullptr; // dunno if this is needed    
     t = std::numeric_limits<double>::infinity();
 
     for (auto it = items_.begin(); it != items_.end(); ++it){
-        (*it)->intersection(ray, intersected, t_temp, uv_temp);
-        if (intersected && (t_temp < t)){
+        if ((*it)->intersection(ray, t_temp, uv_temp) && (t_temp < t)){
             hit_obj = *it;
             uv[0] = uv_temp[0];
             uv[1] = uv_temp[1];

@@ -113,14 +113,12 @@ void Scene_t::build_acc() {
 
 void Scene_t::intersect_brute(const Ray_t &ray, Shape_t* &hit_obj, double &t, double (&uv)[2]) const {
     double t_temp;
-    bool intersected;
     double uv_temp[2];
     
     t = std::numeric_limits<double>::infinity();
 
     for (unsigned int i = 0; i < n_obj_; i++){
-        geometry_[i]->intersection(ray, intersected, t_temp, uv_temp);
-        if (intersected && (t_temp < t)){
+        if (geometry_[i]->intersection(ray, t_temp, uv_temp) && (t_temp < t)){
             hit_obj = geometry_[i];
             uv[0] = uv_temp[0];
             uv[1] = uv_temp[1];

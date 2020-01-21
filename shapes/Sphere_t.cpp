@@ -26,38 +26,34 @@ void Sphere_t::update(){
     direction_sph_ = Vec3f(1.0, direction[1], direction2[2]);
 }
 
-void Sphere_t::intersection(const Ray_t &ray, bool &intersected, double &t, double (&uv)[2]) const {
+bool Sphere_t::intersection(const Ray_t &ray, double &t, double (&uv)[2]) const {
     const Vec3f to_center = origin_ - ray.origin_;
     const double b = to_center.dot(ray.direction_);
     const double c = to_center.dot(to_center) - pow(radius_, 2);
     const double discriminant = pow(b, 2) - c;
 
     if (discriminant < 0.0){
-        intersected = false;
         t = std::numeric_limits<double>::infinity();
         uv[0] = NAN;
         uv[1] = NAN;
-        return;
+        return false;
     }
-    else{
-        t = b - sqrt(discriminant);
-    }
+    t = b - sqrt(discriminant);
 
     if (t < 0.0){
         t = b + sqrt(discriminant);
         if (t < 0.0){
-            intersected = false;
             t = std::numeric_limits<double>::infinity();
             uv[0] = NAN;
             uv[1] = NAN;
-            return; 
+            return false; 
         }
     }
 
-    intersected = true;
     const Vec3f sph = (ray.direction_ * t - to_center).to_sph();
     uv[0] = sph[2]/(2.0 * PI) + 0.5;
     uv[1] = 1.0 - sph[1]/PI;
+    return true;
 }
 
 void Sphere_t::normaluv(const Ray_t &ray, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec) const {

@@ -103,7 +103,7 @@ void TriangleMotionblur_t::update() {
     tangent_vec_ = v0v1_ * tuv_to_world_[0] + v0v2_ * tuv_to_world_[1];
 }
 
-void TriangleMotionblur_t::intersection(const Ray_t &ray, bool &intersected, double &t, double (&uv)[2]) const {
+bool TriangleMotionblur_t::intersection(const Ray_t &ray, double &t, double (&uv)[2]) const {
     const Vec3f v0v1_int = v0v1_ * ray.time_ + v0v1_last_ * (1.0 - ray.time_);
     const Vec3f v0v2_int = v0v2_ * ray.time_ + v0v2_last_ * (1.0 - ray.time_);
 
@@ -116,10 +116,9 @@ void TriangleMotionblur_t::intersection(const Ray_t &ray, bool &intersected, dou
 
     if (std::abs(det) < EPSILON){
         t = std::numeric_limits<double>::infinity();
-        intersected = false;
         uv[0] = NAN;
         uv[1] = NAN;
-        return;
+        return false;
     }
 
     const double invdet = 1.0/det;
@@ -129,9 +128,8 @@ void TriangleMotionblur_t::intersection(const Ray_t &ray, bool &intersected, dou
 
     if ((u < 0.0) || (u > 1.0)){
         t = std::numeric_limits<double>::infinity();
-        intersected = false;
         uv[1] = NAN;
-        return;
+        return false;
     }
 
     const Vec3f qvec = tvec.cross(v0v1_int);
@@ -140,19 +138,17 @@ void TriangleMotionblur_t::intersection(const Ray_t &ray, bool &intersected, dou
 
     if ((v < 0.0) || ((u+v) > 1.0)){
         t = std::numeric_limits<double>::infinity();
-        intersected = false;
-        return;
+        return false;
     }
 
     t = v0v2_int.dot(qvec) * invdet;
 
     if (t < 0.0){
         t = std::numeric_limits<double>::infinity();
-        intersected = false;
-        return;
+        return false;
     }
 
-    intersected = true;
+    return true;
 }
 
 void TriangleMotionblur_t::normaluv(const Ray_t &ray, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec) const {
