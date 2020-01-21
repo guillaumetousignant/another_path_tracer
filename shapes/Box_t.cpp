@@ -8,7 +8,7 @@ Box_t::Box_t(Vec3f (&coord)[2]) : coordinates_{coord[0], coord[1]} {}
 
 Box_t::~Box_t(){}
 
-void Box_t::intersection(const Ray_t &ray, bool &intersected, double &t) const {
+bool Box_t::intersection(const Ray_t &ray, double &t) const {
     const Vec3f invdir = Vec3f(1.0)/ray.direction_;
     const bool sign[3] = {invdir[0] < 0,
                             invdir[1] < 0,
@@ -20,9 +20,8 @@ void Box_t::intersection(const Ray_t &ray, bool &intersected, double &t) const {
     const double tymax = (coordinates_[!sign[1]][1] - ray.origin_[1]) * invdir[1];
 
     if ((tmin > tymax) || (tymin > tmax)){
-        intersected = false;
         t = std::numeric_limits<double>::infinity();
-        return;
+        return false;
     }
 
     tmin = std::max(tmin, tymin);
@@ -32,11 +31,10 @@ void Box_t::intersection(const Ray_t &ray, bool &intersected, double &t) const {
     const double tzmax = (coordinates_[!sign[2]][2] - ray.origin_[2]) * invdir[2];
 
     if ((tmin > tzmax) || (tzmin > tmax)){
-        intersected = false;
         t = std::numeric_limits<double>::infinity();
-        return;
+        return false;
     }
     
     t = std::max(tmin, tzmin);
-    intersected = true;
+    return true;
 }

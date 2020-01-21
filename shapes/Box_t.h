@@ -12,6 +12,6 @@ class Box_t {
 
         Vec3f coordinates_[2];
 
-        void intersection(const Ray_t &ray, bool &intersected, double &t) const;
+        bool intersection(const Ray_t &ray, double &t) const;
 };
 #endif

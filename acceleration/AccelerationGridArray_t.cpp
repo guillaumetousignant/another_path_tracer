@@ -120,7 +120,6 @@ void AccelerationGridArray_t::update(){
 
 void AccelerationGridArray_t::intersect(const Ray_t &ray, Shape_t* &hit_obj, double &t, double (&uv)[2]) const {
     double tbbox;
-    bool intersected;
     int cellexit[3] = {0, 0, 0};
     int cellstep[3] = {0, 0, 0};
     int k;
@@ -131,8 +130,7 @@ void AccelerationGridArray_t::intersect(const Ray_t &ray, Shape_t* &hit_obj, dou
     t = std::numeric_limits<double>::infinity();
     const Vec3f invdir = Vec3f(1.0)/ray.direction_;
 
-    bounding_box_.intersection(ray, intersected, tbbox);
-    if (!intersected){
+    if (!bounding_box_.intersection(ray, tbbox)){
         return;
     }
 
