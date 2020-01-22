@@ -97,9 +97,7 @@ void IsoCamMotionblurAperture_t::autoFocus(const Scene_t* scene, const double (&
 
     const Ray_t focus_ray = Ray_t(pix_origin, direction_, Vec3f(), Vec3f(1.0), medium_list_);
 
-    scene->intersect(focus_ray, t, uv);
-
-    if (t == std::numeric_limits<double>::infinity()){
+    if (scene->intersect(focus_ray, t, uv) == nullptr){
         t = 1000000.0;
     }
     focus(t);
