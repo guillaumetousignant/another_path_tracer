@@ -86,7 +86,7 @@ void AccelerationGrid_t::update(){
     }
 }
 
-void AccelerationGrid_t::intersect(const Ray_t &ray, Shape_t* &hit_obj, double &t, double (&uv)[2]) const {
+Shape_t* AccelerationGrid_t::intersect(const Ray_t &ray, double &t, double (&uv)[2]) const {
     double tbbox;
     int cellexit[3] = {0, 0, 0};
     int cellstep[3] = {0, 0, 0};
@@ -94,12 +94,11 @@ void AccelerationGrid_t::intersect(const Ray_t &ray, Shape_t* &hit_obj, double &
     const unsigned int map[8] = {2, 1, 2, 1, 2, 2, 0, 0};
     int nextaxis;
 
-    hit_obj = nullptr;
     t = std::numeric_limits<double>::infinity();
     const Vec3f invdir = Vec3f(1.0)/ray.direction_;
 
     if (!bounding_box_.intersection(ray, tbbox)){
-        return;
+        return nullptr;
     }
 
     Vec3f deltat = Vec3f();
@@ -127,10 +126,10 @@ void AccelerationGrid_t::intersect(const Ray_t &ray, Shape_t* &hit_obj, double &
     }
 
     int cellcoordint[3] = {(int)cellcoord[0], (int)cellcoord[1], (int)cellcoord[2]};
-
+    Shape_t* hit_obj = nullptr;
     while (true){
         if (cells_[cellcoordint[0] + cellcoordint[1]*cell_res_[0] + cellcoordint[2]*cell_res_[0]*cell_res_[1]] != nullptr){
-            cells_[cellcoordint[0] + cellcoordint[1]*cell_res_[0] + cellcoordint[2]*cell_res_[0]*cell_res_[1]]->intersect(ray, hit_obj, t, uv);
+            hit_obj = cells_[cellcoordint[0] + cellcoordint[1]*cell_res_[0] + cellcoordint[2]*cell_res_[0]*cell_res_[1]]->intersect(ray, t, uv);
         }
 
         k = (tnext[0] < tnext[1]) * 4 + (tnext[0] < tnext[2]) * 2 + (tnext[1] < tnext[2]);
@@ -146,6 +145,7 @@ void AccelerationGrid_t::intersect(const Ray_t &ray, Shape_t* &hit_obj, double &
         }
         tnext[nextaxis] = tnext[nextaxis] + deltat[nextaxis];
     }
+    return hit_obj;
 }
 
 void AccelerationGrid_t::add(Shape_t* item){

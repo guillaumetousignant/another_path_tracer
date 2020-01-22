@@ -17,13 +17,13 @@ void Ray_t::raycast(const Scene_t* scene, unsigned int max_bounces, const Skybox
     double uv[2];
 
     while ((bounces < max_bounces) && (mask_.magnitudeSquared() > 0.01)){ // Should maybe make magnitudesquared min value lower
-        hit_obj = nullptr;
-        scene->intersect(*this, hit_obj, t, uv);
-        dist_ = t;
+        hit_obj = scene->intersect(*this, t, uv);
+        
         if (hit_obj == nullptr){
             colour_ += mask_ * skybox->get(direction_);
             return;
         }
+        dist_ = t;
         bounces++;
 
         if (!medium_list_.front()->scattering_->scatter(*this)){

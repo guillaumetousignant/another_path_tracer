@@ -25,7 +25,7 @@ class AccelerationMultiGridArray_t final : public AccelerationStructure_t{
         unsigned int max_grid_level_;
 
         virtual void update() final;
-        virtual void intersect(const Ray_t &ray, Shape_t* &hit_obj, double &t, double (&uv)[2]) const final;
+        virtual Shape_t* intersect(const Ray_t &ray, double &t, double (&uv)[2]) const final;
         virtual void add(Shape_t* item) final;
         virtual void remove(const Shape_t* item) final;
         void move(Shape_t* item);

@@ -27,8 +27,8 @@ class Scene_t{
         void remove(MeshTop_t** meshes, unsigned int n_meshes);
         void update();
         void build_acc();
-        void intersect_brute(const Ray_t &ray, Shape_t* &hit_obj, double &t, double (&uv)[2]) const;
-        void intersect(const Ray_t &ray, Shape_t* &hit_obj, double &t, double (&uv)[2]) const;
+        Shape_t* intersect_brute(const Ray_t &ray, double &t, double (&uv)[2]) const;
+        Shape_t* intersect(const Ray_t &ray, double &t, double (&uv)[2]) const;
 };
 
 #endif

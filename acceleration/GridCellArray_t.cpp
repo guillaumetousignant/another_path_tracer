@@ -22,11 +22,11 @@ void GridCellArray_t::update(){
     }
 }
 
-void GridCellArray_t::intersect(const Ray_t &ray, Shape_t* &hit_obj, double &t, double (&uv)[2]) const {
+Shape_t* GridCellArray_t::intersect(const Ray_t &ray, double &t, double (&uv)[2]) const {
     double t_temp;
     double uv_temp[2];
 
-    hit_obj = nullptr; // dunno if this is needed    
+    Shape_t* hit_obj = nullptr; // dunno if this is needed    
     t = std::numeric_limits<double>::infinity();
 
     for (unsigned int i = 0; i < n_obj_; i++){
@@ -37,6 +37,7 @@ void GridCellArray_t::intersect(const Ray_t &ray, Shape_t* &hit_obj, double &t, 
             t = t_temp;
         }
     }
+    return hit_obj;
 }
 
 void GridCellArray_t::add(Shape_t* item){

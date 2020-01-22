@@ -122,7 +122,6 @@ void Cam3DAperture_t::focus(double focus_distance){
 }
 
 void Cam3DAperture_t::autoFocus(const Scene_t* scene, const double (&position)[2]){
-    Shape_t* hit_obj = nullptr;
     double t = std::numeric_limits<double>::infinity();
     double uv[2];
 
@@ -130,7 +129,7 @@ void Cam3DAperture_t::autoFocus(const Scene_t* scene, const double (&position)[2
 
     const Ray_t focus_ray = Ray_t(origin_, ray_direction_sph, Vec3f(), Vec3f(1.0), medium_list_);
 
-    scene->intersect(focus_ray, hit_obj, t, uv);
+    scene->intersect(focus_ray, t, uv);
 
     if (t == std::numeric_limits<double>::infinity()){
         t = 1000000.0;
