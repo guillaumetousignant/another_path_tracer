@@ -87,7 +87,7 @@ void RecCamAperture_t::autoFocus(const Scene_t* scene, const double (&position)[
 
     const Ray_t focus_ray = Ray_t(origin_, ray_vec, Vec3f(), Vec3f(1.0), medium_list_);
 
-    if (scene->intersect(focus_ray, t, uv) == nullptr)){
+    if (scene->intersect(focus_ray, t, uv) == nullptr){
         t = 1000000.0;
     }
     focus(t);
