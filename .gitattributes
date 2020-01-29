@@ -14,6 +14,7 @@ freeglut.lib linguist-vendored
 another_path_tracer.sln linguist-vendored
 another_path_tracer.vcxproj linguist-vendored
 another_path_tracer.vcxproj.filters linguist-vendored
+winlibs/* linguist-vendored
 
 * text=auto eol=crlf
 *.{cmd,[cC][mM][dD]} text eol=crlf
