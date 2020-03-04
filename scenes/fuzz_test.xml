@@ -9,7 +9,7 @@
    </scatterers>
    <materials>
       <material name="air" priority="0" scattering_fn="air_absorber" type="transparent"/>
-      <material colour="white" diffusivity="0.0005" emission="black" ind="1.5" name="glass_fuzz" order="1" priority="10" scattering_fn="skin_scatterer" type="reflective_refractive_fuzz"/>
+      <material colour="white" diffusivity="0.0005" emission="black" ind="1.5" name="glass_fuzz" order="1" priority="10" scattering_fn="glass_scatterer" type="reflective_refractive_fuzz"/>
    </materials>
    <objects>
       <object material="glass_fuzz" name="point" transform_matrix="NaN" type="sphere">
