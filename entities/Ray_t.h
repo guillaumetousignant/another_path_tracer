@@ -54,9 +54,9 @@ class Ray_t{
          * it won't be bounced on the hit object's material, as it intersects the medium instead of 
          * the object.
          * 
-         * @param scene [in] Scene containing the objects the ray will intersect.
-         * @param max_bounces [in] Upper bound of number of bounces. Number of bounces may be less if no object is hit or ray can't be illuminated anymore.
-         * @param skybox [in] Skybox that will be intersected if no object is hit.
+         * @param scene Scene containing the objects the ray will intersect.
+         * @param max_bounces Upper bound of number of bounces. Number of bounces may be less if no object is hit or ray can't be illuminated anymore.
+         * @param skybox Skybox that will be intersected if no object is hit.
          */
         void raycast(const Scene_t* scene, unsigned int max_bounces, const Skybox_t* skybox);
         
