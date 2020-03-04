@@ -12,7 +12,6 @@ ReflectiveRefractive_t::~ReflectiveRefractive_t(){}
 
 void ReflectiveRefractive_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray) {
     Vec3f normal;
-    Vec3f newdir;
     //bool coming_out;
 
     hit_obj->normal(ray, uv, normal);
@@ -20,6 +19,7 @@ void ReflectiveRefractive_t::bounce(const double (&uv)[2], const Shape_t* hit_ob
 
     if (priority_ >= ray.medium_list_.front()->priority_){ // CHECK also discard if priority is equal, but watch for going out case
         Vec3f n;
+        Vec3f newdir;
         double etai, etat;
         double kr;
         
@@ -75,9 +75,9 @@ void ReflectiveRefractive_t::bounce(const double (&uv)[2], const Shape_t* hit_ob
 
         ray.colour_ += ray.mask_ * emission_;
         ray.mask_ *= colour_;
+        ray.direction_ = newdir;
     }
     else{
-        newdir = ray.direction_;
         if (cosi < 0.0){
             ray.origin_ += ray.direction_ * ray.dist_ - normal * EPSILON;
             ray.add_to_mediums(this);
@@ -87,6 +87,4 @@ void ReflectiveRefractive_t::bounce(const double (&uv)[2], const Shape_t* hit_ob
             ray.remove_from_mediums(this);
         }
     }
-
-    ray.direction_ = newdir;
 }
