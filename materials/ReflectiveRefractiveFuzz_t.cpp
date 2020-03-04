@@ -42,7 +42,7 @@ void ReflectiveRefractiveFuzz_t::bounce(const double (&uv)[2], const Shape_t* hi
             cosi *= -1.0;
             //coming_out = false;
         }
-        else{ // Goind out
+        else{ // Going out
             etat = (*std::next(ray.medium_list_.begin()))->ind_;
             etai = ind_;
             normal_fuzz *= -1.0;

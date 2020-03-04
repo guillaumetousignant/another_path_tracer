@@ -26,7 +26,7 @@ void Refractive_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &
             cosi *= -1;
             n = normal;
         }
-        else{ // Goind out
+        else{ // Going out
             etat = (*std::next(ray.medium_list_.begin()))->ind_;
             etai = ind_;
             n = -normal;

@@ -30,7 +30,7 @@ void ReflectiveRefractive_t::bounce(const double (&uv)[2], const Shape_t* hit_ob
             n = normal;
             //coming_out = false;
         }
-        else{ // Goind out
+        else{ // Going out
             etat = (*std::next(ray.medium_list_.begin()))->ind_;
             etai = ind_;
             n = -normal;
