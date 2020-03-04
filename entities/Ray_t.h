@@ -35,13 +35,13 @@ class Ray_t{
          */
         ~Ray_t();
 
-        Vec3f origin_; /** @brief Origin of the ray. Changed by materials on bounce.*/
-        Vec3f direction_; /** @brief Direction of the ray. Changed by materials on bounce.*/
-        Vec3f colour_; /** @brief Colour accumulated by the ray. Changed by emissive materials. Starts at [0 0 0].*/
-        Vec3f mask_; /** @brief Part of the ray not yet absorbed by materials. Multiplies the emission of materials to set colour. Starts at [1 1 1], the color can't be changed once the mask reaches 0.*/     
-        double dist_; /** @brief Distance traveled by the ray since last bounce.*/
-        std::list <Medium_t*> medium_list_; /** @brief List of materials in which the ray travels. The first one is the current one.*/
-        double time_; /** @brief Time of emission of the ray, relative to exposure time. 0 for start of exposure to 1 for end.*/
+        Vec3f origin_; /**< @brief Origin of the ray. Changed by materials on bounce.*/
+        Vec3f direction_; /**< @brief Direction of the ray. Changed by materials on bounce.*/
+        Vec3f colour_; /**< @brief Colour accumulated by the ray. Changed by emissive materials. Starts at [0 0 0].*/
+        Vec3f mask_; /**< @brief Part of the ray not yet absorbed by materials. Multiplies the emission of materials to set colour. Starts at [1 1 1], the color can't be changed once the mask reaches 0.*/     
+        double dist_; /**< @brief Distance traveled by the ray since last bounce.*/
+        std::list <Medium_t*> medium_list_; /**< @brief List of materials in which the ray travels. The first one is the current one.*/
+        double time_; /**< @brief Time of emission of the ray, relative to exposure time. 0 for start of exposure to 1 for end.*/
 
         /**
          * @brief Intersects the ray with objects in the scene and bounces it on their material.
