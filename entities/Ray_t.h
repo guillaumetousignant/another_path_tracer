@@ -24,7 +24,7 @@ class Ray_t{
          * @param direction Initial direction of the ray.
          * @param colour Initial colour of the ray. Usually [0 0 0] and is increased by hitting emissive objects.
          * @param mask Initial part of the ray not yet absorbed. Is multiplied with the contribution of a light source to increment colour. Usually [1 1 1] and is decreased by being absorbed by materials.
-         * @param medium_list Initial list of materials through which the ray is travelling. Should have at least two copies of an "outside" medium not assigned to an object.
+         * @param medium_list Initial list of materials through which the ray is travelling. Should have at least two copies of an "outside" medium not assigned to an object (issue #25).
          * @param time Time at which the ray is emitted. From 0 for exposure start to 1 for exposure end.
          */
         Ray_t(const Vec3f &origin, const Vec3f &direction, const Vec3f &colour, const Vec3f &mask, const std::list<Medium_t*> &medium_list, double time = 1.0);
