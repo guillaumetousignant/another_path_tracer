@@ -17,16 +17,16 @@ class Skybox_t;
  */
 class Ray_t{
     public:
-        Ray_t(const Vec3f &origin, const Vec3f &direction, const Vec3f &colour, const Vec3f &mask, const std::list<Medium_t*> &medium_list, double time = 1.0); // Make constructor take time as opt input
+        Ray_t(const Vec3f &origin, const Vec3f &direction, const Vec3f &colour, const Vec3f &mask, const std::list<Medium_t*> &medium_list, double time = 1.0);
         ~Ray_t();
 
         Vec3f origin_; /** @brief Origin of the ray. Changed by materials on bounce.*/
         Vec3f direction_; /** @brief Direction of the ray. Changed by materials on bounce.*/
-        Vec3f colour_; /** @brief Colour accumulated by the ray. Changed by emissive materials.*/
-        Vec3f mask_; /** @brief Part of the ray not yet absorbed by materials. Multiplies the emission of materials to set colour.*/     
-        double dist_; /** @brief Distance traveler by the ray ssince last bounce.*/
-        std::list <Medium_t*> medium_list_; /** @brief */
-        double time_;
+        Vec3f colour_; /** @brief Colour accumulated by the ray. Changed by emissive materials. Starts at [0 0 0].*/
+        Vec3f mask_; /** @brief Part of the ray not yet absorbed by materials. Multiplies the emission of materials to set colour. Starts at [1 1 1], the color can't be changed once the mask reaches 0.*/     
+        double dist_; /** @brief Distance traveled by the ray since last bounce.*/
+        std::list <Medium_t*> medium_list_; /** @brief List of materials in which the ray travels. The first one is the current one.*/
+        double time_; /** @brief Time of emission of the ray, relative to exposure time. 0 for start of exposure to 1 for end.*/
 
         void raycast(const Scene_t* scene, unsigned int max_bounces, const Skybox_t* skybox);
         void add_to_mediums(Medium_t* medium);
