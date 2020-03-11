@@ -30,8 +30,8 @@ class Camera_t{
          * @param transformation Transformation matrix used by the camera. Sets the camera's origin and direction when created and updated.
          * @param filename Filename used by the camera when saving an image. Not used by all cameras, and some might modify it or save multiple pictures.
          * @param up Vector pointing up. Used to set the roll of the camera.
-         * @param fov Array containing field of view of camera in radians, [vertical, horizontal].
-         * @param subpix Array containing the number of subpixels per pixel, [vertical, horizontal], for antialiasing purposes. Not very useful because sample jittering when there are multiple samples per pixel.
+         * @param fov Array containing field of view of camera [vertical, horizontal].
+         * @param subpix Array containing the number of subpixels per pixel, [vertical, horizontal], for antialiasing purposes. Usually [1, 1].
          * @param medium_list Initial list of materials in which the camera is placed. Should have at least two copies of an "outside" medium not assigned to any object (issue #25).
          * @param skybox Skybox that will be intersected if no shape is hit by the rays.
          * @param max_bounces Maximum intersections with shapes and bounces on materials a ray can do before it is terminated. Actual number may be less.
@@ -46,9 +46,9 @@ class Camera_t{
 
         TransformMatrix_t* transformation_; /**< @brief Transformation matrix used by the camera. Sets the camera's origin and direction when created and updated.*/
         std::string filename_; /**< @brief Filename used by the camera when saving an image. Not used by all cameras, and some might modify it or save multiple pictures with variations of the name.*/
-        double fov_[2]; /**< @brief */
-        unsigned int subpix_[2]; /**< @brief */
-        std::list<Medium_t*> medium_list_; /**< @brief */
+        double fov_[2]; /**< @brief Array containing field of view of camera [vertical, horizontal]. Will have different units depending on the projection used.*/
+        unsigned int subpix_[2]; /**< @brief Array containing the number of subpixels per pixel, [vertical, horizontal], for antialiasing purposes. Not very useful because sample jittering when there are multiple samples per pixel removes aliasing. May be useful when there are few samples per pixel and location of the samples mush be controlled.*/
+        std::list<Medium_t*> medium_list_; /**< @brief List of materials in which the camera is placed. Active mediumm is first element. Should have at least two copies of an "outside" medium not assigned to any object (issue #25).*/
         Skybox_t* skybox_; /**< @brief */    
         unsigned int max_bounces_; /**< @brief */
         Vec3f direction_; /**< @brief */
