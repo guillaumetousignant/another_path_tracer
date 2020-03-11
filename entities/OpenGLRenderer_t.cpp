@@ -47,8 +47,7 @@ OpenGLRenderer_t::~OpenGLRenderer_t() {
 
 void OpenGLRenderer_t::accumulate(){
     if (updated_){
-        const TransformMatrix_t transform_norm = camera_->transformation_->transformDir();
-        const Vec3f newdir = transform_norm.multDir(Vec3f(0.0, 1.0, 0.0));
+        const Vec3f newdir = camera_->transformation_->transformDir().multDir(Vec3f(0.0, 1.0, 0.0));
         camera_->transformation_->translate(focus_point_ - newdir * camera_dist_ - camera_->origin_);
     
         updated_ = false;
@@ -70,8 +69,7 @@ void OpenGLRenderer_t::accumulate(){
 
 void OpenGLRenderer_t::accumulate_write(){
     if (updated_){
-        const TransformMatrix_t transform_norm = camera_->transformation_->transformDir();
-        const Vec3f newdir = transform_norm.multDir(Vec3f(0.0, 1.0, 0.0));
+        const Vec3f newdir = camera_->transformation_->transformDir().multDir(Vec3f(0.0, 1.0, 0.0));
         camera_->transformation_->translate(focus_point_ - newdir * camera_dist_ - camera_->origin_);
     
         updated_ = false;
@@ -143,8 +141,7 @@ void OpenGLRenderer_t::mouseMovement(int x, int y){
         camera_->transformation_->rotate(vertical, differential_x/camera_->fov_[1]);
         updated_ = true;
 
-        //TransformMatrix_t transform_norm = camera_->transformation_->transformDir();
-        //newdir = transform_norm.multDir(Vec3f(0.0, 1.0, 0.0));
+        //newdir = camera_->transformation_->transformDir().multDir(Vec3f(0.0, 1.0, 0.0));
     }
 
     //Vec3f diff = focus_point_ - newdir * camera_dist_ - camera_->origin_;

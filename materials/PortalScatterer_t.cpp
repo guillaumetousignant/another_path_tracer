@@ -16,12 +16,8 @@ bool PortalScatterer_t::scatter(Ray_t &ray) {
     }
     else{
         ray.dist_ = distance;
-
-        const TransformMatrix_t transform_norm = transformation_->transformDir();
-
         ray.origin_ = transformation_->multVec(ray.origin_ + ray.direction_ * ray.dist_);
-        ray.direction_ = transform_norm.multDir(ray.direction_).normalize_inplace();
-
+        ray.direction_ = transformation_->transformDir().multDir(ray.direction_).normalize_inplace(); // CHECK cache transformation_->transformDir()??
         ray.medium_list_ = medium_list_;
         return true;
     }

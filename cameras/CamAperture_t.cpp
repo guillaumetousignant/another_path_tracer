@@ -17,8 +17,7 @@ CamAperture_t::~CamAperture_t() {}
 
 void CamAperture_t::update() {
     origin_ = transformation_->multVec(Vec3f());
-    const TransformMatrix_t transform_norm = transformation_->transformDir();
-    direction_ = transform_norm.multDir(Vec3f(0.0, 1.0, 0.0));
+    direction_ = transformation_->transformDir().multDir(Vec3f(0.0, 1.0, 0.0));
     focal_length_ = focal_length_buffer_;
     up_ = up_buffer_;
 }

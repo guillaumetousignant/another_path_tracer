@@ -16,10 +16,8 @@ void Portal_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray)
     hit_obj->normal(ray, uv, normal);
 
     if (ray.direction_.dot(normal) < 0){
-        const TransformMatrix_t transform_norm = transformation_->transformDir();
-
         ray.origin_ = transformation_->multVec(ray.origin_ + ray.direction_ * ray.dist_);
-        ray.direction_ = transform_norm.multDir(ray.direction_).normalize_inplace();
+        ray.direction_ = transformation_->transformDir().multDir(ray.direction_).normalize_inplace(); // CHECK cache transformation_->transformDir()??
         ray.medium_list_ = medium_list_;
     }
     else{
