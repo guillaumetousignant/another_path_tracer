@@ -9,6 +9,7 @@ using APTracer::Entities::Material_t;
 using APTracer::Entities::TransformMatrix_t;
 using APTracer::Entities::MeshGeometry_t;
 using APTracer::Entities::MaterialMap_t;
+using APTracer::Shapes::MeshTop_t;
 
 class Material_t;
 class TransformMatrix_t;

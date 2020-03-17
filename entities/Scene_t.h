@@ -3,11 +3,13 @@
 
 #include "Ray_t.h"
 
+using APTracer::Shapes::MeshTop_t;
+
+class MeshTop_t;
+
 namespace APTracer::Entities {
     class Shape_t;
     class AccelerationStructure_t;
-    class MeshTop_t;
-
 
     class Scene_t{
         public:

@@ -100,7 +100,13 @@
 #include "AccelerationMultiGridArray_t.h"
 #include "AccelerationMultiGridVector_t.h"
 
-SceneContext_t::SceneContext_t() :
+using namespace APTracer::Materials;
+using namespace APTracer::Shapes;
+using namespace APTracer::Cameras;
+using namespace APTracer::Skyboxes;
+using namespace APTracer::Acceleration;
+
+APTracer::Entities::SceneContext_t::SceneContext_t() :
     use_gl_(false), scene_name_(""), opengl_renderer_(), opengl_imgbuffer_(nullptr), 
     opengl_camera_(nullptr), scene_(), camera_rendermode_(), camera_n_iter_(), camera_write_interval_(), 
     index_transform_matrices_(0), index_textures_(0), index_scatterers_(0), index_materials_(0), 
@@ -111,11 +117,11 @@ SceneContext_t::SceneContext_t() :
     material_aggregates_(), meshes_() 
     {}
 
-SceneContext_t::~SceneContext_t() {
+APTracer::Entities::SceneContext_t::~SceneContext_t() {
     reset();
 }
 
-void SceneContext_t::readXML(const std::string &filename){
+void APTracer::Entities::SceneContext_t::readXML(const std::string &filename){
     reset();
 
     std::string new_filename, folder;
@@ -863,7 +869,7 @@ void SceneContext_t::readXML(const std::string &filename){
     std::cout << std::endl << "ReadXML done." << std::endl << std::endl;
 }    
 
-void SceneContext_t::render(){
+void APTracer::Entities::SceneContext_t::render(){
     std::cout << "In rendering function." << std::endl;
 
     // Running
@@ -927,7 +933,7 @@ void SceneContext_t::render(){
     }
 }
 
-void SceneContext_t::reset(){
+void APTracer::Entities::SceneContext_t::reset(){
     index_transform_matrices_ = 0;
     index_textures_ = 0;
     index_scatterers_ = 0;
@@ -945,7 +951,7 @@ void SceneContext_t::reset(){
     scene_name_ = "";
 }
 
-std::unique_ptr<TransformMatrix_t> SceneContext_t::create_transform_matrix(const tinyxml2::XMLElement* xml_transform_matrix) const {
+std::unique_ptr<TransformMatrix_t> APTracer::Entities::SceneContext_t::create_transform_matrix(const tinyxml2::XMLElement* xml_transform_matrix) const {
     std::string string_transform_matrix;
     const char* transform_matrix_char = xml_transform_matrix->Attribute("value");
     if (transform_matrix_char == nullptr){
@@ -986,7 +992,7 @@ std::unique_ptr<TransformMatrix_t> SceneContext_t::create_transform_matrix(const
     }
 }
 
-std::unique_ptr<Texture_t> SceneContext_t::create_texture(const tinyxml2::XMLElement* xml_texture) const {
+std::unique_ptr<Texture_t> APTracer::Entities::SceneContext_t::create_texture(const tinyxml2::XMLElement* xml_texture) const {
     std::string type;
     const char* type_char = xml_texture->Attribute("type");
     if (type_char == nullptr) {
@@ -1022,7 +1028,7 @@ std::unique_ptr<Texture_t> SceneContext_t::create_texture(const tinyxml2::XMLEle
     }
 }
 
-std::unique_ptr<ScatteringFunction_t> SceneContext_t::create_scatterer(const tinyxml2::XMLElement* xml_scatterer, std::unique_ptr<std::list<unsigned int>> &scatterers_medium_list, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials) {
+std::unique_ptr<ScatteringFunction_t> APTracer::Entities::SceneContext_t::create_scatterer(const tinyxml2::XMLElement* xml_scatterer, std::unique_ptr<std::list<unsigned int>> &scatterers_medium_list, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials) {
     std::string type;
     const char* type_char = xml_scatterer->Attribute("type");
     if (type_char == nullptr) {
@@ -1038,7 +1044,7 @@ std::unique_ptr<ScatteringFunction_t> SceneContext_t::create_scatterer(const tin
         const char* attributes[] = {"emission", "colour", "emission_distance", "absorption_distance"};
         require_attributes(xml_scatterer, attributes, 4);
         return std::unique_ptr<ScatteringFunction_t>(
-                    new Absorber_t(get_colour(xml_scatterer->Attribute("emission")), get_colour(xml_scatterer->Attribute("colour")), 
+                    new Absorber_t(APTracer::get_colour(xml_scatterer->Attribute("emission")), APTracer::get_colour(xml_scatterer->Attribute("colour")), 
                                     xml_scatterer->DoubleAttribute("emission_distance"), xml_scatterer->DoubleAttribute("absorption_distance")));
     }
     else if (type == "nonabsorber"){
@@ -1056,7 +1062,7 @@ std::unique_ptr<ScatteringFunction_t> SceneContext_t::create_scatterer(const tin
         const char* attributes[] = {"emission", "colour", "emission_distance", "absorption_distance", "scattering_distance", "order", "scattering_angle"};
         require_attributes(xml_scatterer, attributes, 7);
         return std::unique_ptr<ScatteringFunction_t>(
-                    new ScattererExp_t(get_colour(xml_scatterer->Attribute("emission")), get_colour(xml_scatterer->Attribute("colour")),
+                    new ScattererExp_t(APTracer::get_colour(xml_scatterer->Attribute("emission")), APTracer::get_colour(xml_scatterer->Attribute("colour")),
                                 xml_scatterer->DoubleAttribute("emission_distance"), xml_scatterer->DoubleAttribute("absorption_distance"),
                                 xml_scatterer->DoubleAttribute("scattering_distance"), xml_scatterer->DoubleAttribute("order"), 
                                 xml_scatterer->DoubleAttribute("scattering_angle")));
@@ -1065,8 +1071,8 @@ std::unique_ptr<ScatteringFunction_t> SceneContext_t::create_scatterer(const tin
         const char* attributes[] = {"emission", "colour", "scattering_emission", "scattering_colour", "emission_distance", "absorption_distance", "scattering_distance", "order", "scattering_angle"};
         require_attributes(xml_scatterer, attributes, 9);
         return std::unique_ptr<ScatteringFunction_t>(
-                    new ScattererExpFull_t(get_colour(xml_scatterer->Attribute("emission")), get_colour(xml_scatterer->Attribute("colour")),
-                                get_colour(xml_scatterer->Attribute("scattering_emission")), get_colour(xml_scatterer->Attribute("scattering_colour")),
+                    new ScattererExpFull_t(APTracer::get_colour(xml_scatterer->Attribute("emission")), APTracer::get_colour(xml_scatterer->Attribute("colour")),
+                                APTracer::get_colour(xml_scatterer->Attribute("scattering_emission")), APTracer::get_colour(xml_scatterer->Attribute("scattering_colour")),
                                 xml_scatterer->DoubleAttribute("emission_distance"), xml_scatterer->DoubleAttribute("absorption_distance"),
                                 xml_scatterer->DoubleAttribute("scattering_distance"), xml_scatterer->DoubleAttribute("order"), 
                                 xml_scatterer->DoubleAttribute("scattering_angle")));
@@ -1075,7 +1081,7 @@ std::unique_ptr<ScatteringFunction_t> SceneContext_t::create_scatterer(const tin
         const char* attributes[] = {"emission", "colour", "emission_distance", "absorption_distance", "scattering_distance"};
         require_attributes(xml_scatterer, attributes, 5);
         return std::unique_ptr<ScatteringFunction_t>(
-                    new Scatterer_t(get_colour(xml_scatterer->Attribute("emission")), get_colour(xml_scatterer->Attribute("colour")),
+                    new Scatterer_t(APTracer::get_colour(xml_scatterer->Attribute("emission")), APTracer::get_colour(xml_scatterer->Attribute("colour")),
                                 xml_scatterer->DoubleAttribute("emission_distance"), xml_scatterer->DoubleAttribute("absorption_distance"),
                                 xml_scatterer->DoubleAttribute("scattering_distance")));
     }
@@ -1083,8 +1089,8 @@ std::unique_ptr<ScatteringFunction_t> SceneContext_t::create_scatterer(const tin
         const char* attributes[] = {"emission", "colour", "scattering_emission", "scattering_colour", "emission_distance", "absorption_distance", "scattering_distance"};
         require_attributes(xml_scatterer, attributes, 7);
         return std::unique_ptr<ScatteringFunction_t>(
-                    new ScattererFull_t(get_colour(xml_scatterer->Attribute("emission")), get_colour(xml_scatterer->Attribute("colour")),
-                                get_colour(xml_scatterer->Attribute("scattering_emission")), get_colour(xml_scatterer->Attribute("scattering_colour")),
+                    new ScattererFull_t(APTracer::get_colour(xml_scatterer->Attribute("emission")), APTracer::get_colour(xml_scatterer->Attribute("colour")),
+                                APTracer::get_colour(xml_scatterer->Attribute("scattering_emission")), APTracer::get_colour(xml_scatterer->Attribute("scattering_colour")),
                                 xml_scatterer->DoubleAttribute("emission_distance"), xml_scatterer->DoubleAttribute("absorption_distance"),
                                 xml_scatterer->DoubleAttribute("scattering_distance")));
     }
@@ -1094,7 +1100,7 @@ std::unique_ptr<ScatteringFunction_t> SceneContext_t::create_scatterer(const tin
     }
 }
 
-std::unique_ptr<Material_t> SceneContext_t::create_material(const tinyxml2::XMLElement* xml_material, std::unique_ptr<std::list<unsigned int>> &materials_medium_list, std::vector<unsigned int> &materials_mix_list, std::unique_ptr<std::tuple<std::unique_ptr<std::list<unsigned int>>, std::unique_ptr<std::list<std::string>>>> &materials_aggregate_list, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_scatterers) {
+std::unique_ptr<Material_t> APTracer::Entities::SceneContext_t::create_material(const tinyxml2::XMLElement* xml_material, std::unique_ptr<std::list<unsigned int>> &materials_medium_list, std::vector<unsigned int> &materials_mix_list, std::unique_ptr<std::tuple<std::unique_ptr<std::list<unsigned int>>, std::unique_ptr<std::list<std::string>>>> &materials_aggregate_list, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_scatterers) {
     std::string type;
     const char* type_char = xml_material->Attribute("type");
     if (type_char == nullptr) {
@@ -1110,14 +1116,14 @@ std::unique_ptr<Material_t> SceneContext_t::create_material(const tinyxml2::XMLE
         const char* attributes[] = {"emission", "colour", "roughness"};
         require_attributes(xml_material, attributes, 3);
         return std::unique_ptr<Material_t>(
-                    new Diffuse_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), 
+                    new Diffuse_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), 
                                 xml_material->DoubleAttribute("roughness")));
     }
     else if (type == "diffuse_normal"){
         const char* attributes[] = {"emission", "colour", "normal_map", "roughness"};
         require_attributes(xml_material, attributes, 4);
         return std::unique_ptr<Material_t>(
-                    new DiffuseNormal_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), 
+                    new DiffuseNormal_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), 
                                 get_texture(xml_material->Attribute("normal_map"), xml_textures), xml_material->DoubleAttribute("roughness")));
     }
     else if (type == "diffuse_full"){
@@ -1131,14 +1137,14 @@ std::unique_ptr<Material_t> SceneContext_t::create_material(const tinyxml2::XMLE
         const char* attributes[] = {"emission", "texture", "roughness"};
         require_attributes(xml_material, attributes, 3);
         return std::unique_ptr<Material_t>(
-                    new DiffuseTex_t(get_colour(xml_material->Attribute("emission")), get_texture(xml_material->Attribute("texture"), xml_textures), 
+                    new DiffuseTex_t(APTracer::get_colour(xml_material->Attribute("emission")), get_texture(xml_material->Attribute("texture"), xml_textures), 
                                 xml_material->DoubleAttribute("roughness")));
     }
     else if (type == "diffuse_tex_normal"){
         const char* attributes[] = {"emission", "texture", "normal_map", "roughness"};
         require_attributes(xml_material, attributes, 4);
         return std::unique_ptr<Material_t>(
-                    new DiffuseTexNormal_t(get_colour(xml_material->Attribute("emission")), get_texture(xml_material->Attribute("texture"), xml_textures), 
+                    new DiffuseTexNormal_t(APTracer::get_colour(xml_material->Attribute("emission")), get_texture(xml_material->Attribute("texture"), xml_textures), 
                                 get_texture(xml_material->Attribute("normal_map"), xml_textures), xml_material->DoubleAttribute("roughness")));
     }
     else if (type == "fresnelmix"){
@@ -1192,70 +1198,70 @@ std::unique_ptr<Material_t> SceneContext_t::create_material(const tinyxml2::XMLE
         const char* attributes[] = {"emission", "colour"};
         require_attributes(xml_material, attributes, 2);
         return std::unique_ptr<Material_t>(
-                    new Reflective_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour"))));
+                    new Reflective_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour"))));
     }
     else if (type == "reflective_normal"){
         const char* attributes[] = {"emission", "colour", "normal_map"};
         require_attributes(xml_material, attributes, 3);
         return std::unique_ptr<Material_t>(
-                    new ReflectiveNormal_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), get_texture(xml_material->Attribute("normal_map"), xml_textures)));
+                    new ReflectiveNormal_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), get_texture(xml_material->Attribute("normal_map"), xml_textures)));
     }
     else if (type == "reflective_fuzz"){
         const char* attributes[] = {"emission", "colour", "order", "diffusivity"};
         require_attributes(xml_material, attributes, 4);
         return std::unique_ptr<Material_t>(
-                    new ReflectiveFuzz_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity")));
+                    new ReflectiveFuzz_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity")));
     }
     else if (type == "reflective_fuzz_normal"){
         const char* attributes[] = {"emission", "colour", "normal_map", "order", "diffusivity"};
         require_attributes(xml_material, attributes, 5);
         return std::unique_ptr<Material_t>(
-                    new ReflectiveFuzzNormal_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), 
+                    new ReflectiveFuzzNormal_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), 
                     get_texture(xml_material->Attribute("normal_map"), xml_textures), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity")));
     }
     else if (type == "reflective_fuzz_tex"){
         const char* attributes[] = {"emission", "texture", "order", "diffusivity"};
         require_attributes(xml_material, attributes, 4);
         return std::unique_ptr<Material_t>(
-                    new ReflectiveFuzzTex_t(get_colour(xml_material->Attribute("emission")), get_texture(xml_material->Attribute("texture"), xml_textures), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity")));
+                    new ReflectiveFuzzTex_t(APTracer::get_colour(xml_material->Attribute("emission")), get_texture(xml_material->Attribute("texture"), xml_textures), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity")));
     }
     else if (type == "reflective_fuzz_tex_normal"){
         const char* attributes[] = {"emission", "texture", "normal_map", "order", "diffusivity"};
         require_attributes(xml_material, attributes, 5);
         return std::unique_ptr<Material_t>(
-                    new ReflectiveFuzzTexNormal_t(get_colour(xml_material->Attribute("emission")), get_texture(xml_material->Attribute("texture"), xml_textures), 
+                    new ReflectiveFuzzTexNormal_t(APTracer::get_colour(xml_material->Attribute("emission")), get_texture(xml_material->Attribute("texture"), xml_textures), 
                     get_texture(xml_material->Attribute("normal_map"), xml_textures), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity")));
     }
     else if (type == "reflective_refractive"){
         const char* attributes[] = {"emission", "colour", "ind", "priority", "scattering_fn"};
         require_attributes(xml_material, attributes, 5);
         return std::unique_ptr<Material_t>(
-                    new ReflectiveRefractive_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("ind"), xml_material->UnsignedAttribute("priority"), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers)));
+                    new ReflectiveRefractive_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("ind"), xml_material->UnsignedAttribute("priority"), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers)));
     }
     else if (type == "reflective_refractive_normal"){
         const char* attributes[] = {"emission", "colour", "normal_map", "ind", "priority", "scattering_fn"};
         require_attributes(xml_material, attributes, 6);
         return std::unique_ptr<Material_t>(
-                    new ReflectiveRefractiveNormal_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), get_texture(xml_material->Attribute("normal_map"), xml_textures),
+                    new ReflectiveRefractiveNormal_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), get_texture(xml_material->Attribute("normal_map"), xml_textures),
                     xml_material->DoubleAttribute("ind"), xml_material->UnsignedAttribute("priority"), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers)));
     }
     else if (type == "reflective_refractive_fuzz"){
         const char* attributes[] = {"emission", "colour", "ind", "priority", "scattering_fn", "order", "diffusivity"};
         require_attributes(xml_material, attributes, 7);
         return std::unique_ptr<Material_t>(
-                    new ReflectiveRefractiveFuzz_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("ind"), xml_material->UnsignedAttribute("priority"), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity"), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers)));
+                    new ReflectiveRefractiveFuzz_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("ind"), xml_material->UnsignedAttribute("priority"), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity"), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers)));
     }
     else if (type == "refractive"){
         const char* attributes[] = {"emission", "colour", "ind", "priority", "scattering_fn"};
         require_attributes(xml_material, attributes, 5);
         return std::unique_ptr<Material_t>(
-                    new Refractive_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("ind"), xml_material->UnsignedAttribute("priority"), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers)));
+                    new Refractive_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("ind"), xml_material->UnsignedAttribute("priority"), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers)));
     }
     else if (type == "refractive_fuzz"){
         const char* attributes[] = {"emission", "colour", "ind", "priority", "scattering_fn", "order", "diffusivity"};
         require_attributes(xml_material, attributes, 7);
         return std::unique_ptr<Material_t>(
-                    new RefractiveFuzz_t(get_colour(xml_material->Attribute("emission")), get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("ind"), xml_material->UnsignedAttribute("priority"), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity"), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers)));
+                    new RefractiveFuzz_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("ind"), xml_material->UnsignedAttribute("priority"), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity"), get_scatterer(xml_material->Attribute("scattering_fn"), xml_scatterers)));
     }
     else if (type == "transparent"){
         const char* attributes[] = {"priority", "scattering_fn"};
@@ -1279,7 +1285,7 @@ std::unique_ptr<Material_t> SceneContext_t::create_material(const tinyxml2::XMLE
         const char* attributes[] = {"colour"};
         require_attributes(xml_material, attributes, 1);
         return std::unique_ptr<Material_t>(
-                    new Toon_t(get_colour(xml_material->Attribute("colour"))));
+                    new Toon_t(APTracer::get_colour(xml_material->Attribute("colour"))));
     }
     else if (type == "aggregate"){
         const char* attributes[] = {"materials_list", "materials_names"};
@@ -1295,7 +1301,7 @@ std::unique_ptr<Material_t> SceneContext_t::create_material(const tinyxml2::XMLE
     }
 }
 
-std::unique_ptr<MeshGeometry_t> SceneContext_t::create_mesh_geometry(const tinyxml2::XMLElement* xml_mesh_geometry) const {
+std::unique_ptr<MeshGeometry_t> APTracer::Entities::SceneContext_t::create_mesh_geometry(const tinyxml2::XMLElement* xml_mesh_geometry) const {
     std::string type;
     const char* type_char = xml_mesh_geometry->Attribute("type");
     if (type_char == nullptr) {
@@ -1331,7 +1337,7 @@ std::unique_ptr<MeshGeometry_t> SceneContext_t::create_mesh_geometry(const tinyx
     }
 }
 
-std::unique_ptr<Shape_t> SceneContext_t::create_object(const tinyxml2::XMLElement* xml_object, std::unique_ptr<MeshTop_t> &mesh, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_mesh_geometries) {
+std::unique_ptr<Shape_t> APTracer::Entities::SceneContext_t::create_object(const tinyxml2::XMLElement* xml_object, std::unique_ptr<MeshTop_t> &mesh, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_mesh_geometries) {
     std::string type;
     const char* type_char = xml_object->Attribute("type");
     if (type_char == nullptr) {
@@ -1453,7 +1459,7 @@ std::unique_ptr<Shape_t> SceneContext_t::create_object(const tinyxml2::XMLElemen
     }
 }
 
-std::unique_ptr<DirectionalLight_t> SceneContext_t::create_directional_light(const tinyxml2::XMLElement* xml_directional_light, const tinyxml2::XMLElement* xml_transform_matrices){
+std::unique_ptr<DirectionalLight_t> APTracer::Entities::SceneContext_t::create_directional_light(const tinyxml2::XMLElement* xml_directional_light, const tinyxml2::XMLElement* xml_transform_matrices){
     std::string type;
     const char* type_char = xml_directional_light->Attribute("type");
     if (type_char == nullptr) {
@@ -1469,7 +1475,7 @@ std::unique_ptr<DirectionalLight_t> SceneContext_t::create_directional_light(con
         const char* attributes[] = {"colour", "transform_matrix"};
         require_attributes(xml_directional_light, attributes, 2);
         return std::unique_ptr<DirectionalLight_t>(
-                    new DirectionalLight_t(get_colour(xml_directional_light->Attribute("colour")), get_transform_matrix(xml_directional_light->Attribute("transform_matrix"), xml_transform_matrices)));
+                    new DirectionalLight_t(APTracer::get_colour(xml_directional_light->Attribute("colour")), get_transform_matrix(xml_directional_light->Attribute("transform_matrix"), xml_transform_matrices)));
     }
     else{
         std::cerr << "Error, directional light type '" << type << "' not implemented. Only 'directional_light' exists for now. Exiting." << std::endl; 
@@ -1477,7 +1483,7 @@ std::unique_ptr<DirectionalLight_t> SceneContext_t::create_directional_light(con
     }
 }
 
-std::unique_ptr<Skybox_t> SceneContext_t::create_skybox(const tinyxml2::XMLElement* xml_skybox, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_directional_lights) {
+std::unique_ptr<Skybox_t> APTracer::Entities::SceneContext_t::create_skybox(const tinyxml2::XMLElement* xml_skybox, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_directional_lights) {
     std::string type;
     const char* type_char = xml_skybox->Attribute("type");
     if (type_char == nullptr) {
@@ -1493,7 +1499,7 @@ std::unique_ptr<Skybox_t> SceneContext_t::create_skybox(const tinyxml2::XMLEleme
         const char* attributes[] = {"colour"};
         require_attributes(xml_skybox, attributes, 1);
         return std::unique_ptr<Skybox_t>(
-                    new SkyboxFlat_t(get_colour(xml_skybox->Attribute("colour"))));
+                    new SkyboxFlat_t(APTracer::get_colour(xml_skybox->Attribute("colour"))));
     }
     else if (type == "skybox_flat_sun"){
         const char* attributes[] = {"colour", "lights"};
@@ -1505,7 +1511,7 @@ std::unique_ptr<Skybox_t> SceneContext_t::create_skybox(const tinyxml2::XMLEleme
         DirectionalLight_t** lights_ptr = lights.empty() ? nullptr : lights.data();
                
         return std::unique_ptr<Skybox_t>(
-                    new SkyboxFlatSun_t(get_colour(xml_skybox->Attribute("colour")), lights_ptr, lights.size()));
+                    new SkyboxFlatSun_t(APTracer::get_colour(xml_skybox->Attribute("colour")), lights_ptr, lights.size()));
     }
     else if (type == "skybox_texture"){
         const char* attributes[] = {"texture"};
@@ -1519,7 +1525,7 @@ std::unique_ptr<Skybox_t> SceneContext_t::create_skybox(const tinyxml2::XMLEleme
         double sun_pos[2];
         get_xy(xml_skybox->Attribute("light_position"), sun_pos);
         return std::unique_ptr<Skybox_t>(
-                    new SkyboxTextureSun_t(get_texture(xml_skybox->Attribute("texture"), xml_textures), sun_pos, get_colour(xml_skybox->Attribute("light_colour")), xml_skybox->DoubleAttribute("light_radius")));
+                    new SkyboxTextureSun_t(get_texture(xml_skybox->Attribute("texture"), xml_textures), sun_pos, APTracer::get_colour(xml_skybox->Attribute("light_colour")), xml_skybox->DoubleAttribute("light_radius")));
     }
     else if (type == "skybox_texture_transformation"){
         const char* attributes[] = {"texture", "transform_matrix"};
@@ -1533,7 +1539,7 @@ std::unique_ptr<Skybox_t> SceneContext_t::create_skybox(const tinyxml2::XMLEleme
         double sun_pos[2];
         get_xy(xml_skybox->Attribute("light_position"), sun_pos);
         return std::unique_ptr<Skybox_t>(
-                    new SkyboxTextureTransformationSun_t(get_texture(xml_skybox->Attribute("texture"), xml_textures), get_transform_matrix(xml_skybox->Attribute("transform_matrix"), xml_transform_matrices), sun_pos, get_colour(xml_skybox->Attribute("light_colour")), xml_skybox->DoubleAttribute("light_radius")));
+                    new SkyboxTextureTransformationSun_t(get_texture(xml_skybox->Attribute("texture"), xml_textures), get_transform_matrix(xml_skybox->Attribute("transform_matrix"), xml_transform_matrices), sun_pos, APTracer::get_colour(xml_skybox->Attribute("light_colour")), xml_skybox->DoubleAttribute("light_radius")));
     }
     else{
         std::cerr << "Error, skybox type '" << type << "' not implemented. Ignoring." << std::endl; 
@@ -1541,7 +1547,7 @@ std::unique_ptr<Skybox_t> SceneContext_t::create_skybox(const tinyxml2::XMLEleme
     }
 }
 
-std::unique_ptr<ImgBuffer_t> SceneContext_t::create_imgbuffer(const tinyxml2::XMLElement* xml_imgbuffer) {
+std::unique_ptr<ImgBuffer_t> APTracer::Entities::SceneContext_t::create_imgbuffer(const tinyxml2::XMLElement* xml_imgbuffer) {
     std::string type;
     const char* type_char = xml_imgbuffer->Attribute("type");
     if (type_char == nullptr) {
@@ -1572,7 +1578,7 @@ std::unique_ptr<ImgBuffer_t> SceneContext_t::create_imgbuffer(const tinyxml2::XM
     }
 }
 
-std::unique_ptr<Camera_t> SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, const std::string &next_filename, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_imgbuffers, const tinyxml2::XMLElement* xml_skyboxes) {
+std::unique_ptr<Camera_t> APTracer::Entities::SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, const std::string &next_filename, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_imgbuffers, const tinyxml2::XMLElement* xml_skyboxes) {
     std::string type;
     const char* type_char = xml_camera->Attribute("type");
     if (type_char == nullptr) {
@@ -1619,7 +1625,7 @@ std::unique_ptr<Camera_t> SceneContext_t::create_camera(const tinyxml2::XMLEleme
         get_xy(xml_camera->Attribute("subpix"), subpix);
 
         return std::unique_ptr<Camera_t>(
-                    new Cam_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), 
+                    new Cam_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
                             fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), 
                             get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("gammaind")));
     }
@@ -1632,7 +1638,7 @@ std::unique_ptr<Camera_t> SceneContext_t::create_camera(const tinyxml2::XMLEleme
         get_xy(xml_camera->Attribute("subpix"), subpix);
 
         return std::unique_ptr<Camera_t>(
-                    new CamAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), 
+                    new CamAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
                             fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), 
                             get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focal_length"),
                             xml_camera->DoubleAttribute("aperture"), xml_camera->DoubleAttribute("gammaind")));
@@ -1648,7 +1654,7 @@ std::unique_ptr<Camera_t> SceneContext_t::create_camera(const tinyxml2::XMLEleme
         get_xy(xml_camera->Attribute("time"), time);
         
         return std::unique_ptr<Camera_t>(
-                    new CamMotionblur_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), 
+                    new CamMotionblur_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
                             fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), 
                             get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), time, xml_camera->DoubleAttribute("gammaind")));
     }
@@ -1663,7 +1669,7 @@ std::unique_ptr<Camera_t> SceneContext_t::create_camera(const tinyxml2::XMLEleme
         get_xy(xml_camera->Attribute("time"), time);
         
         return std::unique_ptr<Camera_t>(
-                    new CamMotionblurAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), 
+                    new CamMotionblurAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
                             fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), 
                             get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focal_length"),
                             xml_camera->DoubleAttribute("aperture"), time, xml_camera->DoubleAttribute("gammaind")));
@@ -1677,7 +1683,7 @@ std::unique_ptr<Camera_t> SceneContext_t::create_camera(const tinyxml2::XMLEleme
         get_xy(xml_camera->Attribute("subpix"), subpix);
 
         return std::unique_ptr<Camera_t>(
-                    new IsoCam_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), 
+                    new IsoCam_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
                             fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), 
                             get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("gammaind")));
     }
@@ -1690,7 +1696,7 @@ std::unique_ptr<Camera_t> SceneContext_t::create_camera(const tinyxml2::XMLEleme
         get_xy(xml_camera->Attribute("subpix"), subpix);
 
         return std::unique_ptr<Camera_t>(
-                    new IsoCamAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), 
+                    new IsoCamAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
                             fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), 
                             get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focal_length"),
                             xml_camera->DoubleAttribute("aperture"), xml_camera->DoubleAttribute("gammaind")));
@@ -1706,7 +1712,7 @@ std::unique_ptr<Camera_t> SceneContext_t::create_camera(const tinyxml2::XMLEleme
         get_xy(xml_camera->Attribute("time"), time);
         
         return std::unique_ptr<Camera_t>(
-                    new IsoCamMotionblur_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), 
+                    new IsoCamMotionblur_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
                             fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), 
                             get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), time, xml_camera->DoubleAttribute("gammaind")));
     }
@@ -1721,7 +1727,7 @@ std::unique_ptr<Camera_t> SceneContext_t::create_camera(const tinyxml2::XMLEleme
         get_xy(xml_camera->Attribute("time"), time);
         
         return std::unique_ptr<Camera_t>(
-                    new IsoCamMotionblurAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), 
+                    new IsoCamMotionblurAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
                             fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), 
                             get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focal_length"),
                             xml_camera->DoubleAttribute("aperture"), time, xml_camera->DoubleAttribute("gammaind")));
@@ -1735,7 +1741,7 @@ std::unique_ptr<Camera_t> SceneContext_t::create_camera(const tinyxml2::XMLEleme
         get_xy(xml_camera->Attribute("subpix"), subpix);
 
         return std::unique_ptr<Camera_t>(
-                    new RecCam_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), 
+                    new RecCam_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
                             fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), 
                             get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("gammaind")));
     }
@@ -1748,7 +1754,7 @@ std::unique_ptr<Camera_t> SceneContext_t::create_camera(const tinyxml2::XMLEleme
         get_xy(xml_camera->Attribute("subpix"), subpix);
 
         return std::unique_ptr<Camera_t>(
-                    new RecCamAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), 
+                    new RecCamAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
                             fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), 
                             get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focal_length"),
                             xml_camera->DoubleAttribute("aperture"), xml_camera->DoubleAttribute("gammaind")));
@@ -1764,7 +1770,7 @@ std::unique_ptr<Camera_t> SceneContext_t::create_camera(const tinyxml2::XMLEleme
         get_xy(xml_camera->Attribute("time"), time);
         
         return std::unique_ptr<Camera_t>(
-                    new RecCamMotionblur_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), 
+                    new RecCamMotionblur_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
                             fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), 
                             get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), time, xml_camera->DoubleAttribute("gammaind")));
     }
@@ -1779,7 +1785,7 @@ std::unique_ptr<Camera_t> SceneContext_t::create_camera(const tinyxml2::XMLEleme
         get_xy(xml_camera->Attribute("time"), time);
         
         return std::unique_ptr<Camera_t>(
-                    new RecCamMotionblurAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), 
+                    new RecCamMotionblurAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
                             fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), 
                             get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focal_length"),
                             xml_camera->DoubleAttribute("aperture"), time, xml_camera->DoubleAttribute("gammaind")));
@@ -1793,7 +1799,7 @@ std::unique_ptr<Camera_t> SceneContext_t::create_camera(const tinyxml2::XMLEleme
         get_xy(xml_camera->Attribute("subpix"), subpix);
 
         return std::unique_ptr<Camera_t>(
-                    new Cam3D_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), fov, subpix, 
+                    new Cam3D_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), fov, subpix, 
                             get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_imgbuffer(xml_camera->Attribute("imgbuffer_L"), xml_imgbuffers), 
                             get_imgbuffer(xml_camera->Attribute("imgbuffer_R"), xml_imgbuffers), xml_camera->DoubleAttribute("eye_dist"), 
                             get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), 
@@ -1808,7 +1814,7 @@ std::unique_ptr<Camera_t> SceneContext_t::create_camera(const tinyxml2::XMLEleme
         get_xy(xml_camera->Attribute("subpix"), subpix);
 
         return std::unique_ptr<Camera_t>(
-                    new Cam3DAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), fov, subpix, 
+                    new Cam3DAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), fov, subpix, 
                             get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_imgbuffer(xml_camera->Attribute("imgbuffer_L"), xml_imgbuffers), 
                             get_imgbuffer(xml_camera->Attribute("imgbuffer_R"), xml_imgbuffers), xml_camera->DoubleAttribute("eye_dist"), 
                             get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), 
@@ -1826,7 +1832,7 @@ std::unique_ptr<Camera_t> SceneContext_t::create_camera(const tinyxml2::XMLEleme
         get_xy(xml_camera->Attribute("time"), time);
 
         return std::unique_ptr<Camera_t>(
-                    new Cam3DMotionblur_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), fov, subpix, 
+                    new Cam3DMotionblur_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), fov, subpix, 
                             get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_imgbuffer(xml_camera->Attribute("imgbuffer_L"), xml_imgbuffers), 
                             get_imgbuffer(xml_camera->Attribute("imgbuffer_R"), xml_imgbuffers), xml_camera->DoubleAttribute("eye_dist"), 
                             get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), 
@@ -1843,7 +1849,7 @@ std::unique_ptr<Camera_t> SceneContext_t::create_camera(const tinyxml2::XMLEleme
         get_xy(xml_camera->Attribute("time"), time);
 
         return std::unique_ptr<Camera_t>(
-                    new Cam3DMotionblurAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, get_colour(xml_camera->Attribute("up")), fov, subpix, 
+                    new Cam3DMotionblurAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), fov, subpix, 
                             get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_imgbuffer(xml_camera->Attribute("imgbuffer_L"), xml_imgbuffers), 
                             get_imgbuffer(xml_camera->Attribute("imgbuffer_R"), xml_imgbuffers), xml_camera->DoubleAttribute("eye_dist"), 
                             get_medium_list(xml_camera->Attribute("medium_list"), xml_materials), get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), 
@@ -1856,7 +1862,7 @@ std::unique_ptr<Camera_t> SceneContext_t::create_camera(const tinyxml2::XMLEleme
     }
 }
 
-void SceneContext_t::create_acceleration_structure(const tinyxml2::XMLElement* xml_acceleration_structure) {
+void APTracer::Entities::SceneContext_t::create_acceleration_structure(const tinyxml2::XMLElement* xml_acceleration_structure) {
     if (xml_acceleration_structure == nullptr){
         scene_->acc_ = new AccelerationGrid_t(scene_->geometry_, scene_->n_obj_);
         return;
@@ -1897,7 +1903,7 @@ void SceneContext_t::create_acceleration_structure(const tinyxml2::XMLElement* x
     }
 }
 
-TransformMatrix_t* SceneContext_t::get_transform_matrix(std::string transform_matrix, const tinyxml2::XMLElement* xml_transform_matrices){
+TransformMatrix_t* APTracer::Entities::SceneContext_t::get_transform_matrix(std::string transform_matrix, const tinyxml2::XMLElement* xml_transform_matrices){
     std::transform(transform_matrix.begin(), transform_matrix.end(), transform_matrix.begin(), ::tolower);
     if (transform_matrix == "nan"){
         transform_matrices_[index_transform_matrices_] = std::unique_ptr<TransformMatrix_t>(new TransformMatrix_t());
@@ -1927,7 +1933,7 @@ TransformMatrix_t* SceneContext_t::get_transform_matrix(std::string transform_ma
     return new TransformMatrix_t();
 }
 
-std::unique_ptr<std::list<unsigned int>> SceneContext_t::get_medium_index_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_materials) const {
+std::unique_ptr<std::list<unsigned int>> APTracer::Entities::SceneContext_t::get_medium_index_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_materials) const {
     std::unique_ptr<std::list<unsigned int>> medium_list = std::unique_ptr<std::list<unsigned int>>(new std::list<unsigned int>());
     std::string delimiter = ", ";
     size_t pos = 0;
@@ -2006,7 +2012,7 @@ std::unique_ptr<std::list<unsigned int>> SceneContext_t::get_medium_index_list(s
     return medium_list;
 }
 
-std::list<Medium_t*> SceneContext_t::get_medium_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_materials) const {
+std::list<Medium_t*> APTracer::Entities::SceneContext_t::get_medium_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_materials) const {
     std::list<Medium_t*> medium_list = std::list<Medium_t*>(); // CHECK full of dynamic casts with no checks... should maybe check for errors
     std::string delimiter = ", ";
     size_t pos = 0;
@@ -2104,7 +2110,7 @@ std::list<Medium_t*> SceneContext_t::get_medium_list(std::string string_medium_l
     return medium_list;
 }
 
-Texture_t* SceneContext_t::get_texture(std::string texture, const tinyxml2::XMLElement* xml_textures) const {
+Texture_t* APTracer::Entities::SceneContext_t::get_texture(std::string texture, const tinyxml2::XMLElement* xml_textures) const {
     if (is_number(texture)) {
         return textures_[std::stoi(texture) - 1].get();
     }
@@ -2130,7 +2136,7 @@ Texture_t* SceneContext_t::get_texture(std::string texture, const tinyxml2::XMLE
     exit(21); 
 }
 
-std::vector<unsigned int> SceneContext_t::get_material_mix(std::string material_refracted, std::string material_reflected, const tinyxml2::XMLElement* xml_materials) const {
+std::vector<unsigned int> APTracer::Entities::SceneContext_t::get_material_mix(std::string material_refracted, std::string material_reflected, const tinyxml2::XMLElement* xml_materials) const {
     //std::unique_ptr<unsigned int> output_materials = std::unique_ptr<unsigned int>(new unsigned int[2]);
     std::vector<unsigned int> output_materials = std::vector<unsigned int>(2);
     
@@ -2201,7 +2207,7 @@ std::vector<unsigned int> SceneContext_t::get_material_mix(std::string material_
     return output_materials;
 }
 
-ScatteringFunction_t* SceneContext_t::get_scatterer(std::string scatterer, const tinyxml2::XMLElement* xml_scatterers) const {
+ScatteringFunction_t* APTracer::Entities::SceneContext_t::get_scatterer(std::string scatterer, const tinyxml2::XMLElement* xml_scatterers) const {
     if (is_number(scatterer)) {
         return scatterers_[std::stoi(scatterer) - 1].get();
     }
@@ -2226,7 +2232,7 @@ ScatteringFunction_t* SceneContext_t::get_scatterer(std::string scatterer, const
     return new NonAbsorber_t();
 }
 
-MeshGeometry_t* SceneContext_t::get_mesh_geometry(std::string mesh_geometry, const tinyxml2::XMLElement* xml_mesh_geometries) const {
+MeshGeometry_t* APTracer::Entities::SceneContext_t::get_mesh_geometry(std::string mesh_geometry, const tinyxml2::XMLElement* xml_mesh_geometries) const {
     if (is_number(mesh_geometry)) {
         return mesh_geometries_[std::stoi(mesh_geometry) - 1].get();
     }
@@ -2251,7 +2257,7 @@ MeshGeometry_t* SceneContext_t::get_mesh_geometry(std::string mesh_geometry, con
     exit(51);
 }
 
-unsigned int SceneContext_t::get_material_index(std::string material, const tinyxml2::XMLElement* xml_materials) const {
+unsigned int APTracer::Entities::SceneContext_t::get_material_index(std::string material, const tinyxml2::XMLElement* xml_materials) const {
     if (is_number(material)) {
         return std::stoi(material) - 1;
     }
@@ -2276,7 +2282,7 @@ unsigned int SceneContext_t::get_material_index(std::string material, const tiny
     exit(41);
 }
 
-Material_t* SceneContext_t::get_material(std::string material, const tinyxml2::XMLElement* xml_materials) const {
+Material_t* APTracer::Entities::SceneContext_t::get_material(std::string material, const tinyxml2::XMLElement* xml_materials) const {
     if (is_number(material)) {
         return materials_[std::stoi(material) - 1].get();
     }
@@ -2301,7 +2307,7 @@ Material_t* SceneContext_t::get_material(std::string material, const tinyxml2::X
     exit(41);
 }
 
-void SceneContext_t::get_lights(std::string lights_string, std::vector<DirectionalLight_t*> &lights, const tinyxml2::XMLElement* xml_directional_lights) const {
+void APTracer::Entities::SceneContext_t::get_lights(std::string lights_string, std::vector<DirectionalLight_t*> &lights, const tinyxml2::XMLElement* xml_directional_lights) const {
     std::list<DirectionalLight_t*> lights_list = std::list<DirectionalLight_t*>();
     std::string delimiter = ", ";
     size_t pos = 0;
@@ -2382,7 +2388,7 @@ void SceneContext_t::get_lights(std::string lights_string, std::vector<Direction
     }
 }
 
-ImgBuffer_t* SceneContext_t::get_imgbuffer(std::string imgbuffer, const tinyxml2::XMLElement* xml_imgbuffers) const {
+ImgBuffer_t* APTracer::Entities::SceneContext_t::get_imgbuffer(std::string imgbuffer, const tinyxml2::XMLElement* xml_imgbuffers) const {
     if (is_number(imgbuffer)) {
         return imgbuffers_[std::stoi(imgbuffer) - 1].get();
     }
@@ -2407,7 +2413,7 @@ ImgBuffer_t* SceneContext_t::get_imgbuffer(std::string imgbuffer, const tinyxml2
     exit(91); 
 }
 
-Skybox_t* SceneContext_t::get_skybox(std::string skybox, const tinyxml2::XMLElement* xml_skyboxes) const {
+Skybox_t* APTracer::Entities::SceneContext_t::get_skybox(std::string skybox, const tinyxml2::XMLElement* xml_skyboxes) const {
     if (is_number(skybox)) {
         return skyboxes_[std::stoi(skybox) - 1].get();
     }
@@ -2432,7 +2438,7 @@ Skybox_t* SceneContext_t::get_skybox(std::string skybox, const tinyxml2::XMLElem
     exit(81); 
 }
 
-void SceneContext_t::get_objects(std::string objects_string, std::vector<Shape_t*> &shapes, std::vector<MeshTop_t*> &meshes, const tinyxml2::XMLElement* xml_objects) const {
+void APTracer::Entities::SceneContext_t::get_objects(std::string objects_string, std::vector<Shape_t*> &shapes, std::vector<MeshTop_t*> &meshes, const tinyxml2::XMLElement* xml_objects) const {
     std::list<unsigned int> objects_list = std::list<unsigned int>();
     std::string delimiter = ", ";
     size_t pos = 0;
@@ -2532,7 +2538,7 @@ void SceneContext_t::get_objects(std::string objects_string, std::vector<Shape_t
     }
 }
 
-void SceneContext_t::get_objects(std::vector<Shape_t*> &shapes, std::vector<MeshTop_t*> &meshes) const {
+void APTracer::Entities::SceneContext_t::get_objects(std::vector<Shape_t*> &shapes, std::vector<MeshTop_t*> &meshes) const {
     unsigned int n_shapes = 0;
     unsigned int n_meshes = 0;
 
@@ -2562,11 +2568,11 @@ void SceneContext_t::get_objects(std::vector<Shape_t*> &shapes, std::vector<Mesh
     }
 }
 
-Vec3f get_colour(std::string colour) {
+Vec3f APTracer::get_colour(std::string colour) {
     std::transform(colour.begin(), colour.end(), colour.begin(), ::tolower);
     
-    auto it = my_colours::colours.find(colour);
-    if (it != my_colours::colours.end()) {
+    auto it = APTracer::Colours::colours.find(colour);
+    if (it != APTracer::Colours::colours.end()) {
 		return it->second;
 	} 
     else {
@@ -2594,7 +2600,7 @@ Vec3f get_colour(std::string colour) {
 	}
 }
 
-std::vector<Vec3f> get_points(std::string points_string) {
+std::vector<Vec3f> APTracer::get_points(std::string points_string) {
     std::vector<Vec3f> points;
     std::transform(points_string.begin(), points_string.end(), points_string.begin(), ::tolower);
 
@@ -2630,7 +2636,7 @@ std::vector<Vec3f> get_points(std::string points_string) {
     return points;
 }
 
-std::vector<std::vector<double>> get_texture_coordinates(std::string texture_coordinates_string) {
+std::vector<std::vector<double>> APTracer::get_texture_coordinates(std::string texture_coordinates_string) {
     std::vector<std::vector<double>> texture_coordinates;
 
     std::transform(texture_coordinates_string.begin(), texture_coordinates_string.end(), texture_coordinates_string.begin(), ::tolower);
@@ -2667,7 +2673,7 @@ std::vector<std::vector<double>> get_texture_coordinates(std::string texture_coo
     return texture_coordinates;
 }
 
-std::unique_ptr<std::list<std::string>> get_medium_names(std::string string_medium_names) {
+std::unique_ptr<std::list<std::string>> APTracer::get_medium_names(std::string string_medium_names) {
     std::unique_ptr<std::list<std::string>> medium_names = std::unique_ptr<std::list<std::string>>(new std::list<std::string>());
     std::string delimiter = ", ";
     size_t pos = 0;
@@ -2681,7 +2687,7 @@ std::unique_ptr<std::list<std::string>> get_medium_names(std::string string_medi
     return medium_names;
 }
 
-void get_xy(const std::string &string_value, double (&value)[2]) {
+void APTracer::get_xy(const std::string &string_value, double (&value)[2]) {
     unsigned int count = 0;
     std::stringstream ss(string_value);
 
@@ -2697,7 +2703,7 @@ void get_xy(const std::string &string_value, double (&value)[2]) {
     }
 }
 
-void get_xy(const std::string &string_value, unsigned int (&value)[2]) {
+void APTracer::get_xy(const std::string &string_value, unsigned int (&value)[2]) {
     unsigned int count = 0;
     std::stringstream ss(string_value);
 
@@ -2713,12 +2719,12 @@ void get_xy(const std::string &string_value, unsigned int (&value)[2]) {
     }
 }
 
-bool is_number(const std::string& s) {
+bool APTracer::is_number(const std::string& s) {
     return !s.empty() && std::find_if(s.begin(), 
         s.end(), [](char c) { return !std::isdigit(c); }) == s.end();
 }
 
-void apply_transformation(TransformMatrix_t* transform_matrix, const tinyxml2::XMLElement* transform) {
+void APTracer::apply_transformation(TransformMatrix_t* transform_matrix, const tinyxml2::XMLElement* transform) {
     std::string type;
     const char* type_char = transform->Attribute("type");
     if (type_char == nullptr) {
@@ -2763,22 +2769,22 @@ void apply_transformation(TransformMatrix_t* transform_matrix, const tinyxml2::X
     else if (type == "rotateaxis"){
         const char* attributes[] = {"value", "axis"};
         require_attributes(transform, attributes, 2);
-        transform_matrix->rotateAxis(get_colour(transform->Attribute("axis")), transform->DoubleAttribute("value"));
+        transform_matrix->rotateAxis(APTracer::get_colour(transform->Attribute("axis")), transform->DoubleAttribute("value"));
     }
     else if (type == "rotate"){
         const char* attributes[] = {"value", "axis"};
         require_attributes(transform, attributes, 2);
-        transform_matrix->rotate(get_colour(transform->Attribute("axis")), transform->DoubleAttribute("value"));
+        transform_matrix->rotate(APTracer::get_colour(transform->Attribute("axis")), transform->DoubleAttribute("value"));
     }
     else if (type == "translate"){
         const char* attributes[] = {"value"};
         require_attributes(transform, attributes, 1);
-        transform_matrix->translate(get_colour(transform->Attribute("value")));
+        transform_matrix->translate(APTracer::get_colour(transform->Attribute("value")));
     }
     else if (type == "scaleaxis"){
         const char* attributes[] = {"value"};
         require_attributes(transform, attributes, 1);
-        transform_matrix->scaleAxis(get_colour(transform->Attribute("value")));
+        transform_matrix->scaleAxis(APTracer::get_colour(transform->Attribute("value")));
     }
     else if (type == "uniformscaleaxis"){
         const char* attributes[] = {"value"};
@@ -2788,7 +2794,7 @@ void apply_transformation(TransformMatrix_t* transform_matrix, const tinyxml2::X
     else if (type == "scale"){
         const char* attributes[] = {"value"};
         require_attributes(transform, attributes, 1);
-        transform_matrix->scale(get_colour(transform->Attribute("value")));
+        transform_matrix->scale(APTracer::get_colour(transform->Attribute("value")));
     }
     else if (type == "uniformscale"){
         const char* attributes[] = {"value"};
@@ -2798,12 +2804,12 @@ void apply_transformation(TransformMatrix_t* transform_matrix, const tinyxml2::X
     else if (type == "reflect"){
         const char* attributes[] = {"value"};
         require_attributes(transform, attributes, 1);
-        transform_matrix->reflect(get_colour(transform->Attribute("value")));
+        transform_matrix->reflect(APTracer::get_colour(transform->Attribute("value")));
     }
     else if (type == "shear"){
         const char* attributes[] = {"value"};
         require_attributes(transform, attributes, 1);
-        transform_matrix->shear(get_colour(transform->Attribute("value")));
+        transform_matrix->shear(APTracer::get_colour(transform->Attribute("value")));
     }
     else if (type == "transpose"){
         transform_matrix->transpose();
@@ -2819,7 +2825,7 @@ void apply_transformation(TransformMatrix_t* transform_matrix, const tinyxml2::X
     }
 }
 
-void require_attributes(const tinyxml2::XMLElement* element, const char** attributes, unsigned int n) {
+void APTracer::require_attributes(const tinyxml2::XMLElement* element, const char** attributes, unsigned int n) {
     bool missing = false;
 
     for (unsigned int i = 0; i < n; ++i){
