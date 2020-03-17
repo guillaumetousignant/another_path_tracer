@@ -4,15 +4,21 @@
 #include "Material_t.h"
 #include <list>
 
+using APTracer::Entities::Material_t;
+using APTracer::Entities::TransformMatrix_t;
+using APTracer::Entities::Medium_t;
+
 class TransformMatrix_t;
 class Medium_t;
 
-class PortalTop_t : public Material_t{
-    public:
-        PortalTop_t(TransformMatrix_t* transformation, std::list<Medium_t*> medium_list);
-        virtual ~PortalTop_t();
+namespace APTracer::Materials {
+    class PortalTop_t : public Material_t{
+        public:
+            PortalTop_t(TransformMatrix_t* transformation, std::list<Medium_t*> medium_list);
+            virtual ~PortalTop_t();
 
-        TransformMatrix_t* transformation_;
-        std::list<Medium_t*> medium_list_;
-};
+            TransformMatrix_t* transformation_;
+            std::list<Medium_t*> medium_list_;
+    };
+}
 #endif

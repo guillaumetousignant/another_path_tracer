@@ -3,14 +3,16 @@
 
 #include "Ray_t.h"
 
-class Shape_t;
+namespace APTracer::Entities {
+    class Shape_t;
 
-class Material_t{
-    public:
-        Material_t(){};
-        virtual ~Material_t(){};
+    class Material_t{
+        public:
+            Material_t(){};
+            virtual ~Material_t(){};
 
-        virtual void bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray) = 0;
-};
+            virtual void bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray) = 0;
+    };
+}
 
 #endif

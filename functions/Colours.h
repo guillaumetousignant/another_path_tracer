@@ -5,7 +5,9 @@
 #include <string>
 #include "Vec3f.h"
 
-namespace my_colours{
+using APTracer::Entities::Vec3f;
+
+namespace APTracer::Colours {
     extern const std::map<std::string, Vec3f> colours;
 }
 #endif

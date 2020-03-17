@@ -4,13 +4,18 @@
 #include "Skybox_t.h"
 #include "Vec3f.h"
 
-class SkyboxFlat_t final : public Skybox_t{
-    public:
-        SkyboxFlat_t(const Vec3f &background);
-        virtual ~SkyboxFlat_t() final;
+using APTracer::Entities::Skybox_t;
+using APTracer::Entities::Vec3f;
 
-        Vec3f background_;
+namespace APTracer::Skyboxes {
+    class SkyboxFlat_t final : public Skybox_t{
+        public:
+            SkyboxFlat_t(const Vec3f &background);
+            virtual ~SkyboxFlat_t() final;
 
-        virtual Vec3f get(const Vec3f &xyz) const final;
-};
+            Vec3f background_;
+
+            virtual Vec3f get(const Vec3f &xyz) const final;
+    };
+}
 #endif

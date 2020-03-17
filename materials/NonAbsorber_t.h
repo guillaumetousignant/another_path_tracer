@@ -4,11 +4,16 @@
 #include "ScatteringFunction_t.h"
 #include "Ray_t.h"
 
-class NonAbsorber_t final : public ScatteringFunction_t{
-    public:
-        NonAbsorber_t();
-        virtual ~NonAbsorber_t() final;
+using APTracer::Entities::ScatteringFunction_t;
+using APTracer::Entities::Ray_t;
 
-        virtual bool scatter(Ray_t &ray) final; 
-};
+namespace APTracer::Materials {
+    class NonAbsorber_t final : public ScatteringFunction_t{
+        public:
+            NonAbsorber_t();
+            virtual ~NonAbsorber_t() final;
+
+            virtual bool scatter(Ray_t &ray) final; 
+    };
+}
 #endif

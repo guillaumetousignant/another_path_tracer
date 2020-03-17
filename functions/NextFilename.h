@@ -3,6 +3,8 @@
 
 #include <string>
 
-std::string next_filename(const std::string &prefix);
+namespace APTracer {
+    std::string next_filename(const std::string &prefix);
+}
 
 #endif

@@ -3,7 +3,7 @@
 
 #include <random> 
 
-namespace my_rand{
+namespace APTracer::Entities {
     extern std::mt19937 rng;
 }
 #endif

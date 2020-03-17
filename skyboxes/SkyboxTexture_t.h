@@ -4,15 +4,21 @@
 #include "Skybox_t.h"
 #include "Vec3f.h"
 
+using APTracer::Entities::Skybox_t;
+using APTracer::Entities::Vec3f;
+using APTracer::Entities::Texture_t;
+
 class Texture_t;
 
-class SkyboxTexture_t final : public Skybox_t{
-    public:
-        SkyboxTexture_t(Texture_t* texture);
-        virtual ~SkyboxTexture_t() final;
+namespace APTracer::Skyboxes {
+    class SkyboxTexture_t final : public Skybox_t{
+        public:
+            SkyboxTexture_t(Texture_t* texture);
+            virtual ~SkyboxTexture_t() final;
 
-        Texture_t* texture_;
+            Texture_t* texture_;
 
-        virtual Vec3f get(const Vec3f &xyz) const final;
-};
+            virtual Vec3f get(const Vec3f &xyz) const final;
+    };
+}
 #endif
