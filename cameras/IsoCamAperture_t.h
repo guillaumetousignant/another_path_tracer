@@ -17,11 +17,6 @@ namespace APTracer::Entities {
 
 using APTracer::Entities::Camera_t;
 using APTracer::Entities::Vec3f;
-using APTracer::Entities::TransformMatrix_t;
-using APTracer::Entities::Skybox_t;
-using APTracer::Entities::Scene_t;
-using APTracer::Entities::Medium_t;
-using APTracer::Entities::ImgBuffer_t;
 
 namespace APTracer::Cameras {
     class IsoCamAperture_t final : public Camera_t{
