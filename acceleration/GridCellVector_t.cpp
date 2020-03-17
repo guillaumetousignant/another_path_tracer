@@ -3,6 +3,8 @@
 #include <vector>
 #include <limits>
 
+using APTracer::Acceleration::GridCellVector_t;
+
 #define CELLLIST
 
 GridCellVector_t::GridCellVector_t() : items_(std::vector<Shape_t*>()), size_(0) {

@@ -2,6 +2,8 @@
 #include "Shape_t.h"
 #include <limits>
 
+using APTracer::Acceleration::GridCellArray_t;
+
 GridCellArray_t::GridCellArray_t() : size_(0), items_(nullptr), increment_size_(0) {
     n_obj_ = 0;
 }

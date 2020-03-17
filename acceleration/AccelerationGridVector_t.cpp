@@ -4,6 +4,8 @@
 #include <limits>
 #include <cmath>
 
+using APTracer::Acceleration::AccelerationGridVector_t;
+
 AccelerationGridVector_t::AccelerationGridVector_t(Shape_t** items, unsigned int n_items, Vec3f* coordinates/* = nullptr*/, unsigned int level /* = 0*/, unsigned int min_res /* = 1 */, unsigned int max_res /* = 128 */) : 
         level_(level), min_res_(min_res), max_res_(max_res) {
     Vec3f min1, max1;

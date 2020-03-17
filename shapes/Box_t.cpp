@@ -2,6 +2,10 @@
 #include <limits>
 #include <algorithm>
 
+using APTracer::Shapes::Box_t;
+using APTracer::Entities::Vec3f;
+using APTracer::Entities::Ray_t;
+
 Box_t::Box_t() {}
 
 Box_t::Box_t(Vec3f (&coord)[2]) : coordinates_{coord[0], coord[1]} {}

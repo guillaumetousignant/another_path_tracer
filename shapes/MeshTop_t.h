@@ -4,6 +4,14 @@
 #include "Ray_t.h"
 #include "Vec3f.h"
 
+namespace APTracer::Entities {
+    class Material_t;
+    class TransformMatrix_t;
+    class MeshGeometry_t;
+    class MaterialMap_t;
+    class Shape_t;
+}
+
 using APTracer::Entities::Ray_t;
 using APTracer::Entities::Vec3f;
 using APTracer::Entities::Material_t;
@@ -11,12 +19,6 @@ using APTracer::Entities::TransformMatrix_t;
 using APTracer::Entities::MeshGeometry_t;
 using APTracer::Entities::MaterialMap_t;
 using APTracer::Entities::Shape_t;
-
-class Material_t;
-class TransformMatrix_t;
-class MeshGeometry_t;
-class MaterialMap_t;
-class Shape_t;
 
 namespace APTracer::Shapes {
     class MeshTop_t {

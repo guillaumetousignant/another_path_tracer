@@ -9,6 +9,14 @@
 #define PI 3.141592653589793238463
 #define EPSILON 0.00000001
 
+using APTracer::Shapes::TriangleMeshMotionblur_t;
+using APTracer::Entities::Shape_t;
+using APTracer::Entities::Material_t;
+using APTracer::Entities::TransformMatrix_t;
+using APTracer::Entities::Ray_t;
+using APTracer::Entities::Vec3f;
+using APTracer::Entities::MeshGeometry_t;
+
 TriangleMeshMotionblur_t::TriangleMeshMotionblur_t(Material_t *material, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom, unsigned int index) 
     : Shape_t(material, transform_matrix), geom_(geom), index_(index) {
 

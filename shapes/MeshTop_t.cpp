@@ -1,10 +1,15 @@
 #include "MeshTop_t.h"
 #include "MeshGeometry_t.h"
-#include "MaterialMap_t.h"
 #include "TriangleMesh_t.h"
 #include <iostream>
 #include <limits>
-#include "Shape_t.h"
+
+using APTracer::Shapes::MeshTop_t;
+using APTracer::Entities::Material_t;
+using APTracer::Entities::TransformMatrix_t;
+using APTracer::Entities::MeshGeometry_t;
+using APTracer::Entities::Ray_t;
+using APTracer::Entities::Vec3f;
 
 MeshTop_t::MeshTop_t(Material_t *material, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom) 
     : material_(material), transformation_(transform_matrix), geom_(geom), n_tris_(geom->n_tris_) {

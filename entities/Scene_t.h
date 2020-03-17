@@ -3,9 +3,11 @@
 
 #include "Ray_t.h"
 
-using APTracer::Shapes::MeshTop_t;
+namespace APTracer::Shapes {
+    class MeshTop_t;
+}
 
-class MeshTop_t;
+using APTracer::Shapes::MeshTop_t;
 
 namespace APTracer::Entities {
     class Shape_t;

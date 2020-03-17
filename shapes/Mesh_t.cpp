@@ -5,6 +5,14 @@
 #include <iostream>
 #include <limits>
 
+using APTracer::Shapes::Mesh_t;
+using APTracer::Entities::Material_t;
+using APTracer::Entities::TransformMatrix_t;
+using APTracer::Entities::MeshGeometry_t;
+using APTracer::Entities::MaterialMap_t;
+using APTracer::Entities::Shape_t;
+using APTracer::Shapes::TriangleMesh_t;
+
 Mesh_t::Mesh_t(Material_t *material, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom) 
     : MeshTop_t(material, transform_matrix, geom) {
     

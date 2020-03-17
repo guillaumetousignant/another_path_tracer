@@ -7,6 +7,13 @@
 
 #define PI 3.141592653589793238463
 
+using APTracer::Shapes::SphereMotionblur_t;
+using APTracer::Entities::Shape_t;
+using APTracer::Entities::Material_t;
+using APTracer::Entities::TransformMatrix_t;
+using APTracer::Entities::Ray_t;
+using APTracer::Entities::Vec3f;
+
 SphereMotionblur_t::SphereMotionblur_t(Material_t *material, TransformMatrix_t *transform_matrix): Shape_t(material, transform_matrix){
     origin_ = transformation_->multVec(Vec3f());
     origin_last_ = origin_;

@@ -5,6 +5,8 @@
 
 #define CELLLIST
 
+using APTracer::Acceleration::GridCell_t;
+
 GridCell_t::GridCell_t() : items_(std::list<Shape_t*>()) {
     n_obj_ = 0;
 }

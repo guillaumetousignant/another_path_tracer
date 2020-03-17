@@ -10,6 +10,7 @@ using APTracer::Entities::Vec3f;
 using APTracer::Entities::Ray_t;
 using APTracer::Entities::Shape_t;
 using APTracer::Entities::AccelerationStructure_t;
+using APTracer::Shapes::Box_t;
 
 class Shape_t;
 
