@@ -4,6 +4,8 @@
 
 #define EPSILON 0.00000001
 
+using APTracer::Materials::ReflectiveNormal_t;
+
 ReflectiveNormal_t::ReflectiveNormal_t(const Vec3f &emission, const Vec3f &colour, const Texture_t* normal_map) : 
     emission_(emission), colour_(colour), normal_map_(normal_map) {}
 

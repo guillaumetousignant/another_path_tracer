@@ -4,6 +4,8 @@
 #include "Vec3f.h"
 #include "Material_t.h"
 
+using APTracer::Materials::RandomMixIn_t;
+
 RandomMixIn_t::RandomMixIn_t(Material_t* material_refracted, Material_t* material_reflected, double ratio) : 
     MaterialMix_t(material_refracted, material_reflected), ratio_(ratio), unif_(std::uniform_real_distribution<double>(0, 1)) {}
 

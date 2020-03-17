@@ -3,6 +3,8 @@
 
 #define EPSILON 0.00000001
 
+using APTracer::Materials::Reflective_t;
+
 Reflective_t::Reflective_t(const Vec3f &emission, const Vec3f &colour) : 
     emission_(emission), colour_(colour) {}
 

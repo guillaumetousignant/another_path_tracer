@@ -3,6 +3,8 @@
 #include "Vec3f.h"
 #include <cmath>
 
+using APTracer::Materials::DistanceMaterial_t;
+
 DistanceMaterial_t::DistanceMaterial_t(double focal_length, double exponent) : focal_length_(focal_length - 1.0), exponent_(exponent) {}
 
 DistanceMaterial_t::~DistanceMaterial_t(){}

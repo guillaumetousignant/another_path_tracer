@@ -1,5 +1,7 @@
 #include "NonAbsorber_t.h"
 
+using APTracer::Materials::NonAbsorber_t;
+
 NonAbsorber_t::NonAbsorber_t() {}
 
 NonAbsorber_t::~NonAbsorber_t() {}

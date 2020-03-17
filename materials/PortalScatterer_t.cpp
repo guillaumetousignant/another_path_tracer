@@ -3,6 +3,8 @@
 #include "Medium_t.h"
 #include "RandomGenerator_t.h"
 
+using APTracer::Materials::PortalScatterer_t;
+
 PortalScatterer_t::PortalScatterer_t(TransformMatrix_t* transformation, double scattering_distance, std::list<Medium_t*> medium_list)
     : PortalScattererTop_t(transformation, medium_list), scattering_coefficient_(1/scattering_distance), unif_(0.0, 1.0) {}
 

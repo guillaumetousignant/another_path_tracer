@@ -7,6 +7,8 @@
 #define EPSILON 0.00000001
 #define PI 3.141592653589793238463
 
+using APTracer::Materials::DiffuseFull_t;
+
 DiffuseFull_t::DiffuseFull_t(const Texture_t* emission_map, const Texture_t* texture, double roughness) : 
     emission_map_(emission_map), texture_(texture), roughness_(roughness), unif_(std::uniform_real_distribution<double>(0, 1)) {}
 

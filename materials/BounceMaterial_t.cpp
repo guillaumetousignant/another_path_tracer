@@ -7,6 +7,8 @@
 #define EPSILON 0.00001 // was 0.00001, 0.01 works ok when *t
 #define PI 3.141592653589793238463
 
+using APTracer::Materials::BounceMaterial_t;
+
 BounceMaterial_t::BounceMaterial_t(unsigned int max_bounces) : unif_(std::uniform_real_distribution<double>(0, 1)) {
     emission_ = Vec3f(1.0/max_bounces);
 }

@@ -3,6 +3,8 @@
 #include "RandomGenerator_t.h"
 #include "Material_t.h"
 
+using APTracer::Materials::RandomMix_t;
+
 RandomMix_t::RandomMix_t(Material_t* material_refracted, Material_t* material_reflected, double ratio) : 
     MaterialMix_t(material_refracted, material_reflected), ratio_(ratio), unif_(std::uniform_real_distribution<double>(0, 1)) {}
 

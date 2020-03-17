@@ -4,6 +4,8 @@
 
 #define PI 3.141592653589793238463
 
+using APTracer::Materials::ScattererExpFull_t;
+
 ScattererExpFull_t::ScattererExpFull_t(Vec3f emi_vol, Vec3f col_vol, Vec3f emi_scat, Vec3f col_scat, double abs_dist_emi, double abs_dist_col, double scat_dist, double order, double scattering_angle) 
         : emission_scat_(emi_scat), colour_scat_(col_scat), order_(order), scattering_angle_(scattering_angle), unif_(0.0, 1.0) {
     colour_vol_ = -col_vol.ln()/abs_dist_col;

@@ -4,6 +4,8 @@
 
 #define EPSILON 0.00000001
 
+using APTracer::Materials::Refractive_t;
+
 Refractive_t::Refractive_t(const Vec3f &emission, const Vec3f &colour, double ind, unsigned int priority, ScatteringFunction_t* scattering) : 
     Medium_t(ind, priority, scattering), emission_(emission), colour_(colour) {}
 

@@ -1,6 +1,8 @@
 #include "Toon_t.h"
 #include "Shape_t.h"
 
+using APTracer::Materials::Toon_t;
+
 Toon_t::Toon_t(const Vec3f &colour) : colour_(colour) {}
 
 Toon_t::~Toon_t(){}

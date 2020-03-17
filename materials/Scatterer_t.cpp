@@ -4,6 +4,8 @@
 
 #define PI 3.141592653589793238463
 
+using APTracer::Materials::Scatterer_t;
+
 Scatterer_t::Scatterer_t(Vec3f emi_vol, Vec3f col_vol, double abs_dist_emi, double abs_dist_col, double scat_dist) : unif_(0.0, 1.0) {
     colour_vol_ = -col_vol.ln()/abs_dist_col;
     emission_vol_ = emi_vol*emi_vol/abs_dist_emi; // CHECK probably not right.

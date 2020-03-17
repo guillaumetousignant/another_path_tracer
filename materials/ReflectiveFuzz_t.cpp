@@ -6,6 +6,8 @@
 #define EPSILON 0.00000001
 #define PI 3.141592653589793238463
 
+using APTracer::Materials::ReflectiveFuzz_t;
+
 ReflectiveFuzz_t::ReflectiveFuzz_t(const Vec3f &emission, const Vec3f &colour, double order, double diffusivity) : 
     emission_(emission), colour_(colour), order_(order), diffusivity_(diffusivity), unif_(0, 1) {}
 

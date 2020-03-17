@@ -7,6 +7,8 @@
 #define EPSILON 0.00001 // was 0.00001, 0.01 works ok when *t
 #define PI 3.141592653589793238463
 
+using APTracer::Materials::DiffuseNormal_t;
+
 DiffuseNormal_t::DiffuseNormal_t(const Vec3f &emission, const Vec3f &colour, const Texture_t* normal_map, double roughness) : 
     emission_(emission), colour_(colour), normal_map_(normal_map), roughness_(roughness), unif_(std::uniform_real_distribution<double>(0, 1)) {}
 

@@ -6,6 +6,8 @@
 
 #define EPSILON 0.00000001
 
+using APTracer::Materials::ReflectiveRefractiveNormal_t;
+
 ReflectiveRefractiveNormal_t::ReflectiveRefractiveNormal_t(const Vec3f &emission, const Vec3f &colour, const Texture_t* normal_map, double ind, unsigned int priority, ScatteringFunction_t* scattering) : 
     Medium_t(ind, priority, scattering), emission_(emission), colour_(colour), normal_map_(normal_map) {}
 

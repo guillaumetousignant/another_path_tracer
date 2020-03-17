@@ -5,6 +5,8 @@
 #include "RandomGenerator_t.h"
 #include "Material_t.h"
 
+using APTracer::Materials::FresnelMix_t;
+
 FresnelMix_t::FresnelMix_t(Material_t* material_refracted, Material_t* material_reflected, double ind) : 
     MaterialMix_t(material_refracted, material_reflected), ind_(ind), unif_(std::uniform_real_distribution<double>(0, 1)) {}
 

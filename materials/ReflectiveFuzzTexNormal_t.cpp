@@ -7,6 +7,8 @@
 #define EPSILON 0.00000001
 #define PI 3.141592653589793238463
 
+using APTracer::Materials::ReflectiveFuzzTexNormal_t;
+
 ReflectiveFuzzTexNormal_t::ReflectiveFuzzTexNormal_t(const Vec3f &emission, Texture_t* texture, const Texture_t* normal_map, double order, double diffusivity)
     : texture_(texture), emission_(emission), normal_map_(normal_map), order_(order), diffusivity_(diffusivity), unif_(0, 1) {}
 

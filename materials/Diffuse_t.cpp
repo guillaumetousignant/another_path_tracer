@@ -6,6 +6,8 @@
 #define EPSILON 0.00001 // was 0.00001, 0.01 works ok when *t
 #define PI 3.141592653589793238463
 
+using APTracer::Materials::Diffuse_t;
+
 Diffuse_t::Diffuse_t(const Vec3f &emission, const Vec3f &colour, double roughness) : 
     emission_(emission), colour_(colour), roughness_(roughness), unif_(std::uniform_real_distribution<double>(0, 1)) {}
 

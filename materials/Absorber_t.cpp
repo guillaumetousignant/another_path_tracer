@@ -1,6 +1,8 @@
 #include "Absorber_t.h"
 #include <cmath>
 
+using APTracer::Materials::Absorber_t;
+
 Absorber_t::Absorber_t(Vec3f emi_vol, Vec3f col_vol, double abs_dist_emi, double abs_dist_col) {
     colour_vol_ = -col_vol.ln()/abs_dist_col;
     emission_vol_ = emi_vol*emi_vol/abs_dist_emi; // CHECK probably not right.

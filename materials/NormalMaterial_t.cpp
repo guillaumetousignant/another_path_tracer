@@ -2,6 +2,8 @@
 #include "Shape_t.h"
 #include "Vec3f.h"
 
+using APTracer::Materials::NormalMaterial_t;
+
 NormalMaterial_t::NormalMaterial_t() {}
 
 NormalMaterial_t::~NormalMaterial_t(){}

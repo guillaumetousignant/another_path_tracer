@@ -6,6 +6,8 @@
 #include "Material_t.h"
 #include "Texture_t.h"
 
+using APTracer::Materials::FresnelMixNormal_t;
+
 FresnelMixNormal_t::FresnelMixNormal_t(Material_t* material_refracted, Material_t* material_reflected, double ind, const Texture_t* normal_map) : 
     MaterialMix_t(material_refracted, material_reflected), ind_(ind), normal_map_(normal_map), unif_(std::uniform_real_distribution<double>(0, 1)) {}
 

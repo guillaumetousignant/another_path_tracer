@@ -6,6 +6,8 @@
 
 #define EPSILON 0.00000001
 
+using APTracer::Materials::Portal_t;
+
 Portal_t::Portal_t(TransformMatrix_t* transformation, std::list<Medium_t*> medium_list) 
     : PortalTop_t(transformation, medium_list) {}
 
