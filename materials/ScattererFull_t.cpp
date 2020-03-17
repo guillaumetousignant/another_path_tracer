@@ -14,7 +14,7 @@ ScattererFull_t::ScattererFull_t(Vec3f emi_vol, Vec3f col_vol, Vec3f emi_scat, V
 ScattererFull_t::~ScattererFull_t() {}
 
 bool ScattererFull_t::scatter(Ray_t &ray) {
-    const double distance = -std::log(unif_(my_rand::rng))/scattering_coefficient_;
+    const double distance = -std::log(unif_(APTracer::Entities::rng))/scattering_coefficient_;
     if (distance >= ray.dist_){
         ray.colour_ += ray.mask_ * (emission_vol_ * ray.dist_).sqrt(); // sqrt may be slow
         ray.mask_ *= (-colour_vol_ * ray.dist_).exp();
@@ -24,8 +24,8 @@ bool ScattererFull_t::scatter(Ray_t &ray) {
         ray.dist_ = distance;
         ray.origin_ += ray.direction_ * distance;
 
-        const double rand1 = unif_(my_rand::rng) * 2 * PI;
-        const double rand2 = unif_(my_rand::rng) * PI;
+        const double rand1 = unif_(APTracer::Entities::rng) * 2 * PI;
+        const double rand2 = unif_(APTracer::Entities::rng) * PI;
 
         const Vec3f axis = ray.direction_[0] > 0.1 ? Vec3f(0.0, 1.0, 0.0) : Vec3f(1.0, 0.0, 0.0);
 

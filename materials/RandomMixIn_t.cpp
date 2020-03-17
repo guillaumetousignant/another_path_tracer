@@ -16,7 +16,7 @@ void RandomMixIn_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t 
     hit_obj->normal(ray, uv, normal);
     //cosi = ray.direction_.dot(normal);
 
-    if ((ray.direction_.dot(normal) > 0.0) || (unif_(my_rand::rng) < ratio_)){ // refracted
+    if ((ray.direction_.dot(normal) > 0.0) || (unif_(APTracer::Entities::rng) < ratio_)){ // refracted
         material_refracted_->bounce(uv, hit_obj, ray);
     }
     else{   // reflected

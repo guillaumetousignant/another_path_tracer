@@ -5,14 +5,16 @@
 #include "Vec3f.h"
 #include "Shape_t.h"
 
+namespace APTracer::Entities {
+    class TransformMatrix_t;
+    class Material_t;
+}
+
 using APTracer::Entities::Ray_t;
 using APTracer::Entities::Vec3f;
 using APTracer::Entities::Material_t;
 using APTracer::Entities::TransformMatrix_t;
 using APTracer::Entities::Shape_t;
-
-class TransformMatrix_t;
-class Material_t;
 
 namespace APTracer::Shapes {
     class TriangleMotionblur_t final : public Shape_t{

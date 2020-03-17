@@ -18,8 +18,8 @@ void DiffuseFull_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t 
 
     hit_obj->normaluv(ray, uv, tuv, normal);
 
-    const double rand1 = unif_(my_rand::rng)*2*PI;
-    const double rand2 = unif_(my_rand::rng);
+    const double rand1 = unif_(APTracer::Entities::rng)*2*PI;
+    const double rand2 = unif_(APTracer::Entities::rng);
     const double rand2s = sqrt(rand2);
 
     if (normal.dot(ray.direction_) > 0.0){

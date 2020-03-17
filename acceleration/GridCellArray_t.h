@@ -4,11 +4,13 @@
 #include "Ray_t.h"
 #include "AccelerationStructure_t.h"
 
+namespace APTracer::Entities {
+    class Shape_t;
+}
+
 using APTracer::Entities::Ray_t;
 using APTracer::Entities::Shape_t;
 using APTracer::Entities::AccelerationStructure_t;
-
-class Shape_t;
 
 namespace APTracer::Acceleration {
     class GridCellArray_t final : public AccelerationStructure_t{

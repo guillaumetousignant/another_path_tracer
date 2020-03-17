@@ -18,8 +18,8 @@ void BounceMaterial_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray
 
     hit_obj->normal(ray, uv, normal);
 
-    const double rand1 = unif_(my_rand::rng)*2*PI;
-    const double rand2 = unif_(my_rand::rng);
+    const double rand1 = unif_(APTracer::Entities::rng)*2*PI;
+    const double rand2 = unif_(APTracer::Entities::rng);
     const double rand2s = sqrt(rand2);
 
     if (normal.dot(ray.direction_) > 0.0){

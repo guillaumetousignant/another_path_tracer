@@ -9,7 +9,7 @@ PortalScatterer_t::PortalScatterer_t(TransformMatrix_t* transformation, double s
 PortalScatterer_t::~PortalScatterer_t() {}
 
 bool PortalScatterer_t::scatter(Ray_t &ray) {
-    const double distance = -std::log(unif_(my_rand::rng))/scattering_coefficient_;
+    const double distance = -std::log(unif_(APTracer::Entities::rng))/scattering_coefficient_;
 
     if (distance >= ray.dist_){
         return false;

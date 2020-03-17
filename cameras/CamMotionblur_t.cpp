@@ -8,6 +8,15 @@
 
 #define PI 3.141592653589793238463
 
+using APTracer::Entities::Vec3f;
+using APTracer::Cameras::CamMotionblur_t;
+using APTracer::Entities::Ray_t;
+using APTracer::Entities::TransformMatrix_t;
+using APTracer::Entities::ImgBuffer_t;
+using APTracer::Entities::Medium_t;
+using APTracer::Entities::Skybox_t;
+using APTracer::Entities::Scene_t;
+
 CamMotionblur_t::CamMotionblur_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, const double (&fov)[2], const unsigned int (&subpix)[2], ImgBuffer_t* image, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double (&time)[2], double gammaind) 
     : Camera_t(transformation, filename, up, fov, subpix, medium_list, skybox, max_bounces, gammaind), 
     image_(image), unif_(0.0, 1.0), direction_last_(direction_), origin_last_(origin_), time_{time[0], time[1]}, up_last_(up_) {}
@@ -54,9 +63,9 @@ void CamMotionblur_t::raytrace(const Scene_t* scene) {
         for (unsigned int subindex = 0; subindex < subpix_[0] * subpix_[1]; ++subindex){
             const unsigned int l = subindex%subpix_[1]; // x
             const unsigned int k = subindex/subpix_[1]; // y
-            const double rand_time = unif_(my_rand::rng) * (time_[1] - time_[0]) + time_[0];
-            const double jitter_y = unif_(my_rand::rng);
-            const double jitter_x = unif_(my_rand::rng);
+            const double rand_time = unif_(APTracer::Entities::rng) * (time_[1] - time_[0]) + time_[0];
+            const double jitter_y = unif_(APTracer::Entities::rng);
+            const double jitter_x = unif_(APTracer::Entities::rng);
 
             const Vec3f direction_int = direction_ * rand_time + direction_last_ * (1.0 - rand_time); // maybe should normalise this
             const Vec3f horizontal_int = horizontal * rand_time + horizontal_last * (1.0 - rand_time); // maybe should normalise this

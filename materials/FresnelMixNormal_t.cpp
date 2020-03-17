@@ -41,7 +41,7 @@ void FresnelMixNormal_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, R
         kr = (Rs * Rs + Rp * Rp)/2.0;
     }
 
-    if (unif_(my_rand::rng) > kr){ // refracted
+    if (unif_(APTracer::Entities::rng) > kr){ // refracted
         material_refracted_->bounce(uv, hit_obj, ray);
     }
     else{ // reflected

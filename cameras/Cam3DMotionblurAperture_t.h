@@ -7,6 +7,14 @@
 #include <list>
 #include <random>
 
+namespace APTracer::Entities {
+    class TransformMatrix_t;
+    class Skybox_t;
+    class Scene_t;
+    class Medium_t;
+    class ImgBuffer_t;
+}
+
 using APTracer::Entities::Camera_t;
 using APTracer::Entities::Vec3f;
 using APTracer::Entities::TransformMatrix_t;
@@ -14,12 +22,6 @@ using APTracer::Entities::Skybox_t;
 using APTracer::Entities::Scene_t;
 using APTracer::Entities::Medium_t;
 using APTracer::Entities::ImgBuffer_t;
-
-class TransformMatrix_t;
-class Skybox_t;
-class Scene_t;
-class Medium_t;
-class ImgBuffer_t;
 
 namespace APTracer::Cameras {
     class CamMotionblurAperture_t;

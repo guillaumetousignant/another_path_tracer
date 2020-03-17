@@ -51,7 +51,7 @@ void ReflectiveRefractive_t::bounce(const double (&uv)[2], const Shape_t* hit_ob
             kr = (Rs * Rs + Rp * Rp)/2.0;
         }
 
-        if (unif_(my_rand::rng) > kr){ //|| coming_out){ // refracted. Not sure if should always be refracted when going out.
+        if (unif_(APTracer::Entities::rng) > kr){ //|| coming_out){ // refracted. Not sure if should always be refracted when going out.
             const double k = 1.0 - sint*sint;
 
             //newdir = k < 0 ? Vec3f() : (ray.direction_ * eta + n * (eta * cosi - std::sqrt(k))).normalize_inplace(); // k shouldn't be smaller than 0 if sint >= 1

@@ -13,15 +13,15 @@ Scatterer_t::Scatterer_t(Vec3f emi_vol, Vec3f col_vol, double abs_dist_emi, doub
 Scatterer_t::~Scatterer_t() {}
 
 bool Scatterer_t::scatter(Ray_t &ray) {
-    const double distance = -std::log(unif_(my_rand::rng))/scattering_coefficient_;
+    const double distance = -std::log(unif_(APTracer::Entities::rng))/scattering_coefficient_;
     bool intersected = false;
     if (distance < ray.dist_){
         intersected = true;
         ray.dist_ = distance;
         ray.origin_ += ray.direction_ * distance;
 
-        const double rand1 = unif_(my_rand::rng) * 2 * PI;
-        const double rand2 = unif_(my_rand::rng) * PI;
+        const double rand1 = unif_(APTracer::Entities::rng) * 2 * PI;
+        const double rand2 = unif_(APTracer::Entities::rng) * PI;
 
         const Vec3f axis = ray.direction_[0] > 0.1 ? Vec3f(0.0, 1.0, 0.0) : Vec3f(1.0, 0.0, 0.0);
 

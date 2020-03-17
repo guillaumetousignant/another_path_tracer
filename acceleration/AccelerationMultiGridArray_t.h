@@ -6,13 +6,15 @@
 #include "Vec3f.h"
 #include "Box_t.h"
 
+namespace APTracer::Entities {
+    class Shape_t;
+}
+
 using APTracer::Entities::Vec3f;
 using APTracer::Entities::Ray_t;
 using APTracer::Entities::Shape_t;
 using APTracer::Entities::AccelerationStructure_t;
 using APTracer::Shapes::Box_t;
-
-class Shape_t;
 
 namespace APTracer::Acceleration {
     class AccelerationMultiGridArray_t final : public AccelerationStructure_t{

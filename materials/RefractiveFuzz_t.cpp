@@ -21,8 +21,8 @@ void RefractiveFuzz_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray
     if (priority_ >= ray.medium_list_.front()->priority_){ // CHECK also discard if priority is equal, but watch for going out case
         double etai, etat;
 
-        const double rand1 = unif_(my_rand::rng)*2.0*PI;
-        const double rand2 = std::pow(unif_(my_rand::rng), order_) * diffusivity_;
+        const double rand1 = unif_(APTracer::Entities::rng)*2.0*PI;
+        const double rand2 = std::pow(unif_(APTracer::Entities::rng), order_) * diffusivity_;
         const double rand2s = std::sqrt(rand2);
 
         const Vec3f axis = std::abs(normal[0]) > 0.1 ? Vec3f(0.0, 1.0, 0.0) : Vec3f(1.0, 0.0, 0.0);

@@ -23,8 +23,8 @@ void ReflectiveRefractiveFuzz_t::bounce(const double (&uv)[2], const Shape_t* hi
         double etai, etat;
         double kr;
 
-        const double rand1 = unif_(my_rand::rng)*2.0*PI;
-        const double rand2 = std::pow(unif_(my_rand::rng), order_) * diffusivity_;
+        const double rand1 = unif_(APTracer::Entities::rng)*2.0*PI;
+        const double rand2 = std::pow(unif_(APTracer::Entities::rng), order_) * diffusivity_;
         const double rand2s = std::sqrt(rand2);
 
         const Vec3f axis = std::abs(normal[0]) > 0.1 ? Vec3f(0.0, 1.0, 0.0) : Vec3f(1.0, 0.0, 0.0);
@@ -63,7 +63,7 @@ void ReflectiveRefractiveFuzz_t::bounce(const double (&uv)[2], const Shape_t* hi
             kr = (Rs * Rs + Rp * Rp)/2.0;
         }
 
-        if (unif_(my_rand::rng) > kr){// || coming_out){ // refracted. Not sure if should always be refracted when going out.
+        if (unif_(APTracer::Entities::rng) > kr){// || coming_out){ // refracted. Not sure if should always be refracted when going out.
             const double k = 1.0 - sint*sint;
 
             //newdir = k < 0 ? Vec3f() : (ray.direction_ * eta + normal_fuzz * (eta * cosi - std::sqrt(k))).normalize_inplace();

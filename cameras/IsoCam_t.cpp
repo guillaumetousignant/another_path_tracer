@@ -9,6 +9,15 @@
 
 #define PI 3.141592653589793238463
 
+using APTracer::Entities::Vec3f;
+using APTracer::Cameras::IsoCam_t;
+using APTracer::Entities::Ray_t;
+using APTracer::Entities::TransformMatrix_t;
+using APTracer::Entities::ImgBuffer_t;
+using APTracer::Entities::Medium_t;
+using APTracer::Entities::Skybox_t;
+using APTracer::Entities::Scene_t;
+
 IsoCam_t::IsoCam_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, const double (&fov)[2], const unsigned int (&subpix)[2], ImgBuffer_t* image, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double gammaind) 
     : Camera_t(transformation, filename, up, fov, subpix, medium_list, skybox, max_bounces, gammaind), image_(image), unif_(0.0, 1.0) {}
 
@@ -46,8 +55,8 @@ void IsoCam_t::raytrace(const Scene_t* scene) {
         for (unsigned int subindex = 0; subindex < subpix_[0] * subpix_[1]; ++subindex){
             const unsigned int l = subindex%subpix_[1]; // x
             const unsigned int k = subindex/subpix_[1]; // y
-            const double jitter_y = unif_(my_rand::rng);
-            const double jitter_x = unif_(my_rand::rng);
+            const double jitter_y = unif_(APTracer::Entities::rng);
+            const double jitter_x = unif_(APTracer::Entities::rng);
 
             const Vec3f subpix_ray_origin = ray_origin - vertical * subpix_span_y * ((double)k - (double)subpix_[0]/2.0 + jitter_y) + horizontal * subpix_span_x * ((double)l - (double)subpix_[1]/2.0 + jitter_x);;
 

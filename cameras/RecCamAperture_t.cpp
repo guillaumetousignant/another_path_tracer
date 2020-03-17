@@ -10,6 +10,15 @@
 
 #define PI 3.141592653589793238463
 
+using APTracer::Entities::Vec3f;
+using APTracer::Cameras::RecCamAperture_t;
+using APTracer::Entities::Ray_t;
+using APTracer::Entities::TransformMatrix_t;
+using APTracer::Entities::ImgBuffer_t;
+using APTracer::Entities::Medium_t;
+using APTracer::Entities::Skybox_t;
+using APTracer::Entities::Scene_t;
+
 RecCamAperture_t::RecCamAperture_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, const double (&fov)[2], const unsigned int (&subpix)[2], ImgBuffer_t* image, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double focal_length, double aperture, double gammaind) 
     : Camera_t(transformation, filename, up, fov, subpix, medium_list, skybox, max_bounces, gammaind),  
     image_(image), unif_(0.0, 1.0), focal_length_(focal_length), aperture_(aperture), focal_length_buffer_(focal_length) {}
@@ -50,10 +59,10 @@ void RecCamAperture_t::raytrace(const Scene_t* scene) {
         for (unsigned int subindex = 0; subindex < subpix_[0] * subpix_[1]; ++subindex){
             const unsigned int l = subindex%subpix_[1]; // x
             const unsigned int k = subindex/subpix_[1]; // y
-            const double rand_theta = unif_(my_rand::rng) * 2.0 * PI;
-            const double rand_r = std::sqrt(unif_(my_rand::rng)) * aperture_;
-            const double jitter_y = unif_(my_rand::rng);
-            const double jitter_x = unif_(my_rand::rng);
+            const double rand_theta = unif_(APTracer::Entities::rng) * 2.0 * PI;
+            const double rand_r = std::sqrt(unif_(APTracer::Entities::rng)) * aperture_;
+            const double jitter_y = unif_(APTracer::Entities::rng);
+            const double jitter_x = unif_(APTracer::Entities::rng);
 
             const Vec3f origin2 = origin_ + vertical * std::cos(rand_theta) * rand_r + horizontal * std::sin(rand_theta) * rand_r;
 
