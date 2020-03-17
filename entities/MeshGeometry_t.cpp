@@ -6,6 +6,9 @@
 #include <cmath>
 #include <algorithm>
 
+using APTracer::Entities::MeshGeometry_t;
+using APTracer::Entities::Vec3f;
+
 MeshGeometry_t::MeshGeometry_t(const std::string &filename){
     std::string ext = filename.substr(filename.find_last_of(".") + 1);
     std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);

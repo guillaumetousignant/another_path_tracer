@@ -65,19 +65,4 @@ namespace APTracer::Entities {
 
 std::ostream &operator<<(std::ostream &output, const APTracer::Entities::Vec3f &v);
 
-/*int main()
-{
-    Vec3f v1(2,3,-1);
-    Vec3f v2(2,5,6);
-    std::cout<<"v1 = "<<v1<<std::endl;
-    std::cout<<"v2 = "<<v2<<std::endl;
-    std::cout<<"v1 * 2 = "<<v1*2<<" and v1 / 2 = "<<v1/2<<std::endl;
-    std::cout<<"v1 + v2 = "<<v1+v2<<std::endl;
-    std::cout<<"v1 - v2 = "<<v1-v2<<std::endl;
-    std::cout<<"-v1 = "<<-v1<<std::endl;
-    std::cout<<"|v1| = "<<v1.magnitude()<<std::endl;
-    std::cout<<"Normalized v1 = "<<v1.normalize()<<std::endl;
-    std::cout<<"v1.v2 = "<<v1.dot(v2)<<std::endl;
-    std::cout<<"v1xv2 = "<<v1.cross(v2)<<std::endl; 
-}*/
 #endif

@@ -7,6 +7,9 @@
 #include <cmath>
 #include <algorithm>
 
+using APTracer::Entities::ImgBuffer_t;
+using APTracer::Entities::Vec3f;
+
 ImgBuffer_t::ImgBuffer_t(unsigned int size_x, unsigned int size_y): size_x_(size_x), size_y_(size_y), updates_(0) {
     img_ = new Vec3f[size_y_*size_x_];
 }

@@ -6,6 +6,9 @@
 #define cimg_display 0
 #include "CImg.h"
 
+using APTracer::Entities::Texture_t;
+using APTracer::Entities::Vec3f;
+
 Texture_t::Texture_t(const std::string &filename){
     const cimg_library::CImg<unsigned char> image(filename.c_str());
 

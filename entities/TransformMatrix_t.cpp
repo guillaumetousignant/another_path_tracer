@@ -1,6 +1,9 @@
 #include "TransformMatrix_t.h"
 #include <algorithm>
 
+using APTracer::Entities::TransformMatrix_t;
+using APTracer::Entities::Vec3f;
+
 TransformMatrix_t::TransformMatrix_t() : matrix_{1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1} {}
 
 TransformMatrix_t::TransformMatrix_t(double i0, double i1, double i2, double i3, double i4, double i5, double i6, double i7, double i8, double i9, double i10, double i11, double i12, double i13, double i14, double i15) 

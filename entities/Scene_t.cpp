@@ -5,6 +5,11 @@
 #include <limits>
 #include "AccelerationMultiGridVector_t.h"
 
+using APTracer::Entities::Scene_t;
+using APTracer::Entities::Shape_t;
+using APTracer::Shapes::MeshTop_t;
+using APTracer::Acceleration::AccelerationMultiGridVector_t;
+
 Scene_t::Scene_t() : geometry_(nullptr), n_obj_(0), acc_(nullptr) {}
 
 Scene_t::~Scene_t() {

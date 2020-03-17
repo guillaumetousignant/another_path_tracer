@@ -2,6 +2,8 @@
 #include <algorithm>
 #include <cmath>
 
+using APTracer::Entities::Vec3f;
+
 Vec3f::Vec3f() : v{0, 0, 0} {
 } 
 Vec3f::Vec3f(double x, double y, double z) : v{x, y, z} {

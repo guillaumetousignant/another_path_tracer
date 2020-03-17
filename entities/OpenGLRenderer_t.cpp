@@ -18,6 +18,12 @@
     #define GL_CLAMP_TO_EDGE 0x812F
 #endif
 
+using APTracer::Entities::OpenGLRenderer_t;
+using APTracer::Entities::Scene_t;
+using APTracer::Entities::Camera_t;
+using APTracer::Entities::ImgBufferOpenGL_t;
+using APTracer::Entities::Vec3f;
+
 OpenGLRenderer_t* openGL_renderer = nullptr;
 
 OpenGLRenderer_t::OpenGLRenderer_t() :

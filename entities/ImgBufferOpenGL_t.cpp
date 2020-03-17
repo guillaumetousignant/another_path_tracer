@@ -2,6 +2,9 @@
 #include <cmath>
 #include <algorithm>
 
+using APTracer::Entities::ImgBufferOpenGL_t;
+using APTracer::Entities::Vec3f;
+
 ImgBufferOpenGL_t::ImgBufferOpenGL_t(unsigned int size_x, unsigned int size_y): ImgBuffer_t(size_x, size_y) {
     img_gl_ = new unsigned char[size_x_*size_y_*3];
     for (unsigned int i = 0; i < size_x_*size_y_*3; ++i){
