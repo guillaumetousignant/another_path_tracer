@@ -6,7 +6,7 @@
 #include "Material_t.h"
 #include "Texture_t.h"
 
-using APTracer::Materials::Vec3f;
+using APTracer::Entities::Vec3f;
 
 APTracer::Materials::FresnelMixNormal_t::FresnelMixNormal_t(APTracer::Entities::Material_t* material_refracted, APTracer::Entities::Material_t* material_reflected, double ind, const APTracer::Entities::Texture_t* normal_map) : 
     MaterialMix_t(material_refracted, material_reflected), ind_(ind), normal_map_(normal_map), unif_(std::uniform_real_distribution<double>(0, 1)) {}
