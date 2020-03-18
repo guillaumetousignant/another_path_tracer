@@ -8,7 +8,7 @@ bool exists_test (const std::string& name) {
     return f.good();
 }
 
-std::string next_filename(const std::string &prefix) {
+std::string APTracer::next_filename(const std::string &prefix) {
     size_t point;
     std::string name, extension;
     std::string filename, filename_L, filename_R, filename_S;
