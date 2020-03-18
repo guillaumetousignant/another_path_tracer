@@ -15,8 +15,16 @@ namespace APTracer::Entities {
     class ImgBuffer_t;
 }
 
+using APTracer::Entities::TransformMatrix_t;
+using APTracer::Entities::Skybox_t;
+using APTracer::Entities::Scene_t;
+using APTracer::Entities::Medium_t;
+using APTracer::Entities::ImgBuffer_t;
+using APTracer::Entities::Camera_t;
+using APTracer::Entities::Vec3f;
+
 namespace APTracer::Cameras {
-    class IsoCamAperture_t final : public APTracer::Entities::Camera_t{
+    class IsoCamAperture_t final : public Camera_t{
         public:
             IsoCamAperture_t(TransformMatrix_t* transformation, const std::string &filename, APTracer::Entities::Vec3f up, const double (&fov)[2], const unsigned int (&subpix)[2], ImgBuffer_t* image, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double focal_length, double aperture, double gammaind);
             virtual ~IsoCamAperture_t() final;
