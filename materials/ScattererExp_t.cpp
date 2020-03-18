@@ -4,18 +4,18 @@
 
 #define PI 3.141592653589793238463
 
-using APTracer::Materials::ScattererExp_t;
+using APTracer::Entities::Vec3f;
 
-ScattererExp_t::ScattererExp_t(Vec3f emi_vol, Vec3f col_vol, double abs_dist_emi, double abs_dist_col, double scat_dist, double order, double scattering_angle) 
+APTracer::Materials::ScattererExp_t::ScattererExp_t(Vec3f emi_vol, Vec3f col_vol, double abs_dist_emi, double abs_dist_col, double scat_dist, double order, double scattering_angle) 
     : order_(order), scattering_angle_(scattering_angle), unif_(0.0, 1.0) {
     colour_vol_ = -col_vol.ln()/abs_dist_col;
     emission_vol_ = emi_vol*emi_vol/abs_dist_emi; // CHECK probably not right.
     scattering_coefficient_ = 1.0/scat_dist;
 }
 
-ScattererExp_t::~ScattererExp_t() {}
+APTracer::Materials::ScattererExp_t::~ScattererExp_t() {}
 
-bool ScattererExp_t::scatter(Ray_t &ray) {
+bool APTracer::Materials::ScattererExp_t::scatter(APTracer::Entities::Ray_t &ray) {
     const double distance = -std::log(unif_(APTracer::Entities::rng))/scattering_coefficient_;
     bool intersected = false;
     if (distance < ray.dist_){

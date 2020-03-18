@@ -2,9 +2,7 @@
 #include "TransformMatrix_t.h"
 #include "Medium_t.h"
 
-using APTracer::Materials::PortalScattererTop_t;
-
-PortalScattererTop_t::PortalScattererTop_t(TransformMatrix_t* transformation, std::list<Medium_t*> medium_list)
+APTracer::Materials::PortalScattererTop_t::PortalScattererTop_t(APTracer::Entities::TransformMatrix_t* transformation, std::list<APTracer::Entities::Medium_t*> medium_list)
     : transformation_(transformation), medium_list_(medium_list) {}
 
-PortalScattererTop_t::~PortalScattererTop_t() {}
+APTracer::Materials::PortalScattererTop_t::~PortalScattererTop_t() {}

@@ -6,14 +6,14 @@
 #define EPSILON 0.00000001
 #define PI 3.141592653589793238463
 
-using APTracer::Materials::ReflectiveFuzz_t;
+using APTracer::Entities::Vec3f;
 
-ReflectiveFuzz_t::ReflectiveFuzz_t(const Vec3f &emission, const Vec3f &colour, double order, double diffusivity) : 
+APTracer::Materials::ReflectiveFuzz_t::ReflectiveFuzz_t(const Vec3f &emission, const Vec3f &colour, double order, double diffusivity) : 
     emission_(emission), colour_(colour), order_(order), diffusivity_(diffusivity), unif_(0, 1) {}
 
-ReflectiveFuzz_t::~ReflectiveFuzz_t(){}
+APTracer::Materials::ReflectiveFuzz_t::~ReflectiveFuzz_t(){}
 
-void ReflectiveFuzz_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray) {
+void APTracer::Materials::ReflectiveFuzz_t::bounce(const double (&uv)[2], const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
     Vec3f normal;
 
     hit_obj->normal(ray, uv, normal);

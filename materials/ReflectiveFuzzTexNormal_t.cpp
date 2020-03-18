@@ -7,14 +7,14 @@
 #define EPSILON 0.00000001
 #define PI 3.141592653589793238463
 
-using APTracer::Materials::ReflectiveFuzzTexNormal_t;
+using APTracer::Entities::Vec3f;
 
-ReflectiveFuzzTexNormal_t::ReflectiveFuzzTexNormal_t(const Vec3f &emission, Texture_t* texture, const Texture_t* normal_map, double order, double diffusivity)
+APTracer::Materials::ReflectiveFuzzTexNormal_t::ReflectiveFuzzTexNormal_t(const Vec3f &emission, APTracer::Entities::Texture_t* texture, const APTracer::Entities::Texture_t* normal_map, double order, double diffusivity)
     : texture_(texture), emission_(emission), normal_map_(normal_map), order_(order), diffusivity_(diffusivity), unif_(0, 1) {}
 
-ReflectiveFuzzTexNormal_t::~ReflectiveFuzzTexNormal_t(){}
+APTracer::Materials::ReflectiveFuzzTexNormal_t::~ReflectiveFuzzTexNormal_t(){}
 
-void ReflectiveFuzzTexNormal_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray) {
+void APTracer::Materials::ReflectiveFuzzTexNormal_t::bounce(const double (&uv)[2], const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
     Vec3f normal;
     Vec3f tangent;
     Vec3f bitangent;

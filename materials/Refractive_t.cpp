@@ -4,14 +4,14 @@
 
 #define EPSILON 0.00000001
 
-using APTracer::Materials::Refractive_t;
+using APTracer::Entities::Vec3f;
 
-Refractive_t::Refractive_t(const Vec3f &emission, const Vec3f &colour, double ind, unsigned int priority, ScatteringFunction_t* scattering) : 
+APTracer::Materials::Refractive_t::Refractive_t(const Vec3f &emission, const Vec3f &colour, double ind, unsigned int priority, APTracer::Entities::ScatteringFunction_t* scattering) : 
     Medium_t(ind, priority, scattering), emission_(emission), colour_(colour) {}
 
-Refractive_t::~Refractive_t(){}
+APTracer::Materials::Refractive_t::~Refractive_t(){}
 
-void Refractive_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray) {
+void APTracer::Materials::Refractive_t::bounce(const double (&uv)[2], const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
     Vec3f normal;
     Vec3f newdir;
 

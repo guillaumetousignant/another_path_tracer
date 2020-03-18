@@ -5,14 +5,14 @@
 #include "RandomGenerator_t.h"
 #include "Material_t.h"
 
-using APTracer::Materials::FresnelMix_t;
+using APTracer::Entities::Vec3f;
 
-FresnelMix_t::FresnelMix_t(Material_t* material_refracted, Material_t* material_reflected, double ind) : 
+APTracer::Materials::FresnelMix_t::FresnelMix_t(APTracer::Entities::Material_t* material_refracted, APTracer::Entities::Material_t* material_reflected, double ind) : 
     MaterialMix_t(material_refracted, material_reflected), ind_(ind), unif_(std::uniform_real_distribution<double>(0, 1)) {}
 
-FresnelMix_t::~FresnelMix_t(){}
+APTracer::Materials::FresnelMix_t::~FresnelMix_t(){}
 
-void FresnelMix_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray) {
+void APTracer::Materials::FresnelMix_t::bounce(const double (&uv)[2], const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
     Vec3f normal;
     double kr;
 

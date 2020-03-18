@@ -3,14 +3,14 @@
 
 #define EPSILON 0.00000001
 
-using APTracer::Materials::Reflective_t;
+using APTracer::Entities::Vec3f;
 
-Reflective_t::Reflective_t(const Vec3f &emission, const Vec3f &colour) : 
+APTracer::Materials::Reflective_t::Reflective_t(const Vec3f &emission, const Vec3f &colour) : 
     emission_(emission), colour_(colour) {}
 
-Reflective_t::~Reflective_t(){}
+APTracer::Materials::Reflective_t::~Reflective_t(){}
 
-void Reflective_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray) {
+void APTracer::Materials::Reflective_t::bounce(const double (&uv)[2], const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
     Vec3f normal;
 
     hit_obj->normal(ray, uv, normal);

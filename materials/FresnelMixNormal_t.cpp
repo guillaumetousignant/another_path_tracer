@@ -6,14 +6,14 @@
 #include "Material_t.h"
 #include "Texture_t.h"
 
-using APTracer::Materials::FresnelMixNormal_t;
+using APTracer::Materials::Vec3f;
 
-FresnelMixNormal_t::FresnelMixNormal_t(Material_t* material_refracted, Material_t* material_reflected, double ind, const Texture_t* normal_map) : 
+APTracer::Materials::FresnelMixNormal_t::FresnelMixNormal_t(APTracer::Entities::Material_t* material_refracted, APTracer::Entities::Material_t* material_reflected, double ind, const APTracer::Entities::Texture_t* normal_map) : 
     MaterialMix_t(material_refracted, material_reflected), ind_(ind), normal_map_(normal_map), unif_(std::uniform_real_distribution<double>(0, 1)) {}
 
-FresnelMixNormal_t::~FresnelMixNormal_t(){}
+APTracer::Materials::FresnelMixNormal_t::~FresnelMixNormal_t(){}
 
-void FresnelMixNormal_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray) {
+void APTracer::Materials::FresnelMixNormal_t::bounce(const double (&uv)[2], const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
     Vec3f normal;
     Vec3f tangent;
     Vec3f bitangent;

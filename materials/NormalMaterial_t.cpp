@@ -2,13 +2,13 @@
 #include "Shape_t.h"
 #include "Vec3f.h"
 
-using APTracer::Materials::NormalMaterial_t;
+using APTracer::Entities::Vec3f;
 
-NormalMaterial_t::NormalMaterial_t() {}
+APTracer::Materials::NormalMaterial_t::NormalMaterial_t() {}
 
-NormalMaterial_t::~NormalMaterial_t(){}
+APTracer::Materials::NormalMaterial_t::~NormalMaterial_t(){}
 
-void NormalMaterial_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray) {
+void APTracer::Materials::NormalMaterial_t::bounce(const double (&uv)[2], const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
     Vec3f normal;
 
     hit_obj->normal(ray, uv, normal);

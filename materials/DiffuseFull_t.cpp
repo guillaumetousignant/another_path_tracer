@@ -7,14 +7,14 @@
 #define EPSILON 0.00000001
 #define PI 3.141592653589793238463
 
-using APTracer::Materials::DiffuseFull_t;
+using APTracer::Entities::Vec3f;
 
-DiffuseFull_t::DiffuseFull_t(const Texture_t* emission_map, const Texture_t* texture, double roughness) : 
+APTracer::Materials::DiffuseFull_t::DiffuseFull_t(const APTracer::Entities::Texture_t* emission_map, const APTracer::Entities::Texture_t* texture, double roughness) : 
     emission_map_(emission_map), texture_(texture), roughness_(roughness), unif_(std::uniform_real_distribution<double>(0, 1)) {}
 
-DiffuseFull_t::~DiffuseFull_t(){}
+APTracer::Materials::DiffuseFull_t::~DiffuseFull_t(){}
 
-void DiffuseFull_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray) {
+void APTracer::Materials::DiffuseFull_t::bounce(const double (&uv)[2], const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
     Vec3f normal;
     double tuv[2];
 

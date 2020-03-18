@@ -4,22 +4,17 @@
 
 #define EPSILON 0.00000001
 
-using APTracer::Materials::Transparent_t;
-using APTracer::Entities::ScatteringFunction_t;
-using APTracer::Entities::Shape_t;
-using APTracer::Entities::Medium_t;
-using APTracer::Entities::Ray_t;
 using APTracer::Entities::Vec3f;
 
-Transparent_t::Transparent_t(unsigned int priority, ScatteringFunction_t* scattering) : Medium_t(1.0, priority, scattering) {
+APTracer::Materials::Transparent_t::Transparent_t(unsigned int priority, APTracer::Entities::ScatteringFunction_t* scattering) : Medium_t(1.0, priority, scattering) {
 
 }
 
-Transparent_t::~Transparent_t() {
+APTracer::Materials::Transparent_t::~Transparent_t() {
 
 }
 
-void Transparent_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray){
+void APTracer::Materials::Transparent_t::bounce(const double (&uv)[2], const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray){
     Vec3f normal;
 
     hit_obj->normal(ray, uv, normal);

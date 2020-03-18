@@ -6,14 +6,14 @@
 
 #define EPSILON 0.00000001
 
-using APTracer::Materials::Portal_t;
+using APTracer::Entities::Vec3f;
 
-Portal_t::Portal_t(TransformMatrix_t* transformation, std::list<Medium_t*> medium_list) 
+APTracer::Materials::Portal_t::Portal_t(APTracer::Entities::TransformMatrix_t* transformation, std::list<APTracer::Entities::Medium_t*> medium_list) 
     : PortalTop_t(transformation, medium_list) {}
 
-Portal_t::~Portal_t(){}
+APTracer::Materials::Portal_t::~Portal_t(){}
 
-void Portal_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray) {
+void APTracer::Materials::Portal_t::bounce(const double (&uv)[2], const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
     Vec3f normal;
     hit_obj->normal(ray, uv, normal);
 

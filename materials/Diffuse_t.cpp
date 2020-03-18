@@ -6,14 +6,14 @@
 #define EPSILON 0.00001 // was 0.00001, 0.01 works ok when *t
 #define PI 3.141592653589793238463
 
-using APTracer::Materials::Diffuse_t;
+using APTracer::Entities::Vec3f;
 
-Diffuse_t::Diffuse_t(const Vec3f &emission, const Vec3f &colour, double roughness) : 
+APTracer::Materials::Diffuse_t::Diffuse_t(const Vec3f &emission, const Vec3f &colour, double roughness) : 
     emission_(emission), colour_(colour), roughness_(roughness), unif_(std::uniform_real_distribution<double>(0, 1)) {}
 
-Diffuse_t::~Diffuse_t(){}
+APTracer::Materials::Diffuse_t::~Diffuse_t(){}
 
-void Diffuse_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray) {
+void APTracer::Materials::Diffuse_t::bounce(const double (&uv)[2], const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
     Vec3f normal;
 
     hit_obj->normal(ray, uv, normal);

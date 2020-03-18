@@ -4,14 +4,14 @@
 #include "Vec3f.h"
 #include "Material_t.h"
 
-using APTracer::Materials::RandomMixIn_t;
+using APTracer::Entities::Vec3f;
 
-RandomMixIn_t::RandomMixIn_t(Material_t* material_refracted, Material_t* material_reflected, double ratio) : 
+APTracer::Materials::RandomMixIn_t::RandomMixIn_t(APTracer::Entities::Material_t* material_refracted, APTracer::Entities::Material_t* material_reflected, double ratio) : 
     MaterialMix_t(material_refracted, material_reflected), ratio_(ratio), unif_(std::uniform_real_distribution<double>(0, 1)) {}
 
-RandomMixIn_t::~RandomMixIn_t(){}
+APTracer::Materials::RandomMixIn_t::~RandomMixIn_t(){}
 
-void RandomMixIn_t::bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray) {
+void APTracer::Materials::RandomMixIn_t::bounce(const double (&uv)[2], const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
     Vec3f normal;
     //double cosi;
 
