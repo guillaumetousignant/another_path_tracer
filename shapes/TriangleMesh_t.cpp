@@ -9,18 +9,12 @@
 #define PI 3.141592653589793238463
 #define EPSILON 0.00000001
 
-using APTracer::Shapes::TriangleMesh_t;
-using APTracer::Entities::Shape_t;
-using APTracer::Entities::Material_t;
-using APTracer::Entities::TransformMatrix_t;
-using APTracer::Entities::Ray_t;
 using APTracer::Entities::Vec3f;
-using APTracer::Entities::MeshGeometry_t;
 
-TriangleMesh_t::TriangleMesh_t(Material_t *material, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom, unsigned int index) 
+APTracer::Shapes::TriangleMesh_t::TriangleMesh_t(APTracer::Entities::Material_t *material, APTracer::Entities::TransformMatrix_t *transform_matrix, APTracer::Entities::MeshGeometry_t* geom, unsigned int index) 
     : Shape_t(material, transform_matrix), geom_(geom), index_(index) {
 
-    const TransformMatrix_t transform_norm = transformation_->transformDir();
+    const APTracer::Entities::TransformMatrix_t transform_norm = transformation_->transformDir();
 
     points_[0] = transformation_->multVec(geom_->v_[3 * index_]);
     points_[1] = transformation_->multVec(geom_->v_[3 * index_ + 1]);
@@ -47,10 +41,10 @@ TriangleMesh_t::TriangleMesh_t(Material_t *material, TransformMatrix_t *transfor
     tangent_vec_ = v0v1_ * tuv_to_world_[0] + v0v2_ * tuv_to_world_[1];
 }
 
-TriangleMesh_t::~TriangleMesh_t(){}
+APTracer::Shapes::TriangleMesh_t::~TriangleMesh_t(){}
 
-void TriangleMesh_t::update() {
-    const TransformMatrix_t transform_norm = transformation_->transformDir();
+void APTracer::Shapes::TriangleMesh_t::update() {
+    const APTracer::Entities::TransformMatrix_t transform_norm = transformation_->transformDir();
 
     points_[0] = transformation_->multVec(geom_->v_[3 * index_]);
     points_[1] = transformation_->multVec(geom_->v_[3 * index_ + 1]);
@@ -65,7 +59,7 @@ void TriangleMesh_t::update() {
     tangent_vec_ = v0v1_ * tuv_to_world_[0] + v0v2_ * tuv_to_world_[1];
 }
 
-bool TriangleMesh_t::intersection(const Ray_t &ray, double &t, double (&uv)[2]) const {
+bool APTracer::Shapes::TriangleMesh_t::intersection(const APTracer::Entities::Ray_t &ray, double &t, double (&uv)[2]) const {
     const Vec3f pvec = ray.direction_.cross(v0v2_);
     const double det = v0v1_.dot(pvec);
 
@@ -106,7 +100,7 @@ bool TriangleMesh_t::intersection(const Ray_t &ray, double &t, double (&uv)[2]) 
     return true;
 }
 
-void TriangleMesh_t::normaluv(const Ray_t &ray, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec) const {
+void APTracer::Shapes::TriangleMesh_t::normaluv(const APTracer::Entities::Ray_t &ray, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec) const {
     const Vec3f distance = Vec3f(1.0 - uv[0] - uv[1], uv[0], uv[1]);
     normalvec = Vec3f(distance[0] * normals_[0][0] + distance[1] * normals_[1][0] + distance[2] * normals_[2][0], 
         distance[0] * normals_[0][1] + distance[1] * normals_[1][1] + distance[2] * normals_[2][1],
@@ -116,7 +110,7 @@ void TriangleMesh_t::normaluv(const Ray_t &ray, const double (&uv)[2], double (&
     tuv[1] = distance[0] * geom_->vt_[3*index_][1] + distance[1] * geom_->vt_[3*index_ + 1][1] + distance[2] * geom_->vt_[3*index_ + 2][1];
 }
 
-void TriangleMesh_t::normal(const Ray_t &ray, const double (&uv)[2], Vec3f &normalvec) const {
+void APTracer::Shapes::TriangleMesh_t::normal(const APTracer::Entities::Ray_t &ray, const double (&uv)[2], Vec3f &normalvec) const {
     const Vec3f distance = Vec3f(1.0 - uv[0] - uv[1], uv[0], uv[1]);
     normalvec = Vec3f(distance[0] * normals_[0][0] + distance[1] * normals_[1][0] + distance[2] * normals_[2][0], 
         distance[0] * normals_[0][1] + distance[1] * normals_[1][1] + distance[2] * normals_[2][1],
@@ -124,7 +118,7 @@ void TriangleMesh_t::normal(const Ray_t &ray, const double (&uv)[2], Vec3f &norm
     // Matrix multiplication, optimise.
 }
 
-void TriangleMesh_t::normal_uv_tangent(const Ray_t &ray, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec, Vec3f &tangentvec) const {
+void APTracer::Shapes::TriangleMesh_t::normal_uv_tangent(const APTracer::Entities::Ray_t &ray, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec, Vec3f &tangentvec) const {
     const Vec3f distance = Vec3f(1.0 - uv[0] - uv[1], uv[0], uv[1]);
     normalvec = Vec3f(distance[0] * normals_[0][0] + distance[1] * normals_[1][0] + distance[2] * normals_[2][0], 
         distance[0] * normals_[0][1] + distance[1] * normals_[1][1] + distance[2] * normals_[2][1],
@@ -136,14 +130,14 @@ void TriangleMesh_t::normal_uv_tangent(const Ray_t &ray, const double (&uv)[2], 
     tangentvec = tangent_vec_.cross(normalvec).normalize_inplace();
 }  
 
-void TriangleMesh_t::normal_face(const Ray_t &ray, Vec3f &normalvec) const{
+void APTracer::Shapes::TriangleMesh_t::normal_face(const APTracer::Entities::Ray_t &ray, Vec3f &normalvec) const{
     normalvec = v0v1_.cross(v0v2_).normalize_inplace();
 }
 
-Vec3f TriangleMesh_t::mincoord() const {
+Vec3f APTracer::Shapes::TriangleMesh_t::mincoord() const {
     return points_[0].getMin(points_[1]).min(points_[2]);
 }
 
-Vec3f TriangleMesh_t::maxcoord() const {
+Vec3f APTracer::Shapes::TriangleMesh_t::maxcoord() const {
     return points_[0].getMax(points_[1]).max(points_[2]);
 }

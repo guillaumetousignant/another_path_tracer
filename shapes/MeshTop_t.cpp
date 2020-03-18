@@ -4,18 +4,13 @@
 #include <iostream>
 #include <limits>
 
-using APTracer::Shapes::MeshTop_t;
-using APTracer::Entities::Material_t;
-using APTracer::Entities::TransformMatrix_t;
-using APTracer::Entities::MeshGeometry_t;
-using APTracer::Entities::Ray_t;
 using APTracer::Entities::Vec3f;
 
-MeshTop_t::MeshTop_t(Material_t *material, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom) 
+APTracer::Shapes::MeshTop_t::MeshTop_t(APTracer::Entities::Material_t *material, APTracer::Entities::TransformMatrix_t *transform_matrix, APTracer::Entities::MeshGeometry_t* geom) 
     : material_(material), transformation_(transform_matrix), geom_(geom), n_tris_(geom->n_tris_) {
 }      
 
-MeshTop_t::~MeshTop_t(){
+APTracer::Shapes::MeshTop_t::~MeshTop_t(){
     if (triangles_ != nullptr){
         for (unsigned int i = 0; i < n_tris_; i++){
             if (triangles_[i] != nullptr){
@@ -26,13 +21,13 @@ MeshTop_t::~MeshTop_t(){
     }
 }
 
-void MeshTop_t::update(){
+void APTracer::Shapes::MeshTop_t::update(){
     for (unsigned int i = 0; i < n_tris_; i++){
         triangles_[i]->update();
     }
 }
 
-void MeshTop_t::intersection(const Ray_t &ray, bool &intersected, double &t, double (&uv)[2]) const {
+void APTracer::Shapes::MeshTop_t::intersection(const APTracer::Entities::Ray_t &ray, bool &intersected, double &t, double (&uv)[2]) const {
     t = std::numeric_limits<double>::infinity();
     intersected = false;
     uv[0] = 0;
@@ -40,19 +35,19 @@ void MeshTop_t::intersection(const Ray_t &ray, bool &intersected, double &t, dou
     std::cout << "Warning, do not intersect meshes directly." << std::endl;   
 }
 
-void MeshTop_t::normaluv(const Ray_t &ray, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec) const {
+void APTracer::Shapes::MeshTop_t::normaluv(const APTracer::Entities::Ray_t &ray, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec) const {
     tuv[0] = 0;
     tuv[1] = 0;
     normalvec = Vec3f();
     std::cout << "Warning, do not calculate normals on meshes." << std::endl;
 }
 
-void MeshTop_t::normal(const Ray_t &ray, const double (&uv)[2], Vec3f &normalvec) const {
+void APTracer::Shapes::MeshTop_t::normal(const APTracer::Entities::Ray_t &ray, const double (&uv)[2], Vec3f &normalvec) const {
     normalvec = Vec3f();
     std::cout << "Warning, do not calculate normals on meshes." << std::endl;
 }
 
-Vec3f MeshTop_t::mincoord() const {
+Vec3f APTracer::Shapes::MeshTop_t::mincoord() const {
     Vec3f coord = Vec3f(std::numeric_limits<double>::infinity());
     for (unsigned int i = 0; i < n_tris_; i++){
         coord.min(triangles_[i]->mincoord());
@@ -60,7 +55,7 @@ Vec3f MeshTop_t::mincoord() const {
     return coord;
 }
 
-Vec3f MeshTop_t::maxcoord() const {
+Vec3f APTracer::Shapes::MeshTop_t::maxcoord() const {
     Vec3f coord = Vec3f(-std::numeric_limits<double>::infinity());
     for (unsigned int i = 0; i < n_tris_; i++){
         coord.max(triangles_[i]->maxcoord());

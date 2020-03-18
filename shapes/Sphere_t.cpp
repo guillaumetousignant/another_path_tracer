@@ -6,34 +6,29 @@
 
 #define PI 3.141592653589793238463
 
-using APTracer::Shapes::Sphere_t;
-using APTracer::Entities::Shape_t;
-using APTracer::Entities::Material_t;
-using APTracer::Entities::TransformMatrix_t;
-using APTracer::Entities::Ray_t;
 using APTracer::Entities::Vec3f;
 
-Sphere_t::Sphere_t(Material_t *material, TransformMatrix_t *transform_matrix): Shape_t(material, transform_matrix){
+APTracer::Shapes::Sphere_t::Sphere_t(APTracer::Entities::Material_t *material, APTracer::Entities::TransformMatrix_t *transform_matrix): Shape_t(material, transform_matrix){
     origin_ = transformation_->multVec(Vec3f());
     radius_ = transformation_->getScale(); 
-    const TransformMatrix_t transform_norm = transformation_->transformDir();
+    const APTracer::Entities::TransformMatrix_t transform_norm = transformation_->transformDir();
     const Vec3f direction = transform_norm.multDir(Vec3f(0.0, 0.0, 1.0)).to_sph(); 
     const Vec3f direction2 = transform_norm.multDir(Vec3f(1.0, 0.0, 0.0)).to_sph();
     direction_sph_ = Vec3f(1.0, direction[1], direction2[2]);
 }
 
-Sphere_t::~Sphere_t(){}
+APTracer::Shapes::Sphere_t::~Sphere_t(){}
 
-void Sphere_t::update(){
+void APTracer::Shapes::Sphere_t::update(){
     origin_ = transformation_->multVec(Vec3f());
     radius_ = transformation_->getScale();
-    const TransformMatrix_t transform_norm = transformation_->transformDir();
+    const APTracer::Entities::TransformMatrix_t transform_norm = transformation_->transformDir();
     const Vec3f direction = transform_norm.multDir(Vec3f(0.0, 0.0, 1.0)).to_sph(); 
     const Vec3f direction2 = transform_norm.multDir(Vec3f(1.0, 0.0, 0.0)).to_sph();
     direction_sph_ = Vec3f(1.0, direction[1], direction2[2]);
 }
 
-bool Sphere_t::intersection(const Ray_t &ray, double &t, double (&uv)[2]) const {
+bool APTracer::Shapes::Sphere_t::intersection(const APTracer::Entities::Ray_t &ray, double &t, double (&uv)[2]) const {
     const Vec3f to_center = origin_ - ray.origin_;
     const double b = to_center.dot(ray.direction_);
     const double c = to_center.dot(to_center) - pow(radius_, 2);
@@ -63,7 +58,7 @@ bool Sphere_t::intersection(const Ray_t &ray, double &t, double (&uv)[2]) const 
     return true;
 }
 
-void Sphere_t::normaluv(const Ray_t &ray, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec) const {
+void APTracer::Shapes::Sphere_t::normaluv(const APTracer::Entities::Ray_t &ray, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec) const {
     Vec3f sph = Vec3f(1.0, (1.0 - uv[1]) * PI, (uv[0] - 0.5) * 2.0 * PI);
     normalvec = sph.get_xyz();
 
@@ -91,11 +86,11 @@ void Sphere_t::normaluv(const Ray_t &ray, const double (&uv)[2], double (&tuv)[2
     tuv[1] = 1.0 - sph[1]/PI;
 }
 
-void Sphere_t::normal(const Ray_t &ray, const double (&uv)[2], Vec3f &normalvec) const {
+void APTracer::Shapes::Sphere_t::normal(const APTracer::Entities::Ray_t &ray, const double (&uv)[2], Vec3f &normalvec) const {
     normalvec = Vec3f(1.0, (1.0 - uv[1]) * PI, (uv[0] - 0.5) * 2.0 * PI).to_xyz();
 }
 
-void Sphere_t::normal_uv_tangent(const Ray_t &ray, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec, Vec3f &tangentvec) const {
+void APTracer::Shapes::Sphere_t::normal_uv_tangent(const APTracer::Entities::Ray_t &ray, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec, Vec3f &tangentvec) const {
     Vec3f sph = Vec3f(1.0, (1.0 - uv[1]) * PI, (uv[0] - 0.5) * 2.0 * PI);
     normalvec = sph.get_xyz();
 
@@ -125,10 +120,10 @@ void Sphere_t::normal_uv_tangent(const Ray_t &ray, const double (&uv)[2], double
     tangentvec = direction_sph_.get_xyz().cross(normalvec).normalize_inplace();
 } 
 
-Vec3f Sphere_t::mincoord() const {
+Vec3f APTracer::Shapes::Sphere_t::mincoord() const {
     return origin_ - radius_;
 }
 
-Vec3f Sphere_t::maxcoord() const {
+Vec3f APTracer::Shapes::Sphere_t::maxcoord() const {
     return origin_ + radius_;
 }

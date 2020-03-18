@@ -8,14 +8,9 @@
 #define PI 3.141592653589793238463
 #define EPSILON 0.00000001
 
-using APTracer::Shapes::TriangleMotionblur_t;
-using APTracer::Entities::Shape_t;
-using APTracer::Entities::Material_t;
-using APTracer::Entities::TransformMatrix_t;
-using APTracer::Entities::Ray_t;
 using APTracer::Entities::Vec3f;
 
-TriangleMotionblur_t::TriangleMotionblur_t(Material_t *material, TransformMatrix_t *transform_matrix, Vec3f* points, Vec3f* normals, double** texcoord) 
+APTracer::Shapes::TriangleMotionblur_t::TriangleMotionblur_t(APTracer::Entities::Material_t *material, APTracer::Entities::TransformMatrix_t *transform_matrix, Vec3f* points, Vec3f* normals, double** texcoord) 
     : Shape_t(material, transform_matrix), points_orig_{points[0], points[1], points[2]} {
 
     if (normals == nullptr){
@@ -47,7 +42,7 @@ TriangleMotionblur_t::TriangleMotionblur_t(Material_t *material, TransformMatrix
         texture_coordinates_[2][1] = texcoord[2][1];
     }
 
-    const TransformMatrix_t transform_norm = transformation_->transformDir();
+    const APTracer::Entities::TransformMatrix_t transform_norm = transformation_->transformDir();
 
     points_[0] = transformation_->multVec(points_orig_[0]);
     points_[1] = transformation_->multVec(points_orig_[1]);
@@ -83,10 +78,10 @@ TriangleMotionblur_t::TriangleMotionblur_t(Material_t *material, TransformMatrix
     tangent_vec_last_ = tangent_vec_;
 }
 
-TriangleMotionblur_t::~TriangleMotionblur_t(){}
+APTracer::Shapes::TriangleMotionblur_t::~TriangleMotionblur_t(){}
 
-void TriangleMotionblur_t::update() {    
-    const TransformMatrix_t transform_norm = transformation_->transformDir();
+void APTracer::Shapes::TriangleMotionblur_t::update() {    
+    const APTracer::Entities::TransformMatrix_t transform_norm = transformation_->transformDir();
 
     points_last_[0] = points_[0];
     points_last_[1] = points_[1];
@@ -110,7 +105,7 @@ void TriangleMotionblur_t::update() {
     tangent_vec_ = v0v1_ * tuv_to_world_[0] + v0v2_ * tuv_to_world_[1];
 }
 
-bool TriangleMotionblur_t::intersection(const Ray_t &ray, double &t, double (&uv)[2]) const {
+bool APTracer::Shapes::TriangleMotionblur_t::intersection(const APTracer::Entities::Ray_t &ray, double &t, double (&uv)[2]) const {
     const Vec3f v0v1_int = v0v1_ * ray.time_ + v0v1_last_ * (1.0 - ray.time_);
     const Vec3f v0v2_int = v0v2_ * ray.time_ + v0v2_last_ * (1.0 - ray.time_);
 
@@ -158,7 +153,7 @@ bool TriangleMotionblur_t::intersection(const Ray_t &ray, double &t, double (&uv
     return true;
 }
 
-void TriangleMotionblur_t::normaluv(const Ray_t &ray, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec) const {
+void APTracer::Shapes::TriangleMotionblur_t::normaluv(const APTracer::Entities::Ray_t &ray, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec) const {
     const Vec3f normals_int[3] = {normals_[0] * ray.time_ + normals_last_[0] * (1.0 - ray.time_),
                                     normals_[1] * ray.time_ + normals_last_[1] * (1.0 - ray.time_),
                                     normals_[2] * ray.time_ + normals_last_[2] * (1.0 - ray.time_)};
@@ -172,7 +167,7 @@ void TriangleMotionblur_t::normaluv(const Ray_t &ray, const double (&uv)[2], dou
     tuv[1] = distance[0] * texture_coordinates_[0][1] + distance[1] * texture_coordinates_[1][1] + distance[2] * texture_coordinates_[2][1];
 }
 
-void TriangleMotionblur_t::normal(const Ray_t &ray, const double (&uv)[2], Vec3f &normalvec) const {
+void APTracer::Shapes::TriangleMotionblur_t::normal(const APTracer::Entities::Ray_t &ray, const double (&uv)[2], Vec3f &normalvec) const {
     const Vec3f normals_int[3] = {normals_[0] * ray.time_ + normals_last_[0] * (1.0 - ray.time_),
                                     normals_[1] * ray.time_ + normals_last_[1] * (1.0 - ray.time_),
                                     normals_[2] * ray.time_ + normals_last_[2] * (1.0 - ray.time_)};
@@ -184,7 +179,7 @@ void TriangleMotionblur_t::normal(const Ray_t &ray, const double (&uv)[2], Vec3f
     // Matrix multiplication, optimise.
 }
 
-void TriangleMotionblur_t::normal_uv_tangent(const Ray_t &ray, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec, Vec3f &tangentvec) const {
+void APTracer::Shapes::TriangleMotionblur_t::normal_uv_tangent(const APTracer::Entities::Ray_t &ray, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec, Vec3f &tangentvec) const {
     const Vec3f normals_int[3] = {normals_[0] * ray.time_ + normals_last_[0] * (1.0 - ray.time_),
                                     normals_[1] * ray.time_ + normals_last_[1] * (1.0 - ray.time_),
                                     normals_[2] * ray.time_ + normals_last_[2] * (1.0 - ray.time_)};
@@ -201,17 +196,17 @@ void TriangleMotionblur_t::normal_uv_tangent(const Ray_t &ray, const double (&uv
     tangentvec = tangent_vec_int.cross(normalvec).normalize_inplace();
 } 
 
-void TriangleMotionblur_t::normal_face(const Ray_t &ray, Vec3f &normalvec) const{
+void APTracer::Shapes::TriangleMotionblur_t::normal_face(const APTracer::Entities::Ray_t &ray, Vec3f &normalvec) const{
     const Vec3f v0v1_int = v0v1_ * ray.time_ + v0v1_last_ * (1.0 - ray.time_);
     const Vec3f v0v2_int = v0v2_ * ray.time_ + v0v2_last_ * (1.0 - ray.time_);
 
     normalvec = v0v1_int.cross(v0v2_int).normalize_inplace();
 }
 
-Vec3f TriangleMotionblur_t::mincoord() const {
+Vec3f APTracer::Shapes::TriangleMotionblur_t::mincoord() const {
     return points_[0].getMin(points_[1]).min(points_[2]).min(points_last_[0]).min(points_last_[1]).min(points_last_[2]);
 }
 
-Vec3f TriangleMotionblur_t::maxcoord() const {
+Vec3f APTracer::Shapes::TriangleMotionblur_t::maxcoord() const {
     return points_[0].getMax(points_[1]).max(points_[2]).max(points_last_[0]).max(points_last_[1]).max(points_last_[2]);
 }
