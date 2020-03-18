@@ -162,50 +162,82 @@ DEBUGLIBS += -lpthread
 all : release $(ReleaseObjectFiles)
 
 debug : .debug  begun $(DebugObjectFiles) $(ExecutableDebugObjectFile)
+	@printf '   Building Library...'
+	@ar crf $(addprefix lib/lib,$(current_dir)).a $(DebugObjectFiles)
+	@printf 'Done'
+	@printf '\n'
 	@printf '   Linking Debug...'
-	@$(CXX) $(CXXFLAGS) $(DEBUGFLAGS) $(DebugObjectFiles) $(ExecutableDebugObjectFile) -o $(addprefix bin/,$(Executable)) $(IMAGELIBS) $(DISPLAYLIBS) $(DEBUGLIBS)
+	@$(CXX) $(CXXFLAGS) $(DEBUGFLAGS) $(ExecutableDebugObjectFile) -L./lib -l$(current_dir) -o $(addprefix bin/,$(Executable)) $(IMAGELIBS) $(DISPLAYLIBS) $(DEBUGLIBS)
 	@printf 'Done'
 	@printf '\n'
 
 release : .release begun $(ReleaseObjectFiles) $(ExecutableReleaseObjectFile)
+	@printf '   Building Library...'
+	@ar crf $(addprefix lib/lib,$(current_dir)).a $(ReleaseObjectFiles)
+	@printf 'Done'
+	@printf '\n'
 	@printf '   Linking Release...'
-	@$(CXX) $(CXXFLAGS) $(RELEASEFLAGS) $(ReleaseObjectFiles) $(ExecutableReleaseObjectFile) -o $(addprefix bin/,$(Executable)) $(IMAGELIBS) $(DISPLAYLIBS) -D cimg_use_openmp=1
+	@$(CXX) $(CXXFLAGS) $(RELEASEFLAGS) $(ExecutableReleaseObjectFile) -L./lib -l$(current_dir) -o $(addprefix bin/,$(Executable)) $(IMAGELIBS) $(DISPLAYLIBS) -D cimg_use_openmp=1
 	@printf 'Done'
 	@printf '\n'
 
 mpidebug : .mpidebug  begun $(MPIDebugObjectFiles) $(ExecutableMPIDebugObjectFile)
+	@printf '   Building Library...'
+	@ar crf $(addprefix lib/lib,$(current_dir)).a $(MPIDebugObjectFiles)
+	@printf 'Done'
+	@printf '\n'
 	@printf '   Linking MpiDebug...'
-	@$(MPICXX) $(CXXFLAGS) $(DEBUGFLAGS) $(MPIDebugObjectFiles) $(ExecutableMPIDebugObjectFile) -o $(addprefix bin/,$(Executable)) $(IMAGELIBS) $(DISPLAYLIBS) $(DEBUGLIBS)
+	@$(MPICXX) $(CXXFLAGS) $(DEBUGFLAGS) $(ExecutableMPIDebugObjectFile) -L./lib -l$(current_dir) -o $(addprefix bin/,$(Executable)) $(IMAGELIBS) $(DISPLAYLIBS) $(DEBUGLIBS)
 	@printf 'Done'
 	@printf '\n'
 
 mpirelease : .mpirelease begun $(MPIReleaseObjectFiles) $(ExecutableMPIReleaseObjectFile)	
+	@printf '   Building Library...'
+	@ar crf $(addprefix lib/lib,$(current_dir)).a $(MPIReleaseObjectFiles)
+	@printf 'Done'
+	@printf '\n'
 	@printf '   Linking MpiRelease...'
-	@$(MPICXX) $(CXXFLAGS) $(RELEASEFLAGS) $(MPIReleaseObjectFiles) $(ExecutableMPIReleaseObjectFile) -o $(addprefix bin/,$(Executable)) $(IMAGELIBS) $(DISPLAYLIBS) -D cimg_use_openmp=1
+	@$(MPICXX) $(CXXFLAGS) $(RELEASEFLAGS) $(ExecutableMPIReleaseObjectFile) -L./lib -l$(current_dir) -o $(addprefix bin/,$(Executable)) $(IMAGELIBS) $(DISPLAYLIBS) -D cimg_use_openmp=1
 	@printf 'Done'
 	@printf '\n'
 
 windebug : .windebug  begun $(WINDebugObjectFiles) $(ExecutableWINDebugObjectFile)
+	@printf '   Building Library...'
+	@ar crf $(addprefix lib/lib,$(current_dir)).a $(WINDebugObjectFiles)
+	@printf 'Done'
+	@printf '\n'
 	@printf '   Linking WINDebug...'
-	@$(WINCXX) $(CXXFLAGS) $(DEBUGFLAGS) $(WINDebugObjectFiles) $(ExecutableWINDebugObjectFile) -o $(addprefix bin/,$(WINExecutable)) $(IMAGELIBS) $(WINLIBS) $(WINDISPLAYLIBS)
+	@$(WINCXX) $(CXXFLAGS) $(DEBUGFLAGS) $(ExecutableWINDebugObjectFile) -L./lib -l$(current_dir) -o $(addprefix bin/,$(WINExecutable)) $(IMAGELIBS) $(WINLIBS) $(WINDISPLAYLIBS)
 	@printf 'Done'
 	@printf '\n'
 
-winrelease : .winrelease begun $(WINReleaseObjectFiles) $(ExecutableWINReleaseObjectFile)	
+winrelease : .winrelease begun $(WINReleaseObjectFiles) $(ExecutableWINReleaseObjectFile)
+	@printf '   Building Library...'
+	@ar crf $(addprefix lib/lib,$(current_dir)).a $(WINReleaseObjectFiles)
+	@printf 'Done'
+	@printf '\n'
 	@printf '   Linking WINRelease...'
-	@$(WINCXX) $(CXXFLAGS) $(RELEASEFLAGS) $(WINReleaseObjectFiles) $(ExecutableWINReleaseObjectFile) -o $(addprefix bin/,$(WINExecutable)) $(IMAGELIBS) $(WINLIBS) $(WINDISPLAYLIBS) -D cimg_use_openmp=1
+	@$(WINCXX) $(CXXFLAGS) $(RELEASEFLAGS) $(ExecutableWINReleaseObjectFile) -L./lib -l$(current_dir) -o $(addprefix bin/,$(WINExecutable)) $(IMAGELIBS) $(WINLIBS) $(WINDISPLAYLIBS) -D cimg_use_openmp=1
 	@printf 'Done'
 	@printf '\n'
 
 androiddebug : .androiddebug  begun $(ANDROIDDebugObjectFiles) $(ExecutableANDROIDDebugObjectFile)
+	@printf '   Building Library...'
+	@ar crf $(addprefix lib/lib,$(current_dir)).a $(ANDROIDDebugObjectFiles)
+	@printf 'Done'
+	@printf '\n'
 	@printf '   Linking ANDROIDDebug...'
-	@$(ANDROIDCXX) $(CXXFLAGS) $(DEBUGFLAGS) $(ANDROIDDebugObjectFiles) $(ExecutableANDROIDDebugObjectFile) -o $(addprefix bin/,$(Executable)) $(IMAGELIBS) $(ANDROIDLIBS) $(DISPLAYLIBS)
+	@$(ANDROIDCXX) $(CXXFLAGS) $(DEBUGFLAGS) $(ExecutableANDROIDDebugObjectFile) -L./lib -l$(current_dir) -o $(addprefix bin/,$(Executable)) $(IMAGELIBS) $(ANDROIDLIBS) $(DISPLAYLIBS)
 	@printf 'Done'
 	@printf '\n'
 
 androidrelease : .androidrelease begun $(ANDROIDReleaseObjectFiles) $(ExecutableANDROIDReleaseObjectFile)	
+	@printf '   Building Library...'
+	@ar crf $(addprefix lib/lib,$(current_dir)).a $(ANDROIDReleaseObjectFiles)
+	@printf 'Done'
+	@printf '\n'
 	@printf '   Linking ANDROIDRelease...'
-	@$(ANDROIDCXX) $(CXXFLAGS) $(RELEASEFLAGS) $(ANDROIDReleaseObjectFiles) $(ExecutableANDROIDReleaseObjectFile) -o $(addprefix bin/,$(Executable)) $(IMAGELIBS) $(ANDROIDLIBS) $(DISPLAYLIBS) -D cimg_use_openmp=1
+	@$(ANDROIDCXX) $(CXXFLAGS) $(RELEASEFLAGS) $(ExecutableANDROIDReleaseObjectFile) -L./lib -l$(current_dir) -o $(addprefix bin/,$(Executable)) $(IMAGELIBS) $(ANDROIDLIBS) $(DISPLAYLIBS) -D cimg_use_openmp=1
 	@printf 'Done'
 	@printf '\n'
 
@@ -261,6 +293,7 @@ begun :
 clean : cleandebug cleanrelease cleanmpidebug cleanmpirelease cleanwindebug cleanwinrelease cleanandroiddebug cleanandroidrelease
 	@-rm -rf $(AnyObjectFiles)
 	@-rm -f bin/$(current_dir)
+	@-rm -f $(addprefix lib/lib,$(current_dir)).a
 	
 cleandebug :
 	@-rm -rf .debug .debugtimestamp
@@ -305,21 +338,25 @@ cleanandroidrelease :
 .debugtimestamp :
 	@mkdir -p .debug $(DebugDirs)
 	@mkdir -p bin
+	@mkdir -p lib
 #	@touch .debugtimestamp
 
 .mpidebugtimestamp :
 	@mkdir -p .mpidebug $(MPIDebugDirs)
 	@mkdir -p bin
+	@mkdir -p lib
 #	@touch .mpidebugtimestamp
 
 .windebugtimestamp :
 	@mkdir -p .windebug $(WINDebugDirs)
 	@mkdir -p bin
+	@mkdir -p lib
 #	@touch .windebugtimestamp
 
 .androiddebugtimestamp :
 	@mkdir -p .androiddebug $(ANDROIDDebugDirs)
 	@mkdir -p bin
+	@mkdir -p lib
 #	@touch .androiddebugtimestamp
 
 .release : .releasetimestamp
@@ -333,18 +370,22 @@ cleanandroidrelease :
 .releasetimestamp :
 	@mkdir -p .release $(ReleaseDirs)
 	@mkdir -p bin
+	@mkdir -p lib
 
 .mpireleasetimestamp :
 	@mkdir -p .mpirelease $(MPIReleaseDirs)
 	@mkdir -p bin
+	@mkdir -p lib
 
 .winreleasetimestamp :
 	@mkdir -p .winrelease $(WINReleaseDirs)
 	@mkdir -p bin
+	@mkdir -p lib
 
 .androidreleasetimestamp :
 	@mkdir -p .androidrelease $(ANDROIDReleaseDirs)
 	@mkdir -p bin
+	@mkdir -p lib
 
 #--------------------------------------------------------------------------------+
 #--------------------------------------+
