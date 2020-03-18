@@ -1,9 +1,11 @@
 #include "SkyboxFlat_t.h"
 
-SkyboxFlat_t::SkyboxFlat_t(const Vec3f &background) : background_(background) {}
+using APTracer::Entities::Vec3f;
 
-SkyboxFlat_t::~SkyboxFlat_t(){}
+APTracer::Skyboxes::SkyboxFlat_t::SkyboxFlat_t(const Vec3f &background) : background_(background) {}
 
-Vec3f SkyboxFlat_t::get(const Vec3f &xyz) const{
+APTracer::Skyboxes::SkyboxFlat_t::~SkyboxFlat_t(){}
+
+Vec3f APTracer::Skyboxes::SkyboxFlat_t::get(const Vec3f &xyz) const{
     return background_;
 }

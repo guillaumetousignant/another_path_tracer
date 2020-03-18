@@ -4,11 +4,13 @@
 #include "Skybox_t.h"
 #include "Vec3f.h"
 
+namespace APTracer::Entities {
+    class Texture_t;
+}
+
 using APTracer::Entities::Skybox_t;
 using APTracer::Entities::Vec3f;
 using APTracer::Entities::Texture_t;
-
-class Texture_t;
 
 namespace APTracer::Skyboxes {
     class SkyboxTextureSun_t final : public Skybox_t{

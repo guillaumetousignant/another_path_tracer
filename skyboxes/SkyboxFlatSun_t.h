@@ -4,11 +4,13 @@
 #include "Skybox_t.h"
 #include "Vec3f.h"
 
+namespace APTracer::Entities {
+    class DirectionalLight_t;
+}
+
 using APTracer::Entities::Skybox_t;
 using APTracer::Entities::Vec3f;
 using APTracer::Entities::DirectionalLight_t;
-
-class DirectionalLight_t;
 
 namespace APTracer::Skyboxes {
     class SkyboxFlatSun_t final : public Skybox_t{
