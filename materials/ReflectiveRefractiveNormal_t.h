@@ -8,7 +8,7 @@
 
 namespace APTracer::Entities {
     class ScatteringFunction_t;
-    class Txture_t;
+    class Texture_t;
     class Shape_t;
 }
 
