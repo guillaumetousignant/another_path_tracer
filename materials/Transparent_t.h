@@ -5,14 +5,16 @@
 #include "Vec3f.h"
 #include "Ray_t.h"
 
+namespace APTracer::Entities {
+    class ScatteringFunction_t;
+    class Shape_t;
+}
+
 using APTracer::Entities::Medium_t;
 using APTracer::Entities::Vec3f;
 using APTracer::Entities::Ray_t;
 using APTracer::Entities::Shape_t;
 using APTracer::Entities::ScatteringFunction_t;
-
-class ScatteringFunction_t;
-class Shape_t;
 
 namespace APTracer::Materials {
     class Transparent_t final : public Medium_t {

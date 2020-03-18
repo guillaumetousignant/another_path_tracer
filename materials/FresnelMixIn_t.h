@@ -6,13 +6,16 @@
 #include "Ray_t.h"
 #include <random>
 
+namespace APTracer::Entities {
+    class Material_t;
+    class Shape_t;
+}
+
 using APTracer::Entities::MaterialMix_t;
 using APTracer::Entities::Vec3f;
 using APTracer::Entities::Ray_t;
 using APTracer::Entities::Shape_t;
 using APTracer::Entities::Material_t;
-
-class Material_t;
 
 namespace APTracer::Materials {
     class FresnelMixIn_t final : public MaterialMix_t{

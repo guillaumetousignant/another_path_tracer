@@ -3,6 +3,11 @@
 
 #include "Material_t.h"
 #include "Vec3f.h"
+#include "Ray_t.h"
+
+namespace APTracer::Entities {
+    class Shape_t;
+}
 
 using APTracer::Entities::Material_t;
 using APTracer::Entities::Vec3f;

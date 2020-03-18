@@ -6,12 +6,14 @@
 #include <list>
 #include <random>
 
+namespace APTracer::Entities {
+    class TransformMatrix_t;
+    class Medium_t;
+}
+
 using APTracer::Entities::Ray_t;
 using APTracer::Entities::TransformMatrix_t;
 using APTracer::Entities::Medium_t;
-
-class TransformMatrix_t;
-class Medium_t;
 
 namespace APTracer::Materials {
     class PortalScatterer_t final : public PortalScattererTop_t{

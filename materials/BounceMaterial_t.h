@@ -3,14 +3,17 @@
 
 #include "Material_t.h"
 #include "Vec3f.h"
+#include "Ray_t.h"
 #include <random>
+
+namespace APTracer::Entities {
+    class Shape_t;
+}
 
 using APTracer::Entities::Material_t;
 using APTracer::Entities::Vec3f;
 using APTracer::Entities::Ray_t;
 using APTracer::Entities::Shape_t;
-
-class Shape_t;
 
 namespace APTracer::Materials {
     class BounceMaterial_t final : public Material_t{

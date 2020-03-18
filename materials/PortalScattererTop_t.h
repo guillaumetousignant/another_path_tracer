@@ -4,12 +4,14 @@
 #include "ScatteringFunction_t.h"
 #include <list>
 
+namespace APTracer::Entities {
+    class TransformMatrix_t;
+    class Medium_t;
+}
+
 using APTracer::Entities::ScatteringFunction_t;
 using APTracer::Entities::TransformMatrix_t;
 using APTracer::Entities::Medium_t;
-
-class TransformMatrix_t;
-class Medium_t;
 
 namespace APTracer::Materials {
     class PortalScattererTop_t : public ScatteringFunction_t{

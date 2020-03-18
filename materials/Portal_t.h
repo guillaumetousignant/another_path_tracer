@@ -5,14 +5,16 @@
 #include "Ray_t.h"
 #include <list>
 
+namespace APTracer::Entities {
+    class Shape_t;
+    class TransformMatrix_t;
+    class Medium_t;
+}
+
 using APTracer::Entities::Ray_t;
 using APTracer::Entities::Shape_t;
 using APTracer::Entities::TransformMatrix_t;
 using APTracer::Entities::Medium_t;
-
-class Shape_t;
-class TransformMatrix_t;
-class Medium_t;
 
 namespace APTracer::Materials {
     class Portal_t final : public PortalTop_t{
