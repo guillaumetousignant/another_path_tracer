@@ -163,7 +163,7 @@ all : release $(ReleaseObjectFiles)
 
 debug : .debug  begun $(DebugObjectFiles) $(ExecutableDebugObjectFile)
 	@printf '   Building Library...'
-	@ar crf $(addprefix lib/lib,$(current_dir)).a $(DebugObjectFiles)
+	@ar rcs $(addprefix lib/lib,$(current_dir)).a $(DebugObjectFiles)
 	@printf 'Done'
 	@printf '\n'
 	@printf '   Linking Debug...'
@@ -173,7 +173,7 @@ debug : .debug  begun $(DebugObjectFiles) $(ExecutableDebugObjectFile)
 
 release : .release begun $(ReleaseObjectFiles) $(ExecutableReleaseObjectFile)
 	@printf '   Building Library...'
-	@ar crf $(addprefix lib/lib,$(current_dir)).a $(ReleaseObjectFiles)
+	@ar rcs $(addprefix lib/lib,$(current_dir)).a $(ReleaseObjectFiles)
 	@printf 'Done'
 	@printf '\n'
 	@printf '   Linking Release...'
@@ -183,7 +183,7 @@ release : .release begun $(ReleaseObjectFiles) $(ExecutableReleaseObjectFile)
 
 mpidebug : .mpidebug  begun $(MPIDebugObjectFiles) $(ExecutableMPIDebugObjectFile)
 	@printf '   Building Library...'
-	@ar crf $(addprefix lib/lib,$(current_dir)).a $(MPIDebugObjectFiles)
+	@ar rcs $(addprefix lib/lib,$(current_dir)).a $(MPIDebugObjectFiles)
 	@printf 'Done'
 	@printf '\n'
 	@printf '   Linking MpiDebug...'
@@ -193,7 +193,7 @@ mpidebug : .mpidebug  begun $(MPIDebugObjectFiles) $(ExecutableMPIDebugObjectFil
 
 mpirelease : .mpirelease begun $(MPIReleaseObjectFiles) $(ExecutableMPIReleaseObjectFile)	
 	@printf '   Building Library...'
-	@ar crf $(addprefix lib/lib,$(current_dir)).a $(MPIReleaseObjectFiles)
+	@ar rcs $(addprefix lib/lib,$(current_dir)).a $(MPIReleaseObjectFiles)
 	@printf 'Done'
 	@printf '\n'
 	@printf '   Linking MpiRelease...'
@@ -203,7 +203,7 @@ mpirelease : .mpirelease begun $(MPIReleaseObjectFiles) $(ExecutableMPIReleaseOb
 
 windebug : .windebug  begun $(WINDebugObjectFiles) $(ExecutableWINDebugObjectFile)
 	@printf '   Building Library...'
-	@ar crf $(addprefix lib/lib,$(current_dir)).a $(WINDebugObjectFiles)
+	@ar rcs $(addprefix lib/lib,$(current_dir)).a $(WINDebugObjectFiles)
 	@printf 'Done'
 	@printf '\n'
 	@printf '   Linking WINDebug...'
@@ -213,7 +213,7 @@ windebug : .windebug  begun $(WINDebugObjectFiles) $(ExecutableWINDebugObjectFil
 
 winrelease : .winrelease begun $(WINReleaseObjectFiles) $(ExecutableWINReleaseObjectFile)
 	@printf '   Building Library...'
-	@ar crf $(addprefix lib/lib,$(current_dir)).a $(WINReleaseObjectFiles)
+	@ar rcs $(addprefix lib/lib,$(current_dir)).a $(WINReleaseObjectFiles)
 	@printf 'Done'
 	@printf '\n'
 	@printf '   Linking WINRelease...'
@@ -223,7 +223,7 @@ winrelease : .winrelease begun $(WINReleaseObjectFiles) $(ExecutableWINReleaseOb
 
 androiddebug : .androiddebug  begun $(ANDROIDDebugObjectFiles) $(ExecutableANDROIDDebugObjectFile)
 	@printf '   Building Library...'
-	@ar crf $(addprefix lib/lib,$(current_dir)).a $(ANDROIDDebugObjectFiles)
+	@ar rcs $(addprefix lib/lib,$(current_dir)).a $(ANDROIDDebugObjectFiles)
 	@printf 'Done'
 	@printf '\n'
 	@printf '   Linking ANDROIDDebug...'
@@ -233,7 +233,7 @@ androiddebug : .androiddebug  begun $(ANDROIDDebugObjectFiles) $(ExecutableANDRO
 
 androidrelease : .androidrelease begun $(ANDROIDReleaseObjectFiles) $(ExecutableANDROIDReleaseObjectFile)	
 	@printf '   Building Library...'
-	@ar crf $(addprefix lib/lib,$(current_dir)).a $(ANDROIDReleaseObjectFiles)
+	@ar rcs $(addprefix lib/lib,$(current_dir)).a $(ANDROIDReleaseObjectFiles)
 	@printf 'Done'
 	@printf '\n'
 	@printf '   Linking ANDROIDRelease...'
