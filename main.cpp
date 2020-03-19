@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
-#include "RandomGenerator_t.h"
-#include "SceneContext_t.h"
+#include "another_path_tracer.h"
 
 int main(int argc, char **argv){
     std::string filename = "";
