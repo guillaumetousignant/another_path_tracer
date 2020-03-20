@@ -33,6 +33,7 @@
 
 /.vscode/*
 /bin/*
+/lib/*
 /images/*
 /assets/*
 *.png
