@@ -11,8 +11,8 @@
 
 namespace APTracer { namespace Shapes{
     class MeshTop_t;
-}
-namespace APTracer::Entities{
+}}
+namespace APTracer { namespace Entities{
     class TransformMatrix_t;
     class Texture_t;
     class ScatteringFunction_t;

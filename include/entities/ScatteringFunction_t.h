@@ -11,6 +11,6 @@ namespace APTracer { namespace Entities {
 
             virtual bool scatter(Ray_t &ray) = 0; 
     };
-}
+}}
 
 #endif
