@@ -9,7 +9,7 @@
 #include "functions/tinyxml2.h"
 #include "entities/Vec3f.h"
 
-namespace APTracer::Shapes{
+namespace APTracer { namespace Shapes{
     class MeshTop_t;
 }
 namespace APTracer::Entities{
@@ -28,12 +28,12 @@ namespace APTracer::Entities{
     class ImgBufferOpenGL_t;
     class Scene_t;
     class OpenGLRenderer_t;
-}
+}}
 
 using namespace APTracer::Shapes;
 using namespace APTracer::Entities;
 
-namespace APTracer::Entities {
+namespace APTracer { namespace Entities {
     class SceneContext_t{
         public:
             SceneContext_t();
@@ -107,7 +107,7 @@ namespace APTracer::Entities {
             void get_objects(std::string objects_string, std::vector<Shape_t*> &shapes, std::vector<MeshTop_t*> &meshes, const tinyxml2::XMLElement* xml_objects) const;
             void get_objects(std::vector<Shape_t*> &shapes, std::vector<MeshTop_t*> &meshes) const;
     };
-}
+}}
 
 namespace APTracer {
     Vec3f get_colour(std::string colour); // copies string :(

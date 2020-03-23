@@ -3,7 +3,7 @@
 
 #include "entities/Material_t.h"
 
-namespace APTracer::Entities {
+namespace APTracer { namespace Entities {
     class ScatteringFunction_t;
 
     class Medium_t : public Material_t{
@@ -15,6 +15,6 @@ namespace APTracer::Entities {
             unsigned int priority_;
             ScatteringFunction_t* scattering_;
     };
-}
+}}
 
 #endif

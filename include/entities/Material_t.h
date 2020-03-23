@@ -3,7 +3,7 @@
 
 #include "entities/Ray_t.h"
 
-namespace APTracer::Entities {
+namespace APTracer { namespace Entities {
     class Shape_t;
 
     class Material_t{
@@ -13,6 +13,6 @@ namespace APTracer::Entities {
 
             virtual void bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray) = 0;
     };
-}
+}}
 
 #endif

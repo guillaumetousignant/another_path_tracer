@@ -4,15 +4,15 @@
 #include "entities/Skybox_t.h"
 #include "entities/Vec3f.h"
 
-namespace APTracer::Entities {
+namespace APTracer { namespace Entities {
     class DirectionalLight_t;
-}
+}}
 
 using APTracer::Entities::Skybox_t;
 using APTracer::Entities::Vec3f;
 using APTracer::Entities::DirectionalLight_t;
 
-namespace APTracer::Skyboxes {
+namespace APTracer { namespace Skyboxes {
     class SkyboxFlatSun_t final : public Skybox_t{
         public:
             SkyboxFlatSun_t(const Vec3f &background, DirectionalLight_t* light);
@@ -25,5 +25,5 @@ namespace APTracer::Skyboxes {
 
             virtual Vec3f get(const Vec3f &xyz) const final;
     };
-}
+}}
 #endif

@@ -7,15 +7,15 @@
 
 #define CELLLIST
 
-namespace APTracer::Entities {
+namespace APTracer { namespace Entities {
     class Shape_t;
-}
+}}
 
 using APTracer::Entities::Ray_t;
 using APTracer::Entities::Shape_t;
 using APTracer::Entities::AccelerationStructure_t;
 
-namespace APTracer::Acceleration {
+namespace APTracer { namespace Acceleration {
     class GridCellVector_t final : public AccelerationStructure_t{
         public:
             GridCellVector_t();
@@ -32,5 +32,5 @@ namespace APTracer::Acceleration {
             void reserve();
             GridCellVector_t& operator++();
     };
-}
+}}
 #endif

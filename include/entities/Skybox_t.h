@@ -3,7 +3,7 @@
 
 #include "entities/Vec3f.h"
 
-namespace APTracer::Entities {
+namespace APTracer { namespace Entities {
     class Skybox_t{
         public:
             Skybox_t(){};
@@ -11,6 +11,6 @@ namespace APTracer::Entities {
 
             virtual Vec3f get(const Vec3f &xyz) const = 0;
     };
-}
+}}
 
 #endif

@@ -12,7 +12,7 @@
 #endif
 #include "GL/gl.h"
 
-namespace APTracer::Entities {
+namespace APTracer { namespace Entities {
     class ImgBufferOpenGL_t final : public ImgBuffer_t{
         public:
             ImgBufferOpenGL_t(unsigned int size_x, unsigned int size_y);
@@ -28,5 +28,5 @@ namespace APTracer::Entities {
             unsigned char* img_gl_;
             GLuint tex_;
     };
-}
+}}
 #endif

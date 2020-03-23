@@ -6,9 +6,9 @@
 #include "entities/Vec3f.h"
 #include "shapes/Box_t.h"
 
-namespace APTracer::Entities {
+namespace APTracer { namespace Entities {
     class Shape_t;
-}
+}}
 
 using APTracer::Entities::Vec3f;
 using APTracer::Entities::Ray_t;
@@ -16,7 +16,7 @@ using APTracer::Entities::Shape_t;
 using APTracer::Entities::AccelerationStructure_t;
 using APTracer::Shapes::Box_t;
 
-namespace APTracer::Acceleration {
+namespace APTracer { namespace Acceleration {
     class AccelerationMultiGridVector_t final : public AccelerationStructure_t{
         public:
             AccelerationMultiGridVector_t(Shape_t** items, unsigned int n_items, Vec3f* coordinates = nullptr, unsigned int level = 0, unsigned int min_res = 1, unsigned int max_res = 128, unsigned int max_cell_content = 32, unsigned int max_grid_level = 1);
@@ -39,5 +39,5 @@ namespace APTracer::Acceleration {
             virtual void remove(const Shape_t* item) final;
             void move(Shape_t* item);
     };
-}
+}}
 #endif

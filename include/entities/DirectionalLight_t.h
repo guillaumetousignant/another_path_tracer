@@ -3,7 +3,7 @@
 
 #include "entities/Vec3f.h"
 
-namespace APTracer::Entities {
+namespace APTracer { namespace Entities {
     class TransformMatrix_t;
 
     class DirectionalLight_t{
@@ -18,6 +18,6 @@ namespace APTracer::Entities {
 
             void update();
     };
-}
+}}
 
 #endif

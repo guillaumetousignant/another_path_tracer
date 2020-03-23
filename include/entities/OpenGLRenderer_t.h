@@ -4,7 +4,7 @@
 #include <string>
 #include "entities/Vec3f.h"
 
-namespace APTracer::Entities {
+namespace APTracer { namespace Entities {
     class Camera_t;
     class Scene_t;
     class ImgBufferOpenGL_t;
@@ -57,5 +57,5 @@ namespace APTracer::Entities {
             static void openGL_keyboardPaused(unsigned char key, int x, int y);
             static void openGL_keyboard(unsigned char key, int x, int y);
     };
-}
+}}
 #endif

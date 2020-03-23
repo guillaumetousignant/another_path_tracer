@@ -4,7 +4,7 @@
 #include <string>
 #include <map>
 
-namespace APTracer::Entities {
+namespace APTracer { namespace Entities {
     class Material_t;
 
     class MaterialMap_t{
@@ -17,6 +17,6 @@ namespace APTracer::Entities {
             Material_t* getMaterial(const std::string &key) const;
             Material_t* getFirst() const;
     };
-}
+}}
 
 #endif

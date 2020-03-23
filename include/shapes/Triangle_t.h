@@ -5,10 +5,10 @@
 #include "entities/Vec3f.h"
 #include "entities/Shape_t.h"
 
-namespace APTracer::Entities {
+namespace APTracer { namespace Entities {
     class TransformMatrix_t;
     class Material_t;
-}
+}}
 
 using APTracer::Entities::Ray_t;
 using APTracer::Entities::Vec3f;
@@ -16,7 +16,7 @@ using APTracer::Entities::Material_t;
 using APTracer::Entities::TransformMatrix_t;
 using APTracer::Entities::Shape_t;
 
-namespace APTracer::Shapes {
+namespace APTracer { namespace Shapes {
     class Triangle_t final : public Shape_t{
         public:
             Triangle_t(Material_t *material, TransformMatrix_t *transform_matrix, Vec3f* points, Vec3f* normals, double** texcoord);
@@ -41,5 +41,5 @@ namespace APTracer::Shapes {
             virtual Vec3f mincoord() const final;
             virtual Vec3f maxcoord() const final;
     };
-}
+}}
 #endif

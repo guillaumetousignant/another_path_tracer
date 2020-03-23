@@ -3,7 +3,7 @@
 
 #include "entities/Material_t.h"
 
-namespace APTracer::Entities {
+namespace APTracer { namespace Entities {
     class MaterialMix_t : public Material_t{
         public:
             MaterialMix_t(Material_t* material_refracted, Material_t* material_reflected) 
@@ -13,6 +13,6 @@ namespace APTracer::Entities {
             Material_t* material_refracted_;
             Material_t* material_reflected_;        
     };
-}
+}}
 
 #endif

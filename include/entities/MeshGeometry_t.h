@@ -4,7 +4,7 @@
 #include <string>
 #include "entities/Vec3f.h"
 
-namespace APTracer::Entities {
+namespace APTracer { namespace Entities {
     class MeshGeometry_t{
         public:
             MeshGeometry_t(const std::string &filename);
@@ -21,6 +21,6 @@ namespace APTracer::Entities {
             void readSU2(const std::string &filename);
             void deNan();
     };
-}
+}}
 
 #endif

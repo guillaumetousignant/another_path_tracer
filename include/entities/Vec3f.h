@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-namespace APTracer::Entities {
+namespace APTracer { namespace Entities {
     class Vec3f {
         public:
             double v[3];
@@ -61,7 +61,7 @@ namespace APTracer::Entities {
             Vec3f &round_inplace();
             Vec3f &clamp(double minimum, double maximum);
     };
-}
+}}
 
 std::ostream &operator<<(std::ostream &output, const APTracer::Entities::Vec3f &v);
 

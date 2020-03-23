@@ -3,7 +3,7 @@
 
 #include <random> 
 
-namespace APTracer::Entities {
+namespace APTracer { namespace Entities {
     extern std::mt19937 rng;
-}
+}}
 #endif

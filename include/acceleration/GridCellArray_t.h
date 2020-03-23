@@ -4,15 +4,15 @@
 #include "entities/Ray_t.h"
 #include "entities/AccelerationStructure_t.h"
 
-namespace APTracer::Entities {
+namespace APTracer { namespace Entities {
     class Shape_t;
-}
+}}
 
 using APTracer::Entities::Ray_t;
 using APTracer::Entities::Shape_t;
 using APTracer::Entities::AccelerationStructure_t;
 
-namespace APTracer::Acceleration {
+namespace APTracer { namespace Acceleration {
     class GridCellArray_t final : public AccelerationStructure_t{
         public:
             GridCellArray_t();
@@ -30,5 +30,5 @@ namespace APTracer::Acceleration {
             void reserve();
             GridCellArray_t& operator++();
     };
-}
+}}
 #endif

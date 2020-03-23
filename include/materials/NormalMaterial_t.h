@@ -4,15 +4,15 @@
 #include "entities/Material_t.h"
 #include "entities/Ray_t.h"
 
-namespace APTracer::Entities {
+namespace APTracer { namespace Entities {
     class Shape_t;
-}
+}}
 
 using APTracer::Entities::Material_t;
 using APTracer::Entities::Ray_t;
 using APTracer::Entities::Shape_t;
 
-namespace APTracer::Materials {
+namespace APTracer { namespace Materials {
     class NormalMaterial_t final : public Material_t{
         public:
             NormalMaterial_t();
@@ -20,5 +20,5 @@ namespace APTracer::Materials {
 
             virtual void bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray) final;
     };
-}
+}}
 #endif

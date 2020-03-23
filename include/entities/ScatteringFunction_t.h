@@ -3,7 +3,7 @@
 
 #include "entities/Ray_t.h"
 
-namespace APTracer::Entities {
+namespace APTracer { namespace Entities {
     class ScatteringFunction_t{
         public:
             ScatteringFunction_t(){};

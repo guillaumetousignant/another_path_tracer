@@ -4,7 +4,7 @@
 #include "entities/Vec3f.h"
 #include <string>
 
-namespace APTracer::Entities {
+namespace APTracer { namespace Entities {
     class Texture_t{
         public:
             Texture_t(const std::string &filename);
@@ -17,6 +17,6 @@ namespace APTracer::Entities {
             Vec3f get(const double (&xy)[2]) const;
             Vec3f get_nn(const double (&xy)[2]) const;
     };
-}
+}}
 
 #endif

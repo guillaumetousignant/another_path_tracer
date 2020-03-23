@@ -3,13 +3,13 @@
 
 #include "entities/Ray_t.h"
 
-namespace APTracer::Shapes {
+namespace APTracer { namespace Shapes {
     class MeshTop_t;
-}
+}}
 
 using APTracer::Shapes::MeshTop_t;
 
-namespace APTracer::Entities {
+namespace APTracer { namespace Entities {
     class Shape_t;
     class AccelerationStructure_t;
 
@@ -35,6 +35,6 @@ namespace APTracer::Entities {
             Shape_t* intersect_brute(const Ray_t &ray, double &t, double (&uv)[2]) const;
             Shape_t* intersect(const Ray_t &ray, double &t, double (&uv)[2]) const;
     };
-}
+}}
 
 #endif

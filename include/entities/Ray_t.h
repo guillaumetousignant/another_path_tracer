@@ -4,7 +4,7 @@
 #include "entities/Vec3f.h"
 #include <list>
 
-namespace APTracer::Entities {
+namespace APTracer { namespace Entities {
     class Medium_t;
     class Scene_t;
     class Skybox_t;
@@ -83,6 +83,6 @@ namespace APTracer::Entities {
              */
             void remove_from_mediums(Medium_t* medium);
     };
-}
+}}
 
 #endif

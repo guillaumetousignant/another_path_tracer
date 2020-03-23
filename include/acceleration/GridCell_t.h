@@ -5,15 +5,15 @@
 #include "entities/AccelerationStructure_t.h"
 #include <list>
 
-namespace APTracer::Entities {
+namespace APTracer { namespace Entities {
     class Shape_t;
-}
+}}
 
 using APTracer::Entities::Ray_t;
 using APTracer::Entities::Shape_t;
 using APTracer::Entities::AccelerationStructure_t;
 
-namespace APTracer::Acceleration {
+namespace APTracer { namespace Acceleration {
     class GridCell_t final : public AccelerationStructure_t{
         public:
             GridCell_t();
@@ -26,5 +26,5 @@ namespace APTracer::Acceleration {
             virtual void add(Shape_t* item) final;
             virtual void remove(const Shape_t* item) final;
     };
-}
+}}
 #endif

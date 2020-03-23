@@ -7,13 +7,13 @@
 #include <list>
 #include <random>
 
-namespace APTracer::Entities {
+namespace APTracer { namespace Entities {
     class TransformMatrix_t;
     class Skybox_t;
     class Scene_t;
     class Medium_t;
     class ImgBuffer_t;
-}
+}}
 
 using APTracer::Entities::Camera_t;
 using APTracer::Entities::Vec3f;
@@ -23,7 +23,7 @@ using APTracer::Entities::Scene_t;
 using APTracer::Entities::Medium_t;
 using APTracer::Entities::ImgBuffer_t;
 
-namespace APTracer::Cameras {
+namespace APTracer { namespace Cameras {
     class Cam_t;
     
     class Cam3D_t  final: public Camera_t{
@@ -47,5 +47,5 @@ namespace APTracer::Cameras {
             virtual void focus(double focus_distance) final;
             virtual void autoFocus(const Scene_t* scene, const double (&position)[2]) final;
     };
-}
+}}
 #endif

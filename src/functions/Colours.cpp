@@ -1,6 +1,6 @@
 #include "Colours.h"
 
-namespace APTracer::Colours {
+namespace APTracer { namespace Colours {
     const std::map<std::string, Vec3f> colours = {
         {"yellow", Vec3f(0.98, 1.0, 0.9)},
         {"purple", Vec3f(0.98, 0.7, 0.85)},
@@ -20,4 +20,4 @@ namespace APTracer::Colours {
         {"pink", Vec3f(1.0, 0.50196, 0.75294)},
         {"wood_colour", Vec3f(0.8549, 0.7882, 0.5882)}
     };
-}
+}}

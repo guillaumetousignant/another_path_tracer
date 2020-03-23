@@ -7,7 +7,7 @@
 
 using APTracer::Entities::Vec3f;
 
-namespace APTracer::Colours {
+namespace APTracer { namespace Colours {
     extern const std::map<std::string, Vec3f> colours;
-}
+}}
 #endif

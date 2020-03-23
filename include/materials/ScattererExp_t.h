@@ -10,7 +10,7 @@ using APTracer::Entities::ScatteringFunction_t;
 using APTracer::Entities::Vec3f;
 using APTracer::Entities::Ray_t;
 
-namespace APTracer::Materials {
+namespace APTracer { namespace Materials {
     class ScattererExp_t final : public ScatteringFunction_t{
         public:
             ScattererExp_t(Vec3f emi_vol, Vec3f col_vol, double abs_dist_emi, double abs_dist_col, double scat_dist, double order, double scattering_angle);
@@ -25,5 +25,5 @@ namespace APTracer::Materials {
 
             virtual bool scatter(Ray_t &) final; 
     };
-}
+}}
 #endif

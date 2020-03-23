@@ -7,7 +7,7 @@
 using APTracer::Entities::ScatteringFunction_t;
 using APTracer::Entities::Ray_t;
 
-namespace APTracer::Materials {
+namespace APTracer { namespace Materials {
     class NonAbsorber_t final : public ScatteringFunction_t{
         public:
             NonAbsorber_t();
@@ -15,5 +15,5 @@ namespace APTracer::Materials {
 
             virtual bool scatter(Ray_t &ray) final; 
     };
-}
+}}
 #endif

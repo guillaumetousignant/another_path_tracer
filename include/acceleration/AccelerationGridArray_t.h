@@ -6,9 +6,9 @@
 #include "entities/Vec3f.h"
 #include "shapes/Box_t.h"
 
-namespace APTracer::Entities {
+namespace APTracer { namespace Entities {
     class Shape_t;
-}
+}}
 
 using APTracer::Entities::Vec3f;
 using APTracer::Entities::Ray_t;
@@ -16,7 +16,7 @@ using APTracer::Entities::Shape_t;
 using APTracer::Entities::AccelerationStructure_t;
 using APTracer::Shapes::Box_t;
 
-namespace APTracer::Acceleration {
+namespace APTracer { namespace Acceleration {
     class GridCellVector_t;
 
     class AccelerationGridArray_t final : public AccelerationStructure_t{
@@ -39,5 +39,5 @@ namespace APTracer::Acceleration {
             virtual void remove(const Shape_t* item) final;
             void move(Shape_t* item);
     };
-}
+}}
 #endif

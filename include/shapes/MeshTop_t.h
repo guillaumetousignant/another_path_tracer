@@ -4,13 +4,13 @@
 #include "entities/Ray_t.h"
 #include "entities/Vec3f.h"
 
-namespace APTracer::Entities {
+namespace APTracer { namespace Entities {
     class Material_t;
     class TransformMatrix_t;
     class MeshGeometry_t;
     class MaterialMap_t;
     class Shape_t;
-}
+}}
 
 using APTracer::Entities::Ray_t;
 using APTracer::Entities::Vec3f;
@@ -20,7 +20,7 @@ using APTracer::Entities::MeshGeometry_t;
 using APTracer::Entities::MaterialMap_t;
 using APTracer::Entities::Shape_t;
 
-namespace APTracer::Shapes {
+namespace APTracer { namespace Shapes {
     class MeshTop_t {
         public:
             MeshTop_t(Material_t *material, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom);
@@ -41,5 +41,5 @@ namespace APTracer::Shapes {
             virtual void createTriangles() = 0;
             virtual void createTriangles(MaterialMap_t *materialmap) = 0;
     };
-}
+}}
 #endif

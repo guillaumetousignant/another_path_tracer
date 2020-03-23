@@ -4,7 +4,7 @@
 #include "entities/Ray_t.h"
 #include "entities/Vec3f.h"
 
-namespace APTracer::Entities {
+namespace APTracer { namespace Entities {
     class Material_t;
     class TransformMatrix_t;
 
@@ -24,5 +24,5 @@ namespace APTracer::Entities {
             Material_t *material_;
             TransformMatrix_t *transformation_;
     };
-}
+}}
 #endif

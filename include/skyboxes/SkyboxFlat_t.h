@@ -7,7 +7,7 @@
 using APTracer::Entities::Skybox_t;
 using APTracer::Entities::Vec3f;
 
-namespace APTracer::Skyboxes {
+namespace APTracer { namespace Skyboxes {
     class SkyboxFlat_t final : public Skybox_t{
         public:
             SkyboxFlat_t(const Vec3f &background);
@@ -17,5 +17,5 @@ namespace APTracer::Skyboxes {
 
             virtual Vec3f get(const Vec3f &xyz) const final;
     };
-}
+}}
 #endif

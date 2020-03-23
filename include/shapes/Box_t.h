@@ -7,7 +7,7 @@
 using APTracer::Entities::Ray_t;
 using APTracer::Entities::Vec3f;
 
-namespace APTracer::Shapes {
+namespace APTracer { namespace Shapes {
     class Box_t {
         public:
             Box_t();
@@ -18,5 +18,5 @@ namespace APTracer::Shapes {
 
             bool intersection(const Ray_t &ray, double &t) const;
     };
-}
+}}
 #endif

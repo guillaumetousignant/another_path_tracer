@@ -4,7 +4,7 @@
 #include "entities/Vec3f.h"
 #include <cmath>
 
-namespace APTracer::Entities {
+namespace APTracer { namespace Entities {
     class TransformMatrix_t{
         public:
             TransformMatrix_t();
@@ -36,7 +36,7 @@ namespace APTracer::Entities {
             Vec3f multDir(const Vec3f &vec) const;
             TransformMatrix_t transformDir() const; // Should return reference?
             double getScale() const;
-};
-}
+    };
+}}
 
 #endif

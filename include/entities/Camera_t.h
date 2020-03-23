@@ -5,7 +5,7 @@
 #include <string>
 #include <list>
 
-namespace APTracer::Entities {
+namespace APTracer { namespace Entities {
     class TransformMatrix_t;
     class Skybox_t;
     class Scene_t;
@@ -69,6 +69,6 @@ namespace APTracer::Entities {
             virtual void show() const = 0;
             virtual void reset() = 0;
     };
-}
+}}
 
 #endif

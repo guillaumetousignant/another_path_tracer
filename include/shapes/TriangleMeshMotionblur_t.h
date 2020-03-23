@@ -5,11 +5,11 @@
 #include "entities/Vec3f.h"
 #include "entities/Shape_t.h"
 
-namespace APTracer::Entities {
+namespace APTracer { namespace Entities {
     class TransformMatrix_t;
     class Material_t;
     class MeshGeometry_t;
-}
+}}
 
 using APTracer::Entities::Ray_t;
 using APTracer::Entities::Vec3f;
@@ -18,7 +18,7 @@ using APTracer::Entities::TransformMatrix_t;
 using APTracer::Entities::Shape_t;
 using APTracer::Entities::MeshGeometry_t;
 
-namespace APTracer::Shapes {
+namespace APTracer { namespace Shapes {
     class TriangleMeshMotionblur_t final : public Shape_t{
         public:
             TriangleMeshMotionblur_t(Material_t *material, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom, unsigned int index);
@@ -47,5 +47,5 @@ namespace APTracer::Shapes {
             virtual Vec3f mincoord() const final;
             virtual Vec3f maxcoord() const final;
     };
-}
+}}
 #endif

@@ -3,7 +3,7 @@
 
 #include "entities/Ray_t.h"
 
-namespace APTracer::Entities {
+namespace APTracer { namespace Entities {
     class Shape_t;
 
     /**
@@ -64,6 +64,6 @@ namespace APTracer::Entities {
              */
             virtual void add(Shape_t* item) = 0;
     };
-}
+}}
 
 #endif

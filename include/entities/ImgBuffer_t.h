@@ -4,7 +4,7 @@
 #include "entities/Vec3f.h"
 #include <string>
 
-namespace APTracer::Entities {
+namespace APTracer { namespace Entities {
     class ImgBuffer_t{
         public:
             ImgBuffer_t(unsigned int size_x, unsigned int size_y);
@@ -23,5 +23,5 @@ namespace APTracer::Entities {
             unsigned int updates_;
             Vec3f* img_;
     };
-}
+}}
 #endif
