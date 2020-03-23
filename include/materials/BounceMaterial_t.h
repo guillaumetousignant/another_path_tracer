@@ -8,7 +8,7 @@
 
 namespace APTracer { namespace Entities {
     class Shape_t;
-}
+}}
 
 using APTracer::Entities::Material_t;
 using APTracer::Entities::Vec3f;
