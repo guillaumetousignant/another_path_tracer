@@ -1,6 +1,6 @@
 #include "Transparent_t.h"
-#include "ScatteringFunction_t.h"
-#include "Shape_t.h"
+#include "entities/ScatteringFunction_t.h"
+#include "entities/Shape_t.h"
 
 #define EPSILON 0.00000001
 

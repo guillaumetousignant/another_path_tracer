@@ -31,7 +31,7 @@
 #include "PortalTop_t.h"
 #include "Portal_t.h"
 #include "NormalMaterial_t.h"
-#include "MaterialMix_t.h"
+#include "entities/MaterialMix_t.h"
 #include "FresnelMix_t.h"
 #include "FresnelMixNormal_t.h"
 #include "FresnelMixIn_t.h"
@@ -52,7 +52,7 @@
 #include "PortalScatterer_t.h"
 
 #include "TransformMatrix_t.h"
-#include "ImgBuffer_t.h"
+#include "entities/ImgBuffer_t.h"
 #include "ImgBufferOpenGL_t.h"
 #include "Scene_t.h"
 #include "MeshGeometry_t.h"
@@ -68,7 +68,7 @@
 #include "Mesh_t.h"
 #include "MeshMotionblur_t.h"
 
-#include "Camera_t.h"
+#include "entities/Camera_t.h"
 #include "Cam_t.h"
 #include "CamAperture_t.h"
 #include "CamMotionblur_t.h"

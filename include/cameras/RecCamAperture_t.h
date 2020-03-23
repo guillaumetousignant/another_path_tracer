@@ -1,8 +1,8 @@
 #ifndef RECCAMAPERTURE_T_H
 #define RECCAMAPERTURE_T_H
 
-#include "Camera_t.h"
-#include "Vec3f.h"
+#include "entities/Camera_t.h"
+#include "entities/Vec3f.h"
 #include <string>
 #include <list>
 #include <random>

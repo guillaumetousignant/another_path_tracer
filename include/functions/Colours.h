@@ -3,7 +3,7 @@
 
 #include <map> 
 #include <string>
-#include "Vec3f.h"
+#include "entities/Vec3f.h"
 
 using APTracer::Entities::Vec3f;
 

@@ -1,8 +1,8 @@
 #ifndef NORMALMATERIAL_T_H
 #define NORMALMATERIAL_T_H
 
-#include "Material_t.h"
-#include "Ray_t.h"
+#include "entities/Material_t.h"
+#include "entities/Ray_t.h"
 
 namespace APTracer::Entities {
     class Shape_t;

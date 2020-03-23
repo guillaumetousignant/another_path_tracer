@@ -1,9 +1,9 @@
 #ifndef REFLECTIVENORMAL_T_H
 #define REFLECTIVENORMAL_T_H
 
-#include "Material_t.h"
-#include "Vec3f.h"
-#include "Ray_t.h"
+#include "entities/Material_t.h"
+#include "entities/Vec3f.h"
+#include "entities/Ray_t.h"
 
 namespace APTracer::Entities {
     class Texture_t;

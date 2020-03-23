@@ -1,9 +1,9 @@
 #ifndef SCATTERERFULL_T_H
 #define SCATTERERFULL_T_H
 
-#include "ScatteringFunction_t.h"
-#include "Ray_t.h"
-#include "Vec3f.h"
+#include "entities/ScatteringFunction_t.h"
+#include "entities/Ray_t.h"
+#include "entities/Vec3f.h"
 #include <random>
 
 using APTracer::Entities::ScatteringFunction_t;

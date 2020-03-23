@@ -1,7 +1,7 @@
 #ifndef ACCELERATIONSTRUCTURE_T_H
 #define ACCELERATIONSTRUCTURE_T_H
 
-#include "Ray_t.h"
+#include "entities/Ray_t.h"
 
 namespace APTracer::Entities {
     class Shape_t;

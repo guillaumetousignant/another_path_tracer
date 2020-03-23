@@ -1,10 +1,10 @@
 #ifndef ACCELERATIONGRID_T_H
 #define ACCELERATIONGRID_T_H
 
-#include "Ray_t.h"
-#include "AccelerationStructure_t.h"
-#include "Vec3f.h"
-#include "Box_t.h"
+#include "entities/Ray_t.h"
+#include "entities/AccelerationStructure_t.h"
+#include "entities/Vec3f.h"
+#include "shapes/Box_t.h"
 
 namespace APTracer::Entities {
     class Shape_t;

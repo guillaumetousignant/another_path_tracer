@@ -1,7 +1,7 @@
 #ifndef DIRECTIONALLIGHT_T_H
 #define DIRECTIONALLIGHT_T_H
 
-#include "Vec3f.h"
+#include "entities/Vec3f.h"
 
 namespace APTracer::Entities {
     class TransformMatrix_t;

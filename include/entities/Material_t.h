@@ -1,7 +1,7 @@
 #ifndef MATERIAL_T_H
 #define MATERIAL_T_H
 
-#include "Ray_t.h"
+#include "entities/Ray_t.h"
 
 namespace APTracer::Entities {
     class Shape_t;

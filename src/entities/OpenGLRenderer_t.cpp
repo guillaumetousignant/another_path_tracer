@@ -9,7 +9,7 @@
 
 #include <chrono>
 #include <algorithm>
-#include "Camera_t.h"
+#include "entities/Camera_t.h"
 #include "Scene_t.h"
 #include "ImgBufferOpenGL_t.h"
 #include "TransformMatrix_t.h"

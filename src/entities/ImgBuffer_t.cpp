@@ -1,4 +1,4 @@
-#include "ImgBuffer_t.h"
+#include "entities/ImgBuffer_t.h"
 #define cimg_use_jpeg
 #define cimg_use_png
 #define cimg_use_tiff

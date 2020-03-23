@@ -2,7 +2,7 @@
 #define PORTALSCATTERER_T_H
 
 #include "PortalScattererTop_t.h"
-#include "Ray_t.h"
+#include "entities/Ray_t.h"
 #include <list>
 #include <random>
 

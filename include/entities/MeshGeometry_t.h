@@ -2,7 +2,7 @@
 #define MESHGEOMETRY_T_H
 
 #include <string>
-#include "Vec3f.h"
+#include "entities/Vec3f.h"
 
 namespace APTracer::Entities {
     class MeshGeometry_t{

@@ -1,10 +1,10 @@
 #include "Cam3D_t.h"
 #include "Cam_t.h"
 #include "TransformMatrix_t.h"
-#include "Skybox_t.h"
+#include "entities/Skybox_t.h"
 #include "Scene_t.h"
-#include "Medium_t.h"
-#include "ImgBuffer_t.h"
+#include "entities/Medium_t.h"
+#include "entities/ImgBuffer_t.h"
 #include "RandomGenerator_t.h"
 
 #define PI 3.141592653589793238463

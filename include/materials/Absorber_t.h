@@ -1,9 +1,9 @@
 #ifndef ABSORBER_T_H
 #define ABSORBER_T_H
 
-#include "ScatteringFunction_t.h"
-#include "Ray_t.h"
-#include "Vec3f.h"
+#include "entities/ScatteringFunction_t.h"
+#include "entities/Ray_t.h"
+#include "entities/Vec3f.h"
 
 using APTracer::Entities::ScatteringFunction_t;
 using APTracer::Entities::Vec3f;

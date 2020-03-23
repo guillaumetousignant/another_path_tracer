@@ -1,9 +1,9 @@
 #ifndef SPHEREMOTIONBLUR_T_H
 #define SPHEREMOTIONBLUR_T_H
 
-#include "Ray_t.h"
-#include "Vec3f.h"
-#include "Shape_t.h"
+#include "entities/Ray_t.h"
+#include "entities/Vec3f.h"
+#include "entities/Shape_t.h"
 
 namespace APTracer::Entities {
     class TransformMatrix_t;

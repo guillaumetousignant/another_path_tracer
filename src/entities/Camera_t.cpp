@@ -1,4 +1,4 @@
-#include "Camera_t.h"
+#include "entities/Camera_t.h"
 #include "TransformMatrix_t.h"
 #include <iostream>
 #include <chrono>

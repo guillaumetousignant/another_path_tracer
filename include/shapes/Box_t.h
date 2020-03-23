@@ -1,8 +1,8 @@
 #ifndef BOX_T_H
 #define BOX_T_H
 
-#include "Ray_t.h"
-#include "Vec3f.h"
+#include "entities/Ray_t.h"
+#include "entities/Vec3f.h"
 
 using APTracer::Entities::Ray_t;
 using APTracer::Entities::Vec3f;

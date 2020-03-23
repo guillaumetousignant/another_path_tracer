@@ -1,7 +1,7 @@
 #ifndef TEXTURE_T_H
 #define TEXTURE_T_H
 
-#include "Vec3f.h"
+#include "entities/Vec3f.h"
 #include <string>
 
 namespace APTracer::Entities {

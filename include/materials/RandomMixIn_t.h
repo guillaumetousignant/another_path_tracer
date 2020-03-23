@@ -1,8 +1,8 @@
 #ifndef RANDOMMIXIN_T_H
 #define RANDOMMIXIN_T_H
 
-#include "MaterialMix_t.h"
-#include "Ray_t.h"
+#include "entities/MaterialMix_t.h"
+#include "entities/Ray_t.h"
 #include <random>
 
 namespace APTracer::Entities {

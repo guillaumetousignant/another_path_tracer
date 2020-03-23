@@ -2,7 +2,7 @@
 #define PORTAL_T_H
 
 #include "PortalTop_t.h"
-#include "Ray_t.h"
+#include "entities/Ray_t.h"
 #include <list>
 
 namespace APTracer::Entities {

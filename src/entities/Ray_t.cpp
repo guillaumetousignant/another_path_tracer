@@ -1,9 +1,9 @@
-#include "Ray_t.h"
-#include "Medium_t.h"
+#include "entities/Ray_t.h"
+#include "entities/Medium_t.h"
 #include "Scene_t.h"
-#include "Skybox_t.h"
-#include "Shape_t.h"
-#include "ScatteringFunction_t.h"
+#include "entities/Skybox_t.h"
+#include "entities/Shape_t.h"
+#include "entities/ScatteringFunction_t.h"
 
 using APTracer::Entities::Ray_t;
 using APTracer::Entities::Vec3f;

@@ -1,6 +1,6 @@
 #include "NormalMaterial_t.h"
-#include "Shape_t.h"
-#include "Vec3f.h"
+#include "entities/Shape_t.h"
+#include "entities/Vec3f.h"
 
 using APTracer::Entities::Vec3f;
 

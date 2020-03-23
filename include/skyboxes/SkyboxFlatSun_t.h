@@ -1,8 +1,8 @@
 #ifndef SKYBOXFLATSUN_T_H
 #define SKYBOXFLATSUN_T_H
 
-#include "Skybox_t.h"
-#include "Vec3f.h"
+#include "entities/Skybox_t.h"
+#include "entities/Vec3f.h"
 
 namespace APTracer::Entities {
     class DirectionalLight_t;

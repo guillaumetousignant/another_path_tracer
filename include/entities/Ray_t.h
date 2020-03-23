@@ -1,7 +1,7 @@
 #ifndef RAY_T_H
 #define RAY_T_H
 
-#include "Vec3f.h"
+#include "entities/Vec3f.h"
 #include <list>
 
 namespace APTracer::Entities {

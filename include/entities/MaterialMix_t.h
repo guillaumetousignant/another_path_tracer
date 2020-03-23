@@ -1,7 +1,7 @@
 #ifndef MATERIALMIX_T_H
 #define MATERIALMIX_T_H
 
-#include "Material_t.h"
+#include "entities/Material_t.h"
 
 namespace APTracer::Entities {
     class MaterialMix_t : public Material_t{

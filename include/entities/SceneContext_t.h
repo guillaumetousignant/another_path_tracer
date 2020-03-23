@@ -6,8 +6,8 @@
 #include <tuple>
 #include <vector>
 #include <memory>
-#include "tinyxml2.h"
-#include "Vec3f.h"
+#include "functions/tinyxml2.h"
+#include "entities/Vec3f.h"
 
 namespace APTracer::Shapes{
     class MeshTop_t;

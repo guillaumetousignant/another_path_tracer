@@ -1,7 +1,7 @@
 #include "Portal_t.h"
-#include "Shape_t.h"
-#include "Vec3f.h"
-#include "Medium_t.h"
+#include "entities/Shape_t.h"
+#include "entities/Vec3f.h"
+#include "entities/Medium_t.h"
 #include "TransformMatrix_t.h"
 
 #define EPSILON 0.00000001

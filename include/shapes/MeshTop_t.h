@@ -1,8 +1,8 @@
 #ifndef MESHTOP_T_H
 #define MESHTOP_T_H
 
-#include "Ray_t.h"
-#include "Vec3f.h"
+#include "entities/Ray_t.h"
+#include "entities/Vec3f.h"
 
 namespace APTracer::Entities {
     class Material_t;

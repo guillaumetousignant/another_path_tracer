@@ -1,8 +1,8 @@
 #ifndef IMGBUFFEROPENGL_T_H
 #define IMGBUFFEROPENGL_T_H
 
-#include "ImgBuffer_t.h"
-#include "Vec3f.h"
+#include "entities/ImgBuffer_t.h"
+#include "entities/Vec3f.h"
 #include <string>
 
 #ifdef _WIN32

@@ -1,7 +1,7 @@
 #ifndef PORTALSCATTERERTOP_T_H
 #define PORTALSCATTERERTOP_T_H
 
-#include "ScatteringFunction_t.h"
+#include "entities/ScatteringFunction_t.h"
 #include <list>
 
 namespace APTracer::Entities {

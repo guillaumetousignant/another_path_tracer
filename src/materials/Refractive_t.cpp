@@ -1,5 +1,5 @@
 #include "Refractive_t.h"
-#include "Shape_t.h"
+#include "entities/Shape_t.h"
 #include <cmath>
 
 #define EPSILON 0.00000001

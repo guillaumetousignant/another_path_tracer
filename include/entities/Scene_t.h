@@ -1,7 +1,7 @@
 #ifndef SCENE_T_H
 #define SCENE_T_H
 
-#include "Ray_t.h"
+#include "entities/Ray_t.h"
 
 namespace APTracer::Shapes {
     class MeshTop_t;

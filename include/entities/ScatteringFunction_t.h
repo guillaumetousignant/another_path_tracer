@@ -1,7 +1,7 @@
 #ifndef SCATTERINGFUNCTION_T_H
 #define SCATTERINGFUNCTION_T_H
 
-#include "Ray_t.h"
+#include "entities/Ray_t.h"
 
 namespace APTracer::Entities {
     class ScatteringFunction_t{

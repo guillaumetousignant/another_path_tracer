@@ -1,8 +1,8 @@
 #include "RandomMixIn_t.h"
-#include "Shape_t.h"
+#include "entities/Shape_t.h"
 #include "RandomGenerator_t.h"
-#include "Vec3f.h"
-#include "Material_t.h"
+#include "entities/Vec3f.h"
+#include "entities/Material_t.h"
 
 using APTracer::Entities::Vec3f;
 

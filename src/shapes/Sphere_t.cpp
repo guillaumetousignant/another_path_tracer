@@ -1,6 +1,6 @@
 #include "Sphere_t.h"
 #include "TransformMatrix_t.h"
-#include "Material_t.h"
+#include "entities/Material_t.h"
 #include <cmath>
 #include <limits>
 

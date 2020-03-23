@@ -1,5 +1,5 @@
 #include "ReflectiveFuzzTex_t.h"
-#include "Shape_t.h"
+#include "entities/Shape_t.h"
 #include "RandomGenerator_t.h"
 #include <cmath>
 #include "Texture_t.h"

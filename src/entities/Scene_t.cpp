@@ -1,6 +1,6 @@
 #include "Scene_t.h"
-#include "Shape_t.h"
-#include "AccelerationStructure_t.h"
+#include "entities/Shape_t.h"
+#include "entities/AccelerationStructure_t.h"
 #include "MeshTop_t.h"
 #include <limits>
 #include "AccelerationMultiGridVector_t.h"

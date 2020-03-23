@@ -1,9 +1,9 @@
 #ifndef DIFFUSE_T_H
 #define DIFFUSE_T_H
 
-#include "Material_t.h"
-#include "Vec3f.h"
-#include "Ray_t.h"
+#include "entities/Material_t.h"
+#include "entities/Vec3f.h"
+#include "entities/Ray_t.h"
 #include <random>
 
 namespace APTracer::Entities {

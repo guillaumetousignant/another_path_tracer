@@ -1,7 +1,7 @@
 #ifndef MEDIUM_T_H
 #define MEDIUM_T_H
 
-#include "Material_t.h"
+#include "entities/Material_t.h"
 
 namespace APTracer::Entities {
     class ScatteringFunction_t;

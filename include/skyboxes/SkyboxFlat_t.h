@@ -1,8 +1,8 @@
 #ifndef SKYBOXFLAT_T_H
 #define SKYBOXFLAT_T_H
 
-#include "Skybox_t.h"
-#include "Vec3f.h"
+#include "entities/Skybox_t.h"
+#include "entities/Vec3f.h"
 
 using APTracer::Entities::Skybox_t;
 using APTracer::Entities::Vec3f;
