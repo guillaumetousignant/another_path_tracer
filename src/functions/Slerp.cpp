@@ -1,4 +1,4 @@
-#include "Slerp.h"
+#include "functions/Slerp.h"
 
 #define PI 3.141592653589793238463
 
