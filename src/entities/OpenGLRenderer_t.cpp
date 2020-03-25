@@ -1,4 +1,4 @@
-#include "OpenGLRenderer_t.h"
+#include "entities/OpenGLRenderer_t.h"
 
 #ifdef _WIN32
     #include "GL/freeglut.h"
@@ -10,9 +10,9 @@
 #include <chrono>
 #include <algorithm>
 #include "entities/Camera_t.h"
-#include "Scene_t.h"
-#include "ImgBufferOpenGL_t.h"
-#include "TransformMatrix_t.h"
+#include "entities/Scene_t.h"
+#include "entities/ImgBufferOpenGL_t.h"
+#include "entities/TransformMatrix_t.h"
 
 #ifdef _WIN32
     #define GL_CLAMP_TO_EDGE 0x812F

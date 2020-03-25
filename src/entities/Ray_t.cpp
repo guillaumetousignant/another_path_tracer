@@ -1,6 +1,6 @@
 #include "entities/Ray_t.h"
 #include "entities/Medium_t.h"
-#include "Scene_t.h"
+#include "entities/Scene_t.h"
 #include "entities/Skybox_t.h"
 #include "entities/Shape_t.h"
 #include "entities/ScatteringFunction_t.h"

@@ -1,9 +1,9 @@
-#include "Scene_t.h"
+#include "entities/Scene_t.h"
 #include "entities/Shape_t.h"
 #include "entities/AccelerationStructure_t.h"
-#include "MeshTop_t.h"
+#include "shapes/MeshTop_t.h"
 #include <limits>
-#include "AccelerationMultiGridVector_t.h"
+#include "acceleration/AccelerationMultiGridVector_t.h"
 
 using APTracer::Entities::Scene_t;
 using APTracer::Entities::Shape_t;

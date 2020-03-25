@@ -1,10 +1,10 @@
-#include "IsoCamMotionblur_t.h"
-#include "TransformMatrix_t.h"
+#include "cameras/IsoCamMotionblur_t.h"
+#include "entities/TransformMatrix_t.h"
 #include "entities/Skybox_t.h"
-#include "Scene_t.h"
+#include "entities/Scene_t.h"
 #include "entities/Medium_t.h"
 #include "entities/ImgBuffer_t.h"
-#include "RandomGenerator_t.h"
+#include "entities/RandomGenerator_t.h"
 #include <cmath>
 
 #define PI 3.141592653589793238463

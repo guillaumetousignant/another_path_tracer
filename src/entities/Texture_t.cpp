@@ -1,10 +1,10 @@
-#include "Texture_t.h"
+#include "entities/Texture_t.h"
 #include <string>
 #define cimg_use_jpeg
 #define cimg_use_png
 #define cimg_use_tiff
 #define cimg_display 0
-#include "CImg.h"
+#include "functions/CImg.h"
 
 using APTracer::Entities::Texture_t;
 using APTracer::Entities::Vec3f;

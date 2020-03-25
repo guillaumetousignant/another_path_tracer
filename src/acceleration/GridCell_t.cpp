@@ -1,4 +1,4 @@
-#include "GridCell_t.h"
+#include "acceleration/GridCell_t.h"
 #include "entities/Shape_t.h"
 #include <list>
 #include <limits>

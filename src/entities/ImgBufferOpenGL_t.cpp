@@ -1,4 +1,4 @@
-#include "ImgBufferOpenGL_t.h"
+#include "entities/ImgBufferOpenGL_t.h"
 #include <cmath>
 #include <algorithm>
 

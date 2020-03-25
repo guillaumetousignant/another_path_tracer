@@ -1,4 +1,4 @@
-#include "GridCellVector_t.h"
+#include "acceleration/GridCellVector_t.h"
 #include "entities/Shape_t.h"
 #include <vector>
 #include <limits>
