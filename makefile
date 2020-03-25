@@ -20,7 +20,7 @@ newline := ""
 # Directory Variables
 
 ifdef VERIFY
-DeactivatedFiles = src/main.cpp /winlibs/*
+DeactivatedFiles = src/main.cpp /external_windows/*
 else
 DeactivatedFiles := $(shell grep -v '^//' .makeignore | grep -v '^$$')
 endif
