@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.13)
 
 project(another_path_tracer VERSION 1.1.0 LANGUAGES C CXX)
 
-add_library(another_path_tracer
+add_library(libanother_path_tracer
     src/acceleration/AccelerationGrid_t.cpp
     src/acceleration/AccelerationGridArray_t
     src/acceleration/AccelerationGridVector_t
@@ -101,3 +101,9 @@ add_library(another_path_tracer
     src/skyboxes/SkyboxTextureTransformation_t.cpp
     src/skyboxes/SkyboxTextureTransformationSun_t.cpp
 )
+
+target_include_directories(libanother_path_tracer PUBLIC include)
+
+add_executable(another_path_tracer src/main.cpp)
+
+target_link_libraries(another_path_tracer PRIVATE libanother_path_tracer)
