@@ -42,6 +42,11 @@ add_library(another_path_tracer
     src/entities/Scene_t.cpp
     src/entities/SceneContext_t.cpp
 
+    src/functions/Colours.cpp
+    src/functions/NextFilename.cpp
+    src/functions/Slerp.cpp
+    src/functions/tinyxml2.cpp
+
     src/materials/Absorber_t.cpp
     src/materials/BounceMaterial_t.cpp
     src/materials/Diffuse_t.cpp
