@@ -1,4 +1,4 @@
-main_test.cpp
+src/main_test.cpp
 catch.hpp
 /tests/*
 /freeglut/*

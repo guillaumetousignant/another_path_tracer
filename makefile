@@ -20,7 +20,7 @@ newline := ""
 # Directory Variables
 
 ifdef VERIFY
-DeactivatedFiles = main.cpp /winlibs/*
+DeactivatedFiles = src/main.cpp /winlibs/*
 else
 DeactivatedFiles := $(shell grep -v '^//' .makeignore | grep -v '^$$')
 endif
@@ -66,9 +66,9 @@ Executable = $(current_dir)
 WINExecutable = $(current_dir).exe
 
 ifdef VERIFY
-ExecutableSourceFile = main_test.cpp
+ExecutableSourceFile = src/main_test.cpp
 else
-ExecutableSourceFile = main.cpp
+ExecutableSourceFile = src/main.cpp
 endif
 
 # Executable debug object file
