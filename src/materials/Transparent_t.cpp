@@ -1,4 +1,4 @@
-#include "Transparent_t.h"
+#include "materials/Transparent_t.h"
 #include "entities/ScatteringFunction_t.h"
 #include "entities/Shape_t.h"
 

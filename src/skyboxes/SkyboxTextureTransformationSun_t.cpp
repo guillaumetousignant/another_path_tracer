@@ -1,6 +1,6 @@
-#include "SkyboxTextureTransformationSun_t.h"
-#include "Texture_t.h"
-#include "TransformMatrix_t.h"
+#include "skyboxes/SkyboxTextureTransformationSun_t.h"
+#include "entities/Texture_t.h"
+#include "entities/TransformMatrix_t.h"
 
 #define PI 3.141592653589793238463
 

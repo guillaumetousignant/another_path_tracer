@@ -16,7 +16,6 @@
 #include "Ray_t.h"
 #include "ScatteringFunction_t.h"
 #include "Scene_t.h"
-#include "SceneContext_t.h"
 #include "Shape_t.h"
 #include "Skybox_t.h"
 #include "Texture_t.h"

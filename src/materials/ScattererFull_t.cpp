@@ -1,6 +1,6 @@
-#include "ScattererFull_t.h"
+#include "materials/ScattererFull_t.h"
 #include <cmath>
-#include "RandomGenerator_t.h"
+#include "entities/RandomGenerator_t.h"
 
 #define PI 3.141592653589793238463
 

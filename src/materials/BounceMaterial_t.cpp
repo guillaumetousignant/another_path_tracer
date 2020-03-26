@@ -1,8 +1,8 @@
-#include "BounceMaterial_t.h"
+#include "materials/BounceMaterial_t.h"
 #include "entities/Shape_t.h"
 #include "entities/Vec3f.h"
 #include <cmath>
-#include "RandomGenerator_t.h"
+#include "entities/RandomGenerator_t.h"
 
 #define EPSILON 0.00001 // was 0.00001, 0.01 works ok when *t
 #define PI 3.141592653589793238463

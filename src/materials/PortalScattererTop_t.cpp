@@ -1,5 +1,5 @@
-#include "PortalScattererTop_t.h"
-#include "TransformMatrix_t.h"
+#include "materials/PortalScattererTop_t.h"
+#include "entities/TransformMatrix_t.h"
 #include "entities/Medium_t.h"
 
 APTracer::Materials::PortalScattererTop_t::PortalScattererTop_t(APTracer::Entities::TransformMatrix_t* transformation, std::list<APTracer::Entities::Medium_t*> medium_list)

@@ -1,6 +1,6 @@
-#include "PortalTop_t.h"
+#include "materials/PortalTop_t.h"
 #include "entities/Medium_t.h"
-#include "TransformMatrix_t.h"
+#include "entities/TransformMatrix_t.h"
 
 #define EPSILON 0.00000001
 

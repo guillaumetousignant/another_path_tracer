@@ -1,4 +1,4 @@
-#include "DistanceMaterial_t.h"
+#include "materials/DistanceMaterial_t.h"
 #include "entities/Shape_t.h"
 #include "entities/Vec3f.h"
 #include <cmath>

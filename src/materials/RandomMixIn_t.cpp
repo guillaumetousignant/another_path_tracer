@@ -1,6 +1,6 @@
-#include "RandomMixIn_t.h"
+#include "materials/RandomMixIn_t.h"
 #include "entities/Shape_t.h"
-#include "RandomGenerator_t.h"
+#include "entities/RandomGenerator_t.h"
 #include "entities/Vec3f.h"
 #include "entities/Material_t.h"
 

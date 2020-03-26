@@ -1,6 +1,6 @@
-#include "MeshTop_t.h"
-#include "MeshGeometry_t.h"
-#include "TriangleMesh_t.h"
+#include "shapes/MeshTop_t.h"
+#include "entities/MeshGeometry_t.h"
+#include "shapes/TriangleMesh_t.h"
 #include <iostream>
 #include <limits>
 

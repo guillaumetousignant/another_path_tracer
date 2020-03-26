@@ -1,8 +1,8 @@
-#include "FresnelMixIn_t.h"
+#include "materials/FresnelMixIn_t.h"
 #include "entities/Shape_t.h"
 #include "entities/Medium_t.h"
 #include <cmath> 
-#include "RandomGenerator_t.h"
+#include "entities/RandomGenerator_t.h"
 #include "entities/Material_t.h"
 
 using APTracer::Entities::Vec3f;

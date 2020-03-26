@@ -1,9 +1,9 @@
-#include "SphereMotionblur_t.h"
-#include "TransformMatrix_t.h"
+#include "shapes/SphereMotionblur_t.h"
+#include "entities/TransformMatrix_t.h"
 #include "entities/Material_t.h"
 #include <cmath>
 #include <limits>
-#include "Slerp.h"
+#include "functions/Slerp.h"
 
 #define PI 3.141592653589793238463
 

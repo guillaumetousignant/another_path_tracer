@@ -1,7 +1,7 @@
-#include "PortalScatterer_t.h"
-#include "TransformMatrix_t.h"
+#include "materials/PortalScatterer_t.h"
+#include "entities/TransformMatrix_t.h"
 #include "entities/Medium_t.h"
-#include "RandomGenerator_t.h"
+#include "entities/RandomGenerator_t.h"
 
 APTracer::Materials::PortalScatterer_t::PortalScatterer_t(APTracer::Entities::TransformMatrix_t* transformation, double scattering_distance, std::list<APTracer::Entities::Medium_t*> medium_list)
     : PortalScattererTop_t(transformation, medium_list), scattering_coefficient_(1/scattering_distance), unif_(0.0, 1.0) {}

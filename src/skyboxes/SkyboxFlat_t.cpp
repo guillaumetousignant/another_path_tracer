@@ -1,4 +1,4 @@
-#include "SkyboxFlat_t.h"
+#include "skyboxes/SkyboxFlat_t.h"
 
 using APTracer::Entities::Vec3f;
 

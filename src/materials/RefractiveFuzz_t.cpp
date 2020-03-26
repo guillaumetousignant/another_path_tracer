@@ -1,6 +1,6 @@
-#include "RefractiveFuzz_t.h"
+#include "materials/RefractiveFuzz_t.h"
 #include "entities/Shape_t.h"
-#include "RandomGenerator_t.h"
+#include "entities/RandomGenerator_t.h"
 #include <cmath>
 
 #define EPSILON 0.00000001

@@ -1,8 +1,8 @@
-#include "ReflectiveFuzzTexNormal_t.h"
+#include "materials/ReflectiveFuzzTexNormal_t.h"
 #include "entities/Shape_t.h"
-#include "RandomGenerator_t.h"
+#include "entities/RandomGenerator_t.h"
 #include <cmath>
-#include "Texture_t.h"
+#include "entities/Texture_t.h"
 
 #define EPSILON 0.00000001
 #define PI 3.141592653589793238463

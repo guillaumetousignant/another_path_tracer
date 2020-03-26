@@ -1,5 +1,5 @@
-#include "Sphere_t.h"
-#include "TransformMatrix_t.h"
+#include "shapes/Sphere_t.h"
+#include "entities/TransformMatrix_t.h"
 #include "entities/Material_t.h"
 #include <cmath>
 #include <limits>

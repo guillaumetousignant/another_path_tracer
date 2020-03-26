@@ -1,4 +1,4 @@
-#include "NormalMaterial_t.h"
+#include "materials/NormalMaterial_t.h"
 #include "entities/Shape_t.h"
 #include "entities/Vec3f.h"
 

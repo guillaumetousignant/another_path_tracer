@@ -1,6 +1,6 @@
-#include "RandomMix_t.h"
+#include "materials/RandomMix_t.h"
 #include "entities/Shape_t.h"
-#include "RandomGenerator_t.h"
+#include "entities/RandomGenerator_t.h"
 #include "entities/Material_t.h"
 
 APTracer::Materials::RandomMix_t::RandomMix_t(APTracer::Entities::Material_t* material_refracted, APTracer::Entities::Material_t* material_reflected, double ratio) : 

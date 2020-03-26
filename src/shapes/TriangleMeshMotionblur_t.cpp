@@ -1,10 +1,10 @@
-#include "TriangleMeshMotionblur_t.h"
-#include "TransformMatrix_t.h"
+#include "shapes/TriangleMeshMotionblur_t.h"
+#include "entities/TransformMatrix_t.h"
 #include "entities/Material_t.h"
 #include <cmath>
 #include <limits>
 #include <algorithm>
-#include "MeshGeometry_t.h"
+#include "entities/MeshGeometry_t.h"
 
 #define PI 3.141592653589793238463
 #define EPSILON 0.00000001

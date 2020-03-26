@@ -8,5 +8,6 @@
 #include "materials/materials.h"
 #include "shapes/shapes.h"
 #include "skyboxes/skyboxes.h"
+#include "entities/SceneContext_t.h"
 
 #endif

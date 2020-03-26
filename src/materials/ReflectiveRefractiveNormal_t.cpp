@@ -1,8 +1,8 @@
-#include "ReflectiveRefractiveNormal_t.h"
+#include "materials/ReflectiveRefractiveNormal_t.h"
 #include "entities/Shape_t.h"
 #include <cmath>
-#include "RandomGenerator_t.h"
-#include "Texture_t.h"
+#include "entities/RandomGenerator_t.h"
+#include "entities/Texture_t.h"
 
 #define EPSILON 0.00000001
 

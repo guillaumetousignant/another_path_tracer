@@ -1,5 +1,5 @@
-#include "SkyboxTextureSun_t.h"
-#include "Texture_t.h"
+#include "skyboxes/SkyboxTextureSun_t.h"
+#include "entities/Texture_t.h"
 #include <cmath>
 
 #define PI 3.141592653589793238463

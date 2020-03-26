@@ -1,7 +1,7 @@
-#include "ReflectiveFuzzNormal_t.h"
+#include "materials/ReflectiveFuzzNormal_t.h"
 #include "entities/Shape_t.h"
-#include "Texture_t.h"
-#include "RandomGenerator_t.h"
+#include "entities/Texture_t.h"
+#include "entities/RandomGenerator_t.h"
 #include <cmath>
 
 #define EPSILON 0.00000001
