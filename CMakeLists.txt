@@ -104,6 +104,16 @@ add_library(aptracer
 
 target_include_directories(aptracer PUBLIC include)
 
+target_link_libraries(aptracer PUBLIC png)
+target_link_libraries(aptracer PUBLIC jpeg)
+target_link_libraries(aptracer PUBLIC tiff)
+target_link_libraries(aptracer PUBLIC glut)
+target_link_libraries(aptracer PUBLIC GL)
+
+target_compile_features(aptracer PRIVATE cxx_std_11)
+
 add_executable(another_path_tracer src/main.cpp)
 
 target_link_libraries(another_path_tracer PRIVATE aptracer)
+
+target_compile_features(another_path_tracer PRIVATE cxx_std_11)
