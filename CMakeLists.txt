@@ -4,11 +4,11 @@ project(another_path_tracer VERSION 1.1.0 LANGUAGES C CXX)
 
 add_library(aptracer
     src/acceleration/AccelerationGrid_t.cpp
-    src/acceleration/AccelerationGridArray_t
-    src/acceleration/AccelerationGridVector_t
-    src/acceleration/AccelerationMultigrid_t
-    src/acceleration/AccelerationMultigridArray_t
-    src/acceleration/AccelerationMultigridVector_t
+    src/acceleration/AccelerationGridArray_t.cpp
+    src/acceleration/AccelerationGridVector_t.cpp
+    src/acceleration/AccelerationMultigrid_t.cpp
+    src/acceleration/AccelerationMultigridArray_t.cpp
+    src/acceleration/AccelerationMultigridVector_t.cpp
     src/acceleration/GridCell_t.cpp
     src/acceleration/GridCellArray_t.cpp
     src/acceleration/GridCellVector_t.cpp
@@ -100,6 +100,114 @@ add_library(aptracer
     src/skyboxes/SkyboxTextureSun_t.cpp
     src/skyboxes/SkyboxTextureTransformation_t.cpp
     src/skyboxes/SkyboxTextureTransformationSun_t.cpp
+
+    include/another_path_tracer.h
+
+    include/acceleration/acceleration.h
+    include/acceleration/AccelerationGrid_t.h
+    include/acceleration/AccelerationGridArray_t.h
+    include/acceleration/AccelerationGridVector_t.h
+    include/acceleration/AccelerationMultigrid_t.h
+    include/acceleration/AccelerationMultigridArray_t.h
+    include/acceleration/AccelerationMultigridVector_t.h
+    include/acceleration/GridCell_t.h
+    include/acceleration/GridCellArray_t.h
+    include/acceleration/GridCellVector_t.h
+
+    include/cameras/cameras.h
+    include/cameras/Cam_t.h
+    include/cameras/Cam3D_t.h
+    include/cameras/Cam3DAperture_t.h
+    include/cameras/Cam3DMotionblur_t.h
+    include/cameras/Cam3DMotionblurAperture_t.h
+    include/cameras/CamAperture_t.h
+    include/cameras/CamMotionblur_t.h
+    include/cameras/Cam3DMotionblurAperture_t.h
+    include/cameras/IsoCam_t.h
+    include/cameras/IsoCamAperture_t.h
+    include/cameras/IsoCamMotionblur_t.h
+    include/cameras/IsoCamMotionblurAperture_t.h
+    include/cameras/RecCam_t.h
+    include/cameras/RecCamAperture_t.h
+    include/cameras/RecCamMotionblur_t.h
+    include/cameras/RecCamMotionblurAperture_t.h
+
+    include/entities/entities.h
+    include/entities/Camera_t.h
+    include/entities/DirectionalLight_t.h
+    include/entities/ImgBuffer_t.h
+    include/entities/ImgBufferOpenGL_t.h
+    include/entities/MaterialMap_t.h
+    include/entities/MeshGeometry_t.h
+    include/entities/OpenGLRenderer_t.h
+    include/entities/RandomGenerator_t.h
+    include/entities/Ray_t.h
+    include/entities/Scene_t.h
+    include/entities/SceneContext_t.h
+
+    include/functions/functions.h
+    include/functions/CImg.h
+    include/functions/Colours.h
+    include/functions/NextFilename.h
+    include/functions/Slerp.h
+    include/functions/tinyxml2.h
+
+    include/materials/materials.h
+    include/materials/Absorber_t.h
+    include/materials/BounceMaterial_t.h
+    include/materials/Diffuse_t.h
+    include/materials/DiffuseFull_t.h
+    include/materials/DiffuseNormal_t.h
+    include/materials/DiffuseTex_t.h
+    include/materials/DiffuseTexNormal_t.h
+    include/materials/DistanceMaterial_t.h
+    include/materials/FresnelMix_t.h
+    include/materials/FresnelMixIn_t.h
+    include/materials/FresnelMixNormal_t.h
+    include/materials/NonAbsorber_t.h
+    include/materials/NormalMaterial_t.h
+    include/materials/Portal_t.h
+    include/materials/PortalScatterer_t.h
+    include/materials/PortalScattererTop_t.h
+    include/materials/PortalTop_t.h
+    include/materials/RandomMix_t.h
+    include/materials/RandomMixIn_t.h
+    include/materials/Reflective_t.h
+    include/materials/ReflectiveFuzz_t.h
+    include/materials/ReflectiveFuzzNormal_t.h
+    include/materials/ReflectiveFuzzTex_t.h
+    include/materials/ReflectiveFuzzTexNormal_t.h
+    include/materials/ReflectiveRefractive_t.h
+    include/materials/ReflectiveRefractiveFuzz_t.h
+    include/materials/ReflectiveRefractiveNormal_t.h
+    include/materials/Refractive_t.h
+    include/materials/RefractiveFuzz_t.h
+    include/materials/Scatterer_t.h
+    include/materials/ScattererExp_t.h
+    include/materials/ScattererExpFull_t.h
+    include/materials/ScattererFull_t.h
+    include/materials/Toon_t.h
+    include/materials/Transparent_t.h
+
+    include/shapes/shapes.h
+    include/shapes/Box_t.h
+    include/shapes/Mesh_t.h
+    include/shapes/MeshMotionblur_t.h
+    include/shapes/MeshTop_t.h
+    include/shapes/Sphere_t.h
+    include/shapes/SphereMotionblur_t.h
+    include/shapes/Triangle_t.h
+    include/shapes/TriangleMesh_t.h
+    include/shapes/TriangleMeshMotionblur_t.h
+    include/shapes/TriangleMotionblur_t.h
+
+    include/skyboxes/skyboxes.h
+    include/skyboxes/SkyboxFlat_t.h
+    include/skyboxes/SkyboxFlatSun_t.h
+    include/skyboxes/SkyboxTexture_t.h
+    include/skyboxes/SkyboxTextureSun_t.h
+    include/skyboxes/SkyboxTextureTransformation_t.h
+    include/skyboxes/SkyboxTextureTransformationSun_t.h
 )
 
 target_include_directories(aptracer PUBLIC include)
