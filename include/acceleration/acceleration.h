@@ -1,14 +1,14 @@
 #ifndef ACCELERATION_H
 #define ACCELERATION_H
 
-#include "AccelerationGrid_t.h"
-#include "AccelerationGridArray_t.h"
-#include "AccelerationGridVector_t.h"
-#include "AccelerationMultiGrid_t.h"
-#include "AccelerationMultiGridArray_t.h"
-#include "AccelerationGridVector_t.h"
-#include "GridCell_t.h"
-#include "GridCellArray_t.h"
-#include "GridCellVector_t.h"
+#include "acceleration/AccelerationGrid_t.h"
+#include "acceleration/AccelerationGridArray_t.h"
+#include "acceleration/AccelerationGridVector_t.h"
+#include "acceleration/AccelerationMultiGrid_t.h"
+#include "acceleration/AccelerationMultiGridArray_t.h"
+#include "acceleration/AccelerationGridVector_t.h"
+#include "acceleration/GridCell_t.h"
+#include "acceleration/GridCellArray_t.h"
+#include "acceleration/GridCellVector_t.h"
 
 #endif
