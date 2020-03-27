@@ -20,7 +20,7 @@ add_library(aptracer
     src/cameras/Cam3DMotionblurAperture_t.cpp
     src/cameras/CamAperture_t.cpp
     src/cameras/CamMotionblur_t.cpp
-    src/cameras/Cam3DMotionblurAperture_t.cpp
+    src/cameras/CamMotionblurAperture_t.cpp
     src/cameras/IsoCam_t.cpp
     src/cameras/IsoCamAperture_t.cpp
     src/cameras/IsoCamMotionblur_t.cpp
@@ -125,7 +125,7 @@ add_library(aptracer
     include/cameras/Cam3DMotionblurAperture_t.h
     include/cameras/CamAperture_t.h
     include/cameras/CamMotionblur_t.h
-    include/cameras/Cam3DMotionblurAperture_t.h
+    include/cameras/CamMotionblurAperture_t.h
     include/cameras/IsoCam_t.h
     include/cameras/IsoCamAperture_t.h
     include/cameras/IsoCamMotionblur_t.h
