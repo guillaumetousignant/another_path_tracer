@@ -1986,7 +1986,6 @@ std::unique_ptr<std::list<unsigned int>> APTracer::Entities::SceneContext_t::get
             std::transform(string_medium_list.begin(), string_medium_list.end(), string_medium_list.begin(), ::tolower);
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
-                std::string name_material;
                 const char* material_char = xml_material->Attribute("name");
                 if (material_char != nullptr){
                     std::string name_material = material_char;
@@ -2119,7 +2118,6 @@ Texture_t* APTracer::Entities::SceneContext_t::get_texture(std::string texture, 
             std::transform(texture.begin(), texture.end(), texture.begin(), ::tolower);
             unsigned int index = 0;
             for (const tinyxml2::XMLElement* xml_texture = xml_textures->FirstChildElement("texture"); xml_texture; xml_texture = xml_texture->NextSiblingElement("texture")){
-                std::string name_texture;
                 const char* name_char = xml_texture->Attribute("name");
                 if (name_char != nullptr){
                     std::string name_texture = name_char;

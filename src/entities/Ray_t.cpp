@@ -19,12 +19,11 @@ Ray_t::~Ray_t(){}
 
 void Ray_t::raycast(const Scene_t* scene, unsigned int max_bounces, const Skybox_t* skybox){
     unsigned int bounces = 0;
-    Shape_t* hit_obj;
     double t;
     double uv[2];
 
     while ((bounces < max_bounces) && (mask_.magnitudeSquared() > 0.01)){ // Should maybe make magnitudesquared min value lower
-        hit_obj = scene->intersect(*this, t, uv);
+        const Shape_t* hit_obj = scene->intersect(*this, t, uv);
         
         if (hit_obj == nullptr){
             colour_ += mask_ * skybox->get(direction_);
@@ -40,7 +39,7 @@ void Ray_t::raycast(const Scene_t* scene, unsigned int max_bounces, const Skybox
 }
 
 void Ray_t::add_to_mediums(Medium_t* medium){
-    for (std::list<Medium_t*>::iterator i = medium_list_.begin(); i != medium_list_.end(); i++){
+    for (std::list<Medium_t*>::iterator i = medium_list_.begin(); i != medium_list_.end(); ++i){
         if ((*i)->priority_ <= medium->priority_){
             medium_list_.insert(i, medium);
             return;
@@ -50,7 +49,7 @@ void Ray_t::add_to_mediums(Medium_t* medium){
 }
 
 void Ray_t::remove_from_mediums(Medium_t* medium){
-    for (std::list<Medium_t*>::iterator i = medium_list_.begin(); i != medium_list_.end(); i++){
+    for (std::list<Medium_t*>::iterator i = medium_list_.begin(); i != medium_list_.end(); ++i){
         if (*i == medium){
             medium_list_.erase(i);
             return;

@@ -49,12 +49,12 @@ void Camera_t::accumulateWrite(const Scene_t* scene, unsigned int n_iter /*= 100
         show();
         if (!(n%interval)){
             std::cout << "Writing started." << std::endl;
-            auto t_start = std::chrono::high_resolution_clock::now();
+            auto t_start2 = std::chrono::high_resolution_clock::now();
             write();
-            auto t_end = std::chrono::high_resolution_clock::now();
+            auto t_end2 = std::chrono::high_resolution_clock::now();
 
             std::cout << "Writing done in "
-            << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
+            << std::chrono::duration<double, std::milli>(t_end2-t_start2).count()/1000.0 
             << "s." << std::endl;
         }
     }

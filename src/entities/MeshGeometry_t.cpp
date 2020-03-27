@@ -339,9 +339,6 @@ void MeshGeometry_t::readSU2(const std::string &filename){
         else if (token == "NMARK="){
             wall_started = false;
         }
-        else if (token == "MARKER_TAG="){
-            wall_started = false;
-        }
         else if (token == "NELEM="){
             wall_started = false;
         }

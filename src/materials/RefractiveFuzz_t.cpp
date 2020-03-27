@@ -18,7 +18,6 @@ void APTracer::Materials::RefractiveFuzz_t::bounce(const double (&uv)[2], const 
     Vec3f newdir;
 
     hit_obj->normal(ray, uv, normal);
-    double cosi = ray.direction_.dot(normal);
 
     if (priority_ >= ray.medium_list_.front()->priority_){ // CHECK also discard if priority is equal, but watch for going out case
         double etai, etat;
@@ -33,7 +32,7 @@ void APTracer::Materials::RefractiveFuzz_t::bounce(const double (&uv)[2], const 
         const Vec3f v = normal.cross(u).normalize_inplace(); // wasn't normalized before
 
         Vec3f normal_fuzz = (u * std::cos(rand1)*rand2s + v*std::sin(rand1)*rand2s + normal*std::sqrt(1.0-rand2)).normalize_inplace();
-        cosi = ray.direction_.dot(normal_fuzz);
+        double cosi = ray.direction_.dot(normal_fuzz);
 
         if (cosi < 0.0){ // Coming in
             etai = ray.medium_list_.front()->ind_;
