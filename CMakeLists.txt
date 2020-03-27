@@ -74,6 +74,7 @@ add_library(aptracer
     src/materials/ReflectiveFuzzNormal_t.cpp
     src/materials/ReflectiveFuzzTex_t.cpp
     src/materials/ReflectiveFuzzTexNormal_t.cpp
+    src/materials/ReflectiveNormal_t.cpp
     src/materials/ReflectiveRefractive_t.cpp
     src/materials/ReflectiveRefractiveFuzz_t.cpp
     src/materials/ReflectiveRefractiveNormal_t.cpp
@@ -190,6 +191,7 @@ add_library(aptracer
     include/materials/ReflectiveFuzzNormal_t.h
     include/materials/ReflectiveFuzzTex_t.h
     include/materials/ReflectiveFuzzTexNormal_t.h
+    include/materials/ReflectiveNormal_t.h
     include/materials/ReflectiveRefractive_t.h
     include/materials/ReflectiveRefractiveFuzz_t.h
     include/materials/ReflectiveRefractiveNormal_t.h
