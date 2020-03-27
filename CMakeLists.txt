@@ -210,7 +210,7 @@ add_library(aptracer
     include/skyboxes/SkyboxTextureTransformationSun_t.h
 )
 
-target_include_directories(aptracer PUBLIC include)
+target_include_directories(aptracer PUBLIC include/)
 
 target_link_libraries(aptracer PUBLIC 
     png
