@@ -41,6 +41,9 @@ add_library(aptracer
     src/entities/Ray_t.cpp
     src/entities/Scene_t.cpp
     src/entities/SceneContext_t.cpp
+    src/entities/Texture_t.cpp
+    src/entities/TransformMatrix_t.cpp
+    src/entities/Vec3f.cpp
 
     src/functions/Colours.cpp
     src/functions/NextFilename.cpp
@@ -144,6 +147,9 @@ add_library(aptracer
     include/entities/Ray_t.h
     include/entities/Scene_t.h
     include/entities/SceneContext_t.h
+    src/entities/Texture_t.h
+    src/entities/TransformMatrix_t.h
+    src/entities/Vec3f.h
 
     include/functions/functions.h
     include/functions/CImg.h
