@@ -6,9 +6,9 @@ add_library(aptracer
     src/acceleration/AccelerationGrid_t.cpp
     src/acceleration/AccelerationGridArray_t.cpp
     src/acceleration/AccelerationGridVector_t.cpp
-    src/acceleration/AccelerationMultigrid_t.cpp
-    src/acceleration/AccelerationMultigridArray_t.cpp
-    src/acceleration/AccelerationMultigridVector_t.cpp
+    src/acceleration/AccelerationMultiGrid_t.cpp
+    src/acceleration/AccelerationMultiGridArray_t.cpp
+    src/acceleration/AccelerationMultiGridVector_t.cpp
     src/acceleration/GridCell_t.cpp
     src/acceleration/GridCellArray_t.cpp
     src/acceleration/GridCellVector_t.cpp
@@ -111,9 +111,9 @@ add_library(aptracer
     include/acceleration/AccelerationGrid_t.h
     include/acceleration/AccelerationGridArray_t.h
     include/acceleration/AccelerationGridVector_t.h
-    include/acceleration/AccelerationMultigrid_t.h
-    include/acceleration/AccelerationMultigridArray_t.h
-    include/acceleration/AccelerationMultigridVector_t.h
+    include/acceleration/AccelerationMultiGrid_t.h
+    include/acceleration/AccelerationMultiGridArray_t.h
+    include/acceleration/AccelerationMultiGridVector_t.h
     include/acceleration/GridCell_t.h
     include/acceleration/GridCellArray_t.h
     include/acceleration/GridCellVector_t.h
