@@ -225,7 +225,9 @@ add_library(aptracer
     include/skyboxes/SkyboxTextureTransformationSun_t.h
 )
 
-target_include_directories(aptracer PUBLIC include/)
+target_include_directories(aptracer PUBLIC 
+    $<INSTALL_INTERFACE:include>    
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
 
 if(WIN32)
     find_library(PNG REQUIRED
@@ -241,7 +243,9 @@ if(WIN32)
         NAMES freeglut libfreeglut glut libglut
         HINTS external_windows/lib) # CHECK make image libraries optional
 
-    target_include_directories(aptracer PUBLIC external_windows/include)
+    target_include_directories(aptracer PUBLIC 
+        $<INSTALL_INTERFACE:external_windows/include>    
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/external_windows/include>)
 else()
     find_package(PNG REQUIRED) # CHECK make image libraries optional
     find_package(JPEG REQUIRED)
