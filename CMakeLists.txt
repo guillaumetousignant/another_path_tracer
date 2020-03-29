@@ -232,6 +232,17 @@ find_package(TIFF REQUIRED)
 find_package(OpenGL REQUIRED COMPONENTS OpenGL) # CHECK make optional
 find_package(GLUT REQUIRED)
 
+# REMOVE
+MESSAGE(OpenGL_OpenGL_FOUND)
+MESSAGE(${OpenGL_OpenGL_FOUND})
+MESSAGE(OpenGL_FOUND)
+MESSAGE(${OpenGL_FOUND})
+MESSAGE(OpenGL::OpenGL)
+MESSAGE(${OpenGL::OpenGL})
+MESSAGE(OpenGL::GL)
+MESSAGE(${OpenGL::GL})
+# REMOVE
+
 add_dependencies(aptracer OpenGL::OpenGL)
 
 target_include_directories(aptracer PUBLIC 
