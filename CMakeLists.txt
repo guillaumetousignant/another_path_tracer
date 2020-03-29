@@ -225,8 +225,15 @@ add_library(aptracer
     include/skyboxes/SkyboxTextureTransformationSun_t.h
 )
 
+if(WIN32)
+    find_library(PNG REQUIRED
+        NAMES png libpng libpng_a libpng_debug libpng_a_debug
+        HINTS external_windows/lib) # CHECK make image libraries optional
+else()
+    find_package(PNG REQUIRED) # CHECK make image libraries optional
+endif()
+
 find_package(OpenMP)
-find_package(PNG REQUIRED) # CHECK make image libraries optional
 find_package(JPEG REQUIRED)
 find_package(TIFF REQUIRED)
 find_package(OpenGL REQUIRED COMPONENTS OpenGL) # CHECK make optional
@@ -241,16 +248,17 @@ target_include_directories(aptracer PUBLIC
     ${TIFF_INCLUDE_DIR}
     ${GLUT_INCLUDE_DIRS})
 
-if(OpenMP_CXX_FOUND)
-    target_link_libraries(aptracer PUBLIC optimized OpenMP::OpenMP_CXX)
-endif()
-
 target_link_libraries(aptracer PUBLIC 
     ${PNG_LIBRARY}
     ${JPEG_LIBRARY}
     ${TIFF_LIBRARY}
     OpenGL::GL
     ${GLUT_LIBRARY}) # Should use OpenGL::OpenGL on newer linux hosts, but doesn't work on windows and android
+
+if(OpenMP_CXX_FOUND)
+    target_link_libraries(aptracer PUBLIC optimized OpenMP::OpenMP_CXX)
+endif()
+
 target_link_libraries(aptracer PUBLIC debug pthread)
 target_compile_features(aptracer PRIVATE cxx_std_11)
 
