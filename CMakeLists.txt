@@ -298,7 +298,10 @@ endif()
 
 install(TARGETS aptracer 
     EXPORT aptracer-export
-    DESTINATION lib)
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    PUBLIC_HEADER DESTINATION include)
+
 install(EXPORT aptracer-export
   FILE
     APTracerTargets.cmake
@@ -307,4 +310,5 @@ install(EXPORT aptracer-export
   DESTINATION
     lib/cmake/APTraceer
 )
+
 install(TARGETS another_path_tracer DESTINATION bin)
