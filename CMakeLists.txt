@@ -245,7 +245,7 @@ if(WIN32)
 
     target_include_directories(aptracer PUBLIC 
         $<INSTALL_INTERFACE:external_windows/include>    
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/external_windows/include>)
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
 else()
     find_package(PNG REQUIRED) # CHECK make image libraries optional
     find_package(JPEG REQUIRED)
