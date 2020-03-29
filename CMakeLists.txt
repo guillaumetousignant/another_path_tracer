@@ -229,7 +229,7 @@ find_package(OpenMP)
 find_package(PNG REQUIRED) # CHECK make image libraries optional
 find_package(JPEG REQUIRED)
 find_package(TIFF REQUIRED)
-find_package(OpenGL REQUIRED OPTIONAL_COMPONENTS OpenGL GL) # CHECK make optional
+find_package(OpenGL REQUIRED COMPONENTS OpenGL) # CHECK make optional
 find_package(GLUT REQUIRED)
 
 add_dependencies(aptracer OpenGL::GL)
