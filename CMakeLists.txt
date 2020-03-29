@@ -257,5 +257,15 @@ if (BUILD_TESTS)
     add_test(unit_tests unit_tests)
 endif()
 
-install(TARGETS aptracer DESTINATION lib)
+install(TARGETS aptracer 
+    EXPORT aptracer-export
+    DESTINATION lib)
+install(EXPORT aptracer-targets
+  FILE
+    APTracerTargets.cmake
+  NAMESPACE
+    APTracer::
+  DESTINATION
+    lib/cmake/APTraceer
+)
 install(TARGETS another_path_tracer DESTINATION bin)

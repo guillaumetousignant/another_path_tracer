@@ -24,3 +24,8 @@ To build tests, add -DBUILD_TESTS=ON to cmake call. Then:
 
 make test
 ./unit_tests
+
+To include in a CMake project:
+
+find_package(APTracer 1.1.0 REQUIRED)
+target_link_libraries(example APTracer::aptracer)
