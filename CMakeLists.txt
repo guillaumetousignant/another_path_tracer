@@ -239,10 +239,16 @@ if(OpenMP_CXX_FOUND)
     target_link_libraries(aptracer PUBLIC optimized OpenMP::OpenMP_CXX)
 endif()
 
+target_link_libraries(aptracer PUBLIC debug pthread)
+
 target_compile_features(aptracer PRIVATE cxx_std_11)
+
+install(TARGETS aptracer DESTINATION lib)
 
 add_executable(another_path_tracer src/main.cpp)
 
 target_link_libraries(another_path_tracer PRIVATE aptracer)
 
 target_compile_features(another_path_tracer PRIVATE cxx_std_11)
+
+install(TARGETS another_path_tracer DESTINATION bin)
