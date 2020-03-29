@@ -245,5 +245,17 @@ add_executable(another_path_tracer src/main.cpp)
 target_link_libraries(another_path_tracer PRIVATE aptracer)
 target_compile_features(another_path_tracer PRIVATE cxx_std_11)
 
+option(BUILD_TESTS "Build all tests." OFF)
+
+if (BUILD_TESTS)
+    enable_testing()
+    add_executable(unit_tests 
+        tests/main_test.cpp
+        tests/catch.hpp)
+    target_link_libraries(unit_tests PRIVATE aptracer)
+
+    add_test(unit_tests unit_tests)
+endif()
+
 install(TARGETS aptracer DESTINATION lib)
 install(TARGETS another_path_tracer DESTINATION bin)
