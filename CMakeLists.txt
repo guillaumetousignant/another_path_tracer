@@ -225,28 +225,40 @@ add_library(aptracer
     include/skyboxes/SkyboxTextureTransformationSun_t.h
 )
 
+target_include_directories(aptracer PUBLIC include/)
+
 if(WIN32)
     find_library(PNG REQUIRED
         NAMES png libpng libpng_a libpng_debug libpng_a_debug
         HINTS external_windows/lib) # CHECK make image libraries optional
+    find_library(JPEG REQUIRED
+        NAMES jpeg libjpeg jpeg_a libjpeg_a
+        HINTS external_windows/lib) # CHECK make image libraries optional
+    find_library(TIFF REQUIRED
+        NAMES tiff libtiff
+        HINTS external_windows/lib) # CHECK make image libraries optional
+    find_library(GLUT REQUIRED
+        NAMES freeglut libfreeglut glut libglut
+        HINTS external_windows/lib) # CHECK make image libraries optional
+
+    target_include_directories(aptracer PUBLIC external_windows/include)
 else()
     find_package(PNG REQUIRED) # CHECK make image libraries optional
+    find_package(JPEG REQUIRED)
+    find_package(TIFF REQUIRED)
+    find_package(GLUT REQUIRED)
+
+    target_include_directories(aptracer PUBLIC 
+        ${PNG_INCLUDE_DIR}
+        ${JPEG_INCLUDE_DIR}
+        ${TIFF_INCLUDE_DIR}
+        ${GLUT_INCLUDE_DIRS})
 endif()
 
 find_package(OpenMP)
-find_package(JPEG REQUIRED)
-find_package(TIFF REQUIRED)
 find_package(OpenGL REQUIRED COMPONENTS OpenGL) # CHECK make optional
-find_package(GLUT REQUIRED)
 
 add_dependencies(aptracer OpenGL::GL) # Should use OpenGL::OpenGL on newer linux hosts, but doesn't work on windows and android
-
-target_include_directories(aptracer PUBLIC 
-    include/
-    ${PNG_INCLUDE_DIR}
-    ${JPEG_INCLUDE_DIR}
-    ${TIFF_INCLUDE_DIR}
-    ${GLUT_INCLUDE_DIRS})
 
 target_link_libraries(aptracer PUBLIC 
     ${PNG_LIBRARY}
