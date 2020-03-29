@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.12)
 
 project(another_path_tracer VERSION 1.1.0 LANGUAGES C CXX)
 
