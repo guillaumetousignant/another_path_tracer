@@ -232,7 +232,7 @@ find_package(TIFF REQUIRED)
 find_package(OpenGL REQUIRED COMPONENTS OpenGL) # CHECK make optional
 find_package(GLUT REQUIRED)
 
-add_dependencies(aptracer OpenGL::GL)
+add_dependencies(aptracer OpenGL::GL) # Should use OpenGL::OpenGL on newer linux hosts, but doesn't work on windows and android
 
 target_include_directories(aptracer PUBLIC 
     include/
@@ -250,7 +250,7 @@ target_link_libraries(aptracer PUBLIC
     ${JPEG_LIBRARY}
     ${TIFF_LIBRARY}
     OpenGL::GL
-    ${GLUT_LIBRARY})
+    ${GLUT_LIBRARY}) # Should use OpenGL::OpenGL on newer linux hosts, but doesn't work on windows and android
 target_link_libraries(aptracer PUBLIC debug pthread)
 target_compile_features(aptracer PRIVATE cxx_std_11)
 
