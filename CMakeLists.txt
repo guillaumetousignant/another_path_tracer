@@ -267,6 +267,7 @@ if (BUILD_TESTS)
         tests/main_test.cpp
         tests/catch.hpp)
     target_link_libraries(unit_tests PRIVATE aptracer)
+    target_compile_features(unit_tests PRIVATE cxx_std_11)
 
     add_test(unit_tests unit_tests)
 endif()
