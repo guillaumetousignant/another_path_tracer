@@ -229,21 +229,10 @@ find_package(OpenMP)
 find_package(PNG REQUIRED) # CHECK make image libraries optional
 find_package(JPEG REQUIRED)
 find_package(TIFF REQUIRED)
-find_package(OpenGL REQUIRED COMPONENTS OpenGL) # CHECK make optional
+find_package(OpenGL REQUIRED OPTIONAL_COMPONENTS OpenGL GL) # CHECK make optional
 find_package(GLUT REQUIRED)
 
-# REMOVE
-MESSAGE(OpenGL_OpenGL_FOUND)
-MESSAGE(${OpenGL_OpenGL_FOUND})
-MESSAGE(OpenGL_FOUND)
-MESSAGE(${OpenGL_FOUND})
-MESSAGE(OpenGL::OpenGL)
-MESSAGE(${OpenGL::OpenGL})
-MESSAGE(OpenGL::GL)
-MESSAGE(${OpenGL::GL})
-# REMOVE
-
-add_dependencies(aptracer OpenGL::OpenGL)
+add_dependencies(aptracer OpenGL::GL)
 
 target_include_directories(aptracer PUBLIC 
     include/
@@ -260,7 +249,7 @@ target_link_libraries(aptracer PUBLIC
     ${PNG_LIBRARY}
     ${JPEG_LIBRARY}
     ${TIFF_LIBRARY}
-    OpenGL::OpenGL
+    OpenGL::GL
     ${GLUT_LIBRARY})
 target_link_libraries(aptracer PUBLIC debug pthread)
 target_compile_features(aptracer PRIVATE cxx_std_11)
