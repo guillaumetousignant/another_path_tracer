@@ -260,7 +260,7 @@ endif()
 install(TARGETS aptracer 
     EXPORT aptracer-export
     DESTINATION lib)
-install(EXPORT aptracer-targets
+install(EXPORT aptracer-export
   FILE
     APTracerTargets.cmake
   NAMESPACE
