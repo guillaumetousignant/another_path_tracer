@@ -249,7 +249,7 @@ if(WIN32)
 
     target_include_directories(aptracer PUBLIC 
         $<INSTALL_INTERFACE:external_windows/include>    
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/external_windows/include>)
 else()
     find_package(PNG REQUIRED) # CHECK make image libraries optional
     find_package(JPEG REQUIRED)
@@ -308,6 +308,14 @@ if(NOT CMAKE_SOURCE_DIR STREQUAL CMAKE_INSTALL_PREFIX)
     install(DIRECTORY include/ 
         DESTINATION include
         FILES_MATCHING PATTERN "*.h")
+    
+    if(WIN32)
+        install(DIRECTORY include/ 
+            DESTINATION include
+            FILES_MATCHING 
+                PATTERN "*.h"
+                PATTERN "*.hxx")
+    endif()
 endif()
 
 install(EXPORT aptracer-export
