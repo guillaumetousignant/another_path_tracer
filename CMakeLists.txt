@@ -1,5 +1,13 @@
 cmake_minimum_required(VERSION 3.12)
 
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
+    message(FATAL_ERROR "Do not build in-source. Please remove CMakeCache.txt and the CMakeFiles/ directory. Then build out-of-source.")
+endif()
+
+MESSAGE(${CMAKE_SOURCE_DIR})
+MESSAGE(${CMAKE_BINARY_DIR})
+MESSAGE(${CMAKE_INSTALL_PREFIX})
+
 project(another_path_tracer VERSION 1.1.0 LANGUAGES C CXX)
 
 add_library(aptracer
@@ -298,9 +306,13 @@ endif()
 
 install(TARGETS aptracer 
     EXPORT aptracer-export
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib
-    PUBLIC_HEADER DESTINATION include)
+    DESTINATION lib)
+
+if(NOT CMAKE_SOURCE_DIR STREQUAL CMAKE_INSTALL_PREFIX)
+    install(DIRECTORY include/ 
+        DESTINATION include
+        FILES_MATCHING PATTERN "*.h")
+endif()
 
 install(EXPORT aptracer-export
   FILE
