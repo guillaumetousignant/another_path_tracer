@@ -3,7 +3,7 @@
 
 #include "entities/Ray_t.h"
 #include "entities/Vec3f.h"
-#include "MeshTop_t.h"
+#include "shapes/MeshTop_t.h"
 
 namespace APTracer { namespace Entities {
     class Material_t;
