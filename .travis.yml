@@ -3,13 +3,30 @@ compiler: mpic++
 before_install:
   - test -n $CC  && unset CC
   - test -n $CXX && unset CXX
-  - sudo apt update
-  - sudo apt install -y tree openssh-client openssh-server openmpi-bin openmpi-common libopenmpi-dev cppcheck imagemagick freeglut3 freeglut3-dev libtiff-dev libpng16-16 libpng16-dev libjpeg-dev
+addons:
+  apt:
+    packages:
+    - tree
+    - openssh-client
+    - openssh-server
+    - openmpi-bin
+    - openmpi-common
+    - libopenmpi-dev
+    - cppcheck
+    - imagemagick
+    - freeglut3
+    - freeglut3-dev
+    - libtiff-dev
+    - libpng16-16
+    - libpng16-dev
+    - libjpeg-dev
+    - cmake
 script: 
-  - make VERIFY=true
-  - bin/another_path_tracer
-  - make clean
+  - mkdir -p build
+  - cd build
+  - cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DBUILD_TESTS=ON
   - make
+  - ./unit_tests
 before_script: 
 after_script:  make clean
 before_script:
