@@ -320,14 +320,16 @@ if(NOT CMAKE_SOURCE_DIR STREQUAL CMAKE_INSTALL_PREFIX)
             FILES_MATCHING 
                 PATTERN "*.h"
                 PATTERN "*.hxx")
-        
-        install(DIRECTORY external_windows/bin
-            DESTINATION .
-            FILES_MATCHING 
-                PATTERN "freeglut.dll"
-                PATTERN "libpng.dll"
-                PATTERN "tiff.dll")
     endif()
+endif()
+
+if(WIN32)
+    install(DIRECTORY external_windows/bin
+        DESTINATION .
+        FILES_MATCHING 
+            PATTERN "freeglut.dll"
+            PATTERN "libpng.dll"
+            PATTERN "tiff.dll")
 endif()
 
 install(EXPORT aptracer-export
