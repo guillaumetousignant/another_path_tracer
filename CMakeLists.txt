@@ -338,7 +338,7 @@ install(EXPORT aptracer-export
   NAMESPACE
     APTracer::
   DESTINATION
-    lib/cmake/APTraceer
+    lib/cmake/APTracer
 )
 
 install(TARGETS another_path_tracer DESTINATION bin)
