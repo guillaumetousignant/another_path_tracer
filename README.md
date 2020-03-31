@@ -28,4 +28,4 @@ make test
 To include in a CMake project:
 
 find_package(APTracer 1.1.0 REQUIRED)
-target_link_libraries(example APTracer::aptracer)
+target_link_libraries(example APTracer::APTracer)

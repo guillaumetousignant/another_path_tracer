@@ -6,7 +6,7 @@ endif()
 
 project(another_path_tracer VERSION 1.1.0 LANGUAGES C CXX)
 
-add_library(aptracer
+add_library(APTracer
     src/acceleration/AccelerationGrid_t.cpp
     src/acceleration/AccelerationGridArray_t.cpp
     src/acceleration/AccelerationGridVector_t.cpp
@@ -229,7 +229,7 @@ add_library(aptracer
     include/skyboxes/SkyboxTextureTransformationSun_t.h
 )
 
-target_include_directories(aptracer PUBLIC 
+target_include_directories(APTracer PUBLIC 
     $<INSTALL_INTERFACE:include>    
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
 
@@ -247,7 +247,7 @@ if(WIN32)
         NAMES freeglut libfreeglut glut libglut
         HINTS external_windows/lib) # CHECK make image libraries optional
 
-    target_include_directories(aptracer PUBLIC 
+    target_include_directories(APTracer PUBLIC 
         $<INSTALL_INTERFACE:external_windows/include>    
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/external_windows/include>)
 
@@ -261,7 +261,7 @@ else()
     find_package(TIFF REQUIRED)
     find_package(GLUT REQUIRED)
 
-    target_include_directories(aptracer PUBLIC 
+    target_include_directories(APTracer PUBLIC 
         ${PNG_INCLUDE_DIR}
         ${JPEG_INCLUDE_DIR}
         ${TIFF_INCLUDE_DIR}
@@ -271,9 +271,9 @@ endif()
 find_package(OpenMP)
 find_package(OpenGL REQUIRED COMPONENTS OpenGL) # CHECK make optional
 
-add_dependencies(aptracer OpenGL::GL) # Should use OpenGL::OpenGL on newer linux hosts, but doesn't work on windows and android
+add_dependencies(APTracer OpenGL::GL) # Should use OpenGL::OpenGL on newer linux hosts, but doesn't work on windows and android
 
-target_link_libraries(aptracer PUBLIC 
+target_link_libraries(APTracer PUBLIC 
     ${PNG_LIBRARY}
     ${JPEG_LIBRARY}
     ${TIFF_LIBRARY}
@@ -281,15 +281,15 @@ target_link_libraries(aptracer PUBLIC
     ${GLUT_LIBRARY}) # Should use OpenGL::OpenGL on newer linux hosts, but doesn't work on windows and android
 
 if(OpenMP_CXX_FOUND)
-    target_link_libraries(aptracer PUBLIC optimized OpenMP::OpenMP_CXX)
+    target_link_libraries(APTracer PUBLIC optimized OpenMP::OpenMP_CXX)
 endif()
 
-target_link_libraries(aptracer PUBLIC debug pthread)
-target_compile_features(aptracer PRIVATE cxx_std_11)
+target_link_libraries(APTracer PUBLIC debug pthread)
+target_compile_features(APTracer PRIVATE cxx_std_11)
 
 add_executable(another_path_tracer src/main.cpp)
 
-target_link_libraries(another_path_tracer PRIVATE aptracer)
+target_link_libraries(another_path_tracer PRIVATE APTracer)
 target_compile_features(another_path_tracer PRIVATE cxx_std_11)
 
 option(BUILD_TESTS "Build all tests." OFF)
@@ -299,13 +299,13 @@ if (BUILD_TESTS)
     add_executable(unit_tests 
         tests/main_test.cpp
         tests/catch.hpp)
-    target_link_libraries(unit_tests PRIVATE aptracer)
+    target_link_libraries(unit_tests PRIVATE APTracer)
     target_compile_features(unit_tests PRIVATE cxx_std_11)
 
     add_test(unit_tests unit_tests)
 endif()
 
-install(TARGETS aptracer 
+install(TARGETS APTracer 
     EXPORT aptracer-export
     DESTINATION lib)
 
@@ -315,8 +315,8 @@ if(NOT CMAKE_SOURCE_DIR STREQUAL CMAKE_INSTALL_PREFIX)
         FILES_MATCHING PATTERN "*.h")
     
     if(WIN32)
-        install(DIRECTORY include/ 
-            DESTINATION include
+        install(DIRECTORY external_windows/ 
+            DESTINATION external_windows
             FILES_MATCHING 
                 PATTERN "*.h"
                 PATTERN "*.hxx")
