@@ -334,7 +334,7 @@ endif()
 
 install(EXPORT aptracer-export
   FILE
-    APTracerTargets.cmake
+    APTracerConfig.cmake
   NAMESPACE
     APTracer::
   DESTINATION
