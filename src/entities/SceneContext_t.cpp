@@ -1864,7 +1864,7 @@ std::unique_ptr<Camera_t> APTracer::Entities::SceneContext_t::create_camera(cons
 
 void APTracer::Entities::SceneContext_t::create_acceleration_structure(const tinyxml2::XMLElement* xml_acceleration_structure) {
     if (xml_acceleration_structure == nullptr){
-        scene_->acc_ = new AccelerationGrid_t(scene_->geometry_, scene_->n_obj_);
+        scene_->acc_ = new AccelerationMultiGridVector_t(scene_->geometry_, scene_->n_obj_);
         return;
     }
 
