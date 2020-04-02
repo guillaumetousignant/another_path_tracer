@@ -52,3 +52,7 @@ void GridCell_t::remove(const Shape_t* item){
         }
     }
 }
+
+void GridCell_t::move(Shape_t* item) {
+    
+}

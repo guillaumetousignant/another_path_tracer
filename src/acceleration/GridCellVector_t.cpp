@@ -58,6 +58,10 @@ void GridCellVector_t::remove(const Shape_t* item){
     }
 }
 
+void GridCellVector_t::move(Shape_t* item) {
+    
+}
+
 void GridCellVector_t::reserve(){
     items_.reserve(size_);
 }

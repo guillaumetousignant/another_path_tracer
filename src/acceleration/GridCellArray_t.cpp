@@ -75,6 +75,10 @@ void GridCellArray_t::remove(const Shape_t* item){
     }  
 }
 
+void GridCellArray_t::move(Shape_t* item) {
+    
+}
+
 void GridCellArray_t::reserve(){
     if (n_obj_ > 0){
         Shape_t** items_temp = new Shape_t*[increment_size_];
