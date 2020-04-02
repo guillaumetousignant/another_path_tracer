@@ -209,7 +209,29 @@ void AccelerationGridArray_t::add(Shape_t* item){
 }
 
 void AccelerationGridArray_t::remove(const Shape_t* item){
+    Vec3f min1 = Vec3f(std::numeric_limits<double>::infinity());
+    Vec3f max1 = Vec3f(-std::numeric_limits<double>::infinity());
 
+    min1.min(item->mincoord());
+    max1.max(item->maxcoord());
+    min1 = (min1 - coordinates_[0]).floor() /cell_size_;
+    max1 = (max1 - coordinates_[0]).floor() /cell_size_;
+    min1.max(0.0);
+    max1.max(0.0);
+
+    const Vec3f cell_res = Vec3f(cell_res_[0], cell_res_[1], cell_res_[2]) - 1.0;
+    min1.min(cell_res);
+    max1.min(cell_res);
+
+    for (unsigned int z = (unsigned int)min1[2]; z <= (unsigned int)max1[2]; z++){
+        for (unsigned int y = (unsigned int)min1[1]; y <= (unsigned int)max1[1]; y++){
+            for (unsigned int x = (unsigned int)min1[0]; x <= (unsigned int)max1[0]; x++){
+                if (cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] == nullptr){
+                    cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]]->remove(item);
+                }
+            }
+        }
+    }
 }
 
 void AccelerationGridArray_t::move(Shape_t* item){
