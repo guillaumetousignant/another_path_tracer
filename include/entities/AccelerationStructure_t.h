@@ -52,7 +52,7 @@ namespace APTracer { namespace Entities {
             virtual Shape_t* intersect(const Ray_t &ray, double &t, double (&uv)[2]) const = 0;
             
             /**
-             * @brief Adds a shape to the shape to the acceleration structure.
+             * @brief Adds a shape to the acceleration structure.
              * 
              * Virtual function to add a shape to the acceleration structure. Must be implemented to make multi-level
              * acceleration structures possible. Not all acceleration structures are capable of
@@ -63,6 +63,32 @@ namespace APTracer { namespace Entities {
              * @param[in] item Shape to be added to the acceleration structure.
              */
             virtual void add(Shape_t* item) = 0;
+
+            /**
+             * @brief Removes a shape from the acceleration structure.
+             * 
+             * Virtual function to remove a shape from the acceleration structure. Must be implemented to make moving objects
+             * possible. Not all acceleration structures are capable of
+             * removing shapes without a refit, so this operation may be pricey and should be 
+             * considered when choosing a nested acceleration structure if it can't be constructed
+             * all at once.
+             * 
+             * @param item Shape to be removed from the acceleration structure.
+             */
+            virtual void remove(const Shape_t* item) = 0;
+
+            /**
+             * @brief Moves a shape in the acceleration structure.
+             * 
+             * Virtual function to move a shape within the acceleration structure. Must be implemented to make moving objects
+             * possible. Not all acceleration structures are capable of
+             * moving shapes without a refit, so this operation may be pricey and should be 
+             * considered when choosing a nested acceleration structure if it can't be constructed
+             * all at once.
+             * 
+             * @param item Shape to be removed from the acceleration structure.
+             */
+            virtual void move(Shape_t* item) = 0;
     };
 }}
 
