@@ -67,6 +67,7 @@ add_library(APTracer
     src/materials/FresnelMixNormal_t.cpp
     src/materials/NonAbsorber_t.cpp
     src/materials/NormalMaterial_t.cpp
+    src/materials/NormalDiffuseMaterial_t.cpp
     src/materials/Portal_t.cpp
     src/materials/PortalScatterer_t.cpp
     src/materials/PortalScattererTop_t.cpp
@@ -184,6 +185,7 @@ add_library(APTracer
     include/materials/FresnelMixNormal_t.h
     include/materials/NonAbsorber_t.h
     include/materials/NormalMaterial_t.h
+    include/materials/NormalDiffuseMaterial_t.h
     include/materials/Portal_t.h
     include/materials/PortalScatterer_t.h
     include/materials/PortalScattererTop_t.h

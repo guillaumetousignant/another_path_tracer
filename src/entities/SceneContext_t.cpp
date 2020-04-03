@@ -31,6 +31,7 @@
 #include "materials/PortalTop_t.h"
 #include "materials/Portal_t.h"
 #include "materials/NormalMaterial_t.h"
+#include "materials/NormalDiffuseMaterial_t.h"
 #include "entities/MaterialMix_t.h"
 #include "materials/FresnelMix_t.h"
 #include "materials/FresnelMixNormal_t.h"
@@ -1170,6 +1171,11 @@ std::unique_ptr<Material_t> APTracer::Entities::SceneContext_t::create_material(
     }
     else if (type == "normal_material"){
         return std::unique_ptr<Material_t>(new NormalMaterial_t());
+    }
+    else if (type == "normal_diffuse_material"){
+        const char* attributes[] = {"roughness"};
+        require_attributes(xml_material, attributes, 1);
+        return std::unique_ptr<Material_t>(new NormalDiffuseMaterial_t(xml_material->DoubleAttribute("roughness")));
     }
     else if (type == "portal"){
         const char* attributes[] = {"medium_list", "transform_matrix"};

@@ -14,6 +14,7 @@
 #include "materials/FresnelMixNormal_t.h"
 #include "materials/NonAbsorber_t.h"
 #include "materials/NormalMaterial_t.h"
+#include "materials/NormalDiffuseMaterial_t.h"
 #include "materials/Portal_t.h"
 #include "materials/PortalScatterer_t.h"
 #include "materials/PortalScattererTop_t.h"
