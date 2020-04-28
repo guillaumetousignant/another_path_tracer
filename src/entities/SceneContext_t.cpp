@@ -1042,8 +1042,8 @@ std::unique_ptr<Medium_t> APTracer::Entities::SceneContext_t::create_medium(cons
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
     if (type == "absorber"){
-        const char* attributes[] = {"emission", "colour", "emission_distance", "absorption_distance"};
-        require_attributes(xml_medium, attributes, 4);
+        const char* attributes[] = {"emission", "colour", "emission_distance", "absorption_distance", "ind", "priority"};
+        require_attributes(xml_medium, attributes, 6);
         return std::unique_ptr<Medium_t>(
                     new Absorber_t(APTracer::get_colour(xml_medium->Attribute("emission")), APTracer::get_colour(xml_medium->Attribute("colour")), 
                                     xml_medium->DoubleAttribute("emission_distance"), xml_medium->DoubleAttribute("absorption_distance")));
@@ -1053,15 +1053,15 @@ std::unique_ptr<Medium_t> APTracer::Entities::SceneContext_t::create_medium(cons
     }
     else if (type == "portal_scatterer"){
         // CHECK add medium_list stuff
-        const char* attributes[] = {"medium_list", "transform_matrix", "scattering_distance"};
-        require_attributes(xml_medium, attributes, 3);
+        const char* attributes[] = {"medium_list", "transform_matrix", "scattering_distance", "ind", "priority"};
+        require_attributes(xml_medium, attributes, 5);
         scatterers_medium_list = get_medium_index_list(xml_medium->Attribute("medium_list"), xml_materials);
         return std::unique_ptr<Medium_t>(
                     new PortalScatterer_t(get_transform_matrix(xml_medium->Attribute("transform_matrix"), xml_transform_matrices), xml_medium->DoubleAttribute("scattering_distance"), std::list<Medium_t*>()));
     }
     else if (type == "scatterer_exp"){
-        const char* attributes[] = {"emission", "colour", "emission_distance", "absorption_distance", "scattering_distance", "order", "scattering_angle"};
-        require_attributes(xml_medium, attributes, 7);
+        const char* attributes[] = {"emission", "colour", "emission_distance", "absorption_distance", "scattering_distance", "order", "scattering_angle", "ind", "priority"};
+        require_attributes(xml_medium, attributes, 9);
         return std::unique_ptr<Medium_t>(
                     new ScattererExp_t(APTracer::get_colour(xml_medium->Attribute("emission")), APTracer::get_colour(xml_medium->Attribute("colour")),
                                 xml_medium->DoubleAttribute("emission_distance"), xml_medium->DoubleAttribute("absorption_distance"),
@@ -1069,8 +1069,8 @@ std::unique_ptr<Medium_t> APTracer::Entities::SceneContext_t::create_medium(cons
                                 xml_medium->DoubleAttribute("scattering_angle")));
     }
     else if (type == "scatterer_exp_full"){
-        const char* attributes[] = {"emission", "colour", "scattering_emission", "scattering_colour", "emission_distance", "absorption_distance", "scattering_distance", "order", "scattering_angle"};
-        require_attributes(xml_medium, attributes, 9);
+        const char* attributes[] = {"emission", "colour", "scattering_emission", "scattering_colour", "emission_distance", "absorption_distance", "scattering_distance", "order", "scattering_angle", "ind", "priority"};
+        require_attributes(xml_medium, attributes, 11);
         return std::unique_ptr<Medium_t>(
                     new ScattererExpFull_t(APTracer::get_colour(xml_medium->Attribute("emission")), APTracer::get_colour(xml_medium->Attribute("colour")),
                                 APTracer::get_colour(xml_medium->Attribute("scattering_emission")), APTracer::get_colour(xml_medium->Attribute("scattering_colour")),
@@ -1079,16 +1079,16 @@ std::unique_ptr<Medium_t> APTracer::Entities::SceneContext_t::create_medium(cons
                                 xml_medium->DoubleAttribute("scattering_angle")));
     }
     else if (type == "scatterer"){
-        const char* attributes[] = {"emission", "colour", "emission_distance", "absorption_distance", "scattering_distance"};
-        require_attributes(xml_medium, attributes, 5);
+        const char* attributes[] = {"emission", "colour", "emission_distance", "absorption_distance", "scattering_distance", "ind", "priority"};
+        require_attributes(xml_medium, attributes, 7);
         return std::unique_ptr<Medium_t>(
                     new Scatterer_t(APTracer::get_colour(xml_medium->Attribute("emission")), APTracer::get_colour(xml_medium->Attribute("colour")),
                                 xml_medium->DoubleAttribute("emission_distance"), xml_medium->DoubleAttribute("absorption_distance"),
                                 xml_medium->DoubleAttribute("scattering_distance")));
     }
     else if (type == "scatterer_full"){
-        const char* attributes[] = {"emission", "colour", "scattering_emission", "scattering_colour", "emission_distance", "absorption_distance", "scattering_distance"};
-        require_attributes(xml_medium, attributes, 7);
+        const char* attributes[] = {"emission", "colour", "scattering_emission", "scattering_colour", "emission_distance", "absorption_distance", "scattering_distance", "ind", "priority"};
+        require_attributes(xml_medium, attributes, 9);
         return std::unique_ptr<Medium_t>(
                     new ScattererFull_t(APTracer::get_colour(xml_medium->Attribute("emission")), APTracer::get_colour(xml_medium->Attribute("colour")),
                                 APTracer::get_colour(xml_medium->Attribute("scattering_emission")), APTracer::get_colour(xml_medium->Attribute("scattering_colour")),
@@ -1239,33 +1239,33 @@ std::unique_ptr<Material_t> APTracer::Entities::SceneContext_t::create_material(
                     get_texture(xml_material->Attribute("normal_map"), xml_textures), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity")));
     }
     else if (type == "reflective_refractive"){
-        const char* attributes[] = {"emission", "colour", "ind", "priority", "medium"};
-        require_attributes(xml_material, attributes, 5);
+        const char* attributes[] = {"emission", "colour", "medium"};
+        require_attributes(xml_material, attributes, 3);
         return std::unique_ptr<Material_t>(
                     new ReflectiveRefractive_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), get_medium(xml_material->Attribute("medium"), xml_mediums)));
     }
     else if (type == "reflective_refractive_normal"){
-        const char* attributes[] = {"emission", "colour", "normal_map", "ind", "priority", "medium"};
-        require_attributes(xml_material, attributes, 6);
+        const char* attributes[] = {"emission", "colour", "normal_map", "medium"};
+        require_attributes(xml_material, attributes, 4);
         return std::unique_ptr<Material_t>(
                     new ReflectiveRefractiveNormal_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), get_texture(xml_material->Attribute("normal_map"), xml_textures),
                     get_medium(xml_material->Attribute("medium"), xml_mediums)));
     }
     else if (type == "reflective_refractive_fuzz"){
-        const char* attributes[] = {"emission", "colour", "ind", "priority", "medium", "order", "diffusivity"};
-        require_attributes(xml_material, attributes, 7);
+        const char* attributes[] = {"emission", "colour", "medium", "order", "diffusivity"};
+        require_attributes(xml_material, attributes, 5);
         return std::unique_ptr<Material_t>(
                     new ReflectiveRefractiveFuzz_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity"), get_medium(xml_material->Attribute("medium"), xml_mediums)));
     }
     else if (type == "refractive"){
-        const char* attributes[] = {"emission", "colour", "ind", "priority", "medium"};
-        require_attributes(xml_material, attributes, 5);
+        const char* attributes[] = {"emission", "colour", "medium"};
+        require_attributes(xml_material, attributes, 3);
         return std::unique_ptr<Material_t>(
                     new Refractive_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), get_medium(xml_material->Attribute("medium"), xml_mediums)));
     }
     else if (type == "refractive_fuzz"){
-        const char* attributes[] = {"emission", "colour", "ind", "priority", "medium", "order", "diffusivity"};
-        require_attributes(xml_material, attributes, 7);
+        const char* attributes[] = {"emission", "colour", "medium", "order", "diffusivity"};
+        require_attributes(xml_material, attributes, 5);
         return std::unique_ptr<Material_t>(
                     new RefractiveFuzz_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity"), get_medium(xml_material->Attribute("medium"), xml_mediums)));
     }
