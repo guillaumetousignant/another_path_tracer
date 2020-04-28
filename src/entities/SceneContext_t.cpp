@@ -395,12 +395,7 @@ void APTracer::Entities::SceneContext_t::readXML(const std::string &filename){
                 exit(492);
             }
             for (auto it = materials_medium_list[i]->begin(); it != materials_medium_list[i]->end(); ++it){
-                Medium_t* medium = dynamic_cast<Medium_t*>(materials_[*it].get()); // CHECK I don't like those either
-                if (medium == nullptr){
-                    std::cerr << "Error: material #" << i << " had medium #" << *it << " in its medium list, but it is not convertible to one. Exiting." << std::endl;
-                    exit(493);
-                }
-                portal->medium_list_.push_back(medium);
+                portal->medium_list_.push_back(mediums_[*it].get());
             }
         }
     }
@@ -414,12 +409,7 @@ void APTracer::Entities::SceneContext_t::readXML(const std::string &filename){
                 exit(392);
             }
             for (auto it = mediums_medium_list[i]->begin(); it != mediums_medium_list[i]->end(); ++it){
-                Medium_t* medium = dynamic_cast<Medium_t*>(materials_[*it].get()); // CHECK I don't like those either
-                if (medium == nullptr){
-                    std::cerr << "Error: medium #" << i << " had medium #" << *it << " in its medium list, but it is not convertible to one. Exiting." << std::endl;
-                    exit(393);
-                }
-                portal_scatterer->medium_list_.push_back(medium);
+                portal_scatterer->medium_list_.push_back(mediums_[*it].get());
             }
         }
     }
