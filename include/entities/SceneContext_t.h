@@ -81,14 +81,14 @@ namespace APTracer { namespace Entities {
 
             std::unique_ptr<TransformMatrix_t> create_transform_matrix(const tinyxml2::XMLElement* xml_transform_matrix) const;
             std::unique_ptr<Texture_t> create_texture(const tinyxml2::XMLElement* xml_texture) const;
-            std::unique_ptr<Medium_t> create_medium(const tinyxml2::XMLElement* xml_medium, std::unique_ptr<std::list<unsigned int>> &mediums_medium_list, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials);
+            std::unique_ptr<Medium_t> create_medium(const tinyxml2::XMLElement* xml_medium, std::unique_ptr<std::list<unsigned int>> &mediums_medium_list, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_mediums);
             std::unique_ptr<Material_t> create_material(const tinyxml2::XMLElement* xml_material, std::unique_ptr<std::list<unsigned int>> &materials_medium_list, std::vector<unsigned int> &materials_mix_list, std::unique_ptr<std::tuple<std::unique_ptr<std::list<unsigned int>>, std::unique_ptr<std::list<std::string>>>> &materials_aggregate_list, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_mediums);
             std::unique_ptr<MeshGeometry_t> create_mesh_geometry(const tinyxml2::XMLElement* xml_mesh_geometry) const;
             std::unique_ptr<Shape_t> create_object(const tinyxml2::XMLElement* xml_object, std::unique_ptr<MeshTop_t> &mesh, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_mesh_geometries);
             std::unique_ptr<DirectionalLight_t> create_directional_light(const tinyxml2::XMLElement* xml_directional_light, const tinyxml2::XMLElement* xml_transform_matrices);
             std::unique_ptr<Skybox_t> create_skybox(const tinyxml2::XMLElement* xml_skybox, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_directional_lights);
             std::unique_ptr<ImgBuffer_t> create_imgbuffer(const tinyxml2::XMLElement* xml_imgbuffer);
-            std::unique_ptr<Camera_t> create_camera(const tinyxml2::XMLElement* xml_camera, const std::string &next_filename, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_imgbuffers, const tinyxml2::XMLElement* xml_skyboxes);
+            std::unique_ptr<Camera_t> create_camera(const tinyxml2::XMLElement* xml_camera, const std::string &next_filename, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_mediums, const tinyxml2::XMLElement* xml_imgbuffers, const tinyxml2::XMLElement* xml_skyboxes);
             void create_acceleration_structure(const tinyxml2::XMLElement* xml_acceleration_structure);
 
             TransformMatrix_t* get_transform_matrix(std::string transform_matrix, const tinyxml2::XMLElement* xml_transform_matrices);
