@@ -5,11 +5,10 @@
       <texture filename="assets\rink2.jpg" name="peinture" type="texture"/>
    </textures>
    <mediums>
-      <medium name="air_absorber" type="nonabsorber" ind="1.001" priority="0"/>
+      <medium name="air" type="nonabsorber" ind="1.001" priority="0"/>
       <medium absorption_distance="1" colour="white" emission="black" emission_distance="1" name="glace_scatterer" scattering_distance="0.5" type="scatterer" ind="1.33" priority="10"/>
    </mediums>
    <materials>
-      <material name="air" scattering_fn="air_absorber" type="transparent"/>
       <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>
       <material colour="white" emission="5 5 5" name="diflight" roughness="0" type="diffuse"/>
       <material colour="white" diffusivity="0.01" emission="black" name="glace_mat1" order="1" scattering_fn="glace_scatterer" type="reflective_refractive_fuzz"/>

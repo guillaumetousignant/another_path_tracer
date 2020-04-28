@@ -4,11 +4,10 @@
       <texture filename=".\assets\Zombie beast_texture5.jpg" name="zombie_texture" type="texture"/>
    </textures>
    <mediums>
-      <medium name="air_absorber" type="nonabsorber" ind="1.001" priority="0"/>
+      <medium name="air" type="nonabsorber" ind="1.001" priority="0"/>
       <medium absorption_distance="0.05" colour="green" emission="black" emission_distance="0.05" name="zombie_scatterer" order="1" scattering_angle="1" scattering_distance="0.025" type="scatterer_exp" ind="1.2" priority="10"/>
    </mediums>
    <materials>
-      <material colour="white" emission="black" name="air" scattering_fn="air_absorber" type="refractive"/>
       <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>
       <material colour="white" emission="8 8 8" name="diflight" roughness="0" type="diffuse"/>
       <material colour="white" emission="black" name="goo" scattering_fn="zombie_scatterer" type="reflective_refractive"/>

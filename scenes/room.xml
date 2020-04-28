@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <scene name="room" object_list="wallfront, wallback, walltop, wallbottom, wallleft, wallright, goo">
    <mediums>
-      <medium name="air_absorber" type="nonabsorber" ind="1.001" priority="0"/>
+      <medium name="air" type="nonabsorber" ind="1.001" priority="0"/>
       <medium absorption_distance="100" colour="white" emission="turquoise" emission_distance="5" name="goo_absorber" type="absorber" ind="1.4" priority="10"/>
    </mediums>
    <materials>
-      <material name="air" scattering_fn="air_absorber" type="transparent"/>
       <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>
       <material colour="white" diffusivity="0" emission="black" name="goomat" order="1" scattering_fn="goo_absorber" type="reflective_refractive_fuzz"/>
    </materials>

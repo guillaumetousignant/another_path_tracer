@@ -4,10 +4,9 @@
       <texture filename="assets\Ocean from horn.jpg" name="background" type="texture"/>
    </textures>
    <mediums>
-      <medium name="air_absorber" type="nonabsorber" ind="1.001" priority="0"/>
+      <medium name="air" type="nonabsorber" ind="1.001" priority="0"/>
    </mediums>
    <materials>
-      <material name="air" scattering_fn="air_absorber" type="transparent"/>
       <material colour="white" emission="black" name="difwhite" roughness="0.1" type="diffuse"/>
       <material colour="white" emission="orange" name="diforange" roughness="0.1" type="diffuse"/>
       <material medium_list="air, air" name="portalmat1" transform_matrix="NaN" type="portal">

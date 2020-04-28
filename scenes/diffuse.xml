@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <scene name="diffuse" object_list="sphere1, planegrey1, planegrey2">
    <mediums>
-      <medium name="air_absorber" type="nonabsorber" ind="1.001" priority="0"/>
+      <medium name="air" type="nonabsorber" ind="1.001" priority="0"/>
    </mediums>
    <materials>
       <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>
       <material colour="grey2" emission="black" name="difgrey2" roughness="1" type="diffuse"/>
-      <material colour="white" emission="black" name="air" scattering_fn="air_absorber" type="refractive"/>
    </materials>
    <objects>
       <object material="difgrey" name="planegrey1" normals="NaN" points="-1000 1000 -1&#xA;-1000 -1000 -1&#xA; 1000 -1000 -1" texture_coordinates="NaN" transform_matrix="NaN" type="triangle"/>

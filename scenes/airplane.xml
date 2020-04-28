@@ -11,10 +11,9 @@
       <texture filename="./assets/A380/A380_part3.tga" name="A380_part3" type="texture"/>
    </textures>
    <mediums>
-      <medium name="air_absorber" type="nonabsorber" ind="1.001" priority="0"/>
+      <medium name="air" type="nonabsorber" ind="1.001" priority="0"/>
    </mediums>
    <materials>
-      <material colour="white" emission="black" name="air" scattering_fn="air_absorber" type="refractive"/>
       <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>
       <material emission="black" name="b737_800_2_t" roughness="1" texture="b737_800_2_T" type="diffuse_tex"/>
       <material colour="0.24314 0.24314 0.24314" emission="black" name="matte__ffffffff01" roughness="1" type="diffuse"/>
