@@ -9,7 +9,7 @@
       <material colour="white" emission="2 2 2" name="diflight" roughness="1" type="diffuse"/>
       <material colour="green" emission="black" name="difgreen" roughness="1" type="diffuse"/>
       <material colour="yellow" emission="black" name="ref1" type="reflective"/>
-      <material colour="white" emission="black" name="glass" scattering_fn="glass_absorber" type="reflective_refractive"/>
+      <material colour="white" emission="black" name="glass" medium="glass_absorber" type="reflective_refractive"/>
    </materials>
    <objects>
       <object material="difpurple" name="spherepurple" transform_matrix="NaN" type="sphere">

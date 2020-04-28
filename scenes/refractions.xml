@@ -9,11 +9,11 @@
    </mediums>
    <materials>
       <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>
-      <material colour="white" diffusivity="0" emission="black" name="glass_fuzz1" order="1" scattering_fn="glass_absorber" type="reflective_refractive_fuzz"/>
-      <material colour="white" diffusivity="0.001" emission="black" name="glass_fuzz2" order="1" scattering_fn="glass_absorber" type="reflective_refractive_fuzz"/>
-      <material colour="white" diffusivity="0.01" emission="black" name="glass_fuzz3" order="1" scattering_fn="glass_absorber" type="reflective_refractive_fuzz"/>
-      <material colour="white" diffusivity="0.1" emission="black" name="glass_fuzz4" order="1" scattering_fn="glass_absorber" type="reflective_refractive_fuzz"/>
-      <material colour="white" diffusivity="1" emission="black" name="glass_fuzz5" order="1" scattering_fn="glass_absorber" type="reflective_refractive_fuzz"/>
+      <material colour="white" diffusivity="0" emission="black" name="glass_fuzz1" order="1" medium="glass_absorber" type="reflective_refractive_fuzz"/>
+      <material colour="white" diffusivity="0.001" emission="black" name="glass_fuzz2" order="1" medium="glass_absorber" type="reflective_refractive_fuzz"/>
+      <material colour="white" diffusivity="0.01" emission="black" name="glass_fuzz3" order="1" medium="glass_absorber" type="reflective_refractive_fuzz"/>
+      <material colour="white" diffusivity="0.1" emission="black" name="glass_fuzz4" order="1" medium="glass_absorber" type="reflective_refractive_fuzz"/>
+      <material colour="white" diffusivity="1" emission="black" name="glass_fuzz5" order="1" medium="glass_absorber" type="reflective_refractive_fuzz"/>
    </materials>
    <objects>
       <object material="glass_fuzz1" name="point1" transform_matrix="NaN" type="sphere">

@@ -11,7 +11,7 @@
       <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>
       <material colour="white" emission="black" name="coating" type="reflective"/>
       <material colour="0.05 0.05 0.05" emission="black" name="eyemat1" roughness="1" type="diffuse"/>
-      <material colour="white" diffusivity="0.1" emission="black" name="skinmat" order="2" scattering_fn="skin_scatterer" type="reflective_refractive_fuzz"/>
+      <material colour="white" diffusivity="0.1" emission="black" name="skinmat" order="2" medium="skin_scatterer" type="reflective_refractive_fuzz"/>
       <material colour="white" emission="black" name="bonemat" roughness="0.25" type="diffuse"/>
       <material ind="1.5" material_reflected="coating" material_refracted="eyemat1" name="eyemat" type="fresnelmix"/>
       <material colour="pink" emission="black" name="lungmat" roughness="1" type="diffuse"/>

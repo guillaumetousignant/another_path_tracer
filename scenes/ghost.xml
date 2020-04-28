@@ -9,7 +9,7 @@
    </mediums>
    <materials>
       <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>
-      <material colour="white" diffusivity="1" emission="black" name="air2" order="1" scattering_fn="air2_scatterer" type="reflective_refractive_fuzz"/>
+      <material colour="white" diffusivity="1" emission="black" name="air2" order="1" medium="air2_scatterer" type="reflective_refractive_fuzz"/>
    </materials>
    <objects>
       <object material="difgrey" name="planegrey1" normals="NaN" points="-2 2 -0.5&#xA;-2 -2 -0.5&#xA; 2 -2 -0.5" texture_coordinates="NaN" transform_matrix="NaN" type="triangle">

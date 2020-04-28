@@ -8,7 +8,7 @@
       <medium absorption_distance="100" colour="white" emission="black" emission_distance="100" name="glass_scatterer" type="absorber" ind="1.5" priority="10"/>
    </mediums>
    <materials>
-      <material colour="white" diffusivity="0.0005" emission="black" name="glass_fuzz" order="1" scattering_fn="glass_scatterer" type="reflective_refractive_fuzz"/>
+      <material colour="white" diffusivity="0.0005" emission="black" name="glass_fuzz" order="1" medium="glass_scatterer" type="reflective_refractive_fuzz"/>
    </materials>
    <objects>
       <object material="glass_fuzz" name="point" transform_matrix="NaN" type="sphere">

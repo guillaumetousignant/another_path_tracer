@@ -9,7 +9,7 @@
    </mediums>
    <materials>
       <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>
-      <material colour="white" diffusivity="0.1" emission="black" name="glass" order="2" scattering_fn="glass_scatterer" type="reflective_refractive_fuzz"/>
+      <material colour="white" diffusivity="0.1" emission="black" name="glass" order="2" medium="glass_scatterer" type="reflective_refractive_fuzz"/>
    </materials>
    <mesh_geometries>
       <mesh_geometry filename="assets\teapot2.obj" name="teapot_mesh" type="mesh_geometry"/>

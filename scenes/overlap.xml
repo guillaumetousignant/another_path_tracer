@@ -7,8 +7,8 @@
    </mediums>
    <materials>
       <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>
-      <material colour="white" diffusivity="0.05" emission="black" name="glass" order="2" scattering_fn="1" type="reflective_refractive_fuzz"/>
-      <material colour="white" diffusivity="0.05" emission="black" name="glass2" order="1" scattering_fn="2" type="reflective_refractive_fuzz"/>
+      <material colour="white" diffusivity="0.05" emission="black" name="glass" order="2" medium="1" type="reflective_refractive_fuzz"/>
+      <material colour="white" diffusivity="0.05" emission="black" name="glass2" order="1" medium="2" type="reflective_refractive_fuzz"/>
    </materials>
    <transform_matrices>
       <transform_matrix name="neutralmatrix" value="NaN"/>

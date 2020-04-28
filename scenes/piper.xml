@@ -13,8 +13,8 @@
       <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>
       <material emission="black" name="base1" roughness="1" texture="piper_diffuse" normal_map="piper_normal" type="diffuse_tex_normal"/>
       <material emission="black" name="base_NONE1" roughness="1" texture="piper_diffuse" normal_map="piper_normal" type="diffuse_tex_normal"/>
-      <material colour="0.95 0.95 0.95" emission="black" normal_map="piper_normal" name="glass" scattering_fn="glass_absorber" type="reflective_refractive_normal"/>
-      <material colour="0.95 0.95 0.95" emission="black" normal_map="piper_normal" name="glass_NONE" scattering_fn="glass_absorber" type="reflective_refractive_normal"/>
+      <material colour="0.95 0.95 0.95" emission="black" normal_map="piper_normal" name="glass" medium="glass_absorber" type="reflective_refractive_normal"/>
+      <material colour="0.95 0.95 0.95" emission="black" normal_map="piper_normal" name="glass_NONE" medium="glass_absorber" type="reflective_refractive_normal"/>
       <material diffusivity="0.04" emission="black" name="internals_alu" order="1" texture="piper_diffuse" normal_map="piper_normal" type="reflective_fuzz_tex_normal"/>
       <material colour="0.33602 0.33602 0.33602" diffusivity="0.04" emission="black" normal_map="piper_normal" name="internals_alu_NONE" order="1" type="reflective_fuzz_normal"/>
       <material colour="0.007214 0.007214 0.007214" emission="black" normal_map="piper_normal" name="internals_b" roughness="1" type="diffuse_normal"/>

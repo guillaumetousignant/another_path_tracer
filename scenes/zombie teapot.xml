@@ -10,7 +10,7 @@
    <materials>
       <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>
       <material colour="white" emission="8 8 8" name="diflight" roughness="0" type="diffuse"/>
-      <material colour="white" emission="black" name="goo" scattering_fn="zombie_scatterer" type="reflective_refractive"/>
+      <material colour="white" emission="black" name="goo" medium="zombie_scatterer" type="reflective_refractive"/>
    </materials>
    <mesh_geometries>
       <mesh_geometry filename="assets\Zombie_Beast4_test.obj" name="zombie_mesh" type="mesh_geometry"/>

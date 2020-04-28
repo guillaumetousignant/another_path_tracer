@@ -9,7 +9,7 @@
       <material colour="white" emission="2 2 2" name="diflight" roughness="1" type="diffuse"/>
       <material colour="green" emission="black" name="difgreen" roughness="1" type="diffuse"/>
       <material colour="yellow" diffusivity="0.04" emission="black" name="ref1_fuzz" order="1" type="reflective_fuzz"/>
-      <material colour="white" diffusivity="0.03" emission="black" name="glass_fuzz" order="1" scattering_fn="glass_absorber" type="reflective_refractive_fuzz"/>
+      <material colour="white" diffusivity="0.03" emission="black" name="glass_fuzz" order="1" medium="glass_absorber" type="reflective_refractive_fuzz"/>
    </materials>
    <objects>
       <object material="difpurple" name="spherepurple" transform_matrix="NaN" type="sphere">

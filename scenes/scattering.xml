@@ -13,11 +13,11 @@
    </mediums>
    <materials>
       <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>
-      <material colour="white" emission="black" name="scattering_mat1" scattering_fn="scatterer1" type="reflective_refractive"/>
-      <material colour="white" emission="black" name="scattering_mat2" scattering_fn="scatterer2" type="reflective_refractive"/>
-      <material colour="white" emission="black" name="scattering_mat3" scattering_fn="scatterer3" type="reflective_refractive"/>
-      <material colour="white" emission="black" name="scattering_mat4" scattering_fn="scatterer4" type="reflective_refractive"/>
-      <material colour="white" emission="black" name="scattering_mat5" scattering_fn="scatterer5" type="reflective_refractive"/>
+      <material colour="white" emission="black" name="scattering_mat1" medium="scatterer1" type="reflective_refractive"/>
+      <material colour="white" emission="black" name="scattering_mat2" medium="scatterer2" type="reflective_refractive"/>
+      <material colour="white" emission="black" name="scattering_mat3" medium="scatterer3" type="reflective_refractive"/>
+      <material colour="white" emission="black" name="scattering_mat4" medium="scatterer4" type="reflective_refractive"/>
+      <material colour="white" emission="black" name="scattering_mat5" medium="scatterer5" type="reflective_refractive"/>
    </materials>
    <objects>
       <object material="scattering_mat1" name="point1" transform_matrix="NaN" type="sphere">

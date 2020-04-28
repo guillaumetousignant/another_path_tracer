@@ -11,7 +11,7 @@
    <materials>
       <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>
       <material colour="white" emission="5 5 5" name="diflight" roughness="0" type="diffuse"/>
-      <material colour="white" diffusivity="0.01" emission="black" name="glace_mat1" order="1" scattering_fn="glace_scatterer" type="reflective_refractive_fuzz"/>
+      <material colour="white" diffusivity="0.01" emission="black" name="glace_mat1" order="1" medium="glace_scatterer" type="reflective_refractive_fuzz"/>
       <material colour="white" emission="black" name="coating" type="reflective"/>
       <material ind="1.33" material_reflected="coating" material_refracted="glace_mat1" name="glace_mat" type="fresnelmix"/>
       <material emission="black" name="peinture_mat" roughness="1" texture="peinture" type="diffuse_tex"/>

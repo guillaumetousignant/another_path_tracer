@@ -7,7 +7,7 @@
    <materials>
       <material colour="white" emission="2 2 2" name="diflight" roughness="1" type="diffuse"/>
       <material colour="green" emission="black" name="difgreen" roughness="1" type="diffuse"/>
-      <material colour="white" emission="black" name="glass" scattering_fn="glass_absorber" type="reflective_refractive"/>
+      <material colour="white" emission="black" name="glass" medium="glass_absorber" type="reflective_refractive"/>
    </materials>
    <mesh_geometries>
       <mesh_geometry filename="./assets/cube.obj" name="cube_mesh" type="mesh_geometry"/>

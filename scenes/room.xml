@@ -6,7 +6,7 @@
    </mediums>
    <materials>
       <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>
-      <material colour="white" diffusivity="0" emission="black" name="goomat" order="1" scattering_fn="goo_absorber" type="reflective_refractive_fuzz"/>
+      <material colour="white" diffusivity="0" emission="black" name="goomat" order="1" medium="goo_absorber" type="reflective_refractive_fuzz"/>
    </materials>
    <objects>
       <object material="goomat" name="goo" transform_matrix="NaN" type="sphere">
