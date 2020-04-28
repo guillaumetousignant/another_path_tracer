@@ -1295,7 +1295,7 @@ std::unique_ptr<Material_t> APTracer::Entities::SceneContext_t::create_material(
         const char* attributes[] = {"materials_list", "materials_names"};
         require_attributes(xml_material, attributes, 2);
         materials_aggregate_list = std::unique_ptr<std::tuple<std::unique_ptr<std::list<unsigned int>>, std::unique_ptr<std::list<std::string>>>>(
-                    new std::tuple<std::unique_ptr<std::list<unsigned int>>, std::unique_ptr<std::list<std::string>>>(get_medium_index_list(xml_material->Attribute("materials_list"), xml_mediums), get_medium_names(xml_material->Attribute("materials_names")))); // wtf
+                    new std::tuple<std::unique_ptr<std::list<unsigned int>>, std::unique_ptr<std::list<std::string>>>(get_material_index_list(xml_material->Attribute("materials_list"), xml_materials), get_medium_names(xml_material->Attribute("materials_names")))); // wtf
         return std::unique_ptr<Material_t>();
         // CHECK add aggregates
     }
@@ -1935,6 +1935,84 @@ TransformMatrix_t* APTracer::Entities::SceneContext_t::get_transform_matrix(std:
     }
     std::cerr << "Error, transformation matrix '" << transform_matrix << "' not found. Ignoring. This causes a memory leak." << std::endl;
     return new TransformMatrix_t();
+}
+
+std::unique_ptr<std::list<unsigned int>> APTracer::Entities::SceneContext_t::get_material_index_list(std::string string_material_list, const tinyxml2::XMLElement* xml_materials) const {
+    std::unique_ptr<std::list<unsigned int>> material_list = std::unique_ptr<std::list<unsigned int>>(new std::list<unsigned int>());
+    std::string delimiter = ", ";
+    size_t pos = 0;
+    std::string token;
+
+    while ((pos = string_material_list.find(delimiter)) != std::string::npos) {
+        token = string_material_list.substr(0, pos);
+
+        if (is_number(token)) {
+            material_list->push_back(std::stoi(token) - 1);
+        }
+        else {
+            if (xml_materials != nullptr){
+                bool missing = true;
+                std::transform(token.begin(), token.end(), token.begin(), ::tolower);
+                unsigned int index = 0;
+                for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
+                    const char* material_char = xml_material->Attribute("name");
+                    if (material_char != nullptr){
+                        std::string name_material = material_char;
+                        std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
+                        if (name_material == token){
+                            material_list->push_back(index);
+                            missing = false;
+                            break;
+                        }
+                    }                    
+                    ++index;
+                }
+                if (missing){
+                    std::cerr << "Error: material '" << token << "' not found, exiting." << std::endl;
+                    exit(498);
+                }
+            }
+            else {
+                std::cerr << "Error: no materials, material '" << token << "' not found, exiting." << std::endl;
+                exit(499);
+            }
+        }
+        // CHECK this should check for errors.
+
+        string_material_list.erase(0, pos + delimiter.length());
+    }
+    if (is_number(string_material_list)) {
+        material_list->push_back(std::stoi(string_material_list) - 1);
+    }
+    else {
+        if (xml_materials != nullptr){
+            bool missing = true;
+            std::transform(string_material_list.begin(), string_material_list.end(), string_material_list.begin(), ::tolower);
+            unsigned int index = 0;
+            for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
+                const char* material_char = xml_material->Attribute("name");
+                if (material_char != nullptr){
+                    std::string name_material = material_char;
+                    std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
+                    if (name_material == string_material_list){
+                        material_list->push_back(index);
+                        missing = false;
+                        break;
+                    }
+                }                
+                ++index;
+            }
+            if (missing){
+                std::cerr << "Error: material '" << string_material_list << "' not found, exiting." << std::endl;
+                exit(498);
+            }
+        }
+        else {
+            std::cerr << "Error: no materials, material '" << string_material_list << "' not found, exiting." << std::endl;
+            exit(499);
+        }
+    }
+    return material_list;
 }
 
 std::unique_ptr<std::list<unsigned int>> APTracer::Entities::SceneContext_t::get_medium_index_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_mediums) const {
