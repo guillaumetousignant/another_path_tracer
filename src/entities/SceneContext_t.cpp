@@ -397,7 +397,7 @@ void APTracer::Entities::SceneContext_t::readXML(const std::string &filename){
             for (auto it = materials_medium_list[i]->begin(); it != materials_medium_list[i]->end(); ++it){
                 Medium_t* medium = dynamic_cast<Medium_t*>(materials_[*it].get()); // CHECK I don't like those either
                 if (medium == nullptr){
-                    std::cerr << "Error: material #" << i << " had material #" << *it << " in its medium list, but it is not convertible to one. Exiting." << std::endl;
+                    std::cerr << "Error: material #" << i << " had medium #" << *it << " in its medium list, but it is not convertible to one. Exiting." << std::endl;
                     exit(493);
                 }
                 portal->medium_list_.push_back(medium);
@@ -416,7 +416,7 @@ void APTracer::Entities::SceneContext_t::readXML(const std::string &filename){
             for (auto it = mediums_medium_list[i]->begin(); it != mediums_medium_list[i]->end(); ++it){
                 Medium_t* medium = dynamic_cast<Medium_t*>(materials_[*it].get()); // CHECK I don't like those either
                 if (medium == nullptr){
-                    std::cerr << "Error: medium #" << i << " had material #" << *it << " in its medium list, but it is not convertible to one. Exiting." << std::endl;
+                    std::cerr << "Error: medium #" << i << " had medium #" << *it << " in its medium list, but it is not convertible to one. Exiting." << std::endl;
                     exit(393);
                 }
                 portal_scatterer->medium_list_.push_back(medium);
@@ -1947,7 +1947,7 @@ TransformMatrix_t* APTracer::Entities::SceneContext_t::get_transform_matrix(std:
     return new TransformMatrix_t();
 }
 
-std::unique_ptr<std::list<unsigned int>> APTracer::Entities::SceneContext_t::get_medium_index_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_materials) const {
+std::unique_ptr<std::list<unsigned int>> APTracer::Entities::SceneContext_t::get_medium_index_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_mediums) const {
     std::unique_ptr<std::list<unsigned int>> medium_list = std::unique_ptr<std::list<unsigned int>>(new std::list<unsigned int>());
     std::string delimiter = ", ";
     size_t pos = 0;
@@ -1960,16 +1960,16 @@ std::unique_ptr<std::list<unsigned int>> APTracer::Entities::SceneContext_t::get
             medium_list->push_back(std::stoi(token) - 1);
         }
         else {
-            if (xml_materials != nullptr){
+            if (xml_mediums != nullptr){
                 bool missing = true;
                 std::transform(token.begin(), token.end(), token.begin(), ::tolower);
                 unsigned int index = 0;
-                for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
-                    const char* material_char = xml_material->Attribute("name");
-                    if (material_char != nullptr){
-                        std::string name_material = material_char;
-                        std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
-                        if (name_material == token){
+                for (const tinyxml2::XMLElement* xml_medium = xml_mediums->FirstChildElement("medium"); xml_medium; xml_medium = xml_medium->NextSiblingElement("medium")){
+                    const char* medium_char = xml_medium->Attribute("name");
+                    if (medium_char != nullptr){
+                        std::string name_medium = medium_char;
+                        std::transform(name_medium.begin(), name_medium.end(), name_medium.begin(), ::tolower);
+                        if (name_medium == token){
                             medium_list->push_back(index);
                             missing = false;
                             break;
@@ -1983,7 +1983,7 @@ std::unique_ptr<std::list<unsigned int>> APTracer::Entities::SceneContext_t::get
                 }
             }
             else {
-                std::cerr << "Error: no materials, medium '" << token << "' not found, exiting." << std::endl;
+                std::cerr << "Error: no mediums, medium '" << token << "' not found, exiting." << std::endl;
                 exit(499);
             }
         }
@@ -1995,16 +1995,16 @@ std::unique_ptr<std::list<unsigned int>> APTracer::Entities::SceneContext_t::get
         medium_list->push_back(std::stoi(string_medium_list) - 1);
     }
     else {
-        if (xml_materials != nullptr){
+        if (xml_mediums != nullptr){
             bool missing = true;
             std::transform(string_medium_list.begin(), string_medium_list.end(), string_medium_list.begin(), ::tolower);
             unsigned int index = 0;
-            for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
-                const char* material_char = xml_material->Attribute("name");
-                if (material_char != nullptr){
-                    std::string name_material = material_char;
-                    std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
-                    if (name_material == string_medium_list){
+            for (const tinyxml2::XMLElement* xml_medium = xml_mediums->FirstChildElement("medium"); xml_medium; xml_medium = xml_medium->NextSiblingElement("medium")){
+                const char* medium_char = xml_medium->Attribute("name");
+                if (medium_char != nullptr){
+                    std::string name_medium = medium_char;
+                    std::transform(name_medium.begin(), name_medium.end(), name_medium.begin(), ::tolower);
+                    if (name_medium == string_medium_list){
                         medium_list->push_back(index);
                         missing = false;
                         break;
@@ -2018,14 +2018,14 @@ std::unique_ptr<std::list<unsigned int>> APTracer::Entities::SceneContext_t::get
             }
         }
         else {
-            std::cerr << "Error: no materials, medium '" << string_medium_list << "' not found, exiting." << std::endl;
+            std::cerr << "Error: no mediums, medium '" << string_medium_list << "' not found, exiting." << std::endl;
             exit(499);
         }
     }
     return medium_list;
 }
 
-std::list<Medium_t*> APTracer::Entities::SceneContext_t::get_medium_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_materials) const {
+std::list<Medium_t*> APTracer::Entities::SceneContext_t::get_medium_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_mediums) const {
     std::list<Medium_t*> medium_list = std::list<Medium_t*>(); // CHECK full of dynamic casts with no checks... should maybe check for errors
     std::string delimiter = ", ";
     size_t pos = 0;
@@ -2035,30 +2035,20 @@ std::list<Medium_t*> APTracer::Entities::SceneContext_t::get_medium_list(std::st
         token = string_medium_list.substr(0, pos);
 
         if (is_number(token)) {
-            Medium_t* medium = dynamic_cast<Medium_t*>(materials_[std::stoi(token) - 1].get());
-            if (medium == nullptr){
-                std::cerr << "Error: material #" << token << " is in a medium list, but it is not convertible to one. Exiting." << std::endl;
-                exit(494);
-            }
-            medium_list.push_back(medium);
+            medium_list.push_back(mediums_[std::stoi(token) - 1].get());
         }
         else {
-            if (xml_materials != nullptr){
+            if (xml_mediums != nullptr){
                 bool missing = true;
                 std::transform(token.begin(), token.end(), token.begin(), ::tolower);
                 unsigned int index = 0;
-                for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
-                    const char* material_char = xml_material->Attribute("name");
-                    if (material_char != nullptr){
-                        std::string name_material = material_char;
-                        std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
-                        if (name_material == token){
-                            Medium_t* medium = dynamic_cast<Medium_t*>(materials_[index].get());
-                            if (medium == nullptr){
-                                std::cerr << "Error: material '" << token << "' is in a medium list, but it is not convertible to one. Exiting." << std::endl;
-                                exit(495);
-                            }
-                            medium_list.push_back(medium);
+                for (const tinyxml2::XMLElement* xml_medium = xml_mediums->FirstChildElement("medium"); xml_medium; xml_medium = xml_medium->NextSiblingElement("medium")){
+                    const char* medium_char = xml_medium->Attribute("name");
+                    if (medium_char != nullptr){
+                        std::string name_medium = medium_char;
+                        std::transform(name_medium.begin(), name_medium.end(), name_medium.begin(), ::tolower);
+                        if (name_medium == token){
+                            medium_list.push_back(mediums_[index].get());
                             missing = false;
                             break;
                         }
@@ -2071,7 +2061,7 @@ std::list<Medium_t*> APTracer::Entities::SceneContext_t::get_medium_list(std::st
                 }
             }
             else {
-                std::cerr << "Error: no materials, medium '" << token << "' not found, exiting." << std::endl;
+                std::cerr << "Error: no mediums, medium '" << token << "' not found, exiting." << std::endl;
                 exit(497);
             }
         }
@@ -2080,30 +2070,20 @@ std::list<Medium_t*> APTracer::Entities::SceneContext_t::get_medium_list(std::st
         string_medium_list.erase(0, pos + delimiter.length());
     }
     if (is_number(string_medium_list)) {
-        Medium_t* medium = dynamic_cast<Medium_t*>(materials_[std::stoi(string_medium_list) - 1].get());
-        if (medium == nullptr){
-            std::cerr << "Error: material #" << token << " is in a medium list, but it is not convertible to one. Exiting." << std::endl;
-            exit(494);
-        }
-        medium_list.push_back(medium);
+        medium_list.push_back(mediums_[std::stoi(string_medium_list) - 1].get());
     }
     else {
-        if (xml_materials != nullptr){
+        if (xml_mediums != nullptr){
             bool missing = true;
             std::transform(string_medium_list.begin(), string_medium_list.end(), string_medium_list.begin(), ::tolower);
             unsigned int index = 0;
-            for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")){
-                const char* material_char = xml_material->Attribute("name");
-                if (material_char != nullptr){
-                    std::string name_material = material_char;
-                    std::transform(name_material.begin(), name_material.end(), name_material.begin(), ::tolower);
-                    if (name_material == string_medium_list){
-                        Medium_t* medium = dynamic_cast<Medium_t*>(materials_[index].get());
-                        if (medium == nullptr){
-                            std::cerr << "Error: material '" << token << "' is in a medium list, but it is not convertible to one. Exiting." << std::endl;
-                            exit(495);
-                        }
-                        medium_list.push_back(medium);
+            for (const tinyxml2::XMLElement* xml_medium = xml_mediums->FirstChildElement("medium"); xml_medium; xml_medium = xml_medium->NextSiblingElement("medium")){
+                const char* medium_char = xml_medium->Attribute("name");
+                if (medium_char != nullptr){
+                    std::string name_medium = medium_char;
+                    std::transform(name_medium.begin(), name_medium.end(), name_medium.begin(), ::tolower);
+                    if (name_medium == string_medium_list){
+                        medium_list.push_back(mediums_[index].get());
                         missing = false;
                         break;
                     }
@@ -2116,7 +2096,7 @@ std::list<Medium_t*> APTracer::Entities::SceneContext_t::get_medium_list(std::st
             }
         }
         else {
-            std::cerr << "Error: no materials, medium '" << string_medium_list << "' not found, exiting." << std::endl;
+            std::cerr << "Error: no mediums, medium '" << string_medium_list << "' not found, exiting." << std::endl;
             exit(497);
         }
     }
