@@ -2,13 +2,14 @@
 #include "entities/Shape_t.h"
 #include <cmath>
 #include "entities/RandomGenerator_t.h"
+#include "entities/Medium_t.h"
 
 #define EPSILON 0.00000001
 
 using APTracer::Entities::Vec3f;
 
-APTracer::Materials::ReflectiveRefractive_t::ReflectiveRefractive_t(const Vec3f &emission, const Vec3f &colour, double ind, unsigned int priority, APTracer::Entities::ScatteringFunction_t* scattering) : 
-    Medium_t(ind, priority, scattering), emission_(emission), colour_(colour) {}
+APTracer::Materials::ReflectiveRefractive_t::ReflectiveRefractive_t(const Vec3f &emission, const Vec3f &colour, APTracer::Entities::Medium_t* medium) : 
+    emission_(emission), colour_(colour), medium_(medium) {}
 
 APTracer::Materials::ReflectiveRefractive_t::~ReflectiveRefractive_t(){}
 
@@ -19,7 +20,7 @@ void APTracer::Materials::ReflectiveRefractive_t::bounce(const double (&uv)[2], 
     hit_obj->normal(ray, uv, normal);
     double cosi = ray.direction_.dot(normal);
 
-    if (priority_ >= ray.medium_list_.front()->priority_){ // CHECK also discard if priority is equal, but watch for going out case
+    if (medium_->priority_ >= ray.medium_list_.front()->priority_){ // CHECK also discard if priority is equal, but watch for going out case
         Vec3f n;
         Vec3f newdir;
         double etai, etat;
@@ -27,14 +28,14 @@ void APTracer::Materials::ReflectiveRefractive_t::bounce(const double (&uv)[2], 
         
         if (cosi < 0.0){ // Coming in
             etai = ray.medium_list_.front()->ind_;
-            etat = ind_;
+            etat = medium_->ind_;
             cosi *= -1.0;
             n = normal;
             //coming_out = false;
         }
         else{ // Going out
             etat = (*std::next(ray.medium_list_.begin()))->ind_;
-            etai = ind_;
+            etai = medium_->ind_;
             n = -normal;
             //coming_out = true;
         }
@@ -62,12 +63,12 @@ void APTracer::Materials::ReflectiveRefractive_t::bounce(const double (&uv)[2], 
             if (newdir.dot(normal) < 0.0){ // coming in
                 ray.origin_ += ray.direction_ * ray.dist_ - normal * EPSILON; // use n or normal?
                 if (ray.direction_.dot(normal) < 0.0){
-                    ray.add_to_mediums(this);
+                    ray.add_to_mediums(medium_);
                 }
             }
             else{ // going out
                 ray.origin_ += ray.direction_ * ray.dist_ + normal * EPSILON; // use n or normal?
-                ray.remove_from_mediums(this);
+                ray.remove_from_mediums(medium_);
             }
         }
         else{ // Reflected
@@ -82,11 +83,11 @@ void APTracer::Materials::ReflectiveRefractive_t::bounce(const double (&uv)[2], 
     else{
         if (cosi < 0.0){
             ray.origin_ += ray.direction_ * ray.dist_ - normal * EPSILON;
-            ray.add_to_mediums(this);
+            ray.add_to_mediums(medium_);
         }
         else{
             ray.origin_ += ray.direction_ * ray.dist_ + normal * EPSILON;
-            ray.remove_from_mediums(this);
+            ray.remove_from_mediums(medium_);
         }
     }
 }

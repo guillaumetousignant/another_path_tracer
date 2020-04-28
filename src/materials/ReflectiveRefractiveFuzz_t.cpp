@@ -1,5 +1,6 @@
 #include "materials/ReflectiveRefractiveFuzz_t.h"
 #include "entities/Shape_t.h"
+#include "entities/Medium_t.h"
 #include <cmath>
 #include "entities/RandomGenerator_t.h"
 
@@ -8,8 +9,8 @@
 
 using APTracer::Entities::Vec3f;
 
-APTracer::Materials::ReflectiveRefractiveFuzz_t::ReflectiveRefractiveFuzz_t(const Vec3f &emission, const Vec3f &colour, double ind, unsigned int priority, double order, double diffusivity, ScatteringFunction_t* scattering) : 
-    Medium_t(ind, priority, scattering), emission_(emission), colour_(colour), order_(order), diffusivity_(diffusivity) {}
+APTracer::Materials::ReflectiveRefractiveFuzz_t::ReflectiveRefractiveFuzz_t(const Vec3f &emission, const Vec3f &colour, double order, double diffusivity, Medium_t* medium) : 
+    emission_(emission), colour_(colour), order_(order), diffusivity_(diffusivity), medium_(medium) {}
 
 APTracer::Materials::ReflectiveRefractiveFuzz_t::~ReflectiveRefractiveFuzz_t(){}
 
@@ -20,7 +21,7 @@ void APTracer::Materials::ReflectiveRefractiveFuzz_t::bounce(const double (&uv)[
     hit_obj->normal(ray, uv, normal);
     double cosi = ray.direction_.dot(normal);
 
-    if (priority_ >= ray.medium_list_.front()->priority_){ // CHECK also discard if priority is equal, but watch for going out case  
+    if (medium_->priority_ >= ray.medium_list_.front()->priority_){ // CHECK also discard if priority is equal, but watch for going out case  
         Vec3f newdir;
         double etai, etat;
         double kr;
@@ -40,13 +41,13 @@ void APTracer::Materials::ReflectiveRefractiveFuzz_t::bounce(const double (&uv)[
         
         if (cosi < 0.0){ // Coming in
             etai = ray.medium_list_.front()->ind_;
-            etat = ind_;
+            etat = medium_->ind_;
             cosi *= -1.0;
             //coming_out = false;
         }
         else{ // Going out
             etat = (*std::next(ray.medium_list_.begin()))->ind_;
-            etai = ind_;
+            etai = medium_->ind_;
             normal_fuzz *= -1.0;
             //coming_out = true;
         }
@@ -74,12 +75,12 @@ void APTracer::Materials::ReflectiveRefractiveFuzz_t::bounce(const double (&uv)[
             if (newdir.dot(normal) < 0.0){ // coming in
                 ray.origin_ += ray.direction_ * ray.dist_ - normal * EPSILON; // use n or normal?
                 if (ray.direction_.dot(normal) < 0.0){
-                    ray.add_to_mediums(this);
+                    ray.add_to_mediums(medium_);
                 }
             }
             else{ // going out
                 ray.origin_ += ray.direction_ * ray.dist_ + normal * EPSILON; // use n or normal?
-                ray.remove_from_mediums(this);
+                ray.remove_from_mediums(medium_);
             }
         }
         else{ // Reflected
@@ -94,11 +95,11 @@ void APTracer::Materials::ReflectiveRefractiveFuzz_t::bounce(const double (&uv)[
     else{
         if (cosi < 0.0){
             ray.origin_ += ray.direction_ * ray.dist_ - normal * EPSILON;
-            ray.add_to_mediums(this);
+            ray.add_to_mediums(medium_);
         }
         else{
             ray.origin_ += ray.direction_ * ray.dist_ + normal * EPSILON;
-            ray.remove_from_mediums(this);
+            ray.remove_from_mediums(medium_);
         }
     }
 }

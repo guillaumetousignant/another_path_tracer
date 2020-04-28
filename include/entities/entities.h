@@ -14,7 +14,6 @@
 #include "entities/OpenGLRenderer_t.h"
 #include "entities/RandomGenerator_t.h"
 #include "entities/Ray_t.h"
-#include "entities/ScatteringFunction_t.h"
 #include "entities/Scene_t.h"
 #include "entities/Shape_t.h"
 #include "entities/Skybox_t.h"

@@ -1,17 +1,15 @@
 #include "materials/Transparent_t.h"
-#include "entities/ScatteringFunction_t.h"
+#include "entities/Medium_t.h"
 #include "entities/Shape_t.h"
 
 #define EPSILON 0.00000001
 
 using APTracer::Entities::Vec3f;
 
-APTracer::Materials::Transparent_t::Transparent_t(unsigned int priority, APTracer::Entities::ScatteringFunction_t* scattering) : Medium_t(1.0, priority, scattering) {
-
+APTracer::Materials::Transparent_t::Transparent_t(APTracer::Entities::Medium_t* medium) : medium_(medium) {
 }
 
 APTracer::Materials::Transparent_t::~Transparent_t() {
-
 }
 
 void APTracer::Materials::Transparent_t::bounce(const double (&uv)[2], const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray){
@@ -22,10 +20,10 @@ void APTracer::Materials::Transparent_t::bounce(const double (&uv)[2], const APT
 
     if (cosi < 0.0) {
         ray.origin_ += ray.direction_ * ray.dist_ - normal * EPSILON;
-        ray.add_to_mediums(this);
+        ray.add_to_mediums(medium_);
     }
     else{
         ray.origin_ += ray.direction_ * ray.dist_ + normal * EPSILON;
-        ray.remove_from_mediums(this);
+        ray.remove_from_mediums(medium_);
     }
 }

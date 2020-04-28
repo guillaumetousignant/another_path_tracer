@@ -1,9 +1,9 @@
 #include "entities/Ray_t.h"
+#include "entities/Material_t.h"
 #include "entities/Medium_t.h"
 #include "entities/Scene_t.h"
 #include "entities/Skybox_t.h"
 #include "entities/Shape_t.h"
-#include "entities/ScatteringFunction_t.h"
 
 using APTracer::Entities::Ray_t;
 using APTracer::Entities::Vec3f;
@@ -32,7 +32,7 @@ void Ray_t::raycast(const Scene_t* scene, unsigned int max_bounces, const Skybox
         dist_ = t;
         bounces++;
 
-        if (!medium_list_.front()->scattering_->scatter(*this)){
+        if (!medium_list_.front()->scatter(*this)){
             hit_obj->material_->bounce(uv, hit_obj, *this);
         }
     }

@@ -1,17 +1,17 @@
 #ifndef SCATTERERFULL_T_H
 #define SCATTERERFULL_T_H
 
-#include "entities/ScatteringFunction_t.h"
+#include "entities/Medium_t.h"
 #include "entities/Ray_t.h"
 #include "entities/Vec3f.h"
 #include <random>
 
-using APTracer::Entities::ScatteringFunction_t;
+using APTracer::Entities::Medium_t;
 using APTracer::Entities::Vec3f;
 using APTracer::Entities::Ray_t;
 
 namespace APTracer { namespace Materials {
-    class ScattererFull_t final : public ScatteringFunction_t{
+    class ScattererFull_t final : public Medium_t{
         public:
             ScattererFull_t(Vec3f emi_vol, Vec3f col_vol, Vec3f emi_scat, Vec3f col_scat, double abs_dist_emi, double abs_dist_col, double scat_dist);
             virtual ~ScattererFull_t() final;

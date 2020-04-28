@@ -1,13 +1,14 @@
 #include "materials/Refractive_t.h"
 #include "entities/Shape_t.h"
 #include <cmath>
+#include "entities/Medium_t.h"
 
 #define EPSILON 0.00000001
 
 using APTracer::Entities::Vec3f;
 
-APTracer::Materials::Refractive_t::Refractive_t(const Vec3f &emission, const Vec3f &colour, double ind, unsigned int priority, APTracer::Entities::ScatteringFunction_t* scattering) : 
-    Medium_t(ind, priority, scattering), emission_(emission), colour_(colour) {}
+APTracer::Materials::Refractive_t::Refractive_t(const Vec3f &emission, const Vec3f &colour, APTracer::Entities::Medium_t* medium) : 
+    emission_(emission), colour_(colour), medium_(medium) {}
 
 APTracer::Materials::Refractive_t::~Refractive_t(){}
 
@@ -18,19 +19,19 @@ void APTracer::Materials::Refractive_t::bounce(const double (&uv)[2], const APTr
     hit_obj->normal(ray, uv, normal);
     double cosi = ray.direction_.dot(normal);
 
-    if (priority_ >= ray.medium_list_.front()->priority_){ // CHECK also discard if priority is equal, but watch for going out case
+    if (medium_->priority_ >= ray.medium_list_.front()->priority_){ // CHECK also discard if priority is equal, but watch for going out case
         Vec3f n;
         double etai, etat;
 
         if (cosi < 0){ // Coming in
             etai = ray.medium_list_.front()->ind_;
-            etat = ind_;
+            etat = medium_->ind_;
             cosi *= -1;
             n = normal;
         }
         else{ // Going out
             etat = (*std::next(ray.medium_list_.begin()))->ind_;
-            etai = ind_;
+            etai = medium_->ind_;
             n = -normal;
         }
 
@@ -52,12 +53,12 @@ void APTracer::Materials::Refractive_t::bounce(const double (&uv)[2], const APTr
     if (newdir.dot(normal) < 0.0){ // Coming in
         ray.origin_ += ray.direction_ * ray.dist_ - normal * EPSILON; // n or normal?
         if (ray.direction_.dot(normal) < 0.0){
-            ray.add_to_mediums(this);
+            ray.add_to_mediums(medium_);
         }
     }
     else{ // Going out
         ray.origin_ += ray.direction_ * ray.dist_ + normal * EPSILON; // n or normal?
-        ray.remove_from_mediums(this);
+        ray.remove_from_mediums(medium_);
     }
 
     ray.direction_ = newdir;

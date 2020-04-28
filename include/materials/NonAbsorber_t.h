@@ -1,14 +1,14 @@
 #ifndef NONABSORBER_T_H
 #define NONABSORBER_T_H
 
-#include "entities/ScatteringFunction_t.h"
+#include "entities/Medium_t.h"
 #include "entities/Ray_t.h"
 
-using APTracer::Entities::ScatteringFunction_t;
+using APTracer::Entities::Medium_t;
 using APTracer::Entities::Ray_t;
 
 namespace APTracer { namespace Materials {
-    class NonAbsorber_t final : public ScatteringFunction_t{
+    class NonAbsorber_t final : public Medium_t{
         public:
             NonAbsorber_t();
             virtual ~NonAbsorber_t() final;
