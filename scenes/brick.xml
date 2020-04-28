@@ -5,9 +5,9 @@
       <texture filename="assets\Terracotta\Terracotta_Tiles_002_Base_Color.jpg" name="brick_colour" type="texture"/>
       <texture filename="assets\Terracotta\Terracotta_Tiles_002_Normal.jpg" name="brick_normal" type="texture"/>
    </textures>
-   <scatterers>
-      <scatterer name="air_absorber" type="nonabsorber"/>
-   </scatterers>
+   <mediums>
+      <medium name="air_absorber" type="nonabsorber"/>
+   </mediums>
    <materials>
       <material name="air" priority="0" scattering_fn="air_absorber" type="transparent"/>
       <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>      

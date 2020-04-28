@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <scene name="room" object_list="wallfront, wallback, walltop, wallbottom, wallleft, wallright, goo">
-   <scatterers>
-      <scatterer name="air_absorber" type="nonabsorber"/>
-      <scatterer absorption_distance="100" colour="white" emission="turquoise" emission_distance="5" name="goo_absorber" type="absorber"/>
-   </scatterers>
+   <mediums>
+      <medium name="air_absorber" type="nonabsorber"/>
+      <medium absorption_distance="100" colour="white" emission="turquoise" emission_distance="5" name="goo_absorber" type="absorber"/>
+   </mediums>
    <materials>
       <material name="air" priority="0" scattering_fn="air_absorber" type="transparent"/>
       <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>

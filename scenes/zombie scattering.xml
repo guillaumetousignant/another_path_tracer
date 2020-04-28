@@ -4,10 +4,10 @@
       <texture filename=".\assets\Zombie beast_texture5.jpg" name="zombie_texture" type="texture"/>
       <texture filename=".\assets\Ocean from horn.jpg" name="beach_texture" type="texture"/>
    </textures>
-   <scatterers>
-      <scatterer name="air_absorber" type="nonabsorber"/>
-      <scatterer absorption_distance="0.5" colour="green" emission="black" emission_distance="0.5" name="zombie_scatterer" scattering_distance="0.05" type="scatterer"/>
-   </scatterers>
+   <mediums>
+      <medium name="air_absorber" type="nonabsorber"/>
+      <medium absorption_distance="0.5" colour="green" emission="black" emission_distance="0.5" name="zombie_scatterer" scattering_distance="0.05" type="scatterer"/>
+   </mediums>
    <materials>
       <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>
       <material colour="white" emission="black" ind="1.001" name="air" priority="0" scattering_fn="air_absorber" type="refractive"/>

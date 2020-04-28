@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <scene name="acceleration" object_list="cube, planegrey1, planegrey2">
-   <scatterers>
-      <scatterer name="air_absorber" type="nonabsorber"/>
-   </scatterers>
+   <mediums>
+      <medium name="air_absorber" type="nonabsorber"/>
+   </mediums>
    <materials>
       <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>
       <material colour="blue" emission="black" name="difblue" roughness="1" type="diffuse"/>

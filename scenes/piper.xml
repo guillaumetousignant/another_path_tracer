@@ -5,10 +5,10 @@
       <texture filename="assets\piper_pa18_obj\piper_normal.png" name="piper_normal" type="texture"/>
       <texture filename="assets\Ocean from horn.jpg" name="background" type="texture"/>
    </textures>
-   <scatterers>
-      <scatterer name="air_absorber" type="nonabsorber"/>
-      <scatterer absorption_distance="5" colour="grey2" emission="black" emission_distance="1000" name="glass_absorber" type="absorber"/>
-   </scatterers>
+   <mediums>
+      <medium name="air_absorber" type="nonabsorber"/>
+      <medium absorption_distance="5" colour="grey2" emission="black" emission_distance="1000" name="glass_absorber" type="absorber"/>
+   </mediums>
    <materials>
       <material colour="white" emission="black" ind="1.001" name="air" priority="0" scattering_fn="air_absorber" type="refractive"/>
       <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>

@@ -3,9 +3,9 @@
    <textures>
       <texture filename="assets\earth_2048.png" name="earth_texture" type="texture"/>
    </textures>
-   <scatterers>
-      <scatterer name="air_absorber" type="nonabsorber"/>
-   </scatterers>
+   <mediums>
+      <medium name="air_absorber" type="nonabsorber"/>
+   </mediums>
    <materials>
       <material name="air" priority="0" scattering_fn="air_absorber" type="transparent"/>
       <material colour="green" emission="black" name="difgreen" roughness="1" type="diffuse"/>

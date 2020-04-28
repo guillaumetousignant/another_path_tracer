@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <scene name="lamp" object_list="lamp, planegrey1, planegrey2, sphereair">
-   <scatterers>
-      <scatterer name="air_absorber" type="nonabsorber"/>
-      <scatterer absorption_distance="10000" colour="white" emission="black" emission_distance="10000" name="air_scatterer" scattering_distance="2" type="scatterer"/>
-   </scatterers>
+   <mediums>
+      <medium name="air_absorber" type="nonabsorber"/>
+      <medium absorption_distance="10000" colour="white" emission="black" emission_distance="10000" name="air_scatterer" scattering_distance="2" type="scatterer"/>
+   </mediums>
    <materials>
       <material name="air" priority="0" scattering_fn="air_absorber" type="transparent"/>
       <material name="air2" priority="2" scattering_fn="air_scatterer" type="transparent"/>

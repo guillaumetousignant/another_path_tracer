@@ -3,9 +3,9 @@
    <textures>
       <texture filename="assets\Ocean from horn.jpg" name="background" type="texture"/>
    </textures>
-   <scatterers>
-      <scatterer absorption_distance="50" colour="white" emission="black" emission_distance="1000" name="air_absorber" scattering_distance="4" type="scatterer"/>
-   </scatterers>
+   <mediums>
+      <medium absorption_distance="50" colour="white" emission="black" emission_distance="1000" name="air_absorber" scattering_distance="4" type="scatterer"/>
+   </mediums>
    <materials>
       <material name="air" priority="0" scattering_fn="air_absorber" type="transparent"/>
       <material colour="grey2" diffusivity="1" emission="black" name="metal1" order="2" type="reflective_fuzz"/>

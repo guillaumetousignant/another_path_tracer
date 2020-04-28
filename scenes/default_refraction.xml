@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <scene name="default_refraction" object_list="cube, light, sphereglass1, sphereglass2, ground">
-   <scatterers>
-      <scatterer name="air_absorber" type="nonabsorber"/>
-      <scatterer absorption_distance="32" colour="turquoise" emission="black" emission_distance="100" name="glass_absorber" type="absorber"/>
-   </scatterers>
+   <mediums>
+      <medium name="air_absorber" type="nonabsorber"/>
+      <medium absorption_distance="32" colour="turquoise" emission="black" emission_distance="100" name="glass_absorber" type="absorber"/>
+   </mediums>
    <materials>
       <material colour="white" emission="black" ind="1.001" name="air" priority="0" scattering_fn="air_absorber" type="refractive"/>
       <material colour="white" emission="2 2 2" name="diflight" roughness="1" type="diffuse"/>

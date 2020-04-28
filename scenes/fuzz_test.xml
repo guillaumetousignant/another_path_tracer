@@ -3,10 +3,10 @@
    <textures>
       <texture filename=".\assets\Ocean from horn.jpg" name="background" type="texture"/>
    </textures>
-   <scatterers>
-      <scatterer name="air_absorber" type="nonabsorber"/>
-      <scatterer absorption_distance="100" colour="white" emission="black" emission_distance="100" name="glass_scatterer" type="absorber"/>
-   </scatterers>
+   <mediums>
+      <medium name="air_absorber" type="nonabsorber"/>
+      <medium absorption_distance="100" colour="white" emission="black" emission_distance="100" name="glass_scatterer" type="absorber"/>
+   </mediums>
    <materials>
       <material name="air" priority="0" scattering_fn="air_absorber" type="transparent"/>
       <material colour="white" diffusivity="0.0005" emission="black" ind="1.5" name="glass_fuzz" order="1" priority="10" scattering_fn="glass_scatterer" type="reflective_refractive_fuzz"/>

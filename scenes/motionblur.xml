@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <scene name="motionblur" object_list="planegrey1, planegrey2, ball">
-   <scatterers>
-      <scatterer name="air_absorber" type="nonabsorber"/>
-   </scatterers>
+   <mediums>
+      <medium name="air_absorber" type="nonabsorber"/>
+   </mediums>
    <materials>
       <material name="air" priority="0" scattering_fn="air_absorber" type="transparent"/>
       <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>

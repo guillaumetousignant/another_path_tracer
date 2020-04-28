@@ -3,10 +3,10 @@
    <textures>
       <texture filename=".\assets\Zombie beast_texture5.jpg" name="zombie_texture" type="texture"/>
    </textures>
-   <scatterers>
-      <scatterer name="air_absorber" type="nonabsorber"/>
-      <scatterer absorption_distance="0.05" colour="green" emission="black" emission_distance="0.05" name="zombie_scatterer" order="1" scattering_angle="1" scattering_distance="0.025" type="scatterer_exp"/>
-   </scatterers>
+   <mediums>
+      <medium name="air_absorber" type="nonabsorber"/>
+      <medium absorption_distance="0.05" colour="green" emission="black" emission_distance="0.05" name="zombie_scatterer" order="1" scattering_angle="1" scattering_distance="0.025" type="scatterer_exp"/>
+   </mediums>
    <materials>
       <material colour="white" emission="black" ind="1.001" name="air" priority="0" scattering_fn="air_absorber" type="refractive"/>
       <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>

@@ -10,9 +10,9 @@
       <texture filename="./assets/A380/A380_part2.tga" name="A380_part2" type="texture"/>
       <texture filename="./assets/A380/A380_part3.tga" name="A380_part3" type="texture"/>
    </textures>
-   <scatterers>
-      <scatterer name="air_absorber" type="nonabsorber"/>
-   </scatterers>
+   <mediums>
+      <medium name="air_absorber" type="nonabsorber"/>
+   </mediums>
    <materials>
       <material colour="white" emission="black" ind="1.001" name="air" priority="0" scattering_fn="air_absorber" type="refractive"/>
       <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>

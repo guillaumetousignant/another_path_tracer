@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <scene name="water" object_list="spherepurple, mirror, light, ground, sphereglass, water">
-   <scatterers>
-      <scatterer name="air_absorber" type="nonabsorber"/>
-      <scatterer absorption_distance="32" colour="turquoise" emission="black" emission_distance="100" name="glass_absorber" type="absorber"/>
-      <scatterer absorption_distance="8" colour="blue" emission="black" emission_distance="100" name="water_absorber" type="absorber"/>
-   </scatterers>
+   <mediums>
+      <medium name="air_absorber" type="nonabsorber"/>
+      <medium absorption_distance="32" colour="turquoise" emission="black" emission_distance="100" name="glass_absorber" type="absorber"/>
+      <medium absorption_distance="8" colour="blue" emission="black" emission_distance="100" name="water_absorber" type="absorber"/>
+   </mediums>
    <materials>
       <material name="air" priority="0" scattering_fn="air_absorber" type="transparent"/>
       <material colour="purple" emission="black" name="difpurple" roughness="1" type="diffuse"/>

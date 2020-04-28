@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <scene name="zombie_simple">
-   <scatterers>
-      <scatterer name="air_absorber" type="nonabsorber"/>
-   </scatterers>
+   <mediums>
+      <medium name="air_absorber" type="nonabsorber"/>
+   </mediums>
    <materials>
       <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>
       <material colour="grey2" emission="black" name="difgrey2" roughness="1" type="diffuse"/>
