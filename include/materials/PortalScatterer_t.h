@@ -18,7 +18,7 @@ using APTracer::Entities::Medium_t;
 namespace APTracer { namespace Materials {
     class PortalScatterer_t final : public PortalScattererTop_t{
         public:
-            PortalScatterer_t(TransformMatrix_t* transformation, double scattering_distance, std::list<Medium_t*> medium_list);
+            PortalScatterer_t(TransformMatrix_t* transformation, double scattering_distance, std::list<Medium_t*> medium_list, double ind, unsigned int priority);
             virtual ~PortalScatterer_t() final;
 
             double scattering_coefficient_;

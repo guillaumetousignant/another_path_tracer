@@ -12,7 +12,7 @@ using APTracer::Entities::Ray_t;
 namespace APTracer { namespace Materials {
     class Absorber_t final : public Medium_t{
         public:
-            Absorber_t(Vec3f emi_vol, Vec3f col_vol, double abs_dist_emi, double abs_dist_col);
+            Absorber_t(Vec3f emi_vol, Vec3f col_vol, double abs_dist_emi, double abs_dist_col, double ind, unsigned int priority);
             virtual ~Absorber_t() final;
 
             Vec3f emission_vol_;

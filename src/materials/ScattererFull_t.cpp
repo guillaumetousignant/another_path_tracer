@@ -6,8 +6,8 @@
 
 using APTracer::Entities::Vec3f;
 
-APTracer::Materials::ScattererFull_t::ScattererFull_t(Vec3f emi_vol, Vec3f col_vol, Vec3f emi_scat, Vec3f col_scat, double abs_dist_emi, double abs_dist_col, double scat_dist)
-        : emission_scat_(emi_scat), colour_scat_(col_scat), unif_(0.0, 1.0) {
+APTracer::Materials::ScattererFull_t::ScattererFull_t(Vec3f emi_vol, Vec3f col_vol, Vec3f emi_scat, Vec3f col_scat, double abs_dist_emi, double abs_dist_col, double scat_dist, double ind, unsigned int priority)
+        : Medium_t(ind, priority), emission_scat_(emi_scat), colour_scat_(col_scat), unif_(0.0, 1.0) {
     colour_vol_ = -col_vol.ln()/abs_dist_col;
     emission_vol_ = emi_vol*emi_vol/abs_dist_emi; // CHECK probably not right.
     scattering_coefficient_ = 1.0/scat_dist;

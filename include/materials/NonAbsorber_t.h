@@ -10,7 +10,7 @@ using APTracer::Entities::Ray_t;
 namespace APTracer { namespace Materials {
     class NonAbsorber_t final : public Medium_t{
         public:
-            NonAbsorber_t();
+            NonAbsorber_t(double ind, unsigned int priority);
             virtual ~NonAbsorber_t() final;
 
             virtual bool scatter(Ray_t &ray) final; 
