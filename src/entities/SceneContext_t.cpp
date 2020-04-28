@@ -1046,10 +1046,13 @@ std::unique_ptr<Medium_t> APTracer::Entities::SceneContext_t::create_medium(cons
         require_attributes(xml_medium, attributes, 6);
         return std::unique_ptr<Medium_t>(
                     new Absorber_t(APTracer::get_colour(xml_medium->Attribute("emission")), APTracer::get_colour(xml_medium->Attribute("colour")), 
-                                    xml_medium->DoubleAttribute("emission_distance"), xml_medium->DoubleAttribute("absorption_distance")));
+                                xml_medium->DoubleAttribute("emission_distance"), xml_medium->DoubleAttribute("absorption_distance"),
+                                xml_medium->DoubleAttribute("ind"), xml_medium->UnsignedAttribute("priority")));
     }
     else if (type == "nonabsorber"){
-        return std::unique_ptr<Medium_t>(new NonAbsorber_t());
+        const char* attributes[] = {"ind", "priority"};
+        require_attributes(xml_medium, attributes, 2);
+        return std::unique_ptr<Medium_t>(new NonAbsorber_t(xml_medium->DoubleAttribute("ind"), xml_medium->UnsignedAttribute("priority")));
     }
     else if (type == "portal_scatterer"){
         // CHECK add medium_list stuff
@@ -1057,7 +1060,8 @@ std::unique_ptr<Medium_t> APTracer::Entities::SceneContext_t::create_medium(cons
         require_attributes(xml_medium, attributes, 5);
         scatterers_medium_list = get_medium_index_list(xml_medium->Attribute("medium_list"), xml_materials);
         return std::unique_ptr<Medium_t>(
-                    new PortalScatterer_t(get_transform_matrix(xml_medium->Attribute("transform_matrix"), xml_transform_matrices), xml_medium->DoubleAttribute("scattering_distance"), std::list<Medium_t*>()));
+                    new PortalScatterer_t(get_transform_matrix(xml_medium->Attribute("transform_matrix"), xml_transform_matrices), xml_medium->DoubleAttribute("scattering_distance"), std::list<Medium_t*>(),
+                                xml_medium->DoubleAttribute("ind"), xml_medium->UnsignedAttribute("priority")));
     }
     else if (type == "scatterer_exp"){
         const char* attributes[] = {"emission", "colour", "emission_distance", "absorption_distance", "scattering_distance", "order", "scattering_angle", "ind", "priority"};
@@ -1066,7 +1070,8 @@ std::unique_ptr<Medium_t> APTracer::Entities::SceneContext_t::create_medium(cons
                     new ScattererExp_t(APTracer::get_colour(xml_medium->Attribute("emission")), APTracer::get_colour(xml_medium->Attribute("colour")),
                                 xml_medium->DoubleAttribute("emission_distance"), xml_medium->DoubleAttribute("absorption_distance"),
                                 xml_medium->DoubleAttribute("scattering_distance"), xml_medium->DoubleAttribute("order"), 
-                                xml_medium->DoubleAttribute("scattering_angle")));
+                                xml_medium->DoubleAttribute("scattering_angle"), xml_medium->DoubleAttribute("ind"), 
+                                xml_medium->UnsignedAttribute("priority")));
     }
     else if (type == "scatterer_exp_full"){
         const char* attributes[] = {"emission", "colour", "scattering_emission", "scattering_colour", "emission_distance", "absorption_distance", "scattering_distance", "order", "scattering_angle", "ind", "priority"};
@@ -1076,7 +1081,8 @@ std::unique_ptr<Medium_t> APTracer::Entities::SceneContext_t::create_medium(cons
                                 APTracer::get_colour(xml_medium->Attribute("scattering_emission")), APTracer::get_colour(xml_medium->Attribute("scattering_colour")),
                                 xml_medium->DoubleAttribute("emission_distance"), xml_medium->DoubleAttribute("absorption_distance"),
                                 xml_medium->DoubleAttribute("scattering_distance"), xml_medium->DoubleAttribute("order"), 
-                                xml_medium->DoubleAttribute("scattering_angle")));
+                                xml_medium->DoubleAttribute("scattering_angle"), xml_medium->DoubleAttribute("ind"), 
+                                xml_medium->UnsignedAttribute("priority")));
     }
     else if (type == "scatterer"){
         const char* attributes[] = {"emission", "colour", "emission_distance", "absorption_distance", "scattering_distance", "ind", "priority"};
@@ -1084,7 +1090,8 @@ std::unique_ptr<Medium_t> APTracer::Entities::SceneContext_t::create_medium(cons
         return std::unique_ptr<Medium_t>(
                     new Scatterer_t(APTracer::get_colour(xml_medium->Attribute("emission")), APTracer::get_colour(xml_medium->Attribute("colour")),
                                 xml_medium->DoubleAttribute("emission_distance"), xml_medium->DoubleAttribute("absorption_distance"),
-                                xml_medium->DoubleAttribute("scattering_distance")));
+                                xml_medium->DoubleAttribute("scattering_distance"), xml_medium->DoubleAttribute("ind"), 
+                                xml_medium->UnsignedAttribute("priority")));
     }
     else if (type == "scatterer_full"){
         const char* attributes[] = {"emission", "colour", "scattering_emission", "scattering_colour", "emission_distance", "absorption_distance", "scattering_distance", "ind", "priority"};
@@ -1093,11 +1100,12 @@ std::unique_ptr<Medium_t> APTracer::Entities::SceneContext_t::create_medium(cons
                     new ScattererFull_t(APTracer::get_colour(xml_medium->Attribute("emission")), APTracer::get_colour(xml_medium->Attribute("colour")),
                                 APTracer::get_colour(xml_medium->Attribute("scattering_emission")), APTracer::get_colour(xml_medium->Attribute("scattering_colour")),
                                 xml_medium->DoubleAttribute("emission_distance"), xml_medium->DoubleAttribute("absorption_distance"),
-                                xml_medium->DoubleAttribute("scattering_distance")));
+                                xml_medium->DoubleAttribute("scattering_distance"), xml_medium->DoubleAttribute("ind"), 
+                                xml_medium->UnsignedAttribute("priority")));
     }
     else{
         std::cerr << "Error, medium type '" << type << "' not implemented. Only 'absorber', 'nonabsorber', 'portal_scatterer', 'scatterer_exp', and 'scatterer' exists for now. Ignoring." << std::endl; 
-        return std::unique_ptr<Medium_t>(new NonAbsorber_t());
+        return std::unique_ptr<Medium_t>(new NonAbsorber_t(1.0, 0));
     }
 }
 
@@ -2233,7 +2241,7 @@ Medium_t* APTracer::Entities::SceneContext_t::get_medium(std::string medium, con
         }
     }
     std::cerr << "Error, medium '" << medium << "' not found. Ignoring. This Causes a memory leak." << std::endl;
-    return new NonAbsorber_t();
+    return new NonAbsorber_t(1.0, 0);
 }
 
 MeshGeometry_t* APTracer::Entities::SceneContext_t::get_mesh_geometry(std::string mesh_geometry, const tinyxml2::XMLElement* xml_mesh_geometries) const {
