@@ -81,7 +81,7 @@ namespace APTracer { namespace Entities {
 
             std::unique_ptr<TransformMatrix_t> create_transform_matrix(const tinyxml2::XMLElement* xml_transform_matrix) const;
             std::unique_ptr<Texture_t> create_texture(const tinyxml2::XMLElement* xml_texture) const;
-            std::unique_ptr<Medium_t> create_medium(const tinyxml2::XMLElement* xml_medium, std::unique_ptr<std::list<unsigned int>> &scatterers_medium_list, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials);
+            std::unique_ptr<Medium_t> create_medium(const tinyxml2::XMLElement* xml_medium, std::unique_ptr<std::list<unsigned int>> &mediums_medium_list, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials);
             std::unique_ptr<Material_t> create_material(const tinyxml2::XMLElement* xml_material, std::unique_ptr<std::list<unsigned int>> &materials_medium_list, std::vector<unsigned int> &materials_mix_list, std::unique_ptr<std::tuple<std::unique_ptr<std::list<unsigned int>>, std::unique_ptr<std::list<std::string>>>> &materials_aggregate_list, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_mediums);
             std::unique_ptr<MeshGeometry_t> create_mesh_geometry(const tinyxml2::XMLElement* xml_mesh_geometry) const;
             std::unique_ptr<Shape_t> create_object(const tinyxml2::XMLElement* xml_object, std::unique_ptr<MeshTop_t> &mesh, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_mesh_geometries);

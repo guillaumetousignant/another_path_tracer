@@ -178,7 +178,7 @@ void APTracer::Entities::SceneContext_t::readXML(const std::string &filename){
     unsigned int n_imgbuffers = 0;
     unsigned int n_cameras = 0;
 
-    std::vector<std::unique_ptr<std::list<unsigned int>>> scatterers_medium_list;
+    std::vector<std::unique_ptr<std::list<unsigned int>>> mediums_medium_list;
     std::vector<std::vector<unsigned int>> materials_mix_list;
     std::vector<std::unique_ptr<std::list<unsigned int>>> materials_medium_list;
     std::vector<
@@ -323,7 +323,7 @@ void APTracer::Entities::SceneContext_t::readXML(const std::string &filename){
     imgbuffers_ = std::vector<std::unique_ptr<ImgBuffer_t>>(n_imgbuffers);
     cameras_ = std::vector<std::unique_ptr<Camera_t>>(n_cameras);
  
-    scatterers_medium_list = std::vector<std::unique_ptr<std::list<unsigned int>>>(n_mediums);     
+    mediums_medium_list = std::vector<std::unique_ptr<std::list<unsigned int>>>(n_mediums);     
     materials_mix_list = std::vector<std::vector<unsigned int>>(n_materials);
     materials_medium_list = std::vector<std::unique_ptr<std::list<unsigned int>>>(n_materials);
     materials_aggregate_list = std::vector<
@@ -357,7 +357,7 @@ void APTracer::Entities::SceneContext_t::readXML(const std::string &filename){
     // Mediums (3)
     if (xml_mediums != nullptr){
         for (tinyxml2::XMLElement* xml_medium = xml_mediums->FirstChildElement("medium"); xml_medium; xml_medium = xml_medium->NextSiblingElement("medium")){
-            mediums_[index_mediums_] = create_medium(xml_medium, scatterers_medium_list[index_mediums_], xml_transform_matrices, xml_materials);
+            mediums_[index_mediums_] = create_medium(xml_medium, mediums_medium_list[index_mediums_], xml_transform_matrices, xml_materials);
             ++index_mediums_;
         }
         std::cout << "Mediums created." << std::endl;
@@ -407,13 +407,13 @@ void APTracer::Entities::SceneContext_t::readXML(const std::string &filename){
 
     // Mediums medium list fix
     for (unsigned int i = 0; i < mediums_.size(); i++){
-        if (scatterers_medium_list[i]) {
+        if (mediums_medium_list[i]) {
             PortalScattererTop_t* portal_scatterer = dynamic_cast<PortalScattererTop_t*>(mediums_[i].get());
             if (portal_scatterer == nullptr){
                 std::cerr << "Error: medium #" << i << " was marked as a portal but is not convertible to one. Exiting." << std::endl;
                 exit(392);
             }
-            for (auto it = scatterers_medium_list[i]->begin(); it != scatterers_medium_list[i]->end(); ++it){
+            for (auto it = mediums_medium_list[i]->begin(); it != mediums_medium_list[i]->end(); ++it){
                 Medium_t* medium = dynamic_cast<Medium_t*>(materials_[*it].get()); // CHECK I don't like those either
                 if (medium == nullptr){
                     std::cerr << "Error: medium #" << i << " had material #" << *it << " in its medium list, but it is not convertible to one. Exiting." << std::endl;
@@ -1029,7 +1029,7 @@ std::unique_ptr<Texture_t> APTracer::Entities::SceneContext_t::create_texture(co
     }
 }
 
-std::unique_ptr<Medium_t> APTracer::Entities::SceneContext_t::create_medium(const tinyxml2::XMLElement* xml_medium, std::unique_ptr<std::list<unsigned int>> &scatterers_medium_list, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials) {
+std::unique_ptr<Medium_t> APTracer::Entities::SceneContext_t::create_medium(const tinyxml2::XMLElement* xml_medium, std::unique_ptr<std::list<unsigned int>> &mediums_medium_list, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials) {
     std::string type;
     const char* type_char = xml_medium->Attribute("type");
     if (type_char == nullptr) {
@@ -1058,7 +1058,7 @@ std::unique_ptr<Medium_t> APTracer::Entities::SceneContext_t::create_medium(cons
         // CHECK add medium_list stuff
         const char* attributes[] = {"medium_list", "transform_matrix", "scattering_distance", "ind", "priority"};
         require_attributes(xml_medium, attributes, 5);
-        scatterers_medium_list = get_medium_index_list(xml_medium->Attribute("medium_list"), xml_materials);
+        mediums_medium_list = get_medium_index_list(xml_medium->Attribute("medium_list"), xml_materials);
         return std::unique_ptr<Medium_t>(
                     new PortalScatterer_t(get_transform_matrix(xml_medium->Attribute("transform_matrix"), xml_transform_matrices), xml_medium->DoubleAttribute("scattering_distance"), std::list<Medium_t*>(),
                                 xml_medium->DoubleAttribute("ind"), xml_medium->UnsignedAttribute("priority")));
