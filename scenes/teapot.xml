@@ -4,10 +4,10 @@
       <texture filename="assets\Ocean from horn.jpg" name="background" type="texture"/>
    </textures>
    <mediums>
-      <medium name="air_absorber" type="nonabsorber"/>
+      <medium name="air_absorber" type="nonabsorber" ind="1.001" priority="0"/>
    </mediums>
    <materials>
-      <material name="air" priority="0" scattering_fn="air_absorber" type="transparent"/>
+      <material name="air" scattering_fn="air_absorber" type="transparent"/>
       <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>
       <material colour="red" diffusivity="1" emission="black" name="red_metal" order="2" type="reflective_fuzz"/>
       <material colour="white" emission="black" name="coating" type="reflective"/>

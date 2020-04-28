@@ -4,13 +4,13 @@
       <texture filename="assets\Ocean from horn.jpg" name="background" type="texture"/>
    </textures>
    <mediums>
-      <medium name="air_absorber" type="nonabsorber"/>
-      <medium absorption_distance="100" colour="teal" emission="black" emission_distance="100" name="glass_absorber" type="absorber"/>
+      <medium name="air_absorber" type="nonabsorber" ind="1.001" priority="0"/>
+      <medium absorption_distance="100" colour="teal" emission="black" emission_distance="100" name="glass_absorber" type="absorber" ind="1.5" priority="10"/>
    </mediums>
    <materials>
-      <material name="air" priority="0" scattering_fn="air_absorber" type="transparent"/>
+      <material name="air" scattering_fn="air_absorber" type="transparent"/>
       <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>
-      <material colour="white" emission="black" ind="1.5" name="glass" priority="10" scattering_fn="glass_absorber" type="reflective_refractive"/>
+      <material colour="white" emission="black" name="glass" scattering_fn="glass_absorber" type="reflective_refractive"/>
    </materials>
    <mesh_geometries>
       <mesh_geometry filename="assets\bigsphere.obj" name="sphere_mesh" type="mesh_geometry"/>

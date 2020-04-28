@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <scene name="water" object_list="spherepurple, mirror, light, ground, sphereglass, water">
    <mediums>
-      <medium name="air_absorber" type="nonabsorber"/>
-      <medium absorption_distance="32" colour="turquoise" emission="black" emission_distance="100" name="glass_absorber" type="absorber"/>
-      <medium absorption_distance="8" colour="blue" emission="black" emission_distance="100" name="water_absorber" type="absorber"/>
+      <medium name="air_absorber" type="nonabsorber" ind="1.001" priority="0"/>
+      <medium absorption_distance="32" colour="turquoise" emission="black" emission_distance="100" name="glass_absorber" type="absorber" ind="1.5" priority="10"/>
+      <medium absorption_distance="8" colour="blue" emission="black" emission_distance="100" name="water_absorber" type="absorber" ind="1.33" priority="5"/>
    </mediums>
    <materials>
-      <material name="air" priority="0" scattering_fn="air_absorber" type="transparent"/>
+      <material name="air" scattering_fn="air_absorber" type="transparent"/>
       <material colour="purple" emission="black" name="difpurple" roughness="1" type="diffuse"/>
       <material colour="white" emission="2 2 2" name="diflight" roughness="0" type="diffuse"/>
       <material colour="green" emission="black" name="difgreen" roughness="1" type="diffuse"/>
       <material colour="yellow" emission="black" name="ref1" type="reflective"/>
-      <material colour="white" emission="black" ind="1.5" name="glass" priority="10" scattering_fn="glass_absorber" type="reflective_refractive"/>
-      <material colour="white" diffusivity="0.01" emission="black" ind="1.33" name="watermat" order="1" priority="5" scattering_fn="water_absorber" type="reflective_refractive_fuzz"/>
+      <material colour="white" emission="black" name="glass" scattering_fn="glass_absorber" type="reflective_refractive"/>
+      <material colour="white" diffusivity="0.01" emission="black" name="watermat" order="1" scattering_fn="water_absorber" type="reflective_refractive_fuzz"/>
    </materials>
    <objects>
       <object material="difpurple" name="spherepurple" transform_matrix="NaN" type="sphere">

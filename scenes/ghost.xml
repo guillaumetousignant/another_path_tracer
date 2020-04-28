@@ -4,13 +4,13 @@
       <texture filename=".\assets\Ocean from horn.jpg" name="background" type="texture"/>
    </textures>
    <mediums>
-      <medium name="air_absorber" type="nonabsorber"/>
-      <medium absorption_distance="10000" colour="white" emission="black" emission_distance="10000" name="air2_scatterer" scattering_distance="0.5" type="scatterer"/>
+      <medium name="air_absorber" type="nonabsorber" ind="1.001" priority="0"/>
+      <medium absorption_distance="10000" colour="white" emission="black" emission_distance="10000" name="air2_scatterer" scattering_distance="0.5" type="scatterer" ind="1.01" priority="10"/>
    </mediums>
    <materials>
-      <material name="air" priority="0" scattering_fn="air_absorber" type="transparent"/>
+      <material name="air" scattering_fn="air_absorber" type="transparent"/>
       <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>
-      <material colour="white" diffusivity="1" emission="black" ind="1.01" name="air2" order="1" priority="10" scattering_fn="air2_scatterer" type="reflective_refractive_fuzz"/>
+      <material colour="white" diffusivity="1" emission="black" name="air2" order="1" scattering_fn="air2_scatterer" type="reflective_refractive_fuzz"/>
    </materials>
    <objects>
       <object material="difgrey" name="planegrey1" normals="NaN" points="-2 2 -0.5&#xA;-2 -2 -0.5&#xA; 2 -2 -0.5" texture_coordinates="NaN" transform_matrix="NaN" type="triangle">

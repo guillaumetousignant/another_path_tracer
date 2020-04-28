@@ -6,10 +6,10 @@
       <texture filename="assets\Terracotta\Terracotta_Tiles_002_Normal.jpg" name="brick_normal" type="texture"/>
    </textures>
    <mediums>
-      <medium name="air_absorber" type="nonabsorber"/>
+      <medium name="air_absorber" type="nonabsorber" ind="1.001" priority="0"/>
    </mediums>
    <materials>
-      <material name="air" priority="0" scattering_fn="air_absorber" type="transparent"/>
+      <material name="air" scattering_fn="air_absorber" type="transparent"/>
       <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>      
       <material emission="black" name="brick_mat" roughness="1" texture="brick_colour" normal_map="brick_normal" type="diffuse_tex_normal"/>
    </materials>brick_mat

@@ -4,21 +4,21 @@
       <texture filename="assets\Ocean from horn.jpg" name="background" type="texture"/>
    </textures>
    <mediums>
-      <medium name="air_absorber" type="nonabsorber"/>
-      <medium absorption_distance="0.05" colour="red" emission="black" emission_distance="0.05" name="scatterer1" order="0.2" scattering_angle="1" scattering_distance="0.01" type="scatterer_exp"/>
-      <medium absorption_distance="0.05" colour="red" emission="black" emission_distance="0.05" name="scatterer2" order="0.5" scattering_angle="1" scattering_distance="0.01" type="scatterer_exp"/>
-      <medium absorption_distance="0.05" colour="red" emission="black" emission_distance="0.05" name="scatterer3" order="1" scattering_angle="1" scattering_distance="0.01" type="scatterer_exp"/>
-      <medium absorption_distance="0.05" colour="red" emission="black" emission_distance="0.05" name="scatterer4" order="2" scattering_angle="1" scattering_distance="0.01" type="scatterer_exp"/>
-      <medium absorption_distance="0.05" colour="red" emission="black" emission_distance="0.05" name="scatterer5" order="5" scattering_angle="1" scattering_distance="0.01" type="scatterer_exp"/>
+      <medium name="air_absorber" type="nonabsorber" ind="1.001" priority="0"/>
+      <medium absorption_distance="0.05" colour="red" emission="black" emission_distance="0.05" name="scatterer1" order="0.2" scattering_angle="1" scattering_distance="0.01" type="scatterer_exp" ind="1.5" priority="10"/>
+      <medium absorption_distance="0.05" colour="red" emission="black" emission_distance="0.05" name="scatterer2" order="0.5" scattering_angle="1" scattering_distance="0.01" type="scatterer_exp" ind="1.5" priority="10"/>
+      <medium absorption_distance="0.05" colour="red" emission="black" emission_distance="0.05" name="scatterer3" order="1" scattering_angle="1" scattering_distance="0.01" type="scatterer_exp" ind="1.5" priority="10"/>
+      <medium absorption_distance="0.05" colour="red" emission="black" emission_distance="0.05" name="scatterer4" order="2" scattering_angle="1" scattering_distance="0.01" type="scatterer_exp" ind="1.5" priority="10"/>
+      <medium absorption_distance="0.05" colour="red" emission="black" emission_distance="0.05" name="scatterer5" order="5" scattering_angle="1" scattering_distance="0.01" type="scatterer_exp" ind="1.5" priority="10"/>
    </mediums>
    <materials>
-      <material name="air" priority="0" scattering_fn="air_absorber" type="transparent"/>
+      <material name="air" scattering_fn="air_absorber" type="transparent"/>
       <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>
-      <material colour="white" emission="black" ind="1.5" name="scattering_mat1" priority="10" scattering_fn="scatterer1" type="reflective_refractive"/>
-      <material colour="white" emission="black" ind="1.5" name="scattering_mat2" priority="10" scattering_fn="scatterer2" type="reflective_refractive"/>
-      <material colour="white" emission="black" ind="1.5" name="scattering_mat3" priority="10" scattering_fn="scatterer3" type="reflective_refractive"/>
-      <material colour="white" emission="black" ind="1.5" name="scattering_mat4" priority="10" scattering_fn="scatterer4" type="reflective_refractive"/>
-      <material colour="white" emission="black" ind="1.5" name="scattering_mat5" priority="10" scattering_fn="scatterer5" type="reflective_refractive"/>
+      <material colour="white" emission="black" name="scattering_mat1" scattering_fn="scatterer1" type="reflective_refractive"/>
+      <material colour="white" emission="black" name="scattering_mat2" scattering_fn="scatterer2" type="reflective_refractive"/>
+      <material colour="white" emission="black" name="scattering_mat3" scattering_fn="scatterer3" type="reflective_refractive"/>
+      <material colour="white" emission="black" name="scattering_mat4" scattering_fn="scatterer4" type="reflective_refractive"/>
+      <material colour="white" emission="black" name="scattering_mat5" scattering_fn="scatterer5" type="reflective_refractive"/>
    </materials>
    <objects>
       <object material="scattering_mat1" name="point1" transform_matrix="NaN" type="sphere">

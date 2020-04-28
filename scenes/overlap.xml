@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <scene name="overlap" object_list="1, 2, 3, 4">
    <mediums>
-      <medium absorption_distance="2" colour="red" emission="black" emission_distance="1000" name="red_absorber" type="absorber"/>
-      <medium absorption_distance="2" colour="watercolour" emission="black" emission_distance="1000" name="blue_absorber" type="absorber"/>
-      <medium name="air_absorber" type="nonabsorber"/>
+      <medium absorption_distance="2" colour="red" emission="black" emission_distance="1000" name="red_absorber" type="absorber" ind="1.5" priority="30"/>
+      <medium absorption_distance="2" colour="watercolour" emission="black" emission_distance="1000" name="blue_absorber" type="absorber" ind="1.33" priority="20"/>
+      <medium name="air_absorber" type="nonabsorber" ind="1.001" priority="0"/>
    </mediums>
    <materials>
       <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>
-      <material colour="white" diffusivity="0.05" emission="black" ind="1.5" name="glass" order="2" priority="30" scattering_fn="1" type="reflective_refractive_fuzz"/>
-      <material colour="white" diffusivity="0.05" emission="black" ind="1.33" name="glass2" order="1" priority="20" scattering_fn="2" type="reflective_refractive_fuzz"/>
-      <material colour="white" emission="black" ind="1.001" name="air" priority="0" scattering_fn="3" type="refractive"/>
+      <material colour="white" diffusivity="0.05" emission="black" name="glass" order="2" scattering_fn="1" type="reflective_refractive_fuzz"/>
+      <material colour="white" diffusivity="0.05" emission="black" name="glass2" order="1" scattering_fn="2" type="reflective_refractive_fuzz"/>
+      <material colour="white" emission="black" name="air" scattering_fn="3" type="refractive"/>
    </materials>
    <transform_matrices>
       <transform_matrix name="neutralmatrix" value="NaN"/>

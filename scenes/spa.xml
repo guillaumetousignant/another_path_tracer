@@ -4,10 +4,10 @@
       <texture filename="assets\Ocean from horn.jpg" name="background" type="texture"/>
    </textures>
    <mediums>
-      <medium absorption_distance="50" colour="white" emission="black" emission_distance="1000" name="air_absorber" scattering_distance="4" type="scatterer"/>
+      <medium absorption_distance="50" colour="white" emission="black" emission_distance="1000" name="air_absorber" scattering_distance="4" type="scatterer" ind="1.001" priority="0"/>
    </mediums>
    <materials>
-      <material name="air" priority="0" scattering_fn="air_absorber" type="transparent"/>
+      <material name="air" scattering_fn="air_absorber" type="transparent"/>
       <material colour="grey2" diffusivity="1" emission="black" name="metal1" order="2" type="reflective_fuzz"/>
       <material colour="white" emission="black" name="coating" type="reflective"/>
       <material ind="1.5" material_reflected="coating" material_refracted="metal1" name="metal" type="fresnelmix"/>

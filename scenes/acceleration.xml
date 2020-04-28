@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <scene name="acceleration" object_list="cube, planegrey1, planegrey2">
    <mediums>
-      <medium name="air_absorber" type="nonabsorber"/>
+      <medium name="air_absorber" type="nonabsorber" ind="1.001" priority="0"/>
    </mediums>
    <materials>
       <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>
       <material colour="blue" emission="black" name="difblue" roughness="1" type="diffuse"/>
-      <material colour="white" emission="black" ind="1.001" name="air" priority="0" scattering_fn="air_absorber" type="refractive"/>
+      <material colour="white" emission="black" name="air" scattering_fn="air_absorber" type="refractive"/>
    </materials>
    <mesh_geometries>
       <mesh_geometry filename="./assets/cube.obj" name="cube_mesh" type="mesh_geometry"/>
