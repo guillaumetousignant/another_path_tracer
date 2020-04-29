@@ -1268,8 +1268,8 @@ std::unique_ptr<Material_t> APTracer::Entities::SceneContext_t::create_material(
                     new RefractiveFuzz_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity"), get_medium(xml_material->Attribute("medium"), xml_mediums)));
     }
     else if (type == "transparent"){
-        const char* attributes[] = {"priority", "medium"};
-        require_attributes(xml_material, attributes, 2);
+        const char* attributes[] = {"medium"};
+        require_attributes(xml_material, attributes, 1);
         return std::unique_ptr<Material_t>(
                     new Transparent_t(get_medium(xml_material->Attribute("medium"), xml_mediums)));
     }
