@@ -5,6 +5,7 @@
       <medium absorption_distance="10000" colour="white" emission="black" emission_distance="10000" name="air_scatterer" scattering_distance="2" type="scatterer" ind="1.001" priority="2"/>
    </mediums>
    <materials>
+      <material name="air2" scattering_fn="air_scatterer" type="transparent"/>
       <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>
       <material colour="grey1" diffusivity="1" emission="black" name="metal1" order="5" type="reflective_fuzz"/>
       <material colour="white" emission="black" name="coating" type="reflective"/>
