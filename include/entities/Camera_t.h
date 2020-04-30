@@ -144,6 +144,8 @@ namespace APTracer { namespace Entities {
 
             /**
              * @brief Resets the camera's image buffer(s), for when the scene or camera has changed.
+             * 
+             * This will discard all accumulated samples and start accumulation from scratch.
              */
             virtual void reset() = 0;
     };
