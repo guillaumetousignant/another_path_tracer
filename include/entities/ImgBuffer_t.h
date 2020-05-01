@@ -6,7 +6,7 @@
 
 namespace APTracer { namespace Entities {
     /**
-     * @brief The ImgBuffer_t represents an image, which can be modified, can accumulate samples, and can be written to disk or displayed.
+     * @brief The ImgBuffer_t class represents an image, which can be modified, can accumulate samples, and can be written to disk.
      * 
      * This is the class that stores the results of the intersections. Generally, cameras shoot rays through a scene, and afterwards 
      * add that ray's contribution to the image buffer.
