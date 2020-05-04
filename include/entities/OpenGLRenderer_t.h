@@ -45,10 +45,10 @@ namespace APTracer { namespace Entities {
              */
             ~OpenGLRenderer_t();
 
-            static OpenGLRenderer_t* renderer_;
-            Camera_t* camera_ = nullptr;
-            Scene_t* scene_ = nullptr;
-            ImgBufferOpenGL_t* imgbuffer_ = nullptr;
+            static OpenGLRenderer_t* renderer_; /**< @brief Single OpenGLRenderer_t instance to be used by OpenGL.*/
+            Camera_t* camera_ = nullptr; /**< @brief Camera used to render the scene, and be moved by user input.*/
+            Scene_t* scene_ = nullptr; /**< @brief Scene rendered by the camera and used for autofocus.*/
+            ImgBufferOpenGL_t* imgbuffer_ = nullptr; /**< @brief Image buffer displayed on the screen and used by the renderer.*/
             double width_;
             double height_;
             int right_x_pos_;
