@@ -34,8 +34,8 @@ APTracer::Shapes::TriangleMeshMotionblur_t::TriangleMeshMotionblur_t(APTracer::E
     v0v2_ = points_[2] - points_[0];
     v0v2_last_ = v0v2_;
 
-    const double tuv0v1[2] = {geom->vt_[6 * index_ + 2] - geom->vt_[6 * index_], geom->vt_[6 * index_ + 3] - geom->vt_[6 * index_ + 1]};
-    const double tuv0v2[2] = {geom->vt_[6 * index_ + 4] - geom->vt_[6 * index_], geom->vt_[6 * index_ + 5] - geom->vt_[6 * index_ + 1]};    
+    const double tuv0v1[2] = {geom_->vt_[6 * index_ + 2] - geom_->vt_[6 * index_], geom_->vt_[6 * index_ + 3] - geom_->vt_[6 * index_ + 1]};
+    const double tuv0v2[2] = {geom_->vt_[6 * index_ + 4] - geom_->vt_[6 * index_], geom_->vt_[6 * index_ + 5] - geom_->vt_[6 * index_ + 1]};    
 
     const double invdet = 1.0/(tuv0v1[0] * tuv0v2[1] - tuv0v1[1] * tuv0v2[0]);
     if (std::isfinite(invdet)){
