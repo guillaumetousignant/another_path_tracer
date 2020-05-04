@@ -36,11 +36,6 @@ MeshGeometry_t::~MeshGeometry_t(){
     }
 
     if (vt_ != nullptr){
-        for (unsigned int i = 0; i < 3*n_tris_; ++i){
-            if (vt_[i] != nullptr){
-                delete [] vt_[i];
-            }
-        }
         delete [] vt_;
     }
 
@@ -134,10 +129,7 @@ void MeshGeometry_t::readObj(const std::string &filename){
     n_tris_ = nf;
     mat_ = new std::string[n_tris_];
     v_ = new Vec3f[3*n_tris_];
-    vt_ = new double*[3*n_tris_];
-    for (unsigned int i = 0; i < 3*n_tris_; ++i){
-        vt_[i] = new double[2];
-    }
+    vt_ = new double[6*n_tris_];
     vn_ = new Vec3f[3*n_tris_];
 
     meshfile.clear();
@@ -155,8 +147,8 @@ void MeshGeometry_t::readObj(const std::string &filename){
                     pos = value.find("/");
                     if (pos == std::string::npos){
                         v_[f_counter*3 + i] = v[std::stoi(value, nullptr)-1];
-                        vt_[f_counter*3 + i][0] = 0.0;
-                        vt_[f_counter*3 + i][1] = 0.0;
+                        vt_[f_counter*6 + 2*i] = 0.0;
+                        vt_[f_counter*6 + 2*i + 1] = 0.0;
                         vn_[f_counter*3 + i] = Vec3f(NAN);
                     }
                     else{
@@ -165,18 +157,18 @@ void MeshGeometry_t::readObj(const std::string &filename){
 
                         pos = value.find("/");
                         if (pos == std::string::npos){
-                            vt_[f_counter*3 + i][0] = vt[std::stoi(value, nullptr)-1][0];
-                            vt_[f_counter*3 + i][1] = vt[std::stoi(value, nullptr)-1][1];
+                            vt_[f_counter*6 + 2*i] = vt[std::stoi(value, nullptr)-1][0];
+                            vt_[f_counter*6 + 2*i + 1] = vt[std::stoi(value, nullptr)-1][1];
                             vn_[f_counter*3 + i] = Vec3f(NAN);
                         }
                         else{
                             if (pos == 0){
-                                vt_[f_counter*3 + i][0] = 0;
-                                vt_[f_counter*3 + i][1] = 0; 
+                                vt_[f_counter*6 + 2*i] = 0;
+                                vt_[f_counter*6 + 2*i + 1] = 0; 
                             }
                             else{
-                                vt_[f_counter*3 + i][0] = vt[std::stoi(value.substr(0, pos), nullptr)-1][0];
-                                vt_[f_counter*3 + i][1] = vt[std::stoi(value.substr(0, pos), nullptr)-1][1];
+                                vt_[f_counter*6 + 2*i] = vt[std::stoi(value.substr(0, pos), nullptr)-1][0];
+                                vt_[f_counter*6 + 2*i + 1] = vt[std::stoi(value.substr(0, pos), nullptr)-1][1];
                             }
                             value.erase(0, pos + 1);
                             vn_[f_counter*3 + i] = vn[std::stoi(value, nullptr)-1];
@@ -309,10 +301,7 @@ void MeshGeometry_t::readSU2(const std::string &filename){
     n_tris_ = nf;
     mat_ = new std::string[n_tris_];
     v_ = new Vec3f[3*n_tris_];
-    vt_ = new double*[3*n_tris_];
-    for (unsigned int i = 0; i < 3*n_tris_; ++i){
-        vt_[i] = new double[2];
-    }
+    vt_ = new double[6*n_tris_];
     vn_ = new Vec3f[3*n_tris_];
 
     meshfile.clear();
@@ -352,8 +341,8 @@ void MeshGeometry_t::readSU2(const std::string &filename){
                     liness >> tokens[i];
                     v_[3*f_counter + i] = v[tokens[i]];
                     mat_[f_counter] = material;
-                    vt_[3*f_counter + i][0] = 0.0;
-                    vt_[3*f_counter + i][1] = 0.0;
+                    vt_[6*f_counter + 2*i] = 0.0;
+                    vt_[6*f_counter + 2*i + 1] = 0.0;
                     vn_[3*f_counter + i] = Vec3f(NAN);
                 }
                 ++f_counter;
@@ -363,8 +352,8 @@ void MeshGeometry_t::readSU2(const std::string &filename){
                     liness >> tokens[i];
                     v_[3*f_counter + i] = v[tokens[i]];
                     mat_[f_counter] = material;
-                    vt_[3*f_counter + i][0] = 0.0;
-                    vt_[3*f_counter + i][1] = 0.0;
+                    vt_[6*f_counter + 2*i] = 0.0;
+                    vt_[6*f_counter + 2*i + 1] = 0.0;
                     vn_[3*f_counter + i] = Vec3f(NAN);
                 }
                 ++f_counter;
@@ -373,8 +362,8 @@ void MeshGeometry_t::readSU2(const std::string &filename){
                 for (unsigned int i = 0; i < 3; ++i){
                     v_[3*f_counter + i] = v[tokens[i]];
                     mat_[f_counter] = material;
-                    vt_[3*f_counter + i][0] = 0.0;
-                    vt_[3*f_counter + i][1] = 0.0;
+                    vt_[6*f_counter + 2*i] = 0.0;
+                    vt_[6*f_counter + 2*i + 1] = 0.0;
                     vn_[3*f_counter + i] = Vec3f(NAN);
                 }
                 ++f_counter;

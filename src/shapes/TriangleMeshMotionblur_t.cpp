@@ -34,8 +34,8 @@ APTracer::Shapes::TriangleMeshMotionblur_t::TriangleMeshMotionblur_t(APTracer::E
     v0v2_ = points_[2] - points_[0];
     v0v2_last_ = v0v2_;
 
-    const double tuv0v1[2] = {geom->vt_[3 * index_ + 1][0] - geom->vt_[3 * index_][0], geom->vt_[3 * index_ + 1][1] - geom->vt_[3 * index_][1]};
-    const double tuv0v2[2] = {geom->vt_[3 * index_ + 2][0] - geom->vt_[3 * index_][0], geom->vt_[3 * index_ + 2][1] - geom->vt_[3 * index_][1]};    
+    const double tuv0v1[2] = {geom->vt_[6 * index_ + 2] - geom->vt_[6 * index_], geom->vt_[6 * index_ + 3] - geom->vt_[6 * index_ + 1]};
+    const double tuv0v2[2] = {geom->vt_[6 * index_ + 4] - geom->vt_[6 * index_], geom->vt_[6 * index_ + 5] - geom->vt_[6 * index_ + 1]};    
 
     const double invdet = 1.0/(tuv0v1[0] * tuv0v2[1] - tuv0v1[1] * tuv0v2[0]);
     if (std::isfinite(invdet)){
@@ -134,8 +134,8 @@ void APTracer::Shapes::TriangleMeshMotionblur_t::normaluv(const APTracer::Entiti
         distance[0] * normals_int[0][1] + distance[1] * normals_int[1][1] + distance[2] * normals_int[2][1],
         distance[0] * normals_int[0][2] + distance[1] * normals_int[1][2] + distance[2] * normals_int[2][2]);
     // Matrix multiplication, optimise.
-    tuv[0] = distance[0] * geom_->vt_[3*index_][0] + distance[1] * geom_->vt_[3*index_ + 1][0] + distance[2] * geom_->vt_[3*index_ + 2][0];
-    tuv[1] = distance[0] * geom_->vt_[3*index_][1] + distance[1] * geom_->vt_[3*index_ + 1][1] + distance[2] * geom_->vt_[3*index_ + 2][1];
+    tuv[0] = distance[0] * geom_->vt_[6*index_] + distance[1] * geom_->vt_[6*index_ + 2] + distance[2] * geom_->vt_[6*index_ + 4];
+    tuv[1] = distance[0] * geom_->vt_[6*index_ + 1] + distance[1] * geom_->vt_[6*index_ + 3] + distance[2] * geom_->vt_[6*index_ + 5];
 }
 
 void APTracer::Shapes::TriangleMeshMotionblur_t::normal(const APTracer::Entities::Ray_t &ray, const double (&uv)[2], Vec3f &normalvec) const {
@@ -160,8 +160,8 @@ void APTracer::Shapes::TriangleMeshMotionblur_t::normal_uv_tangent(const APTrace
         distance[0] * normals_int[0][1] + distance[1] * normals_int[1][1] + distance[2] * normals_int[2][1],
         distance[0] * normals_int[0][2] + distance[1] * normals_int[1][2] + distance[2] * normals_int[2][2]);
     // Matrix multiplication, optimise.
-    tuv[0] = distance[0] * geom_->vt_[3*index_][0] + distance[1] * geom_->vt_[3*index_ + 1][0] + distance[2] * geom_->vt_[3*index_ + 2][0];
-    tuv[1] = distance[0] * geom_->vt_[3*index_][1] + distance[1] * geom_->vt_[3*index_ + 1][1] + distance[2] * geom_->vt_[3*index_ + 2][1];
+    tuv[0] = distance[0] * geom_->vt_[6*index_] + distance[1] * geom_->vt_[6*index_ + 2] + distance[2] * geom_->vt_[6*index_ + 4];
+    tuv[1] = distance[0] * geom_->vt_[6*index_ + 1] + distance[1] * geom_->vt_[6*index_ + 3] + distance[2] * geom_->vt_[6*index_ + 5];
 
     const Vec3f tangent_vec_int = tangent_vec_ * ray.time_ + tangent_vec_last_ * (1.0 - ray.time_);
     tangentvec = tangent_vec_int.cross(normalvec).normalize_inplace();
