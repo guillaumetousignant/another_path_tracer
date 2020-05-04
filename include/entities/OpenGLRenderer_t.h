@@ -12,12 +12,37 @@ namespace APTracer { namespace Entities {
     /**
      * @brief The OpenGL renderer class displays an image on the screen and handles user input.
      * 
-     * 
+     * This class interacts with OpenGL. It binds an ImgBufferOpenGL_t to an OpenGL texture and sets up OpenGL to display it.
+     * It also implements some input functions, like mouse movement and keyboard clicks. The camera's raytrace function is called 
+     * each frame, and the camera is reset if it is moved. It uses a singleton pattern and all functions are duplicated to
+     * work with the OpenGL C-style API.
      */
     class OpenGLRenderer_t{
         public:
+            /**
+             * @brief Construct a new OpenGLRenderer_t object with default state and no bound objects.
+             * 
+             * The newly created instance is assigned to the renderer_ singleton. If already assigned, 
+             * the old object is deleted.
+             * It is up to the user to set those values after creation.
+             */
             OpenGLRenderer_t();
+
+            /**
+             * @brief Construct a new OpenGLRenderer_t object with bound objects and default state.
+             * 
+             * The newly created instance is assigned to the renderer_ singleton. If already assigned, 
+             * the old object is deleted.
+             * 
+             * @param scene Scene that will be rendered by the camera and used for autofocus.
+             * @param camera Camera that will render the scene, and be moved by user input.
+             * @param imgbuffer Image buffer to be displayed on the screen and used by the renderer.
+             */
             OpenGLRenderer_t(Scene_t* scene, Camera_t* camera, ImgBufferOpenGL_t* imgbuffer);
+
+            /**
+             * @brief Destroy the OpenGLRenderer_t object, freeing the ressources held by it and setting renderer_ as nullptr.
+             */
             ~OpenGLRenderer_t();
 
             static OpenGLRenderer_t* renderer_;
