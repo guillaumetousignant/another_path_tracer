@@ -31,12 +31,14 @@ namespace APTracer { namespace Shapes {
             Vec3f tangent_vec_; // Points up
             MeshGeometry_t* geom_;
             unsigned int index_;
+            double tuv_[6];
             double tuv_to_world_[2];
             Vec3f points_last_[3];
             Vec3f normals_last_[3];
             Vec3f v0v1_last_;
             Vec3f v0v2_last_;
             Vec3f tangent_vec_last_; // Points up
+            double tuv_last_[6];
 
             virtual void update() final;
             virtual bool intersection(const Ray_t &rays, double &t, double (&uv)[2]) const final; 

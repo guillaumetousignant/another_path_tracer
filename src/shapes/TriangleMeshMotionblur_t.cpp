@@ -34,8 +34,21 @@ APTracer::Shapes::TriangleMeshMotionblur_t::TriangleMeshMotionblur_t(APTracer::E
     v0v2_ = points_[2] - points_[0];
     v0v2_last_ = v0v2_;
 
-    const double tuv0v1[2] = {geom_->vt_[6 * index_ + 2] - geom_->vt_[6 * index_], geom_->vt_[6 * index_ + 3] - geom_->vt_[6 * index_ + 1]};
-    const double tuv0v2[2] = {geom_->vt_[6 * index_ + 4] - geom_->vt_[6 * index_], geom_->vt_[6 * index_ + 5] - geom_->vt_[6 * index_ + 1]};    
+    tuv_[0] = geom_->vt_[6 * index_];
+    tuv_[1] = geom_->vt_[6 * index_ + 1];
+    tuv_[2] = geom_->vt_[6 * index_ + 2];
+    tuv_[3] = geom_->vt_[6 * index_ + 3];
+    tuv_[4] = geom_->vt_[6 * index_ + 4];
+    tuv_[5] = geom_->vt_[6 * index_ + 5];
+    tuv_last_[0] = tuv_[0];
+    tuv_last_[1] = tuv_[1];
+    tuv_last_[2] = tuv_[2];
+    tuv_last_[3] = tuv_[3];
+    tuv_last_[4] = tuv_[4];
+    tuv_last_[5] = tuv_[5];
+
+    const double tuv0v1[2] = {tuv_[2] - tuv_[0], tuv_[3] - tuv_[1]};
+    const double tuv0v2[2] = {tuv_[4] - tuv_[0], tuv_[5] - tuv_[1]};    
 
     const double invdet = 1.0/(tuv0v1[0] * tuv0v2[1] - tuv0v1[1] * tuv0v2[0]);
     if (std::isfinite(invdet)){
@@ -72,6 +85,32 @@ void APTracer::Shapes::TriangleMeshMotionblur_t::update() {
     v0v2_last_ = v0v2_;
     v0v1_ = points_[1] - points_[0];
     v0v2_ = points_[2] - points_[0];
+
+    tuv_[0] = geom_->vt_[6 * index_];
+    tuv_[1] = geom_->vt_[6 * index_ + 1];
+    tuv_[2] = geom_->vt_[6 * index_ + 2];
+    tuv_[3] = geom_->vt_[6 * index_ + 3];
+    tuv_[4] = geom_->vt_[6 * index_ + 4];
+    tuv_[5] = geom_->vt_[6 * index_ + 5];
+    tuv_last_[0] = tuv_[0];
+    tuv_last_[1] = tuv_[1];
+    tuv_last_[2] = tuv_[2];
+    tuv_last_[3] = tuv_[3];
+    tuv_last_[4] = tuv_[4];
+    tuv_last_[5] = tuv_[5];
+
+    const double tuv0v1[2] = {tuv_[2] - tuv_[0], tuv_[3] - tuv_[1]};
+    const double tuv0v2[2] = {tuv_[4] - tuv_[0], tuv_[5] - tuv_[1]};    
+
+    const double invdet = 1.0/(tuv0v1[0] * tuv0v2[1] - tuv0v1[1] * tuv0v2[0]);
+    if (std::isfinite(invdet)){
+        tuv_to_world_[0] = invdet * -tuv0v2[0];
+        tuv_to_world_[1] = invdet * tuv0v1[0];
+    }
+    else {
+        tuv_to_world_[0] = 1.0;
+        tuv_to_world_[1] = 0.0;
+    }
 
     tangent_vec_last_ = tangent_vec_;
     tangent_vec_ = v0v1_ * tuv_to_world_[0] + v0v2_ * tuv_to_world_[1];
@@ -129,13 +168,20 @@ void APTracer::Shapes::TriangleMeshMotionblur_t::normaluv(const APTracer::Entiti
                                     normals_[1] * ray.time_ + normals_last_[1] * (1.0 - ray.time_),
                                     normals_[2] * ray.time_ + normals_last_[2] * (1.0 - ray.time_)};
 
+    const double tuv_int[6] = { tuv_[0] * ray.time_ + tuv_last_[0] * (1.0 - ray.time_),
+                                tuv_[1] * ray.time_ + tuv_last_[1] * (1.0 - ray.time_),
+                                tuv_[2] * ray.time_ + tuv_last_[2] * (1.0 - ray.time_),
+                                tuv_[3] * ray.time_ + tuv_last_[3] * (1.0 - ray.time_),
+                                tuv_[4] * ray.time_ + tuv_last_[4] * (1.0 - ray.time_),
+                                tuv_[5] * ray.time_ + tuv_last_[5] * (1.0 - ray.time_)};
+
     const Vec3f distance = Vec3f(1.0 - uv[0] - uv[1], uv[0], uv[1]);
     normalvec = Vec3f(distance[0] * normals_int[0][0] + distance[1] * normals_int[1][0] + distance[2] * normals_int[2][0], 
         distance[0] * normals_int[0][1] + distance[1] * normals_int[1][1] + distance[2] * normals_int[2][1],
         distance[0] * normals_int[0][2] + distance[1] * normals_int[1][2] + distance[2] * normals_int[2][2]);
     // Matrix multiplication, optimise.
-    tuv[0] = distance[0] * geom_->vt_[6*index_] + distance[1] * geom_->vt_[6*index_ + 2] + distance[2] * geom_->vt_[6*index_ + 4];
-    tuv[1] = distance[0] * geom_->vt_[6*index_ + 1] + distance[1] * geom_->vt_[6*index_ + 3] + distance[2] * geom_->vt_[6*index_ + 5];
+    tuv[0] = distance[0] * tuv_int[0] + distance[1] * tuv_int[2] + distance[2] * tuv_int[4];
+    tuv[1] = distance[0] * tuv_int[1] + distance[1] * tuv_int[3] + distance[2] * tuv_int[5];
 }
 
 void APTracer::Shapes::TriangleMeshMotionblur_t::normal(const APTracer::Entities::Ray_t &ray, const double (&uv)[2], Vec3f &normalvec) const {
@@ -154,14 +200,21 @@ void APTracer::Shapes::TriangleMeshMotionblur_t::normal_uv_tangent(const APTrace
     const Vec3f normals_int[3] = {normals_[0] * ray.time_ + normals_last_[0] * (1.0 - ray.time_),
                                     normals_[1] * ray.time_ + normals_last_[1] * (1.0 - ray.time_),
                                     normals_[2] * ray.time_ + normals_last_[2] * (1.0 - ray.time_)};
+    
+    const double tuv_int[6] = { tuv_[0] * ray.time_ + tuv_last_[0] * (1.0 - ray.time_),
+                                tuv_[1] * ray.time_ + tuv_last_[1] * (1.0 - ray.time_),
+                                tuv_[2] * ray.time_ + tuv_last_[2] * (1.0 - ray.time_),
+                                tuv_[3] * ray.time_ + tuv_last_[3] * (1.0 - ray.time_),
+                                tuv_[4] * ray.time_ + tuv_last_[4] * (1.0 - ray.time_),
+                                tuv_[5] * ray.time_ + tuv_last_[5] * (1.0 - ray.time_)};
 
     const Vec3f distance = Vec3f(1.0 - uv[0] - uv[1], uv[0], uv[1]);
     normalvec = Vec3f(distance[0] * normals_int[0][0] + distance[1] * normals_int[1][0] + distance[2] * normals_int[2][0], 
         distance[0] * normals_int[0][1] + distance[1] * normals_int[1][1] + distance[2] * normals_int[2][1],
         distance[0] * normals_int[0][2] + distance[1] * normals_int[1][2] + distance[2] * normals_int[2][2]);
     // Matrix multiplication, optimise.
-    tuv[0] = distance[0] * geom_->vt_[6*index_] + distance[1] * geom_->vt_[6*index_ + 2] + distance[2] * geom_->vt_[6*index_ + 4];
-    tuv[1] = distance[0] * geom_->vt_[6*index_ + 1] + distance[1] * geom_->vt_[6*index_ + 3] + distance[2] * geom_->vt_[6*index_ + 5];
+    tuv[0] = distance[0] * tuv_int[0] + distance[1] * tuv_int[2] + distance[2] * tuv_int[4];
+    tuv[1] = distance[0] * tuv_int[1] + distance[1] * tuv_int[3] + distance[2] * tuv_int[5];
 
     const Vec3f tangent_vec_int = tangent_vec_ * ray.time_ + tangent_vec_last_ * (1.0 - ray.time_);
     tangentvec = tangent_vec_int.cross(normalvec).normalize_inplace();

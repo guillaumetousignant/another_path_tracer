@@ -30,6 +30,7 @@ namespace APTracer { namespace Shapes {
             Vec3f v0v2_;
             MeshGeometry_t* geom_;
             unsigned int index_;
+            double tuv_[6];
             double tuv_to_world_[2];
             Vec3f tangent_vec_; // Points up
 
