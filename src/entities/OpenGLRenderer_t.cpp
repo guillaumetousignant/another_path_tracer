@@ -24,7 +24,7 @@ using APTracer::Entities::Camera_t;
 using APTracer::Entities::ImgBufferOpenGL_t;
 using APTracer::Entities::Vec3f;
 
-OpenGLRenderer_t* openGL_renderer = nullptr;
+OpenGLRenderer_t* OpenGLRenderer_t::renderer_ = nullptr;
 
 OpenGLRenderer_t::OpenGLRenderer_t() :
     camera_(nullptr), scene_(nullptr), imgbuffer_(nullptr), width_(0), height_(0), 
@@ -32,7 +32,10 @@ OpenGLRenderer_t::OpenGLRenderer_t() :
     middle_y_pos_(0), right_clicked_(false), left_clicked_(false), middle_clicked_(false),
     n_iter_gl_(0), focus_point_(Vec3f()), camera_dist_(0), updated_(false), write_interval_(1),
     render_function_(openGL_accumulate) {
-        openGL_renderer = this;
+        if (renderer_ != nullptr) {
+            delete renderer_;
+        }
+        renderer_ = this;
 }
 
 OpenGLRenderer_t::OpenGLRenderer_t(Scene_t* scene, Camera_t* camera, ImgBufferOpenGL_t* imgbuffer) :
@@ -41,14 +44,17 @@ OpenGLRenderer_t::OpenGLRenderer_t(Scene_t* scene, Camera_t* camera, ImgBufferOp
     middle_y_pos_(0), right_clicked_(false), left_clicked_(false), middle_clicked_(false),
     n_iter_gl_(0), focus_point_(Vec3f()), camera_dist_((focus_point_ - camera_->origin_).magnitude()), updated_(false), 
     write_interval_(1), render_function_(openGL_accumulate) {
-        openGL_renderer = this;
+        if (renderer_ != nullptr) {
+            delete renderer_;
+        }
+        renderer_ = this;
         if (camera_dist_ < 0.1){
             camera_dist_ = 0.1;
         }
 }
 
 OpenGLRenderer_t::~OpenGLRenderer_t() {
-    openGL_renderer = nullptr;
+    renderer_ = nullptr;
 }
 
 void OpenGLRenderer_t::accumulate(){
@@ -299,33 +305,33 @@ void OpenGLRenderer_t::render_write(unsigned int write_interval /* = 1 */){
 }
 
 void OpenGLRenderer_t::openGL_dummyDisp(){
-    openGL_renderer->dummyDisp();
+    renderer_->dummyDisp();
 }
 
 void OpenGLRenderer_t::openGL_accumulate(){
-    openGL_renderer->accumulate();
+    renderer_->accumulate();
 }
 
 void OpenGLRenderer_t::openGL_accumulate_write(){
-    openGL_renderer->accumulate_write();
+    renderer_->accumulate_write();
 }
 
 void OpenGLRenderer_t::openGL_resetDisplay(void){
-    openGL_renderer->resetDisplay();
+    renderer_->resetDisplay();
 }
 
 void OpenGLRenderer_t::openGL_mouseMovement(int x, int y){
-    openGL_renderer->mouseMovement(std::forward<int>(x), std::forward<int>(y));
+    renderer_->mouseMovement(std::forward<int>(x), std::forward<int>(y));
 }
 
 void OpenGLRenderer_t::openGL_mouseClick(int button, int state, int x, int y){
-    openGL_renderer->mouseClick(std::forward<int>(button), std::forward<int>(state), std::forward<int>(x), std::forward<int>(y));
+    renderer_->mouseClick(std::forward<int>(button), std::forward<int>(state), std::forward<int>(x), std::forward<int>(y));
 }
 
 void OpenGLRenderer_t::openGL_keyboardPaused(unsigned char key, int x, int y){
-    openGL_renderer->keyboardPaused(std::forward<unsigned char>(key), std::forward<int>(x), std::forward<int>(y));
+    renderer_->keyboardPaused(std::forward<unsigned char>(key), std::forward<int>(x), std::forward<int>(y));
 }
 
 void OpenGLRenderer_t::openGL_keyboard(unsigned char key, int x, int y){
-    openGL_renderer->keyboard(std::forward<unsigned char>(key), std::forward<int>(x), std::forward<int>(y));
+    renderer_->keyboard(std::forward<unsigned char>(key), std::forward<int>(x), std::forward<int>(y));
 }

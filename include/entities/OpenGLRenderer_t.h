@@ -9,12 +9,18 @@ namespace APTracer { namespace Entities {
     class Scene_t;
     class ImgBufferOpenGL_t;
 
+    /**
+     * @brief The OpenGL renderer class displays an image on the screen and handles user input.
+     * 
+     * 
+     */
     class OpenGLRenderer_t{
         public:
             OpenGLRenderer_t();
             OpenGLRenderer_t(Scene_t* scene, Camera_t* camera, ImgBufferOpenGL_t* imgbuffer);
             ~OpenGLRenderer_t();
 
+            static OpenGLRenderer_t* renderer_;
             Camera_t* camera_ = nullptr;
             Scene_t* scene_ = nullptr;
             ImgBufferOpenGL_t* imgbuffer_ = nullptr;
