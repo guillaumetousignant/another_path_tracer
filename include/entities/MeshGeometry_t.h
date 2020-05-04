@@ -33,12 +33,31 @@ namespace APTracer { namespace Entities {
             unsigned int n_tris_; /**< @brief Number of triangular faces held by the mesh geometry.*/
             std::string* mat_; /**< @brief Array of strings representing each face's material's name. Size: n_tris_.*/
             Vec3f* v_; /**< @brief Array of points representing the triangular faces. Size: 3*n_tris_. Face i has the points v_[3*i], v_[3*i + 1], v_[3*i + 2].*/
-            double* vt_; // Is this legal?
-            Vec3f* vn_;
+            double* vt_; /**< @brief Array of uv coordinates representing the triangular faces' texture coordinates. Size: 6*n_tris_. Face i has the uvs [vt_[6*i], vt_[6*i+1]], [vt_[6*i+2], vt_[6*i+3]], [vt_[6*i+4], vt_[6*i+5]].*/
+            Vec3f* vn_; /**< @brief Array of normals representing the triangular faces' normals. Size: 3*n_tris_. Face i has the normals vn_[3*i], vn_[3*i + 1], vn_[3*i + 2].*/
         
         private:
+            /**
+             * @brief Fills the class' members form a .obj file.
+             * 
+             * @param filename Path to a geometry file in .obj format.
+             */
             void readObj(const std::string &filename);
+
+            /**
+             * @brief Fills the class' members form a .su2 file.
+             * 
+             * The faces in the 'WALL' MARKER_TAG sections will be used.
+             * 
+             * @param filename Path to a geometry file in .su2 format.
+             */
             void readSU2(const std::string &filename);
+
+            /**
+             * @brief Constructs the face normals from the face points when none are supplied in the file.
+             * 
+             * This will give a facetted look, as the faces will have the same normal at all points.
+             */
             void deNan();
     };
 }}
