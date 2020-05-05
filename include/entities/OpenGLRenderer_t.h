@@ -49,15 +49,15 @@ namespace APTracer { namespace Entities {
             Camera_t* camera_ = nullptr; /**< @brief Camera used to render the scene, and be moved by user input.*/
             Scene_t* scene_ = nullptr; /**< @brief Scene rendered by the camera and used for autofocus.*/
             ImgBufferOpenGL_t* imgbuffer_ = nullptr; /**< @brief Image buffer displayed on the screen and used by the renderer.*/
-            int right_x_pos_;
-            int right_y_pos_;
-            int left_x_pos_;
-            int left_y_pos_;
-            int middle_x_pos_;
-            int middle_y_pos_;
-            bool right_clicked_;
-            bool left_clicked_;
-            bool middle_clicked_;
+            int right_x_pos_; /**< @brief x coordinate on the screen where the right mouse button was last clicked.*/
+            int right_y_pos_; /**< @brief y coordinate on the screen where the right mouse button was last clicked.*/
+            int left_x_pos_; /**< @brief x coordinate on the screen where the left mouse button was last clicked.*/
+            int left_y_pos_; /**< @brief y coordinate on the screen where the left mouse button was last clicked.*/
+            int middle_x_pos_; /**< @brief x coordinate on the screen where the middle mouse button was last clicked.*/
+            int middle_y_pos_; /**< @brief y coordinate on the screen where the middle mouse button was last clicked.*/
+            bool right_clicked_; /**< @brief True if the right mouse button is currently pressed.*/
+            bool left_clicked_; /**< @brief True if the left mouse button is currently pressed.*/
+            bool middle_clicked_; /**< @brief True if the middle mouse button is currently pressed.*/
             int n_iter_gl_;
             Vec3f focus_point_;
             double camera_dist_;
