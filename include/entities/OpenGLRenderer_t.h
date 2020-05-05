@@ -49,8 +49,8 @@ namespace APTracer { namespace Entities {
             Camera_t* camera_ = nullptr; /**< @brief Camera used to render the scene, and be moved by user input.*/
             Scene_t* scene_ = nullptr; /**< @brief Scene rendered by the camera and used for autofocus.*/
             ImgBufferOpenGL_t* imgbuffer_ = nullptr; /**< @brief Image buffer displayed on the screen and used by the renderer.*/
-            double width_;
-            double height_;
+            unsigned int width_;
+            unsigned int height_;
             int right_x_pos_;
             int right_y_pos_;
             int left_x_pos_;
