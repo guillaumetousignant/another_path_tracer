@@ -58,7 +58,6 @@ namespace APTracer { namespace Entities {
             bool right_clicked_; /**< @brief True if the right mouse button is currently pressed.*/
             bool left_clicked_; /**< @brief True if the left mouse button is currently pressed.*/
             bool middle_clicked_; /**< @brief True if the middle mouse button is currently pressed.*/
-            int n_iter_gl_;
             Vec3f focus_point_;
             double camera_dist_;
             bool updated_;
