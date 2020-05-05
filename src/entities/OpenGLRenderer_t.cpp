@@ -30,7 +30,7 @@ OpenGLRenderer_t::OpenGLRenderer_t() :
     camera_(nullptr), scene_(nullptr), imgbuffer_(nullptr), 
     right_x_pos_(0), right_y_pos_(0), left_x_pos_(0), left_y_pos_(0), middle_x_pos_(0), 
     middle_y_pos_(0), right_clicked_(false), left_clicked_(false), middle_clicked_(false),
-    n_iter_gl_(0), focus_point_(Vec3f()), camera_dist_(0), updated_(false), write_interval_(1),
+    focus_point_(Vec3f()), camera_dist_(0), updated_(false), write_interval_(1),
     render_function_(openGL_accumulate) {
         if (renderer_ != nullptr) {
             delete renderer_;
@@ -42,7 +42,7 @@ OpenGLRenderer_t::OpenGLRenderer_t(Scene_t* scene, Camera_t* camera, ImgBufferOp
     camera_(camera), scene_(scene), imgbuffer_(imgbuffer),
     right_x_pos_(0), right_y_pos_(0), left_x_pos_(0), left_y_pos_(0), middle_x_pos_(0), 
     middle_y_pos_(0), right_clicked_(false), left_clicked_(false), middle_clicked_(false),
-    n_iter_gl_(0), focus_point_(Vec3f()), camera_dist_((focus_point_ - camera_->origin_).magnitude()), updated_(false), 
+    focus_point_(Vec3f()), camera_dist_((focus_point_ - camera_->origin_).magnitude()), updated_(false), 
     write_interval_(1), render_function_(openGL_accumulate) {
         if (renderer_ != nullptr) {
             delete renderer_;
@@ -65,14 +65,12 @@ void OpenGLRenderer_t::accumulate(){
         updated_ = false;
         camera_->update();     
         camera_->reset();
-        n_iter_gl_ = 0;
     }
-    n_iter_gl_++;
     //auto t_start = std::chrono::high_resolution_clock::now();
     camera_->raytrace(scene_);
     //auto t_end = std::chrono::high_resolution_clock::now();
 
-    /*std::cout << "Iteration " << n_iter_gl_ << " done in " 
+    /*std::cout << "Iteration " << imgbuffer_->updates_ << " done in " 
         << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
         << "s." << std::endl;*/
 
@@ -87,15 +85,13 @@ void OpenGLRenderer_t::accumulate_write(){
         updated_ = false;
         camera_->update();     
         camera_->reset();
-        n_iter_gl_ = 0;
     }
-    n_iter_gl_++;
     //auto t_start = std::chrono::high_resolution_clock::now();
     camera_->raytrace(scene_);
     //auto t_end = std::chrono::high_resolution_clock::now();
 
-    if (!(n_iter_gl_%write_interval_)){
-        std::cout << "Writing started at " << n_iter_gl_ << " iterations." << std::endl;
+    if (!(imgbuffer_->updates_%write_interval_)){
+        std::cout << "Writing started at " << imgbuffer_->updates_ << " iterations." << std::endl;
         auto t_start = std::chrono::high_resolution_clock::now();
         camera_->write();
         auto t_end = std::chrono::high_resolution_clock::now();
@@ -105,7 +101,7 @@ void OpenGLRenderer_t::accumulate_write(){
             << "s." << std::endl;
     }
 
-    /*std::cout << "Iteration " << n_iter_gl_ << " done in " 
+    /*std::cout << "Iteration " << imgbuffer_->updates_ << " done in " 
         << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
         << "s." << std::endl;*/
 
@@ -114,7 +110,6 @@ void OpenGLRenderer_t::accumulate_write(){
 
 void OpenGLRenderer_t::resetDisplay(void){
     camera_->reset();
-    n_iter_gl_ = 0;
 }
 
 void OpenGLRenderer_t::mouseMovement(int x, int y){
@@ -204,7 +199,7 @@ void OpenGLRenderer_t::keyboardPaused(unsigned char key, int x, int y){
 
     switch (key){
         case 's':
-        std::cout << "Writing started at " << n_iter_gl_ << " iterations." << std::endl;
+        std::cout << "Writing started at " << imgbuffer_->updates_ << " iterations." << std::endl;
         t_start_write = std::chrono::high_resolution_clock::now();
         camera_->write();
         t_end_write = std::chrono::high_resolution_clock::now();
@@ -237,7 +232,7 @@ void OpenGLRenderer_t::keyboard(unsigned char key, int x, int y){
     
     switch (key){
     case 's':
-        std::cout << "Writing started at " << n_iter_gl_ << " iterations." << std::endl;
+        std::cout << "Writing started at " << imgbuffer_->updates_ << " iterations." << std::endl;
         t_start_write = std::chrono::high_resolution_clock::now();
         camera_->write();
         t_end_write = std::chrono::high_resolution_clock::now();
@@ -260,7 +255,7 @@ void OpenGLRenderer_t::keyboard(unsigned char key, int x, int y){
         break;
 
     case 'p':
-        std::cout << "Paused at " << n_iter_gl_ << " iterations." << std::endl;
+        std::cout << "Paused at " << imgbuffer_->updates_ << " iterations." << std::endl;
         glutDisplayFunc(openGL_dummyDisp);
         glutMouseFunc(nullptr);
         glutMotionFunc(nullptr);
