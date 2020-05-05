@@ -27,7 +27,7 @@ using APTracer::Entities::Vec3f;
 OpenGLRenderer_t* OpenGLRenderer_t::renderer_ = nullptr;
 
 OpenGLRenderer_t::OpenGLRenderer_t() :
-    camera_(nullptr), scene_(nullptr), imgbuffer_(nullptr), width_(0), height_(0), 
+    camera_(nullptr), scene_(nullptr), imgbuffer_(nullptr), 
     right_x_pos_(0), right_y_pos_(0), left_x_pos_(0), left_y_pos_(0), middle_x_pos_(0), 
     middle_y_pos_(0), right_clicked_(false), left_clicked_(false), middle_clicked_(false),
     n_iter_gl_(0), focus_point_(Vec3f()), camera_dist_(0), updated_(false), write_interval_(1),
@@ -39,7 +39,7 @@ OpenGLRenderer_t::OpenGLRenderer_t() :
 }
 
 OpenGLRenderer_t::OpenGLRenderer_t(Scene_t* scene, Camera_t* camera, ImgBufferOpenGL_t* imgbuffer) :
-    camera_(camera), scene_(scene), imgbuffer_(imgbuffer), width_(imgbuffer->size_x_), height_(imgbuffer->size_y_), 
+    camera_(camera), scene_(scene), imgbuffer_(imgbuffer),
     right_x_pos_(0), right_y_pos_(0), left_x_pos_(0), left_y_pos_(0), middle_x_pos_(0), 
     middle_y_pos_(0), right_clicked_(false), left_clicked_(false), middle_clicked_(false),
     n_iter_gl_(0), focus_point_(Vec3f()), camera_dist_((focus_point_ - camera_->origin_).magnitude()), updated_(false), 
@@ -120,8 +120,8 @@ void OpenGLRenderer_t::resetDisplay(void){
 void OpenGLRenderer_t::mouseMovement(int x, int y){
     //Vec3f newdir = camera_->direction_;
     if (middle_clicked_){
-        const double differential_x = double(x - middle_x_pos_)/double(width_); // maybe change those to glut width/height?
-        const double differential_y = double(y - middle_y_pos_)/double(height_); // maybe change those to glut width/height?
+        const double differential_x = double(x - middle_x_pos_)/double(glutGet(GLUT_WINDOW_WIDTH)); // maybe change those to glut width/height?
+        const double differential_y = double(y - middle_y_pos_)/double(glutGet(GLUT_WINDOW_HEIGHT)); // maybe change those to glut width/height?
         middle_x_pos_ = x;
         middle_y_pos_ = y;
 
@@ -132,8 +132,8 @@ void OpenGLRenderer_t::mouseMovement(int x, int y){
         updated_ = true;
     }
     if (left_clicked_){
-        //double differential_x = double(x - left_x_pos_)/double(width_);
-        const double differential_y = double(y - left_y_pos_)/double(height_); // maybe change those to glut width/height?
+        //double differential_x = double(x - left_x_pos_)/double(glutGet(GLUT_WINDOW_WIDTH));
+        const double differential_y = double(y - left_y_pos_)/double(glutGet(GLUT_WINDOW_HEIGHT)); // maybe change those to glut width/height?
         left_x_pos_ = x;
         left_y_pos_ = y;
 
@@ -141,8 +141,8 @@ void OpenGLRenderer_t::mouseMovement(int x, int y){
         updated_ = true;
     }
     if (right_clicked_){
-        const double differential_x = double(x - right_x_pos_)/double(width_); // maybe change those to glut width/height?
-        const double differential_y = double(y - right_y_pos_)/double(height_); // maybe change those to glut width/height?
+        const double differential_x = double(x - right_x_pos_)/double(glutGet(GLUT_WINDOW_WIDTH)); // maybe change those to glut width/height?
+        const double differential_y = double(y - right_y_pos_)/double(glutGet(GLUT_WINDOW_HEIGHT)); // maybe change those to glut width/height?
         right_x_pos_ = x;
         right_y_pos_ = y;
 
