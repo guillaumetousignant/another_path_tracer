@@ -40,6 +40,7 @@ void Scene_t::remove(Shape_t* shape) {
     for (size_t i = 0; i < geometry_.size(); ++i) {
         if (geometry_[i] == shape) {
             geometry_.erase(geometry_.begin() + i);
+            break;
         }
     }
 }
@@ -60,6 +61,7 @@ void Scene_t::remove(MeshTop_t* mesh) {
         for (size_t i = 0; i < geometry_.size(); ++i) {
             if (geometry_[i] == mesh->triangles_[0]) {
                 geometry_.erase(geometry_.begin() + i, geometry_.begin() + std::max(i + mesh->n_tris_, geometry_.size()));
+                break;
             }
         }
     }
@@ -71,6 +73,7 @@ void Scene_t::remove(MeshTop_t** meshes, unsigned int n_meshes) {
             for (size_t i = 0; i < geometry_.size(); ++i) {
                 if (geometry_[i] == meshes[k]->triangles_[0]) {
                     geometry_.erase(geometry_.begin() + i, geometry_.begin() + std::max(i + meshes[k]->n_tris_, geometry_.size()));
+                    break;
                 }
             }
         }
