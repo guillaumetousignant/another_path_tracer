@@ -1868,7 +1868,7 @@ std::unique_ptr<Camera_t> APTracer::Entities::SceneContext_t::create_camera(cons
 
 void APTracer::Entities::SceneContext_t::create_acceleration_structure(const tinyxml2::XMLElement* xml_acceleration_structure) {
     if (xml_acceleration_structure == nullptr){
-        scene_->acc_ = new AccelerationMultiGridVector_t(scene_->geometry_, scene_->n_obj_);
+        scene_->acc_ = new AccelerationMultiGridVector_t(scene_->geometry_.data(), scene_->geometry_.size());
         return;
     }
 
@@ -1884,26 +1884,26 @@ void APTracer::Entities::SceneContext_t::create_acceleration_structure(const tin
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
     if (type == "grid"){
-        scene_->acc_ = new AccelerationGrid_t(scene_->geometry_, scene_->n_obj_, nullptr, 0, xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128));
+        scene_->acc_ = new AccelerationGrid_t(scene_->geometry_.data(), scene_->geometry_.size(), nullptr, 0, xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128));
     }
     else if (type == "grid_array"){
-        scene_->acc_ = new AccelerationGridArray_t(scene_->geometry_, scene_->n_obj_, nullptr, 0, xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128));
+        scene_->acc_ = new AccelerationGridArray_t(scene_->geometry_.data(), scene_->geometry_.size(), nullptr, 0, xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128));
     }
     else if (type == "grid_vector"){
-        scene_->acc_ = new AccelerationGridVector_t(scene_->geometry_, scene_->n_obj_, nullptr, 0, xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128));
+        scene_->acc_ = new AccelerationGridVector_t(scene_->geometry_.data(), scene_->geometry_.size(), nullptr, 0, xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128));
     }
     else if (type == "multi_grid"){
-        scene_->acc_ = new AccelerationMultiGrid_t(scene_->geometry_, scene_->n_obj_, nullptr, 0, xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128), xml_acceleration_structure->UnsignedAttribute("max_cell_content", 32), xml_acceleration_structure->UnsignedAttribute("max_grid_level", 1));
+        scene_->acc_ = new AccelerationMultiGrid_t(scene_->geometry_.data(), scene_->geometry_.size(), nullptr, 0, xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128), xml_acceleration_structure->UnsignedAttribute("max_cell_content", 32), xml_acceleration_structure->UnsignedAttribute("max_grid_level", 1));
     }
     else if (type == "multi_grid_array"){
-        scene_->acc_ = new AccelerationMultiGridArray_t(scene_->geometry_, scene_->n_obj_, nullptr, 0, xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128), xml_acceleration_structure->UnsignedAttribute("max_cell_content", 32), xml_acceleration_structure->UnsignedAttribute("max_grid_level", 1));
+        scene_->acc_ = new AccelerationMultiGridArray_t(scene_->geometry_.data(), scene_->geometry_.size(), nullptr, 0, xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128), xml_acceleration_structure->UnsignedAttribute("max_cell_content", 32), xml_acceleration_structure->UnsignedAttribute("max_grid_level", 1));
     }
     else if (type == "multi_grid_vector"){
-        scene_->acc_ = new AccelerationMultiGridVector_t(scene_->geometry_, scene_->n_obj_, nullptr, 0, xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128), xml_acceleration_structure->UnsignedAttribute("max_cell_content", 32), xml_acceleration_structure->UnsignedAttribute("max_grid_level", 1));
+        scene_->acc_ = new AccelerationMultiGridVector_t(scene_->geometry_.data(), scene_->geometry_.size(), nullptr, 0, xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128), xml_acceleration_structure->UnsignedAttribute("max_cell_content", 32), xml_acceleration_structure->UnsignedAttribute("max_grid_level", 1));
     }
     else{
         std::cerr << "Error, acceleration structure type '" << type << "' not implemented. Using 'multi_grid_vector'." << std::endl; 
-        scene_->acc_ = new AccelerationMultiGridVector_t(scene_->geometry_, scene_->n_obj_);
+        scene_->acc_ = new AccelerationMultiGridVector_t(scene_->geometry_.data(), scene_->geometry_.size());
     }
 }
 
