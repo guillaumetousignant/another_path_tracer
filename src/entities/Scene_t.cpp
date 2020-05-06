@@ -12,6 +12,18 @@ using APTracer::Acceleration::AccelerationMultiGridVector_t;
 
 Scene_t::Scene_t() : geometry_(), acc_(nullptr) {}
 
+Scene_t::Scene_t(Shape_t* shape) : geometry_(1, shape), acc_(nullptr) {}
+
+Scene_t::Scene_t(Shape_t** shapes, unsigned int n_shapes) : geometry_(shapes, shapes + n_shapes), acc_(nullptr) {}
+
+Scene_t::Scene_t(MeshTop_t* mesh) : geometry_(mesh->triangles_, mesh->triangles_ + mesh->n_tris_), acc_(nullptr) {}
+
+Scene_t::Scene_t(MeshTop_t** meshes, unsigned int n_meshes) : geometry_(), acc_(nullptr) {
+    for (unsigned int i = 0; i < n_meshes; i++){
+        geometry_.insert(geometry_.end(), meshes[i]->triangles_, meshes[i]->triangles_ + meshes[i]->n_tris_);
+    }
+}
+
 Scene_t::~Scene_t() {
     if (acc_ != nullptr){
         delete acc_;

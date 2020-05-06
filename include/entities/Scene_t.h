@@ -25,6 +25,10 @@ namespace APTracer { namespace Entities {
     class Scene_t{
         public:
             Scene_t();
+            Scene_t(Shape_t* shape);
+            Scene_t(Shape_t** shapes, unsigned int n_shapes);
+            Scene_t(MeshTop_t* mesh);
+            Scene_t(MeshTop_t** meshes, unsigned int n_meshes);
             ~Scene_t();
 
             std::vector<Shape_t*> geometry_;
@@ -38,25 +42,25 @@ namespace APTracer { namespace Entities {
             void remove(Shape_t** shapes, unsigned int n_shapes);
 
             /**
-             * @brief 
+             * @brief Removes a mesh from the scene.
              * 
              * This works by finding the first shape pointer of the mesh and deleting it and the n_tris next shapes.
              * This works fine if the mesh is added with add and if the triangles of the mesh are not added individually
              * out of order.
              * 
-             * @param mesh 
+             * @param mesh Mesh to be removed from the scene.
              */
             void remove(MeshTop_t* mesh);
 
             /**
-             * @brief 
+             * @brief Removes multiple meshes from the scene.
              * 
              * This works by finding the first shape pointer of the meshes and deleting it and the n_tris next shapes.
              * This works fine if the meshes are added with add and if the triangles of the meshes are not added individually
              * out of order.
              * 
-             * @param meshes 
-             * @param n_meshes
+             * @param meshes Array of meshes to be removed from the scene.
+             * @param n_meshes Number of meshes to be removed from the scene.
              */
             void remove(MeshTop_t** meshes, unsigned int n_meshes);
             void update();
