@@ -1414,7 +1414,7 @@ std::unique_ptr<Shape_t> APTracer::Entities::SceneContext_t::create_object(const
             texture_coordinates_data[0] = texture_coordinates[0].data();
             texture_coordinates_data[1] = texture_coordinates[1].data();
             texture_coordinates_data[2] = texture_coordinates[2].data();
-            texture_coordinates_ptr = &(texture_coordinates_data[0]);
+            texture_coordinates_ptr = texture_coordinates_data;
         }
 
         return std::unique_ptr<Shape_t>(
@@ -1439,7 +1439,7 @@ std::unique_ptr<Shape_t> APTracer::Entities::SceneContext_t::create_object(const
             texture_coordinates_data[0] = texture_coordinates[0].data();
             texture_coordinates_data[1] = texture_coordinates[1].data();
             texture_coordinates_data[2] = texture_coordinates[2].data();
-            texture_coordinates_ptr = &(texture_coordinates_data[0]);
+            texture_coordinates_ptr = texture_coordinates_data;
         }
 
         return std::unique_ptr<Shape_t>(
