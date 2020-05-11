@@ -15,32 +15,30 @@ APTracer::Materials::ReflectiveRefractive_t::~ReflectiveRefractive_t(){}
 
 void APTracer::Materials::ReflectiveRefractive_t::bounce(const double (&uv)[2], const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
     Vec3f normal;
-    //bool coming_out;
+    Vec3f newdir;
 
     hit_obj->normal(ray, uv, normal);
     double cosi = ray.direction_.dot(normal);
 
     if (medium_->priority_ >= ray.medium_list_.front()->priority_){ // CHECK also discard if priority is equal, but watch for going out case
         Vec3f n;
-        Vec3f newdir;
         double etai, etat;
         double kr;
-        
-        if (cosi < 0.0){ // Coming in
+
+        if (cosi < 0){ // Coming in
             etai = ray.medium_list_.front()->ind_;
             etat = medium_->ind_;
-            cosi *= -1.0;
+            cosi *= -1;
             n = normal;
-            //coming_out = false;
         }
         else{ // Going out
             etat = (*std::next(ray.medium_list_.begin()))->ind_;
             etai = medium_->ind_;
             n = -normal;
-            //coming_out = true;
         }
 
         const double eta = etai/etat;
+
         const double sint = eta * std::sqrt(1.0 - cosi * cosi);
 
         if (sint >= 1.0){
@@ -48,46 +46,42 @@ void APTracer::Materials::ReflectiveRefractive_t::bounce(const double (&uv)[2], 
         }
         else{
             const double cost = std::sqrt(1.0 - sint * sint);
-            cosi = std::abs(cosi);
-            const double Rs = ((etat * cosi) - (etai * cost))/((etat * cosi) + (etai * cost));
-            const double Rp = ((etai * cosi) - (etat * cost))/((etai * cosi) + (etat * cost));
+            const double cosi_abs = std::abs(cosi);
+            const double Rs = ((etat * cosi_abs) - (etai * cost))/((etat * cosi_abs) + (etai * cost));
+            const double Rp = ((etai * cosi_abs) - (etat * cost))/((etai * cosi_abs) + (etat * cost));
             kr = (Rs * Rs + Rp * Rp)/2.0;
         }
 
-        if (unif_(APTracer::Entities::rng) > kr){ //|| coming_out){ // refracted. Not sure if should always be refracted when going out.
-            const double k = 1.0 - sint*sint;
+        if (unif_(APTracer::Entities::rng) > kr){
 
-            //newdir = k < 0 ? Vec3f() : (ray.direction_ * eta + n * (eta * cosi - std::sqrt(k))).normalize_inplace(); // k shouldn't be smaller than 0 if sint >= 1
-            newdir = (ray.direction_ * eta + n * (eta * cosi - std::sqrt(k))).normalize_inplace();
+            const double k = 1.0 - eta*eta * (1.0 - cosi*cosi);
 
-            if (newdir.dot(normal) < 0.0){ // coming in
-                ray.origin_ += ray.direction_ * ray.dist_ - normal * EPSILON; // use n or normal?
-                if (ray.direction_.dot(normal) < 0.0){
-                    ray.add_to_mediums(medium_);
-                }
-            }
-            else{ // going out
-                ray.origin_ += ray.direction_ * ray.dist_ + normal * EPSILON; // use n or normal?
-                ray.remove_from_mediums(medium_);
-            }
+            //newdir = k < 0 ? Vec3f() : (ray.direction_*eta + n * (eta*cosi - std::sqrt(k))).normalize_inplace();
+            newdir = k < 0.0 ? (ray.direction_ - n * 2.0 * cosi).normalize_inplace() : (ray.direction_*eta + n * (eta*cosi - std::sqrt(k))).normalize_inplace(); // Now reflects completely if k < 0
+            // set to 0, 0, 0? maybe mask to 0, 0, 0 also? 
+            // Normalize newdir?
         }
-        else{ // Reflected
+        else {
             newdir = ray.direction_ - n * 2.0 * cosi;
-            ray.origin_ += ray.direction_ * ray.dist_ + n * EPSILON;            
         }
 
         ray.colour_ += ray.mask_ * emission_;
         ray.mask_ *= colour_;
-        ray.direction_ = newdir;
     }
     else{
-        if (cosi < 0.0){
-            ray.origin_ += ray.direction_ * ray.dist_ - normal * EPSILON;
+        newdir = ray.direction_;
+    }
+
+    if (newdir.dot(normal) < 0.0){ // Coming in
+        ray.origin_ += ray.direction_ * ray.dist_ - normal * EPSILON; // n or normal?
+        if (ray.direction_.dot(normal) < 0.0){
             ray.add_to_mediums(medium_);
         }
-        else{
-            ray.origin_ += ray.direction_ * ray.dist_ + normal * EPSILON;
-            ray.remove_from_mediums(medium_);
-        }
     }
+    else{ // Going out
+        ray.origin_ += ray.direction_ * ray.dist_ + normal * EPSILON; // n or normal?
+        ray.remove_from_mediums(medium_);
+    }
+
+    ray.direction_ = newdir;
 }
