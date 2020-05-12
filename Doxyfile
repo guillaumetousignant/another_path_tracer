@@ -831,7 +831,7 @@ RECURSIVE              = YES
 # Note that relative paths are relative to the directory from which doxygen is
 # run.
 
-EXCLUDE                = x64 external external_windows scenes images bin assets functions/CImg.h functions/tinyxml2.cpp functions/tinyxml2.h main_test.cpp
+EXCLUDE                = x64 .vscode docs external_windows scenes images bin build assets include/functions/CImg.h src/functions/tinyxml2.cpp include/functions/tinyxml2.h
 
 # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or
 # directories that are symbolic links (a Unix file system feature) are excluded
