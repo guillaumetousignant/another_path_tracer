@@ -1508,9 +1508,8 @@ std::unique_ptr<Skybox_t> APTracer::Entities::SceneContext_t::create_skybox(cons
     else if (type == "skybox_flat_sun"){
         const char* attributes[] = {"colour", "lights"};
         require_attributes(xml_skybox, attributes, 2);
-        std::vector<DirectionalLight_t*> lights;
 
-        get_lights(xml_skybox->Attribute("lights"), lights, xml_directional_lights);
+        std::vector<DirectionalLight_t*> lights = get_lights(xml_skybox->Attribute("lights"), xml_directional_lights);
 
         DirectionalLight_t** lights_ptr = lights.empty() ? nullptr : lights.data();
                
@@ -2367,7 +2366,7 @@ Material_t* APTracer::Entities::SceneContext_t::get_material(std::string materia
     exit(41);
 }
 
-void APTracer::Entities::SceneContext_t::get_lights(std::string lights_string, std::vector<DirectionalLight_t*> &lights, const tinyxml2::XMLElement* xml_directional_lights) const {
+std::vector<DirectionalLight_t*> APTracer::Entities::SceneContext_t::get_lights(std::string lights_string, const tinyxml2::XMLElement* xml_directional_lights) const {
     std::list<DirectionalLight_t*> lights_list = std::list<DirectionalLight_t*>();
     std::string delimiter = ", ";
     size_t pos = 0;
@@ -2439,13 +2438,15 @@ void APTracer::Entities::SceneContext_t::get_lights(std::string lights_string, s
         }
     }
 
-    lights = std::vector<DirectionalLight_t*>(lights_list.size());
+    std::vector<DirectionalLight_t*> lights(lights_list.size());
     unsigned int index = 0;
 
     for (auto it = lights_list.begin(); it != lights_list.end(); ++it){
         lights[index] = *it;
         ++index;
     }
+
+    return lights;
 }
 
 ImgBuffer_t* APTracer::Entities::SceneContext_t::get_imgbuffer(std::string imgbuffer, const tinyxml2::XMLElement* xml_imgbuffers) const {

@@ -264,36 +264,179 @@ namespace APTracer { namespace Entities {
             Texture_t* get_texture(std::string texture, const tinyxml2::XMLElement* xml_textures) const;
 
             /**
-             * @brief Get the material mix object
+             * @brief Get the two indices of the materials making up a material mix from their names or indices.
              * 
-             * @param material_refracted 
-             * @param material_reflected 
-             * @param xml_materials 
-             * @return std::vector<unsigned int> 
+             * @param material_refracted String containing the first material's name or index.
+             * @param material_reflected String containing the second material's name or index.
+             * @param xml_materials XML entries of all the materials.
+             * @return std::vector<unsigned int> Vector of the indices ot the two materials making up a material mix.
              */
             std::vector<unsigned int> get_material_mix(std::string material_refracted, std::string material_reflected, const tinyxml2::XMLElement* xml_materials) const;
+
+            /**
+             * @brief Get a medium from its name or index.
+             * 
+             * @param medium String containing a medium's name or index.
+             * @param xml_mediums XML entries of all the mediums.
+             * @return Medium_t* Pointer to the requested medium.
+             */
             Medium_t* get_medium(std::string medium, const tinyxml2::XMLElement* xml_mediums) const;
+
+            /**
+             * @brief Get a mesh geometry from its name or index.
+             * 
+             * @param mesh_geometry String containing a mesh geometry's name or index.
+             * @param xml_mesh_geometries XML entries of all the mesh geometries.
+             * @return MeshGeometry_t* Pointer to the requested mesh geometry.
+             */
             MeshGeometry_t* get_mesh_geometry(std::string mesh_geometry, const tinyxml2::XMLElement* xml_mesh_geometries) const;
+
+            /**
+             * @brief Get a material's index from its name or index.
+             * 
+             * @param material String containing a material's name or index.
+             * @param xml_materials XML entries of all the materials.
+             * @return unsigned int Index of the requested material.
+             */
             unsigned int get_material_index(std::string material, const tinyxml2::XMLElement* xml_materials) const;
+
+            /**
+             * @brief Get a material from its name or index.
+             * 
+             * @param material String containing a material's name or index.
+             * @param xml_materials XML entries of all the materials.
+             * @return Material_t* Pointer to the requested material.
+             */
             Material_t* get_material(std::string material, const tinyxml2::XMLElement* xml_materials) const;
-            void get_lights(std::string lights_string, std::vector<DirectionalLight_t*> &lights, const tinyxml2::XMLElement* xml_directional_lights) const;
+
+            /**
+             * @brief Get a vector of directional lights from their name or index.
+             * 
+             * @param lights_string String containing light names and/or indices.
+             * @param xml_directional_lights XML entries of all the directional lights.
+             * @return std::vector<DirectionalLight_t*> Vector of the requested directional lights.
+             */
+            std::vector<DirectionalLight_t*> get_lights(std::string lights_string, const tinyxml2::XMLElement* xml_directional_lights) const;
+
+            /**
+             * @brief Get an image buffer from its name or index.
+             * 
+             * @param imgbuffer String containing an image buffer's name or index.
+             * @param xml_imgbuffers XML entries of all the image buffers.
+             * @return ImgBuffer_t* Pointer to the requested image buffer.
+             */
             ImgBuffer_t* get_imgbuffer(std::string imgbuffer, const tinyxml2::XMLElement* xml_imgbuffers) const;
+
+            /**
+             * @brief Get a skybox from its name or index.
+             * 
+             * @param skybox String containing a skybox's name or index.
+             * @param xml_skyboxes XML entries of all the skyboxes.
+             * @return Skybox_t* Pointer to the requested skybox.
+             */
             Skybox_t* get_skybox(std::string skybox, const tinyxml2::XMLElement* xml_skyboxes) const;
+
+            /**
+             * @brief Get the shapes and meshes making up the scene from their name or index.
+             * 
+             * This function selectively adds the created shapes and meshes to the scene, depending on if they are listed or not.
+             * 
+             * @param objects_string String containing the shapes and/or meshes name or index.
+             * @param[out] shapes Vector containing the shapes making up the scene.
+             * @param[out] meshes Vector containing the meshes making up the scene.
+             * @param xml_objects XML entries of all the shapes and/or meshes.
+             */
             void get_objects(std::string objects_string, std::vector<Shape_t*> &shapes, std::vector<MeshTop_t*> &meshes, const tinyxml2::XMLElement* xml_objects) const;
+
+            /**
+             * @brief Get the shapes and meshes making up the scene from all the created shapes and meshes.
+             * 
+             * This function adds all the created shapes and meshes to the scene.
+             * 
+             * @param[out] shapes Vector containing the shapes making up the scene.
+             * @param[out] meshes Vector containing the meshes making up the scene.
+             */
             void get_objects(std::vector<Shape_t*> &shapes, std::vector<MeshTop_t*> &meshes) const;
     };
 }}
 
 namespace APTracer {
+    /**
+     * @brief Get the colour encoded in a string. Can be one numerical value, three numerical values, or a colour name.
+     * 
+     * The colour can be a colour name, provided it is defined in the APTracer::Colours::colours map. It can also be
+     * a single numerical value, in which case all three components will have the same value, or three values, one for
+     * each component.
+     * 
+     * @param colour String containing a colour value(s) or name.
+     * @return Vec3f Three component colour.
+     */
     Vec3f get_colour(std::string colour); // copies string :(
+
+    /**
+     * @brief Get a vector of three points from a string of numerical values, or nan for nullptr.
+     * 
+     * @param points_string String containing the three components of the three points, or 'nan'.
+     * @return std::vector<Vec3f> Vector containing the components of three points, or empty vector.
+     */
     std::vector<Vec3f> get_points(std::string points_string);
+
+    /**
+     * @brief Get a vector of three 2D coordinates from a string of numerical values, or nan for nullptr.
+     * 
+     * @param texture_coordinates_string String containing the two components of the three coordinates, or 'nan'.
+     * @return std::vector<std::vector<double>> Vector containing the components of three coordinates, or empty vector.
+     */
     std::vector<std::vector<double>> get_texture_coordinates(std::string texture_coordinates_string);    
+
+    /**
+     * @brief Get a list of strings representing material names or indices from a string of material names or indices.
+     * 
+     * @param string_medium_names String of material names or indices.
+     * @return std::unique_ptr<std::list<std::string>> List of strings representing material names or indices
+     */
     std::unique_ptr<std::list<std::string>> get_medium_names(std::string string_medium_names);
+
+    /**
+     * @brief Get an array of two double values from a string.
+     * 
+     * @param string_value String containing two values.
+     * @param value Array of two double values
+     */
     void get_xy(const std::string &string_value, double (&value)[2]);
+
+    /**
+     * @brief Get an array of two unsigned integer values from a string.
+     * 
+     * @param string_value String containing two values.
+     * @param value Array of two unsigned integer values.
+     */
     void get_xy(const std::string &string_value, unsigned int (&value)[2]);
 
+    /**
+     * @brief Returns true if the string represents an integer.
+     * 
+     * @param s String containint or not an integer.
+     * @return true The string represents an integer.
+     * @return false The string doesn't represent an integer.
+     */
     bool is_number(const std::string& s);
+
+    /**
+     * @brief Applies a transformation represented by an XML element to a transformation matrix.
+     * 
+     * @param[in, out] transform_matrix Transformation matrix to which we apply the transformation.
+     * @param transform XML element representing the transformation.
+     */
     void apply_transformation(TransformMatrix_t* transform_matrix, const tinyxml2::XMLElement* transform);
+
+    /**
+     * @brief This function defines the parameters that have to be present in an XML element and throws an error if a parameter is missing.
+     * 
+     * @param element XML element to probe for parameters.
+     * @param attributes Array of chars representing parameter names.
+     * @param n Number of parameters to test.
+     */
     void require_attributes(const tinyxml2::XMLElement* element, const char** attributes, unsigned int n);
 }
 
