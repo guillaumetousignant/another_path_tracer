@@ -16,7 +16,7 @@ void APTracer::Materials::FresnelMixIn_t::bounce(const double (&uv)[2], const AP
     Vec3f normal;
     double kr;
 
-    hit_obj->normal(ray, uv, normal);
+    hit_obj->normal(ray.time_, uv, normal);
 
     double cosi = ray.direction_.dot(normal);
     if (cosi > 0){ // going out

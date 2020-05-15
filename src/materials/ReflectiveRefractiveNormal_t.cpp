@@ -23,7 +23,7 @@ void APTracer::Materials::ReflectiveRefractiveNormal_t::bounce(const double (&uv
     Vec3f newdir;
     //bool coming_out;
 
-    hit_obj->normal_uv_tangent(ray, uv, tuv, normal, tangent);
+    hit_obj->normal_uv_tangent(ray.time_, uv, tuv, normal, tangent);
     bitangent = normal.cross(tangent);
     tangent_weights = normal_map_->get(tuv) * 2.0 - 1.0;
     normal = (tangent * tangent_weights[0] + bitangent * tangent_weights[1] + normal * tangent_weights[2]).normalize_inplace();

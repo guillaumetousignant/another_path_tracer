@@ -18,7 +18,7 @@ void APTracer::Materials::DiffuseTex_t::bounce(const double (&uv)[2], const APTr
     Vec3f normal;
     double tuv[2];
 
-    hit_obj->normaluv(ray, uv, tuv, normal);
+    hit_obj->normaluv(ray.time_, uv, tuv, normal);
 
     const double rand1 = unif_(APTracer::Entities::rng)*2*PI;
     const double rand2 = unif_(APTracer::Entities::rng);

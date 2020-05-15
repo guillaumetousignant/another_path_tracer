@@ -15,7 +15,7 @@ void APTracer::Materials::RandomMixIn_t::bounce(const double (&uv)[2], const APT
     Vec3f normal;
     //double cosi;
 
-    hit_obj->normal(ray, uv, normal);
+    hit_obj->normal(ray.time_, uv, normal);
     //cosi = ray.direction_.dot(normal);
 
     if ((ray.direction_.dot(normal) > 0.0) || (unif_(APTracer::Entities::rng) < ratio_)){ // refracted

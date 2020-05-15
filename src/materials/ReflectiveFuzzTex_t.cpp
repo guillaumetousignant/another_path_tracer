@@ -18,7 +18,7 @@ void APTracer::Materials::ReflectiveFuzzTex_t::bounce(const double (&uv)[2], con
     Vec3f normal;
     double tuv[2];
 
-    hit_obj->normaluv(ray, uv, tuv, normal);
+    hit_obj->normaluv(ray.time_, uv, tuv, normal);
 
     if (normal.dot(ray.direction_) > 0.0){
         normal *= -1.0;

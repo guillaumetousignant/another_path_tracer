@@ -40,18 +40,33 @@ namespace APTracer { namespace Entities {
             virtual void update() = 0;
 
             /**
-             * @brief 
+             * @brief Calculate the intersection between a ray and a shape, and stores information about this intersection.
              * 
-             * @param ray 
-             * @param[out] t 
-             * @param[out] uv 
-             * @return true 
-             * @return false 
+             * This function must return wether a ray intersected the shape or not, according to its direction and origin.
+             * The intersection point, in object coordinates, is stored in uv, and the distance from the ray origin is stored
+             * in t.
+             * 
+             * @param ray Ray to be tested for intersection with the shape.
+             * @param[out] t Distance at which the intersection ocurred, from ray origin. Undefined if not intersected.
+             * @param[out] uv Coordinates in object space of the intersection. Undefined if not intersected.
+             * @return true The ray intersected the shape, t and uv are defined.
+             * @return false The ray doesn't intersect the shape, t and uv are undefined.
              */
             virtual bool intersection(const Ray_t &ray, double &t, double (&uv)[2]) const = 0;
-            virtual void normal(const Ray_t &ray, const double (&uv)[2], Vec3f &normalvec) const = 0;
-            virtual void normaluv(const Ray_t &ray, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec) const = 0;
-            virtual void normal_uv_tangent(const Ray_t &ray, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec, Vec3f &tangentvec) const = 0;
+
+            /**
+             * @brief Returns the surface normal at a point in object coordinates.
+             * 
+             * This is used to find the surface normal on ray bounce. Used by materials to determine ray colour.
+             * The time parameter is for motionblur shapes, where time is used to interpolate.
+             * 
+             * @param time  
+             * @param uv 
+             * @param normalvec 
+             */
+            virtual void normal(double time, const double (&uv)[2], Vec3f &normalvec) const = 0;
+            virtual void normaluv(double time, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec) const = 0;
+            virtual void normal_uv_tangent(double time, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec, Vec3f &tangentvec) const = 0;
             virtual Vec3f mincoord() const = 0;
             virtual Vec3f maxcoord() const = 0;
 

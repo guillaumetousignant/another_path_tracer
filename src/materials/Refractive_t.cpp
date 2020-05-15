@@ -16,7 +16,7 @@ void APTracer::Materials::Refractive_t::bounce(const double (&uv)[2], const APTr
     Vec3f normal;
     Vec3f newdir;
 
-    hit_obj->normal(ray, uv, normal);
+    hit_obj->normal(ray.time_, uv, normal);
     double cosi = ray.direction_.dot(normal);
 
     if (medium_->priority_ >= ray.medium_list_.front()->priority_){ // CHECK also discard if priority is equal, but watch for going out case

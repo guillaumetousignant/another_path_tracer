@@ -18,7 +18,7 @@ void APTracer::Materials::RefractiveFuzz_t::bounce(const double (&uv)[2], const 
     Vec3f normal;
     Vec3f newdir;
 
-    hit_obj->normal(ray, uv, normal);
+    hit_obj->normal(ray.time_, uv, normal);
 
     if (medium_->priority_ >= ray.medium_list_.front()->priority_){ // CHECK also discard if priority is equal, but watch for going out case
         double etai, etat;
