@@ -31,6 +31,9 @@ namespace APTracer { namespace Entities {
              */
             virtual ~Shape_t(){};
 
+            Material_t *material_; /**< @brief Material of which the shape is made of.*/
+            TransformMatrix_t *transformation_; /**< @brief Transformation matrix used to modify the position and other transformations of the shape.*/
+
             /**
              * @brief Propagates changes from the shape's transformation matrix to the shape.
              * 
@@ -60,18 +63,61 @@ namespace APTracer { namespace Entities {
              * This is used to find the surface normal on ray bounce. Used by materials to determine ray colour.
              * The time parameter is for motionblur shapes, where time is used to interpolate.
              * 
-             * @param time  
-             * @param uv 
-             * @param normalvec 
+             * @param[in] time Time at which we want the normal. Used when motion blur is used.
+             * @param[in] uv Object coordinates at which we want to find the normal.
+             * @param[out] normalvec Normal vector at the specified coordinates and time.
              */
             virtual void normal(double time, const double (&uv)[2], Vec3f &normalvec) const = 0;
-            virtual void normaluv(double time, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec) const = 0;
-            virtual void normal_uv_tangent(double time, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec, Vec3f &tangentvec) const = 0;
-            virtual Vec3f mincoord() const = 0;
-            virtual Vec3f maxcoord() const = 0;
 
-            Material_t *material_;
-            TransformMatrix_t *transformation_;
+            /**
+             * @brief Returns the surface normal and texture coordinates at a point in object coordinates.
+             * 
+             * This is used to find the surface normal on ray bounce. Used by materials to determine ray colour.
+             * The texture coordinates is also returned, used by materials to fetch a colour in a texture.
+             * The time parameter is for motionblur shapes, where time is used to interpolate.
+             * 
+             * @param[in] time Time at which we want the normal and texture coordinates. Used when motion blur is used.
+             * @param[in] uv Object coordinates at which we want to find the normal and texture coordinates.
+             * @param[out] tuv Texture coordinates at the specified coordinates and time.
+             * @param[out] normalvec Normal vector at the specified coordinates and time.
+             */
+            virtual void normaluv(double time, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec) const = 0;
+
+            /**
+             * @brief Returns the surface normal, texture coordinates and tangent vector at a point in object coordinates.
+             * 
+             * This is used to find the surface normal on ray bounce. Used by materials to determine ray colour.
+             * The texture coordinates is also returned, used by materials to fetch a colour in a texture. The tangent
+             * vector is used by materials for normal mapping, as the normals returned by those textures are in object
+             * coordinates. The time parameter is for motionblur shapes, where time is used to interpolate.
+             * 
+             * @param[in] time Time at which we want the normal and texture coordinates. Used when motion blur is used.
+             * @param[in] uv Object coordinates at which we want to find the normal, texture coordinates and tangent vector.
+             * @param[out] tuv Texture coordinates at the specified coordinates and time.
+             * @param[out] normalvec Normal vector at the specified coordinates and time.
+             * @param[out] tangentvec Tangent vector at the specified coordinates and time.
+             */
+            virtual void normal_uv_tangent(double time, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec, Vec3f &tangentvec) const = 0;
+
+            /**
+             * @brief Minimum coordinates of an axis-aligned bounding box around the shape.
+             * 
+             * This is used by acceleration structures to spatially sort shapes. Equivalent to the minimum coordinate of the 
+             * shape for each axis.
+             * 
+             * @return Vec3f Minimum coordinates of an axis-aligned bounding box around the shape.
+             */
+            virtual Vec3f mincoord() const = 0;
+
+            /**
+             * @brief Maximum coordinates of an axis-aligned bounding box around the shape.
+             * 
+             * This is used by acceleration structures to spatially sort shapes. Equivalent to the maximum coordinate of the 
+             * shape for each axis.
+             * 
+             * @return Vec3f Maximum coordinates of an axis-aligned bounding box around the shape.
+             */
+            virtual Vec3f maxcoord() const = 0;
     };
 }}
 #endif
