@@ -67,16 +67,119 @@ namespace APTracer { namespace Entities {
              * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
              */
             TransformMatrix_t& rotateXAxis(double angle);
+
+            /**
+             * @brief Rotates the matrix around the x axis by a specified angle in radians.
+             * 
+             * This means that if an object it at (1, 0, 0) and is rotated π rad, it will be at (-1, 0, 0) and face the opposite direction.
+             * 
+             * @param angle Angle in radians to rotate around the y axis.
+             * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
+             */
             TransformMatrix_t& rotateYAxis(double angle);
+
+            /**
+             * @brief Rotates the matrix around the z axis by a specified angle in radians.
+             * 
+             * This means that if an object it at (1, 0, 0) and is rotated π rad, it will be at (-1, 0, 0) and face the opposite direction.
+             * 
+             * @param angle Angle in radians to rotate around the z axis.
+             * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
+             */
             TransformMatrix_t& rotateZAxis(double angle);
+
+            /**
+             * @brief Rotates the matrix on itself around the x direction.
+             * 
+             * The object won't move but will face the opposite direction around x.
+             * 
+             * @param angle Angle in radians to rotate on itself around the x direction.
+             * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
+             */
             TransformMatrix_t& rotateX(double angle);
+
+            /**
+             * @brief Rotates the matrix on itself around the y direction.
+             * 
+             * The object won't move but will face the opposite direction around y.
+             * 
+             * @param angle Angle in radians to rotate on itself around the y direction.
+             * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
+             */
             TransformMatrix_t& rotateY(double angle);
+
+            /**
+             * @brief Rotates the matrix on itself around the z direction.
+             * 
+             * The object won't move but will face the opposite direction around z.
+             * 
+             * @param angle Angle in radians to rotate on itself around the z direction.
+             * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
+             */
             TransformMatrix_t& rotateZ(double angle);
+
+            /**
+             * @brief Rotates the matrix around an arbitrary axis by a specified angle in radians.
+             * 
+             * This rotates the matrix around an arbitrary axis passing through (0, 0, 0).
+             * This moves the object.
+             * 
+             * @param vec Axis around which the matrix will be rotated. Passes through (0, 0, 0).
+             * @param angle Angle in radians to rotate around the axis.
+             * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
+             */
             TransformMatrix_t& rotateAxis(const Vec3f &vec, double angle);
+
+            /**
+             * @brief Rotates the matrix on itself around an arbitrary axis by a specified angle in radians.
+             * 
+             * This rotates the matrix around an arbitrary axis passing through the matrix's center.
+             * This doesn't move the object.
+             * 
+             * @param vec Axis around which the matrix will be rotated on itself.
+             * @param angle Angle in radians to rotate on itself around the axis' direction.
+             * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
+             */
             TransformMatrix_t& rotate(const Vec3f &vec, double angle);
+
+            /**
+             * @brief Translates the matrix in 3D space.
+             * 
+             * @param vec Vector by which to translate the matrix.
+             * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
+             */
             TransformMatrix_t& translate(const Vec3f &vec);
+
+            /**
+             * @brief Scales the matrix from (0, 0, 0) by a three-component vector.
+             * 
+             * This means that if an object is at (1, 0, 1) and is scaled by (2, 2, 1) it will
+             * be placed at (2, 0, 1) and be twice bigger except for the z direction.
+             * 
+             * @param vec Vector whose three components are the scale factors for the three axis.
+             * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
+             */
             TransformMatrix_t& scaleAxis(const Vec3f &vec);
+
+            /**
+             * @brief Scales the matrix from (0, 0, 0) by a factor.
+             * 
+             * This means that if an object is at (1, 0, 1) and is scaled by 2 it will
+             * be placed at (2, 0, 2) and be twice bigger.
+             * 
+             * @param fac Factor by which the matrix will be scaled from (0, 0, 0).
+             * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
+             */
             TransformMatrix_t& scaleAxis(double fac);
+
+            /**
+             * @brief Scales the matrix inplace by a three-component vector.
+             * 
+             * This won't move the object.
+             * 
+             * @param vec Vector whose three components are the scale factors for the three axis.
+             * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
+             */
             TransformMatrix_t& scale(const Vec3f &vec);
             TransformMatrix_t& scale(double fac);
             TransformMatrix_t& reflect(const Vec3f &vec);
