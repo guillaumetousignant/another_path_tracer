@@ -181,15 +181,92 @@ namespace APTracer { namespace Entities {
              * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
              */
             TransformMatrix_t& scale(const Vec3f &vec);
+
+            /**
+             * @brief Scales the matrix inplace by a factor.
+             * 
+             * This won't move the object.
+             * 
+             * @param fac Scale factors for the three axis.
+             * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
+             */
             TransformMatrix_t& scale(double fac);
+
+            /**
+             * @brief Reflects the matrix. Not implemented yet.
+             * 
+             * Not implemented.
+             * 
+             * @param vec Vector around which to reflect.
+             * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
+             */
             TransformMatrix_t& reflect(const Vec3f &vec);
+
+            /**
+             * @brief Shears the matrix. Not implemented yet.
+             * 
+             * Not implemented.
+             * 
+             * @param vec Vector along which to shear.
+             * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
+             */
             TransformMatrix_t& shear(const Vec3f &vec);
+
+            /**
+             * @brief Transposes the matrix.
+             * 
+             * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
+             */
             TransformMatrix_t& transpose();
+
+            /**
+             * @brief Inverts the matrix.
+             * 
+             * See https://graphics.stanford.edu/~mdfisher/Code/Engine/Matrix4.cpp.html
+             * 
+             * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
+             */
             TransformMatrix_t& invert();
+
+            /**
+             * @brief Negates the matrix.
+             * 
+             * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
+             */
             TransformMatrix_t& neg();
+
+            /**
+             * @brief Transforms a point with the matrix, moving it around according to the operations made on the matrix.
+             * 
+             * @param vec Point to transform.
+             * @return Vec3f Transformed point.
+             */
             Vec3f multVec(const Vec3f &vec) const;
+
+            /**
+             * @brief Transforms a direction, rotating it according to the operations made on the matrix.
+             * 
+             * Should be used on the result of transformDir() to change a direction according to a transformation matrix.
+             * 
+             * @param vec Direction to transform.
+             * @return Vec3f Transformed direction.
+             */
             Vec3f multDir(const Vec3f &vec) const;
-            TransformMatrix_t transformDir() const; // Should return reference?
+
+            /**
+             * @brief Returns the transposed inverted matrix, which can be used for multDir().
+             * 
+             * Use multDir() on the result of this function, not on the original transformation matrix.
+             * 
+             * @return TransformMatrix_t Transposed inverted matrix to be used for transforming directions.
+             */
+            TransformMatrix_t transformDir() const;
+
+            /**
+             * @brief Get the maximum scale of all three axis.
+             * 
+             * @return double Maximum scale of the matrix.
+             */
             double getScale() const;
     };
 }}
