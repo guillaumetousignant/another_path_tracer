@@ -11,6 +11,7 @@ cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=..
 make
 make install
 ```
+Don't use .. as install prefix on Windows, use the full path. Can still be the source directory.
 
 Linking:
 
