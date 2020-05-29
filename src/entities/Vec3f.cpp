@@ -127,8 +127,14 @@ Vec3f &Vec3f::max(double other){
 Vec3f Vec3f::getMin(const Vec3f &other) const {
     return Vec3f(std::min(v[0], other[0]), std::min(v[1], other[1]), std::min(v[2], other[2]));
 }
+Vec3f Vec3f::getMin(double other) const {
+    return Vec3f(std::min(v[0], other), std::min(v[1], other), std::min(v[2], other));
+}
 Vec3f Vec3f::getMax(const Vec3f &other) const{
     return Vec3f(std::max(v[0], other[0]), std::max(v[1], other[1]), std::max(v[2], other[2]));
+}
+Vec3f Vec3f::getMax(double other) const{
+    return Vec3f(std::max(v[0], other), std::max(v[1], other), std::max(v[2], other));
 }
 double Vec3f::magnitude() const {
     return std::sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);

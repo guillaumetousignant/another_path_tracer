@@ -207,22 +207,142 @@ namespace APTracer { namespace Entities {
             const Vec3f &operator/=(const Vec3f &other);
 
             /**
-             * @brief 
+             * @brief In-place addition of another vector.
              * 
-             * @param other 
-             * @return const Vec3f& 
+             * Becomes (x1+x2, y1+y2, z1+z2).
+             * 
+             * @param other Vector added to this vector.
+             * @return const Vec3f& Reference to the vector, used to chain operations.
              */
             const Vec3f &operator+=(const Vec3f &other);
+
+            /**
+             * @brief In-place adds a factor to all components of the vector.
+             * 
+             * Becomes (x1+a, y1+a, z1+a).
+             * 
+             * @param factor Factor added to all components of the vector.
+             * @return const Vec3f& Reference to the vector, used to chain operations.
+             */
             const Vec3f &operator+=(double factor);
+
+            /**
+             * @brief In-place substracts a vector from this vector.
+             * 
+             * Becomes (x1-x2, y1-y2, z1-z2).
+             * 
+             * @param other Vector to substract from this vector.
+             * @return const Vec3f& Reference to the vector, used to chain operations.
+             */
             const Vec3f &operator-=(const Vec3f &other); 
+
+            /**
+             * @brief In-place substracts a factor from all components of the vector.
+             * 
+             * Becomes (x1-a, y1-a, z1-a).
+             * 
+             * @param factor Factor substracted from all components of the vector.
+             * @return const Vec3f& Reference to the vector, used to chain operations.
+             */
             const Vec3f &operator-=(double factor);
+
+            /**
+             * @brief Sets the components of the vector to the minimum of its components and the other's.
+             * 
+             * Becomes (min(x1, x2), min(y1, y2), min(z1, z2))
+             * 
+             * @param other Vector to calculate minimum components with.
+             * @return Vec3f& Reference to the vector, used to chain operations.
+             */
             Vec3f &min(const Vec3f &other);
+
+            /**
+             * @brief Sets the components of the vector to the minimum of its components and the provided factor.
+             * 
+             * Becomes (min(x1, a), min(y1, a), min(z1, a))
+             * 
+             * @param other Factor to calculate minimum with.
+             * @return Vec3f& Reference to the vector, used to chain operations.
+             */
             Vec3f &min(double other);
+
+            /**
+             * @brief ets the components of the vector to the maximum of its components and the other's.
+             * 
+             * Becomes (max(x1, x2), max(y1, y2), max(z1, z2))
+             * 
+             * @param other Vector to calculate maximum components with.
+             * @return Vec3f& Reference to the vector, used to chain operations.
+             */
             Vec3f &max(const Vec3f &other);
+
+            /**
+             * @brief Sets the components of the vector to the maximum of its components and the provided factor.
+             * 
+             * Becomes (max(x1, a), max(y1, a), max(z1, a))
+             * 
+             * @param other Factor to calculate maximum with.
+             * @return Vec3f& Reference to the vector, used to chain operations.
+             */
             Vec3f &max(double other);
+
+            /**
+             * @brief Returns a vector with the minimum components of this vector and another.
+             * 
+             * Returns (min(x1, x2), min(y1, y2), min(z1, z2))
+             * 
+             * @param other Vector to calculate minimum components with.
+             * @return Vec3f Reference to the vector, used to chain operations.
+             */
             Vec3f getMin(const Vec3f &other) const;
+
+            /**
+             * @brief Returns a vector with the minimum components of this vector and a factor.
+             * 
+             * Returns (min(x1, a), min(y1, a), min(z1, a))
+             * 
+             * @param other Factor to calculate minimum with.
+             * @return Vec3f Reference to the vector, used to chain operations.
+             */
+            Vec3f getMin(double other) const;
+
+            /**
+             * @brief Returns a vector with the maximum components of this vector and another.
+             * 
+             * Returns (max(x1, x2), max(y1, y2), max(z1, z2))
+             * 
+             * @param other Vector to calculate maximum components with.
+             * @return Vec3f Reference to the vector, used to chain operations.
+             */
             Vec3f getMax(const Vec3f &other) const;
+
+            /**
+             * @brief Returns a vector with the maximum components of this vector and a factor.
+             * 
+             * Returns (max(x1, a), max(y1, a), max(z1, a))
+             * 
+             * @param other Factor to calculate maximum with.
+             * @return Vec3f Reference to the vector, used to chain operations.
+             */
+            Vec3f getMax(double other) const;
+
+            /**
+             * @brief Returns the magnitude of the vector.
+             * 
+             * Returns the L2 norm of the vector: sqrt(x^2 + 1^2 + z^2).
+             * 
+             * @return double Magnitude of the vector.
+             */
             double magnitude() const;
+
+            /**
+             * @brief Returns the squared magnitude of the vector.
+             * 
+             * Returns x^2 + 1^2 + z^2. Useful because it is much faster than the norm,
+             * and can be used instead of it in some situations.
+             * 
+             * @return double Squared magnitude of the norm.
+             */
             double magnitudeSquared() const;
             Vec3f normalize() const;
             const Vec3f &normalize_inplace();
