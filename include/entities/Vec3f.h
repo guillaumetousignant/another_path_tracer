@@ -344,28 +344,208 @@ namespace APTracer { namespace Entities {
              * @return double Squared magnitude of the norm.
              */
             double magnitudeSquared() const;
+
+            /**
+             * @brief Returns a the normalized vector.
+             * 
+             * Divides all components of the vector by its magnitude.
+             * 
+             * @return Vec3f Normalized vector.
+             */
             Vec3f normalize() const;
+
+            /**
+             * @brief Normalizes the vector in-place, dividing it by its norm.
+             * 
+             * Divides all components of the vector by its magnitude.
+             * 
+             * @return const Vec3f& Reference to the vector, used to chain operations.
+             */
             const Vec3f &normalize_inplace();
+
+            /**
+             * @brief Computes the dot product of this vector and another.
+             * 
+             * Returns v1.v2
+             * 
+             * @param other Vector to dot with this one.
+             * @return double Dot product of the two vectors.
+             */
             double dot(const Vec3f &other) const;
+
+            /**
+             * @brief Computes the cross product of this vector and another.
+             * 
+             * Returns v1 x v2.
+             * 
+             * @param other Vector to cross with this one.
+             * @return Vec3f Cross product of the two vectors.
+             */
             Vec3f cross(const Vec3f &other) const;
+
+            /**
+             * @brief Changes the vector in-place to spherical coordinates.
+             * 
+             * Assumes the vector is in cartesian coordinates.
+             * 
+             * @return const Vec3f& Reference to the vector, used to chain operations.
+             */
             const Vec3f &to_sph();
+
+            /**
+             * @brief Changes the vector in-place to cartesian coordinates.
+             * 
+             * Assumes the vector is in spherical coordinates.
+             * 
+             * @return const Vec3f& Reference to the vector, used to chain operations.
+             */
             const Vec3f &to_xyz();
+
+            /**
+             * @brief Changes the vector in-place to cartesian coordinates with arbitrary axises.
+             * 
+             * Assumes the vector is in spherical coordinates.
+             * 
+             * @param ref1 Axis used for x.
+             * @param ref2 Axis used for y.
+             * @param ref3 Axis used for z.
+             * @return const Vec3f& Reference to the vector, used to chain operations.
+             */
             const Vec3f &to_xyz_offset(const Vec3f &ref1, const Vec3f &ref2, const Vec3f &ref3);
+
+            /**
+             * @brief Returns the vector in spherical coordinates.
+             * 
+             * Assumes the vector is in cartesian coordinates.
+             * 
+             * @return Vec3f Spherical coordinates of the vector.
+             */
             Vec3f get_sph() const;
+
+            /**
+             * @brief Returns the vector in cartesian coordinates.
+             * 
+             * Assumes the vector is in spherical coordinates.
+             * 
+             * @return Vec3f Cartesian coordinates of the vector.
+             */
             Vec3f get_xyz() const;
+
+            /**
+             * @brief Returns the vector in cartesian coordinates with arbitrary axises.
+             * 
+             * Assumes the vector is in spherical coordinates.
+             * 
+             * @param ref1 Axis used for x.
+             * @param ref2 Axis used for y.
+             * @param ref3 Axis used for z.
+             * @return Vec3f Cartesian coordinates of the vector.
+             */
             Vec3f get_xyz_offset(const Vec3f &ref1, const Vec3f &ref2, const Vec3f &ref3) const;
+
+            /**
+             * @brief Returns a vector of the natural logarithm of all components of the vector.
+             * 
+             * Returns (ln(x), ln(y), ln(z))
+             * 
+             * @return Vec3f Vector made of the natural logarithm of all components of the vector.
+             */
             Vec3f ln() const;
+
+            /**
+             * @brief Returns a vector of the square root of all components of the vector.
+             * 
+             * Returns (sqrt(x), sqrt(y), sqrt(z))
+             * 
+             * @return Vec3f Vector made of the square root of all components of the vector.
+             */
             Vec3f sqrt() const;
+
+            /**
+             * @brief Returns a vector of the exponential of all components of the vector.
+             * 
+             * Returns (e^x, e^y, e^z).
+             * 
+             * @return Vec3f Vector made of the exponential of all components of the vector.
+             */
             Vec3f exp() const;
+
+            /**
+             * @brief Returns a vector of the components of the vector to the specified power.
+             * 
+             * Returns (x^a, y^a, z^a).
+             * 
+             * @param exp Power to be applied to all components.
+             * @return Vec3f Vector made of the components of the vector to the specified power.
+             */
             Vec3f pow(double exp) const;
+
+            /**
+             * @brief In-place raise the components of the vector to the specified power.
+             * 
+             * Becomes (x^a, y^a, z^a).
+             * 
+             * @param exp Power to be applied to all components.
+             * @return Vec3f& Reference to the vector, used to chain operations.
+             */
             Vec3f &pow_inplace(double exp);
+
+            /**
+             * @brief Returns a vector of the components of the vector rounded down.
+             * 
+             * Returns (floor(x), floor(y), floor(z))
+             * 
+             * @return Vec3f Vector made of the components of the vector rounded down.
+             */
             Vec3f floor() const;
+
+            /**
+             * @brief Returns a vector of the components of the vector rounded up.
+             * 
+             * Returns (ceil(x), ceil(y), ceil(z))
+             * 
+             * @return Vec3f Vector made of the components of the vector rounded up.
+             */
             Vec3f ceil() const;
+
+            /**
+             * @brief In-place rounds the components to the nearest integer value.
+             * 
+             * Becomes (round(x), round(y), round(z))
+             * 
+             * @return Vec3f& Reference to the vector, used to chain operations.
+             */
             Vec3f &round_inplace();
+
+            /**
+             * @brief In-place limits the components of the vector to a minimum and maximum value.
+             * 
+             * @param minimum Minimum value of the components.
+             * @param maximum Maximum value of the components.
+             * @return Vec3f& Reference to the vector, used to chain operations.
+             */
             Vec3f &clamp(double minimum, double maximum);
     };
 }}
 
+/**
+ * @brief Formats a vector to be displayed.
+ * 
+ * @param output Output stream.
+ * @param v Vector to be displayed.
+ * @return std::ostream& Output stream.
+ */
 std::ostream &operator<<(std::ostream &output, const APTracer::Entities::Vec3f &v);
+
+/**
+ * @brief Multiplies a factor with a vector.
+ * 
+ * Returns (a*x, a*y, a*z).
+ * 
+ * @param factor Factor multiplying the vector.
+ * @param v Vector to be multiplied.
+ * @return APTracer::Entities::Vec3f Resulting Vector, (a*x, a*y, a*z).
+ */
+APTracer::Entities::Vec3f operator*(const double factor, const APTracer::Entities::Vec3f &v);
 
 #endif

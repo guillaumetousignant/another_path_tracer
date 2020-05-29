@@ -235,3 +235,6 @@ std::ostream &operator<<(std::ostream &output, const Vec3f &v) {
     std::cout << '[' << v[0] << ", " << v[1] << ", " << v[2] << ']';
     return output;
 } 
+Vec3f operator*(const double factor, const Vec3f &v) {
+    return Vec3f(v[0] * factor, v[1] * factor, v[2] * factor);
+}
