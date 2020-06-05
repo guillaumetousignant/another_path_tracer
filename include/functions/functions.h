@@ -1,8 +1,8 @@
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 
-#include "functions/Colours.h"
-#include "functions/NextFilename.h"
-#include "functions/Slerp.h"
+#include "Colours.h"
+#include "NextFilename.h"
+#include "Slerp.h"
 
 #endif
