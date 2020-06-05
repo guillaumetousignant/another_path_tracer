@@ -14,12 +14,6 @@ GridCell_t::GridCell_t() : items_(std::list<Shape_t*>()) {
 GridCell_t::~GridCell_t(){
 }
 
-void GridCell_t::update(){
-    for (std::list<Shape_t*>::iterator it = items_.begin(); it != items_.end(); ++it){
-        (*it)->update();
-    }
-}
-
 Shape_t* GridCell_t::intersect(const Ray_t &ray, double &t, double (&uv)[2]) const {
     double t_temp;
     double uv_temp[2];

@@ -28,15 +28,6 @@ namespace APTracer { namespace Entities {
             unsigned int n_obj_; /**< @brief Number of shapes currently held in the acceleration structure.*/
 
             /**
-             * @brief Updates all the shapes in the acceleration structure.
-             * 
-             * This is a virtual function. All acceleration strucures should implement it, as it
-             * called to update all the shapes in the structure if their transformation matrix
-             * has changed.
-             */
-            virtual void update() = 0;
-
-            /**
              * @brief Intersects a ray with the acceleration structure to find the closest hit
              * and its caracteristics.
              * 

@@ -23,7 +23,6 @@ namespace APTracer { namespace Acceleration {
             Shape_t** items_;
             unsigned int increment_size_;
 
-            virtual void update() final;
             virtual Shape_t* intersect(const Ray_t &ray, double &t, double (&uv)[2]) const final;
             virtual void add(Shape_t* item) final;
             virtual void remove(const Shape_t* item) final;

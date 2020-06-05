@@ -112,12 +112,6 @@ AccelerationMultiGridVector_t::~AccelerationMultiGridVector_t(){
     }
 }
 
-void AccelerationMultiGridVector_t::update(){
-    for (unsigned int i = 0; i < (cell_res_[0]*cell_res_[1]*cell_res_[2]); i++){
-        cells_[i]->update();
-    }
-}
-
 Shape_t* AccelerationMultiGridVector_t::intersect(const Ray_t &ray, double &t, double (&uv)[2]) const {
     double tbbox;
     int cellexit[3] = {0, 0, 0};

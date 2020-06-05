@@ -18,12 +18,6 @@ GridCellArray_t::~GridCellArray_t(){
     }
 }
 
-void GridCellArray_t::update(){
-    for (unsigned int i = 0; i < n_obj_; i++){
-        items_[i]->update();
-    }
-}
-
 Shape_t* GridCellArray_t::intersect(const Ray_t &ray, double &t, double (&uv)[2]) const {
     double t_temp;
     double uv_temp[2];

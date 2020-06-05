@@ -19,12 +19,6 @@ GridCellVector_t::GridCellVector_t(unsigned int size) : items_(std::vector<Shape
 GridCellVector_t::~GridCellVector_t(){
 }
 
-void GridCellVector_t::update(){
-    for (unsigned int i = 0; i < items_.size(); i++){
-        items_[i]->update();
-    }
-}
-
 Shape_t* GridCellVector_t::intersect(const Ray_t &ray, double &t, double (&uv)[2]) const {
     double t_temp;
     double uv_temp[2];

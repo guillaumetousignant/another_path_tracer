@@ -21,7 +21,6 @@ namespace APTracer { namespace Acceleration {
 
             std::list<Shape_t*> items_; // Should be list or vector or array?
 
-            virtual void update() final;
             virtual Shape_t* intersect(const Ray_t &ray, double &t, double (&uv)[2]) const final;
             virtual void add(Shape_t* item) final;
             virtual void remove(const Shape_t* item) final;

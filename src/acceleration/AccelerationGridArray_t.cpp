@@ -114,12 +114,6 @@ AccelerationGridArray_t::~AccelerationGridArray_t(){
     }
 }
 
-void AccelerationGridArray_t::update(){
-    for (unsigned int i = 0; i < (cell_res_[0]*cell_res_[1]*cell_res_[2]); i++){
-        cells_[i]->update();
-    }
-}
-
 Shape_t* AccelerationGridArray_t::intersect(const Ray_t &ray, double &t, double (&uv)[2]) const {
     double tbbox;
     int cellexit[3] = {0, 0, 0};
