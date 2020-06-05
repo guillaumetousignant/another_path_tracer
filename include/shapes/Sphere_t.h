@@ -28,9 +28,9 @@ namespace APTracer { namespace Shapes {
 
             virtual void update() final;
             virtual bool intersection(const Ray_t &ray, double &t, double (&uv)[2]) const final; 
-            virtual void normaluv(double time, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec) const final;
-            virtual void normal(double time, const double (&uv)[2], Vec3f &normalvec) const final;
-            virtual void normal_uv_tangent(double time, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec, Vec3f &tangentvec) const final;
+            virtual Vec3f normaluv(double time, const double (&uv)[2], double (&tuv)[2]) const final;
+            virtual Vec3f normal(double time, const double (&uv)[2]) const final;
+            virtual Vec3f normal_uv_tangent(double time, const double (&uv)[2], double (&tuv)[2], Vec3f &tangentvec) const final;
             virtual Vec3f mincoord() const final;
             virtual Vec3f maxcoord() const final;
     };

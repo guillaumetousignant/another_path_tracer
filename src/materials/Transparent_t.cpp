@@ -13,9 +13,8 @@ APTracer::Materials::Transparent_t::~Transparent_t() {
 }
 
 void APTracer::Materials::Transparent_t::bounce(const double (&uv)[2], const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray){
-    Vec3f normal;
+    const Vec3f normal = hit_obj->normal(ray.time_, uv);
 
-    hit_obj->normal(ray.time_, uv, normal);
     const double cosi = ray.direction_.dot(normal);
 
     if (cosi < 0.0) {

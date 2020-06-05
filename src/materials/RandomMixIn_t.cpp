@@ -12,13 +12,7 @@ APTracer::Materials::RandomMixIn_t::RandomMixIn_t(APTracer::Entities::Material_t
 APTracer::Materials::RandomMixIn_t::~RandomMixIn_t(){}
 
 void APTracer::Materials::RandomMixIn_t::bounce(const double (&uv)[2], const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
-    Vec3f normal;
-    //double cosi;
-
-    hit_obj->normal(ray.time_, uv, normal);
-    //cosi = ray.direction_.dot(normal);
-
-    if ((ray.direction_.dot(normal) > 0.0) || (unif_(APTracer::Entities::rng) < ratio_)){ // refracted
+    if ((ray.direction_.dot(hit_obj->normal(ray.time_, uv)) > 0.0) || (unif_(APTracer::Entities::rng) < ratio_)){ // refracted
         material_refracted_->bounce(uv, hit_obj, ray);
     }
     else{   // reflected

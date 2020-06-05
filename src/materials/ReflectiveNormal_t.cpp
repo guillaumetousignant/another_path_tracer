@@ -12,13 +12,12 @@ APTracer::Materials::ReflectiveNormal_t::ReflectiveNormal_t(const Vec3f &emissio
 APTracer::Materials::ReflectiveNormal_t::~ReflectiveNormal_t(){}
 
 void APTracer::Materials::ReflectiveNormal_t::bounce(const double (&uv)[2], const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
-    Vec3f normal;
     Vec3f tangent;
     Vec3f bitangent;
     Vec3f tangent_weights;
     double tuv[2];
-
-    hit_obj->normal_uv_tangent(ray.time_, uv, tuv, normal, tangent);
+    Vec3f normal = hit_obj->normal_uv_tangent(ray.time_, uv, tuv, tangent);
+    
     bitangent = normal.cross(tangent);
     tangent_weights = normal_map_->get(tuv) * 2.0 - 1.0;
     normal = (tangent * tangent_weights[0] + bitangent * tangent_weights[1] + normal * tangent_weights[2]).normalize_inplace();

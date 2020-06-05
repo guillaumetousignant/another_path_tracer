@@ -58,9 +58,9 @@ bool APTracer::Shapes::Sphere_t::intersection(const APTracer::Entities::Ray_t &r
     return true;
 }
 
-void APTracer::Shapes::Sphere_t::normaluv(double time, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec) const {
+Vec3f APTracer::Shapes::Sphere_t::normaluv(double time, const double (&uv)[2], double (&tuv)[2]) const {
     Vec3f sph = Vec3f(1.0, (1.0 - uv[1]) * PI, (uv[0] - 0.5) * 2.0 * PI);
-    normalvec = sph.get_xyz();
+    const Vec3f normalvec = sph.get_xyz();
 
     sph -= direction_sph_;
 
@@ -84,15 +84,16 @@ void APTracer::Shapes::Sphere_t::normaluv(double time, const double (&uv)[2], do
 
     tuv[0] = sph[2]/(2.0 * PI) + 0.5;
     tuv[1] = 1.0 - sph[1]/PI;
+    return normalvec;
 }
 
-void APTracer::Shapes::Sphere_t::normal(double time, const double (&uv)[2], Vec3f &normalvec) const {
-    normalvec = Vec3f(1.0, (1.0 - uv[1]) * PI, (uv[0] - 0.5) * 2.0 * PI).to_xyz();
+Vec3f APTracer::Shapes::Sphere_t::normal(double time, const double (&uv)[2]) const {
+    return Vec3f(1.0, (1.0 - uv[1]) * PI, (uv[0] - 0.5) * 2.0 * PI).to_xyz();
 }
 
-void APTracer::Shapes::Sphere_t::normal_uv_tangent(double time, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec, Vec3f &tangentvec) const {
+Vec3f APTracer::Shapes::Sphere_t::normal_uv_tangent(double time, const double (&uv)[2], double (&tuv)[2], Vec3f &tangentvec) const {
     Vec3f sph = Vec3f(1.0, (1.0 - uv[1]) * PI, (uv[0] - 0.5) * 2.0 * PI);
-    normalvec = sph.get_xyz();
+    const Vec3f normalvec = sph.get_xyz();
 
     sph -= direction_sph_;
 
@@ -118,6 +119,7 @@ void APTracer::Shapes::Sphere_t::normal_uv_tangent(double time, const double (&u
     tuv[1] = 1.0 - sph[1]/PI;
 
     tangentvec = direction_sph_.get_xyz().cross(normalvec).normalize_inplace();
+    return normalvec;
 } 
 
 Vec3f APTracer::Shapes::Sphere_t::mincoord() const {

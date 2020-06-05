@@ -13,10 +13,8 @@ APTracer::Materials::FresnelMix_t::FresnelMix_t(APTracer::Entities::Material_t* 
 APTracer::Materials::FresnelMix_t::~FresnelMix_t(){}
 
 void APTracer::Materials::FresnelMix_t::bounce(const double (&uv)[2], const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
-    Vec3f normal;
+    Vec3f normal = hit_obj->normal(ray.time_, uv);
     double kr;
-
-    hit_obj->normal(ray.time_, uv, normal);
 
     const double cosi = std::abs(ray.direction_.dot(normal));
 

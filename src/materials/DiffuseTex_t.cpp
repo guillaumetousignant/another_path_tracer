@@ -15,10 +15,8 @@ APTracer::Materials::DiffuseTex_t::DiffuseTex_t(const Vec3f &emission, const APT
 APTracer::Materials::DiffuseTex_t::~DiffuseTex_t(){}
 
 void APTracer::Materials::DiffuseTex_t::bounce(const double (&uv)[2], const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
-    Vec3f normal;
     double tuv[2];
-
-    hit_obj->normaluv(ray.time_, uv, tuv, normal);
+    Vec3f normal = hit_obj->normaluv(ray.time_, uv, tuv);
 
     const double rand1 = unif_(APTracer::Entities::rng)*2*PI;
     const double rand2 = unif_(APTracer::Entities::rng);

@@ -14,10 +14,9 @@ APTracer::Materials::ReflectiveRefractive_t::ReflectiveRefractive_t(const Vec3f 
 APTracer::Materials::ReflectiveRefractive_t::~ReflectiveRefractive_t(){}
 
 void APTracer::Materials::ReflectiveRefractive_t::bounce(const double (&uv)[2], const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
-    Vec3f normal;
+    const Vec3f normal = hit_obj->normal(ray.time_, uv);
     Vec3f newdir;
 
-    hit_obj->normal(ray.time_, uv, normal);
     double cosi = ray.direction_.dot(normal);
 
     if (medium_->priority_ >= ray.medium_list_.front()->priority_){ // CHECK also discard if priority is equal, but watch for going out case

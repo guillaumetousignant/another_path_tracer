@@ -14,8 +14,7 @@ APTracer::Materials::Portal_t::Portal_t(APTracer::Entities::TransformMatrix_t* t
 APTracer::Materials::Portal_t::~Portal_t(){}
 
 void APTracer::Materials::Portal_t::bounce(const double (&uv)[2], const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
-    Vec3f normal;
-    hit_obj->normal(ray.time_, uv, normal);
+    const Vec3f normal = hit_obj->normal(ray.time_, uv);
 
     if (ray.direction_.dot(normal) < 0){
         ray.origin_ = transformation_->multVec(ray.origin_ + ray.direction_ * ray.dist_);

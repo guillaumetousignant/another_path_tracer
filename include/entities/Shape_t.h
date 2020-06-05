@@ -63,11 +63,11 @@ namespace APTracer { namespace Entities {
              * This is used to find the surface normal on ray bounce. Used by materials to determine ray colour.
              * The time parameter is for motionblur shapes, where time is used to interpolate.
              * 
-             * @param[in] time Time at which we want the normal. Used when motion blur is used.
-             * @param[in] uv Object coordinates at which we want to find the normal.
-             * @param[out] normalvec Normal vector at the specified coordinates and time.
+             * @param time Time at which we want the normal. Used when motion blur is used.
+             * @param uv Object coordinates at which we want to find the normal.
+             * @return Vec3f Normal vector at the specified coordinates and time.
              */
-            virtual void normal(double time, const double (&uv)[2], Vec3f &normalvec) const = 0;
+            virtual Vec3f normal(double time, const double (&uv)[2]) const = 0;
 
             /**
              * @brief Returns the surface normal and texture coordinates at a point in object coordinates.
@@ -79,9 +79,9 @@ namespace APTracer { namespace Entities {
              * @param[in] time Time at which we want the normal and texture coordinates. Used when motion blur is used.
              * @param[in] uv Object coordinates at which we want to find the normal and texture coordinates.
              * @param[out] tuv Texture coordinates at the specified coordinates and time.
-             * @param[out] normalvec Normal vector at the specified coordinates and time.
+             * @return Vec3f Normal vector at the specified coordinates and time.
              */
-            virtual void normaluv(double time, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec) const = 0;
+            virtual Vec3f normaluv(double time, const double (&uv)[2], double (&tuv)[2]) const = 0;
 
             /**
              * @brief Returns the surface normal, texture coordinates and tangent vector at a point in object coordinates.
@@ -94,10 +94,10 @@ namespace APTracer { namespace Entities {
              * @param[in] time Time at which we want the normal and texture coordinates. Used when motion blur is used.
              * @param[in] uv Object coordinates at which we want to find the normal, texture coordinates and tangent vector.
              * @param[out] tuv Texture coordinates at the specified coordinates and time.
-             * @param[out] normalvec Normal vector at the specified coordinates and time.
              * @param[out] tangentvec Tangent vector at the specified coordinates and time.
+             * @return Vec3f Normal vector at the specified coordinates and time.
              */
-            virtual void normal_uv_tangent(double time, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec, Vec3f &tangentvec) const = 0;
+            virtual Vec3f normal_uv_tangent(double time, const double (&uv)[2], double (&tuv)[2], Vec3f &tangentvec) const = 0;
 
             /**
              * @brief Minimum coordinates of an axis-aligned bounding box around the shape.

@@ -69,9 +69,9 @@ bool APTracer::Shapes::SphereMotionblur_t::intersection(const APTracer::Entities
     return true;
 }
 
-void APTracer::Shapes::SphereMotionblur_t::normaluv(double time, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec) const {
+Vec3f APTracer::Shapes::SphereMotionblur_t::normaluv(double time, const double (&uv)[2], double (&tuv)[2]) const {
     Vec3f sph = Vec3f(1.0, (1.0 - uv[1]) * PI, (uv[0] - 0.5) * 2.0 * PI);
-    normalvec = sph.get_xyz();
+    const Vec3f normalvec = sph.get_xyz();
 
     const Vec3f offset = Vec3f(1.0, direction_sph_[1] * time + direction_sph_last_[1] * (1.0 - time),
                         slerp(direction_sph_[2], direction_sph_last_[2], time));
@@ -98,15 +98,16 @@ void APTracer::Shapes::SphereMotionblur_t::normaluv(double time, const double (&
 
     tuv[0] = sph[2]/(2.0 * PI) + 0.5;
     tuv[1] = 1.0 - sph[1]/PI;
+    return normalvec;
 }
 
-void APTracer::Shapes::SphereMotionblur_t::normal(double time, const double (&uv)[2], Vec3f &normalvec) const {
-    normalvec = Vec3f(1.0, (1.0 - uv[1]) * PI, (uv[0] - 0.5) * 2.0 * PI).to_xyz();
+Vec3f APTracer::Shapes::SphereMotionblur_t::normal(double time, const double (&uv)[2]) const {
+    return Vec3f(1.0, (1.0 - uv[1]) * PI, (uv[0] - 0.5) * 2.0 * PI).to_xyz();
 }
 
-void APTracer::Shapes::SphereMotionblur_t::normal_uv_tangent(double time, const double (&uv)[2], double (&tuv)[2], Vec3f &normalvec, Vec3f &tangentvec) const {
+Vec3f APTracer::Shapes::SphereMotionblur_t::normal_uv_tangent(double time, const double (&uv)[2], double (&tuv)[2], Vec3f &tangentvec) const {
     Vec3f sph = Vec3f(1.0, (1.0 - uv[1]) * PI, (uv[0] - 0.5) * 2.0 * PI);
-    normalvec = sph.get_xyz();
+    const Vec3f normalvec = sph.get_xyz();
 
     const Vec3f direction_int = direction_sph_.get_xyz() * time + direction_sph_last_.get_xyz() * (1.0 - time);
 
@@ -137,6 +138,7 @@ void APTracer::Shapes::SphereMotionblur_t::normal_uv_tangent(double time, const 
     tuv[1] = 1.0 - sph[1]/PI;
 
     tangentvec = direction_int.cross(normalvec).normalize_inplace();
+    return normalvec;
 } 
 
 Vec3f APTracer::Shapes::SphereMotionblur_t::mincoord() const {
