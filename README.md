@@ -7,18 +7,9 @@ Installation:
 ```bash
 mkdir build
 cd build
-cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=..
+cmake .. -DCMAKE_BUILD_TYPE=Release
 make
 make install
-```
-Don't use .. as install prefix on Windows, use the full path. Can still be the source directory.
-
-Linking:
-
-After installation you should export the install location in your .bashrc, like so:
-
-```bash
-export ANOTHER_PATH_TRACER_DIR=/path/to/your/install/directory
 ```
 
 Link with `$ANOTHER_PATH_TRACER_DIR/lib`  
