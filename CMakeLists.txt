@@ -231,7 +231,7 @@ add_library(APTracer
 )
 
 target_include_directories(APTracer PUBLIC 
-    $<INSTALL_INTERFACE:include/>    
+    $<INSTALL_INTERFACE:include/another_path_tracer/>    
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/>)
 
 if(WIN32)
@@ -312,7 +312,7 @@ install(TARGETS APTracer
 
 if(NOT CMAKE_SOURCE_DIR STREQUAL CMAKE_INSTALL_PREFIX)
     install(DIRECTORY include/ 
-        DESTINATION include
+        DESTINATION include/another_path_tracer
         FILES_MATCHING PATTERN "*.h")
     
     if(WIN32)
