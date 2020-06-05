@@ -270,7 +270,7 @@ else()
 endif()
 
 find_package(OpenMP)
-find_package(OpenGL REQUIRED COMPONENTS OpenGL) # CHECK make optional
+find_package(OpenGL REQUIRED COMPONENTS GL) # CHECK make optional # Should use OpenGL::OpenGL on newer linux hosts, but doesn't work on windows and android
 
 add_dependencies(APTracer OpenGL::GL) # Should use OpenGL::OpenGL on newer linux hosts, but doesn't work on windows and android
 
