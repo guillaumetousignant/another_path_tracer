@@ -7,7 +7,7 @@ namespace APTracer {
      * Most of the entities represent interface classes, to be specialized in their respective namespaces.
      * Some entities, such as Vec3f, represent basic types used throughout the program.
      */
-    namespace Entities {­}
+    namespace Entities {}
 }
 
 #include "AccelerationStructure_t.h"
