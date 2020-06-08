@@ -1,6 +1,17 @@
 #ifndef CAMERAS_H
 #define CAMERAS_H
 
+namespace APTracer { 
+    /**
+     * @brief Contains the different camera types that can be used.
+     * 
+     * Cameras create rays according to a projection, and casts them in a scene. Then, the
+     * colour of the rays are usually stored in an image buffer. The different cameras have
+     * different projections or effects, such as motion blur, depth of field and 3D.
+     */
+    namespace Cameras {}
+}
+
 #include "Cam_t.h"
 #include "Cam3D_t.h"
 #include "Cam3DAperture_t.h"

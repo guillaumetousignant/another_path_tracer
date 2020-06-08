@@ -1,5 +1,14 @@
 #ifndef ENTITIES_H
 #define ENTITIES_H
+namespace APTracer { 
+    /**
+     * @brief Contains the fundamental types of the project. 
+     * 
+     * Most of the entities represent interface classes, to be specialized in their respective namespaces.
+     * Some entities, such as Vec3f, represent basic types used throughout the program.
+     */
+    namespace Entities {­}
+}
 
 #include "AccelerationStructure_t.h"
 #include "Camera_t.h"
