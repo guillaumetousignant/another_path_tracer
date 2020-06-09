@@ -26,7 +26,6 @@ namespace APTracer { namespace Acceleration {
             unsigned int cell_res_[3];
             Vec3f cell_size_;
             Box_t bounding_box_;
-            Vec3f coordinates_[2];
             unsigned int level_;
             unsigned int min_res_;
             unsigned int max_res_;

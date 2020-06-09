@@ -12,25 +12,26 @@ AccelerationMultiGridArray_t::AccelerationMultiGridArray_t(Shape_t** items, unsi
     unsigned int x, y, z;
     GridCellArray_t** temp_cells;
     Vec3f cell_extent[2];
+    Vec3f bb_coordinates[2];
 
     n_obj_ = n_items;
 
     if (coordinates == nullptr){
-        coordinates_[0] = Vec3f(std::numeric_limits<double>::infinity());
-        coordinates_[1] = Vec3f(-std::numeric_limits<double>::infinity());
+        bb_coordinates[0] = Vec3f(std::numeric_limits<double>::infinity());
+        bb_coordinates[1] = Vec3f(-std::numeric_limits<double>::infinity());
         
         for (unsigned int i = 0; i < n_obj_; i++){
-            coordinates_[0].min(items[i]->mincoord());
-            coordinates_[1].max(items[i]->maxcoord());
+            bb_coordinates[0].min(items[i]->mincoord());
+            bb_coordinates[1].max(items[i]->maxcoord());
         }
     }
     else{
-        coordinates_[0] = coordinates[0];
-        coordinates_[1] = coordinates[1];
+        bb_coordinates[0] = coordinates[0];
+        bb_coordinates[1] = coordinates[1];
     }
 
-    const Vec3f grid_size = coordinates_[1] - coordinates_[0];
-    bounding_box_ = Box_t(coordinates_);
+    const Vec3f grid_size = bb_coordinates[1] - bb_coordinates[0];
+    bounding_box_ = Box_t(bb_coordinates);
 
     const Vec3f cell_res = (grid_size * std::pow(n_obj_/(grid_size[0]*grid_size[1]*grid_size[2]), 1.0/3.0)).floor()
                             .max(min_res_)
@@ -54,8 +55,8 @@ AccelerationMultiGridArray_t::AccelerationMultiGridArray_t(Shape_t** items, unsi
     
         min1.min(items[i]->mincoord());
         max1.max(items[i]->maxcoord());
-        min1 = ((min1 - coordinates_[0])/cell_size_).floor();
-        max1 = ((max1 - coordinates_[0])/cell_size_).floor();
+        min1 = ((min1 - bounding_box_.coordinates_[0])/cell_size_).floor();
+        max1 = ((max1 - bounding_box_.coordinates_[0])/cell_size_).floor();
 
         min1.max(0.0);
         max1.max(0.0);
@@ -86,8 +87,8 @@ AccelerationMultiGridArray_t::AccelerationMultiGridArray_t(Shape_t** items, unsi
     
         min1.min(items[i]->mincoord());
         max1.max(items[i]->maxcoord());
-        min1 = ((min1 - coordinates_[0])/cell_size_).floor();
-        max1 = ((max1 - coordinates_[0])/cell_size_).floor();
+        min1 = ((min1 - bounding_box_.coordinates_[0])/cell_size_).floor();
+        max1 = ((max1 - bounding_box_.coordinates_[0])/cell_size_).floor();
 
         min1.max(0.0);
         max1.max(0.0);
@@ -114,7 +115,7 @@ AccelerationMultiGridArray_t::AccelerationMultiGridArray_t(Shape_t** items, unsi
                 y = (i - z * cell_res_[0]*cell_res_[1])/cell_res_[0];
                 x = (i - y * cell_res_[0] - z * cell_res_[0]*cell_res_[1]);
 
-                cell_extent[0] = coordinates_[0] + grid_size*Vec3f(x, y, z)/(cell_res + 1.0);
+                cell_extent[0] = bounding_box_.coordinates_[0] + grid_size*Vec3f(x, y, z)/(cell_res + 1.0);
                 cell_extent[1] = cell_extent[0] + cell_size_;
 
                 cells_[i] = new AccelerationMultiGridArray_t(temp_cells[i]->items_, temp_cells[i]->n_obj_, &cell_extent[0], level_+1, min_res_, max_res_, max_cell_content_, max_grid_level_);
@@ -210,8 +211,8 @@ void AccelerationMultiGridArray_t::add(Shape_t* item){
 
     min1.min(item->mincoord());
     max1.max(item->maxcoord());
-    min1 = (min1 - coordinates_[0]).floor() /cell_size_;
-    max1 = (max1 - coordinates_[0]).floor() /cell_size_;
+    min1 = (min1 - bounding_box_.coordinates_[0]).floor() /cell_size_;
+    max1 = (max1 - bounding_box_.coordinates_[0]).floor() /cell_size_;
     min1.max(0.0);
     max1.max(0.0);
 
@@ -237,8 +238,8 @@ void AccelerationMultiGridArray_t::remove(const Shape_t* item){
 
     min1.min(item->mincoord());
     max1.max(item->maxcoord());
-    min1 = (min1 - coordinates_[0]).floor() /cell_size_;
-    max1 = (max1 - coordinates_[0]).floor() /cell_size_;
+    min1 = (min1 - bounding_box_.coordinates_[0]).floor() /cell_size_;
+    max1 = (max1 - bounding_box_.coordinates_[0]).floor() /cell_size_;
     min1.max(0.0);
     max1.max(0.0);
 

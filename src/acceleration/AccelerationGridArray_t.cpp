@@ -10,25 +10,26 @@ AccelerationGridArray_t::AccelerationGridArray_t(Shape_t** items, unsigned int n
         level_(level), min_res_(min_res), max_res_(max_res) {
     Vec3f min1, max1;
     unsigned int x, y, z;
+    Vec3f bb_coordinates[2];
 
     n_obj_ = n_items;
 
     if (coordinates == nullptr){
-        coordinates_[0] = Vec3f(std::numeric_limits<double>::infinity());
-        coordinates_[1] = Vec3f(-std::numeric_limits<double>::infinity());
+        bb_coordinates[0] = Vec3f(std::numeric_limits<double>::infinity());
+        bb_coordinates[1] = Vec3f(-std::numeric_limits<double>::infinity());
         
         for (unsigned int i = 0; i < n_obj_; i++){
-            coordinates_[0].min(items[i]->mincoord());
-            coordinates_[1].max(items[i]->maxcoord());
+            bb_coordinates[0].min(items[i]->mincoord());
+            bb_coordinates[1].max(items[i]->maxcoord());
         }
     }
     else{
-        coordinates_[0] = coordinates[0];
-        coordinates_[1] = coordinates[1];
+        bb_coordinates[0] = coordinates[0];
+        bb_coordinates[1] = coordinates[1];
     }
 
-    const Vec3f grid_size = coordinates_[1] - coordinates_[0];
-    bounding_box_ = Box_t(coordinates_);
+    const Vec3f grid_size = bb_coordinates[1] - bb_coordinates[0];
+    bounding_box_ = Box_t(bb_coordinates);
 
     const Vec3f cell_res = (grid_size * std::pow(n_obj_/(grid_size[0]*grid_size[1]*grid_size[2]), 1.0/3.0)).floor()
                             .max(min_res_)
@@ -50,8 +51,8 @@ AccelerationGridArray_t::AccelerationGridArray_t(Shape_t** items, unsigned int n
     
         min1.min(items[i]->mincoord());
         max1.max(items[i]->maxcoord());
-        min1 = ((min1 - coordinates_[0])/cell_size_).floor();
-        max1 = ((max1 - coordinates_[0])/cell_size_).floor();
+        min1 = ((min1 - bounding_box_.coordinates_[0])/cell_size_).floor();
+        max1 = ((max1 - bounding_box_.coordinates_[0])/cell_size_).floor();
 
         min1.max(0.0);
         max1.max(0.0);
@@ -82,8 +83,8 @@ AccelerationGridArray_t::AccelerationGridArray_t(Shape_t** items, unsigned int n
     
         min1.min(items[i]->mincoord());
         max1.max(items[i]->maxcoord());
-        min1 = ((min1 - coordinates_[0])/cell_size_).floor();
-        max1 = ((max1 - coordinates_[0])/cell_size_).floor();
+        min1 = ((min1 - bounding_box_.coordinates_[0])/cell_size_).floor();
+        max1 = ((max1 - bounding_box_.coordinates_[0])/cell_size_).floor();
 
         min1.max(0.0);
         max1.max(0.0);
@@ -181,8 +182,8 @@ void AccelerationGridArray_t::add(Shape_t* item){
 
     min1.min(item->mincoord());
     max1.max(item->maxcoord());
-    min1 = (min1 - coordinates_[0]).floor() /cell_size_;
-    max1 = (max1 - coordinates_[0]).floor() /cell_size_;
+    min1 = (min1 - bounding_box_.coordinates_[0]).floor() /cell_size_;
+    max1 = (max1 - bounding_box_.coordinates_[0]).floor() /cell_size_;
     min1.max(0.0);
     max1.max(0.0);
 
@@ -208,8 +209,8 @@ void AccelerationGridArray_t::remove(const Shape_t* item){
 
     min1.min(item->mincoord());
     max1.max(item->maxcoord());
-    min1 = (min1 - coordinates_[0]).floor() /cell_size_;
-    max1 = (max1 - coordinates_[0]).floor() /cell_size_;
+    min1 = (min1 - bounding_box_.coordinates_[0]).floor() /cell_size_;
+    max1 = (max1 - bounding_box_.coordinates_[0]).floor() /cell_size_;
     min1.max(0.0);
     max1.max(0.0);
 
