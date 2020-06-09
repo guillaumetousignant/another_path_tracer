@@ -1,6 +1,6 @@
 #include "acceleration/AccelerationGridArray_t.h"
 #include "entities/Shape_t.h"
-#include "acceleration/GridCellVector_t.h"
+#include "acceleration/GridCellArray_t.h"
 #include <limits>
 #include <cmath>
 
@@ -40,7 +40,7 @@ AccelerationGridArray_t::AccelerationGridArray_t(Shape_t** items, unsigned int n
     }
 
     cell_size_ = grid_size/(cell_res+1.0);
-    cells_ = new GridCellVector_t*[cell_res_[0] *  cell_res_[1] * cell_res_[2]];
+    cells_ = new GridCellArray_t*[cell_res_[0] *  cell_res_[1] * cell_res_[2]];
     for (unsigned int i = 0; i < cell_res_[0] * cell_res_[1] * cell_res_[2]; i++){
         cells_[i] = nullptr;
     }
@@ -63,7 +63,7 @@ AccelerationGridArray_t::AccelerationGridArray_t(Shape_t** items, unsigned int n
             for (y = (unsigned int)min1[1]; y <= (unsigned int)max1[1]; y++){
                 for (x = (unsigned int)min1[0]; x <= (unsigned int)max1[0]; x++){
                     if (cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] == nullptr){
-                        cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] = new GridCellVector_t;
+                        cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] = new GridCellArray_t;
                     }
                     ++(*cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]]);
                 }
@@ -95,7 +95,7 @@ AccelerationGridArray_t::AccelerationGridArray_t(Shape_t** items, unsigned int n
             for (y = (unsigned int)min1[1]; y <= (unsigned int)max1[1]; y++){
                 for (x = (unsigned int)min1[0]; x <= (unsigned int)max1[0]; x++){
                     if (cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] == nullptr){
-                        cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] = new GridCellVector_t;
+                        cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] = new GridCellArray_t;
                     }
                     cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]]->add(items[i]);
                 }
@@ -195,7 +195,7 @@ void AccelerationGridArray_t::add(Shape_t* item){
         for (unsigned int y = (unsigned int)min1[1]; y <= (unsigned int)max1[1]; y++){
             for (unsigned int x = (unsigned int)min1[0]; x <= (unsigned int)max1[0]; x++){
                 if (cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] == nullptr){
-                    cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] = new GridCellVector_t;
+                    cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] = new GridCellArray_t;
                 }
                 cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]]->add(item);
             }
