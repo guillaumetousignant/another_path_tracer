@@ -19,7 +19,7 @@ using APTracer::Shapes::Box_t;
 namespace APTracer { namespace Acceleration {
     class AccelerationMultiGridArray_t final : public AccelerationStructure_t{
         public:
-            AccelerationMultiGridArray_t(Shape_t** items, unsigned int n_items, Vec3f* coordinates = nullptr, unsigned int level = 0, unsigned int min_res = 1, unsigned int max_res = 128, unsigned int max_cell_content = 32, unsigned int max_grid_level = 1);
+            AccelerationMultiGridArray_t(Shape_t** items, unsigned int n_items, const Vec3f* coordinates = nullptr, unsigned int level = 0, unsigned int min_res = 1, unsigned int max_res = 128, unsigned int max_cell_content = 32, unsigned int max_grid_level = 1);
             virtual ~AccelerationMultiGridArray_t() final;
 
             AccelerationStructure_t** cells_;

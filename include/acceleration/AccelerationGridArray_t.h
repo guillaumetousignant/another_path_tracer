@@ -21,7 +21,7 @@ namespace APTracer { namespace Acceleration {
 
     class AccelerationGridArray_t final : public AccelerationStructure_t{
         public:
-            AccelerationGridArray_t(Shape_t** items, unsigned int n_items, Vec3f* coordinates = nullptr, unsigned int level = 0, unsigned int min_res = 1, unsigned int max_res = 128);
+            AccelerationGridArray_t(Shape_t** items, unsigned int n_items, const Vec3f* coordinates = nullptr, unsigned int level = 0, unsigned int min_res = 1, unsigned int max_res = 128);
             virtual ~AccelerationGridArray_t() final;
 
             GridCellVector_t** cells_;
