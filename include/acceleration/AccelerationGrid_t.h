@@ -46,7 +46,7 @@ namespace APTracer { namespace Acceleration {
              */
             virtual ~AccelerationGrid_t() final;
 
-            GridCell_t** cells_; /**< @brief Array of all the cells contained in the acceleration structure.*/ 
+            GridCell_t** cells_; /**< @brief Array of all the cells contained in the acceleration structure. Cells use lists of shapes, for constant time adding and removal of shapes.*/ 
             unsigned int cell_res_[3]; /**< @brief Number of cells in the x, y, and z direction.*/ 
             Vec3f cell_size_; /**< @brief Span of the cells in the x, y, and z direction.*/ 
             Box_t bounding_box_; /**< @brief Box representing the space encompassed by the grid.*/ 
