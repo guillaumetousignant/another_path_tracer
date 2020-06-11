@@ -39,7 +39,7 @@ namespace APTracer { namespace Acceleration {
             virtual ~GridCellArray_t() final;
 
             unsigned int size_; /**< @brief Size of the array. Number of shapes that can be held by the cell without reallocating.*/
-            Shape_t** items_; /**< @brief List of shapes contained in the cell. This allows fast iterating and lowest memory use.*/
+            Shape_t** items_; /**< @brief Array of shapes contained in the cell. This allows fast iterating and lowest memory use.*/
             unsigned int increment_size_; /**< @brief Size that will be allocated next time 'reserve()' is called. Increased with 'operator++'.*/
 
             virtual Shape_t* intersect(const Ray_t &ray, double &t, double (&uv)[2]) const final;
