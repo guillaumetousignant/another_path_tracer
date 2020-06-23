@@ -5,7 +5,9 @@
 #else
     #include "GL/glut.h"
 #endif
-#include "GL/gl.h"
+#ifndef __APPLE__
+    #include "GL/gl.h"
+#endif
 
 #include <chrono>
 #include <algorithm>
