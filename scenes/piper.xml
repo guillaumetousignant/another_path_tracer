@@ -52,7 +52,7 @@
       </directional_light>
    </directional_lights>
    <skyboxes>
-      <skybox light_colour="12.6373 11.9395 11.6477" light_position="0.62093 0.77075" light_radius="0.035" name="beach" texture="background" type="skybox_texture_sun"/>
+      <skybox light_colour="12.6373 11.9395 11.6477" light_position="0.62093 0.77075" light_radius="0.035" name="beach" texture="background" type="skybox_texture"/>
       <skybox colour="0.804 0.8825 0.9765" lights="sun" name="day" type="skybox_flat_sun"/>
    </skyboxes>
    <imgbuffers>
