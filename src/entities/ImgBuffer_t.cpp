@@ -2,6 +2,9 @@
 #define cimg_use_jpeg
 #define cimg_use_png
 #define cimg_use_tiff
+#define cimg_use_tinyexr
+#define cimg_use_openmp 1
+#define cimg_use_cpp11 1
 #define cimg_display 0
 #include "functions/CImg.h"
 #include <cmath>

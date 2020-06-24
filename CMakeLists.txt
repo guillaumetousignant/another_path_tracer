@@ -168,6 +168,7 @@ add_library(APTracer
     include/functions/Colours.h
     include/functions/NextFilename.h
     include/functions/Slerp.h
+    include/functions/tinyexr.h
     include/functions/tinyxml2.h
 
     include/materials/materials.h
