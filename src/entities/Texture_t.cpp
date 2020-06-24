@@ -18,22 +18,26 @@ Texture_t::Texture_t(const std::string &filename){
     std::for_each(extension.begin(), extension.end(), [](char & c){
         c = ::tolower(c);
     });
-    unsigned int bit_depth;
 
-    if (extension == "jpeg" || extension == "jpg") {
+    if (extension == "jpeg" || extension == "jpg") { 
         image.load_jpeg(filename.c_str());
-        bit_depth = 8;
+        constexpr unsigned int bit_depth = 8;
+        image/=(std::pow(2.0, bit_depth) - 1.0); // Normalizing by bit depth
     } else if (extension == "png") {
+        unsigned int bit_depth;
         image.load_png(filename.c_str(), &bit_depth);
+        image/=(std::pow(2.0, bit_depth) - 1.0); // Normalizing by bit depth
     } else if (extension == "exr") {
-        image.load_exr(filename.c_str()).pow(1.0/2.2);
-        bit_depth = 1;
+        image.load_exr(filename.c_str());
+        image.pow(1.0/2.2); // Gamma correcting
     } else if (extension == "hdr") {
         image.load(filename.c_str());
-        bit_depth = 1;
+        constexpr unsigned int bit_depth = 16; 
+        image/=(std::pow(2.0, bit_depth) - 1.0); // Normalizing by bit depth
     } else {
         image.load(filename.c_str());
-        bit_depth = 8;
+        constexpr unsigned int bit_depth = 8; 
+        image/=(std::pow(2.0, bit_depth) - 1.0); // Normalizing by bit depth
     }
 
     size_x_ = image.width();
@@ -42,12 +46,11 @@ Texture_t::Texture_t(const std::string &filename){
     img_ = new Vec3f[size_y_*size_x_];
 
     const unsigned int n = size_x_ * size_y_;
-    const double dept = std::pow(2.0, bit_depth) - 1.0;
 
     for (unsigned int j = 0; j < size_y_; ++j){
         for (unsigned int i = 0; i < size_x_; ++i){
             //img_[j][i] = Vec3f(image(i, j, 0), image(i, j, 1), image(i, j, 2));
-            img_[(size_y_ - j - 1)*size_x_ + i] = Vec3f(image(i, j, 0, 0, n, n)/dept, image(i, j, 0, 1, n, n)/dept, image(i, j, 0, 2, n, n)/dept);
+            img_[(size_y_ - j - 1)*size_x_ + i] = Vec3f(image(i, j, 0, 0, n, n), image(i, j, 0, 1, n, n), image(i, j, 0, 2, n, n));
         }
     }
 }
