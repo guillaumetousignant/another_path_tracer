@@ -13,12 +13,26 @@ using APTracer::Entities::Vec3f;
 using APTracer::Entities::Texture_t;
 
 namespace APTracer { namespace Skyboxes {
+    /**
+     * @brief The skybox texture class describes texture coloured skybox.
+     * 
+     * This will use an image as the background of the scene.
+     */
     class SkyboxTexture_t final : public Skybox_t{
         public:
+            /**
+             * @brief Construct a new SkyboxTexture_t object from a texture.
+             * 
+             * @param texture Texture used as the background of the skybox.
+             */
             SkyboxTexture_t(Texture_t* texture);
+
+            /**
+             * @brief Destroy the SkyboxTexture_t object. Does nothing.
+             */
             virtual ~SkyboxTexture_t() final;
 
-            Texture_t* texture_;
+            Texture_t* texture_; /**< @brief Texture used as the background of the skybox.*/
 
             virtual Vec3f get(const Vec3f &xyz) const final;
     };

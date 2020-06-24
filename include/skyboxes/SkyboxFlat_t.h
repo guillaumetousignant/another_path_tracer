@@ -11,7 +11,7 @@ namespace APTracer { namespace Skyboxes {
     /**
      * @brief The skybox flat class describes a flat coloured skybox.
      * 
-     * The colour returned is independant of direction, and is 'background_'.
+     * The colour returned is independent of direction, and is 'background_'.
      */
     class SkyboxFlat_t final : public Skybox_t{
         public:
