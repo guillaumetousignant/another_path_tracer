@@ -13,7 +13,28 @@ using APTracer::Entities::Texture_t;
 using APTracer::Entities::Vec3f;
 
 Texture_t::Texture_t(const std::string &filename){
-    const cimg_library::CImg<unsigned char> image(filename.c_str());
+    cimg_library::CImg<double> image;
+    std::string extension = filename.substr(filename.find_last_of(".") + 1);
+    std::for_each(extension.begin(), extension.end(), [](char & c){
+        c = ::tolower(c);
+    });
+    unsigned int bit_depth;
+
+    if (extension == "jpeg" || extension == "jpg") {
+        image.load_jpeg(filename.c_str());
+        bit_depth = 8;
+    } else if (extension == "png") {
+        image.load_png(filename.c_str(), &bit_depth);
+    } else if (extension == "exr") {
+        image.load_exr(filename.c_str()).pow(1.0/2.2);
+        bit_depth = 1;
+    } else if (extension == "hdr") {
+        image.load(filename.c_str());
+        bit_depth = 1;
+    } else {
+        image.load(filename.c_str());
+        bit_depth = 8;
+    }
 
     size_x_ = image.width();
     size_y_ = image.height();
@@ -21,11 +42,12 @@ Texture_t::Texture_t(const std::string &filename){
     img_ = new Vec3f[size_y_*size_x_];
 
     const unsigned int n = size_x_ * size_y_;
+    const double dept = std::pow(2.0, bit_depth) - 1.0;
 
     for (unsigned int j = 0; j < size_y_; ++j){
         for (unsigned int i = 0; i < size_x_; ++i){
             //img_[j][i] = Vec3f(image(i, j, 0), image(i, j, 1), image(i, j, 2));
-            img_[(size_y_ - j - 1)*size_x_ + i] = Vec3f(image(i, j, 0, 0, n, n)/255.0, image(i, j, 0, 1, n, n)/255.0, image(i, j, 0, 2, n, n)/255.0);
+            img_[(size_y_ - j - 1)*size_x_ + i] = Vec3f(image(i, j, 0, 0, n, n)/dept, image(i, j, 0, 1, n, n)/dept, image(i, j, 0, 2, n, n)/dept);
         }
     }
 }
