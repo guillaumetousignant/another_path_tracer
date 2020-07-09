@@ -237,7 +237,7 @@ target_include_directories(APTracer PUBLIC
 
 if(WIN32)
     find_library(ZLIB REQUIRED
-        NAMES png zlib zlib_a
+        NAMES zlib zlib_a
         HINTS external_windows/lib) # CHECK make image libraries optional
     find_library(PNG REQUIRED
         NAMES png libpng libpng_a libpng_debug libpng_a_debug
