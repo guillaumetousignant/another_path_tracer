@@ -236,6 +236,9 @@ target_include_directories(APTracer PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/>)
 
 if(WIN32)
+    find_library(ZLIB REQUIRED
+        NAMES png zlib zlib_a
+        HINTS external_windows/lib) # CHECK make image libraries optional
     find_library(PNG REQUIRED
         NAMES png libpng libpng_a libpng_debug libpng_a_debug
         HINTS external_windows/lib) # CHECK make image libraries optional
@@ -253,17 +256,20 @@ if(WIN32)
         $<INSTALL_INTERFACE:external_windows/include>    
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/external_windows/include>)
 
+    SET(ZLIB_LIBRARY ${ZLIB})
     SET(PNG_LIBRARY ${PNG})
     SET(JPEG_LIBRARY ${JPEG})
     SET(TIFF_LIBRARY ${TIFF})
     SET(GLUT_LIBRARY ${GLUT})
 else()
+    find_package(ZLIB REQUIRED)
     find_package(PNG REQUIRED) # CHECK make image libraries optional
     find_package(JPEG REQUIRED)
     find_package(TIFF REQUIRED)
     find_package(GLUT REQUIRED)
 
     target_include_directories(APTracer PUBLIC 
+        ${ZLIB_INCLUDE_DIR}
         ${PNG_INCLUDE_DIR}
         ${JPEG_INCLUDE_DIR}
         ${TIFF_INCLUDE_DIR}
@@ -275,6 +281,7 @@ find_package(OpenGL REQUIRED COMPONENTS OpenGL) # CHECK make optional
 add_dependencies(APTracer OpenGL::GL) # Should use OpenGL::OpenGL on newer linux hosts, but doesn't work on windows and android
 
 target_link_libraries(APTracer PUBLIC 
+    ${ZLIB_LIBRARY}
     ${PNG_LIBRARY}
     ${JPEG_LIBRARY}
     ${TIFF_LIBRARY}
