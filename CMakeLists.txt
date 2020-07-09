@@ -287,13 +287,17 @@ endif()
 
 target_link_libraries(APTracer PUBLIC debug pthread)
 target_compile_features(APTracer PRIVATE cxx_std_11)
-set_property(TARGET APTracer PROPERTY INTERPROCEDURAL_OPTIMIZATION True)
+if(NOT ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug"))
+    set_property(TARGET APTracer PROPERTY INTERPROCEDURAL_OPTIMIZATION True)
+endif()
 
 add_executable(another_path_tracer src/main.cpp)
 
 target_link_libraries(another_path_tracer PRIVATE APTracer)
 target_compile_features(another_path_tracer PRIVATE cxx_std_11)
-set_property(TARGET another_path_tracer PROPERTY INTERPROCEDURAL_OPTIMIZATION True)
+if(NOT ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug"))
+    set_property(TARGET another_path_tracer PROPERTY INTERPROCEDURAL_OPTIMIZATION True)
+endif()
 
 option(BUILD_TESTS "Build all tests." OFF)
 
