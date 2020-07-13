@@ -3,6 +3,9 @@
 #define cimg_use_jpeg
 #define cimg_use_png
 #define cimg_use_tiff
+#define cimg_use_tinyexr
+#define cimg_use_openmp 1
+#define cimg_use_cpp11 1
 #define cimg_display 0
 #include "functions/CImg.h"
 
@@ -10,7 +13,32 @@ using APTracer::Entities::Texture_t;
 using APTracer::Entities::Vec3f;
 
 Texture_t::Texture_t(const std::string &filename){
-    const cimg_library::CImg<unsigned char> image(filename.c_str());
+    cimg_library::CImg<double> image;
+    std::string extension = filename.substr(filename.find_last_of(".") + 1);
+    std::for_each(extension.begin(), extension.end(), [](char & c){
+        c = ::tolower(c);
+    });
+
+    if (extension == "jpeg" || extension == "jpg") { 
+        image.load_jpeg(filename.c_str());
+        constexpr unsigned int bit_depth = 8;
+        image/=(std::pow(2.0, bit_depth) - 1.0); // Normalizing by bit depth
+    } else if (extension == "png") {
+        unsigned int bit_depth;
+        image.load_png(filename.c_str(), &bit_depth);
+        image/=(std::pow(2.0, bit_depth) - 1.0); // Normalizing by bit depth
+    } else if (extension == "exr") {
+        image.load_exr(filename.c_str());
+        image.pow(1.0/2.2); // Gamma correcting
+    } else if (extension == "hdr") {
+        image.load(filename.c_str());
+        constexpr unsigned int bit_depth = 16; 
+        image/=(std::pow(2.0, bit_depth) - 1.0); // Normalizing by bit depth
+    } else {
+        image.load(filename.c_str());
+        constexpr unsigned int bit_depth = 8; 
+        image/=(std::pow(2.0, bit_depth) - 1.0); // Normalizing by bit depth
+    }
 
     size_x_ = image.width();
     size_y_ = image.height();
@@ -22,7 +50,7 @@ Texture_t::Texture_t(const std::string &filename){
     for (unsigned int j = 0; j < size_y_; ++j){
         for (unsigned int i = 0; i < size_x_; ++i){
             //img_[j][i] = Vec3f(image(i, j, 0), image(i, j, 1), image(i, j, 2));
-            img_[(size_y_ - j - 1)*size_x_ + i] = Vec3f(image(i, j, 0, 0, n, n)/255.0, image(i, j, 0, 1, n, n)/255.0, image(i, j, 0, 2, n, n)/255.0);
+            img_[(size_y_ - j - 1)*size_x_ + i] = Vec3f(image(i, j, 0, 0, n, n), image(i, j, 0, 1, n, n), image(i, j, 0, 2, n, n));
         }
     }
 }

@@ -4,7 +4,7 @@
 
 using APTracer::Entities::Vec3f;
 
-APTracer::Shapes::Box_t::Box_t() {}
+APTracer::Shapes::Box_t::Box_t() : coordinates_{Vec3f(), Vec3f()} {}
 
 APTracer::Shapes::Box_t::Box_t(Vec3f (&coord)[2]) : coordinates_{coord[0], coord[1]} {}
 

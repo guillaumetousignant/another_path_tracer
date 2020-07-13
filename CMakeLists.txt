@@ -168,6 +168,7 @@ add_library(APTracer
     include/functions/Colours.h
     include/functions/NextFilename.h
     include/functions/Slerp.h
+    include/functions/tinyexr.h
     include/functions/tinyxml2.h
 
     include/materials/materials.h
@@ -235,6 +236,9 @@ target_include_directories(APTracer PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/>)
 
 if(WIN32)
+    find_library(ZLIB REQUIRED
+        NAMES zlib
+        HINTS external_windows/lib) # CHECK make image libraries optional
     find_library(PNG REQUIRED
         NAMES png libpng libpng_a libpng_debug libpng_a_debug
         HINTS external_windows/lib) # CHECK make image libraries optional
@@ -252,17 +256,20 @@ if(WIN32)
         $<INSTALL_INTERFACE:external_windows/include>    
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/external_windows/include>)
 
+    SET(ZLIB_LIBRARY ${ZLIB})
     SET(PNG_LIBRARY ${PNG})
     SET(JPEG_LIBRARY ${JPEG})
     SET(TIFF_LIBRARY ${TIFF})
     SET(GLUT_LIBRARY ${GLUT})
 else()
+    find_package(ZLIB REQUIRED)
     find_package(PNG REQUIRED) # CHECK make image libraries optional
     find_package(JPEG REQUIRED)
     find_package(TIFF REQUIRED)
     find_package(GLUT REQUIRED)
 
     target_include_directories(APTracer PUBLIC 
+        ${ZLIB_INCLUDE_DIR}
         ${PNG_INCLUDE_DIR}
         ${JPEG_INCLUDE_DIR}
         ${TIFF_INCLUDE_DIR}
@@ -274,6 +281,7 @@ find_package(OpenGL REQUIRED COMPONENTS OpenGL) # CHECK make optional
 add_dependencies(APTracer OpenGL::GL) # Should use OpenGL::OpenGL on newer linux hosts, but doesn't work on windows and android
 
 target_link_libraries(APTracer PUBLIC 
+    ${ZLIB_LIBRARY}
     ${PNG_LIBRARY}
     ${JPEG_LIBRARY}
     ${TIFF_LIBRARY}
@@ -286,11 +294,17 @@ endif()
 
 target_link_libraries(APTracer PUBLIC debug pthread)
 target_compile_features(APTracer PRIVATE cxx_std_11)
+if(NOT ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug"))
+    set_property(TARGET APTracer PROPERTY INTERPROCEDURAL_OPTIMIZATION True)
+endif()
 
 add_executable(another_path_tracer src/main.cpp)
 
 target_link_libraries(another_path_tracer PRIVATE APTracer)
 target_compile_features(another_path_tracer PRIVATE cxx_std_11)
+if(NOT ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug"))
+    set_property(TARGET another_path_tracer PROPERTY INTERPROCEDURAL_OPTIMIZATION True)
+endif()
 
 option(BUILD_TESTS "Build all tests." OFF)
 
@@ -327,6 +341,7 @@ if(WIN32)
     install(DIRECTORY external_windows/bin
         DESTINATION .
         FILES_MATCHING 
+		  PATTERN "zlib.dll"
             PATTERN "freeglut.dll"
             PATTERN "libpng.dll"
             PATTERN "tiff.dll")

@@ -1,6 +1,6 @@
 # another_path_tracer
-Yet another path tracer
 
+Yet another path tracer
 
 Installation:
 
@@ -8,8 +8,8 @@ Installation:
 mkdir build
 cd build
 cmake .. -DCMAKE_BUILD_TYPE=Release
-make
-make install
+cmake --build .
+cmake --install .
 ```
 
 Link with `$ANOTHER_PATH_TRACER_DIR/lib`  

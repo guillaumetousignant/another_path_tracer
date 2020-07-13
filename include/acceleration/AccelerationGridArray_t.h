@@ -17,21 +17,43 @@ using APTracer::Entities::AccelerationStructure_t;
 using APTracer::Shapes::Box_t;
 
 namespace APTracer { namespace Acceleration {
-    class GridCellVector_t;
+    class GridCellArray_t;
 
+    /**
+     * @brief The acceleration grid array class describes a grid acceleration structure, splitting the space into uniform cells. Cells use arrays of shapes, for fast iteraring and lowest memory use.
+     * 
+     * Grid acceleration structures split the space they span into uniform cells, according to a 3D resolution. Rays are intersected with the cells before being intersected with the shapes they
+     * contain. This makes them fast to build and update, but makes them vulnerable to the "teapot in a stadium" problem, where a single cell can contain a disproportionate amount of geometry.
+     * A heuristic is used to determine grid resolution, taking into account the number of shapes and the span.
+     * This structure with its array representation is more geared toward static scenes, as the cost to remove, add or move shapes from one cell to another is highest. With arrays, iteration on
+     * shapes is slightly faster, and the memory used is lowest. Slightly longer to build, needs two passes.
+     */
     class AccelerationGridArray_t final : public AccelerationStructure_t{
         public:
-            AccelerationGridArray_t(Shape_t** items, unsigned int n_items, Vec3f* coordinates = nullptr, unsigned int level = 0, unsigned int min_res = 1, unsigned int max_res = 128);
+            /**
+             * @brief Construct a new AccelerationGridArray_t object from an array of shapes.
+             * 
+             * @param items Array of shapes to be added to the acceleration structure.
+             * @param n_items Number of shapes to be added to the acceleration structure.
+             * @param coordinates Array of minimum and maximum coordinates covered by the acceleration structure. Defaults to nullptr, to calculate from shapes. Set to restrict span, for example to use as a cell within another grid.
+             * @param level Recursion level of the grid. 0 is a top-level grid, 1 is a grid which is a cell of a grid, 2 is a grid within a grid within a grid, etc. Defaults to 0.
+             * @param min_res Minimum number of cells for all directions. Defaults to 1.
+             * @param max_res Maximum number of cells for all directions. Defaults to 128.
+             */
+            AccelerationGridArray_t(Shape_t** items, unsigned int n_items, const Vec3f* coordinates = nullptr, unsigned int level = 0, unsigned int min_res = 1, unsigned int max_res = 128);
+
+            /**
+             * @brief Destroy the AccelerationGridArray_t object, destroying the cells it owns.
+             */
             virtual ~AccelerationGridArray_t() final;
 
-            GridCellVector_t** cells_;
-            unsigned int cell_res_[3];
-            Vec3f cell_size_;
-            Box_t bounding_box_;
-            Vec3f coordinates_[2];
-            unsigned int level_;
-            unsigned int min_res_;
-            unsigned int max_res_;
+            GridCellArray_t** cells_; /**< @brief Array of all the cells contained in the acceleration structure. Cells use arrays of shapes, for fast iteraring and lowest memory use.*/
+            unsigned int cell_res_[3]; /**< @brief Number of cells in the x, y, and z direction.*/
+            Vec3f cell_size_; /**< @brief Span of the cells in the x, y, and z direction.*/
+            Box_t bounding_box_; /**< @brief Box representing the space encompassed by the grid.*/
+            unsigned int level_; /**< @brief Recursion level of the grid. 0 is a top-level grid, 1 is a grid which is a cell of a grid, 2 is a grid within a grid within a grid, etc.*/
+            unsigned int min_res_; /**< @brief Minimum number of cells for all directions.*/
+            unsigned int max_res_; /**< @brief Maximum number of cells for all directions.*/
 
             virtual Shape_t* intersect(const Ray_t &ray, double &t, double (&uv)[2]) const final;
             virtual void add(Shape_t* item) final;
