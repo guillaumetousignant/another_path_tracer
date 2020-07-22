@@ -17,6 +17,10 @@ using APTracer::Entities::TransformMatrix_t;
 using APTracer::Entities::Shape_t;
 
 namespace APTracer { namespace Shapes {
+    /**
+     * @brief 
+     * 
+     */
     class Sphere_t final : public Shape_t{
         public:
             Sphere_t(Material_t *material, TransformMatrix_t *transform_matrix);
