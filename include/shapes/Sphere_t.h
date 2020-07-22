@@ -18,8 +18,9 @@ using APTracer::Entities::Shape_t;
 
 namespace APTracer { namespace Shapes {
     /**
-     * @brief 
+     * @brief The sphere class defines a sphere shape that can be intersected by rays.
      * 
+     * A sphere is defined by 
      */
     class Sphere_t final : public Shape_t{
         public:
