@@ -52,10 +52,20 @@ namespace APTracer { namespace Shapes {
             virtual ~Mesh_t() final;
 
             /**
-             * @brief Create a Triangles object
+             * @brief Creates the triangles of the mesh, with a reference to the mesh geometry and their index into it.
              * 
+             * This creates regular triangles, and assigns them the mesh's material.
              */
             virtual void createTriangles() final;
+
+            /**
+             * @brief Creates the triangles of the mesh, with a reference to the mesh geometry and their index into it, using a material map.
+             * 
+             * This creates regular triangles, and uses a material map to assign different materials to the 
+             * triangles according to their material name in the mesh geometry.
+             * 
+             * @param materialmap Material map used to assign materials to the triangles according to their material name in the mesh geometry.
+             */
             virtual void createTriangles(MaterialMap_t *materialmap) final;
     };
 }}
