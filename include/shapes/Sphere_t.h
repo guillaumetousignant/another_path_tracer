@@ -53,11 +53,11 @@ namespace APTracer { namespace Shapes {
              * 
              * This function returns wether a ray intersected the sphere or not, according to its direction and origin.
              * The intersection point, in object coordinates, is stored in uv, and the distance from the ray origin is stored
-             * in t.
+             * in t. uv is in spherical coordinates, minus r [theta, phi].
              * 
              * @param ray Ray to be tested for intersection with the sphere.
              * @param[out] t Distance at which the intersection ocurred, from ray origin. Undefined if not intersected.
-             * @param[out] uv Coordinates in object space of the intersection. Undefined if not intersected. The coordinates are in spherical coordinates, minus r.
+             * @param[out] uv Coordinates in object space of the intersection. Undefined if not intersected. The coordinates are in spherical coordinates, minus r [theta, phi].
              * @return true The ray intersected the sphere, t and uv are defined.
              * @return false The ray doesn't intersect the sphere, t and uv are undefined.
              */
@@ -68,18 +68,64 @@ namespace APTracer { namespace Shapes {
              * 
              * This is used to find the surface normal on ray bounce. Used by materials to determine ray colour.
              * The texture coordinates is also returned, used by materials to fetch a colour in a texture.
-             * The time parameter is for motionblur shapes, where time is used to interpolate.
-             * The object coordinates are in spherical cordinates (minus r).
+             * The time parameter is for motionblur shapes, where time is used to interpolate. Not used here.
+             * The object coordinates are in spherical cordinates (minus r) [theta, phi].
              * 
              * @param[in] time Time at which we want the normal and texture coordinates. Not used here.
-             * @param[in] uv Object coordinates at which we want to find the normal and texture coordinates. The coordinates are in spherical coordinates, minus r.
+             * @param[in] uv Object coordinates at which we want to find the normal and texture coordinates. The coordinates are in spherical coordinates, minus r [theta, phi].
              * @param[out] tuv Texture coordinates at the specified coordinates and time.
              * @return Vec3f Normal vector at the specified coordinates and time.
              */
             virtual Vec3f normaluv(double time, const double (&uv)[2], double (&tuv)[2]) const final;
+
+            /**
+             * @brief Returns the surface normal at a point in object coordinates.
+             * 
+             * This is used to find the surface normal on ray bounce. Used by materials to determine ray colour.
+             * The time parameter is for motionblur shapes, where time is used to interpolate. Not used here.
+             * The object coordinates are in spherical cordinates (minus r) [theta, phi].
+             * 
+             * @param time Time at which we want the normal. Used when motion blur is used. Not used here.
+             * @param uv Object coordinates at which we want to find the normal. The coordinates are in spherical coordinates, minus r [theta, phi].
+             * @return Vec3f Normal vector at the specified coordinates and time.
+             */
             virtual Vec3f normal(double time, const double (&uv)[2]) const final;
+
+            /**
+             * @brief Returns the surface normal, texture coordinates and tangent vector at a point in object coordinates.
+             * 
+             * This is used to find the surface normal on ray bounce. Used by materials to determine ray colour.
+             * The texture coordinates is also returned, used by materials to fetch a colour in a texture. The tangent
+             * vector is used by materials for normal mapping, as the normals returned by those textures are in object
+             * coordinates. The time parameter is for motionblur shapes, where time is used to interpolate. Not used here.
+             * The object coordinates are in spherical cordinates (minus r) [theta, phi].
+             * 
+             * @param[in] time Time at which we want the normal and texture coordinates. Used when motion blur is used. Not used here.
+             * @param[in] uv Object coordinates at which we want to find the normal, texture coordinates and tangent vector. The coordinates are in spherical coordinates, minus r [theta, phi].
+             * @param[out] tuv Texture coordinates at the specified coordinates and time.
+             * @param[out] tangentvec Tangent vector at the specified coordinates and time.
+             * @return Vec3f Normal vector at the specified coordinates and time.
+             */
             virtual Vec3f normal_uv_tangent(double time, const double (&uv)[2], double (&tuv)[2], Vec3f &tangentvec) const final;
+
+            /**
+             * @brief Minimum coordinates of an axis-aligned bounding box around the sphere.
+             * 
+             * This is used by acceleration structures to spatially sort shapes. Returns the center position minus 
+             * radius for all axes.
+             * 
+             * @return Vec3f Minimum coordinates of an axis-aligned bounding box around the sphere.
+             */
             virtual Vec3f mincoord() const final;
+
+            /**
+             * @brief Maximum coordinates of an axis-aligned bounding box around the sphere.
+             * 
+             * This is used by acceleration structures to spatially sort shapes. Returns the center position plus 
+             * radius for all axes.
+             * 
+             * @return Vec3f Maximum coordinates of an axis-aligned bounding box around the sphere.
+             */
             virtual Vec3f maxcoord() const final;
     };
 }}
