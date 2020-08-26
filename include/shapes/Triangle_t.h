@@ -17,8 +17,23 @@ using APTracer::Entities::TransformMatrix_t;
 using APTracer::Entities::Shape_t;
 
 namespace APTracer { namespace Shapes {
+    /**
+     * @brief The triangle class defines a triangle shape that can be intersected by rays.
+     * 
+     * A triangle is defined by three points, in counter-clockwise order. Its transformation matrix is used 
+     * to modify those points.
+     */
     class Triangle_t final : public Shape_t{
         public:
+            /**
+             * @brief Construct a new Triangle_t object with a transformation matrix and material from three points.
+             * 
+             * @param material Material of the triangle. Material that will be bounced on at intersection.
+             * @param transform_matrix Transformation used by the triangle to modify its points.
+             * @param points Array of three points, in counter-clockwise order, defining the triangle.
+             * @param normals Array of three normals, in counter-clockwise order, at the three points of the triangle.
+             * @param texcoord 
+             */
             Triangle_t(Material_t *material, TransformMatrix_t *transform_matrix, Vec3f* points, Vec3f* normals, double** texcoord);
             virtual ~Triangle_t() final;
 

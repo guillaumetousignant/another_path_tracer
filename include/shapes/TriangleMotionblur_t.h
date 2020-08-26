@@ -17,6 +17,13 @@ using APTracer::Entities::TransformMatrix_t;
 using APTracer::Entities::Shape_t;
 
 namespace APTracer { namespace Shapes {
+    /**
+     * @brief The triangle motionblur class defines a triangle shape that can be intersected by rays, with motion blur enabled.
+     * 
+     * A triangle is defined by three points, in counter-clockwise order. Its transformation matrix is used 
+     * to modify those points. This shape remembers its last state to enable motion blur. The state is interpolated between current and previous
+     * states according to a ray's time.
+     */
     class TriangleMotionblur_t final : public Shape_t{
         public:
             TriangleMotionblur_t(Material_t *material, TransformMatrix_t *transform_matrix, Vec3f* points, Vec3f* normals, double** texcoord);
