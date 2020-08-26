@@ -73,8 +73,8 @@ namespace APTracer { namespace Shapes {
              * 
              * @param[in] time Time at which we want the normal and texture coordinates. Not used here.
              * @param[in] uv Object coordinates at which we want to find the normal and texture coordinates. The coordinates are in spherical coordinates, minus r [theta, phi].
-             * @param[out] tuv Texture coordinates at the specified coordinates and time.
-             * @return Vec3f Normal vector at the specified coordinates and time.
+             * @param[out] tuv Texture coordinates at the specified coordinates.
+             * @return Vec3f Normal vector at the specified coordinates.
              */
             virtual Vec3f normaluv(double time, const double (&uv)[2], double (&tuv)[2]) const final;
 
@@ -87,7 +87,7 @@ namespace APTracer { namespace Shapes {
              * 
              * @param time Time at which we want the normal. Used when motion blur is used. Not used here.
              * @param uv Object coordinates at which we want to find the normal. The coordinates are in spherical coordinates, minus r [theta, phi].
-             * @return Vec3f Normal vector at the specified coordinates and time.
+             * @return Vec3f Normal vector at the specified coordinates.
              */
             virtual Vec3f normal(double time, const double (&uv)[2]) const final;
 
@@ -100,11 +100,11 @@ namespace APTracer { namespace Shapes {
              * coordinates. The time parameter is for motionblur shapes, where time is used to interpolate. Not used here.
              * The object coordinates are in spherical cordinates (minus r) [theta, phi].
              * 
-             * @param[in] time Time at which we want the normal and texture coordinates. Used when motion blur is used. Not used here.
+             * @param[in] time Time at which we want the normal, tangent and texture coordinates. Used when motion blur is used. Not used here.
              * @param[in] uv Object coordinates at which we want to find the normal, texture coordinates and tangent vector. The coordinates are in spherical coordinates, minus r [theta, phi].
-             * @param[out] tuv Texture coordinates at the specified coordinates and time.
-             * @param[out] tangentvec Tangent vector at the specified coordinates and time.
-             * @return Vec3f Normal vector at the specified coordinates and time.
+             * @param[out] tuv Texture coordinates at the specified coordinates.
+             * @param[out] tangentvec Tangent vector at the specified coordinates.
+             * @return Vec3f Normal vector at the specified coordinates.
              */
             virtual Vec3f normal_uv_tangent(double time, const double (&uv)[2], double (&tuv)[2], Vec3f &tangentvec) const final;
 
