@@ -42,10 +42,10 @@ namespace APTracer { namespace Shapes {
              */
             virtual ~TriangleMotionblur_t() final;
 
-            Vec3f points_orig_[3];
-            Vec3f normals_orig_[3];
-            double texture_coordinates_[6];
-            double tuv_to_world_[2];
+            Vec3f points_orig_[3]; /**< @brief Array of the three un-transformed points of the triangle, in counter-clockwise order. Transformed by the transform matrix on update to give points.*/
+            Vec3f normals_orig_[3]; /**< @brief Array of the three un-transformed normals of the triangle, in counter-clockwise order. Transformed by the transform matrix on update to give normals.*/
+            double texture_coordinates_[6]; /**< @brief Array of the three texture coordinates with two components of the triangle, in counter-clockwise order. Transformed by the transform matrix on update to give texture coordinates. [x0, y0, x1, y1, x2, y2]*/
+            double tuv_to_world_[2]; /**< @brief Matrix to change referential from texture coordinate space to world space. Used to compute tangent vector.*/
             Vec3f points_[3];
             Vec3f normals_[3];
             Vec3f v0v1_;

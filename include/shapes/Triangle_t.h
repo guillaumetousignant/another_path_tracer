@@ -41,15 +41,15 @@ namespace APTracer { namespace Shapes {
              */
             virtual ~Triangle_t() final;
 
-            Vec3f points_orig_[3];
-            Vec3f normals_orig_[3];
-            double texture_coordinates_[6];
-            Vec3f points_[3];
-            Vec3f normals_[3];
-            Vec3f v0v1_;
-            Vec3f v0v2_;
-            double tuv_to_world_[2];
-            Vec3f tangent_vec_; // Points up
+            Vec3f points_orig_[3]; /**< @brief Array of the three un-transformed points of the triangle, in counter-clockwise order. Transformed by the transform matrix on update to give points.*/
+            Vec3f normals_orig_[3]; /**< @brief Array of the three un-transformed normals of the triangle, in counter-clockwise order. Transformed by the transform matrix on update to give normals.*/
+            double texture_coordinates_[6]; /**< @brief Array of the three texture coordinates with two components of the triangle, in counter-clockwise order. Transformed by the transform matrix on update to give texture coordinates. [x0, y0, x1, y1, x2, y2]*/
+            Vec3f points_[3]; /**< @brief Array of the three points of the triangle, in counter-clockwise order.*/
+            Vec3f normals_[3]; /**< @brief Array of the three  normals of the triangle, in counter-clockwise order.*/
+            Vec3f v0v1_; /**< @brief Cached vector from point 0 to point 1. Used for intersection.*/
+            Vec3f v0v2_; /**< @brief Cached vector from point 0 to point 2. Used for intersection.*/
+            double tuv_to_world_[2]; /**< @brief Matrix to change referential from texture coordinate space to world space. Used to compute tangent vector.*/
+            Vec3f tangent_vec_; /**< @brief Tangent vector of the triangle in world space. Points to positive u in texture coordinates. Used for normal mapping.*/
 
             virtual void update() final;
             virtual bool intersection(const Ray_t &ray, double &t, double (&uv)[2]) const final; 
