@@ -385,9 +385,9 @@ namespace APTracer {
      * @brief Get a vector of three 2D coordinates from a string of numerical values, or nan for nullptr.
      * 
      * @param texture_coordinates_string String containing the two components of the three coordinates, or 'nan'.
-     * @return std::vector<std::vector<double>> Vector containing the components of three coordinates, or empty vector.
+     * @return std::vector<double> Vector containing the components of three coordinates, or empty vector. [x0, y0, x1, y1, x2, y2]
      */
-    std::vector<std::vector<double>> get_texture_coordinates(std::string texture_coordinates_string);    
+    std::vector<double> get_texture_coordinates(std::string texture_coordinates_string);    
 
     /**
      * @brief Get a list of strings representing material names or indices from a string of material names or indices.

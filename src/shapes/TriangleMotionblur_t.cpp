@@ -10,7 +10,7 @@
 
 using APTracer::Entities::Vec3f;
 
-APTracer::Shapes::TriangleMotionblur_t::TriangleMotionblur_t(APTracer::Entities::Material_t *material, APTracer::Entities::TransformMatrix_t *transform_matrix, Vec3f* points, Vec3f* normals, double** texcoord) 
+APTracer::Shapes::TriangleMotionblur_t::TriangleMotionblur_t(APTracer::Entities::Material_t *material, APTracer::Entities::TransformMatrix_t *transform_matrix, const Vec3f* points, const Vec3f* normals, const double* texcoord) 
     : Shape_t(material, transform_matrix), points_orig_{points[0], points[1], points[2]} {
 
     if (normals == nullptr){
@@ -26,20 +26,20 @@ APTracer::Shapes::TriangleMotionblur_t::TriangleMotionblur_t(APTracer::Entities:
     }
 
     if (texcoord == nullptr){
-        texture_coordinates_[0][0] = 0;
-        texture_coordinates_[0][1] = 1;
-        texture_coordinates_[1][0] = 0;
-        texture_coordinates_[1][1] = 0;
-        texture_coordinates_[2][0] = 1;
-        texture_coordinates_[2][1] = 0;
+        texture_coordinates_[0] = 0;
+        texture_coordinates_[1] = 1;
+        texture_coordinates_[2] = 0;
+        texture_coordinates_[3] = 0;
+        texture_coordinates_[4] = 1;
+        texture_coordinates_[5] = 0;
     }
     else{
-        texture_coordinates_[0][0] = texcoord[0][0];
-        texture_coordinates_[0][1] = texcoord[0][1];
-        texture_coordinates_[1][0] = texcoord[1][0];
-        texture_coordinates_[1][1] = texcoord[1][1];
-        texture_coordinates_[2][0] = texcoord[2][0];
-        texture_coordinates_[2][1] = texcoord[2][1];
+        texture_coordinates_[0] = texcoord[0];
+        texture_coordinates_[1] = texcoord[1];
+        texture_coordinates_[2] = texcoord[2];
+        texture_coordinates_[3] = texcoord[3];
+        texture_coordinates_[4] = texcoord[4];
+        texture_coordinates_[5] = texcoord[5];
     }
 
     const APTracer::Entities::TransformMatrix_t transform_norm = transformation_->transformDir();
@@ -62,8 +62,8 @@ APTracer::Shapes::TriangleMotionblur_t::TriangleMotionblur_t(APTracer::Entities:
     v0v2_ = points_[2] - points_[0];
     v0v2_last_ = v0v2_;
 
-    const double tuv0v1[2] = {texture_coordinates_[1][0] - texture_coordinates_[0][0], texture_coordinates_[1][1] - texture_coordinates_[0][1]};
-    const double tuv0v2[2] = {texture_coordinates_[2][0] - texture_coordinates_[0][0], texture_coordinates_[2][1] - texture_coordinates_[0][1]};    
+    const double tuv0v1[2] = {texture_coordinates_[2] - texture_coordinates_[0], texture_coordinates_[3] - texture_coordinates_[1]};
+    const double tuv0v2[2] = {texture_coordinates_[4] - texture_coordinates_[0], texture_coordinates_[5] - texture_coordinates_[1]};    
     const double invdet = 1.0/(tuv0v1[0] * tuv0v2[1] - tuv0v1[1] * tuv0v2[0]);
     if (std::isfinite(invdet)){
         tuv_to_world_[0] = invdet * -tuv0v2[0];
@@ -160,8 +160,8 @@ Vec3f APTracer::Shapes::TriangleMotionblur_t::normaluv(double time, const double
 
     const Vec3f distance = Vec3f(1.0 - uv[0] - uv[1], uv[0], uv[1]);
     // Matrix multiplication, optimise.
-    tuv[0] = distance[0] * texture_coordinates_[0][0] + distance[1] * texture_coordinates_[1][0] + distance[2] * texture_coordinates_[2][0];
-    tuv[1] = distance[0] * texture_coordinates_[0][1] + distance[1] * texture_coordinates_[1][1] + distance[2] * texture_coordinates_[2][1];
+    tuv[0] = distance[0] * texture_coordinates_[0] + distance[1] * texture_coordinates_[2] + distance[2] * texture_coordinates_[4];
+    tuv[1] = distance[0] * texture_coordinates_[1] + distance[1] * texture_coordinates_[3] + distance[2] * texture_coordinates_[5];
     return Vec3f(distance[0] * normals_int[0][0] + distance[1] * normals_int[1][0] + distance[2] * normals_int[2][0], 
         distance[0] * normals_int[0][1] + distance[1] * normals_int[1][1] + distance[2] * normals_int[2][1],
         distance[0] * normals_int[0][2] + distance[1] * normals_int[1][2] + distance[2] * normals_int[2][2]);
@@ -186,8 +186,8 @@ Vec3f APTracer::Shapes::TriangleMotionblur_t::normal_uv_tangent(double time, con
 
     const Vec3f distance = Vec3f(1.0 - uv[0] - uv[1], uv[0], uv[1]);
     // Matrix multiplication, optimise.
-    tuv[0] = distance[0] * texture_coordinates_[0][0] + distance[1] * texture_coordinates_[1][0] + distance[2] * texture_coordinates_[2][0];
-    tuv[1] = distance[0] * texture_coordinates_[0][1] + distance[1] * texture_coordinates_[1][1] + distance[2] * texture_coordinates_[2][1];
+    tuv[0] = distance[0] * texture_coordinates_[0] + distance[1] * texture_coordinates_[2] + distance[2] * texture_coordinates_[4];
+    tuv[1] = distance[0] * texture_coordinates_[1] + distance[1] * texture_coordinates_[3] + distance[2] * texture_coordinates_[5];
 
     const Vec3f tangent_vec_int = tangent_vec_ * time + tangent_vec_last_ * (1.0 - time);
 

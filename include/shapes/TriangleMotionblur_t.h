@@ -26,12 +26,12 @@ namespace APTracer { namespace Shapes {
      */
     class TriangleMotionblur_t final : public Shape_t{
         public:
-            TriangleMotionblur_t(Material_t *material, TransformMatrix_t *transform_matrix, Vec3f* points, Vec3f* normals, double** texcoord);
+            TriangleMotionblur_t(Material_t *material, TransformMatrix_t *transform_matrix, const Vec3f* points, const Vec3f* normals, const double* texcoord);
             virtual ~TriangleMotionblur_t() final;
 
             Vec3f points_orig_[3];
             Vec3f normals_orig_[3];
-            double texture_coordinates_[3][2];
+            double texture_coordinates_[6];
             double tuv_to_world_[2];
             Vec3f points_[3];
             Vec3f normals_[3];

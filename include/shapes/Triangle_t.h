@@ -34,12 +34,12 @@ namespace APTracer { namespace Shapes {
              * @param normals Array of three normals, in counter-clockwise order, at the three points of the triangle.
              * @param texcoord 
              */
-            Triangle_t(Material_t *material, TransformMatrix_t *transform_matrix, Vec3f* points, Vec3f* normals, double** texcoord);
+            Triangle_t(Material_t *material, TransformMatrix_t *transform_matrix, const Vec3f* points, const Vec3f* normals, const double* texcoord);
             virtual ~Triangle_t() final;
 
             Vec3f points_orig_[3];
             Vec3f normals_orig_[3];
-            double texture_coordinates_[3][2];
+            double texture_coordinates_[6];
             Vec3f points_[3];
             Vec3f normals_[3];
             Vec3f v0v1_;

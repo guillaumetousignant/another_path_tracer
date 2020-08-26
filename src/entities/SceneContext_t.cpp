@@ -1400,21 +1400,17 @@ std::unique_ptr<Shape_t> APTracer::Entities::SceneContext_t::create_object(const
         require_attributes(xml_object, attributes, 5);
         std::vector<Vec3f> points = get_points(xml_object->Attribute("points"));
         std::vector<Vec3f> normals = get_points(xml_object->Attribute("normals"));
-        std::vector<std::vector<double>> texture_coordinates = get_texture_coordinates(xml_object->Attribute("texture_coordinates"));
+        std::vector<double> texture_coordinates = get_texture_coordinates(xml_object->Attribute("texture_coordinates"));
 
         Vec3f* points_ptr = points.empty() ? nullptr : points.data();
         Vec3f* normals_ptr = normals.empty() ? nullptr : normals.data();
 
-        double** texture_coordinates_ptr;
-        double* texture_coordinates_data[3];
+        double* texture_coordinates_ptr;
         if (texture_coordinates.empty()){
             texture_coordinates_ptr = nullptr;
         }
         else {
-            texture_coordinates_data[0] = texture_coordinates[0].data();
-            texture_coordinates_data[1] = texture_coordinates[1].data();
-            texture_coordinates_data[2] = texture_coordinates[2].data();
-            texture_coordinates_ptr = texture_coordinates_data;
+            texture_coordinates_ptr = texture_coordinates.data();
         }
 
         return std::unique_ptr<Shape_t>(
@@ -1425,21 +1421,17 @@ std::unique_ptr<Shape_t> APTracer::Entities::SceneContext_t::create_object(const
         require_attributes(xml_object, attributes, 5);
         std::vector<Vec3f> points = get_points(xml_object->Attribute("points"));
         std::vector<Vec3f> normals = get_points(xml_object->Attribute("normals"));
-        std::vector<std::vector<double>> texture_coordinates = get_texture_coordinates(xml_object->Attribute("texture_coordinates"));
+        std::vector<double> texture_coordinates = get_texture_coordinates(xml_object->Attribute("texture_coordinates"));
 
         Vec3f* points_ptr = points.empty() ? nullptr : points.data();
         Vec3f* normals_ptr = normals.empty() ? nullptr : normals.data();
 
-        double** texture_coordinates_ptr;
-        double* texture_coordinates_data[3];
+        double* texture_coordinates_ptr;
         if (texture_coordinates.empty()){
             texture_coordinates_ptr = nullptr;
         }
         else {
-            texture_coordinates_data[0] = texture_coordinates[0].data();
-            texture_coordinates_data[1] = texture_coordinates[1].data();
-            texture_coordinates_data[2] = texture_coordinates[2].data();
-            texture_coordinates_ptr = texture_coordinates_data;
+            texture_coordinates_ptr = texture_coordinates.data();
         }
 
         return std::unique_ptr<Shape_t>(
@@ -2697,37 +2689,25 @@ std::vector<Vec3f> APTracer::get_points(std::string points_string) {
     return points;
 }
 
-std::vector<std::vector<double>> APTracer::get_texture_coordinates(std::string texture_coordinates_string) {
-    std::vector<std::vector<double>> texture_coordinates;
+std::vector<double> APTracer::get_texture_coordinates(std::string texture_coordinates_string) {
+    std::vector<double> texture_coordinates;
 
     std::transform(texture_coordinates_string.begin(), texture_coordinates_string.end(), texture_coordinates_string.begin(), ::tolower);
 
     if (texture_coordinates_string != "nan"){
-        texture_coordinates = std::vector<std::vector<double>>(3);
-        texture_coordinates[0] =std::vector<double>(2);
-        texture_coordinates[1] = std::vector<double>(2);
-        texture_coordinates[2] = std::vector<double>(2);
-        double values[6];
+        texture_coordinates = std::vector<double>(6);
         unsigned int count = 0;
         std::stringstream ss(texture_coordinates_string);
         
         for(std::string s; ss >> s; ){
             if (count < 6){
-                values[count] = std::stod(s);
+                texture_coordinates[count] = std::stod(s);
             }
             ++count;
         }
         if (count != 6) {
             std::cerr << "Error, triangle texture coordinates should be 6 values seperated by spaces, or nan. Current number of values is " << count << ". Exiting." << std::endl;
             exit(68);
-        }
-        else{
-            texture_coordinates[0][0] = values[0];
-            texture_coordinates[0][1] = values[1];
-            texture_coordinates[1][0] = values[2];
-            texture_coordinates[1][1] = values[3];
-            texture_coordinates[2][0] = values[4];
-            texture_coordinates[2][1] = values[5];
         }
     }
 
