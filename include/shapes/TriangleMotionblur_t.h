@@ -26,7 +26,20 @@ namespace APTracer { namespace Shapes {
      */
     class TriangleMotionblur_t final : public Shape_t{
         public:
+            /**
+             * @brief Construct a new TriangleMotionblur_t object with a transformation matrix and material from three points.
+             * 
+             * @param material Material of the triangle. Material that will be bounced on at intersection.
+             * @param transform_matrix Transformation used by the triangle to modify its points.
+             * @param points Array of three points, in counter-clockwise order, defining the triangle.
+             * @param normals Array of three normals, in counter-clockwise order, at the three points of the triangle.
+             * @param texcoord Array of three texture coordinates with two components, in counter-clockwise order, at the three points of the triangle. [x0, y0, x1, y1, x2, y2]
+             */
             TriangleMotionblur_t(Material_t *material, TransformMatrix_t *transform_matrix, const Vec3f* points, const Vec3f* normals, const double* texcoord);
+
+            /**
+             * @brief Destroy the TriangleMotionblur_t object. Does nothing.
+             */
             virtual ~TriangleMotionblur_t() final;
 
             Vec3f points_orig_[3];

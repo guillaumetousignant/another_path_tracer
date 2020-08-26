@@ -32,9 +32,13 @@ namespace APTracer { namespace Shapes {
              * @param transform_matrix Transformation used by the triangle to modify its points.
              * @param points Array of three points, in counter-clockwise order, defining the triangle.
              * @param normals Array of three normals, in counter-clockwise order, at the three points of the triangle.
-             * @param texcoord 
+             * @param texcoord Array of three texture coordinates with two components, in counter-clockwise order, at the three points of the triangle. [x0, y0, x1, y1, x2, y2]
              */
             Triangle_t(Material_t *material, TransformMatrix_t *transform_matrix, const Vec3f* points, const Vec3f* normals, const double* texcoord);
+
+            /**
+             * @brief Destroy the Triangle_t object. Does nothing.
+             */
             virtual ~Triangle_t() final;
 
             Vec3f points_orig_[3];
