@@ -102,14 +102,59 @@ namespace APTracer { namespace Shapes {
              * The time parameter is used to interpolate between previous and current states, 0 and 1 respectively.
              * The object coordinates are in barycentric cordinates (minus w) [u, v].
              * 
-             * @param[in] time Time at which we want the normal and texture coordinates, from 0 to 1 for previous and current states.
+             * @param[in] time Time at which we want the normal, from 0 to 1 for previous and current states.
              * @param[in] uv Object coordinates at which we want to find the normal. The coordinates are in barycentric coordinates, minus w [u, v].
              * @return Vec3f Normal vector at the specified coordinates and time.
              */
             virtual Vec3f normal(double time, const double (&uv)[2]) const final;
+
+            /**
+             * @brief Returns the surface normal, texture coordinates and tangent vector at a point in object coordinates and a specific time.
+             * 
+             * This is used to find the surface normal on ray bounce. Used by materials to determine ray colour.
+             * The texture coordinates is also returned, used by materials to fetch a colour in a texture. The tangent
+             * vector is used by materials for normal mapping, as the normals returned by those textures are in object
+             * coordinates. The time parameter is used to interpolate between previous and current states, 0 and 1 respectively.
+             * The object coordinates are in barycentric cordinates (minus w) [u, v].
+             * 
+             * @param[in] time Time at which we want the normal and texture coordinates, from 0 to 1 for previous and current states.
+             * @param[in] uv Object coordinates at which we want to find the normal, texture coordinates and tangent vector. The coordinates are in barycentric coordinates, minus w [u, v].
+             * @param[out] tuv Texture coordinates at the specified coordinates and time.
+             * @param[out] tangentvec Tangent vector at the specified coordinates and time.
+             * @return Vec3f Normal vector at the specified coordinates and time.
+             */
             virtual Vec3f normal_uv_tangent(double time, const double (&uv)[2], double (&tuv)[2], Vec3f &tangentvec) const final;
+
+            /**
+             * @brief Returns the geometric surface normal of the triangle at a specific time, not the interpolated one from vertex normals.
+             * 
+             * Not used anywhere usually, used to debug normal interpolation.
+             * 
+             * @param time Time at which we want the normal, from 0 to 1 for previous and current states.
+             * @return Vec3f Normal vector of the triangle at the specified time.
+             */
             virtual Vec3f normal_face(double time) const final;
+
+            /**
+             * @brief Minimum coordinates of an axis-aligned bounding box around the triangle.
+             * 
+             * This is used by acceleration structures to spatially sort shapes. Returns the minimum of all
+             * three points and previous points for all axes. This ensures the minimum coordinate over the time range
+             * is returned.
+             * 
+             * @return Vec3f Minimum coordinates of an axis-aligned bounding box around the triangle.
+             */
             virtual Vec3f mincoord() const final;
+
+            /**
+             * @brief Maximum coordinates of an axis-aligned bounding box around the triangle.
+             * 
+             * This is used by acceleration structures to spatially sort shapes. Returns the minimum of all
+             * three points and previous points for all axes. This ensures the maximum coordinate over the time range
+             * is returned.
+             * 
+             * @return Vec3f Maximum coordinates of an axis-aligned bounding box around the triangle.
+             */
             virtual Vec3f maxcoord() const final;
     };
 }}
