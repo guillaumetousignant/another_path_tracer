@@ -95,8 +95,8 @@ namespace APTracer { namespace Shapes {
              * The time parameter is for motionblur shapes, where time is used to interpolate. Not used here.
              * The object coordinates are in barycentric cordinates (minus w) [u, v].
              * 
-             * @param time Time at which we want the normal. Used when motion blur is used. Not used here.
-             * @param uv Object coordinates at which we want to find the normal. The coordinates are in barycentric coordinates, minus w [u, v].
+             * @param[in] time Time at which we want the normal. Used when motion blur is used. Not used here.
+             * @param[in] uv Object coordinates at which we want to find the normal. The coordinates are in barycentric coordinates, minus w [u, v].
              * @return Vec3f Normal vector at the specified coordinates. 
              */
             virtual Vec3f normal(double time, const double (&uv)[2]) const final;

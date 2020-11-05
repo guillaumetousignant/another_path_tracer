@@ -92,8 +92,8 @@ namespace APTracer { namespace Shapes {
              * The time parameter is used to interpolate between previous and current states, 0 and 1 respectively.
              * The object coordinates are in spherical cordinates (minus r) [theta, phi].
              * 
-             * @param time Time at which we want the normal, from 0 to 1 for previous and current states.
-             * @param uv Object coordinates at which we want to find the normal. The coordinates are in spherical coordinates, minus r [theta, phi].
+             * @param[in] time Time at which we want the normal, from 0 to 1 for previous and current states.
+             * @param[in] uv Object coordinates at which we want to find the normal. The coordinates are in spherical coordinates, minus r [theta, phi].
              * @return Vec3f Normal vector at the specified coordinates and time.
              */
             virtual Vec3f normal(double time, const double (&uv)[2]) const final;

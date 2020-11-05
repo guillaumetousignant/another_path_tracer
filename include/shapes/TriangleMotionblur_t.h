@@ -82,14 +82,30 @@ namespace APTracer { namespace Shapes {
             virtual bool intersection(const Ray_t &ray, double &t, double (&uv)[2]) const final; 
 
             /**
-             * @brief 
+             * @brief Returns the surface normal and texture coordinates at a point in object coordinates and a specific time.
              * 
-             * @param time 
-             * @param uv 
-             * @param tuv 
-             * @return Vec3f 
+             * This is used to find the surface normal on ray bounce. Used by materials to determine ray colour.
+             * The time parameter is used to interpolate between previous and current states, 0 and 1 respectively.
+             * The object coordinates are in barycentric cordinates (minus w) [u, v].
+             * 
+             * @param[in] time Time at which we want the normal and texture coordinates, from 0 to 1 for previous and current states.
+             * @param[in] uv Object coordinates at which we want to find the normal and texture coordinates. The coordinates are in barycentric coordinates, minus w [u, v].
+             * @param[out] tuv Texture coordinates at the specified coordinates and time.
+             * @return Vec3f Normal vector at the specified coordinates and time.
              */
             virtual Vec3f normaluv(double time, const double (&uv)[2], double (&tuv)[2]) const final;
+
+            /**
+             * @brief Returns the surface normal at a point in object coordinates and a specific time.
+             * 
+             * This is used to find the surface normal on ray bounce. Used by materials to determine ray colour.
+             * The time parameter is used to interpolate between previous and current states, 0 and 1 respectively.
+             * The object coordinates are in barycentric cordinates (minus w) [u, v].
+             * 
+             * @param[in] time Time at which we want the normal and texture coordinates, from 0 to 1 for previous and current states.
+             * @param[in] uv Object coordinates at which we want to find the normal. The coordinates are in barycentric coordinates, minus w [u, v].
+             * @return Vec3f Normal vector at the specified coordinates and time.
+             */
             virtual Vec3f normal(double time, const double (&uv)[2]) const final;
             virtual Vec3f normal_uv_tangent(double time, const double (&uv)[2], double (&tuv)[2], Vec3f &tangentvec) const final;
             virtual Vec3f normal_face(double time) const final;
