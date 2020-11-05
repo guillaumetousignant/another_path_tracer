@@ -57,7 +57,7 @@ namespace APTracer { namespace Shapes {
             /**
              * @brief Intersects a ray with the sphere at a specific time, and stores information about the intersection.
              * 
-             * This function returns wether a ray intersected the sphere or not, according to its direction and origin.
+             * This function returns wether a ray intersected the sphere or not, according to its direction, origin and time.
              * The intersection point, in object coordinates, is stored in uv, and the distance from the ray origin is stored
              * in t. uv is in spherical coordinates, minus r [theta, phi]. Intersection is computed at ray.time, which 
              * interpolates between the previous and current state, with 0 being previous and 1 being current.

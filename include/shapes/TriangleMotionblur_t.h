@@ -46,19 +46,49 @@ namespace APTracer { namespace Shapes {
             Vec3f normals_orig_[3]; /**< @brief Array of the three un-transformed normals of the triangle, in counter-clockwise order. Transformed by the transform matrix on update to give normals.*/
             double texture_coordinates_[6]; /**< @brief Array of the three texture coordinates with two components of the triangle, in counter-clockwise order. Transformed by the transform matrix on update to give texture coordinates. [x0, y0, x1, y1, x2, y2]*/
             double tuv_to_world_[2]; /**< @brief Matrix to change referential from texture coordinate space to world space. Used to compute tangent vector.*/
-            Vec3f points_[3];
-            Vec3f normals_[3];
-            Vec3f v0v1_;
-            Vec3f v0v2_;
-            Vec3f tangent_vec_; // Points up
-            Vec3f points_last_[3];
-            Vec3f normals_last_[3];
-            Vec3f v0v1_last_;
-            Vec3f v0v2_last_;
-            Vec3f tangent_vec_last_; // Points up
+            Vec3f points_[3]; /**< @brief Array of the three points of the triangle, in counter-clockwise order.*/
+            Vec3f normals_[3]; /**< @brief Array of the three  normals of the triangle, in counter-clockwise order.*/
+            Vec3f v0v1_; /**< @brief Cached vector from point 0 to point 1. Used for intersection.*/
+            Vec3f v0v2_; /**< @brief Cached vector from point 0 to point 2. Used for intersection.*/
+            Vec3f tangent_vec_; /**< @brief Tangent vector of the triangle in world space. Points to positive u in texture coordinates. Used for normal mapping.*/
+            Vec3f points_last_[3]; /**< @brief Array of the three points of the triangle before last update. Used for motion blur.*/
+            Vec3f normals_last_[3]; /**< @brief Array of the three  normals of the triangle before last update. Used for motion blur.*/
+            Vec3f v0v1_last_; /**< @brief Cached vector from point 0 to point 1 before last update. Used for motion blur.*/
+            Vec3f v0v2_last_; /**< @brief Cached vector from point 0 to point 2 before last update. Used for motion blur.*/
+            Vec3f tangent_vec_last_; /**< @brief Tangent vector of the triangle in world space before last update. Used for motion blur.*/
 
+            /**
+             * @brief Updates the triangle's points from its transformation matrix.
+             * 
+             * Stores the previous state in the _last variables, so that state can be interpolated according to time.
+             * The points are created from the transformation matrix and the original points, stored in normals_orig_.
+             */
             virtual void update() final;
+
+            /**
+             * @brief Intersects a ray with the triangle at a specific time, and stores information about the intersection.
+             * 
+             * This function returns wether a ray intersected the triangle or not, according to its direction, origin and time.
+             * The intersection point, in object coordinates, is stored in uv, and the distance from the ray origin is stored
+             * in t. uv is in barycentric coordinates, minus w [u, v]. Intersection is computed at ray.time, which 
+             * interpolates between the previous and current state, with 0 being previous and 1 being current.
+             * 
+             * @param ray Ray to be tested for intersection with the triangle.
+             * @param[out] t Distance at which the intersection ocurred, from ray origin. Undefined if not intersected.
+             * @param[out] uv Coordinates in object space of the intersection. Undefined if not intersected. The coordinates are in barycentric coordinates, minus w [u, v].
+             * @return true The ray intersected the triangle, t and uv are defined.
+             * @return false The ray doesn't intersect the triangle, t and uv are undefined.
+             */
             virtual bool intersection(const Ray_t &ray, double &t, double (&uv)[2]) const final; 
+
+            /**
+             * @brief 
+             * 
+             * @param time 
+             * @param uv 
+             * @param tuv 
+             * @return Vec3f 
+             */
             virtual Vec3f normaluv(double time, const double (&uv)[2], double (&tuv)[2]) const final;
             virtual Vec3f normal(double time, const double (&uv)[2]) const final;
             virtual Vec3f normal_uv_tangent(double time, const double (&uv)[2], double (&tuv)[2], Vec3f &tangentvec) const final;
