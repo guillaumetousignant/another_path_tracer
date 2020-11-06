@@ -19,6 +19,10 @@ using APTracer::Entities::Shape_t;
 using APTracer::Entities::MeshGeometry_t;
 
 namespace APTracer { namespace Shapes {
+    /**
+     * @brief 
+     * 
+     */
     class TriangleMesh_t final : public Shape_t{
         public:
             TriangleMesh_t(Material_t *material, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom, unsigned int index);
