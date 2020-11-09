@@ -21,7 +21,7 @@ using APTracer::Entities::MeshGeometry_t;
 namespace APTracer { namespace Shapes {
     class TriangleMeshMotionblur_t final : public Shape_t{
         public:
-            TriangleMeshMotionblur_t(Material_t *material, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom, unsigned int index);
+            TriangleMeshMotionblur_t(Material_t *material, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom, size_t index);
             virtual ~TriangleMeshMotionblur_t() final;
 
             Vec3f points_[3];
@@ -30,7 +30,7 @@ namespace APTracer { namespace Shapes {
             Vec3f v0v2_;
             Vec3f tangent_vec_; // Points up
             MeshGeometry_t* geom_;
-            unsigned int index_;
+            size_t index_;
             double tuv_[6];
             double tuv_to_world_[2];
             Vec3f points_last_[3];

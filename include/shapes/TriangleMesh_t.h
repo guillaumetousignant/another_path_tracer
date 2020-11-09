@@ -25,7 +25,7 @@ namespace APTracer { namespace Shapes {
      */
     class TriangleMesh_t final : public Shape_t{
         public:
-            TriangleMesh_t(Material_t *material, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom, unsigned int index);
+            TriangleMesh_t(Material_t *material, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom, size_t index);
             virtual ~TriangleMesh_t() final;
 
             Vec3f points_[3];
@@ -33,7 +33,7 @@ namespace APTracer { namespace Shapes {
             Vec3f v0v1_;
             Vec3f v0v2_;
             MeshGeometry_t* geom_;
-            unsigned int index_;
+            size_t index_;
             double tuv_[6];
             double tuv_to_world_[2];
             Vec3f tangent_vec_; // Points up

@@ -11,7 +11,7 @@
 
 using APTracer::Entities::Vec3f;
 
-APTracer::Shapes::TriangleMesh_t::TriangleMesh_t(APTracer::Entities::Material_t *material, APTracer::Entities::TransformMatrix_t *transform_matrix, APTracer::Entities::MeshGeometry_t* geom, unsigned int index) 
+APTracer::Shapes::TriangleMesh_t::TriangleMesh_t(APTracer::Entities::Material_t *material, APTracer::Entities::TransformMatrix_t *transform_matrix, APTracer::Entities::MeshGeometry_t* geom, size_t index) 
     : Shape_t(material, transform_matrix), geom_(geom), index_(index) {
 
     const APTracer::Entities::TransformMatrix_t transform_norm = transformation_->transformDir();
