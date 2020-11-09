@@ -42,7 +42,7 @@ namespace APTracer { namespace Entities {
              * @param shapes Shapes to be added to the scene.
              * @param n_shapes Number of shapes to be added.
              */
-            Scene_t(Shape_t** shapes, unsigned int n_shapes);
+            Scene_t(Shape_t** shapes, size_t n_shapes);
 
             /**
              * @brief Construct a new Scene_t object containing a single mesh.
@@ -57,7 +57,7 @@ namespace APTracer { namespace Entities {
              * @param meshes Meshes to be added to the scene.
              * @param n_meshes Number of meshes to be added.
              */
-            Scene_t(MeshTop_t** meshes, unsigned int n_meshes);
+            Scene_t(MeshTop_t** meshes, size_t n_meshes);
 
             /**
              * @brief Destroy the Scene_t object, freeing the ressources held by it and the acceleration structure acc_.
@@ -83,7 +83,7 @@ namespace APTracer { namespace Entities {
              * @param shapes Array of shapes to be added to the scene.
              * @param n_shapes Number of shapes to be added.
              */
-            void add(Shape_t** shapes, unsigned int n_shapes);
+            void add(Shape_t** shapes, size_t n_shapes);
 
             /**
              * @brief Adds a single mesh to the scene.
@@ -98,7 +98,7 @@ namespace APTracer { namespace Entities {
              * @param meshes Array of meshes to be added to the scene.
              * @param n_meshes Number of meshes.
              */
-            void add(MeshTop_t** meshes, unsigned int n_meshes);
+            void add(MeshTop_t** meshes, size_t n_meshes);
 
             /**
              * @brief Removes a single shape from the scene.
@@ -113,7 +113,7 @@ namespace APTracer { namespace Entities {
              * @param shapes Array of shapes to be removed from the scene.
              * @param n_shapes Number of shapes.
              */
-            void remove(Shape_t** shapes, unsigned int n_shapes);
+            void remove(Shape_t** shapes, size_t n_shapes);
 
             /**
              * @brief Removes a mesh from the scene.
@@ -136,7 +136,7 @@ namespace APTracer { namespace Entities {
              * @param meshes Array of meshes to be removed from the scene.
              * @param n_meshes Number of meshes to be removed from the scene.
              */
-            void remove(MeshTop_t** meshes, unsigned int n_meshes);
+            void remove(MeshTop_t** meshes, size_t n_meshes);
 
             /**
              * @brief Updates all the shapes in the scene.

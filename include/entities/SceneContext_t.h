@@ -64,16 +64,16 @@ namespace APTracer { namespace Entities {
             std::vector<unsigned int> camera_n_iter_; /**< @brief Vector of the number of samples to accumulate per camera.*/
             std::vector<unsigned int> camera_write_interval_; /**< @brief Vector of the write interval of cameras.*/
 
-            unsigned int index_transform_matrices_; /**< @brief Index of the next transformation matrix in the vector.*/
-            unsigned int index_textures_; /**< @brief Index of the next texture in the vector.*/
-            unsigned int index_mediums_; /**< @brief Index of the next medium in the vector.*/
-            unsigned int index_materials_; /**< @brief Index of the next material in the vector.*/
-            unsigned int index_mesh_geometries_; /**< @brief Index of the next mesh geometry in the vector.*/
-            unsigned int index_objects_; /**< @brief Index of the next shape in the vector.*/
-            unsigned int index_directional_lights_; /**< @brief Index of the next directional light in the vector.*/
-            unsigned int index_skyboxes_; /**< @brief Index of the next skybox in the vector.*/
-            unsigned int index_imgbuffers_; /**< @brief Index of the next image buffer in the vector.*/
-            unsigned int index_cameras_; /**< @brief Index of the next camera in the vector.*/
+            size_t index_transform_matrices_; /**< @brief Index of the next transformation matrix in the vector.*/
+            size_t index_textures_; /**< @brief Index of the next texture in the vector.*/
+            size_t index_mediums_; /**< @brief Index of the next medium in the vector.*/
+            size_t index_materials_; /**< @brief Index of the next material in the vector.*/
+            size_t index_mesh_geometries_; /**< @brief Index of the next mesh geometry in the vector.*/
+            size_t index_objects_; /**< @brief Index of the next shape in the vector.*/
+            size_t index_directional_lights_; /**< @brief Index of the next directional light in the vector.*/
+            size_t index_skyboxes_; /**< @brief Index of the next skybox in the vector.*/
+            size_t index_imgbuffers_; /**< @brief Index of the next image buffer in the vector.*/
+            size_t index_cameras_; /**< @brief Index of the next camera in the vector.*/
             
             std::vector<std::unique_ptr<TransformMatrix_t>> transform_matrices_; /**< @brief Vector containing the transformation matrices.*/
             std::vector<std::unique_ptr<Texture_t>> textures_; /**< @brief Vector containing the textures.*/
@@ -133,7 +133,7 @@ namespace APTracer { namespace Entities {
              * @param xml_mediums XML entries of all the mediums.
              * @return std::unique_ptr<Medium_t> Unique pointer to the created medium.
              */
-            std::unique_ptr<Medium_t> create_medium(const tinyxml2::XMLElement* xml_medium, std::unique_ptr<std::list<unsigned int>> &mediums_medium_list, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_mediums);
+            std::unique_ptr<Medium_t> create_medium(const tinyxml2::XMLElement* xml_medium, std::unique_ptr<std::list<size_t>> &mediums_medium_list, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_mediums);
             
             /**
              * @brief Create a material object from an xml entry.
@@ -148,7 +148,7 @@ namespace APTracer { namespace Entities {
              * @param xml_mediums XML entries of all the mediums.
              * @return std::unique_ptr<Material_t> Unique pointer to the created material.
              */
-            std::unique_ptr<Material_t> create_material(const tinyxml2::XMLElement* xml_material, std::unique_ptr<std::list<unsigned int>> &materials_medium_list, std::vector<unsigned int> &materials_mix_list, std::unique_ptr<std::tuple<std::unique_ptr<std::list<unsigned int>>, std::unique_ptr<std::list<std::string>>>> &materials_aggregate_list, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_mediums);
+            std::unique_ptr<Material_t> create_material(const tinyxml2::XMLElement* xml_material, std::unique_ptr<std::list<size_t>> &materials_medium_list, std::vector<size_t> &materials_mix_list, std::unique_ptr<std::tuple<std::unique_ptr<std::list<size_t>>, std::unique_ptr<std::list<std::string>>>> &materials_aggregate_list, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_mediums);
             
             /**
              * @brief Create a mesh geometry object from an xml entry.
@@ -232,18 +232,18 @@ namespace APTracer { namespace Entities {
              * 
              * @param string_material_list String containing material names and/or indices.
              * @param xml_materials XML entries of all the materials.
-             * @return std::unique_ptr<std::list<unsigned int>> List of material indices.
+             * @return std::unique_ptr<std::list<size_t>> List of material indices.
              */
-            std::unique_ptr<std::list<unsigned int>> get_material_index_list(std::string string_material_list, const tinyxml2::XMLElement* xml_materials) const;
+            std::unique_ptr<std::list<size_t>> get_material_index_list(std::string string_material_list, const tinyxml2::XMLElement* xml_materials) const;
 
             /**
              * @brief Get a list of medium indices from a string of names of indices.
              * 
              * @param string_medium_list String containing medium names and/or indices.
              * @param xml_mediums XML entries of all the mediums.
-             * @return std::unique_ptr<std::list<unsigned int>> List of medium indices.
+             * @return std::unique_ptr<std::list<size_t>> List of medium indices.
              */
-            std::unique_ptr<std::list<unsigned int>> get_medium_index_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_mediums) const;
+            std::unique_ptr<std::list<size_t>> get_medium_index_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_mediums) const;
 
             /**
              * @brief Get a list of mediums from a string of names of indices.
@@ -269,9 +269,9 @@ namespace APTracer { namespace Entities {
              * @param material_refracted String containing the first material's name or index.
              * @param material_reflected String containing the second material's name or index.
              * @param xml_materials XML entries of all the materials.
-             * @return std::vector<unsigned int> Vector of the indices ot the two materials making up a material mix.
+             * @return std::vector<size_t> Vector of the indices ot the two materials making up a material mix.
              */
-            std::vector<unsigned int> get_material_mix(std::string material_refracted, std::string material_reflected, const tinyxml2::XMLElement* xml_materials) const;
+            std::vector<size_t> get_material_mix(std::string material_refracted, std::string material_reflected, const tinyxml2::XMLElement* xml_materials) const;
 
             /**
              * @brief Get a medium from its name or index.
@@ -296,9 +296,9 @@ namespace APTracer { namespace Entities {
              * 
              * @param material String containing a material's name or index.
              * @param xml_materials XML entries of all the materials.
-             * @return unsigned int Index of the requested material.
+             * @return size_t Index of the requested material.
              */
-            unsigned int get_material_index(std::string material, const tinyxml2::XMLElement* xml_materials) const;
+            size_t get_material_index(std::string material, const tinyxml2::XMLElement* xml_materials) const;
 
             /**
              * @brief Get a material from its name or index.

@@ -48,7 +48,7 @@ namespace APTracer { namespace Shapes {
             Material_t *material_; /**< @brief Dummy material, in case it is used as a shape. Defaults to the first material of a material map if present.*/
             TransformMatrix_t *transformation_; /**< @brief Transformation matrix used for the mesh and all triangles inside it.*/
             MeshGeometry_t* geom_; /**< @brief Mesh geometry used by the mesh and its triangles, which index into it.*/
-            unsigned int n_tris_; /**< @brief Number of triangles held by the mesh.*/
+            size_t n_tris_; /**< @brief Number of triangles held by the mesh.*/
             Shape_t** triangles_; /**< @brief Array of triangles held by the mesh.*/
 
             /**

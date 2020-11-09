@@ -69,7 +69,7 @@ namespace APTracer { namespace Entities {
             virtual void update(const Vec3f &colour, unsigned int pos_x, unsigned int pos_y);
 
             /**
-             * @brief Sets the value of the whole imagee to the value of all pixels in the input.
+             * @brief Sets the value of the whole image to the value of all pixels in the input.
              * 
              * This sets the number of updates to 1.
              * 

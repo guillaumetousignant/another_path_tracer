@@ -8,9 +8,9 @@ APTracer::Skyboxes::SkyboxFlatSun_t::SkyboxFlatSun_t(const Vec3f &background, AP
     lights_[0] = light;
 } 
 
-APTracer::Skyboxes::SkyboxFlatSun_t::SkyboxFlatSun_t(const Vec3f &background, APTracer::Entities::DirectionalLight_t** lights, unsigned int n_lights) : background_(background), n_lights_(n_lights) {
+APTracer::Skyboxes::SkyboxFlatSun_t::SkyboxFlatSun_t(const Vec3f &background, APTracer::Entities::DirectionalLight_t** lights, size_t n_lights) : background_(background), n_lights_(n_lights) {
     lights_ = new APTracer::Entities::DirectionalLight_t*[n_lights_];
-    for (unsigned int i = 0; i < n_lights_; i++){
+    for (size_t i = 0; i < n_lights_; i++){
         lights_[i] = lights[i];
     }
 }
@@ -23,7 +23,7 @@ APTracer::Skyboxes::SkyboxFlatSun_t::~SkyboxFlatSun_t() {
 
 Vec3f APTracer::Skyboxes::SkyboxFlatSun_t::get(const Vec3f &xyz) const {
     Vec3f colour = Vec3f();
-    for (unsigned int i = 0; i < n_lights_; i++){
+    for (size_t i = 0; i < n_lights_; i++){
         if (xyz.dot(lights_[i]->direction_) < -lights_[i]->radius_){
             colour += lights_[i]->intensity_;
         }

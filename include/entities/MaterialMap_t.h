@@ -21,7 +21,7 @@ namespace APTracer { namespace Entities {
              * @param materials Array of pointers to the materials represented by the names, in order. Size: n.
              * @param n Size of both input arrays.
              */
-            MaterialMap_t(std::string* names, Material_t** materials, unsigned int n);
+            MaterialMap_t(std::string* names, Material_t** materials, size_t n);
 
             /**
              * @brief Destroy the MaterialMap_t object. Does nothing.

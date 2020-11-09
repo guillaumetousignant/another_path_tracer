@@ -42,10 +42,10 @@ MeshGeometry_t::~MeshGeometry_t(){
 }
 
 void MeshGeometry_t::readObj(const std::string &filename){
-    unsigned int nv = 0;
-    unsigned int nvt = 0;
-    unsigned int nvn = 0;
-    unsigned int nf = 0;
+    size_t nv = 0;
+    size_t nvt = 0;
+    size_t nvn = 0;
+    size_t nf = 0;
     unsigned int nsides;
     std::string line;
     std::string token;
@@ -81,9 +81,9 @@ void MeshGeometry_t::readObj(const std::string &filename){
     }
 
     // Getting normals, vertex coordinates and texture coordinates
-    unsigned int v_counter = 0;
-    unsigned int vt_counter = 0;
-    unsigned int vn_counter = 0;
+    size_t v_counter = 0;
+    size_t vt_counter = 0;
+    size_t vn_counter = 0;
     double val0, val1, val2;
 
     Vec3f* v = new Vec3f[nv];
@@ -117,7 +117,7 @@ void MeshGeometry_t::readObj(const std::string &filename){
     }   
 
     // Filling faces
-    unsigned int f_counter = 0;
+    size_t f_counter = 0;
     std::string material = "";
     std::string tokens[3];
     std::string value;
@@ -196,8 +196,8 @@ void MeshGeometry_t::readObj(const std::string &filename){
 }
 
 void MeshGeometry_t::readSU2(const std::string &filename){
-    unsigned int nv = 0;
-    unsigned int nf = 0;
+    size_t nv = 0;
+    size_t nf = 0;
     std::string line;
     std::string token;
     unsigned int value;
@@ -245,7 +245,7 @@ void MeshGeometry_t::readSU2(const std::string &filename){
     }
     
     // Getting normals, vertex coordinates and texture coordinates
-    unsigned int v_counter = 0;
+    size_t v_counter = 0;
     double val0, val1, val2;
     bool points_started = false;
 
@@ -286,9 +286,9 @@ void MeshGeometry_t::readSU2(const std::string &filename){
     } 
 
     // Filling faces
-    unsigned int f_counter = 0;
+    size_t f_counter = 0;
     std::string material = "";
-    unsigned int tokens[3];
+    size_t tokens[3];
     wall_started = false;
     std::string marker_token;
 
@@ -377,7 +377,7 @@ void MeshGeometry_t::readSU2(const std::string &filename){
 }
 
 void MeshGeometry_t::deNan(){
-    for (unsigned int i = 0; i < n_tris_; ++i){
+    for (size_t i = 0; i < n_tris_; ++i){
         for (unsigned int j = 0; j < 3; ++j){
             if (std::isnan(vn_[3*i + j][0])){ // Just checking first value, maybe add isnan to vec3f class?
                 vn_[3*i + j] = (v_[3*i + 1] - v_[3*i]).cross(v_[3*i + 2] - v_[3*i]).normalize_inplace();

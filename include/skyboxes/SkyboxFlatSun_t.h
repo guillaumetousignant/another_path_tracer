@@ -36,7 +36,7 @@ namespace APTracer { namespace Skyboxes {
              * @param lights Array of directional lights used for the skybox.
              * @param n_lights Number of directional lights.
              */
-            SkyboxFlatSun_t(const Vec3f &background, DirectionalLight_t** lights, unsigned int n_lights);
+            SkyboxFlatSun_t(const Vec3f &background, DirectionalLight_t** lights, size_t n_lights);
 
             /**
              * @brief Destroy the SkyboxFlatSun_t object, freeing the light array it holds.
@@ -45,7 +45,7 @@ namespace APTracer { namespace Skyboxes {
 
             Vec3f background_; /**< @brief Colour of the skybox if a light is not hit.*/
             DirectionalLight_t** lights_; /**< @brief Array of directional lights in the skybox.*/
-            unsigned int n_lights_; /**< @brief Number of directional lights in the skybox.*/
+            size_t n_lights_; /**< @brief Number of directional lights in the skybox.*/
 
             virtual Vec3f get(const Vec3f &xyz) const final;
     };
