@@ -68,10 +68,10 @@ Vec3f Texture_t::get(const double (&xy)[2]) const {
     const double xd = x - std::floor(x);
     const double yd = y - std::floor(y);
 
-    const int xlo = x;      // floor
-    const int xhi = x + 1.0;// ceil
-    const int ylo = y;      // floor
-    const int yhi = y + 1.0;// ceil
+    const int xlo = (int) x;      // floor
+    const int xhi = (int) (x + 1.0);// ceil
+    const int ylo = (int) y;      // floor
+    const int yhi = (int) (y + 1.0);// ceil
 
     return  img_[ylo*size_x_ + xlo] * (1.0 - xd) * (1.0 - yd) +
             img_[ylo*size_x_ + xhi] * xd * (1.0 - yd) + 

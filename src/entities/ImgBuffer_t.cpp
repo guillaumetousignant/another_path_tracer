@@ -73,9 +73,9 @@ void ImgBuffer_t::write(std::string &filename, double gammaind /* = 1.0 */) cons
             Vec3f colour = img_[j*size_x_ + i]*update_mult;
             colour.clamp(0.0, 1.0).pow_inplace(gammaind);
             colour *= bit_multiplier;
-            image(i, j, 0, 0, n, n) = std::lround(colour[0]);
-            image(i, j, 0, 1, n, n) = std::lround(colour[1]);
-            image(i, j, 0, 2, n, n) = std::lround(colour[2]);
+            image(i, j, 0, 0, n, n) = (unsigned short) std::lround(colour[0]);
+            image(i, j, 0, 1, n, n) = (unsigned short) std::lround(colour[1]);
+            image(i, j, 0, 2, n, n) = (unsigned short) std::lround(colour[2]);
         }
     }
 
