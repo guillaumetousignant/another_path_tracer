@@ -292,7 +292,10 @@ if(OpenMP_CXX_FOUND)
     target_link_libraries(APTracer PUBLIC optimized OpenMP::OpenMP_CXX)
 endif()
 
-target_link_libraries(APTracer PUBLIC debug pthread)
+if(NOT WIN32)
+    target_link_libraries(APTracer PUBLIC debug pthread)
+endif()
+
 target_compile_features(APTracer PRIVATE cxx_std_11)
 if(NOT ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug"))
     set_property(TARGET APTracer PROPERTY INTERPROCEDURAL_OPTIMIZATION True)
