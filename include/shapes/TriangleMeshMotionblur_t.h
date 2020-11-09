@@ -62,13 +62,104 @@ namespace APTracer { namespace Shapes {
             Vec3f v0v2_last_; /**< @brief Cached vector from point 0 to point 2 before last update. Used for motion blur.*/
             Vec3f tangent_vec_last_; /**< @brief Tangent vector of the triangle in world space before last update. Used for motion blur.*/
 
+            /**
+             * @brief Updates the triangle's points from its mesh geometry and the mesh's transformation matrix.
+             * 
+             * Stores the previous state in the _last variables, so that state can be interpolated according to time.
+             * The points are created from the mesh geometry using the triangle's index, and the transformation matrix.
+             */
             virtual void update() final;
-            virtual bool intersection(const Ray_t &rays, double &t, double (&uv)[2]) const final; 
+
+            /**
+             * @brief Intersects a ray with the triangle at a specific time, and stores information about the intersection.
+             * 
+             * This function returns wether a ray intersected the triangle or not, according to its direction, origin and time.
+             * The intersection point, in object coordinates, is stored in uv, and the distance from the ray origin is stored
+             * in t. uv is in barycentric coordinates, minus w [u, v]. Intersection is computed at ray.time, which 
+             * interpolates between the previous and current state, with 0 being previous and 1 being current.
+             * 
+             * @param ray Ray to be tested for intersection with the triangle.
+             * @param[out] t Distance at which the intersection ocurred, from ray origin. Undefined if not intersected.
+             * @param[out] uv Coordinates in object space of the intersection. Undefined if not intersected. The coordinates are in barycentric coordinates, minus w [u, v].
+             * @return true The ray intersected the triangle, t and uv are defined.
+             * @return false The ray doesn't intersect the triangle, t and uv are undefined.
+             */
+            virtual bool intersection(const Ray_t &rays, double &t, double (&uv)[2]) const final;
+
+            /**
+             * @brief Returns the surface normal and texture coordinates at a point in object coordinates and a specific time.
+             * 
+             * This is used to find the surface normal on ray bounce. Used by materials to determine ray colour.
+             * The time parameter is used to interpolate between previous and current states, 0 and 1 respectively.
+             * The object coordinates are in barycentric cordinates (minus w) [u, v].
+             * 
+             * @param[in] time Time at which we want the normal and texture coordinates, from 0 to 1 for previous and current states.
+             * @param[in] uv Object coordinates at which we want to find the normal and texture coordinates. The coordinates are in barycentric coordinates, minus w [u, v].
+             * @param[out] tuv Texture coordinates at the specified coordinates and time.
+             * @return Vec3f Normal vector at the specified coordinates and time.
+             */
             virtual Vec3f normaluv(double time, const double (&uv)[2], double (&tuv)[2]) const final;
+
+            /**
+             * @brief Returns the surface normal at a point in object coordinates and a specific time.
+             * 
+             * This is used to find the surface normal on ray bounce. Used by materials to determine ray colour.
+             * The time parameter is used to interpolate between previous and current states, 0 and 1 respectively.
+             * The object coordinates are in barycentric cordinates (minus w) [u, v].
+             * 
+             * @param[in] time Time at which we want the normal, from 0 to 1 for previous and current states.
+             * @param[in] uv Object coordinates at which we want to find the normal. The coordinates are in barycentric coordinates, minus w [u, v].
+             * @return Vec3f Normal vector at the specified coordinates and time.
+             */
             virtual Vec3f normal(double time, const double (&uv)[2]) const final;
+
+            /**
+             * @brief Returns the surface normal, texture coordinates and tangent vector at a point in object coordinates and a specific time.
+             * 
+             * This is used to find the surface normal on ray bounce. Used by materials to determine ray colour.
+             * The texture coordinates is also returned, used by materials to fetch a colour in a texture. The tangent
+             * vector is used by materials for normal mapping, as the normals returned by those textures are in object
+             * coordinates. The time parameter is used to interpolate between previous and current states, 0 and 1 respectively.
+             * The object coordinates are in barycentric cordinates (minus w) [u, v].
+             * 
+             * @param[in] time Time at which we want the normal and texture coordinates, from 0 to 1 for previous and current states.
+             * @param[in] uv Object coordinates at which we want to find the normal, texture coordinates and tangent vector. The coordinates are in barycentric coordinates, minus w [u, v].
+             * @param[out] tuv Texture coordinates at the specified coordinates and time.
+             * @param[out] tangentvec Tangent vector at the specified coordinates and time.
+             * @return Vec3f Normal vector at the specified coordinates and time.
+             */
             virtual Vec3f normal_uv_tangent(double time, const double (&uv)[2], double (&tuv)[2], Vec3f &tangentvec) const final;
+
+            /**
+             * @brief Returns the geometric surface normal of the triangle at a specific time, not the interpolated one from vertex normals.
+             * 
+             * Not used anywhere usually, used to debug normal interpolation.
+             * 
+             * @param time Time at which we want the normal, from 0 to 1 for previous and current states.
+             * @return Vec3f Normal vector of the triangle at the specified time.
+             */
             virtual Vec3f normal_face(double time) const final;
+
+            /**
+             * @brief Minimum coordinates of an axis-aligned bounding box around the triangle.
+             * 
+             * This is used by acceleration structures to spatially sort shapes. Returns the minimum of all
+             * three points and previous points for all axes. This ensures the minimum coordinate over the time range
+             * is returned.
+             * 
+             * @return Vec3f Minimum coordinates of an axis-aligned bounding box around the triangle.
+             */
             virtual Vec3f mincoord() const final;
+
+            /**
+             * @brief Maximum coordinates of an axis-aligned bounding box around the triangle.
+             * 
+             * This is used by acceleration structures to spatially sort shapes. Returns the minimum of all
+             * three points and previous points for all axes. This ensures the maximum coordinate over the time range
+             * is returned.
+             * 
+             * @return Vec3f Maximum coordinates of an axis-aligned bounding box around the triangle.
+             */
             virtual Vec3f maxcoord() const final;
     };
 }}
