@@ -39,11 +39,16 @@ void CamAperture_t::raytrace(const Scene_t* scene) {
     const double subpix_span_x = pixel_span_x/subpix_[1];
     const Vec3f horizontal = direction_.cross(up_).normalize_inplace();
     const Vec3f vertical = horizontal.cross(direction_).normalize_inplace();
+    #ifdef _WIN32
+        int index; // Openmp on windows can't use unsigned index.
+    #else
+        unsigned int index;
+    #endif
 
     image_->update();
 
     #pragma omp parallel for schedule(guided)
-    for (unsigned int index = 0; index < image_->size_y_ * image_->size_x_; ++index){
+    for (index = 0; index < image_->size_y_ * image_->size_x_; ++index){
         const unsigned int i = index%image_->size_x_;
         const unsigned int j = index/image_->size_x_;
         Vec3f col = Vec3f(); // Or declare above?
