@@ -6,7 +6,7 @@
 
 using APTracer::Acceleration::AccelerationMultiGrid_t;
 
-AccelerationMultiGrid_t::AccelerationMultiGrid_t(Shape_t** items, unsigned int n_items, const Vec3f* coordinates/* = nullptr*/, unsigned int level /* = 0*/, unsigned int min_res /* = 1 */, unsigned int max_res /* = 128 */, unsigned int max_cell_content /* = 32 */, unsigned int max_grid_level /* = 1 */) : 
+AccelerationMultiGrid_t::AccelerationMultiGrid_t(Shape_t** items, size_t n_items, const Vec3f* coordinates/* = nullptr*/, unsigned int level /* = 0*/, unsigned int min_res /* = 1 */, unsigned int max_res /* = 128 */, unsigned int max_cell_content /* = 32 */, unsigned int max_grid_level /* = 1 */) : 
         level_(level), min_res_(min_res), max_res_(max_res), max_cell_content_(max_cell_content), max_grid_level_(max_grid_level) {
     Vec3f min1, max1;
     unsigned int x, y, z;
@@ -23,7 +23,7 @@ AccelerationMultiGrid_t::AccelerationMultiGrid_t(Shape_t** items, unsigned int n
         bb_coordinates[0] = Vec3f(std::numeric_limits<double>::infinity());
         bb_coordinates[1] = Vec3f(-std::numeric_limits<double>::infinity());
         
-        for (unsigned int i = 0; i < n_obj_; i++){
+        for (size_t i = 0; i < n_obj_; i++){
             bb_coordinates[0].min(items[i]->mincoord());
             bb_coordinates[1].max(items[i]->maxcoord());
         }
@@ -52,7 +52,7 @@ AccelerationMultiGrid_t::AccelerationMultiGrid_t(Shape_t** items, unsigned int n
         temp_cells[i] = nullptr;
     }
 
-    for (unsigned int i = 0; i < n_obj_; i++){
+    for (size_t i = 0; i < n_obj_; i++){
         min1 = Vec3f(std::numeric_limits<double>::infinity());
         max1 = Vec3f(-std::numeric_limits<double>::infinity());
     

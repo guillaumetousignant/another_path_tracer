@@ -34,7 +34,7 @@ namespace APTracer { namespace Acceleration {
              * 
              * @param size Initial reserved size of the shape vector.
              */
-            GridCellVector_t(unsigned int size);
+            GridCellVector_t(size_t size);
 
             /**
              * @brief Destroy the GridCellVector_t object, destroying its list of shapes.
@@ -42,7 +42,7 @@ namespace APTracer { namespace Acceleration {
             virtual ~GridCellVector_t() final;
 
             std::vector<Shape_t*> items_; /**< @brief Vector of shapes contained in the cell. This allows fast iterating and low memory use.*/
-            unsigned int size_; /**< @brief Size that will be allocated next time 'reserve()' is called. Increased with 'operator++'.*/
+            size_t size_; /**< @brief Size that will be allocated next time 'reserve()' is called. Increased with 'operator++'.*/
 
             virtual Shape_t* intersect(const Ray_t &ray, double &t, double (&uv)[2]) const final;
             virtual void add(Shape_t* item) final;

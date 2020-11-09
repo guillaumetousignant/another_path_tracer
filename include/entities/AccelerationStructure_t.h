@@ -25,7 +25,7 @@ namespace APTracer { namespace Entities {
              */
             virtual ~AccelerationStructure_t(){};
 
-            unsigned int n_obj_; /**< @brief Number of shapes currently held in the acceleration structure.*/
+            size_t n_obj_; /**< @brief Number of shapes currently held in the acceleration structure.*/
 
             /**
              * @brief Intersects a ray with the acceleration structure to find the closest hit

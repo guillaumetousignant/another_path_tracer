@@ -34,14 +34,14 @@ Shape_t* GridCell_t::intersect(const Ray_t &ray, double &t, double (&uv)[2]) con
 
 void GridCell_t::add(Shape_t* item){
     items_.push_back(item);
-    n_obj_++;
+    ++n_obj_;
 }
 
 void GridCell_t::remove(const Shape_t* item){
     for (std::list<Shape_t*>::iterator it = items_.begin(); it != items_.end(); ++it){
         if ((*it) == item){
             items_.erase(it);
-            n_obj_--;
+            --n_obj_;
             break;
         }
     }

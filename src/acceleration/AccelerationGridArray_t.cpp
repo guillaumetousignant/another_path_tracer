@@ -6,7 +6,7 @@
 
 using APTracer::Acceleration::AccelerationGridArray_t;
 
-AccelerationGridArray_t::AccelerationGridArray_t(Shape_t** items, unsigned int n_items, const Vec3f* coordinates/* = nullptr*/, unsigned int level /* = 0*/, unsigned int min_res /* = 1 */, unsigned int max_res /* = 128 */) : 
+AccelerationGridArray_t::AccelerationGridArray_t(Shape_t** items, size_t n_items, const Vec3f* coordinates/* = nullptr*/, unsigned int level /* = 0*/, unsigned int min_res /* = 1 */, unsigned int max_res /* = 128 */) : 
         level_(level), min_res_(min_res), max_res_(max_res) {
     Vec3f min1, max1;
     unsigned int x, y, z;
@@ -18,7 +18,7 @@ AccelerationGridArray_t::AccelerationGridArray_t(Shape_t** items, unsigned int n
         bb_coordinates[0] = Vec3f(std::numeric_limits<double>::infinity());
         bb_coordinates[1] = Vec3f(-std::numeric_limits<double>::infinity());
         
-        for (unsigned int i = 0; i < n_obj_; i++){
+        for (size_t i = 0; i < n_obj_; i++){
             bb_coordinates[0].min(items[i]->mincoord());
             bb_coordinates[1].max(items[i]->maxcoord());
         }
@@ -77,7 +77,7 @@ AccelerationGridArray_t::AccelerationGridArray_t(Shape_t** items, unsigned int n
         }
     }
 
-    for (unsigned int i = 0; i < n_obj_; i++){
+    for (size_t i = 0; i < n_obj_; i++){
         min1 = Vec3f(std::numeric_limits<double>::infinity());
         max1 = Vec3f(-std::numeric_limits<double>::infinity());
     

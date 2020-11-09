@@ -11,7 +11,7 @@ GridCellVector_t::GridCellVector_t() : items_(std::vector<Shape_t*>()), size_(0)
     n_obj_ = 0;
 }
 
-GridCellVector_t::GridCellVector_t(unsigned int size) : items_(std::vector<Shape_t*>()), size_(size) {
+GridCellVector_t::GridCellVector_t(size_t size) : items_(std::vector<Shape_t*>()), size_(size) {
     n_obj_ = 0;
     items_.reserve(size_);
 }
@@ -26,7 +26,7 @@ Shape_t* GridCellVector_t::intersect(const Ray_t &ray, double &t, double (&uv)[2
     Shape_t* hit_obj = nullptr; // dunno if this is needed    
     t = std::numeric_limits<double>::infinity();
 
-    for (unsigned int i = 0; i < items_.size(); i++){
+    for (size_t i = 0; i < items_.size(); i++){
         if (items_[i]->intersection(ray, t_temp, uv_temp) && (t_temp < t)){
             hit_obj = items_[i];
             uv[0] = uv_temp[0];
@@ -39,14 +39,14 @@ Shape_t* GridCellVector_t::intersect(const Ray_t &ray, double &t, double (&uv)[2
 
 void GridCellVector_t::add(Shape_t* item){
     items_.push_back(item);
-    n_obj_++;
+    ++n_obj_;
 }
 
 void GridCellVector_t::remove(const Shape_t* item){
-    for (unsigned int i = 0; i < items_.size(); i++){
+    for (size_t i = 0; i < items_.size(); i++){
         if (items_[i] == item){
             items_.erase(items_.begin() + i);
-            n_obj_--;
+            --n_obj_;
             break;
         }
     }

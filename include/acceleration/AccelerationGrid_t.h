@@ -39,7 +39,7 @@ namespace APTracer { namespace Acceleration {
              * @param min_res Minimum number of cells for all directions. Defaults to 1.
              * @param max_res Maximum number of cells for all directions. Defaults to 128.
              */
-            AccelerationGrid_t(Shape_t** items, unsigned int n_items, const Vec3f* coordinates = nullptr, unsigned int level = 0, unsigned int min_res = 1, unsigned int max_res = 128);
+            AccelerationGrid_t(Shape_t** items, size_t n_items, const Vec3f* coordinates = nullptr, unsigned int level = 0, unsigned int min_res = 1, unsigned int max_res = 128);
 
             /**
              * @brief Destroy the AccelerationGrid_t object, destroying the cells it owns.

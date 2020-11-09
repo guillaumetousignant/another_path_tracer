@@ -42,7 +42,7 @@ namespace APTracer { namespace Acceleration {
              * @param max_cell_content Maximum number of shapes in a cell before it is changed to a subgrid.
              * @param max_grid_level Maximum recursion level of the grid. 0 is no subgrids, 1 means cells from the top-level grid can be single level grids, etc.
              */
-            AccelerationMultiGridArray_t(Shape_t** items, unsigned int n_items, const Vec3f* coordinates = nullptr, unsigned int level = 0, unsigned int min_res = 1, unsigned int max_res = 128, unsigned int max_cell_content = 32, unsigned int max_grid_level = 1);
+            AccelerationMultiGridArray_t(Shape_t** items, size_t n_items, const Vec3f* coordinates = nullptr, unsigned int level = 0, unsigned int min_res = 1, unsigned int max_res = 128, unsigned int max_cell_content = 32, unsigned int max_grid_level = 1);
             
             /**
              * @brief Destroy the AccelerationMultiGridArray_t object, destroying the cells and grids it owns.
