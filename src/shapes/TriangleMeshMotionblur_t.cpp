@@ -34,21 +34,21 @@ APTracer::Shapes::TriangleMeshMotionblur_t::TriangleMeshMotionblur_t(APTracer::E
     v0v2_ = points_[2] - points_[0];
     v0v2_last_ = v0v2_;
 
-    tuv_[0] = geom_->vt_[6 * index_];
-    tuv_[1] = geom_->vt_[6 * index_ + 1];
-    tuv_[2] = geom_->vt_[6 * index_ + 2];
-    tuv_[3] = geom_->vt_[6 * index_ + 3];
-    tuv_[4] = geom_->vt_[6 * index_ + 4];
-    tuv_[5] = geom_->vt_[6 * index_ + 5];
-    tuv_last_[0] = tuv_[0];
-    tuv_last_[1] = tuv_[1];
-    tuv_last_[2] = tuv_[2];
-    tuv_last_[3] = tuv_[3];
-    tuv_last_[4] = tuv_[4];
-    tuv_last_[5] = tuv_[5];
+    texture_coordinates_[0] = geom_->vt_[6 * index_];
+    texture_coordinates_[1] = geom_->vt_[6 * index_ + 1];
+    texture_coordinates_[2] = geom_->vt_[6 * index_ + 2];
+    texture_coordinates_[3] = geom_->vt_[6 * index_ + 3];
+    texture_coordinates_[4] = geom_->vt_[6 * index_ + 4];
+    texture_coordinates_[5] = geom_->vt_[6 * index_ + 5];
+    texture_coordinates_last_[0] = texture_coordinates_[0];
+    texture_coordinates_last_[1] = texture_coordinates_[1];
+    texture_coordinates_last_[2] = texture_coordinates_[2];
+    texture_coordinates_last_[3] = texture_coordinates_[3];
+    texture_coordinates_last_[4] = texture_coordinates_[4];
+    texture_coordinates_last_[5] = texture_coordinates_[5];
 
-    const double tuv0v1[2] = {tuv_[2] - tuv_[0], tuv_[3] - tuv_[1]};
-    const double tuv0v2[2] = {tuv_[4] - tuv_[0], tuv_[5] - tuv_[1]};    
+    const double tuv0v1[2] = {texture_coordinates_[2] - texture_coordinates_[0], texture_coordinates_[3] - texture_coordinates_[1]};
+    const double tuv0v2[2] = {texture_coordinates_[4] - texture_coordinates_[0], texture_coordinates_[5] - texture_coordinates_[1]};    
 
     const double invdet = 1.0/(tuv0v1[0] * tuv0v2[1] - tuv0v1[1] * tuv0v2[0]);
     if (std::isfinite(invdet)){
@@ -86,21 +86,21 @@ void APTracer::Shapes::TriangleMeshMotionblur_t::update() {
     v0v1_ = points_[1] - points_[0];
     v0v2_ = points_[2] - points_[0];
 
-    tuv_[0] = geom_->vt_[6 * index_];
-    tuv_[1] = geom_->vt_[6 * index_ + 1];
-    tuv_[2] = geom_->vt_[6 * index_ + 2];
-    tuv_[3] = geom_->vt_[6 * index_ + 3];
-    tuv_[4] = geom_->vt_[6 * index_ + 4];
-    tuv_[5] = geom_->vt_[6 * index_ + 5];
-    tuv_last_[0] = tuv_[0];
-    tuv_last_[1] = tuv_[1];
-    tuv_last_[2] = tuv_[2];
-    tuv_last_[3] = tuv_[3];
-    tuv_last_[4] = tuv_[4];
-    tuv_last_[5] = tuv_[5];
+    texture_coordinates_[0] = geom_->vt_[6 * index_];
+    texture_coordinates_[1] = geom_->vt_[6 * index_ + 1];
+    texture_coordinates_[2] = geom_->vt_[6 * index_ + 2];
+    texture_coordinates_[3] = geom_->vt_[6 * index_ + 3];
+    texture_coordinates_[4] = geom_->vt_[6 * index_ + 4];
+    texture_coordinates_[5] = geom_->vt_[6 * index_ + 5];
+    texture_coordinates_last_[0] = texture_coordinates_[0];
+    texture_coordinates_last_[1] = texture_coordinates_[1];
+    texture_coordinates_last_[2] = texture_coordinates_[2];
+    texture_coordinates_last_[3] = texture_coordinates_[3];
+    texture_coordinates_last_[4] = texture_coordinates_[4];
+    texture_coordinates_last_[5] = texture_coordinates_[5];
 
-    const double tuv0v1[2] = {tuv_[2] - tuv_[0], tuv_[3] - tuv_[1]};
-    const double tuv0v2[2] = {tuv_[4] - tuv_[0], tuv_[5] - tuv_[1]};    
+    const double tuv0v1[2] = {texture_coordinates_[2] - texture_coordinates_[0], texture_coordinates_[3] - texture_coordinates_[1]};
+    const double tuv0v2[2] = {texture_coordinates_[4] - texture_coordinates_[0], texture_coordinates_[5] - texture_coordinates_[1]};    
 
     const double invdet = 1.0/(tuv0v1[0] * tuv0v2[1] - tuv0v1[1] * tuv0v2[0]);
     if (std::isfinite(invdet)){
@@ -168,12 +168,12 @@ Vec3f APTracer::Shapes::TriangleMeshMotionblur_t::normaluv(double time, const do
                                     normals_[1] * time + normals_last_[1] * (1.0 - time),
                                     normals_[2] * time + normals_last_[2] * (1.0 - time)};
 
-    const double tuv_int[6] = { tuv_[0] * time + tuv_last_[0] * (1.0 - time),
-                                tuv_[1] * time + tuv_last_[1] * (1.0 - time),
-                                tuv_[2] * time + tuv_last_[2] * (1.0 - time),
-                                tuv_[3] * time + tuv_last_[3] * (1.0 - time),
-                                tuv_[4] * time + tuv_last_[4] * (1.0 - time),
-                                tuv_[5] * time + tuv_last_[5] * (1.0 - time)};
+    const double tuv_int[6] = { texture_coordinates_[0] * time + texture_coordinates_last_[0] * (1.0 - time),
+                                texture_coordinates_[1] * time + texture_coordinates_last_[1] * (1.0 - time),
+                                texture_coordinates_[2] * time + texture_coordinates_last_[2] * (1.0 - time),
+                                texture_coordinates_[3] * time + texture_coordinates_last_[3] * (1.0 - time),
+                                texture_coordinates_[4] * time + texture_coordinates_last_[4] * (1.0 - time),
+                                texture_coordinates_[5] * time + texture_coordinates_last_[5] * (1.0 - time)};
 
     const Vec3f distance = Vec3f(1.0 - uv[0] - uv[1], uv[0], uv[1]);
     // Matrix multiplication, optimise.
@@ -202,12 +202,12 @@ Vec3f APTracer::Shapes::TriangleMeshMotionblur_t::normal_uv_tangent(double time,
                                     normals_[1] * time + normals_last_[1] * (1.0 - time),
                                     normals_[2] * time + normals_last_[2] * (1.0 - time)};
     
-    const double tuv_int[6] = { tuv_[0] * time + tuv_last_[0] * (1.0 - time),
-                                tuv_[1] * time + tuv_last_[1] * (1.0 - time),
-                                tuv_[2] * time + tuv_last_[2] * (1.0 - time),
-                                tuv_[3] * time + tuv_last_[3] * (1.0 - time),
-                                tuv_[4] * time + tuv_last_[4] * (1.0 - time),
-                                tuv_[5] * time + tuv_last_[5] * (1.0 - time)};
+    const double tuv_int[6] = { texture_coordinates_[0] * time + texture_coordinates_last_[0] * (1.0 - time),
+                                texture_coordinates_[1] * time + texture_coordinates_last_[1] * (1.0 - time),
+                                texture_coordinates_[2] * time + texture_coordinates_last_[2] * (1.0 - time),
+                                texture_coordinates_[3] * time + texture_coordinates_last_[3] * (1.0 - time),
+                                texture_coordinates_[4] * time + texture_coordinates_last_[4] * (1.0 - time),
+                                texture_coordinates_[5] * time + texture_coordinates_last_[5] * (1.0 - time)};
 
     const Vec3f distance = Vec3f(1.0 - uv[0] - uv[1], uv[0], uv[1]);
 
