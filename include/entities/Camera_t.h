@@ -49,7 +49,7 @@ namespace APTracer { namespace Entities {
             std::string filename_; /**< @brief Filename used by the camera when saving an image. Not used by all cameras, and some might modify it or save multiple pictures with variations of the name.*/
             double fov_[2]; /**< @brief Array containing field of view of camera [vertical, horizontal]. Will have different units depending on the projection used.*/
             unsigned int subpix_[2]; /**< @brief Array containing the number of subpixels per pixel, [vertical, horizontal], for antialiasing purposes. Not very useful because sample jittering when there are multiple samples per pixel removes aliasing. May be useful when there are few samples per pixel and location of the samples mush be controlled.*/
-            std::list<Medium_t*> medium_list_; /**< @brief List of materials in which the camera is placed. Active mediumm is first element. Should have at least two copies of an "outside" medium not assigned to any object (issue #25).*/
+            std::list<Medium_t*> medium_list_; /**< @brief List of materials in which the camera is placed. Active medium is first element. Should have at least two copies of an "outside" medium not assigned to any object (issue #25).*/
             Skybox_t* skybox_; /**< @brief Skybox that will be intersected if no shape is hit by the rays.*/    
             unsigned int max_bounces_; /**< @brief Maximum intersections with shapes and bounces on materials a ray can do before it is terminated. Actual number may be less.*/
             Vec3f direction_; /**< @brief Direction in which the camera points. Changed by modifying the camera's transformation matrix.*/
@@ -62,7 +62,6 @@ namespace APTracer { namespace Entities {
              * @brief Updates the camera's members.
              * 
              * This is used to set the new direction, origin, up, and other variables. Should be called once per frame, before rendering. This is how the changes to the transformation matrix and functions like setUp take effect.
-             * 
              */
             virtual void update() = 0;
 
@@ -110,7 +109,7 @@ namespace APTracer { namespace Entities {
              * @brief Sets the focal length of the camera to put an object in focus.
              * 
              * The scene will be intersected at a specific position of the frame, and the hit distance returned will be used to set the focal length. This effectively puts that object in focus.
-             * efaults to doing nothing, as cameras use the pinhole model by default, where everything is in focus. Will also intersect invisible objects, and won't propagate through mirrors and such.
+             * defaults to doing nothing, as cameras use the pinhole model by default, where everything is in focus. Will also intersect invisible objects, and won't propagate through mirrors and such.
              * The focal plane's shape will vary based on the projection used.
              * 
              * @param scene Scene that will be used to find what object the ray hits and its distance.
@@ -128,7 +127,7 @@ namespace APTracer { namespace Entities {
             void setUp(Vec3f &new_up);
 
             /**
-             * @brief Writes the image buffer with the provided name, or the camera's filename if empty.
+             * @brief Writes the image buffer to disk with the provided name, or the camera's filename if empty.
              * 
              * This will write the camera's image to disk or otherwise. It uses the input name, or the camera's filename_ if called with "". The actual name may be prefixed or modified, especially if 
              * multiple images are written.
@@ -138,7 +137,7 @@ namespace APTracer { namespace Entities {
             virtual void write(std::string file_name = "") = 0;
 
             /**
-             * @brief Shows the image on screen. Currently not implemented. Use ImgGufferOpenGL_t instead.
+             * @brief Shows the image on screen. Currently not implemented. Use ImgBufferOpenGL_t instead.
              */
             virtual void show() const = 0;
 
