@@ -24,6 +24,7 @@ using APTracer::Entities::Medium_t;
 using APTracer::Entities::ImgBuffer_t;
 
 namespace APTracer { namespace Cameras {
+
     /**
      * @brief The cam class describes a camera that uses a spherical projection.
      * 
@@ -70,7 +71,7 @@ namespace APTracer { namespace Cameras {
             /**
              * @brief Sends rays through the scene, to generate an image.
              * 
-             * The camera will generate rays according to its projection, and cast them through the provided scene. 
+             * The camera will generate rays according to a spherical projection, and cast them through the provided scene. 
              * The resulting colour is written to the image buffer. This will generate one image.
              * 
              * @param scene Scene that will be used to find what each ray hits.
@@ -81,7 +82,7 @@ namespace APTracer { namespace Cameras {
              * @brief Writes the image buffer to disk with the provided name, or the camera's filename if empty.
              * 
              * This will write the camera's image to disk. It uses the input name, or the camera's filename_ if called with "".
-             * This calls the image buffer's write function.
+             * This calls the image buffer's write function. Directory must exist.
              * 
              * @param file_name Filename used to write the images. If "", uses the camera's filename_.
              */
