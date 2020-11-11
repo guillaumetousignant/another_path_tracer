@@ -84,7 +84,7 @@ namespace APTracer { namespace Cameras {
              * 
              * The camera will generate rays according to a spherical projection, and cast them through the provided scene. 
              * The resulting colour is written to the image buffer. This will generate one image. Rays are created with a 
-             * time inside the time_ interval, to enable motion blur.
+             * time inside the time_ interval, to simulate a shutter and enable motion blur.
              * 
              * @param scene Scene that will be used to find what each ray hits.
              */

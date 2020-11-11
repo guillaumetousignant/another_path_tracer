@@ -72,7 +72,7 @@ namespace APTracer { namespace Cameras {
             /**
              * @brief Updates the camera's members.
              * 
-             * This is used to set the new direction, origin, up vector, and focal_length_. Should be called once per frame, before rendering. 
+             * This is used to set the new direction, origin, up vector, and focal length. Should be called once per frame, before rendering. 
              * This is how the changes to the transformation matrix and functions like setUp take effect. It sets focal_length_ to focal_length_buffer_,
              * so it is only modified once per frame. This is needed for some features to work, like motion blur.
              */
