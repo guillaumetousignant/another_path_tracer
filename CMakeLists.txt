@@ -290,7 +290,7 @@ if (BUILD_TESTING)
     include(Catch)
 
     add_executable(unit_tests 
-        tests/unit_tests.cpp)
+        tests/test_main.cpp)
     target_link_libraries(unit_tests PRIVATE 
         APTracer
         Catch2::Catch2)
