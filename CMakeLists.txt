@@ -235,46 +235,19 @@ target_include_directories(APTracer PUBLIC
     $<INSTALL_INTERFACE:include/another_path_tracer/>    
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/>)
 
-if(WIN32)
-    find_library(ZLIB REQUIRED
-        NAMES zlib
-        HINTS external_windows/lib) # CHECK make image libraries optional
-    find_library(PNG REQUIRED
-        NAMES png libpng libpng_a libpng_debug libpng_a_debug
-        HINTS external_windows/lib) # CHECK make image libraries optional
-    find_library(JPEG REQUIRED
-        NAMES jpeg libjpeg jpeg_a libjpeg_a
-        HINTS external_windows/lib) # CHECK make image libraries optional
-    find_library(TIFF REQUIRED
-        NAMES tiff libtiff
-        HINTS external_windows/lib) # CHECK make image libraries optional
-    find_library(GLUT REQUIRED
-        NAMES freeglut libfreeglut glut libglut
-        HINTS external_windows/lib) # CHECK make image libraries optional
 
-    target_include_directories(APTracer PUBLIC 
-        $<INSTALL_INTERFACE:external_windows/include>    
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/external_windows/include>)
+find_package(ZLIB REQUIRED)
+find_package(PNG REQUIRED) # CHECK make image libraries optional
+find_package(JPEG REQUIRED)
+find_package(TIFF REQUIRED)
+find_package(GLUT REQUIRED)
 
-    SET(ZLIB_LIBRARY ${ZLIB})
-    SET(PNG_LIBRARY ${PNG})
-    SET(JPEG_LIBRARY ${JPEG})
-    SET(TIFF_LIBRARY ${TIFF})
-    SET(GLUT_LIBRARY ${GLUT})
-else()
-    find_package(ZLIB REQUIRED)
-    find_package(PNG REQUIRED) # CHECK make image libraries optional
-    find_package(JPEG REQUIRED)
-    find_package(TIFF REQUIRED)
-    find_package(GLUT REQUIRED)
-
-    target_include_directories(APTracer PUBLIC 
-        ${ZLIB_INCLUDE_DIR}
-        ${PNG_INCLUDE_DIR}
-        ${JPEG_INCLUDE_DIR}
-        ${TIFF_INCLUDE_DIR}
-        ${GLUT_INCLUDE_DIRS})
-endif()
+target_include_directories(APTracer PUBLIC 
+    ${ZLIB_INCLUDE_DIR}
+    ${PNG_INCLUDE_DIR}
+    ${JPEG_INCLUDE_DIR}
+    ${TIFF_INCLUDE_DIR}
+    ${GLUT_INCLUDE_DIRS})
 
 find_package(OpenMP)
 find_package(OpenGL REQUIRED COMPONENTS OpenGL) # CHECK make optional
@@ -334,24 +307,12 @@ if(NOT CMAKE_SOURCE_DIR STREQUAL CMAKE_INSTALL_PREFIX)
     install(DIRECTORY include/ 
         DESTINATION include/another_path_tracer
         FILES_MATCHING PATTERN "*.h")
-    
-    if(WIN32)
-        install(DIRECTORY external_windows/ 
-            DESTINATION external_windows
-            FILES_MATCHING 
-                PATTERN "*.h"
-                PATTERN "*.hxx")
-    endif()
 endif()
 
 if(WIN32)
-    install(DIRECTORY external_windows/bin
-        DESTINATION .
-        FILES_MATCHING 
-		  PATTERN "zlib.dll"
-            PATTERN "freeglut.dll"
-            PATTERN "libpng.dll"
-            PATTERN "tiff.dll")
+    install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/
+        DESTINATION bin
+        FILES_MATCHING PATTERN "*.dll")
 endif()
 
 install(EXPORT aptracer-export

@@ -2,6 +2,19 @@
 
 Yet another path tracer
 
+Dependencies:
+
+- freeglut
+- libpng
+- libjpeg
+- libtiff
+
+If installing dependencies with vcpkg under windows, don't forget to add the CMake toolchain path to the cmake call:
+
+```bash
+-DCMAKE_TOOLCHAIN_FILE:FILEPATH=C:/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake
+```
+
 Installation:
 
 ```bash
@@ -16,10 +29,10 @@ Link with `$ANOTHER_PATH_TRACER_DIR/lib`
 Include `$ANOTHER_PATH_TRACER_DIR/include`  
 You can add `$ANOTHER_PATH_TRACER_DIR/bin` to your path.  
 
-To build tests, add `-DBUILD_TESTS=ON` to cmake call. Then:
+To build tests, add `-DBUILD_TESTING=ON` to cmake call. Then:
 
 ```bash
-make test
+make unit_tests
 ./unit_tests
 ```
 
