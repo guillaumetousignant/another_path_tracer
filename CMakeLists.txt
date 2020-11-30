@@ -309,17 +309,21 @@ if(NOT ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug"))
     set_property(TARGET another_path_tracer PROPERTY INTERPROCEDURAL_OPTIMIZATION True)
 endif()
 
-option(BUILD_TESTS "Build all tests." OFF)
+option(BUILD_TESTING "Build all tests." OFF)
 
-if (BUILD_TESTS)
-    enable_testing()
+if (BUILD_TESTING)
+    include(CTest)
+    find_package(Catch2 REQUIRED)
+    include(Catch)
+
     add_executable(unit_tests 
-        tests/main_test.cpp
-        tests/catch.hpp)
-    target_link_libraries(unit_tests PRIVATE APTracer)
+        tests/unit_tests.cpp)
+    target_link_libraries(unit_tests PRIVATE 
+        APTracer
+        Catch2::Catch2)
     target_compile_features(unit_tests PRIVATE cxx_std_11)
 
-    add_test(unit_tests unit_tests)
+    catch_discover_tests(unit_tests)
 endif()
 
 install(TARGETS APTracer 
