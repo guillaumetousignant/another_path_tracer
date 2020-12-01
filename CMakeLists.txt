@@ -285,27 +285,8 @@ endif()
 option(BUILD_TESTING "Build all tests." OFF)
 
 if (BUILD_TESTING)
-    include(FetchContent)
-    FetchContent_Declare(
-        Catch2
-        GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-        GIT_TAG        v2.13.3
-    )
-    FetchContent_MakeAvailable(Catch2)
-    list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/contrib)
-
-    include(CTest)
-    include(Catch)
-
-    add_executable(unit_tests 
-        tests/test_main.cpp
-        tests/example_test.cpp)
-    target_link_libraries(unit_tests PRIVATE 
-        APTracer
-        Catch2::Catch2)
-    target_compile_features(unit_tests PRIVATE cxx_std_11)
-
-    catch_discover_tests(unit_tests)
+    enable_testing()
+    add_subdirectory(tests)
 endif()
 
 install(TARGETS APTracer 
