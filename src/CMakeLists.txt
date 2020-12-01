@@ -15,24 +15,18 @@ find_package(GLUT REQUIRED)
 
 target_include_directories(APTracer PUBLIC 
     $<INSTALL_INTERFACE:include/another_path_tracer/>    
-    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/>
-    ${ZLIB_INCLUDE_DIR}
-    ${PNG_INCLUDE_DIR}
-    ${JPEG_INCLUDE_DIR}
-    ${TIFF_INCLUDE_DIR}
-    ${GLUT_INCLUDE_DIRS})
+    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/>)
 
 find_package(OpenMP)
 find_package(OpenGL REQUIRED COMPONENTS OpenGL) # CHECK make optional
 add_dependencies(APTracer OpenGL::GL) # Should use OpenGL::OpenGL on newer linux hosts, but doesn't work on windows and android
 
 target_link_libraries(APTracer PUBLIC 
-    ${ZLIB_LIBRARY}
-    ${PNG_LIBRARY}
-    ${JPEG_LIBRARY}
-    ${TIFF_LIBRARY}
+    PNG::PNG
+    JPEG::JPEG
+    TIFF::TIFF
     OpenGL::GL
-    ${GLUT_LIBRARY}) # Should use OpenGL::OpenGL on newer linux hosts, but doesn't work on windows and android
+    GLUT::GLUT) # Should use OpenGL::OpenGL on newer linux hosts, but doesn't work on windows and android
 
 if(OpenMP_CXX_FOUND)
     target_link_libraries(APTracer PUBLIC optimized OpenMP::OpenMP_CXX)
