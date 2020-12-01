@@ -1,0 +1,13 @@
+target_sources(APTracer
+    PRIVATE
+        Box_t.cpp
+        Mesh_t.cpp
+        MeshMotionblur_t.cpp
+        MeshTop_t.cpp
+        Sphere_t.cpp
+        SphereMotionblur_t.cpp
+        Triangle_t.cpp
+        TriangleMesh_t.cpp
+        TriangleMeshMotionblur_t.cpp
+        TriangleMotionblur_t.cpp
+)

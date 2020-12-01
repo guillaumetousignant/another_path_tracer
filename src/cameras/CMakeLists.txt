@@ -1,0 +1,19 @@
+target_sources(APTracer
+    PRIVATE
+        Cam_t.cpp
+        Cam3D_t.cpp
+        Cam3DAperture_t.cpp
+        Cam3DMotionblur_t.cpp
+        Cam3DMotionblurAperture_t.cpp
+        CamAperture_t.cpp
+        CamMotionblur_t.cpp
+        CamMotionblurAperture_t.cpp
+        IsoCam_t.cpp
+        IsoCamAperture_t.cpp
+        IsoCamMotionblur_t.cpp
+        IsoCamMotionblurAperture_t.cpp
+        RecCam_t.cpp
+        RecCamAperture_t.cpp
+        RecCamMotionblur_t.cpp
+        RecCamMotionblurAperture_t.cpp
+)
