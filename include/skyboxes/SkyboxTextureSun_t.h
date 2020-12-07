@@ -1,5 +1,5 @@
-#ifndef SKYBOXTEXTURESUN_T_H
-#define SKYBOXTEXTURESUN_T_H
+#ifndef APTRACER_SKYBOXTEXTURESUN_T_H
+#define APTRACER_SKYBOXTEXTURESUN_T_H
 
 #include "entities/Skybox_t.h"
 #include "entities/Vec3f.h"
