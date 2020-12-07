@@ -1,5 +1,5 @@
-#ifndef RAY_T_H
-#define RAY_T_H
+#ifndef APTRACER_RAY_T_H
+#define APTRACER_RAY_T_H
 
 #include "entities/Vec3f.h"
 #include <list>

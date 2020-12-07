@@ -1,5 +1,5 @@
-#ifndef ENTITIES_H
-#define ENTITIES_H
+#ifndef APTRACER_ENTITIES_H
+#define APTRACER_ENTITIES_H
 namespace APTracer { 
     /**
      * @brief Contains the fundamental types of the project. 

@@ -1,5 +1,5 @@
-#ifndef TRANSFORMMATRIX_T_H
-#define TRANSFORMMATRIX_T_H
+#ifndef APTRACER_TRANSFORMMATRIX_T_H
+#define APTRACER_TRANSFORMMATRIX_T_H
 
 #include "entities/Vec3f.h"
 #include <cmath>

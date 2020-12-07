@@ -1,5 +1,5 @@
-#ifndef SHAPES_H
-#define SHAPES_H
+#ifndef APTRACER_SHAPES_H
+#define APTRACER_SHAPES_H
 
 namespace APTracer { 
     /**

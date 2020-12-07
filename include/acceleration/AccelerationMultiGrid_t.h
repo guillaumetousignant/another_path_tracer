@@ -1,5 +1,5 @@
-#ifndef ACCELERATIONMULTIGRID_T_H
-#define ACCELERATIONMULTIGRID_T_H
+#ifndef APTRACER_ACCELERATIONMULTIGRID_T_H
+#define APTRACER_ACCELERATIONMULTIGRID_T_H
 
 #include "entities/Ray_t.h"
 #include "entities/AccelerationStructure_t.h"

@@ -1,5 +1,5 @@
-#ifndef REFLECTIVENORMAL_T_H
-#define REFLECTIVENORMAL_T_H
+#ifndef APTRACER_REFLECTIVENORMAL_T_H
+#define APTRACER_REFLECTIVENORMAL_T_H
 
 #include "entities/Material_t.h"
 #include "entities/Vec3f.h"

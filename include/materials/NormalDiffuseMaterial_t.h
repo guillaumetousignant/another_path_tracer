@@ -1,5 +1,5 @@
-#ifndef NORMALDIFFUSEMATERIAL_T_H
-#define NORMALDIFFUSEMATERIAL_T_H
+#ifndef APTRACER_NORMALDIFFUSEMATERIAL_T_H
+#define APTRACER_NORMALDIFFUSEMATERIAL_T_H
 
 #include "entities/Material_t.h"
 #include "entities/Ray_t.h"

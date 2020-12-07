@@ -1,5 +1,5 @@
-#ifndef ACCELERATIONGRIDARRAY_T_H
-#define ACCELERATIONGRIDARRAY_T_H
+#ifndef APTRACER_ACCELERATIONGRIDARRAY_T_H
+#define APTRACER_ACCELERATIONGRIDARRAY_T_H
 
 #include "entities/Ray_t.h"
 #include "entities/AccelerationStructure_t.h"

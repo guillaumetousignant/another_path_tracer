@@ -1,5 +1,5 @@
-#ifndef GRIDCELLARRAY_T_H
-#define GRIDCELLARRAY_T_H
+#ifndef APTRACER_GRIDCELLARRAY_T_H
+#define APTRACER_GRIDCELLARRAY_T_H
 
 #include "entities/Ray_t.h"
 #include "entities/AccelerationStructure_t.h"

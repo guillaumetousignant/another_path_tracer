@@ -1,5 +1,5 @@
-#ifndef NEXTFILENAME_H
-#define NEXTFILENAME_H
+#ifndef APTRACER_NEXTFILENAME_H
+#define APTRACER_NEXTFILENAME_H
 
 #include <string>
 

@@ -1,5 +1,5 @@
-#ifndef CAMAPERTURE_T_H
-#define CAMAPERTURE_T_H
+#ifndef APTRACER_CAMAPERTURE_T_H
+#define APTRACER_CAMAPERTURE_T_H
 
 #include "entities/Camera_t.h"
 #include "entities/Vec3f.h"

@@ -1,5 +1,5 @@
-#ifndef ACCELERATIONGRIDVECTOR_T_H
-#define ACCELERATIONGRIDVECTOR_T_H
+#ifndef APTRACER_ACCELERATIONGRIDVECTOR_T_H
+#define APTRACER_ACCELERATIONGRIDVECTOR_T_H
 
 #include "entities/Ray_t.h"
 #include "entities/AccelerationStructure_t.h"

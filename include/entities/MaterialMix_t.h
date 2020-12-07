@@ -1,5 +1,5 @@
-#ifndef MATERIALMIX_T_H
-#define MATERIALMIX_T_H
+#ifndef APTRACER_MATERIALMIX_T_H
+#define APTRACER_MATERIALMIX_T_H
 
 #include "entities/Material_t.h"
 

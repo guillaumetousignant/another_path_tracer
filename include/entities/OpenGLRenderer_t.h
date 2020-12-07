@@ -1,5 +1,5 @@
-#ifndef OPENGLRENDERER_T_H
-#define OPENGLRENDERER_T_H
+#ifndef APTRACER_OPENGLRENDERER_T_H
+#define APTRACER_OPENGLRENDERER_T_H
 
 #include <string>
 #include "entities/Vec3f.h"

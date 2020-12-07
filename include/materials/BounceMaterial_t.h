@@ -1,5 +1,5 @@
-#ifndef BOUNCEMATERIAL_T_H
-#define BOUNCEMATERIAL_T_H
+#ifndef APTRACER_BOUNCEMATERIAL_T_H
+#define APTRACER_BOUNCEMATERIAL_T_H
 
 #include "entities/Material_t.h"
 #include "entities/Vec3f.h"

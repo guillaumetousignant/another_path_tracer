@@ -1,5 +1,5 @@
-#ifndef VEC3F_H
-#define VEC3F_H
+#ifndef APTRACER_VEC3F_H
+#define APTRACER_VEC3F_H
 
 #include <iostream>
 

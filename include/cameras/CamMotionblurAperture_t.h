@@ -1,5 +1,5 @@
-#ifndef CAMMOTIONBLURAPERTURE_T_H
-#define CAMMOTIONBLURAPERTURE_T_H
+#ifndef APTRACER_CAMMOTIONBLURAPERTURE_T_H
+#define APTRACER_CAMMOTIONBLURAPERTURE_T_H
 
 #include "entities/Camera_t.h"
 #include "entities/Vec3f.h"

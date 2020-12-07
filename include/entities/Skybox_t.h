@@ -1,5 +1,5 @@
-#ifndef SKYBOX_T_H
-#define SKYBOX_T_H
+#ifndef APTRACER_SKYBOX_T_H
+#define APTRACER_SKYBOX_T_H
 
 #include "entities/Vec3f.h"
 

@@ -1,5 +1,5 @@
-#ifndef PORTALSCATTERER_T_H
-#define PORTALSCATTERER_T_H
+#ifndef APTRACER_PORTALSCATTERER_T_H
+#define APTRACER_PORTALSCATTERER_T_H
 
 #include "PortalScattererTop_t.h"
 #include "entities/Ray_t.h"

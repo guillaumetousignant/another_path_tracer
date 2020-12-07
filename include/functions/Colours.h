@@ -1,5 +1,5 @@
-#ifndef COLOURS_H
-#define COLOURS_H
+#ifndef APTRACER_COLOURS_H
+#define APTRACER_COLOURS_H
 
 #include <map> 
 #include <string>

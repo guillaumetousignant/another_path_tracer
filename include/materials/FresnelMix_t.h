@@ -1,5 +1,5 @@
-#ifndef FRESNELMIX_T_H
-#define FRESNELMIX_T_H
+#ifndef APTRACER_FRESNELMIX_T_H
+#define APTRACER_FRESNELMIX_T_H
 
 #include "entities/MaterialMix_t.h"
 #include "entities/Vec3f.h"

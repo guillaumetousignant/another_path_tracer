@@ -1,5 +1,5 @@
-#ifndef REFRACTIVEFUZZ_T_H
-#define REFRACTIVEFUZZ_T_H
+#ifndef APTRACER_REFRACTIVEFUZZ_T_H
+#define APTRACER_REFRACTIVEFUZZ_T_H
 
 #include "entities/Material_t.h"
 #include "entities/Vec3f.h"

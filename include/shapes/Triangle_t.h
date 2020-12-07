@@ -1,5 +1,5 @@
-#ifndef TRIANGLE_T_H
-#define TRIANGLE_T_H
+#ifndef APTRACER_TRIANGLE_T_H
+#define APTRACER_TRIANGLE_T_H
 
 #include "entities/Ray_t.h"
 #include "entities/Vec3f.h"

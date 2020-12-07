@@ -1,5 +1,5 @@
-#ifndef ACCELERATION_H
-#define ACCELERATION_H
+#ifndef APTRACER_ACCELERATION_H
+#define APTRACER_ACCELERATION_H
 
 namespace APTracer { 
     /**

@@ -1,5 +1,5 @@
-#ifndef REFLECTIVEREFRACTIVE_T_H
-#define REFLECTIVEREFRACTIVE_T_H
+#ifndef APTRACER_REFLECTIVEREFRACTIVE_T_H
+#define APTRACER_REFLECTIVEREFRACTIVE_T_H
 
 #include "entities/Material_t.h"
 #include "entities/Vec3f.h"

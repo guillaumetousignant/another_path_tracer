@@ -1,5 +1,5 @@
-#ifndef SLERP_H
-#define SLERP_H
+#ifndef APTRACER_SLERP_H
+#define APTRACER_SLERP_H
 
 namespace APTracer {
     /**

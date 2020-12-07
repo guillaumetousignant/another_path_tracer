@@ -1,5 +1,5 @@
-#ifndef NONABSORBER_T_H
-#define NONABSORBER_T_H
+#ifndef APTRACER_NONABSORBER_T_H
+#define APTRACER_NONABSORBER_T_H
 
 #include "entities/Medium_t.h"
 #include "entities/Ray_t.h"

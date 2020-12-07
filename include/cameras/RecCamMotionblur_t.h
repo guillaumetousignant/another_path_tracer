@@ -1,5 +1,5 @@
-#ifndef RECCAMMOTIONBLUR_T_H
-#define RECCAMMOTIONBLUR_T_H
+#ifndef APTRACER_RECCAMMOTIONBLUR_T_H
+#define APTRACER_RECCAMMOTIONBLUR_T_H
 
 #include "entities/Camera_t.h"
 #include "entities/Vec3f.h"

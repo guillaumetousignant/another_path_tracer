@@ -1,5 +1,5 @@
-#ifndef RANDOMMIX_T_H
-#define RANDOMMIX_T_H
+#ifndef APTRACER_RANDOMMIX_T_H
+#define APTRACER_RANDOMMIX_T_H
 
 #include "entities/MaterialMix_t.h"
 #include "entities/Ray_t.h"

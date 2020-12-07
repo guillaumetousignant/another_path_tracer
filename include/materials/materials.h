@@ -1,5 +1,5 @@
-#ifndef MATERIALS_H
-#define MATERIALS_H
+#ifndef APTRACER_MATERIALS_H
+#define APTRACER_MATERIALS_H
 
 namespace APTracer { 
     /**

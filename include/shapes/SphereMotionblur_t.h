@@ -1,5 +1,5 @@
-#ifndef SPHEREMOTIONBLUR_T_H
-#define SPHEREMOTIONBLUR_T_H
+#ifndef APTRACER_SPHEREMOTIONBLUR_T_H
+#define APTRACER_SPHEREMOTIONBLUR_T_H
 
 #include "entities/Ray_t.h"
 #include "entities/Vec3f.h"

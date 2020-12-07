@@ -1,5 +1,5 @@
-#ifndef MESHGEOMETRY_T_H
-#define MESHGEOMETRY_T_H
+#ifndef APTRACER_MESHGEOMETRY_T_H
+#define APTRACER_MESHGEOMETRY_T_H
 
 #include <string>
 #include "entities/Vec3f.h"

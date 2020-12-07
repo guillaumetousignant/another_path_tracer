@@ -1,5 +1,5 @@
-#ifndef ISOCAM_T_H
-#define ISOCAM_T_H
+#ifndef APTRACER_ISOCAM_T_H
+#define APTRACER_ISOCAM_T_H
 
 #include "entities/Camera_t.h"
 #include "entities/Vec3f.h"

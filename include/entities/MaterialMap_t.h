@@ -1,5 +1,5 @@
-#ifndef MATERIALMAP_T_H
-#define MATERIALMAP_T_H
+#ifndef APTRACER_MATERIALMAP_T_H
+#define APTRACER_MATERIALMAP_T_H
 
 #include <string>
 #include <map>

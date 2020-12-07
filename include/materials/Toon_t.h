@@ -1,5 +1,5 @@
-#ifndef TOON_T_H
-#define TOON_T_H
+#ifndef APTRACER_TOON_T_H
+#define APTRACER_TOON_T_H
 
 #include "entities/Material_t.h"
 #include "entities/Vec3f.h"

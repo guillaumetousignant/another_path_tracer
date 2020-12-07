@@ -1,5 +1,5 @@
-#ifndef REFLECTIVEFUZZTEXNORMAL_T_H
-#define REFLECTIVEFUZZTEXNORMAL_T_H
+#ifndef APTRACER_REFLECTIVEFUZZTEXNORMAL_T_H
+#define APTRACER_REFLECTIVEFUZZTEXNORMAL_T_H
 
 #include "entities/Material_t.h"
 #include "entities/Vec3f.h"

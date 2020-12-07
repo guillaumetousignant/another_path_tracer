@@ -1,5 +1,5 @@
-#ifndef MESHTOP_T_H
-#define MESHTOP_T_H
+#ifndef APTRACER_MESHTOP_T_H
+#define APTRACER_MESHTOP_T_H
 
 #include "entities/Ray_t.h"
 #include "entities/Vec3f.h"

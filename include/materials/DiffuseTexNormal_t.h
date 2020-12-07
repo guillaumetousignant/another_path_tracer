@@ -1,5 +1,5 @@
-#ifndef DIFFUSETEXNORMAL_T_H
-#define DIFFUSETEXNORMAL_T_H
+#ifndef APTRACER_DIFFUSETEXNORMAL_T_H
+#define APTRACER_DIFFUSETEXNORMAL_T_H
 
 #include "entities/Material_t.h"
 #include "entities/Vec3f.h"

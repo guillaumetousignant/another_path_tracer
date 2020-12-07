@@ -1,5 +1,5 @@
-#ifndef TRIANGLEMOTIONBLUR_T_H
-#define TRIANGLEMOTIONBLUR_T_H
+#ifndef APTRACER_TRIANGLEMOTIONBLUR_T_H
+#define APTRACER_TRIANGLEMOTIONBLUR_T_H
 
 #include "entities/Ray_t.h"
 #include "entities/Vec3f.h"
