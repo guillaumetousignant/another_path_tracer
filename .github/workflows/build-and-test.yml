@@ -30,9 +30,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Prepare vcpkg (Windows)
-        uses: lukka/run-vcpkg@v2
+        uses: lukka/run-vcpkg@v5
         env:
-          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
         id: runvcpkg
         with:
           vcpkgArguments: zlib:x64-windows 
