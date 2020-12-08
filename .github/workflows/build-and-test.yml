@@ -31,6 +31,7 @@ jobs:
         uses: lukka/run-vcpkg@v2
         id: runvcpkg
         with:
+          setupOnly: true
           vcpkgArguments: zlib:x64-windows 
           vcpkgDirectory: ${{ runner.workspace }}/vcpkg/
           vcpkgGitCommitId: ec6fe06e8da05a8157dc8581fa96b36b571c1bd5
