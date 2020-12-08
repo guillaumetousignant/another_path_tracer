@@ -42,7 +42,7 @@ jobs:
           cd ${{ github.workspace }}
           mkdir build
           cd build
-          cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON
+          cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON -DCMAKE_TOOLCHAIN_FILE=${{ runner.workspace }}\another_path_tracer\vcpkg\scripts\buildsystems\vcpkg.cmake
       - name: Build (Windows)
         run: |
           cd build
