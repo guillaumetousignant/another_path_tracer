@@ -1,4 +1,4 @@
-name: windows-build-and-test
+name: Windows
 on: [push]
 jobs:
   Windows:

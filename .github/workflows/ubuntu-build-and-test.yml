@@ -1,4 +1,4 @@
-name: ubuntu-build-and-test
+name: Ubuntu
 on: [push]
 jobs:
   Ubuntu:

@@ -1,4 +1,4 @@
-name: macos-build-and-test
+name: macOS
 on: [push]
 jobs:
   macOS:
