@@ -5,6 +5,8 @@ jobs:
     name: build-ubuntu
     runs-on: ubuntu-latest
     steps:
+      - name: Installing dependencies
+        run: sudo apt install freeglut3-dev
       - name: Checkout
         uses: actions/checkout@v2
       - name: Running CMake (Ubuntu)
