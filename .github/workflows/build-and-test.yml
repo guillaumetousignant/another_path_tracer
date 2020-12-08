@@ -30,7 +30,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Prepare vcpkg (Windows)
-        uses: lukka/run-vcpkg@v5
+        uses: lukka/run-vcpkg@v6
         env:
         id: runvcpkg
         with:
