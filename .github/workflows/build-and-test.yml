@@ -1,21 +1,23 @@
 name: build-and-test
 on: [push]
 jobs:
-  setup-build-test:
+  Ubuntu:
+    name: build-ubuntu
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - run: pwd
-      - run: ls -la
-      - run: mkdir build
-      - run: cd build
-      - run: pwd
-        working-directory: ${{env.working-directory}}/build
-      - run: ls -la
-        working-directory: ${{env.working-directory}}/build
-      - run: cmake .. -DCMAKE_BUILD_TYPE=Release
-        working-directory: ${{env.working-directory}}/build
-      - run: cmake --build .
-        working-directory: ${{env.working-directory}}/build
-      - run: ctest
-        working-directory: ${{env.working-directory}}/build
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Running CMake (Ubuntu)
+        run: |
+          cd ${{ github.workspace }}
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON
+      - name: Build (Ubuntu)
+        run: |
+          cd build
+          cmake --build .
+      - name: Tests (Ubuntu)
+        run: |
+          cd build
+          ctest
