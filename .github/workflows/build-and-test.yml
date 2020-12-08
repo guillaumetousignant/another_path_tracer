@@ -27,14 +27,13 @@ jobs:
     name: build-windows
     runs-on: windows-latest
     steps:
-      - name: Installing vcpkg (Windows)
-        # Download and build vcpkg, without installing any port. If content is cached already, it is a no-op.
-        uses: lukka/run-vcpkg@v6
+      - name: Prepare vcpkg (Windows)
+        uses: lukka/run-vcpkg@v2
+        id: runvcpkg
         with:
-          setupOnly: true
-      - name: Installing dependencies (Windows)
-        run: |
-          $VCPKG_ROOT/vcpkg install zlib:linux-x64
+          vcpkgArguments: zlib:x64-windows 
+          vcpkgDirectory: ${{ runner.workspace }}/vcpkg/
+          vcpkgTriplet: x64-windows
       - name: Checkout
         uses: actions/checkout@v2
       - name: Running CMake (Windows)
