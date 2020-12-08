@@ -34,20 +34,17 @@ jobs:
           vcpkgDirectory: ${{ runner.workspace }}/another_path_tracer/vcpkg/
           vcpkgGitCommitId: ec6fe06e8da05a8157dc8581fa96b36b571c1bd5
           vcpkgTriplet: x64-windows
+      - name: Creating build directory (Windows)
+        run: mkdir build
       - name: Running CMake (Windows)
-        run: |
-          cd ${{ github.workspace }}
-          mkdir build
-          cd build
-          cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON -DCMAKE_TOOLCHAIN_FILE=${{ runner.workspace }}\another_path_tracer\vcpkg\scripts\buildsystems\vcpkg.cmake
+        run: cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON -DCMAKE_TOOLCHAIN_FILE=${{ runner.workspace }}\another_path_tracer\vcpkg\scripts\buildsystems\vcpkg.cmake
+        working-directory: ${{ github.workspace }}/build
       - name: Build (Windows)
-        run: |
-          cd build
-          cmake --build .
+        run: cmake --build .
+        working-directory: ${{ github.workspace }}/build
       - name: Tests (Windows)
-        run: |
-          cd build
-          ctest
+        run: ctest
+        working-directory: ${{ github.workspace }}/build
   macOS:
     name: build-macos
     runs-on: macos-latest
@@ -56,17 +53,14 @@ jobs:
         run: brew install libomp
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Creating build directory (macOS)
+        run: mkdir build
       - name: Running CMake (macOS)
-        run: |
-          cd ${{ github.workspace }}
-          mkdir build
-          cd build
-          cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON
+        run: cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON
+        working-directory: ${{ github.workspace }}/build
       - name: Build (macOS)
-        run: |
-          cd build
-          cmake --build .
+        run: cmake --build .
+        working-directory: ${{ github.workspace }}/build
       - name: Tests (macOS)
-        run: |
-          cd build
-          ctest
+        run: ctest
+        working-directory: ${{ github.workspace }}/build
