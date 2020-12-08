@@ -5,7 +5,7 @@ jobs:
     name: build-ubuntu
     runs-on: ubuntu-latest
     steps:
-      - name: Installing dependencies
+      - name: Installing dependencies (Ubuntu)
         run: sudo apt install freeglut3-dev
       - name: Checkout
         uses: actions/checkout@v2
@@ -20,6 +20,26 @@ jobs:
           cd build
           cmake --build .
       - name: Tests (Ubuntu)
+        run: |
+          cd build
+          ctest
+  Windows:
+    name: build-windows
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Running CMake (Windows)
+        run: |
+          cd ${{ github.workspace }}
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON
+      - name: Build (Windows)
+        run: |
+          cd build
+          cmake --build .
+      - name: Tests (Windows)
         run: |
           cd build
           ctest
