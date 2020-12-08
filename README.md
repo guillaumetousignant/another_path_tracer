@@ -35,7 +35,7 @@ To build tests, add `-DBUILD_TESTING=ON` to cmake call. Then:
 
 ```bash
 make unit_tests
-./unit_tests
+ctest
 ```
 
 To include in a CMake project:
