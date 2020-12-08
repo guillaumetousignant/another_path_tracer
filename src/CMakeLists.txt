@@ -11,6 +11,7 @@ find_package(ZLIB REQUIRED)
 find_package(PNG REQUIRED) # CHECK make image libraries optional
 find_package(JPEG REQUIRED)
 find_package(TIFF REQUIRED)
+list(INSERT CMAKE_FRAMEWORK_PATH 0 /System/Library/Frameworks) # Because CMake doesn't find the correct GLUT on macOS 
 find_package(GLUT REQUIRED)
 
 target_include_directories(APTracer PUBLIC 
