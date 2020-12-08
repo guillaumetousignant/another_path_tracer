@@ -12,5 +12,8 @@ jobs:
       - run: pwd
       - run: ls -la
       - run: cmake .. -DCMAKE_BUILD_TYPE=Release
+        working-directory: ${{env.working-directory}}/build
       - run: cmake --build .
+        working-directory: ${{env.working-directory}}/build
       - run: ctest
+        working-directory: ${{env.working-directory}}/build
