@@ -5,19 +5,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo AAA
-  build-test:
+  build:
     needs: setup
     runs-on: ubuntu-latest
     steps:
-      - name: Build CMake
-        uses: ashutoshvarma/action-cmake-build@v1
-        with:
-          build-dir: ${{ runner.workspace }}/build
-          build-type: Release
-          # Extra options pass to cmake while configuring project
-          configure-options: -DBUILD_TESTING=ON
-          run-test: true
-          # install the build using cmake --install
-          install-build: true
-          # run build using '-j [parallel]' to use multiple threads to build
-          parallel: 2
+      - run: mkdir build
+      - run: cd build
+      - run: cmake .. -DCMAKE_BUILD_TYPE=Release
+      - run: cmake --build .
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - run: ctest
