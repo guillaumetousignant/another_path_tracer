@@ -55,6 +55,8 @@ jobs:
     name: build-macos
     runs-on: macos-latest
     steps:
+      - name: Installing dependencies (macOS)
+        run: brew install libomp
       - name: Checkout
         uses: actions/checkout@v2
       - name: Running CMake (macOS)
