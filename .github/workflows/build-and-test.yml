@@ -51,3 +51,23 @@ jobs:
         run: |
           cd build
           ctest
+  macOS:
+    name: build-macos
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Running CMake (macOS)
+        run: |
+          cd ${{ github.workspace }}
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON
+      - name: Build (macOS)
+        run: |
+          cd build
+          cmake --build .
+      - name: Tests (macOS)
+        run: |
+          cd build
+          ctest
