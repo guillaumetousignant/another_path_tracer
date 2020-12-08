@@ -9,7 +9,8 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
-      - run: cd another_path_tracer
+      - run: pwd
+      - run: ls -la
       - run: mkdir build
       - run: cd build
       - run: cmake .. -DCMAKE_BUILD_TYPE=Release
