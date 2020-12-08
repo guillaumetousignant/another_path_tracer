@@ -50,7 +50,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Installing dependencies (macOS)
-        run: brew install libomp
+        run: brew install libomp freeglut
       - name: Checkout
         uses: actions/checkout@v2
       - name: Creating build directory (macOS)
