@@ -4,7 +4,7 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     steps:
-      - run: echo AAA
+      - uses: actions/checkout@v2
   build:
     needs: setup
     runs-on: ubuntu-latest
