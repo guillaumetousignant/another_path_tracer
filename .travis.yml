@@ -22,11 +22,12 @@ addons:
     - libjpeg-dev
     - cmake
 script: 
+  - cppcheck .
   - mkdir -p build
   - cd build
-  - cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON
+  - cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON
   - cmake --build .
-  - ./unit_tests
+  - ctest
 before_script: 
 after_script:  make clean
 before_script:
