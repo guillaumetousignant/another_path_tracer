@@ -31,7 +31,6 @@ jobs:
         uses: actions/checkout@v2
       - name: Prepare vcpkg (Windows)
         uses: lukka/run-vcpkg@v6
-        env:
         id: runvcpkg
         with:
           vcpkgArguments: zlib:x64-windows 
