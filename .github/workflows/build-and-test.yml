@@ -34,7 +34,7 @@ jobs:
           setupOnly: true
       - name: Installing dependencies (Windows)
         run: |
-        $VCPKG_ROOT/vcpkg install zlib:linux-x64
+          $VCPKG_ROOT/vcpkg install zlib:linux-x64
       - name: Checkout
         uses: actions/checkout@v2
       - name: Running CMake (Windows)
