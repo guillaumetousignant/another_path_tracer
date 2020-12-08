@@ -10,19 +10,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Running CMake (Ubuntu)
-        run: |
-          cd ${{ github.workspace }}
-          mkdir build
-          cd build
-          cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON
+        run: cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON
+        working-directory: ${{ github.workspace }}/build
       - name: Build (Ubuntu)
-        run: |
-          cd build
-          cmake --build .
+        run: cmake --build .
+        working-directory: ${{ github.workspace }}/build
       - name: Tests (Ubuntu)
-        run: |
-          cd build
-          ctest
+        run: ctest
+        working-directory: ${{ github.workspace }}/build
   Windows:
     name: build-windows
     runs-on: windows-latest

@@ -8,7 +8,11 @@
 #ifdef _WIN32
     #include "GL/freeglut.h"
 #else
-    #include "GL/glut.h"
+    #ifndef __APPLE__
+        #include "GL/glut.h"
+    #else
+        #include <GLUT/glut.h>
+    #endif
 #endif
 
 #ifndef __APPLE__
