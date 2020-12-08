@@ -1,0 +1,26 @@
+name: build-and-test
+on: [push]
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo AAA
+  build-test:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build CMake
+        uses: ashutoshvarma/action-cmake-build@v1
+        with:
+          build-dir: ${{ runner.workspace }}/build
+          # will set the CC & CXX for cmake
+          cc: gcc
+          cxx: g++
+          build-type: Release
+          # Extra options pass to cmake while configuring project
+          configure-options: -DBUILD_TESTING=ON
+          run-test: true
+          # install the build using cmake --install
+          install-build: true
+          # run build using '-j [parallel]' to use multiple threads to build
+          parallel: 2
