@@ -69,7 +69,7 @@ namespace APTracer { namespace Cameras {
 
             ImgBuffer_t* image_; /**< @brief Image buffer into which the image is stored.*/
             std::uniform_real_distribution<double> unif_; /**< @brief Uniform random distribution used for generating random numbers.*/
-            Vec3f direction_last_; /**< @brief Direction in which the camera points before last updated. Used for motion blur.*/
+            Vec3f direction_last_; /**< @brief Direction in which the camera points before last update. Used for motion blur.*/
             Vec3f origin_last_; /**< @brief Position of the camera before last update. Used for motion blur.*/
             double time_[2]; /**< @brief Opening and closing time of the shutter. [open, close], from 0 to 1, where 0 is last state and current state. Rays are created at a time in this interval. Enables motion blur.*/
             Vec3f up_last_; /**< @brief Vector pointing up before last update. Used for motion blur.*/
