@@ -26,7 +26,7 @@ using APTracer::Entities::ImgBuffer_t;
 namespace APTracer { namespace Cameras {
 
     /**
-     * @brief The cam class describes a camera that uses an isometric projection.
+     * @brief The iso cam class describes a camera that uses an isometric projection.
      * 
      * It uses an isometric projection, where rays have the same direction and are equally spaced 
      * on a plane for their origin. This removes perspective from the image. As such, its field

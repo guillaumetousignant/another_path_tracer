@@ -34,7 +34,7 @@ namespace APTracer { namespace Cameras {
      * This camera creates rays on a disk to simulate the aperture of a real camera for depth of field.
      * It has a focal length, so all objects at that distance will be in the focal plane,
      * and other objects will be out of focus. The shape of the focal plane is a sphere
-     * at focal_length_ from the origin.
+     * of focal_length_ radius centered on the origin.
      * This camera stores the result from its rays in a single image buffer, and has no
      * motion blur.
      */
