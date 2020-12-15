@@ -84,7 +84,7 @@ namespace APTracer { namespace Shapes {
              * @return true The ray intersected the triangle, t and uv are defined.
              * @return false The ray doesn't intersect the triangle, t and uv are undefined.
              */
-            virtual bool intersection(const Ray_t &rays, double &t, double (&uv)[2]) const final;
+            virtual bool intersection(const Ray_t &ray, double &t, double (&uv)[2]) const final;
 
             /**
              * @brief Returns the surface normal and texture coordinates at a point in object coordinates and a specific time.
