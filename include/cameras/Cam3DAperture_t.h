@@ -122,6 +122,7 @@ namespace APTracer { namespace Cameras {
              * reset functions.
              */
             virtual void reset() final;
+            
             /**
              * @brief Sets the focal length of the camera, the distance at which both eye cameras converge.
              * 
@@ -131,7 +132,6 @@ namespace APTracer { namespace Cameras {
              * 
              * @param focus_distance New focal length of the camera. Distance at which both eye cameras converge.
              */
-            
             virtual void focus(double focus_distance) final;
 
             /**
