@@ -72,7 +72,7 @@ namespace APTracer { namespace Cameras {
             Cam_t* camera_R_; /**< @brief Right eye camera. Managed by the 3D camera, do not update directly.*/
 
             /**
-             * @brief Updates the camera's members, and the dependant cameras.
+             * @brief Updates the camera's members and the dependant cameras.
              * 
              * This is used to set the new direction, origin and up vector. Should be called once per frame, before rendering. 
              * This is how the changes to the transformation matrix and functions like setUp take effect.
