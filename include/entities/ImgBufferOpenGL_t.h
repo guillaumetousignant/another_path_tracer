@@ -82,7 +82,7 @@ namespace APTracer { namespace Entities {
             virtual void update(const Vec3f &colour, unsigned int pos_x, unsigned int pos_y) final;
 
             /**
-             * @brief Sets the value of the whole imagee to the value of all pixels in the input.
+             * @brief Sets the value of the whole image to the value of all pixels in the input.
              * 
              * This sets the number of updates to 1.
              * 
@@ -93,13 +93,13 @@ namespace APTracer { namespace Entities {
             virtual void set(const Vec3f* img, unsigned int size_x, unsigned int size_y) final;
 
             /**
-             * @brief Writes the image to disk using the provided filename and gamma.
+             * @brief Sets the value of a single pixel of the image to the input value.
              * 
-             * This converts the image to integer values and saves it to a 16bit png file. The image
-             * is encoded with the provided gamma value, 1.0 being standard.
+             * This doesn't reset the number of updates to 1.
              * 
-             * @param filename File to which the image will be saved.
-             * @param gammaind Gamma used to encode the image. Defaults to 1.0.
+             * @param colour Colour to be given to the pixel.
+             * @param pos_x Horizontal coordinate of the pixel to be set.
+             * @param pos_y Vertical coordinate of the pixel to be set.
              */
             virtual void set(const Vec3f &colour, unsigned int pos_x, unsigned int pos_y) final;
     };
