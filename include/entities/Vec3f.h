@@ -338,7 +338,7 @@ namespace APTracer { namespace Entities {
             /**
              * @brief Returns the squared magnitude of the vector.
              * 
-             * Returns x^2 + 1^2 + z^2. Useful because it is much faster than the norm,
+             * Returns x^2 + y^2 + z^2. Useful because it is much faster than the norm,
              * and can be used instead of it in some situations.
              * 
              * @return double Squared magnitude of the norm.
