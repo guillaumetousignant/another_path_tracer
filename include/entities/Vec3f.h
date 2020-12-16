@@ -30,7 +30,7 @@ namespace APTracer { namespace Entities {
             Vec3f(double x, double y, double z); 
 
             /**
-             * @brief Construct a new Vec 3f object from one value.
+             * @brief Construct a new Vec3f object from one value.
              * 
              * @param x Value given to the three components of the vector.
              */
