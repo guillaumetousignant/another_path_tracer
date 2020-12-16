@@ -13,7 +13,7 @@ namespace APTracer { namespace Entities {
      */
     class Vec3f {
         public:
-            double v[3]; /**< @brief Array of the 3 values in vector.*/
+            double v[3]; /**< @brief Array of the 3 values in the vector.*/
         public:
             /**
              * @brief Construct a new Vec3f object with (0, 0, 0).
