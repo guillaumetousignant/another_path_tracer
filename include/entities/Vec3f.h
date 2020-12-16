@@ -329,7 +329,7 @@ namespace APTracer { namespace Entities {
             /**
              * @brief Returns the magnitude of the vector.
              * 
-             * Returns the L2 norm of the vector: sqrt(x^2 + 1^2 + z^2).
+             * Returns the L2 norm of the vector: sqrt(x^2 + y^2 + z^2).
              * 
              * @return double Magnitude of the vector.
              */
