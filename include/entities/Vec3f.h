@@ -525,6 +525,90 @@ namespace APTracer { namespace Entities {
              * @return Vec3f& Reference to the vector, used to chain operations.
              */
             Vec3f &clamp(double minimum, double maximum);
+
+            /**
+             * @brief Returns the x component of the vector
+             * 
+             * @return double x component of the vector.
+             */
+            double x() const;
+            
+            /**
+             * @brief Returns the y component of the vector
+             * 
+             * @return double y component of the vector.
+             */
+            double y() const;
+
+            /**
+             * @brief Returns the z component of the vector
+             * 
+             * @return double z component of the vector.
+             */
+            double z() const;
+
+            /**
+             * @brief Returns a reference to the x component of the vector
+             * 
+             * @return double Reference to the x component of the vector.
+             */
+            double& x();
+            
+            /**
+             * @brief Returns a reference to the y component of the vector
+             * 
+             * @return double Reference to the y component of the vector.
+             */
+            double& y();
+
+            /**
+             * @brief Returns a reference to the z component of the vector
+             * 
+             * @return double Reference to the z component of the vector.
+             */
+            double& z();
+
+            /**
+             * @brief Returns the red component of the vector
+             * 
+             * @return double red component of the vector.
+             */
+            double r() const;
+            
+            /**
+             * @brief Returns the green component of the vector
+             * 
+             * @return double green component of the vector.
+             */
+            double g() const;
+
+            /**
+             * @brief Returns the blue component of the vector
+             * 
+             * @return double blue component of the vector.
+             */
+            double b() const;
+
+            /**
+             * @brief Returns a reference to the red component of the vector
+             * 
+             * @return double Reference to the red component of the vector.
+             */
+            double& r();
+            
+            /**
+             * @brief Returns a reference to the green component of the vector
+             * 
+             * @return double Reference to the green component of the vector.
+             */
+            double& g();
+
+            /**
+             * @brief Returns a reference to the blue component of the vector
+             * 
+             * @return double Reference to the blue component of the vector.
+             */
+            double& b();
     };
 }}
 

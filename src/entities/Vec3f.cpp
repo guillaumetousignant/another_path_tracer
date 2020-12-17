@@ -238,3 +238,39 @@ std::ostream &operator<<(std::ostream &output, const Vec3f &v) {
 Vec3f operator*(const double factor, const Vec3f &v) {
     return Vec3f(v[0] * factor, v[1] * factor, v[2] * factor);
 }
+double Vec3f::x() const {
+    return v[0];
+}
+double Vec3f::y() const {
+    return v[1];
+}
+double Vec3f::z() const {
+    return v[2];
+}
+double& Vec3f::x() {
+    return v[0];
+}
+double& Vec3f::y() {
+    return v[1];
+}
+double& Vec3f::z() {
+    return v[2];
+}
+double Vec3f::r() const {
+    return v[0];
+}
+double Vec3f::g() const {
+    return v[1];
+}
+double Vec3f::b() const {
+    return v[2];
+}
+double& Vec3f::r() {
+    return v[0];
+}
+double& Vec3f::g() {
+    return v[1];
+}
+double& Vec3f::b() {
+    return v[2];
+}
