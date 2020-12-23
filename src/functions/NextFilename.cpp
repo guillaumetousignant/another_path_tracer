@@ -14,7 +14,7 @@ std::string APTracer::next_filename(const std::string &prefix) {
     std::string filename, filename_L, filename_R, filename_S;
     unsigned int index;
 
-    point = prefix.find_last_of(".");
+    point = prefix.find_last_of('.');
 
     if (point != std::string::npos) {
         name = prefix.substr(0, point);

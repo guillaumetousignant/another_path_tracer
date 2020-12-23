@@ -22,7 +22,7 @@ Cam3D_t::Cam3D_t(TransformMatrix_t* transformation, const std::string &filename,
 
     std::string filename_S, filename_L, filename_R;
 
-    const size_t point = filename.find_last_of(".");
+    const size_t point = filename.find_last_of('.');
 
     if (point != std::string::npos) {
         filename_L = filename.substr(0, point) + "_L" + filename.substr(point);
@@ -90,7 +90,7 @@ void Cam3D_t::write(std::string file_name /*= ""*/) {
         filename_S = filename_;
     }
     else{
-        const size_t point = file_name.find_last_of(".");
+        const size_t point = file_name.find_last_of('.');
         if (point != std::string::npos) {
             filename_L = file_name.substr(0, point) + "_L" + file_name.substr(point);
             filename_R = file_name.substr(0, point) + "_R" + file_name.substr(point);

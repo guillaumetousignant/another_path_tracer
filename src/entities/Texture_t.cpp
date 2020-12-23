@@ -15,7 +15,7 @@ using APTracer::Entities::Vec3f;
 
 Texture_t::Texture_t(const std::string &filename) {
     cimg_library::CImg<double> image;
-    std::string extension = filename.substr(filename.find_last_of(".") + 1);
+    std::string extension = filename.substr(filename.find_last_of('.') + 1);
     std::for_each(extension.begin(), extension.end(), [](char & c) {
         c = ::tolower(c);
     });
