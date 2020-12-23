@@ -5,8 +5,6 @@
 #include "entities/AccelerationStructure_t.h"
 #include <vector>
 
-#define CELLLIST
-
 namespace APTracer { namespace Entities {
     class Shape_t;
 }}

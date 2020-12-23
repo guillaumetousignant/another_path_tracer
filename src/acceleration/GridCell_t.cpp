@@ -3,8 +3,6 @@
 #include <list>
 #include <limits>
 
-#define CELLLIST
-
 using APTracer::Acceleration::GridCell_t;
 
 GridCell_t::GridCell_t() : items_(std::list<Shape_t*>()) {
