@@ -34,7 +34,7 @@ namespace APTracer { namespace Entities {
              * 
              * @param x Value given to the three components of the vector.
              */
-            Vec3f(double x); 
+            explicit Vec3f(double x); 
 
             /**
              * @brief Accesses the selected component of the vector, returning a reference.
