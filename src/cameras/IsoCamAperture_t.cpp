@@ -52,7 +52,7 @@ void IsoCamAperture_t::raytrace(const Scene_t* scene) {
         const unsigned int i = index%image_->size_x_;
         const unsigned int j = index/image_->size_x_;
         Vec3f col = Vec3f(); // Or declare above?
-        const Vec3f ray_origin = origin_ - vertical * pixel_span_y * ((double)j - (double)image_->size_y_/2.0 + 0.5) + horizontal * pixel_span_x * ((double)i - (double)image_->size_x_/2.0 + 0.5);
+        const Vec3f ray_origin = origin_ - vertical * pixel_span_y * (static_cast<double>(j) - static_cast<double>(image_->size_y_)/2.0 + 0.5) + horizontal * pixel_span_x * (static_cast<double>(i) - static_cast<double>(image_->size_x_)/2.0 + 0.5);
 
         for (unsigned int subindex = 0; subindex < subpix_[0] * subpix_[1]; ++subindex) {
             const unsigned int l = subindex%subpix_[1]; // x
@@ -62,7 +62,7 @@ void IsoCamAperture_t::raytrace(const Scene_t* scene) {
             const double jitter_y = unif_(APTracer::Entities::rng);
             const double jitter_x = unif_(APTracer::Entities::rng);
 
-            const Vec3f subpix_ray_origin = ray_origin - vertical * subpix_span_y * ((double)k - (double)subpix_[0]/2.0 + jitter_y) + horizontal * subpix_span_x * ((double)l - (double)subpix_[1]/2.0 + jitter_x);;
+            const Vec3f subpix_ray_origin = ray_origin - vertical * subpix_span_y * (static_cast<double>(k) - static_cast<double>(subpix_[0])/2.0 + jitter_y) + horizontal * subpix_span_x * (static_cast<double>(l) - static_cast<double>(subpix_[1])/2.0 + jitter_x);;
             const Vec3f ray_origin2 = subpix_ray_origin + vertical * std::cos(rand_theta) * rand_r + horizontal * std::sin(rand_theta) * rand_r;
             const Vec3f direction2 = (subpix_ray_origin + direction_ * focal_length_ - ray_origin2).normalize_inplace();
 

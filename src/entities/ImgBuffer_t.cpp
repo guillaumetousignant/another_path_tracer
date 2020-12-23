@@ -34,7 +34,7 @@ void ImgBuffer_t::update(const Vec3f* img, unsigned int size_x, unsigned int siz
     updates_++;
 
     for (unsigned int j = 0; j < size_y*size_x; ++j) {
-        //img_[j][i] = img_[j][i] * (1.0 - 1.0/(double)updates_) + img[j][i]/(double)updates_;
+        //img_[j][i] = img_[j][i] * (1.0 - 1.0/static_cast<double>(updates_)) + img[j][i]/static_cast<double>(updates_);
         img_[j] += img[j];
     }
 }
@@ -44,7 +44,7 @@ void ImgBuffer_t::update() {
 }
 
 void ImgBuffer_t::update(const Vec3f &colour, unsigned int pos_x, unsigned int pos_y) {
-    //img_[pos_y][pos_x] = img_[pos_y][pos_x] * (1.0 - 1.0/(double)updates_) + colour/(double)updates_;
+    //img_[pos_y][pos_x] = img_[pos_y][pos_x] * (1.0 - 1.0/static_cast<double>(updates_)) + colour/static_cast<double>(updates_);
     img_[pos_y*size_x_ + pos_x] += colour;
 }
 
@@ -60,7 +60,7 @@ void ImgBuffer_t::set(const Vec3f &colour, unsigned int pos_x, unsigned int pos_
 }
 
 void ImgBuffer_t::write(std::string &filename, double gammaind /* = 1.0 */) const {
-    const double update_mult = 1.0/(double)updates_;
+    const double update_mult = 1.0/static_cast<double>(updates_);
     cimg_library::CImg<unsigned short> image(size_x_, size_y_, 1, 3);
     const unsigned int n = size_x_ * size_y_;
 
@@ -73,9 +73,9 @@ void ImgBuffer_t::write(std::string &filename, double gammaind /* = 1.0 */) cons
             Vec3f colour = img_[j*size_x_ + i]*update_mult;
             colour.clamp(0.0, 1.0).pow_inplace(gammaind);
             colour *= bit_multiplier;
-            image(i, j, 0, 0, n, n) = (unsigned short) std::lround(colour[0]);
-            image(i, j, 0, 1, n, n) = (unsigned short) std::lround(colour[1]);
-            image(i, j, 0, 2, n, n) = (unsigned short) std::lround(colour[2]);
+            image(i, j, 0, 0, n, n) = static_cast<unsigned short>(std::lround(colour[0]));
+            image(i, j, 0, 1, n, n) = static_cast<unsigned short>(std::lround(colour[1]));
+            image(i, j, 0, 2, n, n) = static_cast<unsigned short>(std::lround(colour[2]));
         }
     }
 

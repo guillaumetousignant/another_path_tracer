@@ -58,7 +58,7 @@ void CamMotionblur_t::raytrace(const Scene_t* scene) {
         const unsigned int i = index%image_->size_x_;
         const unsigned int j = index/image_->size_x_;
         Vec3f col = Vec3f(); // Or declare above?
-        const Vec3f pix_vec = Vec3f(1.0, pi/2.0 + ((double)j - (double)image_->size_y_/2.0 + 0.5)*pixel_span_y, ((double)i - (double)image_->size_x_/2.0 + 0.5)*pixel_span_x);
+        const Vec3f pix_vec = Vec3f(1.0, pi/2.0 + (static_cast<double>(j) - static_cast<double>(image_->size_y_)/2.0 + 0.5)*pixel_span_y, (static_cast<double>(i) - static_cast<double>(image_->size_x_)/2.0 + 0.5)*pixel_span_x);
         
         for (unsigned int subindex = 0; subindex < subpix_[0] * subpix_[1]; ++subindex) {
             const unsigned int l = subindex%subpix_[1]; // x
@@ -72,7 +72,7 @@ void CamMotionblur_t::raytrace(const Scene_t* scene) {
             const Vec3f vertical_int = vertical * rand_time + vertical_last * (1.0 - rand_time); // maybe should normalise this
             const Vec3f origin_int = origin_ * rand_time + origin_last_ * (1.0 - rand_time);
 
-            Vec3f subpix_vec = (pix_vec + Vec3f(0.0, ((double)k - (double)subpix_[0]/2.0 + jitter_y)*subpix_span_y, ((double)l - (double)subpix_[1]/2.0 + jitter_x)*subpix_span_x)).to_xyz_offset(direction_int, horizontal_int, vertical_int);
+            Vec3f subpix_vec = (pix_vec + Vec3f(0.0, (static_cast<double>(k) - static_cast<double>(subpix_[0])/2.0 + jitter_y)*subpix_span_y, (static_cast<double>(l) - static_cast<double>(subpix_[1])/2.0 + jitter_x)*subpix_span_x)).to_xyz_offset(direction_int, horizontal_int, vertical_int);
 
             Ray_t ray = Ray_t(origin_int, subpix_vec.normalize_inplace(), Vec3f(), Vec3f(1.0), medium_list_, rand_time);
             ray.raycast(scene, max_bounces_, skybox_);

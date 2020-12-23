@@ -41,7 +41,7 @@ AccelerationMultiGrid_t::AccelerationMultiGrid_t(Shape_t** items, size_t n_items
                             .min(max_res_) - 1.0;
 
     for (unsigned int i = 0; i < 3; i++) {
-        cell_res_[i] = (unsigned int)(cell_res[i] + 1.0);
+        cell_res_[i] = static_cast<unsigned int>(cell_res[i] + 1.0);
     }
 
     cell_size_ = grid_size/(cell_res + 1.0);
@@ -66,9 +66,9 @@ AccelerationMultiGrid_t::AccelerationMultiGrid_t(Shape_t** items, size_t n_items
         min1.min(cell_res);
         max1.min(cell_res);
         
-        for (z = (unsigned int)min1[2]; z <= (unsigned int)max1[2]; z++) {
-            for (y = (unsigned int)min1[1]; y <= (unsigned int)max1[1]; y++) {
-                for (x = (unsigned int)min1[0]; x <= (unsigned int)max1[0]; x++) {
+        for (z = static_cast<unsigned int>(min1[2]); z <= static_cast<unsigned int>(max1[2]); z++) {
+            for (y = static_cast<unsigned int>(min1[1]); y <= static_cast<unsigned int>(max1[1]); y++) {
+                for (x = static_cast<unsigned int>(min1[0]); x <= static_cast<unsigned int>(max1[0]); x++) {
                     if (temp_cells[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] == nullptr) {
                         temp_cells[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] = new GridCell_t;
                     }
@@ -160,7 +160,7 @@ Shape_t* AccelerationMultiGrid_t::intersect(const Ray_t &ray, double &t, double 
         }
     }
 
-    int cellcoordint[3] = {(int)cellcoord[0], (int)cellcoord[1], (int)cellcoord[2]};
+    int cellcoordint[3] = {static_cast<int>(cellcoord[0]), static_cast<int>(cellcoord[1]), static_cast<int>(cellcoord[2])};
     Shape_t* hit_obj = nullptr;
 
     while (true) {
@@ -200,9 +200,9 @@ void AccelerationMultiGrid_t::add(Shape_t* item) {
     min1.min(cell_res);
     max1.min(cell_res);
 
-    for (unsigned int z = (unsigned int)min1[2]; z <= (unsigned int)max1[2]; z++) {
-        for (unsigned int y = (unsigned int)min1[1]; y <= (unsigned int)max1[1]; y++) {
-            for (unsigned int x = (unsigned int)min1[0]; x <= (unsigned int)max1[0]; x++) {
+    for (unsigned int z = static_cast<unsigned int>(min1[2]); z <= static_cast<unsigned int>(max1[2]); z++) {
+        for (unsigned int y = static_cast<unsigned int>(min1[1]); y <= static_cast<unsigned int>(max1[1]); y++) {
+            for (unsigned int x = static_cast<unsigned int>(min1[0]); x <= static_cast<unsigned int>(max1[0]); x++) {
                 if (cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] == nullptr) {
                     cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] = new GridCell_t;
                 }
@@ -228,9 +228,9 @@ void AccelerationMultiGrid_t::remove(const Shape_t* item) {
     min1.min(cell_res);
     max1.min(cell_res);
 
-    for (unsigned int z = (unsigned int)min1[2]; z <= (unsigned int)max1[2]; z++) {
-        for (unsigned int y = (unsigned int)min1[1]; y <= (unsigned int)max1[1]; y++) {
-            for (unsigned int x = (unsigned int)min1[0]; x <= (unsigned int)max1[0]; x++) {
+    for (unsigned int z = static_cast<unsigned int>(min1[2]); z <= static_cast<unsigned int>(max1[2]); z++) {
+        for (unsigned int y = static_cast<unsigned int>(min1[1]); y <= static_cast<unsigned int>(max1[1]); y++) {
+            for (unsigned int x = static_cast<unsigned int>(min1[0]); x <= static_cast<unsigned int>(max1[0]); x++) {
                 if (cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] != nullptr) {
                     cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]]->remove(item);
                 }

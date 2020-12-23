@@ -70,8 +70,8 @@ void RecCamMotionblur_t::raytrace(const Scene_t* scene) {
             const Vec3f vertical_int = vertical * rand_time + vertical_last * (1.0 - rand_time);
             const Vec3f origin_int = origin_ * rand_time + origin_last_ * (1.0 - rand_time);
             
-            const Vec3f ray_vec = (focus_point_int - vertical_int * (pixel_span_y * ((double)j - (double)image_->size_y_/2.0 + 0.5) + subpix_span_y * ((double)k - (double)subpix_[0]/2.0 + jitter_y))
-                            + horizontal_int * (pixel_span_x * ((double)i - (double)image_->size_x_/2.0 + 0.5) + subpix_span_x * ((double)l - (double)subpix_[1]/2.0 + jitter_x))
+            const Vec3f ray_vec = (focus_point_int - vertical_int * (pixel_span_y * (static_cast<double>(j) - static_cast<double>(image_->size_y_)/2.0 + 0.5) + subpix_span_y * (static_cast<double>(k) - static_cast<double>(subpix_[0])/2.0 + jitter_y))
+                            + horizontal_int * (pixel_span_x * (static_cast<double>(i) - static_cast<double>(image_->size_x_)/2.0 + 0.5) + subpix_span_x * (static_cast<double>(l) - static_cast<double>(subpix_[1])/2.0 + jitter_x))
                             - origin_int).normalize_inplace();
 
             Ray_t ray = Ray_t(origin_int, ray_vec, Vec3f(), Vec3f(1.0), medium_list_, rand_time);
