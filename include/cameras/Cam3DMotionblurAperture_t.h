@@ -65,7 +65,7 @@ namespace APTracer { namespace Cameras {
              * @param time Opening and closing time of the shutter. [open, close], from 0 to 1, where 0 is last state and current state. Rays are created at a time in this interval. Enables motion blur.
              * @param gammaind Gamma of the saved picture. A value of 1 should be used for usual cases.
              */
-            Cam3DMotionblurAperture_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, const double (&fov)[2], const unsigned int (&subpix)[2], ImgBuffer_t* image, ImgBuffer_t* image_L, ImgBuffer_t* image_R, double eye_dist, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double focal_length, double aperture, double (&time)[2], double gammaind);
+            Cam3DMotionblurAperture_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, std::array<double, 2> fov, std::array<unsigned int, 2> subpix, ImgBuffer_t* image, ImgBuffer_t* image_L, ImgBuffer_t* image_R, double eye_dist, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double focal_length, double aperture, std::array<double, 2> time, double gammaind);
             
             /**
              * @brief Destroy the Cam3DMotionblurAperture_t object, deleting the dependant cameras.
@@ -82,7 +82,7 @@ namespace APTracer { namespace Cameras {
             Vec3f direction_last_; /**< @brief Direction in which the camera points before last update. Used for motion blur.*/
             Vec3f origin_last_; /**< @brief Position of the camera before last update. Used for motion blur.*/
             double focal_length_last_; /**< @brief Distance of the focal plane to the camera origin before last update. Used for motion blur.*/
-            double time_[2]; /**< @brief Opening and closing time of the shutter. [open, close], from 0 to 1, where 0 is last state and current state. Rays are created at a time in this interval. Enables motion blur.*/
+            std::array<double, 2> time_; /**< @brief Opening and closing time of the shutter. [open, close], from 0 to 1, where 0 is last state and current state. Rays are created at a time in this interval. Enables motion blur.*/
             Vec3f up_last_; /**< @brief Vector pointing up before last update. Used for motion blur.*/
 
             CamMotionblurAperture_t* camera_L_; /**< @brief Left eye camera. Managed by the 3D camera, do not update directly.*/

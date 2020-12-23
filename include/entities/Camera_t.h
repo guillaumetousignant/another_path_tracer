@@ -4,6 +4,7 @@
 #include "entities/Vec3f.h"
 #include <string>
 #include <list>
+#include <array>
 
 namespace APTracer { namespace Entities {
     class TransformMatrix_t;
@@ -38,7 +39,7 @@ namespace APTracer { namespace Entities {
              * @param max_bounces Maximum intersections with shapes and bounces on materials a ray can do before it is terminated. Actual number may be less.
              * @param gammaind Gamma of the saved picture. A value of 1 should be used for usual cases.
              */
-            Camera_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, const double (&fov)[2], const unsigned int (&subpix)[2], std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double gammaind);
+            Camera_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, std::array<double, 2> fov, std::array<unsigned int, 2> subpix, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double gammaind);
             
             /**
              * @brief Destroy the Camera_t object. Does nothing.
@@ -47,8 +48,8 @@ namespace APTracer { namespace Entities {
 
             TransformMatrix_t* transformation_; /**< @brief Transformation matrix used by the camera. Sets the camera's origin and direction when created and updated.*/
             std::string filename_; /**< @brief Filename used by the camera when saving an image. Not used by all cameras, and some might modify it or save multiple pictures with variations of the name.*/
-            double fov_[2]; /**< @brief Array containing field of view of camera [vertical, horizontal]. Will have different units depending on the projection used.*/
-            unsigned int subpix_[2]; /**< @brief Array containing the number of subpixels per pixel, [vertical, horizontal], for antialiasing purposes. Not very useful because sample jittering when there are multiple samples per pixel removes aliasing. May be useful when there are few samples per pixel and location of the samples mush be controlled.*/
+            std::array<double, 2> fov_; /**< @brief Array containing field of view of camera [vertical, horizontal]. Will have different units depending on the projection used.*/
+            std::array<unsigned int, 2> subpix_; /**< @brief Array containing the number of subpixels per pixel, [vertical, horizontal], for antialiasing purposes. Not very useful because sample jittering when there are multiple samples per pixel removes aliasing. May be useful when there are few samples per pixel and location of the samples mush be controlled.*/
             std::list<Medium_t*> medium_list_; /**< @brief List of materials in which the camera is placed. Active medium is first element. Should have at least two copies of an "outside" medium not assigned to any object (issue #25).*/
             Skybox_t* skybox_; /**< @brief Skybox that will be intersected if no shape is hit by the rays.*/    
             unsigned int max_bounces_; /**< @brief Maximum intersections with shapes and bounces on materials a ray can do before it is terminated. Actual number may be less.*/

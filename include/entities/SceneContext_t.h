@@ -1,11 +1,14 @@
 #ifndef APTRACER_SCENECONTEXT_T_H
 #define APTRACER_SCENECONTEXT_T_H
 
+#include <iostream>
 #include <string>
+#include <sstream> 
 #include <list>
 #include <tuple>
 #include <vector>
 #include <memory>
+#include <array>
 #include "functions/tinyxml2.h"
 #include "entities/Vec3f.h"
 
@@ -398,10 +401,36 @@ namespace APTracer {
     std::unique_ptr<std::list<std::string>> get_medium_names(std::string string_medium_names);
 
     /**
+     * @brief Get an array of two values from a string.
+     * 
+     * @param string_value String containing two values.
+     * @return std::array<T, 2> Array of two values of type T.
+     */
+    template<typename T>
+    std::array<T, 2> get_xy(const std::string &string_value) {
+        std::array<T, 2> value;
+        std::stringstream ss(string_value);
+
+        for (unsigned int i = 0; i < 2; ++i) {
+            if (ss.rdbuf()->in_avail() == 0) {
+                std::cerr << "Error, xy should be 2 values seperated by spaces. Current number of values is " << i << ", string is '" << string_value << "'. Exiting." << std::endl;
+                exit(3);
+            }
+            ss >> value[i];
+        }
+
+        if (ss.rdbuf()->in_avail() != 0) {
+            std::cerr << "Error, xy should be 2 values seperated by spaces. String not empty after two values, string is '" << string_value << "'. Ignoring." << std::endl;
+        }
+
+        return value;
+    };
+
+    /**
      * @brief Get an array of two double values from a string.
      * 
      * @param string_value String containing two values.
-     * @param value Array of two double values
+     * @param value Array of two double values.
      */
     void get_xy(const std::string &string_value, double (&value)[2]);
 

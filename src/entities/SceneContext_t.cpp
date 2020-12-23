@@ -1621,7 +1621,7 @@ std::unique_ptr<Camera_t> APTracer::Entities::SceneContext_t::create_camera(cons
 
         return std::unique_ptr<Camera_t>(
                     new Cam_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
-                            fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
+                            get_xy<double>("fov"), get_xy<unsigned int>("subpix"), get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
                             get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("gammaind")));
     }
     else if (type == "cam_aperture") {
@@ -1634,167 +1634,100 @@ std::unique_ptr<Camera_t> APTracer::Entities::SceneContext_t::create_camera(cons
 
         return std::unique_ptr<Camera_t>(
                     new CamAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
-                            fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
+                            get_xy<double>("fov"), get_xy<unsigned int>("subpix"), get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
                             get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focal_length"),
                             xml_camera->DoubleAttribute("aperture"), xml_camera->DoubleAttribute("gammaind")));
     }
     else if (type == "cam_motionblur") {
         const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "time"};
-        require_attributes(xml_camera, attributes, 10);
-        double fov[2];
-        unsigned int subpix[2];
-        double time[2];
-        get_xy(xml_camera->Attribute("fov"), fov);
-        get_xy(xml_camera->Attribute("subpix"), subpix);
-        get_xy(xml_camera->Attribute("time"), time);
-        
+        require_attributes(xml_camera, attributes, 10);       
         return std::unique_ptr<Camera_t>(
                     new CamMotionblur_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
-                            fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
-                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), time, xml_camera->DoubleAttribute("gammaind")));
+                            get_xy<double>("fov"), get_xy<unsigned int>("subpix"), get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
+                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), get_xy<double>("time"), xml_camera->DoubleAttribute("gammaind")));
     }
     else if (type == "cam_motionblur_aperture") {
         const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "focal_length", "aperture", "time"};
         require_attributes(xml_camera, attributes, 12);
-        double fov[2];
-        unsigned int subpix[2];
-        double time[2];
-        get_xy(xml_camera->Attribute("fov"), fov);
-        get_xy(xml_camera->Attribute("subpix"), subpix);
-        get_xy(xml_camera->Attribute("time"), time);
-        
         return std::unique_ptr<Camera_t>(
                     new CamMotionblurAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
-                            fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
+                            get_xy<double>("fov"), get_xy<unsigned int>("subpix"), get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
                             get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focal_length"),
-                            xml_camera->DoubleAttribute("aperture"), time, xml_camera->DoubleAttribute("gammaind")));
+                            xml_camera->DoubleAttribute("aperture"), get_xy<double>("time"), xml_camera->DoubleAttribute("gammaind")));
     }
     else if (type == "isocam") {
         const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind"};
         require_attributes(xml_camera, attributes, 9);
-        double fov[2];
-        unsigned int subpix[2];
-        get_xy(xml_camera->Attribute("fov"), fov);
-        get_xy(xml_camera->Attribute("subpix"), subpix);
-
         return std::unique_ptr<Camera_t>(
                     new IsoCam_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
-                            fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
+                            get_xy<double>("fov"), get_xy<unsigned int>("subpix"), get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
                             get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("gammaind")));
     }
     else if (type == "isocam_aperture") {
         const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "focal_length", "aperture"};
         require_attributes(xml_camera, attributes, 11);
-        double fov[2];
-        unsigned int subpix[2];
-        get_xy(xml_camera->Attribute("fov"), fov);
-        get_xy(xml_camera->Attribute("subpix"), subpix);
-
         return std::unique_ptr<Camera_t>(
                     new IsoCamAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
-                            fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
+                            get_xy<double>("fov"), get_xy<unsigned int>("subpix"), get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
                             get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focal_length"),
                             xml_camera->DoubleAttribute("aperture"), xml_camera->DoubleAttribute("gammaind")));
     }
     else if (type == "isocam_motionblur") {
         const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "time"};
         require_attributes(xml_camera, attributes, 10);
-        double fov[2];
-        unsigned int subpix[2];
-        double time[2];
-        get_xy(xml_camera->Attribute("fov"), fov);
-        get_xy(xml_camera->Attribute("subpix"), subpix);
-        get_xy(xml_camera->Attribute("time"), time);
-        
         return std::unique_ptr<Camera_t>(
                     new IsoCamMotionblur_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
-                            fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
-                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), time, xml_camera->DoubleAttribute("gammaind")));
+                            get_xy<double>("fov"), get_xy<unsigned int>("subpix"), get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
+                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), get_xy<double>("time"), xml_camera->DoubleAttribute("gammaind")));
     }
     else if (type == "isocam_motionblur_aperture") {
         const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "focal_length", "aperture", "time"};
         require_attributes(xml_camera, attributes, 12);
-        double fov[2];
-        unsigned int subpix[2];
-        double time[2];
-        get_xy(xml_camera->Attribute("fov"), fov);
-        get_xy(xml_camera->Attribute("subpix"), subpix);
-        get_xy(xml_camera->Attribute("time"), time);
-        
         return std::unique_ptr<Camera_t>(
                     new IsoCamMotionblurAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
-                            fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
+                            get_xy<double>("fov"), get_xy<unsigned int>("subpix"), get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
                             get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focal_length"),
-                            xml_camera->DoubleAttribute("aperture"), time, xml_camera->DoubleAttribute("gammaind")));
+                            xml_camera->DoubleAttribute("aperture"), get_xy<double>("time"), xml_camera->DoubleAttribute("gammaind")));
     }
     else if (type == "reccam") {
         const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind"};
         require_attributes(xml_camera, attributes, 9);
-        double fov[2];
-        unsigned int subpix[2];
-        get_xy(xml_camera->Attribute("fov"), fov);
-        get_xy(xml_camera->Attribute("subpix"), subpix);
-
         return std::unique_ptr<Camera_t>(
                     new RecCam_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
-                            fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
+                            get_xy<double>("fov"), get_xy<unsigned int>("subpix"), get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
                             get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("gammaind")));
     }
     else if (type == "reccam_aperture") {
         const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "focal_length", "aperture"};
         require_attributes(xml_camera, attributes, 11);
-        double fov[2];
-        unsigned int subpix[2];
-        get_xy(xml_camera->Attribute("fov"), fov);
-        get_xy(xml_camera->Attribute("subpix"), subpix);
-
         return std::unique_ptr<Camera_t>(
                     new RecCamAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
-                            fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
+                            get_xy<double>("fov"), get_xy<unsigned int>("subpix"), get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
                             get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focal_length"),
                             xml_camera->DoubleAttribute("aperture"), xml_camera->DoubleAttribute("gammaind")));
     }
     else if (type == "reccam_motionblur") {
         const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "time"};
         require_attributes(xml_camera, attributes, 10);
-        double fov[2];
-        unsigned int subpix[2];
-        double time[2];
-        get_xy(xml_camera->Attribute("fov"), fov);
-        get_xy(xml_camera->Attribute("subpix"), subpix);
-        get_xy(xml_camera->Attribute("time"), time);
-        
         return std::unique_ptr<Camera_t>(
                     new RecCamMotionblur_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
-                            fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
-                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), time, xml_camera->DoubleAttribute("gammaind")));
+                            get_xy<double>("fov"), get_xy<unsigned int>("subpix"), get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
+                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), get_xy<double>("time"), xml_camera->DoubleAttribute("gammaind")));
     }
     else if (type == "reccam_motionblur_aperture") {
         const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "focal_length", "aperture", "time"};
         require_attributes(xml_camera, attributes, 12);
-        double fov[2];
-        unsigned int subpix[2];
-        double time[2];
-        get_xy(xml_camera->Attribute("fov"), fov);
-        get_xy(xml_camera->Attribute("subpix"), subpix);
-        get_xy(xml_camera->Attribute("time"), time);
-        
         return std::unique_ptr<Camera_t>(
                     new RecCamMotionblurAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
-                            fov, subpix, get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
+                            get_xy<double>("fov"), get_xy<unsigned int>("subpix"), get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
                             get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focal_length"),
-                            xml_camera->DoubleAttribute("aperture"), time, xml_camera->DoubleAttribute("gammaind")));
+                            xml_camera->DoubleAttribute("aperture"), get_xy<double>("time"), xml_camera->DoubleAttribute("gammaind")));
     }
     else if (type == "cam_3d") {
         const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "imgbuffer_L", "imgbuffer_R", "eye_dist", "medium_list", "skybox", "max_bounces", "gammaind"};
         require_attributes(xml_camera, attributes, 12);
-        double fov[2];
-        unsigned int subpix[2];
-        get_xy(xml_camera->Attribute("fov"), fov);
-        get_xy(xml_camera->Attribute("subpix"), subpix);
-
         return std::unique_ptr<Camera_t>(
-                    new Cam3D_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), fov, subpix, 
+                    new Cam3D_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), get_xy<double>("fov"), get_xy<unsigned int>("subpix"), 
                             get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_imgbuffer(xml_camera->Attribute("imgbuffer_L"), xml_imgbuffers), 
                             get_imgbuffer(xml_camera->Attribute("imgbuffer_R"), xml_imgbuffers), xml_camera->DoubleAttribute("eye_dist"), 
                             get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), 
@@ -1803,13 +1736,8 @@ std::unique_ptr<Camera_t> APTracer::Entities::SceneContext_t::create_camera(cons
     else if (type == "cam_3d_aperture") {
         const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "imgbuffer_L", "imgbuffer_R", "eye_dist", "medium_list", "skybox", "max_bounces", "gammaind", "focal_length", "aperture"};
         require_attributes(xml_camera, attributes, 14);
-        double fov[2];
-        unsigned int subpix[2];
-        get_xy(xml_camera->Attribute("fov"), fov);
-        get_xy(xml_camera->Attribute("subpix"), subpix);
-
         return std::unique_ptr<Camera_t>(
-                    new Cam3DAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), fov, subpix, 
+                    new Cam3DAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), get_xy<double>("fov"), get_xy<unsigned int>("subpix"), 
                             get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_imgbuffer(xml_camera->Attribute("imgbuffer_L"), xml_imgbuffers), 
                             get_imgbuffer(xml_camera->Attribute("imgbuffer_R"), xml_imgbuffers), xml_camera->DoubleAttribute("eye_dist"), 
                             get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), 
@@ -1819,37 +1747,23 @@ std::unique_ptr<Camera_t> APTracer::Entities::SceneContext_t::create_camera(cons
     else if (type == "cam_3d_motionblur") {
         const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "imgbuffer_L", "imgbuffer_R", "eye_dist", "medium_list", "skybox", "max_bounces", "gammaind", "time"};
         require_attributes(xml_camera, attributes, 13);
-        double fov[2];
-        unsigned int subpix[2];
-        double time[2];
-        get_xy(xml_camera->Attribute("fov"), fov);
-        get_xy(xml_camera->Attribute("subpix"), subpix);
-        get_xy(xml_camera->Attribute("time"), time);
-
         return std::unique_ptr<Camera_t>(
-                    new Cam3DMotionblur_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), fov, subpix, 
+                    new Cam3DMotionblur_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), get_xy<double>("fov"), get_xy<unsigned int>("subpix"), 
                             get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_imgbuffer(xml_camera->Attribute("imgbuffer_L"), xml_imgbuffers), 
                             get_imgbuffer(xml_camera->Attribute("imgbuffer_R"), xml_imgbuffers), xml_camera->DoubleAttribute("eye_dist"), 
                             get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), 
-                            xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focal_length"), time, xml_camera->DoubleAttribute("gammaind")));
+                            xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focal_length"), get_xy<double>("time"), xml_camera->DoubleAttribute("gammaind")));
     }
     else if (type == "cam_3d_motionblur_aperture") {
         const char* attributes[] = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "imgbuffer_L", "imgbuffer_R", "eye_dist", "medium_list", "skybox", "max_bounces", "gammaind", "focal_length", "aperture", "time"};
         require_attributes(xml_camera, attributes, 15);
-        double fov[2];
-        unsigned int subpix[2];
-        double time[2];
-        get_xy(xml_camera->Attribute("fov"), fov);
-        get_xy(xml_camera->Attribute("subpix"), subpix);
-        get_xy(xml_camera->Attribute("time"), time);
-
         return std::unique_ptr<Camera_t>(
-                    new Cam3DMotionblurAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), fov, subpix, 
+                    new Cam3DMotionblurAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), get_xy<double>("fov"), get_xy<unsigned int>("subpix"), 
                             get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_imgbuffer(xml_camera->Attribute("imgbuffer_L"), xml_imgbuffers), 
                             get_imgbuffer(xml_camera->Attribute("imgbuffer_R"), xml_imgbuffers), xml_camera->DoubleAttribute("eye_dist"), 
                             get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), 
                             xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focal_length"), xml_camera->DoubleAttribute("aperture"), 
-                            time, xml_camera->DoubleAttribute("gammaind")));
+                            get_xy<double>("time"), xml_camera->DoubleAttribute("gammaind")));
     }
     else{
         std::cerr << "Error, camera type '" << type << "' not implemented. Exiting." << std::endl; 

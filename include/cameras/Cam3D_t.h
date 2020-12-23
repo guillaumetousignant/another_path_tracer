@@ -56,7 +56,7 @@ namespace APTracer { namespace Cameras {
              * @param focal_length Distance of the focal plane to the camera origin. Distance at which both eye cameras converge.
              * @param gammaind Gamma of the saved picture. A value of 1 should be used for usual cases.
              */
-            Cam3D_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, const double (&fov)[2], const unsigned int (&subpix)[2], ImgBuffer_t* image, ImgBuffer_t* image_L, ImgBuffer_t* image_R, double eye_dist, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double focal_length, double gammaind);
+            Cam3D_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, std::array<double, 2> fov, std::array<unsigned int, 2> subpix, ImgBuffer_t* image, ImgBuffer_t* image_L, ImgBuffer_t* image_R, double eye_dist, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double focal_length, double gammaind);
             
             /**
              * @brief Destroy the Cam3D_t object, deleting the dependant cameras.

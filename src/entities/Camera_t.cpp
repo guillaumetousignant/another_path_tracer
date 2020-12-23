@@ -10,8 +10,8 @@ using APTracer::Entities::Skybox_t;
 using APTracer::Entities::Scene_t;
 using APTracer::Entities::Vec3f;
 
-Camera_t::Camera_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, const double (&fov)[2], const unsigned int (&subpix)[2], std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double gammaind) 
-            : transformation_(transformation), filename_(filename), fov_{fov[0], fov[1]}, subpix_{subpix[0], subpix[1]}, medium_list_(medium_list), 
+Camera_t::Camera_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, std::array<double, 2> fov, std::array<unsigned int, 2> subpix, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double gammaind) 
+            : transformation_(transformation), filename_(filename), fov_{fov}, subpix_{subpix}, medium_list_(medium_list), 
             skybox_(skybox), max_bounces_(max_bounces), gammaind_(gammaind), up_(up), up_buffer_(up) {
     origin_ = transformation_->multVec(Vec3f()); 
     direction_ = transformation_->transformDir().multDir(Vec3f(0.0, 1.0, 0.0));
