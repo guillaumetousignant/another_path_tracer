@@ -17,18 +17,18 @@ APTracer::Shapes::Mesh_t::Mesh_t(APTracer::Entities::MaterialMap_t *materialmap,
     createTriangles(materialmap);
 }        
 
-APTracer::Shapes::Mesh_t::~Mesh_t(){}
+APTracer::Shapes::Mesh_t::~Mesh_t() {}
 
-void APTracer::Shapes::Mesh_t::createTriangles(){    
+void APTracer::Shapes::Mesh_t::createTriangles() {    
     triangles_ = new APTracer::Entities::Shape_t*[n_tris_];
-    for (size_t i = 0; i < n_tris_; i++){
+    for (size_t i = 0; i < n_tris_; i++) {
         triangles_[i] = new APTracer::Shapes::TriangleMesh_t(material_, transformation_, geom_, i);
     }
 }
 
-void APTracer::Shapes::Mesh_t::createTriangles(APTracer::Entities::MaterialMap_t *materialmap){
+void APTracer::Shapes::Mesh_t::createTriangles(APTracer::Entities::MaterialMap_t *materialmap) {
     triangles_ = new APTracer::Entities::Shape_t*[n_tris_];
-    for (size_t i = 0; i < n_tris_; i++){
+    for (size_t i = 0; i < n_tris_; i++) {
         triangles_[i] = new APTracer::Shapes::TriangleMesh_t(materialmap->getMaterial(geom_->mat_[i]), transformation_, geom_, i);
     }
 }

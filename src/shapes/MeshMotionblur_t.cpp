@@ -15,18 +15,18 @@ APTracer::Shapes::MeshMotionblur_t::MeshMotionblur_t(APTracer::Entities::Materia
     createTriangles(materialmap);
 }      
 
-APTracer::Shapes::MeshMotionblur_t::~MeshMotionblur_t(){}  
+APTracer::Shapes::MeshMotionblur_t::~MeshMotionblur_t() {}  
 
-void APTracer::Shapes::MeshMotionblur_t::createTriangles(){
+void APTracer::Shapes::MeshMotionblur_t::createTriangles() {
     triangles_ = new APTracer::Entities::Shape_t*[n_tris_];
-    for (size_t i = 0; i < n_tris_; i++){
+    for (size_t i = 0; i < n_tris_; i++) {
         triangles_[i] = new APTracer::Shapes::TriangleMeshMotionblur_t(material_, transformation_, geom_, i);
     }
 }
 
-void APTracer::Shapes::MeshMotionblur_t::createTriangles(MaterialMap_t *materialmap){
+void APTracer::Shapes::MeshMotionblur_t::createTriangles(MaterialMap_t *materialmap) {
     triangles_ = new APTracer::Entities::Shape_t*[n_tris_];
-    for (size_t i = 0; i < n_tris_; i++){
+    for (size_t i = 0; i < n_tris_; i++) {
         triangles_[i] = new APTracer::Shapes::TriangleMeshMotionblur_t(materialmap->getMaterial(geom_->mat_[i]), transformation_, geom_, i);
     }
 }

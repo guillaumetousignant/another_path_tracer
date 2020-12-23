@@ -7,8 +7,6 @@
 #include "entities/RandomGenerator_t.h"
 #include <cmath>
 
-#define PI 3.141592653589793238463
-
 using APTracer::Entities::Vec3f;
 using APTracer::Cameras::IsoCamMotionblur_t;
 using APTracer::Entities::Ray_t;
@@ -53,11 +51,11 @@ void IsoCamMotionblur_t::raytrace(const Scene_t* scene) {
     image_->update();
 
     #pragma omp parallel for schedule(guided)
-    for (index = 0; index < image_->size_y_ * image_->size_x_; ++index){
+    for (index = 0; index < image_->size_y_ * image_->size_x_; ++index) {
         const unsigned int i = index%image_->size_x_;
         const unsigned int j = index/image_->size_x_;
         Vec3f col = Vec3f(); // Or declare above?
-        for (unsigned int subindex = 0; subindex < subpix_[0] * subpix_[1]; ++subindex){
+        for (unsigned int subindex = 0; subindex < subpix_[0] * subpix_[1]; ++subindex) {
             const unsigned int l = subindex%subpix_[1]; // x
             const unsigned int k = subindex/subpix_[1]; // y
             const double rand_time = unif_(APTracer::Entities::rng) * (time_[1] - time_[0]) + time_[0];
@@ -82,7 +80,7 @@ void IsoCamMotionblur_t::raytrace(const Scene_t* scene) {
 }
 
 void IsoCamMotionblur_t::write(std::string file_name /*= ""*/) {
-    if (file_name.empty()){
+    if (file_name.empty()) {
         file_name = filename_;
     }
     image_->write(file_name);
@@ -92,6 +90,6 @@ void IsoCamMotionblur_t::show() const {
     // What to do here?
 }
 
-void IsoCamMotionblur_t::reset(){
+void IsoCamMotionblur_t::reset() {
     image_->reset();
 }

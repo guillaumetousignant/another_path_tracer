@@ -5,15 +5,14 @@
 #include <limits>
 #include <algorithm>
 
-#define PI 3.141592653589793238463
-#define EPSILON 0.00000001
+constexpr double epsilon = 0.00000001;
 
 using APTracer::Entities::Vec3f;
 
 APTracer::Shapes::Triangle_t::Triangle_t(APTracer::Entities::Material_t *material, APTracer::Entities::TransformMatrix_t *transform_matrix, const Vec3f* points, const Vec3f* normals, const double* texcoord) 
     : Shape_t(material, transform_matrix), points_orig_{points[0], points[1], points[2]} {
 
-    if (normals == nullptr){
+    if (normals == nullptr) {
         const Vec3f nor = (points[1] - points[0]).cross(points[2] - points[0]).normalize_inplace(); 
 
         normals_orig_[0] = nor;
@@ -26,7 +25,7 @@ APTracer::Shapes::Triangle_t::Triangle_t(APTracer::Entities::Material_t *materia
         normals_orig_[2] = normals[2];
     }
 
-    if (texcoord == nullptr){
+    if (texcoord == nullptr) {
         texture_coordinates_[0] = 0;
         texture_coordinates_[1] = 1;
         texture_coordinates_[2] = 0;
@@ -60,7 +59,7 @@ APTracer::Shapes::Triangle_t::Triangle_t(APTracer::Entities::Material_t *materia
     const double tuv0v2[2] = {texture_coordinates_[4] - texture_coordinates_[0], texture_coordinates_[5] - texture_coordinates_[1]};    
 
     const double invdet = 1.0/(tuv0v1[0] * tuv0v2[1] - tuv0v1[1] * tuv0v2[0]);
-    if (std::isfinite(invdet)){
+    if (std::isfinite(invdet)) {
         tuv_to_world_[0] = invdet * -tuv0v2[0];
         tuv_to_world_[1] = invdet * tuv0v1[0];
     }
@@ -71,7 +70,7 @@ APTracer::Shapes::Triangle_t::Triangle_t(APTracer::Entities::Material_t *materia
     tangent_vec_ = v0v1_ * tuv_to_world_[0] + v0v2_ * tuv_to_world_[1];
 }
 
-APTracer::Shapes::Triangle_t::~Triangle_t(){}
+APTracer::Shapes::Triangle_t::~Triangle_t() {}
 
 void APTracer::Shapes::Triangle_t::update() {
     points_[0] = transformation_->multVec(points_orig_[0]);
@@ -93,7 +92,7 @@ bool APTracer::Shapes::Triangle_t::intersection(const APTracer::Entities::Ray_t 
     const Vec3f pvec = ray.direction_.cross(v0v2_);
     const double det = v0v1_.dot(pvec);
 
-    if (std::abs(det) < EPSILON){
+    if (std::abs(det) < epsilon) {
         t = std::numeric_limits<double>::infinity();
         uv[0] = NAN;
         uv[1] = NAN;
@@ -105,7 +104,7 @@ bool APTracer::Shapes::Triangle_t::intersection(const APTracer::Entities::Ray_t 
     const double u = tvec.dot(pvec) * invdet;
     uv[0] = u;
 
-    if ((u < 0.0) || (u > 1.0)){
+    if ((u < 0.0) || (u > 1.0)) {
         t = std::numeric_limits<double>::infinity();
         uv[1] = NAN;
         return false;
@@ -115,14 +114,14 @@ bool APTracer::Shapes::Triangle_t::intersection(const APTracer::Entities::Ray_t 
     const double v = ray.direction_.dot(qvec) * invdet;
     uv[1] = v;
 
-    if ((v < 0.0) || ((u+v) > 1.0)){
+    if ((v < 0.0) || ((u+v) > 1.0)) {
         t = std::numeric_limits<double>::infinity();
         return false;
     }
 
     t = v0v2_.dot(qvec) * invdet;
 
-    if (t < 0.0){
+    if (t < 0.0) {
         t = std::numeric_limits<double>::infinity();
         return false;
     }
@@ -162,7 +161,7 @@ Vec3f APTracer::Shapes::Triangle_t::normal_uv_tangent(double time, const double 
     return normalvec;
 }        
 
-Vec3f APTracer::Shapes::Triangle_t::normal_face(double time) const{
+Vec3f APTracer::Shapes::Triangle_t::normal_face(double time) const {
     return v0v1_.cross(v0v2_).normalize_inplace();
 }
 

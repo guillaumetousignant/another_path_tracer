@@ -6,7 +6,7 @@
 #include "entities/ImgBuffer_t.h"
 #include "entities/RandomGenerator_t.h"
 
-#define PI 3.141592653589793238463
+constexpr double pi = 3.141592653589793238463;
 
 using APTracer::Entities::Vec3f;
 using APTracer::Cameras::Cam_t;
@@ -45,13 +45,13 @@ void Cam_t::raytrace(const Scene_t* scene) {
     image_->update();
 
     #pragma omp parallel for schedule(guided)
-    for (index = 0; index < image_->size_y_ * image_->size_x_; ++index){
+    for (index = 0; index < image_->size_y_ * image_->size_x_; ++index) {
         const unsigned int i = index%image_->size_x_;
         const unsigned int j = index/image_->size_x_;
         Vec3f col = Vec3f(); // Or declare above?
-        const Vec3f pix_vec = Vec3f(1.0, PI/2.0 + ((double)j - (double)image_->size_y_/2.0 + 0.5)*pixel_span_y, ((double)i - (double)image_->size_x_/2.0 + 0.5)*pixel_span_x); // Is shit after this line
+        const Vec3f pix_vec = Vec3f(1.0, pi/2.0 + ((double)j - (double)image_->size_y_/2.0 + 0.5)*pixel_span_y, ((double)i - (double)image_->size_x_/2.0 + 0.5)*pixel_span_x); // Is shit after this line
         
-        for (unsigned int subindex = 0; subindex < subpix_[0] * subpix_[1]; ++subindex){
+        for (unsigned int subindex = 0; subindex < subpix_[0] * subpix_[1]; ++subindex) {
             const unsigned int l = subindex%subpix_[1]; // x
             const unsigned int k = subindex/subpix_[1]; // y                
             const double jitter_y = unif_(APTracer::Entities::rng);
@@ -69,7 +69,7 @@ void Cam_t::raytrace(const Scene_t* scene) {
 }
 
 void Cam_t::write(std::string file_name /*= ""*/) {
-    if (file_name.empty()){
+    if (file_name.empty()) {
         file_name = filename_;
     }
     image_->write(file_name, gammaind_);
@@ -79,6 +79,6 @@ void Cam_t::show() const {
     // What to do here?
 }
 
-void Cam_t::reset(){
+void Cam_t::reset() {
     image_->reset();
 }

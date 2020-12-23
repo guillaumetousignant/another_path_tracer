@@ -12,8 +12,8 @@ GridCellArray_t::GridCellArray_t(size_t size) : size_(size), items_(new Shape_t*
     n_obj_ = 0;
 }
 
-GridCellArray_t::~GridCellArray_t(){
-    if (items_ != nullptr){
+GridCellArray_t::~GridCellArray_t() {
+    if (items_ != nullptr) {
         delete [] items_;
     }
 }
@@ -25,8 +25,8 @@ Shape_t* GridCellArray_t::intersect(const Ray_t &ray, double &t, double (&uv)[2]
     Shape_t* hit_obj = nullptr; // dunno if this is needed    
     t = std::numeric_limits<double>::infinity();
 
-    for (size_t i = 0; i < n_obj_; i++){
-        if (items_[i]->intersection(ray, t_temp, uv_temp) && (t_temp < t)){
+    for (size_t i = 0; i < n_obj_; i++) {
+        if (items_[i]->intersection(ray, t_temp, uv_temp) && (t_temp < t)) {
             hit_obj = items_[i];
             uv[0] = uv_temp[0];
             uv[1] = uv_temp[1];
@@ -36,17 +36,17 @@ Shape_t* GridCellArray_t::intersect(const Ray_t &ray, double &t, double (&uv)[2]
     return hit_obj;
 }
 
-void GridCellArray_t::add(Shape_t* item){
-    if (n_obj_ < size_){
+void GridCellArray_t::add(Shape_t* item) {
+    if (n_obj_ < size_) {
         items_[n_obj_] = item;
     }
     else {
         Shape_t** items2 = new Shape_t*[n_obj_+1];
-        for (size_t i = 0; i < n_obj_; i++){
+        for (size_t i = 0; i < n_obj_; i++) {
             items2[i] = items_[i];
         }
         items2[n_obj_] = item;
-        if (items_ != nullptr){
+        if (items_ != nullptr) {
             delete [] items_;
         }
         items_ = items2;
@@ -57,10 +57,10 @@ void GridCellArray_t::add(Shape_t* item){
     ++n_obj_;
 }
 
-void GridCellArray_t::remove(const Shape_t* item){
-    for (size_t i = 0; i < n_obj_; i++){
-        if (items_[i] == item){
-            for (size_t j = i+1; j < n_obj_; ++j){
+void GridCellArray_t::remove(const Shape_t* item) {
+    for (size_t i = 0; i < n_obj_; i++) {
+        if (items_[i] == item) {
+            for (size_t j = i+1; j < n_obj_; ++j) {
                 items_[j-1] = items_[j]; 
             }
             --n_obj_;
@@ -73,17 +73,17 @@ void GridCellArray_t::move(Shape_t* item) {
     
 }
 
-void GridCellArray_t::reserve(){
-    if (n_obj_ > 0){
+void GridCellArray_t::reserve() {
+    if (n_obj_ > 0) {
         Shape_t** items_temp = new Shape_t*[increment_size_];
-        for (size_t i = 0; i < n_obj_; ++i){
+        for (size_t i = 0; i < n_obj_; ++i) {
             items_temp[i] = items_[i];
         }
         delete [] items_;
         items_ = items_temp;
     }
     else {
-        if (items_ != nullptr){
+        if (items_ != nullptr) {
             delete [] items_;
         }
         items_ = new Shape_t*[increment_size_];        
@@ -91,7 +91,7 @@ void GridCellArray_t::reserve(){
     size_ = increment_size_;
 }
 
-GridCellArray_t& GridCellArray_t::operator++(){
+GridCellArray_t& GridCellArray_t::operator++() {
     ++increment_size_;
     return *this;
 }

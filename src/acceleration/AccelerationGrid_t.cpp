@@ -18,11 +18,11 @@ AccelerationGrid_t::AccelerationGrid_t(Shape_t** items, size_t n_items, const Ve
 
     n_obj_ = n_items;
 
-    if (coordinates == nullptr){
+    if (coordinates == nullptr) {
         bb_coordinates[0] = Vec3f(std::numeric_limits<double>::infinity());
         bb_coordinates[1] = Vec3f(-std::numeric_limits<double>::infinity());
         
-        for (size_t i = 0; i < n_obj_; i++){
+        for (size_t i = 0; i < n_obj_; i++) {
             bb_coordinates[0].min(items[i]->mincoord());
             bb_coordinates[1].max(items[i]->maxcoord());
         }
@@ -39,17 +39,17 @@ AccelerationGrid_t::AccelerationGrid_t(Shape_t** items, size_t n_items, const Ve
                             .max(min_res_)
                             .min(max_res_) - 1.0;
 
-    for (unsigned int i = 0; i < 3; i++){
+    for (unsigned int i = 0; i < 3; i++) {
         cell_res_[i] = (unsigned int)(cell_res[i]+1.0);
     }
 
     cell_size_ = grid_size/(cell_res+1.0);
     cells_ = new GridCell_t*[cell_res_[0] *  cell_res_[1] * cell_res_[2]];
-    for (unsigned int i = 0; i < cell_res_[0] * cell_res_[1] * cell_res_[2]; i++){
+    for (unsigned int i = 0; i < cell_res_[0] * cell_res_[1] * cell_res_[2]; i++) {
         cells_[i] = nullptr;
     }
 
-    for (unsigned int i = 0; i < n_obj_; i++){
+    for (unsigned int i = 0; i < n_obj_; i++) {
         min1 = Vec3f(std::numeric_limits<double>::infinity());
         max1 = Vec3f(-std::numeric_limits<double>::infinity());
     
@@ -63,10 +63,10 @@ AccelerationGrid_t::AccelerationGrid_t(Shape_t** items, size_t n_items, const Ve
         min1.min(cell_res);
         max1.min(cell_res);
         
-        for (z = (unsigned int)min1[2]; z <= (unsigned int)max1[2]; z++){
-            for (y = (unsigned int)min1[1]; y <= (unsigned int)max1[1]; y++){
-                for (x = (unsigned int)min1[0]; x <= (unsigned int)max1[0]; x++){
-                    if (cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] == nullptr){
+        for (z = (unsigned int)min1[2]; z <= (unsigned int)max1[2]; z++) {
+            for (y = (unsigned int)min1[1]; y <= (unsigned int)max1[1]; y++) {
+                for (x = (unsigned int)min1[0]; x <= (unsigned int)max1[0]; x++) {
+                    if (cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] == nullptr) {
                         cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] = new GridCell_t;
                     }
                     cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]]->add(items[i]);
@@ -76,10 +76,10 @@ AccelerationGrid_t::AccelerationGrid_t(Shape_t** items, size_t n_items, const Ve
     }
 }
 
-AccelerationGrid_t::~AccelerationGrid_t(){
-    if (cells_ != nullptr){
-        for (unsigned int i = 0; i < (cell_res_[0]*cell_res_[1]*cell_res_[2]); i++){
-            if (cells_[i] != nullptr){
+AccelerationGrid_t::~AccelerationGrid_t() {
+    if (cells_ != nullptr) {
+        for (unsigned int i = 0; i < (cell_res_[0]*cell_res_[1]*cell_res_[2]); i++) {
+            if (cells_[i] != nullptr) {
                 delete cells_[i];
             }
         }
@@ -96,7 +96,7 @@ Shape_t* AccelerationGrid_t::intersect(const Ray_t &ray, double &t, double (&uv)
     t = std::numeric_limits<double>::infinity();
     const Vec3f invdir = Vec3f(1.0)/ray.direction_;
 
-    if (!bounding_box_.intersection(ray, tbbox)){
+    if (!bounding_box_.intersection(ray, tbbox)) {
         return nullptr;
     }
 
@@ -109,8 +109,8 @@ Shape_t* AccelerationGrid_t::intersect(const Ray_t &ray, double &t, double (&uv)
                             .max(0.0)
                             .min(cell_res-1.0);
     
-    for (unsigned int i = 0; i < 3; i++){
-        if (ray.direction_[i] < 0){
+    for (unsigned int i = 0; i < 3; i++) {
+        if (ray.direction_[i] < 0) {
             deltat[i] = -cell_size_[i] * invdir[i];
             tnext[i] = tbbox + (cellcoord[i] * cell_size_[i] - raycellorigin[i]) * invdir[i];
             cellexit[i] = -1;
@@ -126,20 +126,20 @@ Shape_t* AccelerationGrid_t::intersect(const Ray_t &ray, double &t, double (&uv)
 
     int cellcoordint[3] = {(int)cellcoord[0], (int)cellcoord[1], (int)cellcoord[2]};
     Shape_t* hit_obj = nullptr;
-    while (true){
-        if (cells_[cellcoordint[0] + cellcoordint[1]*cell_res_[0] + cellcoordint[2]*cell_res_[0]*cell_res_[1]] != nullptr){
+    while (true) {
+        if (cells_[cellcoordint[0] + cellcoordint[1]*cell_res_[0] + cellcoordint[2]*cell_res_[0]*cell_res_[1]] != nullptr) {
             hit_obj = cells_[cellcoordint[0] + cellcoordint[1]*cell_res_[0] + cellcoordint[2]*cell_res_[0]*cell_res_[1]]->intersect(ray, t, uv);
         }
 
         const int k = (tnext[0] < tnext[1]) * 4 + (tnext[0] < tnext[2]) * 2 + (tnext[1] < tnext[2]);
         const int nextaxis = map[k];
 
-        if (t < tnext[nextaxis]){
+        if (t < tnext[nextaxis]) {
             break;
         }
 
         cellcoordint[nextaxis] = cellcoordint[nextaxis] + cellstep[nextaxis];
-        if (cellcoordint[nextaxis] == cellexit[nextaxis]){
+        if (cellcoordint[nextaxis] == cellexit[nextaxis]) {
             break;
         }
         tnext[nextaxis] = tnext[nextaxis] + deltat[nextaxis];
@@ -147,7 +147,7 @@ Shape_t* AccelerationGrid_t::intersect(const Ray_t &ray, double &t, double (&uv)
     return hit_obj;
 }
 
-void AccelerationGrid_t::add(Shape_t* item){
+void AccelerationGrid_t::add(Shape_t* item) {
     Vec3f min1 = Vec3f(std::numeric_limits<double>::infinity());
     Vec3f max1 = Vec3f(-std::numeric_limits<double>::infinity());
 
@@ -162,10 +162,10 @@ void AccelerationGrid_t::add(Shape_t* item){
     min1.min(cell_res);
     max1.min(cell_res);
 
-    for (unsigned int z = (unsigned int)min1[2]; z <= (unsigned int)max1[2]; z++){
-        for (unsigned int y = (unsigned int)min1[1]; y <= (unsigned int)max1[1]; y++){
-            for (unsigned int x = (unsigned int)min1[0]; x <= (unsigned int)max1[0]; x++){
-                if (cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] == nullptr){
+    for (unsigned int z = (unsigned int)min1[2]; z <= (unsigned int)max1[2]; z++) {
+        for (unsigned int y = (unsigned int)min1[1]; y <= (unsigned int)max1[1]; y++) {
+            for (unsigned int x = (unsigned int)min1[0]; x <= (unsigned int)max1[0]; x++) {
+                if (cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] == nullptr) {
                     cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] = new GridCell_t;
                 }
                 cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]]->add(item);
@@ -174,7 +174,7 @@ void AccelerationGrid_t::add(Shape_t* item){
     }
 }
 
-void AccelerationGrid_t::remove(const Shape_t* item){
+void AccelerationGrid_t::remove(const Shape_t* item) {
     Vec3f min1 = Vec3f(std::numeric_limits<double>::infinity());
     Vec3f max1 = Vec3f(-std::numeric_limits<double>::infinity());
 
@@ -189,10 +189,10 @@ void AccelerationGrid_t::remove(const Shape_t* item){
     min1.min(cell_res);
     max1.min(cell_res);
 
-    for (unsigned int z = (unsigned int)min1[2]; z <= (unsigned int)max1[2]; z++){
-        for (unsigned int y = (unsigned int)min1[1]; y <= (unsigned int)max1[1]; y++){
-            for (unsigned int x = (unsigned int)min1[0]; x <= (unsigned int)max1[0]; x++){
-                if (cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] != nullptr){
+    for (unsigned int z = (unsigned int)min1[2]; z <= (unsigned int)max1[2]; z++) {
+        for (unsigned int y = (unsigned int)min1[1]; y <= (unsigned int)max1[1]; y++) {
+            for (unsigned int x = (unsigned int)min1[0]; x <= (unsigned int)max1[0]; x++) {
+                if (cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] != nullptr) {
                     cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]]->remove(item);
                 }
             }
@@ -200,6 +200,6 @@ void AccelerationGrid_t::remove(const Shape_t* item){
     }
 }
 
-void AccelerationGrid_t::move(Shape_t* item){
+void AccelerationGrid_t::move(Shape_t* item) {
 
 }

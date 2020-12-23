@@ -24,7 +24,7 @@ namespace APTracer { namespace Entities {
             /**
              * @brief Destroy the MaterialMix_t object. Does nothing.
              */
-            virtual ~MaterialMix_t(){};
+            virtual ~MaterialMix_t() {};
 
             Material_t* material_refracted_; /**< @brief First material of the mix. Doesn't have to be specifically refracted, though it often is.*/
             Material_t* material_reflected_; /**< @brief Second material of the mix. Doesn't have to be specifically reflected, though it often is.*/     

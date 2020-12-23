@@ -2,14 +2,14 @@
 #include "entities/Shape_t.h"
 #include "entities/Texture_t.h"
 
-#define EPSILON 0.00000001
+constexpr double epsilon = 0.00000001;
 
 using APTracer::Entities::Vec3f;
 
 APTracer::Materials::ReflectiveNormal_t::ReflectiveNormal_t(const Vec3f &emission, const Vec3f &colour, const APTracer::Entities::Texture_t* normal_map) : 
     emission_(emission), colour_(colour), normal_map_(normal_map) {}
 
-APTracer::Materials::ReflectiveNormal_t::~ReflectiveNormal_t(){}
+APTracer::Materials::ReflectiveNormal_t::~ReflectiveNormal_t() {}
 
 void APTracer::Materials::ReflectiveNormal_t::bounce(const double (&uv)[2], const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
     Vec3f tangent;
@@ -23,11 +23,11 @@ void APTracer::Materials::ReflectiveNormal_t::bounce(const double (&uv)[2], cons
     normal = (tangent * tangent_weights[0] + bitangent * tangent_weights[1] + normal * tangent_weights[2]).normalize_inplace();
 
 
-    if (normal.dot(ray.direction_) > 0.0){
+    if (normal.dot(ray.direction_) > 0.0) {
         normal *= -1.0;
     }
     
-    ray.origin_ += ray.direction_ * ray.dist_ + normal * EPSILON;
+    ray.origin_ += ray.direction_ * ray.dist_ + normal * epsilon;
     ray.direction_ = ray.direction_ - normal * 2.0 * ray.direction_.dot(normal);
 
     ray.colour_ += ray.mask_ * emission_;

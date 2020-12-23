@@ -6,8 +6,7 @@
 #include <algorithm>
 #include "entities/MeshGeometry_t.h"
 
-#define PI 3.141592653589793238463
-#define EPSILON 0.00000001
+constexpr double epsilon = 0.00000001;
 
 using APTracer::Entities::Vec3f;
 
@@ -37,7 +36,7 @@ APTracer::Shapes::TriangleMesh_t::TriangleMesh_t(APTracer::Entities::Material_t 
     const double tuv0v2[2] = {texture_coordinates_[4] - texture_coordinates_[0], texture_coordinates_[5] - texture_coordinates_[1]};    
 
     const double invdet = 1.0/(tuv0v1[0] * tuv0v2[1] - tuv0v1[1] * tuv0v2[0]);
-    if (std::isfinite(invdet)){
+    if (std::isfinite(invdet)) {
         tuv_to_world_[0] = invdet * -tuv0v2[0];
         tuv_to_world_[1] = invdet * tuv0v1[0];
     }
@@ -48,7 +47,7 @@ APTracer::Shapes::TriangleMesh_t::TriangleMesh_t(APTracer::Entities::Material_t 
     tangent_vec_ = v0v1_ * tuv_to_world_[0] + v0v2_ * tuv_to_world_[1];
 }
 
-APTracer::Shapes::TriangleMesh_t::~TriangleMesh_t(){}
+APTracer::Shapes::TriangleMesh_t::~TriangleMesh_t() {}
 
 void APTracer::Shapes::TriangleMesh_t::update() {
     const APTracer::Entities::TransformMatrix_t transform_norm = transformation_->transformDir();
@@ -74,7 +73,7 @@ void APTracer::Shapes::TriangleMesh_t::update() {
     const double tuv0v2[2] = {texture_coordinates_[4] - texture_coordinates_[0], texture_coordinates_[5] - texture_coordinates_[1]};    
 
     const double invdet = 1.0/(tuv0v1[0] * tuv0v2[1] - tuv0v1[1] * tuv0v2[0]);
-    if (std::isfinite(invdet)){
+    if (std::isfinite(invdet)) {
         tuv_to_world_[0] = invdet * -tuv0v2[0];
         tuv_to_world_[1] = invdet * tuv0v1[0];
     }
@@ -89,7 +88,7 @@ bool APTracer::Shapes::TriangleMesh_t::intersection(const APTracer::Entities::Ra
     const Vec3f pvec = ray.direction_.cross(v0v2_);
     const double det = v0v1_.dot(pvec);
 
-    if (std::abs(det) < EPSILON){
+    if (std::abs(det) < epsilon) {
         t = std::numeric_limits<double>::infinity();
         uv[0] = NAN;
         uv[1] = NAN;
@@ -101,7 +100,7 @@ bool APTracer::Shapes::TriangleMesh_t::intersection(const APTracer::Entities::Ra
     const double u = tvec.dot(pvec) * invdet;
     uv[0] = u;
 
-    if ((u < 0.0) || (u > 1.0)){
+    if ((u < 0.0) || (u > 1.0)) {
         t = std::numeric_limits<double>::infinity();
         uv[1] = NAN;
         return false;
@@ -111,14 +110,14 @@ bool APTracer::Shapes::TriangleMesh_t::intersection(const APTracer::Entities::Ra
     const double v = ray.direction_.dot(qvec) * invdet;
     uv[1] = v;
 
-    if ((v < 0.0) || ((u+v) > 1.0)){
+    if ((v < 0.0) || ((u+v) > 1.0)) {
         t = std::numeric_limits<double>::infinity();
         return false;
     }
 
     t = v0v2_.dot(qvec) * invdet;
 
-    if (t < 0.0){
+    if (t < 0.0) {
         t = std::numeric_limits<double>::infinity();
         return false;
     }
@@ -159,7 +158,7 @@ Vec3f APTracer::Shapes::TriangleMesh_t::normal_uv_tangent(double time, const dou
     return normalvec;
 }  
 
-Vec3f APTracer::Shapes::TriangleMesh_t::normal_face(double time) const{
+Vec3f APTracer::Shapes::TriangleMesh_t::normal_face(double time) const {
     return v0v1_.cross(v0v2_).normalize_inplace();
 }
 

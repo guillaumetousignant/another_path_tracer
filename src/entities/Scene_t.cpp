@@ -20,13 +20,13 @@ Scene_t::Scene_t(Shape_t** shapes, size_t n_shapes) : geometry_(shapes, shapes +
 Scene_t::Scene_t(MeshTop_t* mesh) : geometry_(mesh->triangles_, mesh->triangles_ + mesh->n_tris_), acc_(nullptr) {}
 
 Scene_t::Scene_t(MeshTop_t** meshes, size_t n_meshes) : geometry_(), acc_(nullptr) {
-    for (size_t i = 0; i < n_meshes; i++){
+    for (size_t i = 0; i < n_meshes; i++) {
         geometry_.insert(geometry_.end(), meshes[i]->triangles_, meshes[i]->triangles_ + meshes[i]->n_tris_);
     }
 }
 
 Scene_t::~Scene_t() {
-    if (acc_ != nullptr){
+    if (acc_ != nullptr) {
         delete acc_;
     }
 }
@@ -44,7 +44,7 @@ void Scene_t::add(MeshTop_t* mesh) {
 }
 
 void Scene_t::add(MeshTop_t** meshes, size_t n_meshes) {
-    for (size_t i = 0; i < n_meshes; i++){
+    for (size_t i = 0; i < n_meshes; i++) {
         geometry_.insert(geometry_.end(), meshes[i]->triangles_, meshes[i]->triangles_ + meshes[i]->n_tris_);
     }
 }
@@ -94,13 +94,13 @@ void Scene_t::remove(MeshTop_t** meshes, size_t n_meshes) {
 }
 
 void Scene_t::update() {
-    for (size_t i = 0; i < geometry_.size(); i++){
+    for (size_t i = 0; i < geometry_.size(); i++) {
         geometry_[i]->update();
     }
 }
 
 void Scene_t::build_acc() {
-    if (acc_ != nullptr){
+    if (acc_ != nullptr) {
         delete acc_;
     }
     acc_ = new AccelerationMultiGridVector_t(geometry_.data(), geometry_.size());
@@ -113,8 +113,8 @@ Shape_t* Scene_t::intersect_brute(const Ray_t &ray, double &t, double (&uv)[2]) 
     t = std::numeric_limits<double>::infinity();
     Shape_t* hit_obj = nullptr;
 
-    for (size_t i = 0; i < geometry_.size(); i++){
-        if (geometry_[i]->intersection(ray, t_temp, uv_temp) && (t_temp < t)){
+    for (size_t i = 0; i < geometry_.size(); i++) {
+        if (geometry_[i]->intersection(ray, t_temp, uv_temp) && (t_temp < t)) {
             hit_obj = geometry_[i];
             uv[0] = uv_temp[0];
             uv[1] = uv_temp[1];

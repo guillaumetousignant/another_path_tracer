@@ -34,10 +34,10 @@ Vec3f Vec3f::operator/(double scale) const {
 Vec3f Vec3f::operator/(const Vec3f &other) const {
     return Vec3f(v[0] / other[0], v[1] / other[1], v[2] / other[2]);
 }
-Vec3f Vec3f::operator+(const Vec3f &other)  const{
+Vec3f Vec3f::operator+(const Vec3f &other)  const {
     return Vec3f(v[0] + other.v[0], v[1] + other.v[1], v[2] + other.v[2]);
 } 
-Vec3f Vec3f::operator+(double factor)  const{
+Vec3f Vec3f::operator+(double factor)  const {
     return Vec3f(v[0] + factor, v[1] + factor, v[2] + factor);
 } 
 Vec3f Vec3f::operator-(const Vec3f &other) const {
@@ -100,25 +100,25 @@ const Vec3f &Vec3f::operator-=(double factor) {
     v[2] -= factor;
     return *this;
 }
-Vec3f &Vec3f::min(const Vec3f &other){
+Vec3f &Vec3f::min(const Vec3f &other) {
     v[0] = std::min(v[0], other[0]);
     v[1] = std::min(v[1], other[1]);
     v[2] = std::min(v[2], other[2]);
     return *this;
 }
-Vec3f &Vec3f::min(double other){
+Vec3f &Vec3f::min(double other) {
     v[0] = std::min(v[0], other);
     v[1] = std::min(v[1], other);
     v[2] = std::min(v[2], other);
     return *this;
 }
-Vec3f &Vec3f::max(const Vec3f &other){
+Vec3f &Vec3f::max(const Vec3f &other) {
     v[0] = std::max(v[0], other[0]);
     v[1] = std::max(v[1], other[1]);
     v[2] = std::max(v[2], other[2]);
     return *this;
 }
-Vec3f &Vec3f::max(double other){
+Vec3f &Vec3f::max(double other) {
     v[0] = std::max(v[0], other);
     v[1] = std::max(v[1], other);
     v[2] = std::max(v[2], other);
@@ -130,10 +130,10 @@ Vec3f Vec3f::getMin(const Vec3f &other) const {
 Vec3f Vec3f::getMin(double other) const {
     return Vec3f(std::min(v[0], other), std::min(v[1], other), std::min(v[2], other));
 }
-Vec3f Vec3f::getMax(const Vec3f &other) const{
+Vec3f Vec3f::getMax(const Vec3f &other) const {
     return Vec3f(std::max(v[0], other[0]), std::max(v[1], other[1]), std::max(v[2], other[2]));
 }
-Vec3f Vec3f::getMax(double other) const{
+Vec3f Vec3f::getMax(double other) const {
     return Vec3f(std::max(v[0], other), std::max(v[1], other), std::max(v[2], other));
 }
 double Vec3f::magnitude() const {
@@ -161,7 +161,7 @@ Vec3f Vec3f::cross(const Vec3f &other) const {
                  v[2] * other.v[0] - v[0] * other.v[2],
                  v[0] * other.v[1] - v[1] * other.v[0]);
 } 
-const Vec3f &Vec3f::to_sph(){ // CHECK outputs nan
+const Vec3f &Vec3f::to_sph() { // CHECK outputs nan
     // [r, theta, phi] (theta is polar angle)
     const double temp = std::atan2(v[1], v[0]);
     v[0] = magnitude();
@@ -170,7 +170,7 @@ const Vec3f &Vec3f::to_sph(){ // CHECK outputs nan
     v[2] = temp;
     return *this;
 }
-const Vec3f &Vec3f::to_xyz(){
+const Vec3f &Vec3f::to_xyz() {
     const double temp = std::move(v[2]);
     v[2] = v[0]*std::cos(v[1]);
     const double temp2 = std::move(v[1]);
@@ -178,7 +178,7 @@ const Vec3f &Vec3f::to_xyz(){
     v[0] *= std::sin(temp2)*std::cos(temp);
     return *this;
 }
-const Vec3f &Vec3f::to_xyz_offset(const Vec3f &ref1, const Vec3f &ref2, const Vec3f &ref3){
+const Vec3f &Vec3f::to_xyz_offset(const Vec3f &ref1, const Vec3f &ref2, const Vec3f &ref3) {
     const Vec3f temp = Vec3f(v[0]*std::sin(v[1])*std::cos(v[2]), v[0]*std::sin(v[1])*std::sin(v[2]),  v[0]*std::cos(v[1])); // CHECK could be better
     v[0] = ref1[0] * temp[0] + ref2[0] * temp[1] + ref3[0] * temp[2];
     v[1] = ref1[1] * temp[0] + ref2[1] * temp[1] + ref3[1] * temp[2];
@@ -208,7 +208,7 @@ Vec3f Vec3f::exp() const {
 Vec3f Vec3f::pow(double exp) const {
     return Vec3f(std::pow(v[0], exp), std::pow(v[1], exp), std::pow(v[2], exp));
 }
-Vec3f &Vec3f::pow_inplace(double exp){
+Vec3f &Vec3f::pow_inplace(double exp) {
     v[0] = std::pow(v[0], exp);
     v[1] = std::pow(v[1], exp);
     v[2] = std::pow(v[2], exp);
@@ -220,13 +220,13 @@ Vec3f Vec3f::floor() const {
 Vec3f Vec3f::ceil() const {
     return Vec3f(std::ceil(v[0]), std::ceil(v[1]), std::ceil(v[2]));
 }
-Vec3f &Vec3f::round_inplace(){
+Vec3f &Vec3f::round_inplace() {
     v[0] = std::round(v[0]);
     v[1] = std::round(v[1]);
     v[2] = std::round(v[2]);
     return *this;
 }
-Vec3f &Vec3f::clamp(double minimum, double maximum){
+Vec3f &Vec3f::clamp(double minimum, double maximum) {
     min(maximum);
     max(minimum);
     return *this;

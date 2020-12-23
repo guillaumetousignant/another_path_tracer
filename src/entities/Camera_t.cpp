@@ -19,7 +19,7 @@ Camera_t::Camera_t(TransformMatrix_t* transformation, const std::string &filenam
 
 void Camera_t::accumulate(const Scene_t* scene, unsigned int n_iter /*= 1000000000*/) {
     unsigned int n = 0;
-    while (n < n_iter){
+    while (n < n_iter) {
         ++n;
 
         auto t_start = std::chrono::high_resolution_clock::now();
@@ -35,7 +35,7 @@ void Camera_t::accumulate(const Scene_t* scene, unsigned int n_iter /*= 10000000
 void Camera_t::accumulateWrite(const Scene_t* scene, unsigned int n_iter /*= 1000000000*/, unsigned int interval /*=1*/) {
     //std::chrono::steady_clock::time_point t_start, t_end;
     unsigned int n = 0;
-    while (n < n_iter){
+    while (n < n_iter) {
         ++n;
         
         auto t_start = std::chrono::high_resolution_clock::now();
@@ -47,7 +47,7 @@ void Camera_t::accumulateWrite(const Scene_t* scene, unsigned int n_iter /*= 100
             << "s." << std::endl;
 
         show();
-        if (!(n%interval)){
+        if (!(n%interval)) {
             std::cout << "Writing started." << std::endl;
             auto t_start2 = std::chrono::high_resolution_clock::now();
             write();
@@ -60,6 +60,6 @@ void Camera_t::accumulateWrite(const Scene_t* scene, unsigned int n_iter /*= 100
     }
 }
 
-void Camera_t::setUp(Vec3f &new_up){
+void Camera_t::setUp(Vec3f &new_up) {
     up_buffer_ = new_up;
 }

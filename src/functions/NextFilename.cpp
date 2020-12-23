@@ -16,7 +16,7 @@ std::string APTracer::next_filename(const std::string &prefix) {
 
     point = prefix.find_last_of(".");
 
-    if (point != std::string::npos){
+    if (point != std::string::npos) {
         name = prefix.substr(0, point);
         extension = prefix.substr(point);
     }
@@ -33,7 +33,7 @@ std::string APTracer::next_filename(const std::string &prefix) {
     filename_R = name + index_ss.str() + "_R" + extension;
     filename_S = name + index_ss.str() + "_S" + extension;
 
-    while (exists_test(filename) || exists_test(filename_L) || exists_test(filename_R) || exists_test(filename_S)){
+    while (exists_test(filename) || exists_test(filename_L) || exists_test(filename_R) || exists_test(filename_S)) {
         ++index;
         std::ostringstream index_ss1;
         index_ss1 << std::setw(3) << std::setfill('0') << index;

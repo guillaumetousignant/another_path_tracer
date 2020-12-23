@@ -43,7 +43,7 @@ namespace APTracer { namespace Entities {
             /**
              * @brief Destroy the Camera_t object. Does nothing.
              */
-            virtual ~Camera_t(){};
+            virtual ~Camera_t() {};
 
             TransformMatrix_t* transformation_; /**< @brief Transformation matrix used by the camera. Sets the camera's origin and direction when created and updated.*/
             std::string filename_; /**< @brief Filename used by the camera when saving an image. Not used by all cameras, and some might modify it or save multiple pictures with variations of the name.*/
@@ -103,7 +103,7 @@ namespace APTracer { namespace Entities {
              * 
              * @param focus_distance How far will the focal plane be.
              */
-            virtual void focus(double focus_distance){};
+            virtual void focus(double focus_distance) {};
 
             /**
              * @brief Sets the focal length of the camera to put an object in focus.
@@ -115,7 +115,7 @@ namespace APTracer { namespace Entities {
              * @param scene Scene that will be used to find what object the ray hits and its distance.
              * @param position Where in the frame will the ray be sent. [horizontal, vertical], both from 0 to 1, starting from bottom left.
              */
-            virtual void autoFocus(const Scene_t* scene, const double (&position)[2]){};
+            virtual void autoFocus(const Scene_t* scene, const double (&position)[2]) {};
 
             /**
              * @brief Set the up vector of the camera.

@@ -5,15 +5,14 @@
 #include <limits>
 #include <algorithm>
 
-#define PI 3.141592653589793238463
-#define EPSILON 0.00000001
+constexpr double epsilon = 0.00000001;
 
 using APTracer::Entities::Vec3f;
 
 APTracer::Shapes::TriangleMotionblur_t::TriangleMotionblur_t(APTracer::Entities::Material_t *material, APTracer::Entities::TransformMatrix_t *transform_matrix, const Vec3f* points, const Vec3f* normals, const double* texcoord) 
     : Shape_t(material, transform_matrix), points_orig_{points[0], points[1], points[2]} {
 
-    if (normals == nullptr){
+    if (normals == nullptr) {
         const Vec3f nor = (points[1] - points[0]).cross(points[2] - points[0]).normalize_inplace(); 
         normals_orig_[0] = nor;
         normals_orig_[1] = nor;
@@ -25,7 +24,7 @@ APTracer::Shapes::TriangleMotionblur_t::TriangleMotionblur_t(APTracer::Entities:
         normals_orig_[2] = normals[2];
     }
 
-    if (texcoord == nullptr){
+    if (texcoord == nullptr) {
         texture_coordinates_[0] = 0;
         texture_coordinates_[1] = 1;
         texture_coordinates_[2] = 0;
@@ -65,7 +64,7 @@ APTracer::Shapes::TriangleMotionblur_t::TriangleMotionblur_t(APTracer::Entities:
     const double tuv0v1[2] = {texture_coordinates_[2] - texture_coordinates_[0], texture_coordinates_[3] - texture_coordinates_[1]};
     const double tuv0v2[2] = {texture_coordinates_[4] - texture_coordinates_[0], texture_coordinates_[5] - texture_coordinates_[1]};    
     const double invdet = 1.0/(tuv0v1[0] * tuv0v2[1] - tuv0v1[1] * tuv0v2[0]);
-    if (std::isfinite(invdet)){
+    if (std::isfinite(invdet)) {
         tuv_to_world_[0] = invdet * -tuv0v2[0];
         tuv_to_world_[1] = invdet * tuv0v1[0];
     }
@@ -78,7 +77,7 @@ APTracer::Shapes::TriangleMotionblur_t::TriangleMotionblur_t(APTracer::Entities:
     tangent_vec_last_ = tangent_vec_;
 }
 
-APTracer::Shapes::TriangleMotionblur_t::~TriangleMotionblur_t(){}
+APTracer::Shapes::TriangleMotionblur_t::~TriangleMotionblur_t() {}
 
 void APTracer::Shapes::TriangleMotionblur_t::update() {    
     const APTracer::Entities::TransformMatrix_t transform_norm = transformation_->transformDir();
@@ -116,7 +115,7 @@ bool APTracer::Shapes::TriangleMotionblur_t::intersection(const APTracer::Entiti
     const Vec3f pvec = ray.direction_.cross(v0v2_int);
     const double det = v0v1_int.dot(pvec);
 
-    if (std::abs(det) < EPSILON){
+    if (std::abs(det) < epsilon) {
         t = std::numeric_limits<double>::infinity();
         uv[0] = NAN;
         uv[1] = NAN;
@@ -128,7 +127,7 @@ bool APTracer::Shapes::TriangleMotionblur_t::intersection(const APTracer::Entiti
     const double u = tvec.dot(pvec) * invdet;
     uv[0] = u;
 
-    if ((u < 0.0) || (u > 1.0)){
+    if ((u < 0.0) || (u > 1.0)) {
         t = std::numeric_limits<double>::infinity();
         uv[1] = NAN;
         return false;
@@ -138,14 +137,14 @@ bool APTracer::Shapes::TriangleMotionblur_t::intersection(const APTracer::Entiti
     const double v = ray.direction_.dot(qvec) * invdet;
     uv[1] = v;
 
-    if ((v < 0.0) || ((u+v) > 1.0)){
+    if ((v < 0.0) || ((u+v) > 1.0)) {
         t = std::numeric_limits<double>::infinity();
         return false;
     }
 
     t = v0v2_int.dot(qvec) * invdet;
 
-    if (t < 0.0){
+    if (t < 0.0) {
         t = std::numeric_limits<double>::infinity();
         return false;
     }
@@ -199,7 +198,7 @@ Vec3f APTracer::Shapes::TriangleMotionblur_t::normal_uv_tangent(double time, con
     return normalvec;
 } 
 
-Vec3f APTracer::Shapes::TriangleMotionblur_t::normal_face(double time) const{
+Vec3f APTracer::Shapes::TriangleMotionblur_t::normal_face(double time) const {
     const Vec3f v0v1_int = v0v1_ * time + v0v1_last_ * (1.0 - time);
     const Vec3f v0v2_int = v0v2_ * time + v0v2_last_ * (1.0 - time);
 

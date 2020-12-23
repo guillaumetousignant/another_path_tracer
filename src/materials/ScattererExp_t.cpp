@@ -2,7 +2,7 @@
 #include <cmath>
 #include "entities/RandomGenerator_t.h"
 
-#define PI 3.141592653589793238463
+constexpr double pi = 3.141592653589793238463;
 
 using APTracer::Entities::Vec3f;
 
@@ -18,13 +18,13 @@ APTracer::Materials::ScattererExp_t::~ScattererExp_t() {}
 bool APTracer::Materials::ScattererExp_t::scatter(APTracer::Entities::Ray_t &ray) {
     const double distance = -std::log(unif_(APTracer::Entities::rng))/scattering_coefficient_;
     bool intersected = false;
-    if (distance < ray.dist_){
+    if (distance < ray.dist_) {
         intersected = true;
         ray.dist_ = distance;
         ray.origin_ += ray.direction_ * distance;
 
-        const double rand1 = unif_(APTracer::Entities::rng) * 2 * PI;
-        const double rand2 = std::pow(unif_(APTracer::Entities::rng), order_) * scattering_angle_ * PI;
+        const double rand1 = unif_(APTracer::Entities::rng) * 2.0 * pi;
+        const double rand2 = std::pow(unif_(APTracer::Entities::rng), order_) * scattering_angle_ * pi;
 
         const Vec3f axis = ray.direction_[0] > 0.1 ? Vec3f(0.0, 1.0, 0.0) : Vec3f(1.0, 0.0, 0.0);
 

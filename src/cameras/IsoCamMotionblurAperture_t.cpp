@@ -7,7 +7,7 @@
 #include "entities/RandomGenerator_t.h"
 #include <cmath>
 
-#define PI 3.141592653589793238463
+constexpr double pi = 3.141592653589793238463;
 
 using APTracer::Entities::Vec3f;
 using APTracer::Cameras::IsoCamMotionblurAperture_t;
@@ -56,15 +56,15 @@ void IsoCamMotionblurAperture_t::raytrace(const Scene_t* scene) {
     image_->update();
 
     #pragma omp parallel for schedule(guided)
-    for (index = 0; index < image_->size_y_ * image_->size_x_; ++index){
+    for (index = 0; index < image_->size_y_ * image_->size_x_; ++index) {
         const unsigned int i = index%image_->size_x_;
         const unsigned int j = index/image_->size_x_;
         Vec3f col = Vec3f(); // Or declare above?
-        for (unsigned int subindex = 0; subindex < subpix_[0] * subpix_[1]; ++subindex){
+        for (unsigned int subindex = 0; subindex < subpix_[0] * subpix_[1]; ++subindex) {
             const unsigned int l = subindex%subpix_[1]; // x
             const unsigned int k = subindex/subpix_[1]; // y
             const double rand_time = unif_(APTracer::Entities::rng) * (time_[1] - time_[0]) + time_[0];
-            const double rand_theta = unif_(APTracer::Entities::rng) * 2.0 * PI;
+            const double rand_theta = unif_(APTracer::Entities::rng) * 2.0 * pi;
             const double rand_r = std::sqrt(unif_(APTracer::Entities::rng)) * aperture_;
             const double jitter_y = unif_(APTracer::Entities::rng);
             const double jitter_x = unif_(APTracer::Entities::rng);
@@ -90,11 +90,11 @@ void IsoCamMotionblurAperture_t::raytrace(const Scene_t* scene) {
     }
 }
 
-void IsoCamMotionblurAperture_t::focus(double focus_distance){
+void IsoCamMotionblurAperture_t::focus(double focus_distance) {
     focal_length_buffer_ = focus_distance;
 }
 
-void IsoCamMotionblurAperture_t::autoFocus(const Scene_t* scene, const double (&position)[2]){
+void IsoCamMotionblurAperture_t::autoFocus(const Scene_t* scene, const double (&position)[2]) {
     double t = std::numeric_limits<double>::infinity();
     double uv[2];
 
@@ -105,14 +105,14 @@ void IsoCamMotionblurAperture_t::autoFocus(const Scene_t* scene, const double (&
 
     const Ray_t focus_ray = Ray_t(pix_origin, direction_, Vec3f(), Vec3f(1.0), medium_list_);
 
-    if (scene->intersect(focus_ray, t, uv) == nullptr){
+    if (scene->intersect(focus_ray, t, uv) == nullptr) {
         t = 1000000.0;
     }
     focus(t);
 }
 
 void IsoCamMotionblurAperture_t::write(std::string file_name /*= ""*/) {
-    if (file_name.empty()){
+    if (file_name.empty()) {
         file_name = filename_;
     }
     image_->write(file_name);
@@ -122,6 +122,6 @@ void IsoCamMotionblurAperture_t::show() const {
     // What to do here?
 }
 
-void IsoCamMotionblurAperture_t::reset(){
+void IsoCamMotionblurAperture_t::reset() {
     image_->reset();
 }

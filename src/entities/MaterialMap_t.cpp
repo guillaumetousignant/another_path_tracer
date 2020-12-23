@@ -6,12 +6,12 @@ using APTracer::Entities::MaterialMap_t;
 using APTracer::Entities::Material_t;
 
 MaterialMap_t::MaterialMap_t(std::string* names, Material_t** materials, size_t n) {
-    for (size_t i = 0; i < n; i++){
+    for (size_t i = 0; i < n; i++) {
         materials_[names[i]] = materials[i];
     }
 }
 
-MaterialMap_t::~MaterialMap_t(){}
+MaterialMap_t::~MaterialMap_t() {}
 
 Material_t* MaterialMap_t::getMaterial(const std::string &key) const {
     return materials_.at(key);

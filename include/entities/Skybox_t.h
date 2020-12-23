@@ -16,12 +16,12 @@ namespace APTracer { namespace Entities {
             /**
              * @brief Construct a new Skybox_t object. Does nothing.
              */
-            Skybox_t(){};
+            Skybox_t() {};
 
             /**
              * @brief Destroy the Skybox_t object. Does nothing.
              */
-            virtual ~Skybox_t(){};
+            virtual ~Skybox_t() {};
 
             /**
              * @brief Returns the colour of the skybox for a given direction.

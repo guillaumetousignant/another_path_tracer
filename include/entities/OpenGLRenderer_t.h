@@ -67,7 +67,7 @@ namespace APTracer { namespace Entities {
             /**
              * @brief Function used every frame when the rendering is on pause. Does nothing.
              */
-            void dummyDisp(){};
+            void dummyDisp() {};
 
             /**
              * @brief Function used every frame to accumulate one sample per pixel for the whole image.

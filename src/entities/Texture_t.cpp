@@ -13,10 +13,10 @@
 using APTracer::Entities::Texture_t;
 using APTracer::Entities::Vec3f;
 
-Texture_t::Texture_t(const std::string &filename){
+Texture_t::Texture_t(const std::string &filename) {
     cimg_library::CImg<double> image;
     std::string extension = filename.substr(filename.find_last_of(".") + 1);
-    std::for_each(extension.begin(), extension.end(), [](char & c){
+    std::for_each(extension.begin(), extension.end(), [](char & c) {
         c = ::tolower(c);
     });
 
@@ -48,16 +48,16 @@ Texture_t::Texture_t(const std::string &filename){
 
     const unsigned int n = size_x_ * size_y_;
 
-    for (unsigned int j = 0; j < size_y_; ++j){
-        for (unsigned int i = 0; i < size_x_; ++i){
+    for (unsigned int j = 0; j < size_y_; ++j) {
+        for (unsigned int i = 0; i < size_x_; ++i) {
             //img_[j][i] = Vec3f(image(i, j, 0), image(i, j, 1), image(i, j, 2));
             img_[(size_y_ - j - 1)*size_x_ + i] = Vec3f(image(i, j, 0, 0, n, n), image(i, j, 0, 1, n, n), image(i, j, 0, 2, n, n));
         }
     }
 }
 
-Texture_t::~Texture_t(){
-    if (img_ != nullptr){
+Texture_t::~Texture_t() {
+    if (img_ != nullptr) {
         delete [] img_;
     }
 }

@@ -24,12 +24,12 @@ namespace APTracer { namespace Entities {
              * @param material Material of the shape.
              * @param transform_matrix Transformation matrix used to transform and move the shape.
              */
-            Shape_t(Material_t *material, TransformMatrix_t *transform_matrix): material_(material), transformation_(transform_matrix){};
+            Shape_t(Material_t *material, TransformMatrix_t *transform_matrix): material_(material), transformation_(transform_matrix) {};
 
             /**
              * @brief Destroy the Shape_t object. Does nothing.
              */
-            virtual ~Shape_t(){};
+            virtual ~Shape_t() {};
 
             Material_t *material_; /**< @brief Material of which the shape is made of.*/
             TransformMatrix_t *transformation_; /**< @brief Transformation matrix used to modify the position and other transformations of the shape.*/

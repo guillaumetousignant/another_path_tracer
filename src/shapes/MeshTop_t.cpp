@@ -10,10 +10,10 @@ APTracer::Shapes::MeshTop_t::MeshTop_t(APTracer::Entities::Material_t *material,
     : material_(material), transformation_(transform_matrix), geom_(geom), n_tris_(geom->n_tris_) {
 }      
 
-APTracer::Shapes::MeshTop_t::~MeshTop_t(){
-    if (triangles_ != nullptr){
-        for (size_t i = 0; i < n_tris_; i++){
-            if (triangles_[i] != nullptr){
+APTracer::Shapes::MeshTop_t::~MeshTop_t() {
+    if (triangles_ != nullptr) {
+        for (size_t i = 0; i < n_tris_; i++) {
+            if (triangles_[i] != nullptr) {
                 delete triangles_[i];
             }
         }
@@ -21,8 +21,8 @@ APTracer::Shapes::MeshTop_t::~MeshTop_t(){
     }
 }
 
-void APTracer::Shapes::MeshTop_t::update(){
-    for (size_t i = 0; i < n_tris_; i++){
+void APTracer::Shapes::MeshTop_t::update() {
+    for (size_t i = 0; i < n_tris_; i++) {
         triangles_[i]->update();
     }
 }
@@ -49,7 +49,7 @@ void APTracer::Shapes::MeshTop_t::normal(const APTracer::Entities::Ray_t &ray, c
 
 Vec3f APTracer::Shapes::MeshTop_t::mincoord() const {
     Vec3f coord = Vec3f(std::numeric_limits<double>::infinity());
-    for (size_t i = 0; i < n_tris_; i++){
+    for (size_t i = 0; i < n_tris_; i++) {
         coord.min(triangles_[i]->mincoord());
     }    
     return coord;
@@ -57,7 +57,7 @@ Vec3f APTracer::Shapes::MeshTop_t::mincoord() const {
 
 Vec3f APTracer::Shapes::MeshTop_t::maxcoord() const {
     Vec3f coord = Vec3f(-std::numeric_limits<double>::infinity());
-    for (size_t i = 0; i < n_tris_; i++){
+    for (size_t i = 0; i < n_tris_; i++) {
         coord.max(triangles_[i]->maxcoord());
     }
     return coord;

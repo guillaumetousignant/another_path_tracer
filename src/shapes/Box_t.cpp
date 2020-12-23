@@ -8,7 +8,7 @@ APTracer::Shapes::Box_t::Box_t() : coordinates_{Vec3f(), Vec3f()} {}
 
 APTracer::Shapes::Box_t::Box_t(Vec3f (&coord)[2]) : coordinates_{coord[0], coord[1]} {}
 
-APTracer::Shapes::Box_t::~Box_t(){}
+APTracer::Shapes::Box_t::~Box_t() {}
 
 bool APTracer::Shapes::Box_t::intersection(const APTracer::Entities::Ray_t &ray, double &t) const {
     const Vec3f invdir = Vec3f(1.0)/ray.direction_;
@@ -21,7 +21,7 @@ bool APTracer::Shapes::Box_t::intersection(const APTracer::Entities::Ray_t &ray,
     const double tymin = (coordinates_[sign[1]][1] - ray.origin_[1]) * invdir[1];
     const double tymax = (coordinates_[!sign[1]][1] - ray.origin_[1]) * invdir[1];
 
-    if ((tmin > tymax) || (tymin > tmax)){
+    if ((tmin > tymax) || (tymin > tmax)) {
         t = std::numeric_limits<double>::infinity();
         return false;
     }
@@ -32,7 +32,7 @@ bool APTracer::Shapes::Box_t::intersection(const APTracer::Entities::Ray_t &ray,
     const double tzmin = (coordinates_[sign[2]][2] - ray.origin_[2]) * invdir[2];
     const double tzmax = (coordinates_[!sign[2]][2] - ray.origin_[2]) * invdir[2];
 
-    if ((tmin > tzmax) || (tzmin > tmax)){
+    if ((tmin > tzmax) || (tzmin > tmax)) {
         t = std::numeric_limits<double>::infinity();
         return false;
     }

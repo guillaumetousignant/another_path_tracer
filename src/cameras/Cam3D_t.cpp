@@ -7,8 +7,6 @@
 #include "entities/ImgBuffer_t.h"
 #include "entities/RandomGenerator_t.h"
 
-#define PI 3.141592653589793238463
-
 using APTracer::Entities::Vec3f;
 using APTracer::Cameras::Cam3D_t;
 using APTracer::Entities::Ray_t;
@@ -26,7 +24,7 @@ Cam3D_t::Cam3D_t(TransformMatrix_t* transformation, const std::string &filename,
 
     const size_t point = filename.find_last_of(".");
 
-    if (point != std::string::npos){
+    if (point != std::string::npos) {
         filename_L = filename.substr(0, point) + "_L" + filename.substr(point);
         filename_R = filename.substr(0, point) + "_R" + filename.substr(point);
         filename_S = filename;
@@ -76,8 +74,8 @@ void Cam3D_t::raytrace(const Scene_t* scene) {
     camera_R_->raytrace(scene);
 
     image_->update();
-    for (unsigned int j = 0; j < image_->size_y_; j++){
-        for (unsigned int i = 0; i < image_->size_x_; i++){
+    for (unsigned int j = 0; j < image_->size_y_; j++) {
+        for (unsigned int i = 0; i < image_->size_x_; i++) {
             image_->set(Vec3f(camera_L_->image_->img_[j*camera_L_->image_->size_x_ + i][0], camera_R_->image_->img_[j*camera_L_->image_->size_x_ + i][1], camera_R_->image_->img_[j*camera_L_->image_->size_x_ + i][2]), i, j);
         }
     }
@@ -86,14 +84,14 @@ void Cam3D_t::raytrace(const Scene_t* scene) {
 void Cam3D_t::write(std::string file_name /*= ""*/) {
     std::string filename_S, filename_L, filename_R;
 
-    if (file_name.empty()){
+    if (file_name.empty()) {
         filename_L = "";
         filename_R = "";
         filename_S = filename_;
     }
     else{
         const size_t point = file_name.find_last_of(".");
-        if (point != std::string::npos){
+        if (point != std::string::npos) {
             filename_L = file_name.substr(0, point) + "_L" + file_name.substr(point);
             filename_R = file_name.substr(0, point) + "_R" + file_name.substr(point);
             filename_S = file_name;
@@ -113,17 +111,17 @@ void Cam3D_t::show() const {
     // What to do here?
 }
 
-void Cam3D_t::reset(){
+void Cam3D_t::reset() {
     camera_L_->reset();
     camera_R_->reset();
     image_->reset();
 }
 
-void Cam3D_t::focus(double focus_distance){
+void Cam3D_t::focus(double focus_distance) {
     focal_length_buffer_ = focus_distance;
 }
 
-void Cam3D_t::autoFocus(const Scene_t* scene, const double (&position)[2]){
+void Cam3D_t::autoFocus(const Scene_t* scene, const double (&position)[2]) {
     double t = std::numeric_limits<double>::infinity();
     double uv[2];
 
@@ -131,7 +129,7 @@ void Cam3D_t::autoFocus(const Scene_t* scene, const double (&position)[2]){
 
     const Ray_t focus_ray = Ray_t(origin_, ray_direction_sph, Vec3f(), Vec3f(1.0), medium_list_);
 
-    if (scene->intersect(focus_ray, t, uv) == nullptr){
+    if (scene->intersect(focus_ray, t, uv) == nullptr) {
         t = 1000000.0;
     }
     focus(t);
