@@ -152,7 +152,7 @@ namespace APTracer { namespace Cameras {
              * @param scene Scene to use to find the object to focus on.
              * @param position Image space coordinates on which to focus. [horizontal, vertical] from 0 to 1, from left to right and bottom to top.
              */
-            virtual void autoFocus(const Scene_t* scene, const double (&position)[2]) final;
+            virtual void autoFocus(const Scene_t* scene, std::array<double, 2> position) final;
     };
 }}
 #endif

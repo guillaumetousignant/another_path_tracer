@@ -127,7 +127,7 @@ void Cam3DAperture_t::focus(double focus_distance) {
     focal_length_buffer_ = focus_distance;
 }
 
-void Cam3DAperture_t::autoFocus(const Scene_t* scene, const double (&position)[2]) {
+void Cam3DAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> position) {
     double t = std::numeric_limits<double>::infinity();
     double uv[2];
 

@@ -138,7 +138,7 @@ void Cam3DMotionblur_t::focus(double focus_distance) {
     focal_length_buffer_ = focus_distance;
 }
 
-void Cam3DMotionblur_t::autoFocus(const Scene_t* scene, const double (&position)[2]) {
+void Cam3DMotionblur_t::autoFocus(const Scene_t* scene, std::array<double, 2> position) {
     double t = std::numeric_limits<double>::infinity();
     double uv[2];
 

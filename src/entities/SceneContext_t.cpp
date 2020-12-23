@@ -735,7 +735,6 @@ void APTracer::Entities::SceneContext_t::readXML(const std::string &filename) {
                 std::string focal_length = focal_length_char;
                 std::transform(focal_length.begin(), focal_length.end(), focal_length.begin(), ::tolower);
                 if (focal_length == "nan") {
-                    double position[2];
                     const char* focus_position_char = xml_camera->Attribute("focus_position");
                     std::string focus_position;
                     if (focus_position_char == nullptr) {
@@ -745,8 +744,7 @@ void APTracer::Entities::SceneContext_t::readXML(const std::string &filename) {
                     else {
                         focus_position = focus_position_char;
                     }
-                    get_xy(focus_position, position);
-                    cameras_[index]->autoFocus(scene_.get(), position);
+                    cameras_[index]->autoFocus(scene_.get(), get_xy<double>(focus_position));
                     std::cout << "Camera #" << index << " autofocus." << std::endl;
                 }
             }

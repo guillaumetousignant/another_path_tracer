@@ -234,7 +234,6 @@ void OpenGLRenderer_t::keyboardPaused(unsigned char key, int x, int y) {
 void OpenGLRenderer_t::keyboard(unsigned char key, int x, int y) {
     auto t_start_write = std::chrono::high_resolution_clock::now(); // why is this needed?
     auto t_end_write = t_start_write;
-    double position[2];
     
     switch (key) {
     case 's':
@@ -249,8 +248,10 @@ void OpenGLRenderer_t::keyboard(unsigned char key, int x, int y) {
         break;
 
     case 'f':
-        position[0] = std::min(std::max(double(x)/double(glutGet(GLUT_WINDOW_WIDTH)), 0.0), 1.0);
-        position[1] = std::min(std::max(double(y)/double(glutGet(GLUT_WINDOW_HEIGHT)), 0.0), 1.0);
+        std::array<double, 2> position {
+            std::min(std::max(double(x)/double(glutGet(GLUT_WINDOW_WIDTH)), 0.0), 1.0),
+            std::min(std::max(double(y)/double(glutGet(GLUT_WINDOW_HEIGHT)), 0.0), 1.0)
+        };
         camera_->autoFocus(scene_, position);
         updated_ = true;
         break;

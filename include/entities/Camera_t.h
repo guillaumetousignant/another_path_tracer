@@ -116,7 +116,7 @@ namespace APTracer { namespace Entities {
              * @param scene Scene that will be used to find what object the ray hits and its distance.
              * @param position Where in the frame will the ray be sent. [horizontal, vertical], both from 0 to 1, starting from bottom left.
              */
-            virtual void autoFocus(const Scene_t* scene, const double (&position)[2]) {};
+            virtual void autoFocus(const Scene_t* scene, std::array<double, 2> position) {};
 
             /**
              * @brief Set the up vector of the camera.
