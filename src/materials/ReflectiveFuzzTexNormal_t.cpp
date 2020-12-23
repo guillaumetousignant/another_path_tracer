@@ -12,7 +12,7 @@ using APTracer::Entities::Vec3f;
 APTracer::Materials::ReflectiveFuzzTexNormal_t::ReflectiveFuzzTexNormal_t(const Vec3f &emission, APTracer::Entities::Texture_t* texture, const APTracer::Entities::Texture_t* normal_map, double order, double diffusivity)
     : texture_(texture), emission_(emission), normal_map_(normal_map), order_(order), diffusivity_(diffusivity), unif_(0, 1) {}
 
-APTracer::Materials::ReflectiveFuzzTexNormal_t::~ReflectiveFuzzTexNormal_t() {}
+APTracer::Materials::ReflectiveFuzzTexNormal_t::~ReflectiveFuzzTexNormal_t() = default;
 
 void APTracer::Materials::ReflectiveFuzzTexNormal_t::bounce(const double (&uv)[2], const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
     Vec3f tangent;

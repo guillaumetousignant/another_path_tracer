@@ -9,8 +9,7 @@ GridCell_t::GridCell_t() : items_(std::list<Shape_t*>()) {
     n_obj_ = 0;
 }
 
-GridCell_t::~GridCell_t() {
-}
+GridCell_t::~GridCell_t() = default;
 
 Shape_t* GridCell_t::intersect(const Ray_t &ray, double &t, double (&uv)[2]) const {
     double t_temp;

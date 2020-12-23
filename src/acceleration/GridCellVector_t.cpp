@@ -14,8 +14,7 @@ GridCellVector_t::GridCellVector_t(size_t size) : items_(std::vector<Shape_t*>()
     items_.reserve(size_);
 }
 
-GridCellVector_t::~GridCellVector_t() {
-}
+GridCellVector_t::~GridCellVector_t() = default;
 
 Shape_t* GridCellVector_t::intersect(const Ray_t &ray, double &t, double (&uv)[2]) const {
     double t_temp;

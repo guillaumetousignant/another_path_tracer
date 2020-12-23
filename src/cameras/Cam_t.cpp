@@ -20,7 +20,7 @@ using APTracer::Entities::Scene_t;
 Cam_t::Cam_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, const double (&fov)[2], const unsigned int (&subpix)[2], ImgBuffer_t* image, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double gammaind) 
     : Camera_t(transformation, filename, up, fov, subpix, medium_list, skybox, max_bounces, gammaind), image_(image), unif_(0.0, 1.0) {}
 
-Cam_t::~Cam_t() {}
+Cam_t::~Cam_t() = default;
 
 void Cam_t::update() {
     origin_ = transformation_->multVec(Vec3f());

@@ -62,7 +62,7 @@ APTracer::Shapes::TriangleMeshMotionblur_t::TriangleMeshMotionblur_t(APTracer::E
     tangent_vec_last_ = tangent_vec_;
 }
 
-APTracer::Shapes::TriangleMeshMotionblur_t::~TriangleMeshMotionblur_t() {}
+APTracer::Shapes::TriangleMeshMotionblur_t::~TriangleMeshMotionblur_t() = default;
 
 void APTracer::Shapes::TriangleMeshMotionblur_t::update() {
     const APTracer::Entities::TransformMatrix_t transform_norm = transformation_->transformDir();

@@ -17,7 +17,7 @@ APTracer::Shapes::Sphere_t::Sphere_t(APTracer::Entities::Material_t *material, A
     direction_sph_ = Vec3f(1.0, direction[1], direction2[2]);
 }
 
-APTracer::Shapes::Sphere_t::~Sphere_t() {}
+APTracer::Shapes::Sphere_t::~Sphere_t() = default;
 
 void APTracer::Shapes::Sphere_t::update() {
     origin_ = transformation_->multVec(Vec3f());

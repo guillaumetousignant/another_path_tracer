@@ -12,7 +12,7 @@ using APTracer::Entities::Vec3f;
 APTracer::Materials::ReflectiveFuzzTex_t::ReflectiveFuzzTex_t(const Vec3f &emission, APTracer::Entities::Texture_t* texture, double order, double diffusivity)
     : texture_(texture), emission_(emission), order_(order), diffusivity_(diffusivity), unif_(0, 1) {}
 
-APTracer::Materials::ReflectiveFuzzTex_t::~ReflectiveFuzzTex_t() {}
+APTracer::Materials::ReflectiveFuzzTex_t::~ReflectiveFuzzTex_t() = default;
 
 void APTracer::Materials::ReflectiveFuzzTex_t::bounce(const double (&uv)[2], const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
     double tuv[2];

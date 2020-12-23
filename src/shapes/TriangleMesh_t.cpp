@@ -47,7 +47,7 @@ APTracer::Shapes::TriangleMesh_t::TriangleMesh_t(APTracer::Entities::Material_t 
     tangent_vec_ = v0v1_ * tuv_to_world_[0] + v0v2_ * tuv_to_world_[1];
 }
 
-APTracer::Shapes::TriangleMesh_t::~TriangleMesh_t() {}
+APTracer::Shapes::TriangleMesh_t::~TriangleMesh_t() = default;
 
 void APTracer::Shapes::TriangleMesh_t::update() {
     const APTracer::Entities::TransformMatrix_t transform_norm = transformation_->transformDir();

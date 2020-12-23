@@ -12,7 +12,7 @@ using APTracer::Entities::Vec3f;
 APTracer::Materials::ReflectiveRefractiveNormal_t::ReflectiveRefractiveNormal_t(const Vec3f &emission, const Vec3f &colour, const APTracer::Entities::Texture_t* normal_map, APTracer::Entities::Medium_t* medium) : 
     emission_(emission), colour_(colour), normal_map_(normal_map), medium_(medium) {}
 
-APTracer::Materials::ReflectiveRefractiveNormal_t::~ReflectiveRefractiveNormal_t() {}
+APTracer::Materials::ReflectiveRefractiveNormal_t::~ReflectiveRefractiveNormal_t() = default;
 
 void APTracer::Materials::ReflectiveRefractiveNormal_t::bounce(const double (&uv)[2], const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
     Vec3f tangent;

@@ -8,7 +8,7 @@ APTracer::Shapes::Box_t::Box_t() : coordinates_{Vec3f(), Vec3f()} {}
 
 APTracer::Shapes::Box_t::Box_t(Vec3f (&coord)[2]) : coordinates_{coord[0], coord[1]} {}
 
-APTracer::Shapes::Box_t::~Box_t() {}
+APTracer::Shapes::Box_t::~Box_t() = default;
 
 bool APTracer::Shapes::Box_t::intersection(const APTracer::Entities::Ray_t &ray, double &t) const {
     const Vec3f invdir = Vec3f(1.0)/ray.direction_;

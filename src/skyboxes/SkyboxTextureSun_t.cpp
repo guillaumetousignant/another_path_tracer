@@ -9,7 +9,7 @@ using APTracer::Entities::Vec3f;
 APTracer::Skyboxes::SkyboxTextureSun_t::SkyboxTextureSun_t(APTracer::Entities::Texture_t* texture, const double (&sun_pos)[2], Vec3f sun_col, double sun_rad) 
     : texture_(texture), sun_pos_{sun_pos[0], sun_pos[1]}, sun_col_(sun_col), sun_rad_(sun_rad) {}
 
-APTracer::Skyboxes::SkyboxTextureSun_t::~SkyboxTextureSun_t() {}
+APTracer::Skyboxes::SkyboxTextureSun_t::~SkyboxTextureSun_t() = default;
 
 Vec3f APTracer::Skyboxes::SkyboxTextureSun_t::get(const Vec3f &xyz) const {
     const Vec3f sph = xyz.get_sph();

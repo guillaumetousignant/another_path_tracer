@@ -11,7 +11,7 @@ using APTracer::Entities::Vec3f;
 APTracer::Materials::Portal_t::Portal_t(APTracer::Entities::TransformMatrix_t* transformation, std::list<APTracer::Entities::Medium_t*> medium_list) 
     : PortalTop_t(transformation, medium_list) {}
 
-APTracer::Materials::Portal_t::~Portal_t() {}
+APTracer::Materials::Portal_t::~Portal_t() = default;
 
 void APTracer::Materials::Portal_t::bounce(const double (&uv)[2], const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
     const Vec3f normal = hit_obj->normal(ray.time_, uv);

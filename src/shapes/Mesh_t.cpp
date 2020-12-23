@@ -17,7 +17,7 @@ APTracer::Shapes::Mesh_t::Mesh_t(APTracer::Entities::MaterialMap_t *materialmap,
     createTriangles(materialmap);
 }        
 
-APTracer::Shapes::Mesh_t::~Mesh_t() {}
+APTracer::Shapes::Mesh_t::~Mesh_t() = default;
 
 void APTracer::Shapes::Mesh_t::createTriangles() {    
     triangles_ = new APTracer::Entities::Shape_t*[n_tris_];

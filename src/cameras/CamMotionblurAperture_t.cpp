@@ -22,7 +22,7 @@ CamMotionblurAperture_t::CamMotionblurAperture_t(TransformMatrix_t* transformati
     image_(image), unif_(0.0, 1.0), direction_last_(direction_), origin_last_(origin_), time_{time[0], time[1]}, up_last_(up_),
     focal_length_(focal_length), focal_length_last_(focal_length), aperture_(aperture), focal_length_buffer_(focal_length) {}
 
-CamMotionblurAperture_t::~CamMotionblurAperture_t() {}
+CamMotionblurAperture_t::~CamMotionblurAperture_t() = default;
 
 void CamMotionblurAperture_t::update() {
     origin_last_ = origin_;
@@ -78,7 +78,7 @@ void CamMotionblurAperture_t::raytrace(const Scene_t* scene) {
             const Vec3f vertical_int = vertical * rand_time + vertical_last * (1.0 - rand_time);
             const Vec3f origin_int = origin_ * rand_time + origin_last_ * (1.0 - rand_time);
 
-            Vec3f subpix_vec = pix_vec + Vec3f(0.0, (static_cast<double>(k) - static_cast<double>(subpix_[0])/2.0 + jitter_y)*subpix_span_y, (static_cast<double>(l) - static_cast<double>(subpix_)[1]/2.0 + jitter_x)*subpix_span_x);
+            Vec3f subpix_vec = pix_vec + Vec3f(0.0, (static_cast<double>(k) - static_cast<double>(subpix_[0])/2.0 + jitter_y)*subpix_span_y, (static_cast<double>(l) - static_cast<double>(subpix_[1])/2.0 + jitter_x)*subpix_span_x);
             const Vec3f origin2 = origin_int + vertical_int * std::cos(rand_theta) * rand_r + horizontal_int * std::sin(rand_theta) * rand_r;
             
             subpix_vec = origin_int + subpix_vec.to_xyz_offset(direction_int, horizontal_int, vertical_int) * focal_length_int - origin2;

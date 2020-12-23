@@ -7,7 +7,7 @@ using APTracer::Entities::Vec3f;
 
 APTracer::Skyboxes::SkyboxTexture_t::SkyboxTexture_t(APTracer::Entities::Texture_t* texture) : texture_(texture) {}
 
-APTracer::Skyboxes::SkyboxTexture_t::~SkyboxTexture_t() {}
+APTracer::Skyboxes::SkyboxTexture_t::~SkyboxTexture_t() = default;
 
 Vec3f APTracer::Skyboxes::SkyboxTexture_t::get(const Vec3f &xyz) const {
     const Vec3f sph = xyz.get_sph();

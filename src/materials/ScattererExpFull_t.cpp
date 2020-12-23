@@ -13,7 +13,7 @@ APTracer::Materials::ScattererExpFull_t::ScattererExpFull_t(Vec3f emi_vol, Vec3f
     scattering_coefficient_ = 1.0/scat_dist;
 }
 
-APTracer::Materials::ScattererExpFull_t::~ScattererExpFull_t() {}
+APTracer::Materials::ScattererExpFull_t::~ScattererExpFull_t() = default;
 
 bool APTracer::Materials::ScattererExpFull_t::scatter(APTracer::Entities::Ray_t &ray) {
     const double distance = -std::log(unif_(APTracer::Entities::rng))/scattering_coefficient_;

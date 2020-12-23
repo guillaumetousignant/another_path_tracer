@@ -8,7 +8,7 @@ using APTracer::Entities::Vec3f;
 APTracer::Materials::Reflective_t::Reflective_t(const Vec3f &emission, const Vec3f &colour) : 
     emission_(emission), colour_(colour) {}
 
-APTracer::Materials::Reflective_t::~Reflective_t() {}
+APTracer::Materials::Reflective_t::~Reflective_t() = default;
 
 void APTracer::Materials::Reflective_t::bounce(const double (&uv)[2], const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
     Vec3f normal = hit_obj->normal(ray.time_, uv);

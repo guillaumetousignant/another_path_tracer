@@ -15,7 +15,7 @@ TransformMatrix_t::TransformMatrix_t(const TransformMatrix_t &other)
               other.matrix_[8], other.matrix_[9], other.matrix_[10], other.matrix_[11],
               other.matrix_[12], other.matrix_[13], other.matrix_[14], other.matrix_[15]} {}
 
-TransformMatrix_t::~TransformMatrix_t() {}
+TransformMatrix_t::~TransformMatrix_t() = default;
 
 TransformMatrix_t&  TransformMatrix_t::rotateXAxis(double angle) {
     const double other[16] = {1, 0, 0, 0,

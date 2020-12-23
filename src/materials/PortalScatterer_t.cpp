@@ -5,7 +5,7 @@
 APTracer::Materials::PortalScatterer_t::PortalScatterer_t(APTracer::Entities::TransformMatrix_t* transformation, double scattering_distance, std::list<APTracer::Entities::Medium_t*> medium_list, double ind, unsigned int priority)
     : PortalScattererTop_t(transformation, medium_list, ind, priority), scattering_coefficient_(1/scattering_distance), unif_(0.0, 1.0) {}
 
-APTracer::Materials::PortalScatterer_t::~PortalScatterer_t() {}
+APTracer::Materials::PortalScatterer_t::~PortalScatterer_t() = default;
 
 bool APTracer::Materials::PortalScatterer_t::scatter(APTracer::Entities::Ray_t &ray) {
     const double distance = -std::log(unif_(APTracer::Entities::rng))/scattering_coefficient_;

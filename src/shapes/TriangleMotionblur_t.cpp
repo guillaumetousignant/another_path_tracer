@@ -77,7 +77,7 @@ APTracer::Shapes::TriangleMotionblur_t::TriangleMotionblur_t(APTracer::Entities:
     tangent_vec_last_ = tangent_vec_;
 }
 
-APTracer::Shapes::TriangleMotionblur_t::~TriangleMotionblur_t() {}
+APTracer::Shapes::TriangleMotionblur_t::~TriangleMotionblur_t() = default;
 
 void APTracer::Shapes::TriangleMotionblur_t::update() {    
     const APTracer::Entities::TransformMatrix_t transform_norm = transformation_->transformDir();

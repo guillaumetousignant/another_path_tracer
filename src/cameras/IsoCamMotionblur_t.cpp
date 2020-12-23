@@ -20,7 +20,7 @@ IsoCamMotionblur_t::IsoCamMotionblur_t(TransformMatrix_t* transformation, const 
     : Camera_t(transformation, filename, up, fov, subpix, medium_list, skybox, max_bounces, gammaind),
     image_(image), unif_(0.0, 1.0), direction_last_(direction_), origin_last_(origin_), time_{time[0], time[1]}, up_last_(up_) {}
 
-IsoCamMotionblur_t::~IsoCamMotionblur_t() {}
+IsoCamMotionblur_t::~IsoCamMotionblur_t() = default;
 
 void IsoCamMotionblur_t::update() {
     origin_last_ = origin_;

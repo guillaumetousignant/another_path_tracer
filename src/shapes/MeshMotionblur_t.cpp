@@ -15,7 +15,7 @@ APTracer::Shapes::MeshMotionblur_t::MeshMotionblur_t(APTracer::Entities::Materia
     createTriangles(materialmap);
 }      
 
-APTracer::Shapes::MeshMotionblur_t::~MeshMotionblur_t() {}  
+APTracer::Shapes::MeshMotionblur_t::~MeshMotionblur_t() = default;  
 
 void APTracer::Shapes::MeshMotionblur_t::createTriangles() {
     triangles_ = new APTracer::Entities::Shape_t*[n_tris_];

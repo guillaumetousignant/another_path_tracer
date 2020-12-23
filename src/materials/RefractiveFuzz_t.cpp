@@ -12,7 +12,7 @@ using APTracer::Entities::Vec3f;
 APTracer::Materials::RefractiveFuzz_t::RefractiveFuzz_t(const Vec3f &emission, const Vec3f &colour, double order, double diffusivity, APTracer::Entities::Medium_t* medium) : 
     emission_(emission), colour_(colour), order_(order), diffusivity_(diffusivity), unif_(0.0, 1.0), medium_(medium) {}
 
-APTracer::Materials::RefractiveFuzz_t::~RefractiveFuzz_t() {}
+APTracer::Materials::RefractiveFuzz_t::~RefractiveFuzz_t() = default;
 
 void APTracer::Materials::RefractiveFuzz_t::bounce(const double (&uv)[2], const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
     const Vec3f normal = hit_obj->normal(ray.time_, uv);

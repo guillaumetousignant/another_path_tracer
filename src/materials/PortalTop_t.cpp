@@ -5,4 +5,4 @@
 APTracer::Materials::PortalTop_t::PortalTop_t(APTracer::Entities::TransformMatrix_t* transformation, std::list<APTracer::Entities::Medium_t*> medium_list) 
     : transformation_(transformation), medium_list_(medium_list) {}
 
-APTracer::Materials::PortalTop_t::~PortalTop_t() {}
+APTracer::Materials::PortalTop_t::~PortalTop_t() = default;

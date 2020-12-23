@@ -15,7 +15,7 @@ using APTracer::Entities::Shape_t;
 Ray_t::Ray_t(const Vec3f &origin, const Vec3f &direction, const Vec3f &colour, const Vec3f &mask, const std::list<Medium_t*> &medium_list, double time /*= 1.0*/) : 
     origin_(origin), direction_(direction), colour_(colour), mask_(mask), dist_(0.0), medium_list_(medium_list), time_(time) {}
 
-Ray_t::~Ray_t() {}
+Ray_t::~Ray_t() = default;
 
 void Ray_t::raycast(const Scene_t* scene, unsigned int max_bounces, const Skybox_t* skybox) {
     unsigned int bounces = 0;
