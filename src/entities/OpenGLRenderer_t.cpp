@@ -92,7 +92,7 @@ void OpenGLRenderer_t::accumulate_write() {
     camera_->raytrace(scene_);
     //auto t_end = std::chrono::high_resolution_clock::now();
 
-    if (!(imgbuffer_->updates_%write_interval_)) {
+    if (imgbuffer_->updates_%write_interval_ == 0) {
         std::cout << "Writing started at " << imgbuffer_->updates_ << " iterations." << std::endl;
         auto t_start = std::chrono::high_resolution_clock::now();
         camera_->write();
