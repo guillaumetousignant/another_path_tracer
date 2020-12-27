@@ -1,6 +1,7 @@
 #include "shapes/Box_t.h"
 #include <limits>
 #include <algorithm>
+#include <array>
 
 using APTracer::Entities::Vec3f;
 
@@ -12,7 +13,7 @@ APTracer::Shapes::Box_t::~Box_t() = default;
 
 bool APTracer::Shapes::Box_t::intersection(const APTracer::Entities::Ray_t &ray, double &t) const {
     const Vec3f invdir = Vec3f(1.0)/ray.direction_;
-    const bool sign[3] = {invdir[0] < 0,
+    const std::array<bool, 3> sign{invdir[0] < 0,
                             invdir[1] < 0,
                             invdir[2] < 0};
 

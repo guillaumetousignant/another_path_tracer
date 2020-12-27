@@ -129,7 +129,7 @@ void Cam3DAperture_t::focus(double focus_distance) {
 
 void Cam3DAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> position) {
     double t = std::numeric_limits<double>::infinity();
-    double uv[2];
+    std::array<double, 2> uv;
 
     const Vec3f ray_direction_sph = (direction_.get_sph() + Vec3f(0, (position[1]-0.5)*fov_[0], (position[0]-0.5)*-fov_[1])).to_xyz(); // 0, y, x
 

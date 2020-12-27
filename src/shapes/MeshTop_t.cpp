@@ -27,11 +27,10 @@ void APTracer::Shapes::MeshTop_t::update() {
     }
 }
 
-void APTracer::Shapes::MeshTop_t::intersection(const APTracer::Entities::Ray_t &ray, bool &intersected, double &t, double (&uv)[2]) const {
+void APTracer::Shapes::MeshTop_t::intersection(const APTracer::Entities::Ray_t &ray, bool &intersected, double &t, std::array<double, 2> &uv) const {
     t = std::numeric_limits<double>::infinity();
     intersected = false;
-    uv[0] = 0;
-    uv[1] = 0;
+    uv = {0.0, 0.0};
     std::cout << "Warning, do not intersect meshes directly." << std::endl;   
 }
 

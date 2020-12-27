@@ -28,7 +28,7 @@ void APTracer::Shapes::Sphere_t::update() {
     direction_sph_ = Vec3f(1.0, direction[1], direction2[2]);
 }
 
-bool APTracer::Shapes::Sphere_t::intersection(const APTracer::Entities::Ray_t &ray, double &t, double (&uv)[2]) const {
+bool APTracer::Shapes::Sphere_t::intersection(const APTracer::Entities::Ray_t &ray, double &t, std::array<double, 2> &uv) const {
     const Vec3f to_center = origin_ - ray.origin_;
     const double b = to_center.dot(ray.direction_);
     const double c = to_center.dot(to_center) - pow(radius_, 2);
@@ -36,8 +36,7 @@ bool APTracer::Shapes::Sphere_t::intersection(const APTracer::Entities::Ray_t &r
 
     if (discriminant < 0.0) {
         t = std::numeric_limits<double>::infinity();
-        uv[0] = NAN;
-        uv[1] = NAN;
+        uv =  {NAN, NAN};
         return false;
     }
     t = b - sqrt(discriminant);
@@ -46,15 +45,13 @@ bool APTracer::Shapes::Sphere_t::intersection(const APTracer::Entities::Ray_t &r
         t = b + sqrt(discriminant);
         if (t < 0.0) {
             t = std::numeric_limits<double>::infinity();
-            uv[0] = NAN;
-            uv[1] = NAN;
+            uv = {NAN, NAN};
             return false; 
         }
     }
 
     const Vec3f sph = (ray.direction_ * t - to_center).to_sph();
-    uv[0] = sph[2]/(2.0 * pi) + 0.5;
-    uv[1] = 1.0 - sph[1]/pi;
+    uv = {sph[2]/(2.0 * pi) + 0.5, 1.0 - sph[1]/pi};
     return true;
 }
 

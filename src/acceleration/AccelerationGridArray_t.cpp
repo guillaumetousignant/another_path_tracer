@@ -115,7 +115,7 @@ AccelerationGridArray_t::~AccelerationGridArray_t() {
     }
 }
 
-Shape_t* AccelerationGridArray_t::intersect(const Ray_t &ray, double &t, double (&uv)[2]) const {
+Shape_t* AccelerationGridArray_t::intersect(const Ray_t &ray, double &t, std::array<double, 2> &uv) const {
     double tbbox;
     int cellexit[3] = {0, 0, 0};
     int cellstep[3] = {0, 0, 0};

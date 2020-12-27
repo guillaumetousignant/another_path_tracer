@@ -88,14 +88,13 @@ void APTracer::Shapes::Triangle_t::update() {
     tangent_vec_ = v0v1_ * tuv_to_world_[0] + v0v2_ * tuv_to_world_[1];
 }
 
-bool APTracer::Shapes::Triangle_t::intersection(const APTracer::Entities::Ray_t &ray, double &t, double (&uv)[2]) const {
+bool APTracer::Shapes::Triangle_t::intersection(const APTracer::Entities::Ray_t &ray, double &t, std::array<double, 2> &uv) const {
     const Vec3f pvec = ray.direction_.cross(v0v2_);
     const double det = v0v1_.dot(pvec);
 
     if (std::abs(det) < epsilon) {
         t = std::numeric_limits<double>::infinity();
-        uv[0] = NAN;
-        uv[1] = NAN;
+        uv = {NAN, NAN};
         return false;
     }
 

@@ -3,6 +3,7 @@
 
 #include "entities/Ray_t.h"
 #include "entities/Vec3f.h"
+#include <array>
 
 namespace APTracer { namespace Entities {
     class Material_t;
@@ -55,7 +56,7 @@ namespace APTracer { namespace Entities {
              * @return true The ray intersected the shape, t and uv are defined.
              * @return false The ray doesn't intersect the shape, t and uv are undefined.
              */
-            virtual bool intersection(const Ray_t &ray, double &t, double (&uv)[2]) const = 0;
+            virtual bool intersection(const Ray_t &ray, double &t, std::array<double, 2> &uv) const = 0;
 
             /**
              * @brief Returns the surface normal at a point in object coordinates.

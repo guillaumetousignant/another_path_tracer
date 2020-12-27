@@ -106,9 +106,9 @@ void Scene_t::build_acc() {
     acc_ = new AccelerationMultiGridVector_t(geometry_.data(), geometry_.size());
 }
 
-Shape_t* Scene_t::intersect_brute(const Ray_t &ray, double &t, double (&uv)[2]) const {
+Shape_t* Scene_t::intersect_brute(const Ray_t &ray, double &t, std::array<double, 2> &uv) const {
     double t_temp;
-    double uv_temp[2];
+    std::array<double, 2> uv_temp;
     
     t = std::numeric_limits<double>::infinity();
     Shape_t* hit_obj = nullptr;
@@ -116,14 +116,13 @@ Shape_t* Scene_t::intersect_brute(const Ray_t &ray, double &t, double (&uv)[2]) 
     for (size_t i = 0; i < geometry_.size(); i++) {
         if (geometry_[i]->intersection(ray, t_temp, uv_temp) && (t_temp < t)) {
             hit_obj = geometry_[i];
-            uv[0] = uv_temp[0];
-            uv[1] = uv_temp[1];
+            uv = uv_temp;
             t = t_temp;
         }
     }
     return hit_obj;
 }
 
-Shape_t* Scene_t::intersect(const Ray_t &ray, double &t, double (&uv)[2]) const {
+Shape_t* Scene_t::intersect(const Ray_t &ray, double &t, std::array<double, 2> &uv) const {
     return acc_->intersect(ray, t, uv);
 }

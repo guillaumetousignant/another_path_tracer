@@ -55,7 +55,7 @@ namespace APTracer { namespace Acceleration {
             unsigned int min_res_; /**< @brief Minimum number of cells for all directions.*/
             unsigned int max_res_; /**< @brief Maximum number of cells for all directions.*/
 
-            virtual Shape_t* intersect(const Ray_t &ray, double &t, double (&uv)[2]) const final;
+            virtual Shape_t* intersect(const Ray_t &ray, double &t, std::array<double, 2> &uv) const final;
             virtual void add(Shape_t* item) final;
             virtual void remove(const Shape_t* item) final;
             virtual void move(Shape_t* item) final;

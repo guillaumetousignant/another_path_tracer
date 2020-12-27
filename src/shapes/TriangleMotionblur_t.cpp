@@ -104,7 +104,7 @@ void APTracer::Shapes::TriangleMotionblur_t::update() {
     tangent_vec_ = v0v1_ * tuv_to_world_[0] + v0v2_ * tuv_to_world_[1];
 }
 
-bool APTracer::Shapes::TriangleMotionblur_t::intersection(const APTracer::Entities::Ray_t &ray, double &t, double (&uv)[2]) const {
+bool APTracer::Shapes::TriangleMotionblur_t::intersection(const APTracer::Entities::Ray_t &ray, double &t, std::array<double, 2> &uv) const {
     const Vec3f v0v1_int = v0v1_ * ray.time_ + v0v1_last_ * (1.0 - ray.time_);
     const Vec3f v0v2_int = v0v2_ * ray.time_ + v0v2_last_ * (1.0 - ray.time_);
 
@@ -117,8 +117,7 @@ bool APTracer::Shapes::TriangleMotionblur_t::intersection(const APTracer::Entiti
 
     if (std::abs(det) < epsilon) {
         t = std::numeric_limits<double>::infinity();
-        uv[0] = NAN;
-        uv[1] = NAN;
+        uv = {NAN, NAN};
         return false;
     }
 

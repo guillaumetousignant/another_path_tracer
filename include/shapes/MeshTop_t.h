@@ -3,6 +3,7 @@
 
 #include "entities/Ray_t.h"
 #include "entities/Vec3f.h"
+#include <array>
 
 namespace APTracer { namespace Entities {
     class Material_t;
@@ -66,7 +67,7 @@ namespace APTracer { namespace Shapes {
              * @param[out] t Distance from the ray origin to the intersection point.
              * @param[out] uv 2D coordinates of the intersection point in object space.
              */
-            virtual void intersection(const Ray_t &ray, bool &intersected, double &t, double (&uv)[2]) const; // Never use this
+            virtual void intersection(const Ray_t &ray, bool &intersected, double &t, std::array<double, 2> &uv) const; // Never use this
 
             /**
              * @brief Returns the surface normal and texture coordinates at a point in object coordinates. Placeholder

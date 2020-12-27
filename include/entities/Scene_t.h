@@ -1,8 +1,9 @@
 #ifndef APTRACER_SCENE_T_H
 #define APTRACER_SCENE_T_H
 
-#include <vector>
 #include "entities/Ray_t.h"
+#include <vector>
+#include <array>
 
 namespace APTracer { namespace Shapes {
     class MeshTop_t;
@@ -162,7 +163,7 @@ namespace APTracer { namespace Entities {
              * @param[out] uv 2D object-space coordinates of the intersection.
              * @return Shape_t* Pointer of the intersected shape. Returns nullptr if there is no intersection.
              */
-            Shape_t* intersect_brute(const Ray_t &ray, double &t, double (&uv)[2]) const;
+            Shape_t* intersect_brute(const Ray_t &ray, double &t, std::array<double, 2> &uv) const;
 
             /**
              * @brief Intersects the scene using the acceleration structure. Main way to intersect shapes.
@@ -172,7 +173,7 @@ namespace APTracer { namespace Entities {
              * @param[out] uv 2D object-space coordinates of the intersection.
              * @return Shape_t* Pointer of the intersected shape. Returns nullptr if there is no intersection.
              */
-            Shape_t* intersect(const Ray_t &ray, double &t, double (&uv)[2]) const;
+            Shape_t* intersect(const Ray_t &ray, double &t, std::array<double, 2> &uv) const;
     };
 }}
 
