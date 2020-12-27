@@ -39,7 +39,7 @@ namespace APTracer { namespace Entities {
              * @param max_bounces Maximum intersections with shapes and bounces on materials a ray can do before it is terminated. Actual number may be less.
              * @param gammaind Gamma of the saved picture. A value of 1 should be used for usual cases.
              */
-            Camera_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, std::array<double, 2> fov, std::array<unsigned int, 2> subpix, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double gammaind);
+            Camera_t(TransformMatrix_t* transformation, std::string filename, Vec3f up, std::array<double, 2> fov, std::array<unsigned int, 2> subpix, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double gammaind);
             
             /**
              * @brief Destroy the Camera_t object. Does nothing.
