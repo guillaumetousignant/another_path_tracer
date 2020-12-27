@@ -38,7 +38,7 @@ namespace APTracer { namespace Entities {
              * @param key String representing the material's name.
              * @return Material_t* Pointer to the material which has the input name.
              */
-            Material_t* getMaterial(const std::string &key) const;
+            auto getMaterial(const std::string &key) const -> Material_t*;
 
             /**
              * @brief Get the first material pointer from the map.
@@ -47,7 +47,7 @@ namespace APTracer { namespace Entities {
              * 
              * @return Material_t* Pointer to the first material of the map.
              */
-            Material_t* getFirst() const;
+            auto getFirst() const -> Material_t*;
     };
 }}
 

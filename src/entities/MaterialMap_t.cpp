@@ -13,10 +13,10 @@ MaterialMap_t::MaterialMap_t(std::string* names, Material_t** materials, size_t 
 
 MaterialMap_t::~MaterialMap_t() = default;
 
-Material_t* MaterialMap_t::getMaterial(const std::string &key) const {
+auto MaterialMap_t::getMaterial(const std::string &key) const -> Material_t* {
     return materials_.at(key);
 }
 
-Material_t* MaterialMap_t::getFirst() const {
+auto MaterialMap_t::getFirst() const -> Material_t* {
     return materials_.begin()->second;
 }
