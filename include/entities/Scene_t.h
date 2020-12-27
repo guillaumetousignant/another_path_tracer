@@ -163,7 +163,7 @@ namespace APTracer { namespace Entities {
              * @param[out] uv 2D object-space coordinates of the intersection.
              * @return Shape_t* Pointer of the intersected shape. Returns nullptr if there is no intersection.
              */
-            Shape_t* intersect_brute(const Ray_t &ray, double &t, std::array<double, 2> &uv) const;
+            auto intersect_brute(const Ray_t &ray, double &t, std::array<double, 2> &uv) const -> Shape_t*;
 
             /**
              * @brief Intersects the scene using the acceleration structure. Main way to intersect shapes.
@@ -173,7 +173,7 @@ namespace APTracer { namespace Entities {
              * @param[out] uv 2D object-space coordinates of the intersection.
              * @return Shape_t* Pointer of the intersected shape. Returns nullptr if there is no intersection.
              */
-            Shape_t* intersect(const Ray_t &ray, double &t, std::array<double, 2> &uv) const;
+            auto intersect(const Ray_t &ray, double &t, std::array<double, 2> &uv) const -> Shape_t*;
     };
 }}
 
