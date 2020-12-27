@@ -3,6 +3,7 @@
 
 #include "entities/Vec3f.h"
 #include <string>
+#include <array>
 
 namespace APTracer { namespace Entities {
 
@@ -38,7 +39,7 @@ namespace APTracer { namespace Entities {
              * @param xy Array of two coordinates, [x, y], ranging from 0 to 1, starting from the bottom left of the texture.
              * @return Vec3f Value of the texture at the provided coordinates.
              */
-            Vec3f get(const double (&xy)[2]) const;
+            Vec3f get(std::array<double, 2> xy) const;
 
             /**
              * @brief Returns the value of the texture from 2D uniform coordinates, using nearest-neighbour filtering.
@@ -48,7 +49,7 @@ namespace APTracer { namespace Entities {
              * @param xy Array of two coordinates, [x, y], ranging from 0 to 1, starting from the bottom left of the texture.
              * @return Vec3f Value of the texture at the provided coordinates.
              */
-            Vec3f get_nn(const double (&xy)[2]) const;
+            Vec3f get_nn(std::array<double, 2> xy) const;
     };
 }}
 
