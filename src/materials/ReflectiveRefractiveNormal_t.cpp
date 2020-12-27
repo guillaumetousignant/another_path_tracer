@@ -18,7 +18,7 @@ void APTracer::Materials::ReflectiveRefractiveNormal_t::bounce(std::array<double
     Vec3f tangent;
     Vec3f bitangent;
     Vec3f tangent_weights;
-    double tuv[2];
+    std::array<double, 2> tuv;
     Vec3f newdir;
     //bool coming_out;
 

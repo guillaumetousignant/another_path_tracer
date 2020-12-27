@@ -18,7 +18,7 @@ void APTracer::Materials::DiffuseNormal_t::bounce(std::array<double, 2> uv, cons
     Vec3f tangent;
     Vec3f bitangent;
     Vec3f tangent_weights;
-    double tuv[2];
+    std::array<double, 2> tuv;
     Vec3f normal = hit_obj->normal_uv_tangent(ray.time_, uv, tuv, tangent);
 
     bitangent = normal.cross(tangent);
