@@ -143,11 +143,11 @@ auto Vec3f::magnitudeSquared() const -> double {
     return v[0] * v[0] + v[1] * v[1] + v[2] * v[2];
 } 
 auto Vec3f::normalize() const -> Vec3f {
-    const double m = std::sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+    const double m = magnitude();
     return {v[0] / m, v[1] / m, v[2] / m};
 } 
 auto Vec3f::normalize_inplace() -> const Vec3f& {
-    const double m = std::sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+    const double m = magnitude();
     v[0] /= m;
     v[1] /= m;
     v[2] /= m;
