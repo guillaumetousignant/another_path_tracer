@@ -19,10 +19,11 @@ Ray_t::~Ray_t() = default;
 
 void Ray_t::raycast(const Scene_t* scene, unsigned int max_bounces, const Skybox_t* skybox) {
     unsigned int bounces = 0;
-    double t;
-    double uv[2];
 
     while ((bounces < max_bounces) && (mask_.magnitudeSquared() > 0.01)) { // Should maybe make magnitudesquared min value lower
+        double t;
+        std::array<double, 2> uv;
+
         const Shape_t* hit_obj = scene->intersect(*this, t, uv);
         
         if (hit_obj == nullptr) {
