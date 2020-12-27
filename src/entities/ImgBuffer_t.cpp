@@ -18,9 +18,7 @@ ImgBuffer_t::ImgBuffer_t(unsigned int size_x, unsigned int size_y): size_x_(size
 }
 
 ImgBuffer_t::~ImgBuffer_t() {
-    if (img_ != nullptr) {
-        delete [] img_;
-    }
+    delete [] img_;
 }
 
 void ImgBuffer_t::reset() {

@@ -14,9 +14,7 @@ ImgBufferOpenGL_t::ImgBufferOpenGL_t(unsigned int size_x, unsigned int size_y): 
 }
 
 ImgBufferOpenGL_t::~ImgBufferOpenGL_t() {
-    if (img_gl_ != nullptr) {
-        delete [] img_gl_;
-    }
+    delete [] img_gl_;
 }
 
 void ImgBufferOpenGL_t::reset() {

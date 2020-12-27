@@ -26,9 +26,7 @@ Scene_t::Scene_t(MeshTop_t** meshes, size_t n_meshes) : geometry_(), acc_(nullpt
 }
 
 Scene_t::~Scene_t() {
-    if (acc_ != nullptr) {
-        delete acc_;
-    }
+    delete acc_;
 }
 
 void Scene_t::add(Shape_t* shape) {
@@ -100,9 +98,7 @@ void Scene_t::update() {
 }
 
 void Scene_t::build_acc() {
-    if (acc_ != nullptr) {
-        delete acc_;
-    }
+    delete acc_;
     acc_ = new AccelerationMultiGridVector_t(geometry_.data(), geometry_.size());
 }
 

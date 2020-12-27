@@ -16,9 +16,7 @@ APTracer::Skyboxes::SkyboxFlatSun_t::SkyboxFlatSun_t(const Vec3f &background, AP
 }
 
 APTracer::Skyboxes::SkyboxFlatSun_t::~SkyboxFlatSun_t() {
-    if (lights_ != nullptr) {
-        delete [] lights_;
-    }
+    delete [] lights_;
 }
 
 Vec3f APTracer::Skyboxes::SkyboxFlatSun_t::get(const Vec3f &xyz) const {

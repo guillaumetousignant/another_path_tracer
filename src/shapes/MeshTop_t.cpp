@@ -11,14 +11,10 @@ APTracer::Shapes::MeshTop_t::MeshTop_t(APTracer::Entities::Material_t *material,
 }      
 
 APTracer::Shapes::MeshTop_t::~MeshTop_t() {
-    if (triangles_ != nullptr) {
-        for (size_t i = 0; i < n_tris_; i++) {
-            if (triangles_[i] != nullptr) {
-                delete triangles_[i];
-            }
-        }
-        delete [] triangles_;
+    for (size_t i = 0; i < n_tris_; i++) {
+        delete triangles_[i];
     }
+    delete [] triangles_;
 }
 
 void APTracer::Shapes::MeshTop_t::update() {

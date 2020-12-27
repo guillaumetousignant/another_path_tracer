@@ -13,9 +13,7 @@ GridCellArray_t::GridCellArray_t(size_t size) : size_(size), items_(new Shape_t*
 }
 
 GridCellArray_t::~GridCellArray_t() {
-    if (items_ != nullptr) {
-        delete [] items_;
-    }
+    delete [] items_;
 }
 
 Shape_t* GridCellArray_t::intersect(const Ray_t &ray, double &t, std::array<double, 2> &uv) const {
@@ -45,9 +43,8 @@ void GridCellArray_t::add(Shape_t* item) {
             items2[i] = items_[i];
         }
         items2[n_obj_] = item;
-        if (items_ != nullptr) {
-            delete [] items_;
-        }
+        delete [] items_;
+
         items_ = items2;
         ++size_;
         ++increment_size_;
@@ -82,9 +79,7 @@ void GridCellArray_t::reserve() {
         items_ = items_temp;
     }
     else {
-        if (items_ != nullptr) {
-            delete [] items_;
-        }
+        delete [] items_;
         items_ = new Shape_t*[increment_size_];        
     }
     size_ = increment_size_;

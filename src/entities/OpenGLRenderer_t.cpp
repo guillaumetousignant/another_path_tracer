@@ -38,9 +38,7 @@ OpenGLRenderer_t::OpenGLRenderer_t() :
     middle_y_pos_(0), right_clicked_(false), left_clicked_(false), middle_clicked_(false),
     focus_point_(Vec3f()), camera_dist_(0), updated_(false), write_interval_(1),
     render_function_(openGL_accumulate) {
-        if (renderer_ != nullptr) {
-            delete renderer_;
-        }
+        delete renderer_;
         renderer_ = this;
 }
 
@@ -50,9 +48,7 @@ OpenGLRenderer_t::OpenGLRenderer_t(Scene_t* scene, Camera_t* camera, ImgBufferOp
     middle_y_pos_(0), right_clicked_(false), left_clicked_(false), middle_clicked_(false),
     focus_point_(Vec3f()), camera_dist_((focus_point_ - camera_->origin_).magnitude()), updated_(false), 
     write_interval_(1), render_function_(openGL_accumulate) {
-        if (renderer_ != nullptr) {
-            delete renderer_;
-        }
+        delete renderer_;
         renderer_ = this;
         if (camera_dist_ < 0.1) {
             camera_dist_ = 0.1;

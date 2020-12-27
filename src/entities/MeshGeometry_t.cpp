@@ -23,22 +23,10 @@ MeshGeometry_t::MeshGeometry_t(const std::string &filename) {
 }
 
 MeshGeometry_t::~MeshGeometry_t() {
-    if (mat_ != nullptr) {
-        delete [] mat_;
-    }
-
-    if (v_ != nullptr) {
-        delete [] v_;
-    }
-
-    if (vn_ != nullptr) {
-        delete [] vn_;
-    }
-
-    if (vt_ != nullptr) {
-        delete [] vt_;
-    }
-
+    delete [] mat_;
+    delete [] v_;
+    delete [] vn_;
+    delete [] vt_;
 }
 
 void MeshGeometry_t::readObj(const std::string &filename) {

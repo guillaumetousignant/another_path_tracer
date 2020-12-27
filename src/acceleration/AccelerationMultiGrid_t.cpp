@@ -113,14 +113,10 @@ AccelerationMultiGrid_t::AccelerationMultiGrid_t(Shape_t** items, size_t n_items
 }
 
 AccelerationMultiGrid_t::~AccelerationMultiGrid_t() {
-    if (cells_ != nullptr) {
-        for (unsigned int i = 0; i < (cell_res_[0]*cell_res_[1]*cell_res_[2]); i++) {
-            if (cells_[i] != nullptr) {
-                delete cells_[i];
-            }
-        }
-        delete [] cells_;
+    for (unsigned int i = 0; i < (cell_res_[0]*cell_res_[1]*cell_res_[2]); i++) {
+        delete cells_[i];
     }
+    delete [] cells_;
 }
 
 Shape_t* AccelerationMultiGrid_t::intersect(const Ray_t &ray, double &t, std::array<double, 2> &uv) const {

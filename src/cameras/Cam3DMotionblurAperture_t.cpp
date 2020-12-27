@@ -58,13 +58,8 @@ Cam3DMotionblurAperture_t::Cam3DMotionblurAperture_t(TransformMatrix_t* transfor
 }
 
 Cam3DMotionblurAperture_t::~Cam3DMotionblurAperture_t() {
-    if (camera_L_ != nullptr) {
-        delete camera_L_;
-    }
-    
-    if (camera_R_ != nullptr) {
-        delete camera_R_;
-    }
+    delete camera_L_;
+    delete camera_R_;
 }
 
 void Cam3DMotionblurAperture_t::update() {

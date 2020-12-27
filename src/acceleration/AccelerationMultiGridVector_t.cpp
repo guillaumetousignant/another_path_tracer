@@ -103,14 +103,10 @@ AccelerationMultiGridVector_t::AccelerationMultiGridVector_t(Shape_t** items, si
 }
 
 AccelerationMultiGridVector_t::~AccelerationMultiGridVector_t() {
-    if (cells_ != nullptr) {
-        for (unsigned int i = 0; i < (cell_res_[0]*cell_res_[1]*cell_res_[2]); i++) {
-            if (cells_[i] != nullptr) {
-                delete cells_[i];
-            }
-        }
-        delete [] cells_;
+    for (unsigned int i = 0; i < (cell_res_[0]*cell_res_[1]*cell_res_[2]); i++) {
+        delete cells_[i];
     }
+    delete [] cells_;
 }
 
 Shape_t* AccelerationMultiGridVector_t::intersect(const Ray_t &ray, double &t, std::array<double, 2> &uv) const {

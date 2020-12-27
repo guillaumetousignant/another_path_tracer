@@ -49,13 +49,8 @@ Cam3D_t::Cam3D_t(TransformMatrix_t* transformation, const std::string &filename,
 }
 
 Cam3D_t::~Cam3D_t() {
-    if (camera_L_ != nullptr) {
-        delete camera_L_;
-    }
-    
-    if (camera_R_ != nullptr) {
-        delete camera_R_;
-    }
+    delete camera_L_;
+    delete camera_R_;
 }
 
 void Cam3D_t::update() {

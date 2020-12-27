@@ -57,9 +57,7 @@ Texture_t::Texture_t(const std::string &filename) {
 }
 
 Texture_t::~Texture_t() {
-    if (img_ != nullptr) {
-        delete [] img_;
-    }
+    delete [] img_;
 }
 
 Vec3f Texture_t::get(std::array<double, 2> xy) const {
