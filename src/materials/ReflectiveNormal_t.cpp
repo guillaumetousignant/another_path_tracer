@@ -11,7 +11,7 @@ APTracer::Materials::ReflectiveNormal_t::ReflectiveNormal_t(const Vec3f &emissio
 
 APTracer::Materials::ReflectiveNormal_t::~ReflectiveNormal_t() = default;
 
-void APTracer::Materials::ReflectiveNormal_t::bounce(const double (&uv)[2], const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
+void APTracer::Materials::ReflectiveNormal_t::bounce(std::array<double, 2> uv, const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
     Vec3f tangent;
     Vec3f bitangent;
     Vec3f tangent_weights;

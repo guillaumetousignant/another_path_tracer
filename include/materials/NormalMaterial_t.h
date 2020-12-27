@@ -18,7 +18,7 @@ namespace APTracer { namespace Materials {
             NormalMaterial_t();
             virtual ~NormalMaterial_t() final;
 
-            virtual void bounce(const double (&uv)[2], const Shape_t* hit_obj, Ray_t &ray) final;
+            virtual void bounce(std::array<double, 2> uv, const Shape_t* hit_obj, Ray_t &ray) final;
     };
 }}
 #endif

@@ -8,7 +8,7 @@ APTracer::Materials::NormalMaterial_t::NormalMaterial_t() {}
 
 APTracer::Materials::NormalMaterial_t::~NormalMaterial_t() = default;
 
-void APTracer::Materials::NormalMaterial_t::bounce(const double (&uv)[2], const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
+void APTracer::Materials::NormalMaterial_t::bounce(std::array<double, 2> uv, const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
     ray.colour_ = hit_obj->normal(ray.time_, uv) * 0.5 + 0.5;
     ray.mask_ = Vec3f();
 }

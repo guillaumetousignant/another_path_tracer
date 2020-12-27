@@ -13,7 +13,7 @@ APTracer::Materials::Diffuse_t::Diffuse_t(const Vec3f &emission, const Vec3f &co
 
 APTracer::Materials::Diffuse_t::~Diffuse_t() = default;
 
-void APTracer::Materials::Diffuse_t::bounce(const double (&uv)[2], const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
+void APTracer::Materials::Diffuse_t::bounce(std::array<double, 2> uv, const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
     Vec3f normal = hit_obj->normal(ray.time_, uv);
 
     const double rand1 = unif_(APTracer::Entities::rng) * 2.0 * pi;
