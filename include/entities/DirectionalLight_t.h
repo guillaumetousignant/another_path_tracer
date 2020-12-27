@@ -24,7 +24,7 @@ namespace APTracer { namespace Entities {
             /**
              * @brief Destroy the DirectionalLight_t object. Does nothing.
              */
-            ~DirectionalLight_t();
+            ~DirectionalLight_t() = default;
 
             Vec3f direction_; /**< @brief Direction of the light. Defines towards where the light points. Changed by modifying the light's transformation matrix.*/
             Vec3f intensity_; /**< @brief Colour of the light. Defines the value that will be multiplied with a ray's mask to set the ray's colour on intersection.*/
