@@ -5,6 +5,7 @@
 #include <sstream>
 #include <cmath>
 #include <algorithm>
+#include <array>
 
 using APTracer::Entities::MeshGeometry_t;
 using APTracer::Entities::Vec3f;
@@ -106,8 +107,8 @@ void MeshGeometry_t::readObj(const std::string &filename) {
 
     // Filling faces
     size_t f_counter = 0;
-    std::string material = "";
-    std::string tokens[3];
+    std::string material;
+    std::array<std::string, 3> tokens;
     std::string value;
     size_t pos;
 
@@ -129,29 +130,29 @@ void MeshGeometry_t::readObj(const std::string &filename) {
                 for (unsigned int i = 0; i < 3; ++i) {
                     value = tokens[i];
                     mat_[f_counter] = material;
-                    pos = value.find("/");
+                    pos = value.find('/');
                     if (pos == std::string::npos) {
                         v_[f_counter*3 + i] = v[std::stoi(value, nullptr)-1];
                         vt_[f_counter*6 + 2*i] = 0.0;
                         vt_[f_counter*6 + 2*i + 1] = 0.0;
                         vn_[f_counter*3 + i] = Vec3f(NAN);
                     }
-                    else{
+                    else {
                         v_[f_counter*3 + i] = v[std::stoi(value.substr(0, pos), nullptr)-1];
                         value.erase(0, pos + 1);
 
-                        pos = value.find("/");
+                        pos = value.find('/');
                         if (pos == std::string::npos) {
                             vt_[f_counter*6 + 2*i] = vt[2 * std::stoi(value, nullptr) - 2];
                             vt_[f_counter*6 + 2*i + 1] = vt[2 * std::stoi(value, nullptr) - 1];
                             vn_[f_counter*3 + i] = Vec3f(NAN);
                         }
-                        else{
+                        else {
                             if (pos == 0) {
                                 vt_[f_counter*6 + 2*i] = 0;
                                 vt_[f_counter*6 + 2*i + 1] = 0; 
                             }
-                            else{
+                            else {
                                 vt_[f_counter*6 + 2*i] = vt[2 * std::stoi(value.substr(0, pos), nullptr) - 2];
                                 vt_[f_counter*6 + 2*i + 1] = vt[2 * std::stoi(value.substr(0, pos), nullptr) - 1];
                             }
@@ -167,7 +168,7 @@ void MeshGeometry_t::readObj(const std::string &filename) {
         }
         else if (token == "usemtl") { // check if there is :
             liness >> tokens[0];
-            pos = tokens[0].find(":");
+            pos = tokens[0].find(':');
             if (pos != std::string::npos) {
                 tokens[0].erase(0, pos + 1);
             }
@@ -176,7 +177,6 @@ void MeshGeometry_t::readObj(const std::string &filename) {
     }    
 
     meshfile.close();
-
 
     delete [] v;
     delete [] vt;
@@ -213,11 +213,11 @@ void MeshGeometry_t::readSU2(const std::string &filename) {
                 wall_started = true;
                 std::getline(meshfile, line);
             }
-            else{
+            else {
                 wall_started = false;
             }
         }
-        else if (token == "") {
+        else if (token.empty()) {
             wall_started = false;
         }
         else if (token == "5") {
@@ -247,22 +247,16 @@ void MeshGeometry_t::readSU2(const std::string &filename) {
         if ((line == "\r") || (line.empty())) {
             token = "";
         }
-        else{
+        else {
             liness >> token;
         }
 
-        if (token == "NELEM=") {
+        if (token == "NELEM=" || token == "NMARK=" || token == "MARKER_TAG=") {
             points_started = false;
         }
         else if (token == "NPOIN=") {
             points_started = true;
             std::getline(meshfile, line);
-        }
-        else if (token == "NMARK=") {
-            points_started = false;
-        }
-        else if (token == "MARKER_TAG=") {
-            points_started = false;
         }
 
         if (points_started && (!token.empty())) {
@@ -275,8 +269,8 @@ void MeshGeometry_t::readSU2(const std::string &filename) {
 
     // Filling faces
     size_t f_counter = 0;
-    std::string material = "";
-    size_t tokens[3];
+    std::string material;
+    std::array<size_t, 3> tokens;
     wall_started = false;
     std::string marker_token;
 
@@ -294,7 +288,7 @@ void MeshGeometry_t::readSU2(const std::string &filename) {
         if ((line == "\r") || (line.empty())) {
             token = "";
         }
-        else{
+        else {
             liness >> token;
         }
 
@@ -304,16 +298,7 @@ void MeshGeometry_t::readSU2(const std::string &filename) {
                 wall_started = false;
             }
         } 
-        else if (token == "") {
-            wall_started = false;
-        }
-        else if (token == "NMARK=") {
-            wall_started = false;
-        }
-        else if (token == "NELEM=") {
-            wall_started = false;
-        }
-        else if (token == "MARKER_ELEMS=") {
+        else if (token.empty() || token == "NMARK=" || token == "NELEM=" || token == "MARKER_ELEMS=") {
             wall_started = false;
         }
 
