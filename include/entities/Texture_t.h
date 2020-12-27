@@ -39,7 +39,7 @@ namespace APTracer { namespace Entities {
              * @param xy Array of two coordinates, [x, y], ranging from 0 to 1, starting from the bottom left of the texture.
              * @return Vec3f Value of the texture at the provided coordinates.
              */
-            Vec3f get(std::array<double, 2> xy) const;
+            auto get(std::array<double, 2> xy) const -> Vec3f;
 
             /**
              * @brief Returns the value of the texture from 2D uniform coordinates, using nearest-neighbour filtering.
@@ -49,7 +49,7 @@ namespace APTracer { namespace Entities {
              * @param xy Array of two coordinates, [x, y], ranging from 0 to 1, starting from the bottom left of the texture.
              * @return Vec3f Value of the texture at the provided coordinates.
              */
-            Vec3f get_nn(std::array<double, 2> xy) const;
+            auto get_nn(std::array<double, 2> xy) const -> Vec3f;
     };
 }}
 

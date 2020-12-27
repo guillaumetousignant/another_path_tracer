@@ -17,7 +17,7 @@ Texture_t::Texture_t(const std::string &filename) {
     cimg_library::CImg<double> image;
     std::string extension = filename.substr(filename.find_last_of('.') + 1);
     std::for_each(extension.begin(), extension.end(), [](char & c) {
-        c = ::tolower(c);
+        c = std::tolower(c);
     });
 
     if (extension == "jpeg" || extension == "jpg") { 
@@ -60,17 +60,17 @@ Texture_t::~Texture_t() {
     delete [] img_;
 }
 
-Vec3f Texture_t::get(std::array<double, 2> xy) const {
+auto Texture_t::get(std::array<double, 2> xy) const -> Vec3f {
     const double x = (size_x_ - 1) * xy[0];
     const double y = (size_y_ - 1) * xy[1];
 
     const double xd = x - std::floor(x);
     const double yd = y - std::floor(y);
 
-    const int xlo = static_cast<int>(x);      // floor
-    const int xhi = static_cast<int>(x + 1.0);// ceil
-    const int ylo = static_cast<int>(y);      // floor
-    const int yhi = static_cast<int>(y + 1.0);// ceil
+    const int xlo = static_cast<int>(x);       // floor
+    const int xhi = static_cast<int>(x + 1.0); // ceil
+    const int ylo = static_cast<int>(y);       // floor
+    const int yhi = static_cast<int>(y + 1.0); // ceil
 
     return  img_[ylo*size_x_ + xlo] * (1.0 - xd) * (1.0 - yd) +
             img_[ylo*size_x_ + xhi] * xd * (1.0 - yd) + 
@@ -78,6 +78,6 @@ Vec3f Texture_t::get(std::array<double, 2> xy) const {
             img_[ yhi*size_x_ + xhi] * xd * yd;
 }
 
-Vec3f Texture_t::get_nn(std::array<double, 2> xy) const {
+auto Texture_t::get_nn(std::array<double, 2> xy) const -> Vec3f {
     return img_[std::lround((size_x_ - 1) * xy[0])* size_x_ + std::lround((size_y_ - 1) * xy[1])];
 }
