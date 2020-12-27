@@ -12,8 +12,8 @@ using APTracer::Entities::Skybox_t;
 using APTracer::Entities::Scene_t;
 using APTracer::Entities::Shape_t;
 
-Ray_t::Ray_t(const Vec3f &origin, const Vec3f &direction, const Vec3f &colour, const Vec3f &mask, const std::list<Medium_t*> &medium_list, double time /*= 1.0*/) : 
-    origin_(origin), direction_(direction), colour_(colour), mask_(mask), dist_(0.0), medium_list_(medium_list), time_(time) {}
+Ray_t::Ray_t(const Vec3f &origin, const Vec3f &direction, const Vec3f &colour, const Vec3f &mask, std::list<Medium_t*> medium_list, double time /*= 1.0*/) : 
+    origin_(origin), direction_(direction), colour_(colour), mask_(mask), dist_(0.0), medium_list_(std::move(medium_list)), time_(time) {}
 
 Ray_t::~Ray_t() = default;
 
@@ -40,7 +40,7 @@ void Ray_t::raycast(const Scene_t* scene, unsigned int max_bounces, const Skybox
 }
 
 void Ray_t::add_to_mediums(Medium_t* medium) {
-    for (std::list<Medium_t*>::iterator i = medium_list_.begin(); i != medium_list_.end(); ++i) {
+    for (auto i = medium_list_.begin(); i != medium_list_.end(); ++i) {
         if ((*i)->priority_ <= medium->priority_) {
             medium_list_.insert(i, medium);
             return;
@@ -50,7 +50,7 @@ void Ray_t::add_to_mediums(Medium_t* medium) {
 }
 
 void Ray_t::remove_from_mediums(Medium_t* medium) {
-    for (std::list<Medium_t*>::iterator i = medium_list_.begin(); i != medium_list_.end(); ++i) {
+    for (auto i = medium_list_.begin(); i != medium_list_.end(); ++i) {
         if (*i == medium) {
             medium_list_.erase(i);
             return;
