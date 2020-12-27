@@ -3,6 +3,7 @@
 
 #include "entities/Vec3f.h"
 #include <cmath>
+#include <array>
 
 namespace APTracer { namespace Entities {
     
@@ -54,9 +55,9 @@ namespace APTracer { namespace Entities {
             /**
              * @brief Destroy the TransformMatrix_t object.
              */
-            ~TransformMatrix_t();
+            ~TransformMatrix_t() = default;
 
-            double matrix_[16]; /**< @brief Array of the 16 values in the 4x4 matrix.*/
+            std::array<double, 16> matrix_; /**< @brief Array of the 16 values in the 4x4 matrix.*/
 
             /**
              * @brief Rotates the matrix around the x axis by a specified angle in radians.
@@ -66,7 +67,7 @@ namespace APTracer { namespace Entities {
              * @param angle Angle in radians to rotate around the x axis.
              * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
              */
-            TransformMatrix_t& rotateXAxis(double angle);
+            auto rotateXAxis(double angle) -> TransformMatrix_t&;
 
             /**
              * @brief Rotates the matrix around the x axis by a specified angle in radians.
@@ -76,7 +77,7 @@ namespace APTracer { namespace Entities {
              * @param angle Angle in radians to rotate around the y axis.
              * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
              */
-            TransformMatrix_t& rotateYAxis(double angle);
+            auto rotateYAxis(double angle) -> TransformMatrix_t&;
 
             /**
              * @brief Rotates the matrix around the z axis by a specified angle in radians.
@@ -86,7 +87,7 @@ namespace APTracer { namespace Entities {
              * @param angle Angle in radians to rotate around the z axis.
              * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
              */
-            TransformMatrix_t& rotateZAxis(double angle);
+            auto rotateZAxis(double angle) -> TransformMatrix_t&;
 
             /**
              * @brief Rotates the matrix on itself around the x direction.
@@ -96,7 +97,7 @@ namespace APTracer { namespace Entities {
              * @param angle Angle in radians to rotate on itself around the x direction.
              * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
              */
-            TransformMatrix_t& rotateX(double angle);
+            auto rotateX(double angle) -> TransformMatrix_t&;
 
             /**
              * @brief Rotates the matrix on itself around the y direction.
@@ -106,7 +107,7 @@ namespace APTracer { namespace Entities {
              * @param angle Angle in radians to rotate on itself around the y direction.
              * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
              */
-            TransformMatrix_t& rotateY(double angle);
+            auto rotateY(double angle) -> TransformMatrix_t&;
 
             /**
              * @brief Rotates the matrix on itself around the z direction.
@@ -116,7 +117,7 @@ namespace APTracer { namespace Entities {
              * @param angle Angle in radians to rotate on itself around the z direction.
              * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
              */
-            TransformMatrix_t& rotateZ(double angle);
+            auto rotateZ(double angle) -> TransformMatrix_t&;
 
             /**
              * @brief Rotates the matrix around an arbitrary axis by a specified angle in radians.
@@ -128,7 +129,7 @@ namespace APTracer { namespace Entities {
              * @param angle Angle in radians to rotate around the axis.
              * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
              */
-            TransformMatrix_t& rotateAxis(const Vec3f &vec, double angle);
+            auto rotateAxis(const Vec3f &vec, double angle) -> TransformMatrix_t&;
 
             /**
              * @brief Rotates the matrix on itself around an arbitrary axis by a specified angle in radians.
@@ -140,7 +141,7 @@ namespace APTracer { namespace Entities {
              * @param angle Angle in radians to rotate on itself around the axis' direction.
              * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
              */
-            TransformMatrix_t& rotate(const Vec3f &vec, double angle);
+            auto rotate(const Vec3f &vec, double angle) -> TransformMatrix_t&;
 
             /**
              * @brief Translates the matrix in 3D space.
@@ -148,7 +149,7 @@ namespace APTracer { namespace Entities {
              * @param vec Vector by which to translate the matrix.
              * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
              */
-            TransformMatrix_t& translate(const Vec3f &vec);
+            auto translate(const Vec3f &vec) -> TransformMatrix_t&;
 
             /**
              * @brief Scales the matrix from (0, 0, 0) by a three-component vector.
@@ -159,7 +160,7 @@ namespace APTracer { namespace Entities {
              * @param vec Vector whose three components are the scale factors for the three axis.
              * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
              */
-            TransformMatrix_t& scaleAxis(const Vec3f &vec);
+            auto scaleAxis(const Vec3f &vec) -> TransformMatrix_t&;
 
             /**
              * @brief Scales the matrix from (0, 0, 0) by a factor.
@@ -170,7 +171,7 @@ namespace APTracer { namespace Entities {
              * @param fac Factor by which the matrix will be scaled from (0, 0, 0).
              * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
              */
-            TransformMatrix_t& scaleAxis(double fac);
+            auto scaleAxis(double fac) -> TransformMatrix_t&;
 
             /**
              * @brief Scales the matrix inplace by a three-component vector.
@@ -180,7 +181,7 @@ namespace APTracer { namespace Entities {
              * @param vec Vector whose three components are the scale factors for the three axis.
              * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
              */
-            TransformMatrix_t& scale(const Vec3f &vec);
+            auto scale(const Vec3f &vec) -> TransformMatrix_t&;
 
             /**
              * @brief Scales the matrix inplace by a factor.
@@ -190,7 +191,7 @@ namespace APTracer { namespace Entities {
              * @param fac Scale factors for the three axis.
              * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
              */
-            TransformMatrix_t& scale(double fac);
+            auto scale(double fac) -> TransformMatrix_t&;
 
             /**
              * @brief Reflects the matrix. Not implemented yet.
@@ -200,7 +201,7 @@ namespace APTracer { namespace Entities {
              * @param vec Vector around which to reflect.
              * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
              */
-            TransformMatrix_t& reflect(const Vec3f &vec);
+            auto reflect(const Vec3f &vec) -> TransformMatrix_t&;
 
             /**
              * @brief Shears the matrix. Not implemented yet.
@@ -210,14 +211,14 @@ namespace APTracer { namespace Entities {
              * @param vec Vector along which to shear.
              * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
              */
-            TransformMatrix_t& shear(const Vec3f &vec);
+            auto shear(const Vec3f &vec) -> TransformMatrix_t&;
 
             /**
              * @brief Transposes the matrix.
              * 
              * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
              */
-            TransformMatrix_t& transpose();
+            auto transpose() -> TransformMatrix_t&;
 
             /**
              * @brief Inverts the matrix.
@@ -226,14 +227,14 @@ namespace APTracer { namespace Entities {
              * 
              * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
              */
-            TransformMatrix_t& invert();
+            auto invert() -> TransformMatrix_t&;
 
             /**
              * @brief Negates the matrix.
              * 
              * @return TransformMatrix_t& Reference to this matrix, used to chain operations.
              */
-            TransformMatrix_t& neg();
+            auto neg() -> TransformMatrix_t&;
 
             /**
              * @brief Transforms a point with the matrix, moving it around according to the operations made on the matrix.
@@ -241,7 +242,7 @@ namespace APTracer { namespace Entities {
              * @param vec Point to transform.
              * @return Vec3f Transformed point.
              */
-            Vec3f multVec(const Vec3f &vec) const;
+            auto multVec(const Vec3f &vec) const -> Vec3f;
 
             /**
              * @brief Transforms a direction, rotating it according to the operations made on the matrix.
@@ -251,7 +252,7 @@ namespace APTracer { namespace Entities {
              * @param vec Direction to transform.
              * @return Vec3f Transformed direction.
              */
-            Vec3f multDir(const Vec3f &vec) const;
+            auto multDir(const Vec3f &vec) const -> Vec3f;
 
             /**
              * @brief Returns the transposed inverted matrix, which can be used for multDir().
@@ -260,14 +261,14 @@ namespace APTracer { namespace Entities {
              * 
              * @return TransformMatrix_t Transposed inverted matrix to be used for transforming directions.
              */
-            TransformMatrix_t transformDir() const;
+            auto transformDir() const -> TransformMatrix_t;
 
             /**
              * @brief Get the maximum scale of all three axis.
              * 
              * @return double Maximum scale of the matrix.
              */
-            double getScale() const;
+            auto getScale() const -> double;
     };
 }}
 
