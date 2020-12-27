@@ -98,18 +98,18 @@ namespace APTracer { namespace Entities {
              * 
              * @param filename Path to the scene file to be read, in xml format.
              */
-            void readXML(const std::string &filename);
+            auto readXML(const std::string &filename) -> void;
 
             /**
              * @brief Starts rendering of all the scene's cameras, according to their mode.
              */
-            void render();
+            auto render() -> void;
         
         private:
             /**
              * @brief Set the scene context to empty, so it can be filled again or deleted.
              */
-            void reset();
+            auto reset() -> void;
 
             /**
              * @brief Create a transformation matrix object from an xml entry.
@@ -117,7 +117,7 @@ namespace APTracer { namespace Entities {
              * @param xml_transform_matrix XML entry containing the transformation matrix information.
              * @return std::unique_ptr<TransformMatrix_t> Unique pointer to the created transformation matrix.
              */
-            std::unique_ptr<TransformMatrix_t> create_transform_matrix(const tinyxml2::XMLElement* xml_transform_matrix) const;
+            auto create_transform_matrix(const tinyxml2::XMLElement* xml_transform_matrix) const -> std::unique_ptr<TransformMatrix_t>;
 
             /**
              * @brief Create a texture object from an xml entry.
@@ -125,7 +125,7 @@ namespace APTracer { namespace Entities {
              * @param xml_texture XML entry containing the texture information.
              * @return std::unique_ptr<Texture_t> Unique pointer to the created texture.
              */
-            std::unique_ptr<Texture_t> create_texture(const tinyxml2::XMLElement* xml_texture) const;
+            auto create_texture(const tinyxml2::XMLElement* xml_texture) const -> std::unique_ptr<Texture_t>;
 
             /**
              * @brief Create a medium object from an xml entry.
@@ -136,7 +136,7 @@ namespace APTracer { namespace Entities {
              * @param xml_mediums XML entries of all the mediums.
              * @return std::unique_ptr<Medium_t> Unique pointer to the created medium.
              */
-            std::unique_ptr<Medium_t> create_medium(const tinyxml2::XMLElement* xml_medium, std::unique_ptr<std::list<size_t>> &mediums_medium_list, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_mediums);
+            auto create_medium(const tinyxml2::XMLElement* xml_medium, std::unique_ptr<std::list<size_t>> &mediums_medium_list, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_mediums) -> std::unique_ptr<Medium_t>;
             
             /**
              * @brief Create a material object from an xml entry.
@@ -151,7 +151,7 @@ namespace APTracer { namespace Entities {
              * @param xml_mediums XML entries of all the mediums.
              * @return std::unique_ptr<Material_t> Unique pointer to the created material.
              */
-            std::unique_ptr<Material_t> create_material(const tinyxml2::XMLElement* xml_material, std::unique_ptr<std::list<size_t>> &materials_medium_list, std::vector<size_t> &materials_mix_list, std::unique_ptr<std::tuple<std::unique_ptr<std::list<size_t>>, std::unique_ptr<std::list<std::string>>>> &materials_aggregate_list, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_mediums);
+            auto create_material(const tinyxml2::XMLElement* xml_material, std::unique_ptr<std::list<size_t>> &materials_medium_list, std::vector<size_t> &materials_mix_list, std::unique_ptr<std::tuple<std::unique_ptr<std::list<size_t>>, std::unique_ptr<std::list<std::string>>>> &materials_aggregate_list, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_mediums) -> std::unique_ptr<Material_t>;
             
             /**
              * @brief Create a mesh geometry object from an xml entry.
@@ -159,7 +159,7 @@ namespace APTracer { namespace Entities {
              * @param xml_mesh_geometry XML entry containing the mesh geometry information.
              * @return std::unique_ptr<MeshGeometry_t> Unique pointer to the created mesh geometry.
              */
-            std::unique_ptr<MeshGeometry_t> create_mesh_geometry(const tinyxml2::XMLElement* xml_mesh_geometry) const;
+            auto create_mesh_geometry(const tinyxml2::XMLElement* xml_mesh_geometry) const -> std::unique_ptr<MeshGeometry_t>;
 
             /**
              * @brief Create a shape object from an xml entry.
@@ -171,7 +171,7 @@ namespace APTracer { namespace Entities {
              * @param xml_mesh_geometries XML entries of all the mesh geometries.
              * @return std::unique_ptr<Shape_t> Unique pointer to the created shape. Nullptr if the shape is a mesh.
              */
-            std::unique_ptr<Shape_t> create_object(const tinyxml2::XMLElement* xml_object, std::unique_ptr<MeshTop_t> &mesh, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_mesh_geometries);
+            auto create_object(const tinyxml2::XMLElement* xml_object, std::unique_ptr<MeshTop_t> &mesh, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_mesh_geometries) -> std::unique_ptr<Shape_t>;
             
             /**
              * @brief Create a directional light object from an xml entry.
@@ -180,7 +180,7 @@ namespace APTracer { namespace Entities {
              * @param xml_transform_matrices XML entries of all the transformation matrices.
              * @return std::unique_ptr<DirectionalLight_t> Unique pointer to the created directional light.
              */
-            std::unique_ptr<DirectionalLight_t> create_directional_light(const tinyxml2::XMLElement* xml_directional_light, const tinyxml2::XMLElement* xml_transform_matrices);
+            auto create_directional_light(const tinyxml2::XMLElement* xml_directional_light, const tinyxml2::XMLElement* xml_transform_matrices) -> std::unique_ptr<DirectionalLight_t>;
             
             /**
              * @brief Create a skybox object from an xml entry.
@@ -191,7 +191,7 @@ namespace APTracer { namespace Entities {
              * @param xml_directional_lights XML entries of all the directional lights.
              * @return std::unique_ptr<Skybox_t> Unique pointer to the created skybox.
              */
-            std::unique_ptr<Skybox_t> create_skybox(const tinyxml2::XMLElement* xml_skybox, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_directional_lights);
+            auto create_skybox(const tinyxml2::XMLElement* xml_skybox, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_directional_lights) -> std::unique_ptr<Skybox_t>;
             
             /**
              * @brief Create a image buffer object from an xml entry.
@@ -199,7 +199,7 @@ namespace APTracer { namespace Entities {
              * @param xml_imgbuffer XML entry containing the image buffer information.
              * @return std::unique_ptr<ImgBuffer_t> Unique pointer to the created image buffer.
              */
-            std::unique_ptr<ImgBuffer_t> create_imgbuffer(const tinyxml2::XMLElement* xml_imgbuffer);
+            auto create_imgbuffer(const tinyxml2::XMLElement* xml_imgbuffer) -> std::unique_ptr<ImgBuffer_t>;
 
             /**
              * @brief Create a camera object from an xml entry.
@@ -212,14 +212,14 @@ namespace APTracer { namespace Entities {
              * @param xml_skyboxes XML entries of all the skyboxes.
              * @return std::unique_ptr<Camera_t> Unique pointer to the created camera.
              */
-            std::unique_ptr<Camera_t> create_camera(const tinyxml2::XMLElement* xml_camera, const std::string &next_filename, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_mediums, const tinyxml2::XMLElement* xml_imgbuffers, const tinyxml2::XMLElement* xml_skyboxes);
+            auto create_camera(const tinyxml2::XMLElement* xml_camera, const std::string &next_filename, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_mediums, const tinyxml2::XMLElement* xml_imgbuffers, const tinyxml2::XMLElement* xml_skyboxes) -> std::unique_ptr<Camera_t>;
             
             /**
              * @brief Create a acceleration structure object from an xml entry and bind it to the scene.
              * 
              * @param xml_acceleration_structure XML entry containing the acceleration structurecod information.
              */
-            void create_acceleration_structure(const tinyxml2::XMLElement* xml_acceleration_structure);
+            auto create_acceleration_structure(const tinyxml2::XMLElement* xml_acceleration_structure) -> void;
 
             /**
              * @brief Get a transform matrix object from its name or index.
@@ -228,7 +228,7 @@ namespace APTracer { namespace Entities {
              * @param xml_transform_matrices XML entries of all the transformation matrices.
              * @return TransformMatrix_t* Pointer to the requested transformation matrix.
              */
-            TransformMatrix_t* get_transform_matrix(std::string transform_matrix, const tinyxml2::XMLElement* xml_transform_matrices);
+            auto get_transform_matrix(std::string transform_matrix, const tinyxml2::XMLElement* xml_transform_matrices) -> TransformMatrix_t*;
 
             /**
              * @brief Get a list of material indices from a string of names of indices.
@@ -237,7 +237,7 @@ namespace APTracer { namespace Entities {
              * @param xml_materials XML entries of all the materials.
              * @return std::unique_ptr<std::list<size_t>> List of material indices.
              */
-            std::unique_ptr<std::list<size_t>> get_material_index_list(std::string string_material_list, const tinyxml2::XMLElement* xml_materials) const;
+            auto get_material_index_list(std::string string_material_list, const tinyxml2::XMLElement* xml_materials) const -> std::unique_ptr<std::list<size_t>>;
 
             /**
              * @brief Get a list of medium indices from a string of names of indices.
@@ -246,7 +246,7 @@ namespace APTracer { namespace Entities {
              * @param xml_mediums XML entries of all the mediums.
              * @return std::unique_ptr<std::list<size_t>> List of medium indices.
              */
-            std::unique_ptr<std::list<size_t>> get_medium_index_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_mediums) const;
+            auto get_medium_index_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_mediums) const -> std::unique_ptr<std::list<size_t>>;
 
             /**
              * @brief Get a list of mediums from a string of names of indices.
@@ -255,7 +255,7 @@ namespace APTracer { namespace Entities {
              * @param xml_mediums XML entries of all the mediums.
              * @return std::list<Medium_t*> List of mediums.
              */
-            std::list<Medium_t*> get_medium_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_mediums) const;
+            auto get_medium_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_mediums) const -> std::list<Medium_t*>;
 
             /**
              * @brief Get a texture from its name or index.
@@ -264,7 +264,7 @@ namespace APTracer { namespace Entities {
              * @param xml_textures XML entries of all the textures.
              * @return Texture_t* Pointer to the requested texture.
              */
-            Texture_t* get_texture(std::string texture, const tinyxml2::XMLElement* xml_textures) const;
+            auto get_texture(std::string texture, const tinyxml2::XMLElement* xml_textures) const -> Texture_t*;
 
             /**
              * @brief Get the two indices of the materials making up a material mix from their names or indices.
@@ -274,7 +274,7 @@ namespace APTracer { namespace Entities {
              * @param xml_materials XML entries of all the materials.
              * @return std::vector<size_t> Vector of the indices ot the two materials making up a material mix.
              */
-            std::vector<size_t> get_material_mix(std::string material_refracted, std::string material_reflected, const tinyxml2::XMLElement* xml_materials) const;
+            auto get_material_mix(std::string material_refracted, std::string material_reflected, const tinyxml2::XMLElement* xml_materials) const -> std::vector<size_t>;
 
             /**
              * @brief Get a medium from its name or index.
@@ -283,7 +283,7 @@ namespace APTracer { namespace Entities {
              * @param xml_mediums XML entries of all the mediums.
              * @return Medium_t* Pointer to the requested medium.
              */
-            Medium_t* get_medium(std::string medium, const tinyxml2::XMLElement* xml_mediums) const;
+            auto get_medium(std::string medium, const tinyxml2::XMLElement* xml_mediums) const -> Medium_t*;
 
             /**
              * @brief Get a mesh geometry from its name or index.
@@ -292,7 +292,7 @@ namespace APTracer { namespace Entities {
              * @param xml_mesh_geometries XML entries of all the mesh geometries.
              * @return MeshGeometry_t* Pointer to the requested mesh geometry.
              */
-            MeshGeometry_t* get_mesh_geometry(std::string mesh_geometry, const tinyxml2::XMLElement* xml_mesh_geometries) const;
+            auto get_mesh_geometry(std::string mesh_geometry, const tinyxml2::XMLElement* xml_mesh_geometries) const -> MeshGeometry_t*;
 
             /**
              * @brief Get a material's index from its name or index.
@@ -301,7 +301,7 @@ namespace APTracer { namespace Entities {
              * @param xml_materials XML entries of all the materials.
              * @return size_t Index of the requested material.
              */
-            size_t get_material_index(std::string material, const tinyxml2::XMLElement* xml_materials) const;
+            auto get_material_index(std::string material, const tinyxml2::XMLElement* xml_materials) const -> size_t;
 
             /**
              * @brief Get a material from its name or index.
@@ -310,7 +310,7 @@ namespace APTracer { namespace Entities {
              * @param xml_materials XML entries of all the materials.
              * @return Material_t* Pointer to the requested material.
              */
-            Material_t* get_material(std::string material, const tinyxml2::XMLElement* xml_materials) const;
+            auto get_material(std::string material, const tinyxml2::XMLElement* xml_materials) const -> Material_t*;
 
             /**
              * @brief Get a vector of directional lights from their name or index.
@@ -319,7 +319,7 @@ namespace APTracer { namespace Entities {
              * @param xml_directional_lights XML entries of all the directional lights.
              * @return std::vector<DirectionalLight_t*> Vector of the requested directional lights.
              */
-            std::vector<DirectionalLight_t*> get_lights(std::string lights_string, const tinyxml2::XMLElement* xml_directional_lights) const;
+            auto get_lights(std::string lights_string, const tinyxml2::XMLElement* xml_directional_lights) const -> std::vector<DirectionalLight_t*>;
 
             /**
              * @brief Get an image buffer from its name or index.
@@ -328,7 +328,7 @@ namespace APTracer { namespace Entities {
              * @param xml_imgbuffers XML entries of all the image buffers.
              * @return ImgBuffer_t* Pointer to the requested image buffer.
              */
-            ImgBuffer_t* get_imgbuffer(std::string imgbuffer, const tinyxml2::XMLElement* xml_imgbuffers) const;
+            auto get_imgbuffer(std::string imgbuffer, const tinyxml2::XMLElement* xml_imgbuffers) const -> ImgBuffer_t*;
 
             /**
              * @brief Get a skybox from its name or index.
@@ -337,7 +337,7 @@ namespace APTracer { namespace Entities {
              * @param xml_skyboxes XML entries of all the skyboxes.
              * @return Skybox_t* Pointer to the requested skybox.
              */
-            Skybox_t* get_skybox(std::string skybox, const tinyxml2::XMLElement* xml_skyboxes) const;
+            auto get_skybox(std::string skybox, const tinyxml2::XMLElement* xml_skyboxes) const -> Skybox_t*;
 
             /**
              * @brief Get the shapes and meshes making up the scene from their name or index.
@@ -349,7 +349,7 @@ namespace APTracer { namespace Entities {
              * @param[out] meshes Vector containing the meshes making up the scene.
              * @param xml_objects XML entries of all the shapes and/or meshes.
              */
-            void get_objects(std::string objects_string, std::vector<Shape_t*> &shapes, std::vector<MeshTop_t*> &meshes, const tinyxml2::XMLElement* xml_objects) const;
+            auto get_objects(std::string objects_string, std::vector<Shape_t*> &shapes, std::vector<MeshTop_t*> &meshes, const tinyxml2::XMLElement* xml_objects) const -> void;
 
             /**
              * @brief Get the shapes and meshes making up the scene from all the created shapes and meshes.
@@ -359,7 +359,7 @@ namespace APTracer { namespace Entities {
              * @param[out] shapes Vector containing the shapes making up the scene.
              * @param[out] meshes Vector containing the meshes making up the scene.
              */
-            void get_objects(std::vector<Shape_t*> &shapes, std::vector<MeshTop_t*> &meshes) const;
+            auto get_objects(std::vector<Shape_t*> &shapes, std::vector<MeshTop_t*> &meshes) const -> void;
     };
 }}
 
@@ -374,7 +374,7 @@ namespace APTracer {
      * @param colour String containing a colour value(s) or name.
      * @return Vec3f Three component colour.
      */
-    Vec3f get_colour(std::string colour); // copies string :(
+    auto get_colour(std::string colour) -> Vec3f; // copies string :(
 
     /**
      * @brief Get a vector of three points from a string of numerical values, or nan for nullptr.
@@ -382,7 +382,7 @@ namespace APTracer {
      * @param points_string String containing the three components of the three points, or 'nan'.
      * @return std::vector<Vec3f> Vector containing the components of three points, or empty vector.
      */
-    std::vector<Vec3f> get_points(std::string points_string);
+    auto get_points(std::string points_string) -> std::vector<Vec3f>;
 
     /**
      * @brief Get a vector of three 2D coordinates from a string of numerical values, or nan for nullptr.
@@ -390,7 +390,7 @@ namespace APTracer {
      * @param texture_coordinates_string String containing the two components of the three coordinates, or 'nan'.
      * @return std::vector<double> Vector containing the components of three coordinates, or empty vector. [x0, y0, x1, y1, x2, y2]
      */
-    std::vector<double> get_texture_coordinates(std::string texture_coordinates_string);    
+    auto get_texture_coordinates(std::string texture_coordinates_string) -> std::vector<double>;    
 
     /**
      * @brief Get a list of strings representing material names or indices from a string of material names or indices.
@@ -398,7 +398,7 @@ namespace APTracer {
      * @param string_medium_names String of material names or indices.
      * @return std::unique_ptr<std::list<std::string>> List of strings representing material names or indices
      */
-    std::unique_ptr<std::list<std::string>> get_medium_names(std::string string_medium_names);
+    auto get_medium_names(std::string string_medium_names) -> std::unique_ptr<std::list<std::string>>;
 
     /**
      * @brief Get an array of two values from a string.
@@ -407,7 +407,7 @@ namespace APTracer {
      * @return std::array<T, 2> Array of two values of type T.
      */
     template<typename T>
-    std::array<T, 2> get_xy(const std::string &string_value) {
+    auto get_xy(const std::string &string_value) -> std::array<T, 2> {
         std::array<T, 2> value;
         std::stringstream ss(string_value);
 
@@ -432,7 +432,7 @@ namespace APTracer {
      * @param string_value String containing two values.
      * @param value Array of two double values.
      */
-    void get_xy(const std::string &string_value, double (&value)[2]);
+    auto get_xy(const std::string &string_value, double (&value)[2]) -> void;
 
     /**
      * @brief Get an array of two unsigned integer values from a string.
@@ -440,7 +440,7 @@ namespace APTracer {
      * @param string_value String containing two values.
      * @param value Array of two unsigned integer values.
      */
-    void get_xy(const std::string &string_value, unsigned int (&value)[2]);
+    auto get_xy(const std::string &string_value, unsigned int (&value)[2]) -> void;
 
     /**
      * @brief Returns true if the string represents an integer.
@@ -449,7 +449,7 @@ namespace APTracer {
      * @return true The string represents an integer.
      * @return false The string doesn't represent an integer.
      */
-    bool is_number(const std::string& s);
+    auto is_number(const std::string& s) -> bool;
 
     /**
      * @brief Applies a transformation represented by an XML element to a transformation matrix.
@@ -457,7 +457,7 @@ namespace APTracer {
      * @param[in, out] transform_matrix Transformation matrix to which we apply the transformation.
      * @param transform XML element representing the transformation.
      */
-    void apply_transformation(TransformMatrix_t* transform_matrix, const tinyxml2::XMLElement* transform);
+    auto apply_transformation(TransformMatrix_t* transform_matrix, const tinyxml2::XMLElement* transform) -> void;
 
     /**
      * @brief This function defines the parameters that have to be present in an XML element and throws an error if a parameter is missing.
@@ -466,7 +466,7 @@ namespace APTracer {
      * @param attributes Array of chars representing parameter names.
      * @param n Number of parameters to test.
      */
-    void require_attributes(const tinyxml2::XMLElement* element, const char** attributes, unsigned int n);
+    auto require_attributes(const tinyxml2::XMLElement* element, const char** attributes, unsigned int n) -> void;
 }
 
 #endif
