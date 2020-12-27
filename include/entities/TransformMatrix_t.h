@@ -50,7 +50,7 @@ namespace APTracer { namespace Entities {
              * 
              * @param other Transformation matrix to be copied into the new transformation matrix.
              */
-            TransformMatrix_t(const TransformMatrix_t &other);
+            TransformMatrix_t(const TransformMatrix_t &other) = default;
 
             /**
              * @brief Destroy the TransformMatrix_t object.

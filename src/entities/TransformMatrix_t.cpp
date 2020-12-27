@@ -9,9 +9,6 @@ TransformMatrix_t::TransformMatrix_t() : matrix_{1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1
 TransformMatrix_t::TransformMatrix_t(double i0, double i1, double i2, double i3, double i4, double i5, double i6, double i7, double i8, double i9, double i10, double i11, double i12, double i13, double i14, double i15) 
     : matrix_{i0, i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14, i15} {}
 
-TransformMatrix_t::TransformMatrix_t(const TransformMatrix_t &other)
-    : matrix_{other.matrix_} {}
-
 auto TransformMatrix_t::rotateXAxis(double angle) -> TransformMatrix_t& {
     const std::array<double, 16> other{1, 0, 0, 0,
                                        0, cos(angle), sin(angle), 0,
@@ -282,25 +279,24 @@ auto TransformMatrix_t::transpose() -> TransformMatrix_t& {
 auto TransformMatrix_t::invert() -> TransformMatrix_t& { // oh boï
     // See https://graphics.stanford.edu/~mdfisher/Code/Engine/Matrix4.cpp.html
 
-    std::array<double, 12> tmp; /* temp array for pairs */
-    double det; /* determinant */
     const std::array<double, 16> transpose{matrix_[0], matrix_[4], matrix_[8], matrix_[12],
                                            matrix_[1], matrix_[5], matrix_[9], matrix_[13],
                                            matrix_[2], matrix_[6], matrix_[10], matrix_[14],
                                            matrix_[3], matrix_[7], matrix_[11], matrix_[15]};
 
-    tmp[0] = transpose[10] * transpose[15];
-    tmp[1] = transpose[11] * transpose[14];
-    tmp[2] = transpose[9] * transpose[15];
-    tmp[3] = transpose[11] * transpose[13];
-    tmp[4] = transpose[9] * transpose[14];
-    tmp[5] = transpose[10] * transpose[13];
-    tmp[6] = transpose[8] * transpose[15];
-    tmp[7] = transpose[11] * transpose[12];
-    tmp[8] = transpose[8] * transpose[14];
-    tmp[9] = transpose[10] * transpose[12];
-    tmp[10] = transpose[8] * transpose[13];
-    tmp[11] = transpose[9] * transpose[12];
+    /* temp array for pairs */
+    std::array<double, 12> tmp{ transpose[10] * transpose[15],
+                                transpose[11] * transpose[14],
+                                transpose[9] * transpose[15],
+                                transpose[11] * transpose[13],
+                                transpose[9] * transpose[14],
+                                transpose[10] * transpose[13],
+                                transpose[8] * transpose[15],
+                                transpose[11] * transpose[12],
+                                transpose[8] * transpose[14],
+                                transpose[10] * transpose[12],
+                                transpose[8] * transpose[13],
+                                transpose[9] * transpose[12]};
 
     // ij order might be messed up for these. If it is, order it: 0 4 8 12 1 5 9 13.
     matrix_[0] = tmp[0]*transpose[5] + tmp[3]*transpose[6] + tmp[4]*transpose[7];
@@ -351,8 +347,8 @@ auto TransformMatrix_t::invert() -> TransformMatrix_t& { // oh boï
     matrix_[15] = tmp[10]*transpose[10] + tmp[4]*transpose[8] + tmp[9]*transpose[9];
     matrix_[15] -= tmp[8]*transpose[9] + tmp[11]*transpose[10] + tmp[5]*transpose[8];
 
-    det = transpose[0]*matrix_[0]+transpose[1]*matrix_[1]+transpose[2]*matrix_[2]+transpose[3]*matrix_[3];
-    det = 1.0/det;
+    /* determinant */
+    const double det = 1.0/(transpose[0]*matrix_[0]+transpose[1]*matrix_[1]+transpose[2]*matrix_[2]+transpose[3]*matrix_[3]);
 
     for (auto& element: matrix_) {
         element *= det;
