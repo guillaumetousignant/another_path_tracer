@@ -41,7 +41,7 @@ void APTracer::Materials::ReflectiveRefractiveNormal_t::bounce(std::array<double
             n = normal;
             //coming_out = false;
         }
-        else{ // Goind out
+        else { // Goind out
             etat = (*std::next(ray.medium_list_.begin()))->ind_;
             etai = medium_->ind_;
             n = -normal;
@@ -54,7 +54,7 @@ void APTracer::Materials::ReflectiveRefractiveNormal_t::bounce(std::array<double
         if (sint >= 1.0) {
             kr = 1.0;
         }
-        else{
+        else {
             const double cost = std::sqrt(1.0 - sint * sint);
             cosi = std::abs(cosi);
             const double Rs = ((etat * cosi) - (etai * cost))/((etat * cosi) + (etai * cost));
@@ -74,12 +74,12 @@ void APTracer::Materials::ReflectiveRefractiveNormal_t::bounce(std::array<double
                     ray.add_to_mediums(medium_);
                 }
             }
-            else{ // going out
+            else { // going out
                 ray.origin_ += ray.direction_ * ray.dist_ + normal * epsilon; // use n or normal?
                 ray.remove_from_mediums(medium_);
             }
         }
-        else{ // Reflected
+        else { // Reflected
             newdir = ray.direction_ - n * 2.0 * cosi;
             ray.origin_ += ray.direction_ * ray.dist_ + n * epsilon;            
         }
@@ -87,13 +87,13 @@ void APTracer::Materials::ReflectiveRefractiveNormal_t::bounce(std::array<double
         ray.colour_ += ray.mask_ * emission_;
         ray.mask_ *= colour_;
     }
-    else{
+    else {
         newdir = ray.direction_;
         if (cosi < 0.0) {
             ray.origin_ += ray.direction_ * ray.dist_ - normal * epsilon;
             ray.add_to_mediums(medium_);
         }
-        else{
+        else {
             ray.origin_ += ray.direction_ * ray.dist_ + normal * epsilon;
             ray.remove_from_mediums(medium_);
         }

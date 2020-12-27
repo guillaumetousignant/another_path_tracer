@@ -13,7 +13,7 @@ bool APTracer::Materials::PortalScatterer_t::scatter(APTracer::Entities::Ray_t &
     if (distance >= ray.dist_) {
         return false;
     }
-    else{
+    else {
         ray.dist_ = distance;
         ray.origin_ = transformation_->multVec(ray.origin_ + ray.direction_ * ray.dist_);
         ray.direction_ = transformation_->transformDir().multDir(ray.direction_).normalize_inplace(); // CHECK cache transformation_->transformDir()??

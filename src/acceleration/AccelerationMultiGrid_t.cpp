@@ -28,7 +28,7 @@ AccelerationMultiGrid_t::AccelerationMultiGrid_t(Shape_t** items, size_t n_items
             bb_coordinates[1].max(items[i]->maxcoord());
         }
     }
-    else{
+    else {
         bb_coordinates[0] = coordinates[0];
         bb_coordinates[1] = coordinates[1];
     }
@@ -103,7 +103,7 @@ AccelerationMultiGrid_t::AccelerationMultiGrid_t(Shape_t** items, size_t n_items
                 temp_cells[i] = nullptr;
 
             }
-            else{
+            else {
                 cells_[i] = temp_cells[i];
             }
         }
@@ -148,7 +148,7 @@ Shape_t* AccelerationMultiGrid_t::intersect(const Ray_t &ray, double &t, std::ar
             cellexit[i] = -1;
             cellstep[i] = -1;
         }
-        else{
+        else {
             deltat[i] = cell_size_[i] * invdir[i];
             tnext[i] = tbbox + ((cellcoord[i] + 1.0) * cell_size_[i] - raycellorigin[i]) * invdir[i];
             cellexit[i] = cell_res_[i];

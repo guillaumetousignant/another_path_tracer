@@ -30,7 +30,7 @@ Cam3DMotionblur_t::Cam3DMotionblur_t(TransformMatrix_t* transformation, const st
         filename_R = filename.substr(0, point) + "_R" + filename.substr(point);
         filename_S = filename;
     }
-    else{
+    else {
         filename_L = filename + "_L.png";
         filename_R = filename + "_R.png";
         filename_S = filename;
@@ -106,14 +106,14 @@ void Cam3DMotionblur_t::write(std::string file_name /*= ""*/) {
         filename_R = "";
         filename_S = filename_;
     }
-    else{
+    else {
         const size_t point = file_name.find_last_of('.');
         if (point != std::string::npos) {
             filename_L = file_name.substr(0, point) + "_L" + file_name.substr(point);
             filename_R = file_name.substr(0, point) + "_R" + file_name.substr(point);
             filename_S = file_name;
         }
-        else{
+        else {
             filename_L = file_name + "_L.png";
             filename_R = file_name + "_R.png";
             filename_S = file_name;

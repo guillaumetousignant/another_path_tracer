@@ -522,7 +522,7 @@ void APTracer::Entities::SceneContext_t::readXML(const std::string &filename) {
                 if (portal == nullptr) {
                     std::cerr << "Error, material #" << index << " has transformations, but it is not convertible to a portal. Ignoring." << std::endl;
                 }
-                else{
+                else {
                     for (tinyxml2::XMLElement* transformation_pre = transformations_pre->FirstChildElement("transformation_pre"); transformation_pre; transformation_pre = transformation_pre->NextSiblingElement("transformation_pre")) {
                         apply_transformation(portal->transformation_, transformation_pre);
                     }
@@ -640,7 +640,7 @@ void APTracer::Entities::SceneContext_t::readXML(const std::string &filename) {
                 if (portal == nullptr) {
                     std::cerr << "Error, material #" << index << " has transformations, but it is not convertible to a portal. Ignoring." << std::endl;
                 }
-                else{
+                else {
                     for (tinyxml2::XMLElement* transformation_post = transformations_post->FirstChildElement("transformation_post"); transformation_post; transformation_post = transformation_post->NextSiblingElement("transformation_post")) {
                         apply_transformation(portal->transformation_, transformation_post);
                     }
@@ -776,7 +776,7 @@ void APTracer::Entities::SceneContext_t::readXML(const std::string &filename) {
                 std::cerr << "Error: XML cameras should have a 'rendermode' attribute. Using 'single'." << std::endl;
                 render_mode = "single";
             }
-            else{
+            else {
                 render_mode = render_mode_char;
             }
 
@@ -956,7 +956,7 @@ std::unique_ptr<TransformMatrix_t> APTracer::Entities::SceneContext_t::create_tr
     if (string_transform_matrix == "nan") {
         return std::unique_ptr<TransformMatrix_t>(new TransformMatrix_t());
     }
-    else{
+    else {
         double values[16];
         unsigned int count = 0;
         std::stringstream ss(string_transform_matrix);
@@ -971,7 +971,7 @@ std::unique_ptr<TransformMatrix_t> APTracer::Entities::SceneContext_t::create_tr
             std::cerr << "Error, transform matrix value should be 16 values seperated by spaces, or nan. Current number of values is " << count << ". Ignoring." << std::endl;
             return std::unique_ptr<TransformMatrix_t>(new TransformMatrix_t());
         }
-        else{
+        else {
             return std::unique_ptr<TransformMatrix_t>(
                   new TransformMatrix_t(values[0], values[1], values[2], values[3],
                                         values[4], values[5], values[6], values[7],
@@ -1011,7 +1011,7 @@ std::unique_ptr<Texture_t> APTracer::Entities::SceneContext_t::create_texture(co
         
         return std::unique_ptr<Texture_t>(new Texture_t(filename));
     }
-    else{
+    else {
         std::cerr << "Error, texture type '" << type << "' not implemented. Only 'texture' exists for now. Exiting." << std::endl; 
         exit(20);
     }
@@ -1091,7 +1091,7 @@ std::unique_ptr<Medium_t> APTracer::Entities::SceneContext_t::create_medium(cons
                                 xml_medium->DoubleAttribute("scattering_distance"), xml_medium->DoubleAttribute("ind"), 
                                 xml_medium->UnsignedAttribute("priority")));
     }
-    else{
+    else {
         std::cerr << "Error, medium type '" << type << "' not implemented. Only 'absorber', 'nonabsorber', 'portal_scatterer', 'scatterer_exp', and 'scatterer' exists for now. Ignoring." << std::endl; 
         return std::unique_ptr<Medium_t>(new NonAbsorber_t(1.0, 0));
     }
@@ -1297,7 +1297,7 @@ std::unique_ptr<Material_t> APTracer::Entities::SceneContext_t::create_material(
         return std::unique_ptr<Material_t>();
         // CHECK add aggregates
     }
-    else{
+    else {
         std::cerr << "Error, material type '" << type << "' not implemented. Ignoring." << std::endl; 
         return std::unique_ptr<Material_t>(new NormalMaterial_t());
     }
@@ -1333,7 +1333,7 @@ std::unique_ptr<MeshGeometry_t> APTracer::Entities::SceneContext_t::create_mesh_
 
         return std::unique_ptr<MeshGeometry_t>(new MeshGeometry_t(filename));
     }
-    else{
+    else {
         std::cerr << "Error, mesh geometry type '" << type << "' not implemented. Only 'mesh_geometry' exists for now. Exiting." << std::endl; 
         exit(50);
     }
@@ -1447,7 +1447,7 @@ std::unique_ptr<Shape_t> APTracer::Entities::SceneContext_t::create_object(const
         return std::unique_ptr<Shape_t>(
                     new TriangleMeshMotionblur_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries), xml_object->UnsignedAttribute("index")));
     }
-    else{
+    else {
         std::cerr << "Error, object type '" << type << "' not implemented. Exiting." << std::endl; 
         exit(60);
     }
@@ -1471,7 +1471,7 @@ std::unique_ptr<DirectionalLight_t> APTracer::Entities::SceneContext_t::create_d
         return std::unique_ptr<DirectionalLight_t>(
                     new DirectionalLight_t(APTracer::get_colour(xml_directional_light->Attribute("colour")), get_transform_matrix(xml_directional_light->Attribute("transform_matrix"), xml_transform_matrices)));
     }
-    else{
+    else {
         std::cerr << "Error, directional light type '" << type << "' not implemented. Only 'directional_light' exists for now. Exiting." << std::endl; 
         exit(70);
     }
@@ -1534,7 +1534,7 @@ std::unique_ptr<Skybox_t> APTracer::Entities::SceneContext_t::create_skybox(cons
         return std::unique_ptr<Skybox_t>(
                     new SkyboxTextureTransformationSun_t(get_texture(xml_skybox->Attribute("texture"), xml_textures), get_transform_matrix(xml_skybox->Attribute("transform_matrix"), xml_transform_matrices), sun_pos, APTracer::get_colour(xml_skybox->Attribute("light_colour")), xml_skybox->DoubleAttribute("light_radius")));
     }
-    else{
+    else {
         std::cerr << "Error, skybox type '" << type << "' not implemented. Ignoring." << std::endl; 
         return std::unique_ptr<Skybox_t>(new SkyboxFlat_t(Vec3f(0.5)));
     }
@@ -1565,7 +1565,7 @@ std::unique_ptr<ImgBuffer_t> APTracer::Entities::SceneContext_t::create_imgbuffe
         opengl_imgbuffer_ = new ImgBufferOpenGL_t(xml_imgbuffer->UnsignedAttribute("resx"), xml_imgbuffer->UnsignedAttribute("resy"));
         return std::unique_ptr<ImgBuffer_t>(opengl_imgbuffer_);
     }
-    else{
+    else {
         std::cerr << "Error, imgbuffer type '" << type << "' not implemented. Only 'imgbuffer', and 'imgbuffer_opengl' exist for now. Ignoring." << std::endl; 
         return std::unique_ptr<ImgBuffer_t>(new ImgBuffer_t(300, 200));
     }
@@ -1763,7 +1763,7 @@ std::unique_ptr<Camera_t> APTracer::Entities::SceneContext_t::create_camera(cons
                             xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focal_length"), xml_camera->DoubleAttribute("aperture"), 
                             get_xy<double>("time"), xml_camera->DoubleAttribute("gammaind")));
     }
-    else{
+    else {
         std::cerr << "Error, camera type '" << type << "' not implemented. Exiting." << std::endl; 
         exit(100);
     }
@@ -1804,7 +1804,7 @@ void APTracer::Entities::SceneContext_t::create_acceleration_structure(const tin
     else if (type == "multi_grid_vector") {
         scene_->acc_ = new AccelerationMultiGridVector_t(scene_->geometry_.data(), scene_->geometry_.size(), nullptr, 0, xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128), xml_acceleration_structure->UnsignedAttribute("max_cell_content", 32), xml_acceleration_structure->UnsignedAttribute("max_grid_level", 1));
     }
-    else{
+    else {
         std::cerr << "Error, acceleration structure type '" << type << "' not implemented. Using 'multi_grid_vector'." << std::endl; 
         scene_->acc_ = new AccelerationMultiGridVector_t(scene_->geometry_.data(), scene_->geometry_.size());
     }
@@ -2129,7 +2129,7 @@ std::vector<size_t> APTracer::Entities::SceneContext_t::get_material_mix(std::st
                 exit(41); 
             }
         }
-        else{
+        else {
             std::cerr << "Error, no materials, '" << material_refracted << "' not found. Exiting." << std::endl;
             exit(47);
         }        
@@ -2161,7 +2161,7 @@ std::vector<size_t> APTracer::Entities::SceneContext_t::get_material_mix(std::st
                 exit(41); 
             }
         }
-        else{
+        else {
             std::cerr << "Error, no materials, '" << material_reflected << "' not found. Exiting." << std::endl;
             exit(47);
         }        
@@ -2559,7 +2559,7 @@ Vec3f APTracer::get_colour(std::string colour) {
             std::cerr << "Error, colour should be 1 or 3 values seperated by spaces, or a string. Current number of values is " << count << ", colour is '" << colour << "'. Ignoring." << std::endl;
             return Vec3f(0.5);
         }
-        else{
+        else {
             return Vec3f(values[0], values[1], values[2]);
         }
 	}
@@ -2585,7 +2585,7 @@ std::vector<Vec3f> APTracer::get_points(std::string points_string) {
             std::cerr << "Error, triangle points should be 9 values seperated by spaces, or nan. Current number of values is " << count << ". Exiting." << std::endl;
             exit(67);
         }
-        else{
+        else {
             points[0][0] = values[0];
             points[0][1] = values[1];
             points[0][2] = values[2];
@@ -2773,7 +2773,7 @@ void APTracer::apply_transformation(TransformMatrix_t* transform_matrix, const t
     else if (type == "neg") {
         transform_matrix->neg();
     }
-    else{
+    else {
         std::cerr << "Error, transform type '" << type << "' not implemented. Ignoring." << std::endl; 
     }
 }

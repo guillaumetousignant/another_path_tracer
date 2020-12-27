@@ -15,7 +15,7 @@ void APTracer::Materials::RandomMixIn_t::bounce(std::array<double, 2> uv, const 
     if ((ray.direction_.dot(hit_obj->normal(ray.time_, uv)) > 0.0) || (unif_(APTracer::Entities::rng) < ratio_)) { // refracted
         material_refracted_->bounce(uv, hit_obj, ray);
     }
-    else{   // reflected
+    else {   // reflected
         material_reflected_->bounce(uv, hit_obj, ray);
     }
 }

@@ -20,7 +20,7 @@ std::string APTracer::next_filename(const std::string &prefix) {
         name = prefix.substr(0, point);
         extension = prefix.substr(point);
     }
-    else{
+    else {
         name = prefix;
         extension = ".png";
     }

@@ -26,7 +26,7 @@ void APTracer::Materials::FresnelMix_t::bounce(std::array<double, 2> uv, const A
     if (sint >= 1) {
         kr = 1.0;
     }
-    else{
+    else {
         const double cost = std::sqrt(1 - sint * sint);
         const double Rs = ((etat * cosi) - (etai * cost))/((etat * cosi) + (etai * cost));
         const double Rp = ((etai * cosi) - (etat * cost))/((etai * cosi) + (etat * cost));
@@ -36,7 +36,7 @@ void APTracer::Materials::FresnelMix_t::bounce(std::array<double, 2> uv, const A
     if (unif_(APTracer::Entities::rng) > kr) { // refracted
         material_refracted_->bounce(uv, hit_obj, ray);
     }
-    else{ // reflected
+    else { // reflected
         material_reflected_->bounce(uv, hit_obj, ray);
     }
 }

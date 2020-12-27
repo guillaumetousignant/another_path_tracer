@@ -42,7 +42,7 @@ void APTracer::Materials::ReflectiveRefractiveFuzz_t::bounce(std::array<double, 
             cosi *= -1.0;
             //coming_out = false;
         }
-        else{ // Going out
+        else { // Going out
             etat = (*std::next(ray.medium_list_.begin()))->ind_;
             etai = medium_->ind_;
             normal_fuzz *= -1.0;
@@ -55,7 +55,7 @@ void APTracer::Materials::ReflectiveRefractiveFuzz_t::bounce(std::array<double, 
         if (sint >= 1.0) {
             kr = 1.0;
         }
-        else{
+        else {
             const double cost = std::sqrt(1.0 - sint * sint);
             cosi = std::abs(cosi);
             const double Rs = ((etat * cosi) - (etai * cost))/((etat * cosi) + (etai * cost));
@@ -75,12 +75,12 @@ void APTracer::Materials::ReflectiveRefractiveFuzz_t::bounce(std::array<double, 
                     ray.add_to_mediums(medium_);
                 }
             }
-            else{ // going out
+            else { // going out
                 ray.origin_ += ray.direction_ * ray.dist_ + normal * epsilon; // use n or normal?
                 ray.remove_from_mediums(medium_);
             }
         }
-        else{ // Reflected
+        else { // Reflected
             newdir = ray.direction_ - normal_fuzz * 2.0 * cosi;
             ray.origin_ += ray.direction_ * ray.dist_ + normal_fuzz * epsilon; // n or normal_fuzz?          
         }
@@ -89,12 +89,12 @@ void APTracer::Materials::ReflectiveRefractiveFuzz_t::bounce(std::array<double, 
         ray.mask_ *= colour_;
         ray.direction_ = newdir;
     }
-    else{
+    else {
         if (cosi < 0.0) {
             ray.origin_ += ray.direction_ * ray.dist_ - normal * epsilon;
             ray.add_to_mediums(medium_);
         }
-        else{
+        else {
             ray.origin_ += ray.direction_ * ray.dist_ + normal * epsilon;
             ray.remove_from_mediums(medium_);
         }

@@ -18,7 +18,7 @@ APTracer::Shapes::TriangleMotionblur_t::TriangleMotionblur_t(APTracer::Entities:
         normals_orig_[1] = nor;
         normals_orig_[2] = nor;
     }
-    else{
+    else {
         normals_orig_[0] = normals[0];
         normals_orig_[1] = normals[1];
         normals_orig_[2] = normals[2];
@@ -32,7 +32,7 @@ APTracer::Shapes::TriangleMotionblur_t::TriangleMotionblur_t(APTracer::Entities:
         texture_coordinates_[4] = 1;
         texture_coordinates_[5] = 0;
     }
-    else{
+    else {
         texture_coordinates_[0] = texcoord[0];
         texture_coordinates_[1] = texcoord[1];
         texture_coordinates_[2] = texcoord[2];

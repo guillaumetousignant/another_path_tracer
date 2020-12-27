@@ -21,7 +21,7 @@ void APTracer::Materials::Portal_t::bounce(std::array<double, 2> uv, const APTra
         ray.direction_ = transformation_->transformDir().multDir(ray.direction_).normalize_inplace(); // CHECK cache transformation_->transformDir()??
         ray.medium_list_ = medium_list_;
     }
-    else{
+    else {
         ray.origin_ += ray.direction_ * ray.dist_ + normal * epsilon;
     }
 }

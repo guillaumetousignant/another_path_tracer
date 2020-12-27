@@ -20,7 +20,7 @@ void APTracer::Materials::Transparent_t::bounce(std::array<double, 2> uv, const 
         ray.origin_ += ray.direction_ * ray.dist_ - normal * epsilon;
         ray.add_to_mediums(medium_);
     }
-    else{
+    else {
         ray.origin_ += ray.direction_ * ray.dist_ + normal * epsilon;
         ray.remove_from_mediums(medium_);
     }

@@ -28,7 +28,7 @@ void APTracer::Materials::Refractive_t::bounce(std::array<double, 2> uv, const A
             cosi *= -1;
             n = normal;
         }
-        else{ // Going out
+        else { // Going out
             etat = (*std::next(ray.medium_list_.begin()))->ind_;
             etai = medium_->ind_;
             n = -normal;
@@ -45,7 +45,7 @@ void APTracer::Materials::Refractive_t::bounce(std::array<double, 2> uv, const A
         ray.colour_ += ray.mask_ * emission_;
         ray.mask_ *= colour_;
     }
-    else{
+    else {
         newdir = ray.direction_;
     }
 
@@ -55,7 +55,7 @@ void APTracer::Materials::Refractive_t::bounce(std::array<double, 2> uv, const A
             ray.add_to_mediums(medium_);
         }
     }
-    else{ // Going out
+    else { // Going out
         ray.origin_ += ray.direction_ * ray.dist_ + normal * epsilon; // n or normal?
         ray.remove_from_mediums(medium_);
     }

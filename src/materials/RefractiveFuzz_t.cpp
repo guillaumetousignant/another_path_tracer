@@ -38,7 +38,7 @@ void APTracer::Materials::RefractiveFuzz_t::bounce(std::array<double, 2> uv, con
             etat = medium_->ind_;
             cosi *= -1.0;
         }
-        else{ // Going out
+        else { // Going out
             etat = (*std::next(ray.medium_list_.begin()))->ind_;
             etai = medium_->ind_;
             normal_fuzz *= -1.0;
@@ -55,7 +55,7 @@ void APTracer::Materials::RefractiveFuzz_t::bounce(std::array<double, 2> uv, con
         ray.colour_ += ray.mask_ * emission_;
         ray.mask_ *= colour_;
     }
-    else{
+    else {
         newdir = ray.direction_;
     }
 
@@ -65,7 +65,7 @@ void APTracer::Materials::RefractiveFuzz_t::bounce(std::array<double, 2> uv, con
             ray.add_to_mediums(medium_);
         }
     }
-    else{ // Going out
+    else { // Going out
         ray.origin_ += ray.direction_ * ray.dist_ + normal * epsilon; // n or normal?
         ray.remove_from_mediums(medium_);
     }
