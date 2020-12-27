@@ -53,8 +53,13 @@ Cam3DAperture_t::Cam3DAperture_t(TransformMatrix_t* transformation, const std::s
 }
 
 Cam3DAperture_t::~Cam3DAperture_t() {
-    delete camera_L_;
-    delete camera_R_;
+    if (camera_L_ != nullptr) {
+        delete camera_L_;
+    }
+    
+    if (camera_R_ != nullptr) {
+        delete camera_R_;
+    }
 }
 
 void Cam3DAperture_t::update() {

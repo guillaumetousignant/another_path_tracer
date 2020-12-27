@@ -55,8 +55,13 @@ Cam3DMotionblur_t::Cam3DMotionblur_t(TransformMatrix_t* transformation, const st
 }
 
 Cam3DMotionblur_t::~Cam3DMotionblur_t() {
-    delete camera_L_;
-    delete camera_R_;
+    if (camera_L_ != nullptr) {
+        delete camera_L_;
+    }
+    
+    if (camera_R_ != nullptr) {
+        delete camera_R_;
+    }
 }
 
 void Cam3DMotionblur_t::update() {
