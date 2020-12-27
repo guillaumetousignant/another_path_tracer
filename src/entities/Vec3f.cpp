@@ -171,9 +171,9 @@ auto Vec3f::to_sph() -> const Vec3f& { // CHECK outputs nan
     return *this;
 }
 auto Vec3f::to_xyz() -> const Vec3f& {
-    const double temp = std::move(v[2]);
+    const double temp = v[2];
     v[2] = v[0]*std::cos(v[1]);
-    const double temp2 = std::move(v[1]);
+    const double temp2 = v[1];
     v[1] = v[0]*std::sin(temp2)*std::sin(temp);
     v[0] *= std::sin(temp2)*std::cos(temp);
     return *this;
