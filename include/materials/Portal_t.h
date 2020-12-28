@@ -22,7 +22,7 @@ namespace APTracer { namespace Materials {
             Portal_t(TransformMatrix_t* transformation, std::list<Medium_t*> medium_list);
             virtual ~Portal_t() final;
 
-            virtual void bounce(const std::array<double, 2> &uv, const Shape_t* hit_obj, Ray_t &ray) final;
+            virtual void bounce(std::array<double, 2> uv, const Shape_t* hit_obj, Ray_t &ray) final;
     };
 }}
 #endif

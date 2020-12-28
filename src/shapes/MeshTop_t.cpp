@@ -30,13 +30,13 @@ void APTracer::Shapes::MeshTop_t::intersection(const APTracer::Entities::Ray_t &
     std::cout << "Warning, do not intersect meshes directly." << std::endl;   
 }
 
-void APTracer::Shapes::MeshTop_t::normaluv(const APTracer::Entities::Ray_t &ray, const std::array<double, 2> &uv, std::array<double, 2> &tuv, Vec3f &normalvec) const {
+void APTracer::Shapes::MeshTop_t::normaluv(const APTracer::Entities::Ray_t &ray, std::array<double, 2> uv, std::array<double, 2> &tuv, Vec3f &normalvec) const {
     tuv = {0.0, 0.0};
     normalvec = Vec3f();
     std::cout << "Warning, do not calculate normals on meshes." << std::endl;
 }
 
-void APTracer::Shapes::MeshTop_t::normal(const APTracer::Entities::Ray_t &ray, const std::array<double, 2> &uv, Vec3f &normalvec) const {
+void APTracer::Shapes::MeshTop_t::normal(const APTracer::Entities::Ray_t &ray, std::array<double, 2> uv, Vec3f &normalvec) const {
     normalvec = Vec3f();
     std::cout << "Warning, do not calculate normals on meshes." << std::endl;
 }

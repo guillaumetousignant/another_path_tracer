@@ -94,7 +94,7 @@ namespace APTracer { namespace Shapes {
              * @param[out] tuv Texture coordinates at the specified coordinates and time.
              * @return Vec3f Normal vector at the specified coordinates and time.
              */
-            virtual Vec3f normaluv(double time, const std::array<double, 2> &uv, std::array<double, 2> &tuv) const final;
+            virtual Vec3f normaluv(double time, std::array<double, 2> uv, std::array<double, 2> &tuv) const final;
 
             /**
              * @brief Returns the surface normal at a point in object coordinates and a specific time.
@@ -107,7 +107,7 @@ namespace APTracer { namespace Shapes {
              * @param[in] uv Object coordinates at which we want to find the normal. The coordinates are in barycentric coordinates, minus w [u, v].
              * @return Vec3f Normal vector at the specified coordinates and time.
              */
-            virtual Vec3f normal(double time, const std::array<double, 2> &uv) const final;
+            virtual Vec3f normal(double time, std::array<double, 2> uv) const final;
 
             /**
              * @brief Returns the surface normal, texture coordinates and tangent vector at a point in object coordinates and a specific time.
@@ -124,7 +124,7 @@ namespace APTracer { namespace Shapes {
              * @param[out] tangentvec Tangent vector at the specified coordinates and time.
              * @return Vec3f Normal vector at the specified coordinates and time.
              */
-            virtual Vec3f normal_uv_tangent(double time, const std::array<double, 2> &uv, std::array<double, 2> &tuv, Vec3f &tangentvec) const final;
+            virtual Vec3f normal_uv_tangent(double time, std::array<double, 2> uv, std::array<double, 2> &tuv, Vec3f &tangentvec) const final;
 
             /**
              * @brief Returns the geometric surface normal of the triangle at a specific time, not the interpolated one from vertex normals.

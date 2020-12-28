@@ -79,7 +79,7 @@ namespace APTracer { namespace Shapes {
              * @param[out] tuv Texture coordinates at the specified coordinates and time.
              * @param[out] normalvec Normal vector at the specified coordinates and time.
              */
-            virtual void normaluv(const Ray_t &ray, const std::array<double, 2> &uv, std::array<double, 2> &tuv, Vec3f &normalvec) const;
+            virtual void normaluv(const Ray_t &ray, std::array<double, 2> uv, std::array<double, 2> &tuv, Vec3f &normalvec) const;
 
             /**
              * @brief Returns the surface normal at a point in object coordinates. Placeholder
@@ -90,7 +90,7 @@ namespace APTracer { namespace Shapes {
              * @param uv Texture coordinates at the specified coordinates and time.
              * @param[out] normalvec Normal vector at the specified coordinates and time.
              */
-            virtual void normal(const Ray_t &ray, const std::array<double, 2> &uv, Vec3f &normalvec) const;
+            virtual void normal(const Ray_t &ray, std::array<double, 2> uv, Vec3f &normalvec) const;
 
             /**
              * @brief Minimum coordinates of an axis-aligned bounding box around the mesh.
