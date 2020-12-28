@@ -1390,11 +1390,21 @@ auto APTracer::Entities::SceneContext_t::create_object(const tinyxml2::XMLElemen
     else if (type == "triangle") {
         const char* attributes[] = {"material", "transform_matrix", "points", "normals", "texture_coordinates"};
         require_attributes(xml_object, attributes, 5);
-        std::vector<Vec3f> points = get_points(xml_object->Attribute("points"));
+        std::vector<Vec3f> points_vec = get_points(xml_object->Attribute("points"));
         std::vector<Vec3f> normals = get_points(xml_object->Attribute("normals"));
         std::vector<double> texture_coordinates = get_texture_coordinates(xml_object->Attribute("texture_coordinates"));
+        std::array<Vec3f, 3> points;
 
-        Vec3f* points_ptr = points.empty() ? nullptr : points.data();
+        if (points_vec.empty()) {
+            std::cerr << "Error, triangle points should not be empty. Exiting." << std::endl;
+            exit(69);
+        }
+        else {
+            for (size_t i = 0; i < points.size(); ++i) {
+                points[i] = points_vec[i];
+            }
+        }
+
         Vec3f* normals_ptr = normals.empty() ? nullptr : normals.data();
 
         double* texture_coordinates_ptr;
@@ -1406,16 +1416,26 @@ auto APTracer::Entities::SceneContext_t::create_object(const tinyxml2::XMLElemen
         }
 
         return std::unique_ptr<Shape_t>(
-                    new Triangle_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), points_ptr, normals_ptr, texture_coordinates_ptr));
+                    new Triangle_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), points, normals_ptr, texture_coordinates_ptr));
     }
     else if (type == "triangle_motionblur") {
         const char* attributes[] = {"material", "transform_matrix", "points", "normals", "texture_coordinates"};
         require_attributes(xml_object, attributes, 5);
-        std::vector<Vec3f> points = get_points(xml_object->Attribute("points"));
+        std::vector<Vec3f> points_vec = get_points(xml_object->Attribute("points"));
         std::vector<Vec3f> normals = get_points(xml_object->Attribute("normals"));
         std::vector<double> texture_coordinates = get_texture_coordinates(xml_object->Attribute("texture_coordinates"));
+        std::array<Vec3f, 3> points;
 
-        Vec3f* points_ptr = points.empty() ? nullptr : points.data();
+        if (points_vec.empty()) {
+            std::cerr << "Error, triangle points should not be empty. Exiting." << std::endl;
+            exit(69);
+        }
+        else {
+            for (size_t i = 0; i < points.size(); ++i) {
+                points[i] = points_vec[i];
+            }
+        }
+
         Vec3f* normals_ptr = normals.empty() ? nullptr : normals.data();
 
         double* texture_coordinates_ptr;
@@ -1427,7 +1447,7 @@ auto APTracer::Entities::SceneContext_t::create_object(const tinyxml2::XMLElemen
         }
 
         return std::unique_ptr<Shape_t>(
-                    new TriangleMotionblur_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), points_ptr, normals_ptr, texture_coordinates_ptr));
+                    new TriangleMotionblur_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), points, normals_ptr, texture_coordinates_ptr));
     }
     else if (type == "triangle_mesh") {
         const char* attributes[] = {"material", "transform_matrix", "mesh_geometry", "index"};

@@ -15,34 +15,29 @@ APTracer::Shapes::TriangleMesh_t::TriangleMesh_t(APTracer::Entities::Material_t 
 
     const APTracer::Entities::TransformMatrix_t transform_norm = transformation_->transformDir();
 
-    points_[0] = transformation_->multVec(geom_->v_[3 * index_]);
-    points_[1] = transformation_->multVec(geom_->v_[3 * index_ + 1]);
-    points_[2] = transformation_->multVec(geom_->v_[3 * index_ + 2]);
-    normals_[0] = transform_norm.multDir(geom_->vn_[3 * index_]);
-    normals_[1] = transform_norm.multDir(geom_->vn_[3 * index_ + 1]);
-    normals_[2] = transform_norm.multDir(geom_->vn_[3 * index_ + 2]);
+    points_ = {transformation_->multVec(geom_->v_[3 * index_]),
+               transformation_->multVec(geom_->v_[3 * index_ + 1]),
+               transformation_->multVec(geom_->v_[3 * index_ + 2])};
+    normals_ = {transform_norm.multDir(geom_->vn_[3 * index_]),
+                transform_norm.multDir(geom_->vn_[3 * index_ + 1]),
+                transform_norm.multDir(geom_->vn_[3 * index_ + 2])};
 
     v0v1_ = points_[1] - points_[0];
     v0v2_ = points_[2] - points_[0];
 
-    texture_coordinates_[0] = geom_->vt_[6 * index_];
-    texture_coordinates_[1] = geom_->vt_[6 * index_ + 1];
-    texture_coordinates_[2] = geom_->vt_[6 * index_ + 2];
-    texture_coordinates_[3] = geom_->vt_[6 * index_ + 3];
-    texture_coordinates_[4] = geom_->vt_[6 * index_ + 4];
-    texture_coordinates_[5] = geom_->vt_[6 * index_ + 5];
+    texture_coordinates_ = {geom_->vt_[6 * index_], geom_->vt_[6 * index_ + 1],
+                            geom_->vt_[6 * index_ + 2], geom_->vt_[6 * index_ + 3],
+                            geom_->vt_[6 * index_ + 4], geom_->vt_[6 * index_ + 5]};
 
-    const double tuv0v1[2] = {texture_coordinates_[2] - texture_coordinates_[0], texture_coordinates_[3] - texture_coordinates_[1]};
-    const double tuv0v2[2] = {texture_coordinates_[4] - texture_coordinates_[0], texture_coordinates_[5] - texture_coordinates_[1]};    
+    const std::array<double, 2> tuv0v1 = {texture_coordinates_[2] - texture_coordinates_[0], texture_coordinates_[3] - texture_coordinates_[1]};
+    const std::array<double, 2> tuv0v2 = {texture_coordinates_[4] - texture_coordinates_[0], texture_coordinates_[5] - texture_coordinates_[1]};    
 
     const double invdet = 1.0/(tuv0v1[0] * tuv0v2[1] - tuv0v1[1] * tuv0v2[0]);
     if (std::isfinite(invdet)) {
-        tuv_to_world_[0] = invdet * -tuv0v2[0];
-        tuv_to_world_[1] = invdet * tuv0v1[0];
+        tuv_to_world_ = {invdet * -tuv0v2[0], invdet * tuv0v1[0]};
     }
     else {
-        tuv_to_world_[0] = 1.0;
-        tuv_to_world_[1] = 0.0;
+        tuv_to_world_ = {1.0, 0.0};
     }
     tangent_vec_ = v0v1_ * tuv_to_world_[0] + v0v2_ * tuv_to_world_[1];
 }
@@ -52,34 +47,29 @@ APTracer::Shapes::TriangleMesh_t::~TriangleMesh_t() = default;
 void APTracer::Shapes::TriangleMesh_t::update() {
     const APTracer::Entities::TransformMatrix_t transform_norm = transformation_->transformDir();
 
-    points_[0] = transformation_->multVec(geom_->v_[3 * index_]);
-    points_[1] = transformation_->multVec(geom_->v_[3 * index_ + 1]);
-    points_[2] = transformation_->multVec(geom_->v_[3 * index_ + 2]);
-    normals_[0] = transform_norm.multDir(geom_->vn_[3 * index_]);
-    normals_[1] = transform_norm.multDir(geom_->vn_[3 * index_ + 1]);
-    normals_[2] = transform_norm.multDir(geom_->vn_[3 * index_ + 2]);
+    points_ = {transformation_->multVec(geom_->v_[3 * index_]),
+               transformation_->multVec(geom_->v_[3 * index_ + 1]),
+               transformation_->multVec(geom_->v_[3 * index_ + 2])};
+    normals_ = {transform_norm.multDir(geom_->vn_[3 * index_]),
+                transform_norm.multDir(geom_->vn_[3 * index_ + 1]),
+                transform_norm.multDir(geom_->vn_[3 * index_ + 2])};
 
     v0v1_ = points_[1] - points_[0];
     v0v2_ = points_[2] - points_[0];
 
-    texture_coordinates_[0] = geom_->vt_[6 * index_];
-    texture_coordinates_[1] = geom_->vt_[6 * index_ + 1];
-    texture_coordinates_[2] = geom_->vt_[6 * index_ + 2];
-    texture_coordinates_[3] = geom_->vt_[6 * index_ + 3];
-    texture_coordinates_[4] = geom_->vt_[6 * index_ + 4];
-    texture_coordinates_[5] = geom_->vt_[6 * index_ + 5];
+    texture_coordinates_ = {geom_->vt_[6 * index_], geom_->vt_[6 * index_ + 1],
+                            geom_->vt_[6 * index_ + 2], geom_->vt_[6 * index_ + 3],
+                            geom_->vt_[6 * index_ + 4], geom_->vt_[6 * index_ + 5]};
 
-    const double tuv0v1[2] = {texture_coordinates_[2] - texture_coordinates_[0], texture_coordinates_[3] - texture_coordinates_[1]};
-    const double tuv0v2[2] = {texture_coordinates_[4] - texture_coordinates_[0], texture_coordinates_[5] - texture_coordinates_[1]};    
+    const std::array<double, 2> tuv0v1 = {texture_coordinates_[2] - texture_coordinates_[0], texture_coordinates_[3] - texture_coordinates_[1]};
+    const std::array<double, 2> tuv0v2 = {texture_coordinates_[4] - texture_coordinates_[0], texture_coordinates_[5] - texture_coordinates_[1]};    
 
     const double invdet = 1.0/(tuv0v1[0] * tuv0v2[1] - tuv0v1[1] * tuv0v2[0]);
     if (std::isfinite(invdet)) {
-        tuv_to_world_[0] = invdet * -tuv0v2[0];
-        tuv_to_world_[1] = invdet * tuv0v1[0];
+        tuv_to_world_ = {invdet * -tuv0v2[0], invdet * tuv0v1[0]};
     }
     else {
-        tuv_to_world_[0] = 1.0;
-        tuv_to_world_[1] = 0.0;
+        tuv_to_world_ = {1.0, 0.0};
     }
     tangent_vec_ = v0v1_ * tuv_to_world_[0] + v0v2_ * tuv_to_world_[1];
 }
@@ -130,16 +120,16 @@ Vec3f APTracer::Shapes::TriangleMesh_t::normaluv(double time, std::array<double,
     tuv = {distance[0] * texture_coordinates_[0] + distance[1] * texture_coordinates_[2] + distance[2] * texture_coordinates_[4],
            distance[0] * texture_coordinates_[1] + distance[1] * texture_coordinates_[3] + distance[2] * texture_coordinates_[5]};
 
-    return Vec3f(distance[0] * normals_[0][0] + distance[1] * normals_[1][0] + distance[2] * normals_[2][0], 
+    return {distance[0] * normals_[0][0] + distance[1] * normals_[1][0] + distance[2] * normals_[2][0], 
         distance[0] * normals_[0][1] + distance[1] * normals_[1][1] + distance[2] * normals_[2][1],
-        distance[0] * normals_[0][2] + distance[1] * normals_[1][2] + distance[2] * normals_[2][2]);
+        distance[0] * normals_[0][2] + distance[1] * normals_[1][2] + distance[2] * normals_[2][2]};
 }
 
 Vec3f APTracer::Shapes::TriangleMesh_t::normal(double time, std::array<double, 2> uv) const {
     const Vec3f distance = Vec3f(1.0 - uv[0] - uv[1], uv[0], uv[1]);
-    return Vec3f(distance[0] * normals_[0][0] + distance[1] * normals_[1][0] + distance[2] * normals_[2][0], 
+    return {distance[0] * normals_[0][0] + distance[1] * normals_[1][0] + distance[2] * normals_[2][0], 
         distance[0] * normals_[0][1] + distance[1] * normals_[1][1] + distance[2] * normals_[2][1],
-        distance[0] * normals_[0][2] + distance[1] * normals_[1][2] + distance[2] * normals_[2][2]);
+        distance[0] * normals_[0][2] + distance[1] * normals_[1][2] + distance[2] * normals_[2][2]};
     // Matrix multiplication, optimise.
 }
 

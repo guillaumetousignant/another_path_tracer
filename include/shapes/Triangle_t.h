@@ -4,6 +4,7 @@
 #include "entities/Ray_t.h"
 #include "entities/Vec3f.h"
 #include "entities/Shape_t.h"
+#include <array>
 
 namespace APTracer { namespace Entities {
     class TransformMatrix_t;
@@ -34,21 +35,21 @@ namespace APTracer { namespace Shapes {
              * @param normals Array of three normals, in counter-clockwise order, at the three points of the triangle.
              * @param texcoord Array of three texture coordinates with two components, in counter-clockwise order, at the three points of the triangle. [x0, y0, x1, y1, x2, y2]
              */
-            Triangle_t(Material_t *material, TransformMatrix_t *transform_matrix, const Vec3f* points, const Vec3f* normals, const double* texcoord);
+            Triangle_t(Material_t *material, TransformMatrix_t *transform_matrix, std::array<Vec3f, 3> points, const Vec3f* normals, const double* texcoord);
 
             /**
              * @brief Destroy the Triangle_t object. Does nothing.
              */
             virtual ~Triangle_t() final;
 
-            Vec3f points_orig_[3]; /**< @brief Array of the three un-transformed points of the triangle, in counter-clockwise order. Transformed by the transform matrix on update to give points.*/
-            Vec3f normals_orig_[3]; /**< @brief Array of the three un-transformed normals of the triangle, in counter-clockwise order. Transformed by the transform matrix on update to give normals.*/
-            double texture_coordinates_[6]; /**< @brief Array of the three texture coordinates with two components of the triangle, in counter-clockwise order. Transformed by the transform matrix on update to give texture coordinates. [x0, y0, x1, y1, x2, y2]*/
-            Vec3f points_[3]; /**< @brief Array of the three points of the triangle, in counter-clockwise order.*/
-            Vec3f normals_[3]; /**< @brief Array of the three  normals of the triangle, in counter-clockwise order.*/
+            std::array<Vec3f, 3> points_orig_; /**< @brief Array of the three un-transformed points of the triangle, in counter-clockwise order. Transformed by the transform matrix on update to give points.*/
+            std::array<Vec3f, 3> normals_orig_; /**< @brief Array of the three un-transformed normals of the triangle, in counter-clockwise order. Transformed by the transform matrix on update to give normals.*/
+            std::array<double, 6> texture_coordinates_; /**< @brief Array of the three texture coordinates with two components of the triangle, in counter-clockwise order. Transformed by the transform matrix on update to give texture coordinates. [x0, y0, x1, y1, x2, y2]*/
+            std::array<Vec3f, 3> points_; /**< @brief Array of the three points of the triangle, in counter-clockwise order.*/
+            std::array<Vec3f, 3> normals_; /**< @brief Array of the three  normals of the triangle, in counter-clockwise order.*/
             Vec3f v0v1_; /**< @brief Cached vector from point 0 to point 1. Used for intersection.*/
             Vec3f v0v2_; /**< @brief Cached vector from point 0 to point 2. Used for intersection.*/
-            double tuv_to_world_[2]; /**< @brief Matrix to change referential from texture coordinate space to world space. Used to compute tangent vector.*/
+            std::array<double, 2> tuv_to_world_; /**< @brief Matrix to change referential from texture coordinate space to world space. Used to compute tangent vector.*/
             Vec3f tangent_vec_; /**< @brief Tangent vector of the triangle in world space. Points to positive u in texture coordinates. Used for normal mapping.*/
 
             /**
