@@ -20,7 +20,6 @@ AccelerationGrid_t::AccelerationGrid_t(Shape_t** items, size_t n_items, unsigned
 
     std::array<Vec3f, 2> coordinates{Vec3f(std::numeric_limits<double>::infinity()),
                                      Vec3f(-std::numeric_limits<double>::infinity())};
-    
     for (size_t i = 0; i < n_obj_; i++) {
         coordinates[0].min(items[i]->mincoord());
         coordinates[1].max(items[i]->maxcoord());
