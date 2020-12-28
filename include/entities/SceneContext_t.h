@@ -427,22 +427,6 @@ namespace APTracer {
     };
 
     /**
-     * @brief Get an array of two double values from a string.
-     * 
-     * @param string_value String containing two values.
-     * @param value Array of two double values.
-     */
-    auto get_xy(const std::string &string_value, double (&value)[2]) -> void;
-
-    /**
-     * @brief Get an array of two unsigned integer values from a string.
-     * 
-     * @param string_value String containing two values.
-     * @param value Array of two unsigned integer values.
-     */
-    auto get_xy(const std::string &string_value, unsigned int (&value)[2]) -> void;
-
-    /**
      * @brief Returns true if the string represents an integer.
      * 
      * @param s String containint or not an integer.
