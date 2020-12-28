@@ -7,7 +7,7 @@ using APTracer::Entities::Vec3f;
 
 APTracer::Shapes::Box_t::Box_t() : coordinates_{Vec3f(), Vec3f()} {}
 
-APTracer::Shapes::Box_t::Box_t(Vec3f (&coord)[2]) : coordinates_{coord[0], coord[1]} {}
+APTracer::Shapes::Box_t::Box_t(std::array<Vec3f, 2> coord) : coordinates_{coord} {}
 
 APTracer::Shapes::Box_t::~Box_t() = default;
 

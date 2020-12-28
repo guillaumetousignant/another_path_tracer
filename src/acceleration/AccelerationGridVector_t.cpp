@@ -10,7 +10,7 @@ AccelerationGridVector_t::AccelerationGridVector_t(Shape_t** items, size_t n_ite
         level_(level), min_res_(min_res), max_res_(max_res) {
     Vec3f min1, max1;
     unsigned int x, y, z;
-    Vec3f bb_coordinates[2];
+    std::array<Vec3f, 2> bb_coordinates;
 
     n_obj_ = n_items;
 

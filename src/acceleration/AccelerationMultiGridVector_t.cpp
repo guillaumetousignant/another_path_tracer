@@ -14,7 +14,7 @@ AccelerationMultiGridVector_t::AccelerationMultiGridVector_t(Shape_t** items, si
     unsigned int x, y, z;
     GridCellVector_t** temp_cells;
     Vec3f cell_extent[2];
-    Vec3f bb_coordinates[2];
+    std::array<Vec3f, 2> bb_coordinates;
 
     n_obj_ = n_items;
 

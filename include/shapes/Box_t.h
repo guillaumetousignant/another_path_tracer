@@ -3,6 +3,7 @@
 
 #include "entities/Ray_t.h"
 #include "entities/Vec3f.h"
+#include <array>
 
 using APTracer::Entities::Ray_t;
 using APTracer::Entities::Vec3f;
@@ -26,14 +27,14 @@ namespace APTracer { namespace Shapes {
              * 
              * @param coord Array of [minimum, maximum] coordinates in the three axis for the bounding box.
              */
-            Box_t(Vec3f (&coord)[2]);
+            Box_t(std::array<Vec3f, 2> coord);
 
             /**
              * @brief Destroy the Box_t object. Does nothing.
              */
             ~Box_t();
 
-            Vec3f coordinates_[2]; /**< @brief Array of [minimum, maximum] coordinates in the three axis for the bounding box.*/
+            std::array<Vec3f, 2> coordinates_; /**< @brief Array of [minimum, maximum] coordinates in the three axis for the bounding box.*/
 
             /**
              * @brief Tests a ray for intersection with the bounding box, setting the intersection distance.

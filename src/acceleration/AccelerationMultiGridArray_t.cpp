@@ -12,7 +12,7 @@ AccelerationMultiGridArray_t::AccelerationMultiGridArray_t(Shape_t** items, size
     unsigned int x, y, z;
     GridCellArray_t** temp_cells;
     Vec3f cell_extent[2];
-    Vec3f bb_coordinates[2];
+    std::array<Vec3f, 2> bb_coordinates;
 
     n_obj_ = n_items;
 
