@@ -107,9 +107,9 @@ namespace APTracer { namespace Entities {
              * is encoded with the provided gamma value, 1.0 being standard.
              * 
              * @param filename File to which the image will be saved.
-             * @param gammaind Gamma used to encode the image. Defaults to 1.0.
+             * @param gammaind Gamma used to encode the image.
              */
-            void write(std::string &filename, double gammaind = 1.0) const;
+            void write(std::string &filename, double gammaind) const;
     };
 }}
 #endif
