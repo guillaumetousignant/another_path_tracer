@@ -12,8 +12,11 @@ using APTracer::Entities::Skybox_t;
 using APTracer::Entities::Scene_t;
 using APTracer::Entities::Shape_t;
 
-Ray_t::Ray_t(const Vec3f &origin, const Vec3f &direction, const Vec3f &colour, const Vec3f &mask, std::list<Medium_t*> medium_list, double time /*= 1.0*/) : 
-    origin_(origin), direction_(direction), colour_(colour), mask_(mask), dist_(0.0), medium_list_(std::move(medium_list)), time_(time) {}
+Ray_t::Ray_t(const Vec3f &origin, const Vec3f &direction, const Vec3f &colour, const Vec3f &mask, std::list<Medium_t*> medium_list) : 
+    origin_(origin), direction_(direction), colour_(colour), mask_(mask), dist_(0.0), medium_list_(std::move(medium_list)), time_(1.0) {}
+
+Ray_t::Ray_t(const Vec3f &origin, const Vec3f &direction, const Vec3f &colour, const Vec3f &mask, std::list<Medium_t*> medium_list, double time) : 
+    origin_(origin), direction_(direction), colour_(colour), mask_(mask), dist_(0.0), medium_list_(std::move(medium_list)), time_(time) {}  
 
 Ray_t::~Ray_t() = default;
 

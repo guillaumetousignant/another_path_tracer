@@ -19,16 +19,27 @@ namespace APTracer { namespace Entities {
     class Ray_t{
         public:
             /**
-             * @brief Construct a new Ray_t object
+             * @brief Construct a new Ray_t object.
              * 
              * @param[in] origin Initial origin of the ray.
              * @param[in] direction Initial direction of the ray.
              * @param[in] colour Initial colour of the ray. Usually [0 0 0] and is increased by hitting emissive objects.
              * @param[in] mask Initial part of the ray not yet absorbed. Is multiplied with the contribution of a light source to increment colour. Usually [1 1 1] and is decreased by being absorbed by materials.
              * @param[in] medium_list Initial list of materials through which the ray is travelling. Should have at least two copies of an "outside" medium not assigned to any object (issue #25).
-             * @param[in] time Time at which the ray is emitted. From 0 for exposure start to 1 for exposure end. Defaults to 1.
              */
-            Ray_t(const Vec3f &origin, const Vec3f &direction, const Vec3f &colour, const Vec3f &mask, std::list<Medium_t*> medium_list, double time = 1.0);
+            Ray_t(const Vec3f &origin, const Vec3f &direction, const Vec3f &colour, const Vec3f &mask, std::list<Medium_t*> medium_list);
+
+            /**
+             * @brief Construct a new Ray_t object with a  time.
+             * 
+             * @param[in] origin Initial origin of the ray.
+             * @param[in] direction Initial direction of the ray.
+             * @param[in] colour Initial colour of the ray. Usually [0 0 0] and is increased by hitting emissive objects.
+             * @param[in] mask Initial part of the ray not yet absorbed. Is multiplied with the contribution of a light source to increment colour. Usually [1 1 1] and is decreased by being absorbed by materials.
+             * @param[in] medium_list Initial list of materials through which the ray is travelling. Should have at least two copies of an "outside" medium not assigned to any object (issue #25).
+             * @param[in] time Time at which the ray is emitted. From 0 for exposure start to 1 for exposure end.
+             */
+            Ray_t(const Vec3f &origin, const Vec3f &direction, const Vec3f &colour, const Vec3f &mask, std::list<Medium_t*> medium_list, double time);
             
             /**
              * @brief Destroy the Ray_t object, nothing to be done here.
