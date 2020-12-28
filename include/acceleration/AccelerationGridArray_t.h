@@ -31,16 +31,26 @@ namespace APTracer { namespace Acceleration {
     class AccelerationGridArray_t final : public AccelerationStructure_t{
         public:
             /**
+             * @brief Construct a new top-level AccelerationGridArray_t object from an array of shapes.
+             * 
+             * @param items Array of shapes to be added to the acceleration structure.
+             * @param n_items Number of shapes to be added to the acceleration structure.
+             * @param min_res Minimum number of cells for all directions.
+             * @param max_res Maximum number of cells for all directions.
+             */
+            AccelerationGridArray_t(Shape_t** items, size_t n_items, unsigned int min_res, unsigned int max_res);
+
+            /**
              * @brief Construct a new AccelerationGridArray_t object from an array of shapes.
              * 
              * @param items Array of shapes to be added to the acceleration structure.
              * @param n_items Number of shapes to be added to the acceleration structure.
-             * @param coordinates Array of minimum and maximum coordinates covered by the acceleration structure. Defaults to nullptr, to calculate from shapes. Set to restrict span, for example to use as a cell within another grid.
-             * @param level Recursion level of the grid. 0 is a top-level grid, 1 is a grid which is a cell of a grid, 2 is a grid within a grid within a grid, etc. Defaults to 0.
-             * @param min_res Minimum number of cells for all directions. Defaults to 1.
-             * @param max_res Maximum number of cells for all directions. Defaults to 128.
+             * @param coordinates Array of minimum and maximum coordinates covered by the acceleration structure. Set to restrict span, for example to use as a cell within another grid.
+             * @param level Recursion level of the grid. 0 is a top-level grid, 1 is a grid which is a cell of a grid, 2 is a grid within a grid within a grid, etc.
+             * @param min_res Minimum number of cells for all directions.
+             * @param max_res Maximum number of cells for all directions.
              */
-            AccelerationGridArray_t(Shape_t** items, size_t n_items, const Vec3f* coordinates = nullptr, unsigned int level = 0, unsigned int min_res = 1, unsigned int max_res = 128);
+            AccelerationGridArray_t(Shape_t** items, size_t n_items, std::array<Vec3f, 2> coordinates, unsigned int level, unsigned int min_res, unsigned int max_res);
 
             /**
              * @brief Destroy the AccelerationGridArray_t object, destroying the cells it owns.

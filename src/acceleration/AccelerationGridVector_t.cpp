@@ -6,30 +6,69 @@
 
 using APTracer::Acceleration::AccelerationGridVector_t;
 
-AccelerationGridVector_t::AccelerationGridVector_t(Shape_t** items, size_t n_items, const Vec3f* coordinates/* = nullptr*/, unsigned int level /* = 0*/, unsigned int min_res /* = 1 */, unsigned int max_res /* = 128 */) : 
-        level_(level), min_res_(min_res), max_res_(max_res) {
+AccelerationGridVector_t::AccelerationGridVector_t(Shape_t** items, size_t n_items, unsigned int min_res, unsigned int max_res) : 
+        level_(0), min_res_(min_res), max_res_(max_res) {
     Vec3f min1, max1;
     unsigned int x, y, z;
-    std::array<Vec3f, 2> bb_coordinates;
 
     n_obj_ = n_items;
 
-    if (coordinates == nullptr) {
-        bb_coordinates[0] = Vec3f(std::numeric_limits<double>::infinity());
-        bb_coordinates[1] = Vec3f(-std::numeric_limits<double>::infinity());
-        
-        for (size_t i = 0; i < n_obj_; i++) {
-            bb_coordinates[0].min(items[i]->mincoord());
-            bb_coordinates[1].max(items[i]->maxcoord());
-        }
-    }
-    else {
-        bb_coordinates[0] = coordinates[0];
-        bb_coordinates[1] = coordinates[1];
+    std::array<Vec3f, 2> coordinates{Vec3f(std::numeric_limits<double>::infinity()),
+                                     Vec3f(-std::numeric_limits<double>::infinity())};
+
+    const Vec3f grid_size = coordinates[1] - coordinates[0];
+    bounding_box_ = Box_t(coordinates);
+
+    const Vec3f cell_res = (grid_size * std::pow(n_obj_/(grid_size[0]*grid_size[1]*grid_size[2]), 1.0/3.0)).floor()
+                            .max(min_res_)
+                            .min(max_res_) - 1.0;
+
+    for (unsigned int i = 0; i < 3; i++) {
+        cell_res_[i] = static_cast<unsigned int>(cell_res[i] + 1.0);
     }
 
-    const Vec3f grid_size = bb_coordinates[1] - bb_coordinates[0];
-    bounding_box_ = Box_t(bb_coordinates);
+    cell_size_ = grid_size/(cell_res + 1.0);
+    cells_ = new GridCellVector_t*[cell_res_[0] *  cell_res_[1] * cell_res_[2]];
+    for (unsigned int i = 0; i < cell_res_[0] * cell_res_[1] * cell_res_[2]; i++) {
+        cells_[i] = nullptr;
+    }
+
+    for (unsigned int i = 0; i < n_obj_; i++) {
+        min1 = Vec3f(std::numeric_limits<double>::infinity());
+        max1 = Vec3f(-std::numeric_limits<double>::infinity());
+    
+        min1.min(items[i]->mincoord());
+        max1.max(items[i]->maxcoord());
+        min1 = ((min1 - bounding_box_.coordinates_[0])/cell_size_).floor();
+        max1 = ((max1 - bounding_box_.coordinates_[0])/cell_size_).floor();
+
+        min1.max(0.0);
+        max1.max(0.0);
+        min1.min(cell_res);
+        max1.min(cell_res);
+        
+        for (z = static_cast<unsigned int>(min1[2]); z <= static_cast<unsigned int>(max1[2]); z++) {
+            for (y = static_cast<unsigned int>(min1[1]); y <= static_cast<unsigned int>(max1[1]); y++) {
+                for (x = static_cast<unsigned int>(min1[0]); x <= static_cast<unsigned int>(max1[0]); x++) {
+                    if (cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] == nullptr) {
+                        cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] = new GridCellVector_t;
+                    }
+                    cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]]->add(items[i]);
+                }
+            }
+        }
+    }
+}
+
+AccelerationGridVector_t::AccelerationGridVector_t(Shape_t** items, size_t n_items, std::array<Vec3f, 2> coordinates, unsigned int level, unsigned int min_res, unsigned int max_res) : 
+        level_(level), min_res_(min_res), max_res_(max_res) {
+    Vec3f min1, max1;
+    unsigned int x, y, z;
+
+    n_obj_ = n_items;
+
+    const Vec3f grid_size = coordinates[1] - coordinates[0];
+    bounding_box_ = Box_t(coordinates);
 
     const Vec3f cell_res = (grid_size * std::pow(n_obj_/(grid_size[0]*grid_size[1]*grid_size[2]), 1.0/3.0)).floor()
                             .max(min_res_)

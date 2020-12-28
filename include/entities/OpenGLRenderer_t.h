@@ -141,9 +141,16 @@ namespace APTracer { namespace Entities {
             void render();
 
             /**
-             * @brief Launches the rendering, calling glutMainLoop, and save the image every write_interval_ samples.
+             * @brief Launches the rendering, calling glutMainLoop, and save the image every sample.
              */
-            void render_write(unsigned int write_interval = 1);
+            void render_write();
+
+            /**
+             * @brief Launches the rendering, calling glutMainLoop, and save the image every write_interval_ samples.
+             * 
+             * @param write_interval Number of samples between image saves.
+             */
+            void render_write(unsigned int write_interval);
         
             /**
              * @brief Wrapper function used every frame when the rendering is on pause. Does nothing.

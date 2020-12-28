@@ -30,18 +30,30 @@ namespace APTracer { namespace Acceleration {
     class AccelerationMultiGridVector_t final : public AccelerationStructure_t{
         public:
             /**
+             * @brief Construct a new top-level AccelerationMultiGridVector_t object from an array of shapes.
+             * 
+             * @param items Array of shapes to be added to the acceleration structure.
+             * @param n_items Number of shapes to be added to the acceleration structure.
+             * @param min_res Minimum number of cells for all directions.
+             * @param max_res Maximum number of cells for all directions.
+             * @param max_cell_content Maximum number of shapes in a cell before it is changed to a subgrid.
+             * @param max_grid_level Maximum recursion level of the grid. 0 is no subgrids, 1 means cells from the top-level grid can be single level grids, etc.
+             */
+            AccelerationMultiGridVector_t(Shape_t** items, size_t n_items, unsigned int min_res, unsigned int max_res, unsigned int max_cell_content, unsigned int max_grid_level);
+           
+            /**
              * @brief Construct a new AccelerationMultiGridVector_t object from an array of shapes.
              * 
              * @param items Array of shapes to be added to the acceleration structure.
              * @param n_items Number of shapes to be added to the acceleration structure.
-             * @param coordinates Array of minimum and maximum coordinates covered by the acceleration structure. Defaults to nullptr, to calculate from shapes. Set to restrict span, for example to use as a cell within another grid.
-             * @param level Recursion level of the grid. 0 is a top-level grid, 1 is a grid which is a cell of a grid, 2 is a grid within a grid within a grid, etc. Defaults to 0.
-             * @param min_res Minimum number of cells for all directions. Defaults to 1.
-             * @param max_res Maximum number of cells for all directions. Defaults to 128. 
+             * @param coordinates Array of minimum and maximum coordinates covered by the acceleration structure. Set to restrict span, for example to use as a cell within another grid.
+             * @param level Recursion level of the grid. 0 is a top-level grid, 1 is a grid which is a cell of a grid, 2 is a grid within a grid within a grid, etc.
+             * @param min_res Minimum number of cells for all directions.
+             * @param max_res Maximum number of cells for all directions.
              * @param max_cell_content Maximum number of shapes in a cell before it is changed to a subgrid.
              * @param max_grid_level Maximum recursion level of the grid. 0 is no subgrids, 1 means cells from the top-level grid can be single level grids, etc.
              */
-            AccelerationMultiGridVector_t(Shape_t** items, size_t n_items, const Vec3f* coordinates = nullptr, unsigned int level = 0, unsigned int min_res = 1, unsigned int max_res = 128, unsigned int max_cell_content = 32, unsigned int max_grid_level = 1);
+            AccelerationMultiGridVector_t(Shape_t** items, size_t n_items, std::array<Vec3f, 2> coordinates, unsigned int level, unsigned int min_res, unsigned int max_res, unsigned int max_cell_content, unsigned int max_grid_level);
             
             /**
              * @brief Destroy the AccelerationMultiGridVector_t object, destroying the cells and grids it owns.

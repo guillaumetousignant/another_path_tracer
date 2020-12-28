@@ -294,7 +294,14 @@ void OpenGLRenderer_t::render() {
     glutMainLoop();
 }
 
-void OpenGLRenderer_t::render_write(unsigned int write_interval /* = 1 */) {
+void OpenGLRenderer_t::render_write() {
+    write_interval_ = 1.0;
+    render_function_ = openGL_accumulate_write;
+    glutDisplayFunc(render_function_);
+    glutMainLoop();
+}
+
+void OpenGLRenderer_t::render_write(unsigned int write_interval) {
     write_interval_ = write_interval;
     render_function_ = openGL_accumulate_write;
     glutDisplayFunc(render_function_);

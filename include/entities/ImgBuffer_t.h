@@ -91,6 +91,16 @@ namespace APTracer { namespace Entities {
             virtual void set(const Vec3f &colour, unsigned int pos_x, unsigned int pos_y);
 
             /**
+             * @brief Writes the image to disk using the provided filename.
+             * 
+             * This converts the image to integer values and saves it to a 16bit png file. The image
+             * is encoded with a gamma of 1.0.
+             * 
+             * @param filename File to which the image will be saved.
+             */
+            void write(std::string &filename) const;
+
+            /**
              * @brief Writes the image to disk using the provided filename and gamma.
              * 
              * This converts the image to integer values and saves it to a 16bit png file. The image
