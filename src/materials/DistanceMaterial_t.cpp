@@ -9,7 +9,7 @@ APTracer::Materials::DistanceMaterial_t::DistanceMaterial_t(double focal_length,
 
 APTracer::Materials::DistanceMaterial_t::~DistanceMaterial_t() = default;
 
-void APTracer::Materials::DistanceMaterial_t::bounce(std::array<double, 2> uv, const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
+void APTracer::Materials::DistanceMaterial_t::bounce(const std::array<double, 2> &uv, const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
     ray.colour_ = Vec3f(1.0/(std::pow(ray.dist_ - focal_length_, exponent_)));
     ray.mask_ = Vec3f();
 }

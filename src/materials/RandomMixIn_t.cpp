@@ -11,7 +11,7 @@ APTracer::Materials::RandomMixIn_t::RandomMixIn_t(APTracer::Entities::Material_t
 
 APTracer::Materials::RandomMixIn_t::~RandomMixIn_t() = default;
 
-void APTracer::Materials::RandomMixIn_t::bounce(std::array<double, 2> uv, const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
+void APTracer::Materials::RandomMixIn_t::bounce(const std::array<double, 2> &uv, const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
     if ((ray.direction_.dot(hit_obj->normal(ray.time_, uv)) > 0.0) || (unif_(APTracer::Entities::rng) < ratio_)) { // refracted
         material_refracted_->bounce(uv, hit_obj, ray);
     }

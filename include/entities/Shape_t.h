@@ -68,7 +68,7 @@ namespace APTracer { namespace Entities {
              * @param uv Object coordinates at which we want to find the normal.
              * @return Vec3f Normal vector at the specified coordinates and time.
              */
-            virtual Vec3f normal(double time, std::array<double, 2> uv) const = 0;
+            virtual Vec3f normal(double time, const std::array<double, 2> &uv) const = 0;
 
             /**
              * @brief Returns the surface normal and texture coordinates at a point in object coordinates.
@@ -82,7 +82,7 @@ namespace APTracer { namespace Entities {
              * @param[out] tuv Texture coordinates at the specified coordinates and time.
              * @return Vec3f Normal vector at the specified coordinates and time.
              */
-            virtual Vec3f normaluv(double time, std::array<double, 2> uv, std::array<double, 2> &tuv) const = 0;
+            virtual Vec3f normaluv(double time, const std::array<double, 2> &uv, std::array<double, 2> &tuv) const = 0;
 
             /**
              * @brief Returns the surface normal, texture coordinates and tangent vector at a point in object coordinates.
@@ -98,7 +98,7 @@ namespace APTracer { namespace Entities {
              * @param[out] tangentvec Tangent vector at the specified coordinates and time.
              * @return Vec3f Normal vector at the specified coordinates and time.
              */
-            virtual Vec3f normal_uv_tangent(double time, std::array<double, 2> uv, std::array<double, 2> &tuv, Vec3f &tangentvec) const = 0;
+            virtual Vec3f normal_uv_tangent(double time, const std::array<double, 2> &uv, std::array<double, 2> &tuv, Vec3f &tangentvec) const = 0;
 
             /**
              * @brief Minimum coordinates of an axis-aligned bounding box around the shape.

@@ -66,7 +66,7 @@ bool APTracer::Shapes::SphereMotionblur_t::intersection(const APTracer::Entities
     return true;
 }
 
-Vec3f APTracer::Shapes::SphereMotionblur_t::normaluv(double time, std::array<double, 2> uv, std::array<double, 2> &tuv) const {
+Vec3f APTracer::Shapes::SphereMotionblur_t::normaluv(double time, const std::array<double, 2> &uv, std::array<double, 2> &tuv) const {
     Vec3f sph = Vec3f(1.0, (1.0 - uv[1]) * pi, (uv[0] - 0.5) * 2.0 * pi);
     const Vec3f normalvec = sph.get_xyz();
 
@@ -97,11 +97,11 @@ Vec3f APTracer::Shapes::SphereMotionblur_t::normaluv(double time, std::array<dou
     return normalvec;
 }
 
-Vec3f APTracer::Shapes::SphereMotionblur_t::normal(double time, std::array<double, 2> uv) const {
+Vec3f APTracer::Shapes::SphereMotionblur_t::normal(double time, const std::array<double, 2> &uv) const {
     return Vec3f(1.0, (1.0 - uv[1]) * pi, (uv[0] - 0.5) * 2.0 * pi).to_xyz();
 }
 
-Vec3f APTracer::Shapes::SphereMotionblur_t::normal_uv_tangent(double time, std::array<double, 2> uv, std::array<double, 2> &tuv, Vec3f &tangentvec) const {
+Vec3f APTracer::Shapes::SphereMotionblur_t::normal_uv_tangent(double time, const std::array<double, 2> &uv, std::array<double, 2> &tuv, Vec3f &tangentvec) const {
     Vec3f sph = Vec3f(1.0, (1.0 - uv[1]) * pi, (uv[0] - 0.5) * 2.0 * pi);
     const Vec3f normalvec = sph.get_xyz();
 
