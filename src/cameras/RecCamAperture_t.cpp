@@ -59,10 +59,10 @@ void RecCamAperture_t::raytrace(const Scene_t* scene) {
         for (unsigned int subindex = 0; subindex < subpix_[0] * subpix_[1]; ++subindex) {
             const unsigned int l = subindex%subpix_[1]; // x
             const unsigned int k = subindex/subpix_[1]; // y
-            const double rand_theta = unif_(APTracer::Entities::rng) * 2.0 * pi;
-            const double rand_r = std::sqrt(unif_(APTracer::Entities::rng)) * aperture_;
-            const double jitter_y = unif_(APTracer::Entities::rng);
-            const double jitter_x = unif_(APTracer::Entities::rng);
+            const double rand_theta = unif_(APTracer::Entities::rng()) * 2.0 * pi;
+            const double rand_r = std::sqrt(unif_(APTracer::Entities::rng())) * aperture_;
+            const double jitter_y = unif_(APTracer::Entities::rng());
+            const double jitter_x = unif_(APTracer::Entities::rng());
 
             const Vec3f origin2 = origin_ + vertical * std::cos(rand_theta) * rand_r + horizontal * std::sin(rand_theta) * rand_r;
 

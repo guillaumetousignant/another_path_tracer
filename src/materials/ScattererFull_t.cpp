@@ -16,7 +16,7 @@ APTracer::Materials::ScattererFull_t::ScattererFull_t(Vec3f emi_vol, Vec3f col_v
 APTracer::Materials::ScattererFull_t::~ScattererFull_t() = default;
 
 bool APTracer::Materials::ScattererFull_t::scatter(APTracer::Entities::Ray_t &ray) {
-    const double distance = -std::log(unif_(APTracer::Entities::rng))/scattering_coefficient_;
+    const double distance = -std::log(unif_(APTracer::Entities::rng()))/scattering_coefficient_;
     if (distance >= ray.dist_) {
         ray.colour_ += ray.mask_ * (emission_vol_ * ray.dist_).sqrt(); // sqrt may be slow
         ray.mask_ *= (-colour_vol_ * ray.dist_).exp();
@@ -26,8 +26,8 @@ bool APTracer::Materials::ScattererFull_t::scatter(APTracer::Entities::Ray_t &ra
         ray.dist_ = distance;
         ray.origin_ += ray.direction_ * distance;
 
-        const double rand1 = unif_(APTracer::Entities::rng) * 2.0 * pi;
-        const double rand2 = unif_(APTracer::Entities::rng) * pi;
+        const double rand1 = unif_(APTracer::Entities::rng()) * 2.0 * pi;
+        const double rand2 = unif_(APTracer::Entities::rng()) * pi;
 
         const Vec3f axis = ray.direction_[0] > 0.1 ? Vec3f(0.0, 1.0, 0.0) : Vec3f(1.0, 0.0, 0.0);
 

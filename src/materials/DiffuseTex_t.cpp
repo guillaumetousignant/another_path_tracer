@@ -18,8 +18,8 @@ void APTracer::Materials::DiffuseTex_t::bounce(std::array<double, 2> uv, const A
     std::array<double, 2> tuv;
     Vec3f normal = hit_obj->normaluv(ray.time_, uv, tuv);
 
-    const double rand1 = unif_(APTracer::Entities::rng) * 2.0 * pi;
-    const double rand2 = unif_(APTracer::Entities::rng);
+    const double rand1 = unif_(APTracer::Entities::rng()) * 2.0 * pi;
+    const double rand2 = unif_(APTracer::Entities::rng());
     const double rand2s = sqrt(rand2);
 
     if (normal.dot(ray.direction_) > 0.0) {

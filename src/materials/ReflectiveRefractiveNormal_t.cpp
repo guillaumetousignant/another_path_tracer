@@ -62,7 +62,7 @@ void APTracer::Materials::ReflectiveRefractiveNormal_t::bounce(std::array<double
             kr = (Rs * Rs + Rp * Rp)/2.0;
         }
 
-        if (unif_(APTracer::Entities::rng) > kr) { //|| coming_out) { // refracted. Not sure if should always be refracted when going out.
+        if (unif_(APTracer::Entities::rng()) > kr) { //|| coming_out) { // refracted. Not sure if should always be refracted when going out.
             const double k = 1.0 - sint*sint;
 
             //newdir = k < 0 ? Vec3f() : (ray.direction_ * eta + n * (eta * cosi - std::sqrt(k))).normalize_inplace(); // k shouldn't be smaller than 0 if sint >= 1

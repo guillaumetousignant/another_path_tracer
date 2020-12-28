@@ -40,7 +40,7 @@ void APTracer::Materials::FresnelMixIn_t::bounce(std::array<double, 2> uv, const
         kr = (Rs * Rs + Rp * Rp)/2.0;
     }
 
-    if (unif_(APTracer::Entities::rng) > kr) { // refracted
+    if (unif_(APTracer::Entities::rng()) > kr) { // refracted
         material_refracted_->bounce(uv, hit_obj, ray);
     }
     else { // reflected

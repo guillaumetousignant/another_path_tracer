@@ -53,8 +53,8 @@ void IsoCam_t::raytrace(const Scene_t* scene) {
         for (unsigned int subindex = 0; subindex < subpix_[0] * subpix_[1]; ++subindex) {
             const unsigned int l = subindex%subpix_[1]; // x
             const unsigned int k = subindex/subpix_[1]; // y
-            const double jitter_y = unif_(APTracer::Entities::rng);
-            const double jitter_x = unif_(APTracer::Entities::rng);
+            const double jitter_y = unif_(APTracer::Entities::rng());
+            const double jitter_x = unif_(APTracer::Entities::rng());
 
             const Vec3f subpix_ray_origin = ray_origin - vertical * subpix_span_y * (static_cast<double>(k) - static_cast<double>(subpix_[0])/2.0 + jitter_y) + horizontal * subpix_span_x * (static_cast<double>(l) - static_cast<double>(subpix_[1])/2.0 + jitter_x);;
 

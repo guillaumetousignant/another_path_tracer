@@ -18,8 +18,8 @@ APTracer::Materials::BounceMaterial_t::~BounceMaterial_t() = default;
 void APTracer::Materials::BounceMaterial_t::bounce(std::array<double, 2> uv, const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
     Vec3f normal = hit_obj->normal(ray.time_, uv);
 
-    const double rand1 = unif_(APTracer::Entities::rng) * 2.0 * pi;
-    const double rand2 = unif_(APTracer::Entities::rng);
+    const double rand1 = unif_(APTracer::Entities::rng()) * 2.0 * pi;
+    const double rand2 = unif_(APTracer::Entities::rng());
     const double rand2s = sqrt(rand2);
 
     if (normal.dot(ray.direction_) > 0.0) {

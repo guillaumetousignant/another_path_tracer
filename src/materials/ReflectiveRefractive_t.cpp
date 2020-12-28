@@ -51,7 +51,7 @@ void APTracer::Materials::ReflectiveRefractive_t::bounce(std::array<double, 2> u
             kr = (Rs * Rs + Rp * Rp)/2.0;
         }
 
-        if (unif_(APTracer::Entities::rng) > kr) {
+        if (unif_(APTracer::Entities::rng()) > kr) {
 
             const double k = 1.0 - eta*eta * (1.0 - cosi*cosi);
 

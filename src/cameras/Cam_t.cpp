@@ -54,8 +54,8 @@ void Cam_t::raytrace(const Scene_t* scene) {
         for (unsigned int subindex = 0; subindex < subpix_[0] * subpix_[1]; ++subindex) {
             const unsigned int l = subindex%subpix_[1]; // x
             const unsigned int k = subindex/subpix_[1]; // y                
-            const double jitter_y = unif_(APTracer::Entities::rng);
-            const double jitter_x = unif_(APTracer::Entities::rng);
+            const double jitter_y = unif_(APTracer::Entities::rng());
+            const double jitter_x = unif_(APTracer::Entities::rng());
 
             const Vec3f subpix_vec = (pix_vec + Vec3f(0.0, (static_cast<double>(k) - static_cast<double>(subpix_[0])/2.0 + jitter_y)*subpix_span_y, (static_cast<double>(l) - static_cast<double>(subpix_[1])/2.0 + jitter_x)*subpix_span_x)).to_xyz_offset(direction_, horizontal, vertical);
 

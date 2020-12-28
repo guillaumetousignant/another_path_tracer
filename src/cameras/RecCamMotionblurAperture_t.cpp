@@ -72,11 +72,11 @@ void RecCamMotionblurAperture_t::raytrace(const Scene_t* scene) {
         for (unsigned int subindex = 0; subindex < subpix_[0] * subpix_[1]; ++subindex) {
             const unsigned int l = subindex%subpix_[1]; // x
             const unsigned int k = subindex/subpix_[1]; // y
-            const double rand_time = unif_(APTracer::Entities::rng) * (time_[1] - time_[0]) + time_[0];
-            const double rand_theta = unif_(APTracer::Entities::rng) * 2.0 * pi;
-            const double rand_r = std::sqrt(unif_(APTracer::Entities::rng)) * aperture_;
-            const double jitter_y = unif_(APTracer::Entities::rng);
-            const double jitter_x = unif_(APTracer::Entities::rng);
+            const double rand_time = unif_(APTracer::Entities::rng()) * (time_[1] - time_[0]) + time_[0];
+            const double rand_theta = unif_(APTracer::Entities::rng()) * 2.0 * pi;
+            const double rand_r = std::sqrt(unif_(APTracer::Entities::rng())) * aperture_;
+            const double jitter_y = unif_(APTracer::Entities::rng());
+            const double jitter_x = unif_(APTracer::Entities::rng());
 
             const Vec3f focus_point_int = focus_point * rand_time + focus_point_last * (1.0 - rand_time);
             const Vec3f horizontal_int = horizontal * rand_time + horizontal_last * (1.0 - rand_time);

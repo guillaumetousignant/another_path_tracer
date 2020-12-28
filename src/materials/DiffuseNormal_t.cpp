@@ -25,8 +25,8 @@ void APTracer::Materials::DiffuseNormal_t::bounce(std::array<double, 2> uv, cons
     tangent_weights = normal_map_->get(tuv) * 2.0 - 1.0;
     normal = (tangent * tangent_weights[0] + bitangent * tangent_weights[1] + normal * tangent_weights[2]).normalize_inplace();
 
-    const double rand1 = unif_(APTracer::Entities::rng) * 2.0 * pi;
-    const double rand2 = unif_(APTracer::Entities::rng);
+    const double rand1 = unif_(APTracer::Entities::rng()) * 2.0 * pi;
+    const double rand2 = unif_(APTracer::Entities::rng());
     const double rand2s = sqrt(rand2);
 
     if (normal.dot(ray.direction_) > 0.0) {
