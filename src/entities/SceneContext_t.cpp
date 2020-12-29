@@ -957,10 +957,9 @@ auto APTracer::Entities::SceneContext_t::create_transform_matrix(const tinyxml2:
         std::cerr << "Error, transform matrix value should be 16 values seperated by spaces, or nan. Current number of values is " << count << ". Ignoring." << std::endl;
         return std::unique_ptr<TransformMatrix_t>(new TransformMatrix_t());
     }
-    else {
-        return std::unique_ptr<TransformMatrix_t>(
-                new TransformMatrix_t(values));
-    }
+    
+    return std::unique_ptr<TransformMatrix_t>(
+            new TransformMatrix_t(values));
 }
 
 auto APTracer::Entities::SceneContext_t::create_texture(const tinyxml2::XMLElement* xml_texture) const -> std::unique_ptr<Texture_t>{
@@ -979,24 +978,23 @@ auto APTracer::Entities::SceneContext_t::create_texture(const tinyxml2::XMLEleme
         const std::vector<const char*> attributes = {"filename"};
         require_attributes(xml_texture, attributes);
         std::string filename = xml_texture->Attribute("filename");
-        for (size_t i = 0; i < filename.size(); i++) {
+        for (auto& character: filename) {
             #ifdef _WIN32
-                if (filename[i] == '/') {
-                    filename[i] = '\\';
+                if (character == '/') {
+                    character = '\\';
                 }
             #else
-                if (filename[i] == '\\') {
-                    filename[i] = '/';
+                if (character == '\\') {
+                    character = '/';
                 }
             #endif
-        }  
+        }
         
         return std::unique_ptr<Texture_t>(new Texture_t(filename));
     }
-    else {
-        std::cerr << "Error, texture type '" << type << "' not implemented. Only 'texture' exists for now. Exiting." << std::endl; 
-        exit(20);
-    }
+
+    std::cerr << "Error, texture type '" << type << "' not implemented. Only 'texture' exists for now. Exiting." << std::endl; 
+    exit(20);
 }
 
 auto APTracer::Entities::SceneContext_t::create_medium(const tinyxml2::XMLElement* xml_medium, std::unique_ptr<std::list<size_t>> &mediums_medium_list, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_mediums) -> std::unique_ptr<Medium_t> {
@@ -1019,12 +1017,12 @@ auto APTracer::Entities::SceneContext_t::create_medium(const tinyxml2::XMLElemen
                                 xml_medium->DoubleAttribute("emission_distance"), xml_medium->DoubleAttribute("absorption_distance"),
                                 xml_medium->DoubleAttribute("ind"), xml_medium->UnsignedAttribute("priority")));
     }
-    else if (type == "nonabsorber") {
+    if (type == "nonabsorber") {
         const std::vector<const char*> attributes = {"ind", "priority"};
         require_attributes(xml_medium, attributes);
         return std::unique_ptr<Medium_t>(new APTracer::Materials::NonAbsorber_t(xml_medium->DoubleAttribute("ind"), xml_medium->UnsignedAttribute("priority")));
     }
-    else if (type == "portal_scatterer") {
+    if (type == "portal_scatterer") {
         // CHECK add medium_list stuff
         const std::vector<const char*> attributes = {"medium_list", "transform_matrix", "scattering_distance", "ind", "priority"};
         require_attributes(xml_medium, attributes);
@@ -1033,7 +1031,7 @@ auto APTracer::Entities::SceneContext_t::create_medium(const tinyxml2::XMLElemen
                     new APTracer::Materials::PortalScatterer_t(get_transform_matrix(xml_medium->Attribute("transform_matrix"), xml_transform_matrices), xml_medium->DoubleAttribute("scattering_distance"), std::list<Medium_t*>(),
                                 xml_medium->DoubleAttribute("ind"), xml_medium->UnsignedAttribute("priority")));
     }
-    else if (type == "scatterer_exp") {
+    if (type == "scatterer_exp") {
         const std::vector<const char*> attributes = {"emission", "colour", "emission_distance", "absorption_distance", "scattering_distance", "order", "scattering_angle", "ind", "priority"};
         require_attributes(xml_medium, attributes);
         return std::unique_ptr<Medium_t>(
@@ -1043,7 +1041,7 @@ auto APTracer::Entities::SceneContext_t::create_medium(const tinyxml2::XMLElemen
                                 xml_medium->DoubleAttribute("scattering_angle"), xml_medium->DoubleAttribute("ind"), 
                                 xml_medium->UnsignedAttribute("priority")));
     }
-    else if (type == "scatterer_exp_full") {
+    if (type == "scatterer_exp_full") {
         const std::vector<const char*> attributes = {"emission", "colour", "scattering_emission", "scattering_colour", "emission_distance", "absorption_distance", "scattering_distance", "order", "scattering_angle", "ind", "priority"};
         require_attributes(xml_medium, attributes);
         return std::unique_ptr<Medium_t>(
@@ -1054,7 +1052,7 @@ auto APTracer::Entities::SceneContext_t::create_medium(const tinyxml2::XMLElemen
                                 xml_medium->DoubleAttribute("scattering_angle"), xml_medium->DoubleAttribute("ind"), 
                                 xml_medium->UnsignedAttribute("priority")));
     }
-    else if (type == "scatterer") {
+    if (type == "scatterer") {
         const std::vector<const char*> attributes = {"emission", "colour", "emission_distance", "absorption_distance", "scattering_distance", "ind", "priority"};
         require_attributes(xml_medium, attributes);
         return std::unique_ptr<Medium_t>(
@@ -1063,7 +1061,7 @@ auto APTracer::Entities::SceneContext_t::create_medium(const tinyxml2::XMLElemen
                                 xml_medium->DoubleAttribute("scattering_distance"), xml_medium->DoubleAttribute("ind"), 
                                 xml_medium->UnsignedAttribute("priority")));
     }
-    else if (type == "scatterer_full") {
+    if (type == "scatterer_full") {
         const std::vector<const char*> attributes = {"emission", "colour", "scattering_emission", "scattering_colour", "emission_distance", "absorption_distance", "scattering_distance", "ind", "priority"};
         require_attributes(xml_medium, attributes);
         return std::unique_ptr<Medium_t>(
@@ -1073,10 +1071,9 @@ auto APTracer::Entities::SceneContext_t::create_medium(const tinyxml2::XMLElemen
                                 xml_medium->DoubleAttribute("scattering_distance"), xml_medium->DoubleAttribute("ind"), 
                                 xml_medium->UnsignedAttribute("priority")));
     }
-    else {
-        std::cerr << "Error, medium type '" << type << "' not implemented. Only 'absorber', 'nonabsorber', 'portal_scatterer', 'scatterer_exp', and 'scatterer' exists for now. Ignoring." << std::endl; 
-        return std::unique_ptr<Medium_t>(new APTracer::Materials::NonAbsorber_t(1.0, 0));
-    }
+
+    std::cerr << "Error, medium type '" << type << "' not implemented. Only 'absorber', 'nonabsorber', 'portal_scatterer', 'scatterer_exp', and 'scatterer' exists for now. Ignoring." << std::endl; 
+    return std::unique_ptr<Medium_t>(new APTracer::Materials::NonAbsorber_t(1.0, 0));
 }
 
 auto APTracer::Entities::SceneContext_t::create_material(const tinyxml2::XMLElement* xml_material, std::unique_ptr<std::list<size_t>> &materials_medium_list, std::vector<size_t> &materials_mix_list, std::unique_ptr<std::tuple<std::unique_ptr<std::list<size_t>>, std::unique_ptr<std::list<std::string>>>> &materials_aggregate_list, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_mediums) -> std::unique_ptr<Material_t> {
@@ -1098,180 +1095,180 @@ auto APTracer::Entities::SceneContext_t::create_material(const tinyxml2::XMLElem
                     new APTracer::Materials::Diffuse_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), 
                                 xml_material->DoubleAttribute("roughness")));
     }
-    else if (type == "diffuse_normal") {
+    if (type == "diffuse_normal") {
         const std::vector<const char*> attributes = {"emission", "colour", "normal_map", "roughness"};
         require_attributes(xml_material, attributes);
         return std::unique_ptr<Material_t>(
                     new APTracer::Materials::DiffuseNormal_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), 
                                 get_texture(xml_material->Attribute("normal_map"), xml_textures), xml_material->DoubleAttribute("roughness")));
     }
-    else if (type == "diffuse_full") {
+    if (type == "diffuse_full") {
         const std::vector<const char*> attributes = {"emission_map", "texture", "roughness"};
         require_attributes(xml_material, attributes);
         return std::unique_ptr<Material_t>(
                     new APTracer::Materials::DiffuseFull_t(get_texture(xml_material->Attribute("emission_map"), xml_textures), get_texture(xml_material->Attribute("texture"), xml_textures), 
                                 xml_material->DoubleAttribute("roughness")));
     }
-    else if (type == "diffuse_tex") {
+    if (type == "diffuse_tex") {
         const std::vector<const char*> attributes = {"emission", "texture", "roughness"};
         require_attributes(xml_material, attributes);
         return std::unique_ptr<Material_t>(
                     new APTracer::Materials::DiffuseTex_t(APTracer::get_colour(xml_material->Attribute("emission")), get_texture(xml_material->Attribute("texture"), xml_textures), 
                                 xml_material->DoubleAttribute("roughness")));
     }
-    else if (type == "diffuse_tex_normal") {
+    if (type == "diffuse_tex_normal") {
         const std::vector<const char*> attributes = {"emission", "texture", "normal_map", "roughness"};
         require_attributes(xml_material, attributes);
         return std::unique_ptr<Material_t>(
                     new APTracer::Materials::DiffuseTexNormal_t(APTracer::get_colour(xml_material->Attribute("emission")), get_texture(xml_material->Attribute("texture"), xml_textures), 
                                 get_texture(xml_material->Attribute("normal_map"), xml_textures), xml_material->DoubleAttribute("roughness")));
     }
-    else if (type == "fresnelmix") {
+    if (type == "fresnelmix") {
         const std::vector<const char*> attributes = {"material_refracted", "material_reflected", "ind"};
         require_attributes(xml_material, attributes);
         materials_mix_list = get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials);
         return std::unique_ptr<Material_t>(
                     new APTracer::Materials::FresnelMix_t(nullptr, nullptr, xml_material->DoubleAttribute("ind")));
     }
-    else if (type == "fresnelmix_normal") {
+    if (type == "fresnelmix_normal") {
         const std::vector<const char*> attributes = {"material_refracted", "material_reflected", "ind", "normal_map"};
         require_attributes(xml_material, attributes);
         materials_mix_list = get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials);
         return std::unique_ptr<Material_t>(
                     new APTracer::Materials::FresnelMixNormal_t(nullptr, nullptr, xml_material->DoubleAttribute("ind"), get_texture(xml_material->Attribute("normal_map"), xml_textures)));
     }
-    else if (type == "fresnelmix_in") {
+    if (type == "fresnelmix_in") {
         const std::vector<const char*> attributes = {"material_refracted", "material_reflected", "ind"};
         require_attributes(xml_material, attributes);
         materials_mix_list = get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials);
         return std::unique_ptr<Material_t>(
                     new APTracer::Materials::FresnelMixIn_t(nullptr, nullptr, xml_material->DoubleAttribute("ind")));
     }
-    else if (type == "normal_material") {
+    if (type == "normal_material") {
         return std::unique_ptr<Material_t>(new APTracer::Materials::NormalMaterial_t());
     }
-    else if (type == "normal_diffuse_material") {
+    if (type == "normal_diffuse_material") {
         const std::vector<const char*> attributes = {"roughness"};
         require_attributes(xml_material, attributes);
         return std::unique_ptr<Material_t>(new APTracer::Materials::NormalDiffuseMaterial_t(xml_material->DoubleAttribute("roughness")));
     }
-    else if (type == "portal") {
+    if (type == "portal") {
         const std::vector<const char*> attributes = {"medium_list", "transform_matrix"};
         require_attributes(xml_material, attributes);
         materials_medium_list = get_medium_index_list(xml_material->Attribute("medium_list"), xml_mediums);
         return std::unique_ptr<Material_t>(
                     new APTracer::Materials::Portal_t(get_transform_matrix(xml_material->Attribute("transform_matrix"), xml_transform_matrices), std::list<Medium_t*>()));
     }
-    else if (type == "portal_refractive") {
+    if (type == "portal_refractive") {
         std::cerr << "Error, refractive portal not implemented yet. Ignoring." << std::endl; 
         return std::unique_ptr<Material_t>(new APTracer::Materials::Diffuse_t(Vec3f(), Vec3f(0.5), 1.0));
     }
-    else if (type == "randommix") {
+    if (type == "randommix") {
         const std::vector<const char*> attributes = {"material_refracted", "material_reflected", "ratio"};
         require_attributes(xml_material, attributes);
         materials_mix_list = get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials);
         return std::unique_ptr<Material_t>(new APTracer::Materials::RandomMix_t(nullptr, nullptr, xml_material->DoubleAttribute("ratio")));
     }
-    else if (type == "randommix_in") {
+    if (type == "randommix_in") {
         const std::vector<const char*> attributes = {"material_refracted", "material_reflected", "ratio"};
         require_attributes(xml_material, attributes);
         materials_mix_list = get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials);
         return std::unique_ptr<Material_t>(new APTracer::Materials::RandomMixIn_t(nullptr, nullptr, xml_material->DoubleAttribute("ratio")));
     }
-    else if (type == "reflective") {
+    if (type == "reflective") {
         const std::vector<const char*> attributes = {"emission", "colour"};
         require_attributes(xml_material, attributes);
         return std::unique_ptr<Material_t>(
                     new APTracer::Materials::Reflective_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour"))));
     }
-    else if (type == "reflective_normal") {
+    if (type == "reflective_normal") {
         const std::vector<const char*> attributes = {"emission", "colour", "normal_map"};
         require_attributes(xml_material, attributes);
         return std::unique_ptr<Material_t>(
                     new APTracer::Materials::ReflectiveNormal_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), get_texture(xml_material->Attribute("normal_map"), xml_textures)));
     }
-    else if (type == "reflective_fuzz") {
+    if (type == "reflective_fuzz") {
         const std::vector<const char*> attributes = {"emission", "colour", "order", "diffusivity"};
         require_attributes(xml_material, attributes);
         return std::unique_ptr<Material_t>(
                     new APTracer::Materials::ReflectiveFuzz_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity")));
     }
-    else if (type == "reflective_fuzz_normal") {
+    if (type == "reflective_fuzz_normal") {
         const std::vector<const char*> attributes = {"emission", "colour", "normal_map", "order", "diffusivity"};
         require_attributes(xml_material, attributes);
         return std::unique_ptr<Material_t>(
                     new APTracer::Materials::ReflectiveFuzzNormal_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), 
                     get_texture(xml_material->Attribute("normal_map"), xml_textures), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity")));
     }
-    else if (type == "reflective_fuzz_tex") {
+    if (type == "reflective_fuzz_tex") {
         const std::vector<const char*> attributes = {"emission", "texture", "order", "diffusivity"};
         require_attributes(xml_material, attributes);
         return std::unique_ptr<Material_t>(
                     new APTracer::Materials::ReflectiveFuzzTex_t(APTracer::get_colour(xml_material->Attribute("emission")), get_texture(xml_material->Attribute("texture"), xml_textures), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity")));
     }
-    else if (type == "reflective_fuzz_tex_normal") {
+    if (type == "reflective_fuzz_tex_normal") {
         const std::vector<const char*> attributes = {"emission", "texture", "normal_map", "order", "diffusivity"};
         require_attributes(xml_material, attributes);
         return std::unique_ptr<Material_t>(
                     new APTracer::Materials::ReflectiveFuzzTexNormal_t(APTracer::get_colour(xml_material->Attribute("emission")), get_texture(xml_material->Attribute("texture"), xml_textures), 
                     get_texture(xml_material->Attribute("normal_map"), xml_textures), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity")));
     }
-    else if (type == "reflective_refractive") {
+    if (type == "reflective_refractive") {
         const std::vector<const char*> attributes = {"emission", "colour", "medium"};
         require_attributes(xml_material, attributes);
         return std::unique_ptr<Material_t>(
                     new APTracer::Materials::ReflectiveRefractive_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), get_medium(xml_material->Attribute("medium"), xml_mediums)));
     }
-    else if (type == "reflective_refractive_normal") {
+    if (type == "reflective_refractive_normal") {
         const std::vector<const char*> attributes = {"emission", "colour", "normal_map", "medium"};
         require_attributes(xml_material, attributes);
         return std::unique_ptr<Material_t>(
                     new APTracer::Materials::ReflectiveRefractiveNormal_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), get_texture(xml_material->Attribute("normal_map"), xml_textures),
                     get_medium(xml_material->Attribute("medium"), xml_mediums)));
     }
-    else if (type == "reflective_refractive_fuzz") {
+    if (type == "reflective_refractive_fuzz") {
         const std::vector<const char*> attributes = {"emission", "colour", "medium", "order", "diffusivity"};
         require_attributes(xml_material, attributes);
         return std::unique_ptr<Material_t>(
                     new APTracer::Materials::ReflectiveRefractiveFuzz_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity"), get_medium(xml_material->Attribute("medium"), xml_mediums)));
     }
-    else if (type == "refractive") {
+    if (type == "refractive") {
         const std::vector<const char*> attributes = {"emission", "colour", "medium"};
         require_attributes(xml_material, attributes);
         return std::unique_ptr<Material_t>(
                     new APTracer::Materials::Refractive_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), get_medium(xml_material->Attribute("medium"), xml_mediums)));
     }
-    else if (type == "refractive_fuzz") {
+    if (type == "refractive_fuzz") {
         const std::vector<const char*> attributes = {"emission", "colour", "medium", "order", "diffusivity"};
         require_attributes(xml_material, attributes);
         return std::unique_ptr<Material_t>(
                     new APTracer::Materials::RefractiveFuzz_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity"), get_medium(xml_material->Attribute("medium"), xml_mediums)));
     }
-    else if (type == "transparent") {
+    if (type == "transparent") {
         const std::vector<const char*> attributes = {"medium"};
         require_attributes(xml_material, attributes);
         return std::unique_ptr<Material_t>(
                     new APTracer::Materials::Transparent_t(get_medium(xml_material->Attribute("medium"), xml_mediums)));
     }
-    else if (type == "bounce_material") {
+    if (type == "bounce_material") {
         const std::vector<const char*> attributes = {"max_bounces"};
         require_attributes(xml_material, attributes);
         return std::unique_ptr<Material_t>(
                     new APTracer::Materials::BounceMaterial_t(xml_material->UnsignedAttribute("max_bounces")));
     }
-    else if (type == "distance_material") {
+    if (type == "distance_material") {
         const std::vector<const char*> attributes = {"focal_length", "exponent"};
         require_attributes(xml_material, attributes);
         return std::unique_ptr<Material_t>(
                     new APTracer::Materials::DistanceMaterial_t(xml_material->DoubleAttribute("focal_length"), xml_material->DoubleAttribute("exponent")));
     }
-    else if (type == "toon") {
+    if (type == "toon") {
         const std::vector<const char*> attributes = {"colour"};
         require_attributes(xml_material, attributes);
         return std::unique_ptr<Material_t>(
                     new APTracer::Materials::Toon_t(APTracer::get_colour(xml_material->Attribute("colour"))));
     }
-    else if (type == "aggregate") {
+    if (type == "aggregate") {
         const std::vector<const char*> attributes = {"materials_list", "materials_names"};
         require_attributes(xml_material, attributes);
         materials_aggregate_list = std::unique_ptr<std::tuple<std::unique_ptr<std::list<size_t>>, std::unique_ptr<std::list<std::string>>>>(
@@ -1279,10 +1276,9 @@ auto APTracer::Entities::SceneContext_t::create_material(const tinyxml2::XMLElem
         return std::unique_ptr<Material_t>();
         // CHECK add aggregates
     }
-    else {
-        std::cerr << "Error, material type '" << type << "' not implemented. Ignoring." << std::endl; 
-        return std::unique_ptr<Material_t>(new APTracer::Materials::NormalMaterial_t());
-    }
+
+    std::cerr << "Error, material type '" << type << "' not implemented. Ignoring." << std::endl; 
+    return std::unique_ptr<Material_t>(new APTracer::Materials::NormalMaterial_t());
 }
 
 auto APTracer::Entities::SceneContext_t::create_mesh_geometry(const tinyxml2::XMLElement* xml_mesh_geometry) const -> std::unique_ptr<MeshGeometry_t> {
@@ -1301,24 +1297,23 @@ auto APTracer::Entities::SceneContext_t::create_mesh_geometry(const tinyxml2::XM
         const std::vector<const char*> attributes = {"filename"};
         require_attributes(xml_mesh_geometry, attributes);
         std::string filename = xml_mesh_geometry->Attribute("filename");
-        for (size_t i = 0; i < filename.size(); i++) {
+        for (auto& character: filename) {
             #ifdef _WIN32
-                if (filename[i] == '/') {
-                    filename[i] = '\\';
+                if (character == '/') {
+                    character = '\\';
                 }
             #else
-                if (filename[i] == '\\') {
-                    filename[i] = '/';
+                if (character == '\\') {
+                    character = '/';
                 }
             #endif
         } 
 
         return std::unique_ptr<MeshGeometry_t>(new MeshGeometry_t(filename));
     }
-    else {
-        std::cerr << "Error, mesh geometry type '" << type << "' not implemented. Only 'mesh_geometry' exists for now. Exiting." << std::endl; 
-        exit(50);
-    }
+
+    std::cerr << "Error, mesh geometry type '" << type << "' not implemented. Only 'mesh_geometry' exists for now. Exiting." << std::endl; 
+    exit(50);
 }
 
 auto APTracer::Entities::SceneContext_t::create_object(const tinyxml2::XMLElement* xml_object, std::unique_ptr<MeshTop_t> &mesh, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_mesh_geometries) -> std::unique_ptr<Shape_t>{
