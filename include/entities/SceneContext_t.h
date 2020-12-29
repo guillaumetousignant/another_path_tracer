@@ -449,7 +449,7 @@ namespace APTracer {
      * @param element XML element to probe for parameters.
      * @param attributes Array of char pointers representing parameter names.
      */
-    auto require_attributes(const tinyxml2::XMLElement* element, const std::vector<char*>& attributes) -> void;
+    auto require_attributes(const tinyxml2::XMLElement* element, const std::vector<const char*>& attributes) -> void;
 }
 
 #endif
