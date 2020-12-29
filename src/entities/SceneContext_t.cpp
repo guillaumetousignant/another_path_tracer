@@ -102,14 +102,10 @@
 #include "acceleration/AccelerationMultiGridVector_t.h"
 
 APTracer::Entities::SceneContext_t::SceneContext_t() :
-    use_gl_(false), scene_name_(""), opengl_renderer_(), opengl_imgbuffer_(nullptr), 
-    opengl_camera_(nullptr), scene_(), camera_rendermode_(), camera_n_iter_(), camera_write_interval_(), 
-    index_transform_matrices_(0), index_textures_(0), index_mediums_(0), index_materials_(0), 
-    index_mesh_geometries_(0), index_objects_(0), index_directional_lights_(0), index_skyboxes_(0), 
-    index_imgbuffers_(0), index_cameras_(0), transform_matrices_(), textures_(), 
-    mediums_(), materials_(), mesh_geometries_(), objects_(), 
-    directional_lights_(), skyboxes_(), imgbuffers_(), cameras_(), 
-    material_aggregates_(), meshes_() 
+    use_gl_(false), scene_name_(), opengl_renderer_(), opengl_imgbuffer_(nullptr), 
+    opengl_camera_(nullptr), scene_(), index_transform_matrices_(0), index_textures_(0), 
+    index_mediums_(0), index_materials_(0), index_mesh_geometries_(0), index_objects_(0), 
+    index_directional_lights_(0), index_skyboxes_(0), index_imgbuffers_(0), index_cameras_(0)
     {}
 
 APTracer::Entities::SceneContext_t::~SceneContext_t() {
