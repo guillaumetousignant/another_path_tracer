@@ -926,7 +926,7 @@ auto APTracer::Entities::SceneContext_t::reset() -> void {
     scene_name_ = "";
 }
 
-auto APTracer::Entities::SceneContext_t::create_transform_matrix(const tinyxml2::XMLElement* xml_transform_matrix) const -> std::unique_ptr<TransformMatrix_t> {
+auto APTracer::Entities::SceneContext_t::create_transform_matrix(const tinyxml2::XMLElement* xml_transform_matrix) -> std::unique_ptr<TransformMatrix_t> {
     std::string string_transform_matrix;
     const char* transform_matrix_char = xml_transform_matrix->Attribute("value");
     if (transform_matrix_char == nullptr) {
@@ -962,7 +962,7 @@ auto APTracer::Entities::SceneContext_t::create_transform_matrix(const tinyxml2:
             new TransformMatrix_t(values));
 }
 
-auto APTracer::Entities::SceneContext_t::create_texture(const tinyxml2::XMLElement* xml_texture) const -> std::unique_ptr<Texture_t>{
+auto APTracer::Entities::SceneContext_t::create_texture(const tinyxml2::XMLElement* xml_texture) -> std::unique_ptr<Texture_t>{
     std::string type;
     const char* type_char = xml_texture->Attribute("type");
     if (type_char == nullptr) {
@@ -1281,7 +1281,7 @@ auto APTracer::Entities::SceneContext_t::create_material(const tinyxml2::XMLElem
     return std::unique_ptr<Material_t>(new APTracer::Materials::NormalMaterial_t());
 }
 
-auto APTracer::Entities::SceneContext_t::create_mesh_geometry(const tinyxml2::XMLElement* xml_mesh_geometry) const -> std::unique_ptr<MeshGeometry_t> {
+auto APTracer::Entities::SceneContext_t::create_mesh_geometry(const tinyxml2::XMLElement* xml_mesh_geometry) -> std::unique_ptr<MeshGeometry_t> {
     std::string type;
     const char* type_char = xml_mesh_geometry->Attribute("type");
     if (type_char == nullptr) {
@@ -1800,7 +1800,7 @@ auto APTracer::Entities::SceneContext_t::get_transform_matrix(std::string transf
     return new TransformMatrix_t();
 }
 
-auto APTracer::Entities::SceneContext_t::get_material_index_list(std::string string_material_list, const tinyxml2::XMLElement* xml_materials) const -> std::unique_ptr<std::list<size_t>> {
+auto APTracer::Entities::SceneContext_t::get_material_index_list(std::string string_material_list, const tinyxml2::XMLElement* xml_materials) -> std::unique_ptr<std::list<size_t>> {
     std::unique_ptr<std::list<size_t>> material_list = std::unique_ptr<std::list<size_t>>(new std::list<size_t>());
     std::string delimiter = ", ";
     size_t pos = 0;
@@ -1878,7 +1878,7 @@ auto APTracer::Entities::SceneContext_t::get_material_index_list(std::string str
     return material_list;
 }
 
-auto APTracer::Entities::SceneContext_t::get_medium_index_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_mediums) const -> std::unique_ptr<std::list<size_t>> {
+auto APTracer::Entities::SceneContext_t::get_medium_index_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_mediums) -> std::unique_ptr<std::list<size_t>> {
     std::unique_ptr<std::list<size_t>> medium_list = std::unique_ptr<std::list<size_t>>(new std::list<size_t>());
     std::string delimiter = ", ";
     size_t pos = 0;
@@ -2059,7 +2059,7 @@ auto APTracer::Entities::SceneContext_t::get_texture(std::string texture, const 
     exit(21); 
 }
 
-auto APTracer::Entities::SceneContext_t::get_material_mix(std::string material_refracted, std::string material_reflected, const tinyxml2::XMLElement* xml_materials) const -> std::vector<size_t> {
+auto APTracer::Entities::SceneContext_t::get_material_mix(std::string material_refracted, std::string material_reflected, const tinyxml2::XMLElement* xml_materials) -> std::vector<size_t> {
     //std::unique_ptr<size_t> output_materials = std::unique_ptr<size_t>(new size_t[2]);
     std::vector<size_t> output_materials = std::vector<size_t>(2);
     
@@ -2180,7 +2180,7 @@ auto APTracer::Entities::SceneContext_t::get_mesh_geometry(std::string mesh_geom
     exit(51);
 }
 
-auto APTracer::Entities::SceneContext_t::get_material_index(std::string material, const tinyxml2::XMLElement* xml_materials) const -> size_t {
+auto APTracer::Entities::SceneContext_t::get_material_index(std::string material, const tinyxml2::XMLElement* xml_materials) -> size_t {
     if (is_number(material)) {
         return std::stoi(material) - 1;
     }
@@ -2305,7 +2305,7 @@ auto APTracer::Entities::SceneContext_t::get_lights(std::string lights_string, c
     std::vector<DirectionalLight_t*> lights(lights_list.size());
     size_t index = 0;
 
-    for (auto light: lights_list) {
+    for (auto* light: lights_list) {
         lights[index] = light;
         ++index;
     }

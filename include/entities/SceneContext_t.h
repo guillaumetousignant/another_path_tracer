@@ -117,7 +117,7 @@ namespace APTracer { namespace Entities {
              * @param xml_transform_matrix XML entry containing the transformation matrix information.
              * @return std::unique_ptr<TransformMatrix_t> Unique pointer to the created transformation matrix.
              */
-            auto create_transform_matrix(const tinyxml2::XMLElement* xml_transform_matrix) const -> std::unique_ptr<TransformMatrix_t>;
+            static auto create_transform_matrix(const tinyxml2::XMLElement* xml_transform_matrix) -> std::unique_ptr<TransformMatrix_t>;
 
             /**
              * @brief Create a texture object from an xml entry.
@@ -125,7 +125,7 @@ namespace APTracer { namespace Entities {
              * @param xml_texture XML entry containing the texture information.
              * @return std::unique_ptr<Texture_t> Unique pointer to the created texture.
              */
-            auto create_texture(const tinyxml2::XMLElement* xml_texture) const -> std::unique_ptr<Texture_t>;
+            static auto create_texture(const tinyxml2::XMLElement* xml_texture) -> std::unique_ptr<Texture_t>;
 
             /**
              * @brief Create a medium object from an xml entry.
@@ -159,7 +159,7 @@ namespace APTracer { namespace Entities {
              * @param xml_mesh_geometry XML entry containing the mesh geometry information.
              * @return std::unique_ptr<MeshGeometry_t> Unique pointer to the created mesh geometry.
              */
-            auto create_mesh_geometry(const tinyxml2::XMLElement* xml_mesh_geometry) const -> std::unique_ptr<MeshGeometry_t>;
+            static auto create_mesh_geometry(const tinyxml2::XMLElement* xml_mesh_geometry) -> std::unique_ptr<MeshGeometry_t>;
 
             /**
              * @brief Create a shape object from an xml entry.
@@ -237,7 +237,7 @@ namespace APTracer { namespace Entities {
              * @param xml_materials XML entries of all the materials.
              * @return std::unique_ptr<std::list<size_t>> List of material indices.
              */
-            auto get_material_index_list(std::string string_material_list, const tinyxml2::XMLElement* xml_materials) const -> std::unique_ptr<std::list<size_t>>;
+            static auto get_material_index_list(std::string string_material_list, const tinyxml2::XMLElement* xml_materials) -> std::unique_ptr<std::list<size_t>>;
 
             /**
              * @brief Get a list of medium indices from a string of names of indices.
@@ -246,7 +246,7 @@ namespace APTracer { namespace Entities {
              * @param xml_mediums XML entries of all the mediums.
              * @return std::unique_ptr<std::list<size_t>> List of medium indices.
              */
-            auto get_medium_index_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_mediums) const -> std::unique_ptr<std::list<size_t>>;
+            static auto get_medium_index_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_mediums) -> std::unique_ptr<std::list<size_t>>;
 
             /**
              * @brief Get a list of mediums from a string of names of indices.
@@ -274,7 +274,7 @@ namespace APTracer { namespace Entities {
              * @param xml_materials XML entries of all the materials.
              * @return std::vector<size_t> Vector of the indices ot the two materials making up a material mix.
              */
-            auto get_material_mix(std::string material_refracted, std::string material_reflected, const tinyxml2::XMLElement* xml_materials) const -> std::vector<size_t>;
+            static auto get_material_mix(std::string material_refracted, std::string material_reflected, const tinyxml2::XMLElement* xml_materials) -> std::vector<size_t>;
 
             /**
              * @brief Get a medium from its name or index.
@@ -301,7 +301,7 @@ namespace APTracer { namespace Entities {
              * @param xml_materials XML entries of all the materials.
              * @return size_t Index of the requested material.
              */
-            auto get_material_index(std::string material, const tinyxml2::XMLElement* xml_materials) const -> size_t;
+            static auto get_material_index(std::string material, const tinyxml2::XMLElement* xml_materials) -> size_t;
 
             /**
              * @brief Get a material from its name or index.
