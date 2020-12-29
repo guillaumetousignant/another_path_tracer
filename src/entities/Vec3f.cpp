@@ -8,6 +8,8 @@ Vec3f::Vec3f() : v{0, 0, 0} {
 } 
 Vec3f::Vec3f(double x, double y, double z) : v{x, y, z} {
 } 
+Vec3f::Vec3f(std::array<double, 3> values) : v{values} {
+} 
 Vec3f::Vec3f(double x) : v{x, x, x} {
 } 
 auto Vec3f::operator[](int index) -> double& {

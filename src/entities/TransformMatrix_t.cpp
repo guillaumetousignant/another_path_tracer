@@ -9,6 +9,8 @@ TransformMatrix_t::TransformMatrix_t() : matrix_{1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1
 TransformMatrix_t::TransformMatrix_t(double i0, double i1, double i2, double i3, double i4, double i5, double i6, double i7, double i8, double i9, double i10, double i11, double i12, double i13, double i14, double i15) 
     : matrix_{i0, i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14, i15} {}
 
+TransformMatrix_t::TransformMatrix_t(std::array<double, 16> values) : matrix_{values} {}
+
 auto TransformMatrix_t::rotateXAxis(double angle) -> TransformMatrix_t& {
     const std::array<double, 16> other{1, 0, 0, 0,
                                        0, cos(angle), sin(angle), 0,

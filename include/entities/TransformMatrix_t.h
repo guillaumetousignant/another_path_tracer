@@ -46,6 +46,13 @@ namespace APTracer { namespace Entities {
             TransformMatrix_t(double i0, double i1, double i2, double i3, double i4, double i5, double i6, double i7, double i8, double i9, double i10, double i11, double i12, double i13, double i14, double i15);
 
             /**
+             * @brief Construct a new TransformMatrix_t object from an array of the 16 values of its 4x4 matrix.
+             * 
+             * @param values Array containing the elements of the matrix, ordered by rows.
+             */
+            TransformMatrix_t(std::array<double, 16> values);
+
+            /**
              * @brief Construct a new TransformMatrix_t object from another transformation matrix, copying it.
              * 
              * @param other Transformation matrix to be copied into the new transformation matrix.

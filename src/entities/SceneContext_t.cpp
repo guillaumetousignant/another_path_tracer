@@ -367,7 +367,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
     // Material mixes fix
     for (size_t i = 0; i < materials_.size(); i++) {
         if (!materials_mix_list[i].empty()) {
-            auto material_mix = dynamic_cast<MaterialMix_t*>(materials_[i].get()); // dynamic caaaast :(
+            auto* material_mix = dynamic_cast<MaterialMix_t*>(materials_[i].get()); // dynamic caaaast :(
             if (material_mix == nullptr) {
                 std::cerr << "Error: material #" << i << " was marked as a material mix but is not convertible to one. Exiting." << std::endl;
                 exit(491);
@@ -380,7 +380,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
     // Materials medium list fix
     for (size_t i = 0; i < materials_.size(); i++) {
         if (materials_medium_list[i]) {
-            auto portal = dynamic_cast<APTracer::Materials::PortalTop_t*>(materials_[i].get());
+            auto* portal = dynamic_cast<APTracer::Materials::PortalTop_t*>(materials_[i].get());
             if (portal == nullptr) {
                 std::cerr << "Error: material #" << i << " was marked as a portal but is not convertible to one. Exiting." << std::endl;
                 exit(492);
@@ -394,7 +394,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
     // Mediums medium list fix
     for (size_t i = 0; i < mediums_.size(); i++) {
         if (mediums_medium_list[i]) {
-            auto portal_scatterer = dynamic_cast<APTracer::Materials::PortalScattererTop_t*>(mediums_[i].get());
+            auto* portal_scatterer = dynamic_cast<APTracer::Materials::PortalScattererTop_t*>(mediums_[i].get());
             if (portal_scatterer == nullptr) {
                 std::cerr << "Error: medium #" << i << " was marked as a portal but is not convertible to one. Exiting." << std::endl;
                 exit(392);
@@ -419,7 +419,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
             }
 
             index = 0;
-            for (auto material_name : *std::get<1>(*materials_aggregate_list[i])) {
+            for (const auto &material_name : *std::get<1>(*materials_aggregate_list[i])) {
                 names[index] = material_name;
                 ++index;
             }
@@ -510,7 +510,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
         for (tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")) {
             tinyxml2::XMLElement* transformations_pre = xml_material->FirstChildElement("transformations_pre");
             if (transformations_pre != nullptr) {
-                auto portal = dynamic_cast<APTracer::Materials::PortalTop_t*>(materials_[index].get());
+                auto* portal = dynamic_cast<APTracer::Materials::PortalTop_t*>(materials_[index].get());
                 if (portal == nullptr) {
                     std::cerr << "Error, material #" << index << " has transformations, but it is not convertible to a portal. Ignoring." << std::endl;
                 }
@@ -628,7 +628,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
         for (tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")) {
             tinyxml2::XMLElement* transformations_post = xml_material->FirstChildElement("transformations_post");
             if (transformations_post != nullptr) {
-                auto portal = dynamic_cast<APTracer::Materials::PortalTop_t*>(materials_[index].get());
+                auto* portal = dynamic_cast<APTracer::Materials::PortalTop_t*>(materials_[index].get());
                 if (portal == nullptr) {
                     std::cerr << "Error, material #" << index << " has transformations, but it is not convertible to a portal. Ignoring." << std::endl;
                 }
@@ -942,28 +942,24 @@ auto APTracer::Entities::SceneContext_t::create_transform_matrix(const tinyxml2:
     if (string_transform_matrix == "nan") {
         return std::unique_ptr<TransformMatrix_t>(new TransformMatrix_t());
     }
+
+    std::array<double, 16> values;
+    unsigned int count = 0;
+    std::stringstream ss(string_transform_matrix);
+    
+    for(std::string s; ss >> s; ) {
+        if (count < 16) {
+            values[count] = std::stod(s);
+        }
+        ++count;
+    }
+    if (count != 16) {
+        std::cerr << "Error, transform matrix value should be 16 values seperated by spaces, or nan. Current number of values is " << count << ". Ignoring." << std::endl;
+        return std::unique_ptr<TransformMatrix_t>(new TransformMatrix_t());
+    }
     else {
-        double values[16];
-        unsigned int count = 0;
-        std::stringstream ss(string_transform_matrix);
-        
-        for(std::string s; ss >> s; ) {
-            if (count < 16) {
-                values[count] = std::stod(s);
-            }
-            ++count;
-        }
-        if (count != 16) {
-            std::cerr << "Error, transform matrix value should be 16 values seperated by spaces, or nan. Current number of values is " << count << ". Ignoring." << std::endl;
-            return std::unique_ptr<TransformMatrix_t>(new TransformMatrix_t());
-        }
-        else {
-            return std::unique_ptr<TransformMatrix_t>(
-                  new TransformMatrix_t(values[0], values[1], values[2], values[3],
-                                        values[4], values[5], values[6], values[7],
-                                        values[8], values[9], values[10], values[11],
-                                        values[12], values[13], values[14], values[15]));
-        }
+        return std::unique_ptr<TransformMatrix_t>(
+                new TransformMatrix_t(values));
     }
 }
 

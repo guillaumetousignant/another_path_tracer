@@ -31,6 +31,13 @@ namespace APTracer { namespace Entities {
             Vec3f(double x, double y, double z); 
 
             /**
+             * @brief Construct a new Vec3f object from an array of values.
+             * 
+             * @param values Array containing the three values of the vector.
+             */
+            Vec3f(std::array<double, 3> values);
+
+            /**
              * @brief Construct a new Vec3f object from one value.
              * 
              * @param x Value given to the three components of the vector.
