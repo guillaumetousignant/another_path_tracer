@@ -447,10 +447,9 @@ namespace APTracer {
      * @brief This function defines the parameters that have to be present in an XML element and throws an error if a parameter is missing.
      * 
      * @param element XML element to probe for parameters.
-     * @param attributes Array of chars representing parameter names.
-     * @param n Number of parameters to test.
+     * @param attributes Array of char pointers representing parameter names.
      */
-    auto require_attributes(const tinyxml2::XMLElement* element, const char** attributes, unsigned int n) -> void;
+    auto require_attributes(const tinyxml2::XMLElement* element, const std::vector<char*>& attributes) -> void;
 }
 
 #endif
