@@ -102,7 +102,7 @@
 #include "acceleration/AccelerationMultiGridVector_t.h"
 
 APTracer::Entities::SceneContext_t::SceneContext_t() :
-    use_gl_(false), scene_name_(), opengl_renderer_(), opengl_imgbuffer_(nullptr), 
+    use_gl_(false), opengl_renderer_(), opengl_imgbuffer_(nullptr), 
     opengl_camera_(nullptr), scene_(), index_transform_matrices_(0), index_textures_(0), 
     index_mediums_(0), index_materials_(0), index_mesh_geometries_(0), index_objects_(0), 
     index_directional_lights_(0), index_skyboxes_(0), index_imgbuffers_(0), index_cameras_(0)
@@ -115,7 +115,8 @@ APTracer::Entities::SceneContext_t::~SceneContext_t() {
 auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) -> void {
     reset();
 
-    std::string new_filename, folder;
+    std::string new_filename;
+    std::string folder;
 
     #ifdef _WIN32
         folder = "images\\";
@@ -366,7 +367,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
     // Material mixes fix
     for (size_t i = 0; i < materials_.size(); i++) {
         if (!materials_mix_list[i].empty()) {
-            MaterialMix_t* material_mix = dynamic_cast<MaterialMix_t*>(materials_[i].get()); // dynamic caaaast :(
+            auto material_mix = dynamic_cast<MaterialMix_t*>(materials_[i].get()); // dynamic caaaast :(
             if (material_mix == nullptr) {
                 std::cerr << "Error: material #" << i << " was marked as a material mix but is not convertible to one. Exiting." << std::endl;
                 exit(491);
@@ -379,13 +380,13 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
     // Materials medium list fix
     for (size_t i = 0; i < materials_.size(); i++) {
         if (materials_medium_list[i]) {
-            APTracer::Materials::PortalTop_t* portal = dynamic_cast<APTracer::Materials::PortalTop_t*>(materials_[i].get());
+            auto portal = dynamic_cast<APTracer::Materials::PortalTop_t*>(materials_[i].get());
             if (portal == nullptr) {
                 std::cerr << "Error: material #" << i << " was marked as a portal but is not convertible to one. Exiting." << std::endl;
                 exit(492);
             }
-            for (auto it = materials_medium_list[i]->begin(); it != materials_medium_list[i]->end(); ++it) {
-                portal->medium_list_.push_back(mediums_[*it].get());
+            for (auto medium_index: *materials_medium_list[i]) {
+                portal->medium_list_.push_back(mediums_[medium_index].get());
             }
         }
     }
@@ -393,13 +394,13 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
     // Mediums medium list fix
     for (size_t i = 0; i < mediums_.size(); i++) {
         if (mediums_medium_list[i]) {
-            APTracer::Materials::PortalScattererTop_t* portal_scatterer = dynamic_cast<APTracer::Materials::PortalScattererTop_t*>(mediums_[i].get());
+            auto portal_scatterer = dynamic_cast<APTracer::Materials::PortalScattererTop_t*>(mediums_[i].get());
             if (portal_scatterer == nullptr) {
                 std::cerr << "Error: medium #" << i << " was marked as a portal but is not convertible to one. Exiting." << std::endl;
                 exit(392);
             }
-            for (auto it = mediums_medium_list[i]->begin(); it != mediums_medium_list[i]->end(); ++it) {
-                portal_scatterer->medium_list_.push_back(mediums_[*it].get());
+            for (auto medium_index: *mediums_medium_list[i]) {
+                portal_scatterer->medium_list_.push_back(mediums_[medium_index].get());
             }
         }
     }
@@ -412,13 +413,14 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
             std::vector<Material_t*> materials(n);
 
             size_t index = 0;
-            for (auto it = std::get<0>(*materials_aggregate_list[i])->begin(); it != std::get<0>(*materials_aggregate_list[i])->end(); ++it) {
-                materials[index] = materials_[*it].get();
+            for  (auto material_index: *std::get<0>(*materials_aggregate_list[i])) {
+                materials[index] = materials_[material_index].get();
                 ++index;
             }
+
             index = 0;
-            for (auto it = std::get<1>(*materials_aggregate_list[i])->begin(); it != std::get<1>(*materials_aggregate_list[i])->end(); ++it) {
-                names[index] = *it;
+            for (auto material_name : *std::get<1>(*materials_aggregate_list[i])) {
+                names[index] = material_name;
                 ++index;
             }
             
@@ -508,7 +510,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
         for (tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")) {
             tinyxml2::XMLElement* transformations_pre = xml_material->FirstChildElement("transformations_pre");
             if (transformations_pre != nullptr) {
-                APTracer::Materials::PortalTop_t* portal = dynamic_cast<APTracer::Materials::PortalTop_t*>(materials_[index].get());
+                auto portal = dynamic_cast<APTracer::Materials::PortalTop_t*>(materials_[index].get());
                 if (portal == nullptr) {
                     std::cerr << "Error, material #" << index << " has transformations, but it is not convertible to a portal. Ignoring." << std::endl;
                 }
@@ -575,7 +577,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
     const char* object_list = xml_top->Attribute("object_list");
     std::cout << "Scene created." << std::endl;
     
-    if (objects_.size() > 0) {
+    if (!objects_.empty()) {
         std::vector<Shape_t*> shapes;
         std::vector<MeshTop_t*> meshes;
 
@@ -626,7 +628,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
         for (tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")) {
             tinyxml2::XMLElement* transformations_post = xml_material->FirstChildElement("transformations_post");
             if (transformations_post != nullptr) {
-                APTracer::Materials::PortalTop_t* portal = dynamic_cast<APTracer::Materials::PortalTop_t*>(materials_[index].get());
+                auto portal = dynamic_cast<APTracer::Materials::PortalTop_t*>(materials_[index].get());
                 if (portal == nullptr) {
                     std::cerr << "Error, material #" << index << " has transformations, but it is not convertible to a portal. Ignoring." << std::endl;
                 }
@@ -699,14 +701,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
 
     // Acceleration structure build
     std::cout << "Building acceleration structure..." << std::endl;
-    tinyxml2::XMLElement* xml_acceleration_structure;
-    if (xml_acceleration_structures != nullptr) {
-        xml_acceleration_structure = xml_acceleration_structures->FirstChildElement("acceleration_structure");
-              
-    }
-    else {
-        xml_acceleration_structure = nullptr;
-    }
+    const tinyxml2::XMLElement* xml_acceleration_structure = (xml_acceleration_structures != nullptr) ? xml_acceleration_structures->FirstChildElement("acceleration_structure") : nullptr;
 
     t_start = std::chrono::high_resolution_clock::now();
     create_acceleration_structure(xml_acceleration_structure);
@@ -793,7 +788,8 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
                 }              
             }
             else if (render_mode == "accumulation_write") {
-                std::string n_iter, write_interval;
+                std::string n_iter;
+                std::string write_interval;
                 const char* n_iter_char = xml_camera->Attribute("n_iter");
                 const char* write_interval_char = xml_camera->Attribute("write_interval");
                 if (n_iter_char == nullptr) {
@@ -871,7 +867,7 @@ auto APTracer::Entities::SceneContext_t::render() -> void {
             std::cerr << "Error, motion render mode not implemented yet. Accumulation render fallback." << std::endl;
             opengl_renderer_->render();
         }
-        else if (render_mode == "") {
+        else if (render_mode.empty()) {
 
         }
         else {
@@ -902,7 +898,7 @@ auto APTracer::Entities::SceneContext_t::render() -> void {
                 cameras_[i]->raytrace(scene_.get());
                 cameras_[i]->write();
             }
-            else if (render_mode == "") {
+            else if (render_mode.empty()) {
 
             }
             else {
