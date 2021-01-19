@@ -38,6 +38,11 @@ make unit_tests
 ctest
 ```
 
+To build tests, add `-DBUILD_DOC=ON` to cmake call. Additional dependencies:
+
+- doxygen
+- dot (graphviz)
+
 To include in a CMake project:
 
 ```bash
