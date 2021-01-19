@@ -43,5 +43,5 @@
 *.tmp
 /html/*
 /latex/*
-/docs/*
+/docs/html/*
 /build/*

@@ -9,6 +9,11 @@ project(another_path_tracer VERSION 1.1.0 LANGUAGES C CXX)
 
 add_subdirectory(src)
 
+option(BUILD_DOC "Build documentation." OFF)
+if (BUILD_DOC)
+    add_subdirectory(docs)
+endif()
+
 option(BUILD_TESTING "Build all tests." OFF)
 if (BUILD_TESTING)
     enable_testing()
