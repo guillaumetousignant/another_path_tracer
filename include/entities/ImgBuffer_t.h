@@ -19,15 +19,15 @@ namespace APTracer { namespace Entities {
              * @param size_x Horizontal number of pixels in the image.
              * @param size_y Vertical number of pixels in the image.
              */
-            ImgBuffer_t(unsigned int size_x, unsigned int size_y);
+            ImgBuffer_t(size_t size_x, size_t size_y);
 
             /**
              * @brief Destroy the ImgBuffer_t object, freeing the memory taken up by the image.
              */
             virtual ~ImgBuffer_t();
 
-            unsigned int size_x_; /**< @brief Horizontal number of pixels in the image. Main axis of the layout.*/
-            unsigned int size_y_; /**< @brief Vertical number of pixels in the image. Secondary axis of the layout.*/
+            size_t size_x_; /**< @brief Horizontal number of pixels in the image. Main axis of the layout.*/
+            size_t size_y_; /**< @brief Vertical number of pixels in the image. Secondary axis of the layout.*/
             unsigned int updates_; /**< @brief Number of times the whole image was updated. Number of samples that each pixel holds.*/
             Vec3f* img_; /**< @brief Array of colour pixels representing the image, of length size_x_*size_y_. Stored in a x-major fashion, accessed with: pos_y*size_x_ + pos_x.*/
 
@@ -47,7 +47,7 @@ namespace APTracer { namespace Entities {
              * @param size_x Horizontal size of the image to be added.
              * @param size_y Vertical size of the image to be added.
              */
-            virtual void update(const Vec3f* img, unsigned int size_x, unsigned int size_y);
+            virtual void update(const Vec3f* img, size_t size_x, size_t size_y);
 
             /**
              * @brief Increments the number of updates of the image by 1.
@@ -66,7 +66,7 @@ namespace APTracer { namespace Entities {
              * @param pos_x Horizontal coordinate of the pixel to be updated.
              * @param pos_y Vertical coordinate of the pixel to be updated.
              */
-            virtual void update(const Vec3f &colour, unsigned int pos_x, unsigned int pos_y);
+            virtual void update(const Vec3f &colour, size_t pos_x, size_t pos_y);
 
             /**
              * @brief Sets the value of the whole image to the value of all pixels in the input.
@@ -77,7 +77,7 @@ namespace APTracer { namespace Entities {
              * @param size_x Horizontal size of the image to be set.
              * @param size_y Vertical size of the image to be set.
              */
-            virtual void set(const Vec3f* img, unsigned int size_x, unsigned int size_y);
+            virtual void set(const Vec3f* img, size_t size_x, size_t size_y);
 
             /**
              * @brief Sets the value of a single pixel of the image to the value of the input.
@@ -88,7 +88,7 @@ namespace APTracer { namespace Entities {
              * @param pos_x Horizontal coordinate of the pixel to be set.
              * @param pos_y Vertical coordinate of the pixel to be set.
              */
-            virtual void set(const Vec3f &colour, unsigned int pos_x, unsigned int pos_y);
+            virtual void set(const Vec3f &colour, size_t pos_x, size_t pos_y);
 
             /**
              * @brief Writes the image to disk using the provided filename.

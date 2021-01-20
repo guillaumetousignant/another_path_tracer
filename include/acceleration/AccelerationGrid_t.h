@@ -37,7 +37,7 @@ namespace APTracer { namespace Acceleration {
              * @param min_res Minimum number of cells for all directions.
              * @param max_res Maximum number of cells for all directions.
              */
-            AccelerationGrid_t(Shape_t** items, size_t n_items, unsigned int min_res, unsigned int max_res);
+            AccelerationGrid_t(Shape_t** items, size_t n_items, size_t min_res, size_t max_res);
 
             /**
              * @brief Construct a new AccelerationGrid_t object from an array of shapes.
@@ -49,7 +49,7 @@ namespace APTracer { namespace Acceleration {
              * @param min_res Minimum number of cells for all directions.
              * @param max_res Maximum number of cells for all directions.
              */
-            AccelerationGrid_t(Shape_t** items, size_t n_items, std::array<Vec3f, 2> coordinates, unsigned int level, unsigned int min_res, unsigned int max_res);
+            AccelerationGrid_t(Shape_t** items, size_t n_items, std::array<Vec3f, 2> coordinates, unsigned int level, size_t min_res, size_t max_res);
 
             /**
              * @brief Destroy the AccelerationGrid_t object, destroying the cells it owns.
@@ -57,12 +57,12 @@ namespace APTracer { namespace Acceleration {
             virtual ~AccelerationGrid_t() final;
 
             GridCell_t** cells_; /**< @brief Array of all the cells contained in the acceleration structure. Cells use lists of shapes, for constant time adding and removal of shapes.*/ 
-            unsigned int cell_res_[3]; /**< @brief Number of cells in the x, y, and z direction.*/ 
+            std::array<size_t, 3> cell_res_; /**< @brief Number of cells in the x, y, and z direction.*/ 
             Vec3f cell_size_; /**< @brief Span of the cells in the x, y, and z direction.*/ 
             Box_t bounding_box_; /**< @brief Box representing the space encompassed by the grid.*/ 
             unsigned int level_; /**< @brief Recursion level of the grid. 0 is a top-level grid, 1 is a grid which is a cell of a grid, 2 is a grid within a grid within a grid, etc.*/
-            unsigned int min_res_; /**< @brief Minimum number of cells for all directions.*/
-            unsigned int max_res_; /**< @brief Maximum number of cells for all directions.*/
+            size_t min_res_; /**< @brief Minimum number of cells for all directions.*/
+            size_t max_res_; /**< @brief Maximum number of cells for all directions.*/
 
             virtual Shape_t* intersect(const Ray_t &ray, double &t, std::array<double, 2> &uv) const final;
             virtual void add(Shape_t* item) final;

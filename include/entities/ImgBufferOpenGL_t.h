@@ -33,7 +33,7 @@ namespace APTracer { namespace Entities {
              * @param size_x Horizontal number of pixels in the image.
              * @param size_y Vertical number of pixels in the image.
              */
-            ImgBufferOpenGL_t(unsigned int size_x, unsigned int size_y);
+            ImgBufferOpenGL_t(size_t size_x, size_t size_y);
 
             /**
              * @brief Destroy the ImgBufferOpenGL_t object, freeing the memory taken up by the image.
@@ -59,7 +59,7 @@ namespace APTracer { namespace Entities {
              * @param size_x Horizontal size of the image to be added.
              * @param size_y Vertical size of the image to be added.
              */
-            virtual void update(const Vec3f* img, unsigned int size_x, unsigned int size_y) final;
+            virtual void update(const Vec3f* img, size_t size_x, size_t size_y) final;
 
             /**
              * @brief Increments the number of updates of the image by 1.
@@ -79,7 +79,7 @@ namespace APTracer { namespace Entities {
              * @param pos_x Horizontal coordinate of the pixel to be updated.
              * @param pos_y Vertical coordinate of the pixel to be updated.
              */
-            virtual void update(const Vec3f &colour, unsigned int pos_x, unsigned int pos_y) final;
+            virtual void update(const Vec3f &colour, size_t pos_x, size_t pos_y) final;
 
             /**
              * @brief Sets the value of the whole image to the value of all pixels in the input.
@@ -90,7 +90,7 @@ namespace APTracer { namespace Entities {
              * @param size_x Horizontal size of the image to be set.
              * @param size_y Vertical size of the image to be set.
              */
-            virtual void set(const Vec3f* img, unsigned int size_x, unsigned int size_y) final;
+            virtual void set(const Vec3f* img, size_t size_x, size_t size_y) final;
 
             /**
              * @brief Sets the value of a single pixel of the image to the input value.
@@ -101,7 +101,7 @@ namespace APTracer { namespace Entities {
              * @param pos_x Horizontal coordinate of the pixel to be set.
              * @param pos_y Vertical coordinate of the pixel to be set.
              */
-            virtual void set(const Vec3f &colour, unsigned int pos_x, unsigned int pos_y) final;
+            virtual void set(const Vec3f &colour, size_t pos_x, size_t pos_y) final;
     };
 }}
 #endif

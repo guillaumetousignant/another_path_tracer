@@ -27,8 +27,8 @@ namespace APTracer { namespace Entities {
              */
             ~Texture_t();
 
-            unsigned int size_x_; /**< @brief Horizontal number of pixels in the texture*/
-            unsigned int size_y_; /**< @brief Vertical number of pixels in the texture*/
+            size_t size_x_; /**< @brief Horizontal number of pixels in the texture*/
+            size_t size_y_; /**< @brief Vertical number of pixels in the texture*/
             Vec3f* img_; /**< @brief Array of 3-element pixels representing the values of all pixels of the texture.*/
 
             /**

@@ -40,7 +40,7 @@ namespace APTracer { namespace Acceleration {
              * @param max_cell_content Maximum number of shapes in a cell before it is changed to a subgrid.
              * @param max_grid_level Maximum recursion level of the grid. 0 is no subgrids, 1 means cells from the top-level grid can be single level grids, etc.
              */
-            AccelerationMultiGridArray_t(Shape_t** items, size_t n_items, unsigned int min_res, unsigned int max_res, unsigned int max_cell_content, unsigned int max_grid_level);
+            AccelerationMultiGridArray_t(Shape_t** items, size_t n_items, size_t min_res, size_t max_res, size_t max_cell_content, unsigned int max_grid_level);
             
             /**
              * @brief Construct a new AccelerationMultiGridArray_t object from an array of shapes.
@@ -54,7 +54,7 @@ namespace APTracer { namespace Acceleration {
              * @param max_cell_content Maximum number of shapes in a cell before it is changed to a subgrid.
              * @param max_grid_level Maximum recursion level of the grid. 0 is no subgrids, 1 means cells from the top-level grid can be single level grids, etc.
              */
-            AccelerationMultiGridArray_t(Shape_t** items, size_t n_items, std::array<Vec3f, 2> coordinates, unsigned int level, unsigned int min_res, unsigned int max_res, unsigned int max_cell_content, unsigned int max_grid_level);
+            AccelerationMultiGridArray_t(Shape_t** items, size_t n_items, std::array<Vec3f, 2> coordinates, unsigned int level, size_t min_res, size_t max_res, size_t max_cell_content, unsigned int max_grid_level);
             
             /**
              * @brief Destroy the AccelerationMultiGridArray_t object, destroying the cells and grids it owns.
@@ -63,13 +63,13 @@ namespace APTracer { namespace Acceleration {
             virtual ~AccelerationMultiGridArray_t() final;
 
             AccelerationStructure_t** cells_; /**< @brief Array of all the cells and grids contained in the acceleration structure. Cells use arrays of shapes, for fast iteraring and lowest memory use.*/
-            unsigned int cell_res_[3]; /**< @brief Number of cells in the x, y, and z direction.*/ 
+            std::array<size_t, 3> cell_res_; /**< @brief Number of cells in the x, y, and z direction.*/ 
             Vec3f cell_size_; /**< @brief Span of the cells in the x, y, and z direction.*/ 
             Box_t bounding_box_; /**< @brief Box representing the space encompassed by the grid.*/ 
             unsigned int level_; /**< @brief Recursion level of the grid. 0 is a top-level grid, 1 is a grid which is a cell of a grid, 2 is a grid within a grid within a grid, etc.*/
-            unsigned int min_res_; /**< @brief Minimum number of cells for all directions.*/
-            unsigned int max_res_; /**< @brief Maximum number of cells for all directions.*/
-            unsigned int max_cell_content_; /**< @brief Maximum number of shapes in a cell before it is changed to a subgrid.*/
+            size_t min_res_; /**< @brief Minimum number of cells for all directions.*/
+            size_t max_res_; /**< @brief Maximum number of cells for all directions.*/
+            size_t max_cell_content_; /**< @brief Maximum number of shapes in a cell before it is changed to a subgrid.*/
             unsigned int max_grid_level_; /**< @brief Maximum recursion level of the grid. 0 is no subgrids, 1 means cells from the top-level grid can be single level grids, etc.*/
 
             virtual Shape_t* intersect(const Ray_t &ray, double &t, std::array<double, 2> &uv) const final;
