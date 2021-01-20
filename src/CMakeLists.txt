@@ -18,7 +18,6 @@ target_include_directories(APTracer PUBLIC
     $<INSTALL_INTERFACE:include/another_path_tracer/>    
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/>)
 
-find_package(OpenMP)
 find_package(OpenGL REQUIRED COMPONENTS OpenGL) # CHECK make optional
 add_dependencies(APTracer OpenGL::GL) # Should use OpenGL::OpenGL on newer linux hosts, but doesn't work on windows and android
 
@@ -29,8 +28,11 @@ target_link_libraries(APTracer PUBLIC
     OpenGL::GL
     GLUT::GLUT) # Should use OpenGL::OpenGL on newer linux hosts, but doesn't work on windows and android
 
-if(OpenMP_CXX_FOUND)
-    target_link_libraries(APTracer PUBLIC optimized OpenMP::OpenMP_CXX)
+option(USE_OPENMP "Parallelise using OpenMP." ON)
+if (USE_OPENMP)
+    find_package(OpenMP REQUIRED)
+    target_link_libraries(APTracer PUBLIC OpenMP::OpenMP_CXX)
+    target_compile_definitions(APTracer PUBLIC APTRACER_USE_OPENMP)
 endif()
 
 if(NOT WIN32)
