@@ -44,6 +44,7 @@ To generate documentation, add `-DBUILD_DOC=ON` to cmake call. Additional depend
 - dot (graphviz)
 - Sphinx
 - Breathe
+- Read the Docs Sphinx Theme
 
 To include in a CMake project:
 
