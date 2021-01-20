@@ -295,7 +295,7 @@ void OpenGLRenderer_t::render() {
 }
 
 void OpenGLRenderer_t::render_write() {
-    write_interval_ = 1.0;
+    write_interval_ = 1;
     render_function_ = openGL_accumulate_write;
     glutDisplayFunc(render_function_);
     glutMainLoop();
