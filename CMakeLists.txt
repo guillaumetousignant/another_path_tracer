@@ -5,9 +5,7 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
     message(FATAL_ERROR "Do not build in-source. Please remove CMakeCache.txt and the CMakeFiles/ directory. Then build out-of-source.")
 endif()
 
-project(another_path_tracer VERSION 1.2.0 LANGUAGES C CXX)
-
-set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
+project(another_path_tracer VERSION 1.1.0 LANGUAGES C CXX)
 
 add_subdirectory(src)
 
