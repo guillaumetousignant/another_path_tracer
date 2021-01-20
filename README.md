@@ -43,8 +43,8 @@ To generate documentation, add `-DBUILD_DOC=ON` to cmake call. Additional depend
 - Doxygen
 - dot (graphviz)
 - Sphinx
-- Breathe
-- Read the Docs Sphinx Theme
+- Breathe (pip: breathe)
+- Read the Docs Sphinx Theme (pip: sphinx_rtd_theme)
 
 To include in a CMake project:
 
