@@ -50,10 +50,10 @@ void RecCamAperture_t::raytrace(const Scene_t* scene) {
     #ifdef _WIN32
     for (int index = 0; index < static_cast<int>(image_->size_y_ * image_->size_x_); ++index) { // Openmp on windows can't use unsigned index.
     #else
-    for (unsigned int index = 0; index < image_->size_y_ * image_->size_x_; ++index) {
+    for (size_t index = 0; index < image_->size_y_ * image_->size_x_; ++index) {
     #endif
-        const unsigned int i = index%image_->size_x_;
-        const unsigned int j = index/image_->size_x_;
+        const size_t i = index%image_->size_x_;
+        const size_t j = index/image_->size_x_;
         Vec3f col = Vec3f(); // Or declare above?
         const Vec3f pix_vec = focus_point - pixel_span_y * (static_cast<double>(j) - static_cast<double>(image_->size_y_)/2.0 + 0.5) + pixel_span_x * (static_cast<double>(i) - static_cast<double>(image_->size_x_)/2.0 + 0.5);
         

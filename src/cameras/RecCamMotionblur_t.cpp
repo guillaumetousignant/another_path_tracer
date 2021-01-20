@@ -53,10 +53,10 @@ void RecCamMotionblur_t::raytrace(const Scene_t* scene) {
     #ifdef _WIN32
     for (int index = 0; index < static_cast<int>(image_->size_y_ * image_->size_x_); ++index) { // Openmp on windows can't use unsigned index.
     #else
-    for (unsigned int index = 0; index < image_->size_y_ * image_->size_x_; ++index) {
+    for (size_t index = 0; index < image_->size_y_ * image_->size_x_; ++index) {
     #endif
-        const unsigned int i = index%image_->size_x_;
-        const unsigned int j = index/image_->size_x_;
+        const size_t i = index%image_->size_x_;
+        const size_t j = index/image_->size_x_;
         Vec3f col = Vec3f(); // Or declare above?//std::cout << "noot " << i << " " << j << std::endl; // REMOVE
         
         for (unsigned int subindex = 0; subindex < subpix_[0] * subpix_[1]; ++subindex) {

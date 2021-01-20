@@ -80,8 +80,8 @@ void Cam3DAperture_t::raytrace(const Scene_t* scene) {
     camera_R_->raytrace(scene);
 
     image_->update();
-    for (unsigned int j = 0; j < image_->size_y_; j++) {
-        for (unsigned int i = 0; i < image_->size_x_; i++) {
+    for (size_t j = 0; j < image_->size_y_; j++) {
+        for (size_t i = 0; i < image_->size_x_; i++) {
             image_->set(Vec3f(camera_L_->image_->img_[j*camera_L_->image_->size_x_ + i][0], camera_R_->image_->img_[j*camera_L_->image_->size_x_ + i][1], camera_R_->image_->img_[j*camera_L_->image_->size_x_ + i][2]), i, j);
         }
     }

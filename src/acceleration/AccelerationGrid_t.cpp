@@ -126,9 +126,9 @@ AccelerationGrid_t::~AccelerationGrid_t() {
 
 Shape_t* AccelerationGrid_t::intersect(const Ray_t &ray, double &t, std::array<double, 2> &uv) const {
     double tbbox;
-    int cellexit[3] = {0, 0, 0};
-    int cellstep[3] = {0, 0, 0};
-    const unsigned int map[8] = {2, 1, 2, 1, 2, 2, 0, 0};
+    std::array<int, 3> cellexit {0, 0, 0};
+    std::array<int, 3> cellstep {0, 0, 0};
+    const std::array<unsigned int, 8> map {2, 1, 2, 1, 2, 2, 0, 0};
 
     t = std::numeric_limits<double>::infinity();
     const Vec3f invdir = Vec3f(1.0)/ray.direction_;
@@ -161,7 +161,7 @@ Shape_t* AccelerationGrid_t::intersect(const Ray_t &ray, double &t, std::array<d
         }
     }
 
-    int cellcoordint[3] = {static_cast<int>(cellcoord[0]), static_cast<int>(cellcoord[1]), static_cast<int>(cellcoord[2])};
+    std::array<int, 3> cellcoordint {static_cast<int>(cellcoord[0]), static_cast<int>(cellcoord[1]), static_cast<int>(cellcoord[2])};
     Shape_t* hit_obj = nullptr;
     while (true) {
         if (cells_[cellcoordint[0] + cellcoordint[1]*cell_res_[0] + cellcoordint[2]*cell_res_[0]*cell_res_[1]] != nullptr) {
