@@ -35,6 +35,9 @@ You can add `$ANOTHER_PATH_TRACER_DIR/bin` to your path.
 
 To build without OpenMP, add `-DUSE_OPENMP=OFF` to cmake call.  
 To build without OpenGL, add `-DUSE_OPENGL=OFF` to cmake call.  
+To build without PNG, add `-DUSE_PNG=OFF` to cmake call.  
+To build without JPEG, add `-DUSE_JPEG=OFF` to cmake call.  
+To build without TIFF, add `-DUSE_TIFF=OFF` to cmake call.  
 
 To build tests, add `-DBUILD_TESTING=ON` to cmake call. Then:
 

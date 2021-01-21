@@ -1,11 +1,19 @@
 #include "entities/Texture_t.h"
 #include <string>
-#define cimg_use_jpeg
-#define cimg_use_png
-#define cimg_use_tiff
+#ifdef APTRACER_USE_JPEG
+    #define cimg_use_jpeg
+#endif
+#ifdef APTRACER_USE_PNG
+    #define cimg_use_png
+#endif
+#ifdef APTRACER_USE_TIFF
+    #define cimg_use_tiff
+#endif
 #define cimg_use_tinyexr
-#define TINYEXR_USE_OPENMP (1)
-#define cimg_use_openmp 1
+#ifdef APTRACER_USE_OPENMP
+    #define TINYEXR_USE_OPENMP (1)
+    #define cimg_use_openmp 1
+#endif
 #define cimg_use_cpp11 1
 #define cimg_display 0
 #include "functions/CImg.h"

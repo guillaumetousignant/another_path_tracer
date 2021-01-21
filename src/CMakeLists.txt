@@ -7,19 +7,34 @@ add_subdirectory(materials)
 add_subdirectory(shapes)
 add_subdirectory(skyboxes)
 
-find_package(ZLIB REQUIRED)
-find_package(PNG REQUIRED) # CHECK make image libraries optional
-find_package(JPEG REQUIRED)
-find_package(TIFF REQUIRED)
-
 target_include_directories(APTracer PUBLIC 
     $<INSTALL_INTERFACE:include/another_path_tracer/>    
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/>)
 
-target_link_libraries(APTracer PUBLIC 
-    PNG::PNG
-    JPEG::JPEG
-    TIFF::TIFF)
+option(USE_PNG "Use the PNG library to be able to read/write PNG images." ON)
+if (USE_PNG)
+    find_package(ZLIB REQUIRED)
+    find_package(PNG REQUIRED)
+    target_link_libraries(APTracer PUBLIC 
+        PNG::PNG)
+    target_compile_definitions(APTracer PUBLIC APTRACER_USE_PNG)
+endif()
+
+option(USE_JPEG "Use the jpeg library to be able to read/write jpeg images." ON)
+if (USE_JPEG)
+    find_package(JPEG REQUIRED)
+    target_link_libraries(APTracer PUBLIC 
+        JPEG::JPEG)
+    target_compile_definitions(APTracer PUBLIC APTRACER_USE_JPEG)
+endif()
+
+option(USE_TIFF "Use the tiff library to be able to read/write tiff images." ON)
+if (USE_TIFF)
+    find_package(TIFF REQUIRED)
+    target_link_libraries(APTracer PUBLIC 
+        TIFF::TIFF)
+    target_compile_definitions(APTracer PUBLIC APTRACER_USE_TIFF)
+endif()
 
 option(USE_OPENGL "Use OpenGL to display images." ON)
 if (USE_OPENGL)
@@ -32,7 +47,7 @@ if (USE_OPENGL)
     target_link_libraries(APTracer PUBLIC 
         OpenGL::GL
         GLUT::GLUT) # Should use OpenGL::OpenGL on newer linux hosts, but doesn't work on windows and android
-        target_compile_definitions(APTracer PUBLIC APTRACER_USE_OPENGL)
+    target_compile_definitions(APTracer PUBLIC APTRACER_USE_OPENGL)
 endif()
 
 option(USE_OPENMP "Parallelise using OpenMP." ON)
