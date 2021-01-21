@@ -274,10 +274,12 @@ void OpenGLRenderer_t::keyboard(unsigned char key, int x, int y) {
         break;
 
     case 'f':
+        #ifdef APTRACER_USE_OPENGL
         camera_->autoFocus(scene_, {
             std::min(std::max(double(x)/double(glutGet(GLUT_WINDOW_WIDTH)), 0.0), 1.0),
             std::min(std::max(double(y)/double(glutGet(GLUT_WINDOW_HEIGHT)), 0.0), 1.0)
         });
+        #endif
         updated_ = true;
         break;
 
