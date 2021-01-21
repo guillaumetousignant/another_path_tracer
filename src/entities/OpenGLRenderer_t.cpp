@@ -137,6 +137,7 @@ void OpenGLRenderer_t::resetDisplay(void) {
 void OpenGLRenderer_t::mouseMovement(int x, int y) {
     //Vec3f newdir = camera_->direction_;
     if (middle_clicked_) {
+        #ifdef APTRACER_USE_OPENGL
         const double differential_x = double(x - middle_x_pos_)/double(glutGet(GLUT_WINDOW_WIDTH)); // maybe change those to glut width/height?
         const double differential_y = double(y - middle_y_pos_)/double(glutGet(GLUT_WINDOW_HEIGHT)); // maybe change those to glut width/height?
         middle_x_pos_ = x;
@@ -146,18 +147,22 @@ void OpenGLRenderer_t::mouseMovement(int x, int y) {
         const Vec3f vertical = horizontal.cross(camera_->direction_);
 
         focus_point_ += horizontal * -differential_x * camera_dist_ + vertical * differential_y * camera_dist_;
+        #endif
         updated_ = true;
     }
     if (left_clicked_) {
+        #ifdef APTRACER_USE_OPENGL
         //double differential_x = double(x - left_x_pos_)/double(glutGet(GLUT_WINDOW_WIDTH));
         const double differential_y = double(y - left_y_pos_)/double(glutGet(GLUT_WINDOW_HEIGHT)); // maybe change those to glut width/height?
         left_x_pos_ = x;
         left_y_pos_ = y;
 
         camera_dist_ *= std::pow(2.0, -differential_y);
+        #endif
         updated_ = true;
     }
     if (right_clicked_) {
+        #ifdef APTRACER_USE_OPENGL
         const double differential_x = double(x - right_x_pos_)/double(glutGet(GLUT_WINDOW_WIDTH)); // maybe change those to glut width/height?
         const double differential_y = double(y - right_y_pos_)/double(glutGet(GLUT_WINDOW_HEIGHT)); // maybe change those to glut width/height?
         right_x_pos_ = x;
@@ -168,6 +173,7 @@ void OpenGLRenderer_t::mouseMovement(int x, int y) {
 
         camera_->transformation_->rotate(horizontal, differential_y/camera_->fov_[0]);
         camera_->transformation_->rotate(vertical, differential_x/camera_->fov_[1]);
+        #endif
         updated_ = true;
 
         //newdir = camera_->transformation_->transformDir().multDir(Vec3f(0.0, 1.0, 0.0));
