@@ -301,7 +301,7 @@ void OpenGLRenderer_t::initialise() {
     gl_argv[0] = (char*)"another_path_tracer";
     glutInit(&gl_argc, gl_argv); // was &argc, argv
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-    glutInitWindowSize(imgbuffer_->size_x_, imgbuffer_->size_y_);
+    glutInitWindowSize(static_cast<int>(imgbuffer_->size_x_), static_cast<int>(imgbuffer_->size_y_));
     glutInitWindowPosition(10,10);
     glutCreateWindow(gl_argv[0]);
     glutDisplayFunc(render_function_);
@@ -316,7 +316,7 @@ void OpenGLRenderer_t::initialise() {
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
     glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
-    glTexImage2D( GL_TEXTURE_2D, 0, 3, imgbuffer_->size_x_, imgbuffer_->size_y_, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL );    
+    glTexImage2D( GL_TEXTURE_2D, 0, 3, static_cast<GLsizei>(imgbuffer_->size_x_), static_cast<GLsizei>(imgbuffer_->size_y_), 0, GL_RGB, GL_UNSIGNED_BYTE, NULL );    
     #endif
 }
 

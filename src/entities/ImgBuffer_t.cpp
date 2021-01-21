@@ -59,8 +59,8 @@ void ImgBuffer_t::set(const Vec3f &colour, size_t pos_x, size_t pos_y) {
 
 void ImgBuffer_t::write(std::string &filename) const {
     const double update_mult = 1.0/static_cast<double>(updates_);
-    cimg_library::CImg<unsigned short> image(size_x_, size_y_, 1, 3);
-    const unsigned int n = size_x_ * size_y_;
+    cimg_library::CImg<unsigned short> image(static_cast<unsigned int>(size_x_), static_cast<unsigned int>(size_y_), 1, 3);
+    const unsigned int n = static_cast<unsigned int>(size_x_ * size_y_);
 
     //constexpr unsigned int bit_depth = 16;
     //constexpr double bit_multiplier = std::pow(2.0, bit_depth) - 1.0;
@@ -71,9 +71,9 @@ void ImgBuffer_t::write(std::string &filename) const {
             Vec3f colour = img_[j*size_x_ + i]*update_mult;
             colour.clamp(0.0, 1.0);
             colour *= bit_multiplier;
-            image(i, j, 0, 0, n, n) = static_cast<unsigned short>(std::lround(colour[0]));
-            image(i, j, 0, 1, n, n) = static_cast<unsigned short>(std::lround(colour[1]));
-            image(i, j, 0, 2, n, n) = static_cast<unsigned short>(std::lround(colour[2]));
+            image(static_cast<unsigned int>(i), static_cast<unsigned int>(j), 0, 0, n, n) = static_cast<unsigned short>(std::lround(colour[0]));
+            image(static_cast<unsigned int>(i), static_cast<unsigned int>(j), 0, 1, n, n) = static_cast<unsigned short>(std::lround(colour[1]));
+            image(static_cast<unsigned int>(i), static_cast<unsigned int>(j), 0, 2, n, n) = static_cast<unsigned short>(std::lround(colour[2]));
         }
     }
 
@@ -82,8 +82,8 @@ void ImgBuffer_t::write(std::string &filename) const {
 
 void ImgBuffer_t::write(std::string &filename, double gammaind) const {
     const double update_mult = 1.0/static_cast<double>(updates_);
-    cimg_library::CImg<unsigned short> image(size_x_, size_y_, 1, 3);
-    const unsigned int n = size_x_ * size_y_;
+    cimg_library::CImg<unsigned short> image(static_cast<unsigned int>(size_x_), static_cast<unsigned int>(size_y_), 1, 3);
+    const unsigned int n = static_cast<unsigned int>(size_x_ * size_y_);
 
     //constexpr unsigned int bit_depth = 16;
     //constexpr double bit_multiplier = std::pow(2.0, bit_depth) - 1.0;
@@ -94,9 +94,9 @@ void ImgBuffer_t::write(std::string &filename, double gammaind) const {
             Vec3f colour = img_[j*size_x_ + i]*update_mult;
             colour.clamp(0.0, 1.0).pow_inplace(gammaind);
             colour *= bit_multiplier;
-            image(i, j, 0, 0, n, n) = static_cast<unsigned short>(std::lround(colour[0]));
-            image(i, j, 0, 1, n, n) = static_cast<unsigned short>(std::lround(colour[1]));
-            image(i, j, 0, 2, n, n) = static_cast<unsigned short>(std::lround(colour[2]));
+            image(static_cast<unsigned int>(i), static_cast<unsigned int>(j), 0, 0, n, n) = static_cast<unsigned short>(std::lround(colour[0]));
+            image(static_cast<unsigned int>(i), static_cast<unsigned int>(j), 0, 1, n, n) = static_cast<unsigned short>(std::lround(colour[1]));
+            image(static_cast<unsigned int>(i), static_cast<unsigned int>(j), 0, 2, n, n) = static_cast<unsigned short>(std::lround(colour[2]));
         }
     }
 

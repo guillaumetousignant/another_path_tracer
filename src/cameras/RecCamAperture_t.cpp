@@ -37,8 +37,8 @@ void RecCamAperture_t::raytrace(const Scene_t* scene) {
     const Vec3f vertical = horizontal.cross(direction_).normalize_inplace();
     const Vec3f focus_point = origin_ + direction_ * focal_length_;
     const double tot_subpix = subpix_[0]*subpix_[1];
-    const Vec3f pixel_span_y = vertical * focal_length_ * std::tan(fov_[0]/2.0) * 2.0/image_->size_y_;
-    const Vec3f pixel_span_x = horizontal * focal_length_ * std::tan(fov_[1]/2.0) * 2.0/image_->size_x_;
+    const Vec3f pixel_span_y = vertical * focal_length_ * std::tan(fov_[0]/2.0) * 2.0/static_cast<double>(image_->size_y_);
+    const Vec3f pixel_span_x = horizontal * focal_length_ * std::tan(fov_[1]/2.0) * 2.0/static_cast<double>(image_->size_x_);
     const Vec3f subpix_span_y = pixel_span_y/subpix_[0];
     const Vec3f subpix_span_x = pixel_span_x/subpix_[1];
 

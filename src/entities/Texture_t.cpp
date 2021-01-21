@@ -46,12 +46,12 @@ Texture_t::Texture_t(const std::string &filename) {
 
     img_ = new Vec3f[size_y_*size_x_];
 
-    const size_t n = size_x_ * size_y_;
+    const unsigned int n = static_cast<unsigned int>(size_x_ * size_y_);
 
     for (size_t j = 0; j < size_y_; ++j) {
         for (size_t i = 0; i < size_x_; ++i) {
             //img_[j][i] = Vec3f(image(i, j, 0), image(i, j, 1), image(i, j, 2));
-            img_[(size_y_ - j - 1)*size_x_ + i] = Vec3f(image(i, j, 0, 0, n, n), image(i, j, 0, 1, n, n), image(i, j, 0, 2, n, n));
+            img_[(size_y_ - j - 1)*size_x_ + i] = Vec3f(image(static_cast<unsigned int>(i), static_cast<unsigned int>(j), 0, 0, n, n), image(static_cast<unsigned int>(i), static_cast<unsigned int>(j), 0, 1, n, n), image(static_cast<unsigned int>(i), static_cast<unsigned int>(j), 0, 2, n, n));
         }
     }
 }

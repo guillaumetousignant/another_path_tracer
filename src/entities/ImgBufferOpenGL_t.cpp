@@ -55,7 +55,7 @@ void ImgBufferOpenGL_t::update() {
         (
         GL_TEXTURE_2D, 0,
         0, 0,
-        size_x_, size_y_,
+        static_cast<GLsizei>(size_x_), static_cast<GLsizei>(size_y_),
         GL_RGB,
         GL_UNSIGNED_BYTE,
         &img_gl_[0]

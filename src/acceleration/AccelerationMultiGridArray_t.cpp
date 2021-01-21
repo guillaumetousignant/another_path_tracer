@@ -24,8 +24,8 @@ AccelerationMultiGridArray_t::AccelerationMultiGridArray_t(Shape_t** items, size
     bounding_box_ = Box_t(coordinates);
 
     const Vec3f cell_res = (grid_size * std::pow(n_obj_/(grid_size[0]*grid_size[1]*grid_size[2]), 1.0/3.0)).floor()
-                            .max(min_res_)
-                            .min(max_res_) - 1.0;
+                            .max(static_cast<double>(min_res_))
+                            .min(static_cast<double>(max_res_)) - 1.0;
 
     for (unsigned int i = 0; i < 3; ++i) {
         cell_res_[i] = static_cast<size_t>(cell_res[i] + 1.0);
@@ -105,7 +105,7 @@ AccelerationMultiGridArray_t::AccelerationMultiGridArray_t(Shape_t** items, size
                 const size_t y = (i - z * cell_res_[0]*cell_res_[1])/cell_res_[0];
                 const size_t x = (i - y * cell_res_[0] - z * cell_res_[0]*cell_res_[1]);
 
-                std::array<Vec3f, 2> cell_extent{bounding_box_.coordinates_[0] + grid_size*Vec3f(x, y, z)/(cell_res+1.0), Vec3f()};
+                std::array<Vec3f, 2> cell_extent{bounding_box_.coordinates_[0] + grid_size*Vec3f(static_cast<double>(x), static_cast<double>(y), static_cast<double>(z))/(cell_res+1.0), Vec3f()};
                 cell_extent[1] = cell_extent[0] + cell_size_;
 
                 cells_[i] = new AccelerationMultiGridArray_t(temp_cells[i]->items_, temp_cells[i]->n_obj_, cell_extent, level_+1, min_res_, max_res_, max_cell_content_, max_grid_level_);
@@ -133,8 +133,8 @@ AccelerationMultiGridArray_t::AccelerationMultiGridArray_t(Shape_t** items, size
     bounding_box_ = Box_t(coordinates);
 
     const Vec3f cell_res = (grid_size * std::pow(n_obj_/(grid_size[0]*grid_size[1]*grid_size[2]), 1.0/3.0)).floor()
-                            .max(min_res_)
-                            .min(max_res_) - 1.0;
+                            .max(static_cast<double>(min_res_))
+                            .min(static_cast<double>(max_res_)) - 1.0;
 
     for (unsigned int i = 0; i < 3; ++i) {
         cell_res_[i] = static_cast<size_t>(cell_res[i] + 1.0);
@@ -214,7 +214,7 @@ AccelerationMultiGridArray_t::AccelerationMultiGridArray_t(Shape_t** items, size
                 const size_t y = (i - z * cell_res_[0]*cell_res_[1])/cell_res_[0];
                 const size_t x = (i - y * cell_res_[0] - z * cell_res_[0]*cell_res_[1]);
 
-                std::array<Vec3f, 2> cell_extent{bounding_box_.coordinates_[0] + grid_size*Vec3f(x, y, z)/(cell_res+1.0), Vec3f()};
+                std::array<Vec3f, 2> cell_extent{bounding_box_.coordinates_[0] + grid_size*Vec3f(static_cast<double>(x), static_cast<double>(y), static_cast<double>(z))/(cell_res+1.0), Vec3f()};
                 cell_extent[1] = cell_extent[0] + cell_size_;
 
                 cells_[i] = new AccelerationMultiGridArray_t(temp_cells[i]->items_, temp_cells[i]->n_obj_, cell_extent, level_+1, min_res_, max_res_, max_cell_content_, max_grid_level_);
@@ -240,7 +240,7 @@ AccelerationMultiGridArray_t::~AccelerationMultiGridArray_t() {
 
 Shape_t* AccelerationMultiGridArray_t::intersect(const Ray_t &ray, double &t, std::array<double, 2> &uv) const {
     double tbbox;
-    std::array<int, 3> cellexit {0, 0, 0};
+    std::array<long long, 3> cellexit {0, 0, 0};
     std::array<int, 3> cellstep {0, 0, 0};
     const std::array<unsigned int, 8> map {2, 1, 2, 1, 2, 2, 0, 0};
 
@@ -255,7 +255,7 @@ Shape_t* AccelerationMultiGridArray_t::intersect(const Ray_t &ray, double &t, st
     Vec3f tnext = Vec3f();
 
     const Vec3f raycellorigin = (ray.origin_ + ray.direction_ * tbbox) - bounding_box_.coordinates_[0]; 
-    const Vec3f cell_res = Vec3f(cell_res_[0], cell_res_[1], cell_res_[2]);
+    const Vec3f cell_res = Vec3f(static_cast<double>(cell_res_[0]), static_cast<double>(cell_res_[1]), static_cast<double>(cell_res_[2]));
     const Vec3f cellcoord = (raycellorigin / cell_size_).floor()
                             .max(0.0)
                             .min(cell_res-1.0);
@@ -271,7 +271,7 @@ Shape_t* AccelerationMultiGridArray_t::intersect(const Ray_t &ray, double &t, st
         else {
             deltat[i] = cell_size_[i] * invdir[i];
             tnext[i] = tbbox + ((cellcoord[i] + 1.0) * cell_size_[i] - raycellorigin[i]) * invdir[i];
-            cellexit[i] = cell_res_[i];
+            cellexit[i] = static_cast<long long>(cell_res_[i]);
             cellstep[i] = 1; 
         }
     }
@@ -311,7 +311,7 @@ void AccelerationMultiGridArray_t::add(Shape_t* item) {
     min1.max(0.0);
     max1.max(0.0);
 
-    const Vec3f cell_res = Vec3f(cell_res_[0], cell_res_[1], cell_res_[2]) - 1.0;
+    const Vec3f cell_res = Vec3f(static_cast<double>(cell_res_[0]), static_cast<double>(cell_res_[1]), static_cast<double>(cell_res_[2])) - 1.0;
     min1.min(cell_res);
     max1.min(cell_res);
 
@@ -338,7 +338,7 @@ void AccelerationMultiGridArray_t::remove(const Shape_t* item) {
     min1.max(0.0);
     max1.max(0.0);
 
-    const Vec3f cell_res = Vec3f(cell_res_[0], cell_res_[1], cell_res_[2]) - 1.0;
+    const Vec3f cell_res = Vec3f(static_cast<double>(cell_res_[0]), static_cast<double>(cell_res_[1]), static_cast<double>(cell_res_[2])) - 1.0;
     min1.min(cell_res);
     max1.min(cell_res);
 
