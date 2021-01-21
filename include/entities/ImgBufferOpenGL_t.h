@@ -5,18 +5,22 @@
 #include "entities/Vec3f.h"
 #include <string>
 
-#ifdef _WIN32
-    #include "GL/freeglut.h"
-#else
-    #ifndef __APPLE__
-        #include "GL/glut.h"
+#ifdef APTRACER_USE_OPENGL
+    #ifdef _WIN32
+        #include "GL/freeglut.h"
     #else
-        #include <GLUT/glut.h>
+        #ifndef __APPLE__
+            #include "GL/glut.h"
+        #else
+            #include <GLUT/glut.h>
+        #endif
     #endif
-#endif
 
-#ifndef __APPLE__
-    #include "GL/gl.h"
+    #ifndef __APPLE__
+        #include "GL/gl.h"
+    #endif
+#else 
+    typedef unsigned int GLuint;
 #endif
 
 namespace APTracer { namespace Entities {

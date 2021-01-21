@@ -11,22 +11,29 @@ find_package(ZLIB REQUIRED)
 find_package(PNG REQUIRED) # CHECK make image libraries optional
 find_package(JPEG REQUIRED)
 find_package(TIFF REQUIRED)
-list(INSERT CMAKE_FRAMEWORK_PATH 0 /System/Library/Frameworks) # Because CMake doesn't find the correct GLUT on macOS 
-find_package(GLUT REQUIRED)
 
 target_include_directories(APTracer PUBLIC 
     $<INSTALL_INTERFACE:include/another_path_tracer/>    
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/>)
 
-find_package(OpenGL REQUIRED COMPONENTS OpenGL) # CHECK make optional
-add_dependencies(APTracer OpenGL::GL) # Should use OpenGL::OpenGL on newer linux hosts, but doesn't work on windows and android
-
 target_link_libraries(APTracer PUBLIC 
     PNG::PNG
     JPEG::JPEG
-    TIFF::TIFF
-    OpenGL::GL
-    GLUT::GLUT) # Should use OpenGL::OpenGL on newer linux hosts, but doesn't work on windows and android
+    TIFF::TIFF)
+
+option(USE_OPENGL "Use OpenGL to display images." ON)
+if (USE_OPENGL)
+    list(INSERT CMAKE_FRAMEWORK_PATH 0 /System/Library/Frameworks) # Because CMake doesn't find the correct GLUT on macOS 
+    find_package(GLUT REQUIRED)
+    find_package(OpenGL REQUIRED COMPONENTS OpenGL) 
+
+    add_dependencies(APTracer OpenGL::GL) # Should use OpenGL::OpenGL on newer linux hosts, but doesn't work on windows and android
+
+    target_link_libraries(APTracer PUBLIC 
+        OpenGL::GL
+        GLUT::GLUT) # Should use OpenGL::OpenGL on newer linux hosts, but doesn't work on windows and android
+        target_compile_definitions(APTracer PUBLIC APTRACER_USE_OPENGL)
+endif()
 
 option(USE_OPENMP "Parallelise using OpenMP." ON)
 if (USE_OPENMP)

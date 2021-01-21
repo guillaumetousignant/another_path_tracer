@@ -1,16 +1,24 @@
 #include "entities/OpenGLRenderer_t.h"
 
-#ifdef _WIN32
-    #include "GL/freeglut.h"
-#else
-    #ifndef __APPLE__
-        #include "GL/glut.h"
+#ifdef APTRACER_USE_OPENGL
+    #ifdef _WIN32
+        #include "GL/freeglut.h"
     #else
-        #include <GLUT/glut.h>
+        #ifndef __APPLE__
+            #include "GL/glut.h"
+        #else
+            #include <GLUT/glut.h>
+        #endif
     #endif
-#endif
-#ifndef __APPLE__
-    #include "GL/gl.h"
+    #ifndef __APPLE__
+        #include "GL/gl.h"
+    #endif
+#else
+    #define GLUT_LEFT_BUTTON 0x0000
+    #define GLUT_MIDDLE_BUTTON 0x0001
+    #define GLUT_RIGHT_BUTTON 0x0002
+    #define GLUT_DOWN 0x0000
+    #define GLUT_UP 0x0001
 #endif
 
 #include <chrono>
@@ -38,6 +46,10 @@ OpenGLRenderer_t::OpenGLRenderer_t() :
     middle_y_pos_(0), right_clicked_(false), left_clicked_(false), middle_clicked_(false),
     focus_point_(Vec3f()), camera_dist_(0), updated_(false), write_interval_(1),
     render_function_(openGL_accumulate) {
+        #ifndef APTRACER_USE_OPENGL
+        std::cerr << "Error: OpenGL renderer created, but the library wasn't compiled with 'APTRACER_USE_OPENGL' defined. It will not work correctly." << std::endl;
+        #endif
+
         delete renderer_;
         renderer_ = this;
 }
@@ -48,6 +60,10 @@ OpenGLRenderer_t::OpenGLRenderer_t(Scene_t* scene, Camera_t* camera, ImgBufferOp
     middle_y_pos_(0), right_clicked_(false), left_clicked_(false), middle_clicked_(false),
     focus_point_(Vec3f()), camera_dist_((focus_point_ - camera_->origin_).magnitude()), updated_(false), 
     write_interval_(1), render_function_(openGL_accumulate) {
+        #ifndef APTRACER_USE_OPENGL
+        std::cerr << "Error: OpenGL renderer created, but the library wasn't compiled with 'APTRACER_USE_OPENGL' defined. It will not work correctly." << std::endl;
+        #endif
+
         delete renderer_;
         renderer_ = this;
         if (camera_dist_ < 0.1) {
@@ -76,7 +92,9 @@ void OpenGLRenderer_t::accumulate() {
         << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
         << "s." << std::endl;*/
 
+    #ifdef APTRACER_USE_OPENGL
     glutPostRedisplay(); // REMOVE but makes it work, soooooooo...
+    #endif
 }
 
 void OpenGLRenderer_t::accumulate_write() {
@@ -107,7 +125,9 @@ void OpenGLRenderer_t::accumulate_write() {
         << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
         << "s." << std::endl;*/
 
+    #ifdef APTRACER_USE_OPENGL
     glutPostRedisplay(); // REMOVE but makes it work, soooooooo...
+    #endif
 }
 
 void OpenGLRenderer_t::resetDisplay(void) {
@@ -212,17 +232,21 @@ void OpenGLRenderer_t::keyboardPaused(unsigned char key, int x, int y) {
         break;
 
     case 'q':
+        #ifdef APTRACER_USE_OPENGL
         glutDestroyWindow(0);
+        #endif
         exit(0);
         break;
 
     case 'p':
         std::cout << "Unpaused" << std::endl;
+        #ifdef APTRACER_USE_OPENGL
         glutDisplayFunc(render_function_);
         glutMouseFunc(openGL_mouseClick);
         glutMotionFunc(openGL_mouseMovement);
         glutKeyboardFunc(openGL_keyboard);
         glutPostRedisplay();
+        #endif
         break;
     }
 }
@@ -252,21 +276,26 @@ void OpenGLRenderer_t::keyboard(unsigned char key, int x, int y) {
         break;
 
     case 'q':
+        #ifdef APTRACER_USE_OPENGL
         glutDestroyWindow(0);
+        #endif
         exit(0);
         break;
 
     case 'p':
         std::cout << "Paused at " << imgbuffer_->updates_ << " iterations." << std::endl;
+        #ifdef APTRACER_USE_OPENGL
         glutDisplayFunc(openGL_dummyDisp);
         glutMouseFunc(nullptr);
         glutMotionFunc(nullptr);
         glutKeyboardFunc(openGL_keyboardPaused);
+        #endif
         break;
     }
 }
 
 void OpenGLRenderer_t::initialise() {
+    #ifdef APTRACER_USE_OPENGL
     int gl_argc = 1;
     char* gl_argv[1];
     gl_argv[0] = (char*)"another_path_tracer";
@@ -288,24 +317,31 @@ void OpenGLRenderer_t::initialise() {
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
     glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
     glTexImage2D( GL_TEXTURE_2D, 0, 3, imgbuffer_->size_x_, imgbuffer_->size_y_, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL );    
+    #endif
 }
 
 void OpenGLRenderer_t::render() {
+    #ifdef APTRACER_USE_OPENGL
     glutMainLoop();
+    #endif
 }
 
 void OpenGLRenderer_t::render_write() {
     write_interval_ = 1;
     render_function_ = openGL_accumulate_write;
+    #ifdef APTRACER_USE_OPENGL
     glutDisplayFunc(render_function_);
     glutMainLoop();
+    #endif
 }
 
 void OpenGLRenderer_t::render_write(unsigned int write_interval) {
     write_interval_ = write_interval;
     render_function_ = openGL_accumulate_write;
+    #ifdef APTRACER_USE_OPENGL
     glutDisplayFunc(render_function_);
     glutMainLoop();
+    #endif
 }
 
 void OpenGLRenderer_t::openGL_dummyDisp() {
