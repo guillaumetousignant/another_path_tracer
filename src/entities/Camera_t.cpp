@@ -17,7 +17,7 @@ Camera_t::Camera_t(TransformMatrix_t* transformation, std::string filename, Vec3
     direction_ = transformation_->transformDir().multDir(Vec3f(0.0, 1.0, 0.0));
 }
 
-void Camera_t::accumulate(const Scene_t* scene, unsigned int n_iter /*= 1000000000*/) {
+void Camera_t::accumulate(const Scene_t* scene, unsigned int n_iter) {
     unsigned int n = 0;
     while (n < n_iter) {
         ++n;
@@ -32,7 +32,22 @@ void Camera_t::accumulate(const Scene_t* scene, unsigned int n_iter /*= 10000000
     }
 }
 
-void Camera_t::accumulateWrite(const Scene_t* scene, unsigned int n_iter /*= 1000000000*/, unsigned int interval /*=1*/) {
+void Camera_t::accumulate(const Scene_t* scene) {
+    unsigned int n = 0;
+    while (true) {
+        ++n;
+
+        auto t_start = std::chrono::high_resolution_clock::now();
+        raytrace(scene);
+        auto t_end = std::chrono::high_resolution_clock::now();
+
+        std::cout << "Iteration " << n << " done in " 
+            << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
+            << "s." << std::endl;
+    }
+}
+
+void Camera_t::accumulateWrite(const Scene_t* scene, unsigned int n_iter, unsigned int interval) {
     //std::chrono::steady_clock::time_point t_start, t_end;
     unsigned int n = 0;
     while (n < n_iter) {
@@ -57,6 +72,61 @@ void Camera_t::accumulateWrite(const Scene_t* scene, unsigned int n_iter /*= 100
             << std::chrono::duration<double, std::milli>(t_end2-t_start2).count()/1000.0 
             << "s." << std::endl;
         }
+    }
+}
+
+void Camera_t::accumulateWrite(const Scene_t* scene, unsigned int interval) {
+    //std::chrono::steady_clock::time_point t_start, t_end;
+    unsigned int n = 0;
+    while (true) {
+        ++n;
+        
+        auto t_start = std::chrono::high_resolution_clock::now();
+        raytrace(scene);
+        auto t_end = std::chrono::high_resolution_clock::now();
+
+        std::cout << "Iteration " << n << " done in " 
+            << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
+            << "s." << std::endl;
+
+        show();
+        if (n%interval == 0) {
+            std::cout << "Writing started." << std::endl;
+            auto t_start2 = std::chrono::high_resolution_clock::now();
+            write();
+            auto t_end2 = std::chrono::high_resolution_clock::now();
+
+            std::cout << "Writing done in "
+            << std::chrono::duration<double, std::milli>(t_end2-t_start2).count()/1000.0 
+            << "s." << std::endl;
+        }
+    }
+}
+
+void Camera_t::accumulateWrite(const Scene_t* scene) {
+    //std::chrono::steady_clock::time_point t_start, t_end;
+    unsigned int n = 0;
+    while (true) {
+        ++n;
+        
+        auto t_start = std::chrono::high_resolution_clock::now();
+        raytrace(scene);
+        auto t_end = std::chrono::high_resolution_clock::now();
+
+        std::cout << "Iteration " << n << " done in " 
+            << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0 
+            << "s." << std::endl;
+
+        show();
+        
+        std::cout << "Writing started." << std::endl;
+        auto t_start2 = std::chrono::high_resolution_clock::now();
+        write();
+        auto t_end2 = std::chrono::high_resolution_clock::now();
+
+        std::cout << "Writing done in "
+        << std::chrono::duration<double, std::milli>(t_end2-t_start2).count()/1000.0 
+        << "s." << std::endl;
     }
 }
 

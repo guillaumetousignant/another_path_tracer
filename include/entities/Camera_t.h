@@ -81,9 +81,18 @@ namespace APTracer { namespace Entities {
              * This function will raytrace the same scene multiple times in order to accumulate more samples. This will reduce noise.
              * 
              * @param scene Scene that will be used to find what each ray hits.
-             * @param n_iter Number of times the scene will be raytraced. Defaults to 1000000000.
+             * @param n_iter Number of times the scene will be raytraced.
              */
-            void accumulate(const Scene_t* scene, unsigned int n_iter = 1000000000);
+            void accumulate(const Scene_t* scene, unsigned int n_iter);
+
+            /**
+             * @brief Raytraces the scene indefinitely to get more samples per pixel.
+             * 
+             * This function will raytrace the same scene indefinitely in order to accumulate more samples. This will reduce noise.
+             * 
+             * @param scene Scene that will be used to find what each ray hits.
+             */
+            void accumulate(const Scene_t* scene);
 
             /**
              * @brief Raytraces the scene multiple times to get more samples per pixel, saving the image every so often.
@@ -91,10 +100,29 @@ namespace APTracer { namespace Entities {
              * This function will raytrace the same scene multiple times in order to accumulate more samples. This will reduce noise. It will also save the generated image at an interval. 
              * 
              * @param scene Scene that will be used to find what each ray hits.
-             * @param n_iter Number of times the scene will be raytraced. Defaults to 1000000000.
-             * @param interval Saves the image every x frames by calling write(). Defaults to 1.
+             * @param n_iter Number of times the scene will be raytraced.
+             * @param interval Saves the image every x frames by calling write().
              */
-            void accumulateWrite(const Scene_t* scene, unsigned int n_iter = 1000000000, unsigned int interval = 1);
+            void accumulateWrite(const Scene_t* scene, unsigned int n_iter, unsigned int interval);
+
+            /**
+             * @brief Raytraces the scene indefinitely to get more samples per pixel, saving the image every so often.
+             * 
+             * This function will raytrace the same scene indefinitely in order to accumulate more samples. This will reduce noise. It will also save the generated image at an interval. 
+             * 
+             * @param scene Scene that will be used to find what each ray hits.
+             * @param interval Saves the image every x frames by calling write().
+             */
+            void accumulateWrite(const Scene_t* scene, unsigned int interval);
+
+            /**
+             * @brief Raytraces the scene indefinitely to get more samples per pixel, saving the image frame.
+             * 
+             * This function will raytrace the same scene indefinitely in order to accumulate more samples. This will reduce noise. It will also save the generated image every frame. 
+             * 
+             * @param scene Scene that will be used to find what each ray hits.
+             */
+            void accumulateWrite(const Scene_t* scene);
 
             /**
              * @brief Sets the focal length of the camera to a specific distance.

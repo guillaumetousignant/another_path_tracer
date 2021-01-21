@@ -811,7 +811,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
 
                 std::transform(n_iter.begin(), n_iter.end(), n_iter.begin(), ::tolower);
                 if (n_iter == "inf") {
-                    camera_n_iter_[index] = 1000000000;
+                    camera_n_iter_[index] = 0;
                 }
                 else {
                     camera_n_iter_[index] = std::stoi(n_iter);
@@ -819,7 +819,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
 
                 std::transform(write_interval.begin(), write_interval.end(), write_interval.begin(), ::tolower);
                 if (write_interval == "inf") {
-                    camera_write_interval_[index] = 1000000000;
+                    camera_write_interval_[index] = 0;
                 }
                 else {
                     camera_write_interval_[index] = std::stoi(write_interval);
@@ -882,11 +882,21 @@ auto APTracer::Entities::SceneContext_t::render() -> void {
             std::cout << "Camera #" << i << " rendering scene '" << scene_name_ << "' in '" <<  render_mode << "' mode." << std::endl;
 
             if (render_mode == "accumulation") {
-                cameras_[i]->accumulate(scene_.get(), camera_n_iter_[i]);
+                if (camera_n_iter_[i] != 0) {
+                    cameras_[i]->accumulate(scene_.get(), camera_n_iter_[i]);
+                }
+                else {
+                    cameras_[i]->accumulate(scene_.get());
+                }
                 cameras_[i]->write();
             }
             else if (render_mode == "accumulation_write") {
-                cameras_[i]->accumulateWrite(scene_.get(), camera_n_iter_[i], camera_write_interval_[i]);
+                if (camera_n_iter_[i] != 0) {
+                    cameras_[i]->accumulateWrite(scene_.get(), camera_n_iter_[i], camera_write_interval_[i]);
+                }
+                else {
+                    cameras_[i]->accumulateWrite(scene_.get(), camera_write_interval_[i]);
+                }
                 cameras_[i]->write();
             }
             else if (render_mode == "single") {
