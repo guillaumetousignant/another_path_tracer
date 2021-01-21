@@ -6,6 +6,8 @@ Yet another path tracer
 
 Dependencies:
 
+- OpenMP
+- OpenGL
 - freeglut
 - libpng
 - libjpeg
@@ -30,6 +32,9 @@ cmake --install .
 Link with `$ANOTHER_PATH_TRACER_DIR/lib`  
 Include `$ANOTHER_PATH_TRACER_DIR/include`  
 You can add `$ANOTHER_PATH_TRACER_DIR/bin` to your path.  
+
+To build without OpenMP, add `-DUSE_OPENMP=OFF` to cmake call.  
+To build without OpenGL, add `-DUSE_OPENGL=OFF` to cmake call.  
 
 To build tests, add `-DBUILD_TESTING=ON` to cmake call. Then:
 
