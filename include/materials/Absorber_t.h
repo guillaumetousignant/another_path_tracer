@@ -44,11 +44,14 @@ namespace APTracer { namespace Materials {
             Vec3f colour_vol_; /**< @brief Colour absorbed by the medium in exponential form.*/
 
             /**
-             * @brief 
+             * @brief Defines the interaction between a ray and the medium.
              * 
-             * @param ray 
-             * @return true 
-             * @return false 
+             * This function describes how a ray of light is modified by moving through the medium. This can mean changing the ray's colour and mask to model light absorption and emission of the medium.
+             * In this material, light is absorbed and/or emitted logarithmically with regards to the distance travelled within it by a ray.
+             * 
+             * @param ray Ray modified by the medium. Its colour and mask can be changed.
+             * @return true Returns true if the ray has been scattered, meaning that its origin and/or direction has changed and the material bounce should not be performed. Never the case for an absorber.
+             * @return false Returns false when the ray's path has not been changed, and it should bounce on the intersected material as planned. Always the case for an absorber.
              */
             virtual bool scatter(Ray_t &ray) final; 
     };
