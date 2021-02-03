@@ -22,8 +22,9 @@ namespace APTracer { namespace Materials {
      * 
      * This material emits light proportionally to the number of bounces a ray has achieved when bouncing on it, and resets the
      * ray's mask to 1 in order to continue this process on subsequent bounces. It then reflects the ray like a diffuse material,
-     * in a random direction. This material is more usefull for debugging than for display purposes, as it works best when all 
-     * objects of the scene are made of this material.
+     * in a random direction. 
+     * This material is more usefull for debugging than for display purposes, as it works best when all objects of the scene are
+     * made of this material.
      */
     class BounceMaterial_t final : public Material_t{
         public:
