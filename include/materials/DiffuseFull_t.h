@@ -23,7 +23,7 @@ namespace APTracer { namespace Materials {
      * @brief The diffuse class describes a material that reflects rays in random directions, to model diffuse reflection. Its reflective and emissive colours are taken from textures.
      * 
      * This material has an emissive and reflective texture. The colours are determined on bounce
-     * based on the object space coordinates of the bounce, and fetched from the texture.
+     * based on the object space coordinates of the bounce, and fetched from the textures.
      * The rays are reflected in a random direction in the hemisphere over the hit point.
      * This models diffuse reflection, which reflect light in all directions.
      * This material represents uniformly and finely rough surfaces, such as matte paint,
@@ -45,8 +45,8 @@ namespace APTracer { namespace Materials {
              */
             virtual ~DiffuseFull_t() final;
 
-            const Texture_t* emission_map_; /**< @brief Texture containing the colour emitted by the material at each bounce, mapped by object space coordinates.*/
-            const Texture_t* texture_; /**< @brief Texture containing the colour reflected by the material at each bounce, mapped by object space coordinates.*/
+            const Texture_t* emission_map_; /**< @brief Texture containing the colour emitted by the material, mapped by object space coordinates.*/
+            const Texture_t* texture_; /**< @brief Texture containing the colour reflected by the material, mapped by object space coordinates.*/
             double roughness_; /**< @brief Attenuation of the colour as the angle between the incident ray and the surface normal increase. 0 to 1, 0 being very rough (no attenuation) and 1 being an ideal diffusely reflective surface, obeying Lambert's cosine law.*/
             std::uniform_real_distribution<double> unif_; /**< @brief Uniform random distribution used for generating random numbers.*/
 
@@ -61,7 +61,7 @@ namespace APTracer { namespace Materials {
              * The ray's origin is set to the hit point, and is normal is randomly selected within the hemisphere
              * above the hit point to model diffuse reflection.
              * 
-             * @param uv Shape space coordinates of the hit point. Used to query the shape for values at coordinates on it. Two components, u, and v, that can change meaning depending on the shape.
+             * @param uv Object space coordinates of the hit point. Used to query the shape for values at coordinates on it. Two components, u, and v, that can change meaning depending on the shape.
              * @param hit_obj Pointer to the shape that was hit by the ray.
              * @param ray Ray that has intersected the shape.
              */

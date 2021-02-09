@@ -55,7 +55,7 @@ namespace APTracer { namespace Materials {
              * The ray's origin and direction are modified like a diffuse material would, to the hitpoint and randomly in the 
              * hemisphere above the hit point, respectively.
              * 
-             * @param uv Shape space coordinates of the hit point. Used to query the shape for values at coordinates on it. Two components, u, and v, that can change meaning depending on the shape.
+             * @param uv Object space coordinates of the hit point. Used to query the shape for values at coordinates on it. Two components, u, and v, that can change meaning depending on the shape.
              * @param hit_obj Pointer to the shape that was hit by the ray.
              * @param ray Ray that has intersected the shape.
              */
