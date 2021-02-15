@@ -18,7 +18,7 @@ using APTracer::Entities::Shape_t;
 namespace APTracer { namespace Materials {
 
     /**
-     * @brief The bounce material class describes a material whose color is proportional to the number of bounces a ray has achieved.
+     * @brief The bounce material class describes a material whose colour is proportional to the number of bounces a ray has achieved.
      * 
      * This material emits light proportionally to the number of bounces a ray has achieved when bouncing on it, and resets the
      * ray's mask to 1 in order to continue this process on subsequent bounces. It then reflects the ray like a diffuse material,
