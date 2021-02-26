@@ -86,8 +86,8 @@ void RecCamAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> pos
     double t = std::numeric_limits<double>::infinity();
     std::array<double, 2> uv;
 
-    const Vec3f horizontal = direction_.cross(up_);
-    const Vec3f vertical = horizontal.cross(direction_);
+    const Vec3f horizontal = direction_.cross(up_).normalize_inplace();
+    const Vec3f vertical = horizontal.cross(direction_).normalize_inplace();
     const Vec3f span_y = vertical * focal_length_ * std::tan(fov_[0]/2.0) * 2.0;
     const Vec3f span_x = horizontal * focal_length_ * std::tan(fov_[1]/2.0) * 2.0;
     const Vec3f ray_vec = (origin_ + direction_ * focal_length_

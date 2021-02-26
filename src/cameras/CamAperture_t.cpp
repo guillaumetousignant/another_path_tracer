@@ -85,13 +85,12 @@ void CamAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> positi
     double t = std::numeric_limits<double>::infinity();
     std::array<double, 2> uv;
 
-    const Vec3f horizontal = direction_.cross(up_);
-    const Vec3f vertical = horizontal.cross(direction_);
+    const Vec3f horizontal = direction_.cross(up_).normalize_inplace();
+    const Vec3f vertical = horizontal.cross(direction_).normalize_inplace();
 
     const Vec3f ray_direction_sph = Vec3f(1.0, pi/2.0 + (position[1]-0.5)*fov_[0], (position[0]-0.5)*fov_[1]).to_xyz_offset(direction_, horizontal, vertical); // 0, y, x
 
     const Ray_t focus_ray = Ray_t(origin_, ray_direction_sph, Vec3f(), Vec3f(1.0), medium_list_);
-
 
     if (scene->intersect(focus_ray, t, uv) == nullptr) {
         t = 1000000.0;

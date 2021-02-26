@@ -7,6 +7,8 @@
 #include "entities/ImgBuffer_t.h"
 #include "entities/RandomGenerator_t.h"
 
+constexpr double pi = 3.141592653589793238463;
+
 using APTracer::Entities::Vec3f;
 using APTracer::Cameras::Cam3DAperture_t;
 using APTracer::Entities::Ray_t;
@@ -131,7 +133,10 @@ void Cam3DAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> posi
     double t = std::numeric_limits<double>::infinity();
     std::array<double, 2> uv;
 
-    const Vec3f ray_direction_sph = (direction_.get_sph() + Vec3f(0, (position[1]-0.5)*fov_[0], (position[0]-0.5)*-fov_[1])).to_xyz(); // 0, y, x
+    const Vec3f horizontal = direction_.cross(up_).normalize_inplace();
+    const Vec3f vertical = horizontal.cross(direction_).normalize_inplace();
+
+    const Vec3f ray_direction_sph = Vec3f(1.0, pi/2.0 + (position[1]-0.5)*fov_[0], (position[0]-0.5)*fov_[1]).to_xyz_offset(direction_, horizontal, vertical); // 0, y, x
 
     const Ray_t focus_ray = Ray_t(origin_, ray_direction_sph, Vec3f(), Vec3f(1.0), medium_list_);
 

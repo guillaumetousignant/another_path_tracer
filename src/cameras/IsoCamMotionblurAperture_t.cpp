@@ -99,10 +99,10 @@ void IsoCamMotionblurAperture_t::autoFocus(const Scene_t* scene, std::array<doub
     double t = std::numeric_limits<double>::infinity();
     std::array<double, 2> uv;
 
-    const Vec3f horizontal = direction_.cross(up_);
-    const Vec3f vertical = horizontal.cross(direction_);
+    const Vec3f horizontal = direction_.cross(up_).normalize_inplace();
+    const Vec3f vertical = horizontal.cross(direction_).normalize_inplace();
 
-    const Vec3f pix_origin = origin_ - vertical * (position[1] - 0.5) * fov_[0] - horizontal * (position[0] - 0.5) * fov_[1];
+    const Vec3f pix_origin = origin_ - vertical * (position[1] - 0.5) * fov_[0] + horizontal * (position[0] - 0.5) * fov_[1];
 
     const Ray_t focus_ray = Ray_t(pix_origin, direction_, Vec3f(), Vec3f(1.0), medium_list_);
 
