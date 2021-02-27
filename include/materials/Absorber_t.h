@@ -16,7 +16,7 @@ namespace APTracer { namespace Materials {
      * 
      * Light is absorbed and/or emitted logarithmically with regards to the distance travelled within it by a ray.
      * The ray will not change direction when interacting with this medium.
-     * This material can be used to represent light interacting media like light fog, atmospheric scattering, or
+     * This medium can be used to represent light interacting media like light fog, atmospheric scattering, or
      * clear water.
      */
     class Absorber_t final : public Medium_t{
@@ -46,8 +46,7 @@ namespace APTracer { namespace Materials {
             /**
              * @brief Defines the interaction between a ray and the medium.
              * 
-             * This function describes how a ray of light is modified by moving through the medium. This can mean changing the ray's colour and mask to model light absorption and emission of the medium.
-             * In this material, light is absorbed and/or emitted logarithmically with regards to the distance travelled within it by a ray.
+             * In this medium, light is absorbed and/or emitted logarithmically with regards to the distance travelled within it by a ray.
              * 
              * @param ray Ray modified by the medium. Its colour and mask can be changed.
              * @return true Returns true if the ray has been scattered, meaning that its origin and/or direction has changed and the material bounce should not be performed. Never the case for an absorber.
