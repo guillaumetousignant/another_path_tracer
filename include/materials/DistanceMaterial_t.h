@@ -19,7 +19,7 @@ namespace APTracer { namespace Materials {
      * 
      * This material emits light proportionally to the distance a ray has traveled when bouncing on it, and resets the
      * ray's mask to 0 in order to stop it from being cast again. 
-     * This material is more usefull for debugging than for display purposes.
+     * This material is more useful for debugging than for display purposes.
      */
     class DistanceMaterial_t final : public Material_t{
         public:
