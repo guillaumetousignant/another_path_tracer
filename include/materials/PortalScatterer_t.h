@@ -1,19 +1,18 @@
 #ifndef APTRACER_PORTALSCATTERER_T_H
 #define APTRACER_PORTALSCATTERER_T_H
 
-#include "PortalScattererTop_t.h"
+#include "entities/Medium_t.h"
 #include "entities/Ray_t.h"
 #include <list>
 #include <random>
 
 namespace APTracer { namespace Entities {
     class TransformMatrix_t;
-    class Medium_t;
 }}
 
+using APTracer::Entities::Medium_t;
 using APTracer::Entities::Ray_t;
 using APTracer::Entities::TransformMatrix_t;
-using APTracer::Entities::Medium_t;
 
 namespace APTracer { namespace Materials {
 
@@ -26,7 +25,7 @@ namespace APTracer { namespace Materials {
      * This medium can represent volumetric portals, impossible geometry, or overlaid images.
      * It is one-way, as there is no linked object at the outlet of the portal to be intersected.
      */
-    class PortalScatterer_t final : public PortalScattererTop_t{
+    class PortalScatterer_t final : public Medium_t {
         public:
             /**
              * @brief Construct a new PortalScatterer_t object with a transformation matrix, a medium list, and a scattering distance.
@@ -44,6 +43,8 @@ namespace APTracer { namespace Materials {
              */
             virtual ~PortalScatterer_t() final;
 
+            TransformMatrix_t* transformation_; /**< @brief Transformation matrix which transforms the rays when scattered, potentially moving them to another location.*/
+            std::list<Medium_t*> medium_list_; /**< @brief List of materials in which the portal end is placed. Should have at least two copies of an "outside" medium not assigned to any object (issue #25).*/
             double scattering_coefficient_; /**< @brief Scattering coefficient, inverse of the average scattering distance. A higher coefficient will Have more chance to scatter rays.*/
             std::uniform_real_distribution<double> unif_; /**< @brief Uniform random distribution used for generating random numbers.*/
 

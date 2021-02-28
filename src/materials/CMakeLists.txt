@@ -16,8 +16,6 @@ target_sources(APTracer
         NormalDiffuseMaterial_t.cpp
         Portal_t.cpp
         PortalScatterer_t.cpp
-        PortalScattererTop_t.cpp
-        PortalTop_t.cpp
         RandomMix_t.cpp
         RandomMixIn_t.cpp
         Reflective_t.cpp

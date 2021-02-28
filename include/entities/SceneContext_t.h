@@ -12,10 +12,10 @@
 #include "functions/tinyxml2.h"
 #include "entities/Vec3f.h"
 
-namespace APTracer { namespace Shapes{
+namespace APTracer { namespace Shapes {
     class MeshTop_t;
 }}
-namespace APTracer { namespace Entities{
+namespace APTracer { namespace Entities {
     class TransformMatrix_t;
     class Texture_t;
     class Material_t;
@@ -30,6 +30,10 @@ namespace APTracer { namespace Entities{
     class ImgBufferOpenGL_t;
     class Scene_t;
     class OpenGLRenderer_t;
+}}
+namespace APTracer { namespace Materials {
+    class Portal_t;
+    class PortalScatterer_t;
 }}
 
 using namespace APTracer::Shapes;
@@ -131,18 +135,18 @@ namespace APTracer { namespace Entities {
              * @brief Create a medium object from an xml entry.
              * 
              * @param xml_medium XML entry containing the medium information.
-             * @param[out] mediums_medium_list List of mediums in which the current medium is placed, if needed.
+             * @param[out] mediums_medium_list A list of mediums in which the current medium is placed and a pointer to the medium is appended to this if needed.
              * @param xml_transform_matrices XML entries of all the transformation matrices.
              * @param xml_mediums XML entries of all the mediums.
              * @return std::unique_ptr<Medium_t> Unique pointer to the created medium.
              */
-            auto create_medium(const tinyxml2::XMLElement* xml_medium, std::unique_ptr<std::list<size_t>> &mediums_medium_list, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_mediums) -> std::unique_ptr<Medium_t>;
+            auto create_medium(const tinyxml2::XMLElement* xml_medium, std::list<std::tuple<APTracer::Materials::PortalScatterer_t*, std::list<size_t>>> &mediums_medium_list, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_mediums) -> std::unique_ptr<Medium_t>;
             
             /**
              * @brief Create a material object from an xml entry.
              * 
              * @param xml_material XML entry containing the material information.
-             * @param[out] materials_medium_list List of mediums in which the current material is placed, if needed.
+             * @param[out] materials_medium_list A list of mediums in which the current material is placed and a pointer to the material is appended to this­ if needed.
              * @param[out] materials_mix_list Indexes of the materials making up a material mix, if needed.
              * @param[out] materials_aggregate_list Tuple of a list of material indices and a list of material names making up a material aggregate, if needed.
              * @param xml_textures XML entries of all the textures.
@@ -151,7 +155,7 @@ namespace APTracer { namespace Entities {
              * @param xml_mediums XML entries of all the mediums.
              * @return std::unique_ptr<Material_t> Unique pointer to the created material.
              */
-            auto create_material(const tinyxml2::XMLElement* xml_material, std::unique_ptr<std::list<size_t>> &materials_medium_list, std::vector<size_t> &materials_mix_list, std::unique_ptr<std::tuple<std::unique_ptr<std::list<size_t>>, std::unique_ptr<std::list<std::string>>>> &materials_aggregate_list, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_mediums) -> std::unique_ptr<Material_t>;
+            auto create_material(const tinyxml2::XMLElement* xml_material, std::list<std::tuple<APTracer::Materials::Portal_t*, std::list<size_t>>> &materials_medium_list, std::vector<size_t> &materials_mix_list, std::unique_ptr<std::tuple<std::unique_ptr<std::list<size_t>>, std::unique_ptr<std::list<std::string>>>> &materials_aggregate_list, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_mediums) -> std::unique_ptr<Material_t>;
             
             /**
              * @brief Create a mesh geometry object from an xml entry.
@@ -246,7 +250,7 @@ namespace APTracer { namespace Entities {
              * @param xml_mediums XML entries of all the mediums.
              * @return std::unique_ptr<std::list<size_t>> List of medium indices.
              */
-            static auto get_medium_index_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_mediums) -> std::unique_ptr<std::list<size_t>>;
+            static auto get_medium_index_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_mediums) -> std::list<size_t>;
 
             /**
              * @brief Get a list of mediums from a string of names of indices.

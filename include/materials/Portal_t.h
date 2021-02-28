@@ -1,7 +1,7 @@
 #ifndef APTRACER_PORTAL_T_H
 #define APTRACER_PORTAL_T_H
 
-#include "PortalTop_t.h"
+#include "entities/Material_t.h"
 #include "entities/Ray_t.h"
 #include <list>
 
@@ -11,6 +11,7 @@ namespace APTracer { namespace Entities {
     class Medium_t;
 }}
 
+using APTracer::Entities::Material_t;
 using APTracer::Entities::Ray_t;
 using APTracer::Entities::Shape_t;
 using APTracer::Entities::TransformMatrix_t;
@@ -26,7 +27,7 @@ namespace APTracer { namespace Materials {
      * This material can represent portals, screens showing another area, or impossible geometry.
      * It is one-way, as there is no linked object at the outlet of the portal to be intersected.
      */
-    class Portal_t final : public PortalTop_t{
+    class Portal_t final : public Material_t{
         public:
             /**
              * @brief Construct a new Portal_t object with a transformation matrix and a medium list.
@@ -40,6 +41,9 @@ namespace APTracer { namespace Materials {
              * @brief Destroy the Portal_t object. Does nothing.
              */
             virtual ~Portal_t() final;
+
+            TransformMatrix_t* transformation_; /**< @brief Transformation matrix which transforms the rays on hit, potentially moving them to another location.*/
+            std::list<Medium_t*> medium_list_; /**< @brief List of materials in which the portal end is placed. Should have at least two copies of an "outside" medium not assigned to any object (issue #25).*/
 
             /**
              * @brief Bounces a ray of light on the material.
