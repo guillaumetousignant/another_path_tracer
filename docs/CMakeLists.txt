@@ -56,4 +56,6 @@ add_custom_target(Sphinx ALL DEPENDS ${SPHINX_INDEX_FILE})
 # Add an install target to install the docs
 include(GNUInstallDirs)
 install(DIRECTORY ${SPHINX_BUILD}
-DESTINATION ${CMAKE_INSTALL_DOCDIR})
+        DESTINATION ${CMAKE_INSTALL_DOCDIR})
+install(DIRECTORY ${DOXYGEN_OUTPUT_DIR}
+        DESTINATION ${CMAKE_INSTALL_DOCDIR})
