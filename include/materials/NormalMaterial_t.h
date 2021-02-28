@@ -15,7 +15,7 @@ using APTracer::Entities::Shape_t;
 namespace APTracer { namespace Materials {
 
     /**
-     * @brief The normal material describes a material that emits colour relative to the surface normal at the hit point.
+     * @brief The normal material class describes a material that emits colour relative to the surface normal at the hit point.
      * 
      * This material emits light proportionally to the surface normal in world coordinates, x y and z being red green and blue, respectively. 
      * It then resets the ray's mask to 0 in order to stop it from being cast again. 

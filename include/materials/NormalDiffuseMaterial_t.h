@@ -16,7 +16,7 @@ using APTracer::Entities::Shape_t;
 namespace APTracer { namespace Materials {
 
     /**
-     * @brief The normal diffuse material describes a meterial whose colour is relative to the surface normal at the hit point.
+     * @brief The normal diffuse material class describes a meterial whose colour is relative to the surface normal at the hit point.
      * 
      * This material's reflective colour is proportional to the surface normal in world coordinates, x y and z being red green and blue, respectively. 
      * The rays are reflected in a random direction in the hemisphere over the hit point.

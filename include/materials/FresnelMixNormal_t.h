@@ -22,7 +22,7 @@ using APTracer::Entities::Texture_t;
 namespace APTracer { namespace Materials {
 
     /**
-     * @brief The Fresnel mix normal material describes a mix of two materials, with the material being chosen randomly on bounce according to the Fresnel equations. The surface normal is taken from a normal map.
+     * @brief The Fresnel mix normal class describes a mix of two materials, with the material being chosen randomly on bounce according to the Fresnel equations. The surface normal is taken from a normal map.
      * 
      * This material will bounce rays on either of its material randomly according to the proportion
      * of light reflected and refracted according to the Fresnel equations. This means that more light

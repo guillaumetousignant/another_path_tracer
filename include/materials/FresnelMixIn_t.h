@@ -20,7 +20,7 @@ using APTracer::Entities::Material_t;
 namespace APTracer { namespace Materials {
     
     /**
-     * @brief The Fresnel mix in material describes a mix of two materials, with the material being chosen randomly on bounce according to the Fresnel equations on entrance, and the refracted material on material exit.
+     * @brief The Fresnel mix in class describes a mix of two materials, with the material being chosen randomly on bounce according to the Fresnel equations on entrance, and the refracted material on material exit.
      * 
      * This material will bounce rays on either of its material randomly according to the proportion
      * of light reflected and refracted according to the Fresnel equations. This means that more light
