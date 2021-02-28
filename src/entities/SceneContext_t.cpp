@@ -167,17 +167,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
     size_t n_directional_lights = 0;
     size_t n_skyboxes = 0;
     size_t n_imgbuffers = 0;
-    size_t n_cameras = 0;
-
-    std::vector<std::unique_ptr<std::list<size_t>>> mediums_medium_list;
-    std::vector<std::vector<size_t>> materials_mix_list;
-    std::vector<std::unique_ptr<std::list<size_t>>> materials_medium_list;
-    std::vector<
-        std::unique_ptr<std::tuple<
-            std::unique_ptr<std::list<size_t>>, 
-            std::unique_ptr<std::list<std::string>>
-        >>
-    > materials_aggregate_list;            
+    size_t n_cameras = 0;          
     
     // Counts
     if (xml_transform_matrices != nullptr) {
@@ -314,15 +304,15 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
     imgbuffers_ = std::vector<std::unique_ptr<ImgBuffer_t>>(n_imgbuffers);
     cameras_ = std::vector<std::unique_ptr<Camera_t>>(n_cameras);
  
-    mediums_medium_list = std::vector<std::unique_ptr<std::list<size_t>>>(n_mediums);     
-    materials_mix_list = std::vector<std::vector<size_t>>(n_materials);
-    materials_medium_list = std::vector<std::unique_ptr<std::list<size_t>>>(n_materials);
-    materials_aggregate_list = std::vector<
-                                    std::unique_ptr<std::tuple<
-                                        std::unique_ptr<std::list<size_t>>, 
-                                        std::unique_ptr<std::list<std::string>>
-                                    >>
-                                >(n_materials);
+    std::vector<std::unique_ptr<std::list<size_t>>> mediums_medium_list(n_mediums);     
+    std::vector<std::vector<size_t>> materials_mix_list(n_materials);
+    std::vector<std::unique_ptr<std::list<size_t>>> materials_medium_list(n_materials);
+    std::vector<
+        std::unique_ptr<std::tuple<
+            std::unique_ptr<std::list<size_t>>, 
+            std::unique_ptr<std::list<std::string>>
+        >>
+    > materials_aggregate_list (n_materials);
 
     std::cout << "Buffers allocated." << std::endl << std::endl;
 
@@ -1038,7 +1028,7 @@ auto APTracer::Entities::SceneContext_t::create_medium(const tinyxml2::XMLElemen
         require_attributes(xml_medium, attributes);
         mediums_medium_list = get_medium_index_list(xml_medium->Attribute("medium_list"), xml_mediums);
         return std::unique_ptr<Medium_t>(
-                    new APTracer::Materials::PortalScatterer_t(get_transform_matrix(xml_medium->Attribute("transform_matrix"), xml_transform_matrices), xml_medium->DoubleAttribute("scattering_distance"), std::list<Medium_t*>(),
+                    new APTracer::Materials::PortalScatterer_t(get_transform_matrix(xml_medium->Attribute("transform_matrix"), xml_transform_matrices), std::list<Medium_t*>(), xml_medium->DoubleAttribute("scattering_distance"),
                                 xml_medium->DoubleAttribute("ind"), xml_medium->UnsignedAttribute("priority")));
     }
     if (type == "scatterer_exp") {
