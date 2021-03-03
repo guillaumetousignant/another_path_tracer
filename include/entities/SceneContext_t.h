@@ -34,6 +34,11 @@ namespace APTracer { namespace Entities {
 namespace APTracer { namespace Materials {
     class Portal_t;
     class PortalScatterer_t;
+    class FresnelMix_t;
+    class FresnelMixIn_t;
+    class FresnelMixNormal_t;
+    class RandomMix_t;
+    class RandomMixIn_t;
 }}
 
 using namespace APTracer::Shapes;
@@ -59,6 +64,21 @@ namespace APTracer { namespace Entities {
              * @brief Destroy the SceneContext_t object. Calls the reset function.
              */
             ~SceneContext_t();
+
+            /**
+             * @brief Stores the lists of materials mixes and the indexes of their materials.
+             * 
+             * This is needed because two passes have to be made for those materials, as the 
+             * materials they reference are not necessarely created yet, so their pointers
+             * can't be stored in the material mix.
+             */
+            struct MaterialMixLists {
+                std::list<std::tuple<APTracer::Materials::FresnelMix_t*, std::array<size_t, 2>>> fresnel_mix;
+                std::list<std::tuple<APTracer::Materials::FresnelMixIn_t*, std::array<size_t, 2>>> fresnel_mix_in;
+                std::list<std::tuple<APTracer::Materials::FresnelMixNormal_t*, std::array<size_t, 2>>> fresnel_mix_normal;
+                std::list<std::tuple<APTracer::Materials::RandomMix_t*, std::array<size_t, 2>>> random_mix;
+                std::list<std::tuple<APTracer::Materials::RandomMixIn_t*, std::array<size_t, 2>>> random_mix_in;
+            };
 
             bool use_gl_; /**< @brief True if the scenes will be shown on the screen with OpenGL.*/
             std::string scene_name_; /**< @brief Name of the scene. Default image filename.*/
@@ -147,7 +167,7 @@ namespace APTracer { namespace Entities {
              * 
              * @param xml_material XML entry containing the material information.
              * @param[out] materials_medium_list A list of mediums in which the current material is placed and a pointer to the material is appended to this­ if needed.
-             * @param[out] materials_mix_list Indexes of the materials making up a material mix, if needed.
+             * @param[out] fresnel_mix_list The indexes of the materials making up a fresnel mix and a pointer to the material is appended to this if needed.
              * @param[out] materials_aggregate_list Tuple of a list of material indices and a list of material names making up a material aggregate, if needed.
              * @param xml_textures XML entries of all the textures.
              * @param xml_transform_matrices XML entries of all the transformation matrices.
@@ -155,7 +175,21 @@ namespace APTracer { namespace Entities {
              * @param xml_mediums XML entries of all the mediums.
              * @return std::unique_ptr<Material_t> Unique pointer to the created material.
              */
-            auto create_material(const tinyxml2::XMLElement* xml_material, std::list<std::tuple<APTracer::Materials::Portal_t*, std::list<size_t>>> &materials_medium_list, std::vector<size_t> &materials_mix_list, std::unique_ptr<std::tuple<std::unique_ptr<std::list<size_t>>, std::unique_ptr<std::list<std::string>>>> &materials_aggregate_list, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_mediums) -> std::unique_ptr<Material_t>;
+
+            /**
+             * @brief Create a material object
+             * 
+             * @param xml_material XML entry containing the material information.
+             * @param[out] materials_medium_list A list of mediums in which the current material is placed and a pointer to the material is appended to this­ if needed.
+             * @param[out] material_mix_lists Structure containing lists of material mix pointers and the index oh their materials.
+             * @param[out] materials_aggregate_list Tuple of a list of material indices and a list of material names making up a material aggregate, if needed.
+             * @param xml_textures XML entries of all the textures.
+             * @param xml_transform_matrices XML entries of all the transformation matrices.
+             * @param xml_materials XML entries of all the materials.
+             * @param xml_mediums XML entries of all the mediums.
+             * @return std::unique_ptr<Material_t> Unique pointer to the created material.
+             */
+            auto create_material(const tinyxml2::XMLElement* xml_material, std::list<std::tuple<APTracer::Materials::Portal_t*, std::list<size_t>>> &materials_medium_list, MaterialMixLists &material_mix_lists, std::unique_ptr<std::tuple<std::unique_ptr<std::list<size_t>>, std::unique_ptr<std::list<std::string>>>> &materials_aggregate_list, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_mediums) -> std::unique_ptr<Material_t>;
             
             /**
              * @brief Create a mesh geometry object from an xml entry.
@@ -276,9 +310,9 @@ namespace APTracer { namespace Entities {
              * @param material_refracted String containing the first material's name or index.
              * @param material_reflected String containing the second material's name or index.
              * @param xml_materials XML entries of all the materials.
-             * @return std::vector<size_t> Vector of the indices ot the two materials making up a material mix.
+             * @return std::array<size_t, 2> Array of the indices ot the two materials making up a material mix.
              */
-            static auto get_material_mix(std::string material_refracted, std::string material_reflected, const tinyxml2::XMLElement* xml_materials) -> std::vector<size_t>;
+            static auto get_material_mix(std::string material_refracted, std::string material_reflected, const tinyxml2::XMLElement* xml_materials) -> std::array<size_t, 2>;
 
             /**
              * @brief Get a medium from its name or index.

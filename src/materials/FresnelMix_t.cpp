@@ -3,12 +3,11 @@
 #include "entities/Medium_t.h"
 #include <cmath> 
 #include "entities/RandomGenerator_t.h"
-#include "entities/Material_t.h"
 
 using APTracer::Entities::Vec3f;
 
 APTracer::Materials::FresnelMix_t::FresnelMix_t(APTracer::Entities::Material_t* material_refracted, APTracer::Entities::Material_t* material_reflected, double ind) : 
-    MaterialMix_t(material_refracted, material_reflected), ind_(ind), unif_(std::uniform_real_distribution<double>(0, 1)) {}
+    material_refracted_(material_refracted), material_reflected_(material_reflected), ind_(ind), unif_(std::uniform_real_distribution<double>(0, 1)) {}
 
 APTracer::Materials::FresnelMix_t::~FresnelMix_t() = default;
 

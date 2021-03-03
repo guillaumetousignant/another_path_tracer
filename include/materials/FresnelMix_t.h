@@ -1,17 +1,15 @@
 #ifndef APTRACER_FRESNELMIX_T_H
 #define APTRACER_FRESNELMIX_T_H
 
-#include "entities/MaterialMix_t.h"
+#include "entities/Material_t.h"
 #include "entities/Vec3f.h"
 #include "entities/Ray_t.h"
 #include <random>
 
 namespace APTracer { namespace Entities {
-    class Matrial_t;
     class Shape_t;
 }}
 
-using APTracer::Entities::MaterialMix_t;
 using APTracer::Entities::Vec3f;
 using APTracer::Entities::Ray_t;
 using APTracer::Entities::Shape_t;
@@ -29,7 +27,7 @@ namespace APTracer { namespace Materials {
      * plastic, etc. Reflective and refractive surfaces like glass and water should use the dedicated
      * ReflectiveRefractive materials as they are faster.
      */
-    class FresnelMix_t final : public MaterialMix_t{
+    class FresnelMix_t final : public Material_t{
         public:
             /**
              * @brief Construct a new FresnelMix_t object from a refracted and reflected material, and a refractive index.
@@ -45,6 +43,8 @@ namespace APTracer { namespace Materials {
              */
             virtual ~FresnelMix_t() final;
 
+            Material_t* material_refracted_; /**< @brief Material that will be bounced in proportion to the refracted part of light according to the Fresnel equations.*/
+            Material_t* material_reflected_; /**< @brief Material that will be bounced in proportion to the reflected part of light according to the Fresnel equations.*/  
             double ind_; /**< @brief Refractive index of the material.*/
             std::uniform_real_distribution<double> unif_; /**< @brief Uniform random distribution used for generating random numbers.*/
 

@@ -17,7 +17,6 @@ namespace APTracer {
 #include "ImgBufferOpenGL_t.h"
 #include "Material_t.h"
 #include "MaterialMap_t.h"
-#include "MaterialMix_t.h"
 #include "Medium_t.h"
 #include "MeshGeometry_t.h"
 #include "OpenGLRenderer_t.h"

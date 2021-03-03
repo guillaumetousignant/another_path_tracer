@@ -33,8 +33,6 @@ namespace APTracer {
 #include "NormalDiffuseMaterial_t.h"
 #include "Portal_t.h"
 #include "PortalScatterer_t.h"
-#include "PortalScattererTop_t.h"
-#include "PortalTop_t.h"
 #include "RandomMix_t.h"
 #include "RandomMixIn_t.h"
 #include "Reflective_t.h"

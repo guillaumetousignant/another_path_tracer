@@ -31,7 +31,6 @@
 #include "materials/Portal_t.h"
 #include "materials/NormalMaterial_t.h"
 #include "materials/NormalDiffuseMaterial_t.h"
-#include "entities/MaterialMix_t.h"
 #include "materials/FresnelMix_t.h"
 #include "materials/FresnelMixNormal_t.h"
 #include "materials/FresnelMixIn_t.h"
@@ -302,8 +301,8 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
     imgbuffers_ = std::vector<std::unique_ptr<ImgBuffer_t>>(n_imgbuffers);
     cameras_ = std::vector<std::unique_ptr<Camera_t>>(n_cameras);
  
-    std::list<std::tuple<APTracer::Materials::PortalScatterer_t*, std::list<size_t>>> mediums_medium_list;     
-    std::vector<std::vector<size_t>> materials_mix_list(n_materials);
+    std::list<std::tuple<APTracer::Materials::PortalScatterer_t*, std::list<size_t>>> mediums_medium_list;  
+    MaterialMixLists material_mix_list;
     std::list<std::tuple<APTracer::Materials::Portal_t*, std::list<size_t>>> materials_medium_list;
 
     std::vector<
@@ -346,7 +345,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
     // Materials (4)
     if (xml_materials != nullptr) {
         for (tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")) {
-            materials_[index_materials_] = create_material(xml_material, materials_medium_list, materials_mix_list[index_materials_], materials_aggregate_list[index_materials_], xml_textures, xml_transform_matrices, xml_materials, xml_mediums);
+            materials_[index_materials_] = create_material(xml_material, materials_medium_list, material_mix_list, materials_aggregate_list[index_materials_], xml_textures, xml_transform_matrices, xml_materials, xml_mediums);
             ++index_materials_;
         }
         std::cout << "Materials created." << std::endl;
@@ -354,16 +353,30 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
 
     // Fixes 
     // Material mixes fix
-    for (size_t i = 0; i < materials_.size(); i++) {
-        if (!materials_mix_list[i].empty()) {
-            auto* material_mix = dynamic_cast<MaterialMix_t*>(materials_[i].get()); // dynamic caaaast :(
-            if (material_mix == nullptr) {
-                std::cerr << "Error: material #" << i << " was marked as a material mix but is not convertible to one. Exiting." << std::endl;
-                exit(491);
-            }
-            material_mix->material_refracted_ = materials_[materials_mix_list[i][0]].get();
-            material_mix->material_reflected_ = materials_[materials_mix_list[i][1]].get();
-        }
+    for (const auto& fresnel_mix_list: material_mix_list.fresnel_mix) {
+        auto* material_mix = std::get<0>(fresnel_mix_list);
+        material_mix->material_refracted_ = materials_[std::get<1>(fresnel_mix_list)[0]].get();
+        material_mix->material_reflected_ = materials_[std::get<1>(fresnel_mix_list)[1]].get();
+    }
+    for (const auto& fresnel_mix_list: material_mix_list.fresnel_mix_in) {
+        auto* material_mix = std::get<0>(fresnel_mix_list);
+        material_mix->material_refracted_ = materials_[std::get<1>(fresnel_mix_list)[0]].get();
+        material_mix->material_reflected_ = materials_[std::get<1>(fresnel_mix_list)[1]].get();
+    }
+    for (const auto& fresnel_mix_list: material_mix_list.fresnel_mix_normal) {
+        auto* material_mix = std::get<0>(fresnel_mix_list);
+        material_mix->material_refracted_ = materials_[std::get<1>(fresnel_mix_list)[0]].get();
+        material_mix->material_reflected_ = materials_[std::get<1>(fresnel_mix_list)[1]].get();
+    }
+    for (const auto& fresnel_mix_list: material_mix_list.random_mix) {
+        auto* material_mix = std::get<0>(fresnel_mix_list);
+        material_mix->first_material_ = materials_[std::get<1>(fresnel_mix_list)[0]].get();
+        material_mix->second_material_ = materials_[std::get<1>(fresnel_mix_list)[1]].get();
+    }
+    for (const auto& fresnel_mix_list: material_mix_list.random_mix_in) {
+        auto* material_mix = std::get<0>(fresnel_mix_list);
+        material_mix->first_material_ = materials_[std::get<1>(fresnel_mix_list)[0]].get();
+        material_mix->second_material_ = materials_[std::get<1>(fresnel_mix_list)[1]].get();
     }
 
     // Materials medium list fix
@@ -1105,7 +1118,7 @@ auto APTracer::Entities::SceneContext_t::create_medium(const tinyxml2::XMLElemen
     return std::unique_ptr<Medium_t>(new APTracer::Materials::NonAbsorber_t(1.0, 0));
 }
 
-auto APTracer::Entities::SceneContext_t::create_material(const tinyxml2::XMLElement* xml_material, std::list<std::tuple<APTracer::Materials::Portal_t*, std::list<size_t>>> &materials_medium_list, std::vector<size_t> &materials_mix_list, std::unique_ptr<std::tuple<std::unique_ptr<std::list<size_t>>, std::unique_ptr<std::list<std::string>>>> &materials_aggregate_list, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_mediums) -> std::unique_ptr<Material_t> {
+auto APTracer::Entities::SceneContext_t::create_material(const tinyxml2::XMLElement* xml_material, std::list<std::tuple<APTracer::Materials::Portal_t*, std::list<size_t>>> &materials_medium_list, MaterialMixLists &material_mix_lists, std::unique_ptr<std::tuple<std::unique_ptr<std::list<size_t>>, std::unique_ptr<std::list<std::string>>>> &materials_aggregate_list, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_mediums) -> std::unique_ptr<Material_t> {
     std::string type;
     const char* type_char = xml_material->Attribute("type");
     if (type_char == nullptr) {
@@ -1155,23 +1168,26 @@ auto APTracer::Entities::SceneContext_t::create_material(const tinyxml2::XMLElem
     if (type == "fresnelmix") {
         const std::vector<const char*> attributes = {"material_refracted", "material_reflected", "ind"};
         require_attributes(xml_material, attributes);
-        materials_mix_list = get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials);
-        return std::unique_ptr<Material_t>(
+        std::unique_ptr<APTracer::Materials::FresnelMix_t> material(
                     new APTracer::Materials::FresnelMix_t(nullptr, nullptr, xml_material->DoubleAttribute("ind")));
+        material_mix_lists.fresnel_mix.push_back(std::make_tuple(material.get(), get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials)));
+        return material;
     }
     if (type == "fresnelmix_normal") {
         const std::vector<const char*> attributes = {"material_refracted", "material_reflected", "ind", "normal_map"};
         require_attributes(xml_material, attributes);
-        materials_mix_list = get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials);
-        return std::unique_ptr<Material_t>(
+        std::unique_ptr<APTracer::Materials::FresnelMixNormal_t> material(
                     new APTracer::Materials::FresnelMixNormal_t(nullptr, nullptr, xml_material->DoubleAttribute("ind"), get_texture(xml_material->Attribute("normal_map"), xml_textures)));
+        material_mix_lists.fresnel_mix_normal.push_back(std::make_tuple(material.get(), get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials)));
+        return material;
     }
     if (type == "fresnelmix_in") {
         const std::vector<const char*> attributes = {"material_refracted", "material_reflected", "ind"};
         require_attributes(xml_material, attributes);
-        materials_mix_list = get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials);
-        return std::unique_ptr<Material_t>(
+        std::unique_ptr<APTracer::Materials::FresnelMixIn_t> material(
                     new APTracer::Materials::FresnelMixIn_t(nullptr, nullptr, xml_material->DoubleAttribute("ind")));
+        material_mix_lists.fresnel_mix_in.push_back(std::make_tuple(material.get(), get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials)));
+        return material;
     }
     if (type == "normal_material") {
         return std::unique_ptr<Material_t>(new APTracer::Materials::NormalMaterial_t());
@@ -1195,16 +1211,20 @@ auto APTracer::Entities::SceneContext_t::create_material(const tinyxml2::XMLElem
         return std::unique_ptr<Material_t>(new APTracer::Materials::Diffuse_t(Vec3f(), Vec3f(0.5), 1.0));
     }
     if (type == "randommix") {
-        const std::vector<const char*> attributes = {"material_refracted", "material_reflected", "ratio"};
+        const std::vector<const char*> attributes = {"first_material", "second_material", "ratio"};
         require_attributes(xml_material, attributes);
-        materials_mix_list = get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials);
-        return std::unique_ptr<Material_t>(new APTracer::Materials::RandomMix_t(nullptr, nullptr, xml_material->DoubleAttribute("ratio")));
+        std::unique_ptr<APTracer::Materials::RandomMix_t> material(
+                    new APTracer::Materials::RandomMix_t(nullptr, nullptr, xml_material->DoubleAttribute("ratio")));
+        material_mix_lists.random_mix.push_back(std::make_tuple(material.get(), get_material_mix(xml_material->Attribute("first_material"), xml_material->Attribute("second_material"), xml_materials)));
+        return material;
     }
     if (type == "randommix_in") {
-        const std::vector<const char*> attributes = {"material_refracted", "material_reflected", "ratio"};
+        const std::vector<const char*> attributes = {"first_material", "second_material", "ratio"};
         require_attributes(xml_material, attributes);
-        materials_mix_list = get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials);
-        return std::unique_ptr<Material_t>(new APTracer::Materials::RandomMixIn_t(nullptr, nullptr, xml_material->DoubleAttribute("ratio")));
+        std::unique_ptr<APTracer::Materials::RandomMixIn_t> material(
+                    new APTracer::Materials::RandomMixIn_t(nullptr, nullptr, xml_material->DoubleAttribute("ratio")));
+        material_mix_lists.random_mix_in.push_back(std::make_tuple(material.get(), get_material_mix(xml_material->Attribute("first_material"), xml_material->Attribute("second_material"), xml_materials)));
+        return material;
     }
     if (type == "reflective") {
         const std::vector<const char*> attributes = {"emission", "colour"};
@@ -2090,9 +2110,8 @@ auto APTracer::Entities::SceneContext_t::get_texture(std::string texture, const 
     exit(21); 
 }
 
-auto APTracer::Entities::SceneContext_t::get_material_mix(std::string material_refracted, std::string material_reflected, const tinyxml2::XMLElement* xml_materials) -> std::vector<size_t> {
-    //std::unique_ptr<size_t> output_materials = std::unique_ptr<size_t>(new size_t[2]);
-    std::vector<size_t> output_materials = std::vector<size_t>(2);
+auto APTracer::Entities::SceneContext_t::get_material_mix(std::string material_refracted, std::string material_reflected, const tinyxml2::XMLElement* xml_materials) -> std::array<size_t, 2> {
+    std::array<size_t, 2> output_materials;
     
     if (is_number(material_refracted)) {
         output_materials[0] = std::stoi(material_refracted) - 1;

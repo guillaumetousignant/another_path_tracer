@@ -1,16 +1,14 @@
 #ifndef APTRACER_RANDOMMIXIN_T_H
 #define APTRACER_RANDOMMIXIN_T_H
 
-#include "entities/MaterialMix_t.h"
+#include "entities/Material_t.h"
 #include "entities/Ray_t.h"
 #include <random>
 
 namespace APTracer { namespace Entities {
-    class Material_t;
     class Shape_t;
 }}
 
-using APTracer::Entities::MaterialMix_t;
 using APTracer::Entities::Ray_t;
 using APTracer::Entities::Shape_t;
 using APTracer::Entities::Material_t;
@@ -26,22 +24,24 @@ namespace APTracer { namespace Materials {
      * This material models surfaces that are a mix of two materials, like dusty surfaces or surfaces
      * that partly emit light.
      */
-    class RandomMixIn_t final : public MaterialMix_t{
+    class RandomMixIn_t final : public Material_t{
         public:
             /**
              * @brief Construct a new RandomMixIn_t object from two materials and a ratio.
              * 
-             * @param material_refracted First material, that will be randomly bounced according to the ratio, and always on exit.
-             * @param material_reflected Second material, that will be randomly bounced according to the (1 - ratio).
+             * @param first_material First material, that will be randomly bounced according to the ratio, and always on exit.
+             * @param second_material Second material, that will be randomly bounced according to (1 - ratio).
              * @param ratio Proportion of the light bounced by the first material, from 0 to 1.
              */
-            RandomMixIn_t(Material_t* material_refracted, Material_t* material_reflected, double ratio);
+            RandomMixIn_t(Material_t* first_material, Material_t* second_material, double ratio);
             
             /**
              * @brief Destroy the RandomMixIn_t object. Does nothing.
              */
             virtual ~RandomMixIn_t() final;
 
+            Material_t* first_material_; /**< @brief Material that will be bounced in proportion to the ratio, and always on exit.*/
+            Material_t* second_material_; /**< @brief Material that will be bounced in proportion to (1 - ratio).*/
             double ratio_; /**< @brief Proportion of the light bounced by the first, "refracted", material when entering the material.*/
             std::uniform_real_distribution<double> unif_; /**< @brief Uniform random distribution used for generating random numbers.*/
 
