@@ -2,7 +2,7 @@
 #define APTRACER_MATERIALMAP_T_H
 
 #include <string>
-#include <map>
+#include <unordered_map>
 
 namespace APTracer { namespace Entities {
     class Material_t;
@@ -28,7 +28,7 @@ namespace APTracer { namespace Entities {
              */
             ~MaterialMap_t();
 
-            std::map<std::string, Material_t*> materials_; /**< @brief Map of material pointers using string as keys. The keys represent the materials' names.*/
+            std::unordered_map<std::string, Material_t*> materials_; /**< @brief Map of material pointers using string as keys. The keys represent the materials' names.*/
 
             /**
              * @brief Get the material pointer associated with a specific name.
