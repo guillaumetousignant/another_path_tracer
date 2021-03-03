@@ -5,7 +5,7 @@
 #include <string>
 #include <sstream> 
 #include <list>
-#include <tuple>
+#include <utility>
 #include <vector>
 #include <memory>
 #include <array>
@@ -69,15 +69,35 @@ namespace APTracer { namespace Entities {
              * @brief Stores the lists of materials mixes and the indexes of their materials.
              * 
              * This is needed because two passes have to be made for those materials, as the 
-             * materials they reference are not necessarely created yet, so their pointers
+             * materials they reference are not necessarily created yet, so their pointers
              * can't be stored in the material mix.
              */
             struct MaterialMixLists {
-                std::list<std::tuple<APTracer::Materials::FresnelMix_t*, std::array<size_t, 2>>> fresnel_mix;
-                std::list<std::tuple<APTracer::Materials::FresnelMixIn_t*, std::array<size_t, 2>>> fresnel_mix_in;
-                std::list<std::tuple<APTracer::Materials::FresnelMixNormal_t*, std::array<size_t, 2>>> fresnel_mix_normal;
-                std::list<std::tuple<APTracer::Materials::RandomMix_t*, std::array<size_t, 2>>> random_mix;
-                std::list<std::tuple<APTracer::Materials::RandomMixIn_t*, std::array<size_t, 2>>> random_mix_in;
+                std::list<std::pair<APTracer::Materials::FresnelMix_t*, std::array<size_t, 2>>> fresnel_mix;
+                std::list<std::pair<APTracer::Materials::FresnelMixIn_t*, std::array<size_t, 2>>> fresnel_mix_in;
+                std::list<std::pair<APTracer::Materials::FresnelMixNormal_t*, std::array<size_t, 2>>> fresnel_mix_normal;
+                std::list<std::pair<APTracer::Materials::RandomMix_t*, std::array<size_t, 2>>> random_mix;
+                std::list<std::pair<APTracer::Materials::RandomMixIn_t*, std::array<size_t, 2>>> random_mix_in;
+            };
+
+            /**
+             * @brief Stores the lists of transformable materials and their transformations.
+             * 
+             * This is needed because the materials have to be transformed after their creation.
+             */
+            struct MaterialTransformations {
+                std::list<std::pair<APTracer::Materials::Portal_t*, const tinyxml2::XMLElement*>> transformations_pre;
+                std::list<std::pair<APTracer::Materials::Portal_t*, const tinyxml2::XMLElement*>> transformations_post;
+            };
+
+            /**
+             * @brief Stores the lists of transformable mediums and their transformations.
+             * 
+             * This is needed because the mediums have to be transformed after their creation.
+             */
+            struct MediumTransformations {
+                std::list<std::pair<APTracer::Materials::PortalScatterer_t*, const tinyxml2::XMLElement*>> transformations_pre;
+                std::list<std::pair<APTracer::Materials::PortalScatterer_t*, const tinyxml2::XMLElement*>> transformations_post;
             };
 
             bool use_gl_; /**< @brief True if the scenes will be shown on the screen with OpenGL.*/
@@ -156,40 +176,28 @@ namespace APTracer { namespace Entities {
              * 
              * @param xml_medium XML entry containing the medium information.
              * @param[out] mediums_medium_list A list of mediums in which the current medium is placed and a pointer to the medium is appended to this if needed.
+             * @param[out] medium_transformations Structure containing lists of transformable medium pointers and their transformations.
              * @param xml_transform_matrices XML entries of all the transformation matrices.
              * @param xml_mediums XML entries of all the mediums.
              * @return std::unique_ptr<Medium_t> Unique pointer to the created medium.
              */
-            auto create_medium(const tinyxml2::XMLElement* xml_medium, std::list<std::tuple<APTracer::Materials::PortalScatterer_t*, std::list<size_t>>> &mediums_medium_list, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_mediums) -> std::unique_ptr<Medium_t>;
-            
+            auto create_medium(const tinyxml2::XMLElement* xml_medium, std::list<std::pair<APTracer::Materials::PortalScatterer_t*, std::list<size_t>>> &mediums_medium_list, MediumTransformations &medium_transformations, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_mediums) -> std::unique_ptr<Medium_t>;
+
             /**
              * @brief Create a material object from an xml entry.
              * 
              * @param xml_material XML entry containing the material information.
              * @param[out] materials_medium_list A list of mediums in which the current material is placed and a pointer to the material is appended to this­ if needed.
-             * @param[out] fresnel_mix_list The indexes of the materials making up a fresnel mix and a pointer to the material is appended to this if needed.
-             * @param[out] materials_aggregate_list Tuple of a list of material indices and a list of material names making up a material aggregate, if needed.
-             * @param xml_textures XML entries of all the textures.
-             * @param xml_transform_matrices XML entries of all the transformation matrices.
-             * @param xml_materials XML entries of all the materials.
-             * @param xml_mediums XML entries of all the mediums.
-             * @return std::unique_ptr<Material_t> Unique pointer to the created material.
-             */
-
-            /**
-             * @brief Create a material object
-             * 
-             * @param xml_material XML entry containing the material information.
-             * @param[out] materials_medium_list A list of mediums in which the current material is placed and a pointer to the material is appended to this­ if needed.
              * @param[out] material_mix_lists Structure containing lists of material mix pointers and the index oh their materials.
              * @param[out] materials_aggregate_list Tuple of a list of material indices and a list of material names making up a material aggregate, if needed.
+             * @param[out] material_transformations Structure containing lists of transformable material pointers and their transformations.
              * @param xml_textures XML entries of all the textures.
              * @param xml_transform_matrices XML entries of all the transformation matrices.
              * @param xml_materials XML entries of all the materials.
              * @param xml_mediums XML entries of all the mediums.
              * @return std::unique_ptr<Material_t> Unique pointer to the created material.
              */
-            auto create_material(const tinyxml2::XMLElement* xml_material, std::list<std::tuple<APTracer::Materials::Portal_t*, std::list<size_t>>> &materials_medium_list, MaterialMixLists &material_mix_lists, std::unique_ptr<std::tuple<std::unique_ptr<std::list<size_t>>, std::unique_ptr<std::list<std::string>>>> &materials_aggregate_list, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_mediums) -> std::unique_ptr<Material_t>;
+            auto create_material(const tinyxml2::XMLElement* xml_material, std::list<std::pair<APTracer::Materials::Portal_t*, std::list<size_t>>> &materials_medium_list, MaterialMixLists &material_mix_lists, std::unique_ptr<std::tuple<std::unique_ptr<std::list<size_t>>, std::unique_ptr<std::list<std::string>>>> &materials_aggregate_list, MaterialTransformations &material_transformations, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_mediums) -> std::unique_ptr<Material_t>;
             
             /**
              * @brief Create a mesh geometry object from an xml entry.

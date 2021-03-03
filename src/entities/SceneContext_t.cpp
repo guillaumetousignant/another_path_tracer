@@ -3,7 +3,6 @@
 #include <iostream>
 #include <string>
 #include <sstream> 
-#include <tuple>
 #include <algorithm>
 #include <chrono>
 
@@ -301,16 +300,17 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
     imgbuffers_ = std::vector<std::unique_ptr<ImgBuffer_t>>(n_imgbuffers);
     cameras_ = std::vector<std::unique_ptr<Camera_t>>(n_cameras);
  
-    std::list<std::tuple<APTracer::Materials::PortalScatterer_t*, std::list<size_t>>> mediums_medium_list;  
+    std::list<std::pair<APTracer::Materials::PortalScatterer_t*, std::list<size_t>>> mediums_medium_list;  
     MaterialMixLists material_mix_list;
-    std::list<std::tuple<APTracer::Materials::Portal_t*, std::list<size_t>>> materials_medium_list;
-
+    std::list<std::pair<APTracer::Materials::Portal_t*, std::list<size_t>>> materials_medium_list;
     std::vector<
         std::unique_ptr<std::tuple<
             std::unique_ptr<std::list<size_t>>, 
             std::unique_ptr<std::list<std::string>>
         >>
     > materials_aggregate_list (n_materials);
+    MaterialTransformations material_transformations;
+    MediumTransformations medium_transformations;
 
     std::cout << "Buffers allocated." << std::endl << std::endl;
 
@@ -336,7 +336,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
     // Mediums (3)
     if (xml_mediums != nullptr) {
         for (tinyxml2::XMLElement* xml_medium = xml_mediums->FirstChildElement("medium"); xml_medium; xml_medium = xml_medium->NextSiblingElement("medium")) {
-            mediums_[index_mediums_] = create_medium(xml_medium, mediums_medium_list, xml_transform_matrices, xml_mediums);
+            mediums_[index_mediums_] = create_medium(xml_medium, mediums_medium_list, medium_transformations, xml_transform_matrices, xml_mediums);
             ++index_mediums_;
         }
         std::cout << "Mediums created." << std::endl;
@@ -345,7 +345,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
     // Materials (4)
     if (xml_materials != nullptr) {
         for (tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")) {
-            materials_[index_materials_] = create_material(xml_material, materials_medium_list, material_mix_list, materials_aggregate_list[index_materials_], xml_textures, xml_transform_matrices, xml_materials, xml_mediums);
+            materials_[index_materials_] = create_material(xml_material, materials_medium_list, material_mix_list, materials_aggregate_list[index_materials_], material_transformations, xml_textures, xml_transform_matrices, xml_materials, xml_mediums);
             ++index_materials_;
         }
         std::cout << "Materials created." << std::endl;
@@ -354,43 +354,43 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
     // Fixes 
     // Material mixes fix
     for (const auto& fresnel_mix_list: material_mix_list.fresnel_mix) {
-        auto* material_mix = std::get<0>(fresnel_mix_list);
-        material_mix->material_refracted_ = materials_[std::get<1>(fresnel_mix_list)[0]].get();
-        material_mix->material_reflected_ = materials_[std::get<1>(fresnel_mix_list)[1]].get();
+        auto* material_mix = fresnel_mix_list.first;
+        material_mix->material_refracted_ = materials_[fresnel_mix_list.second[0]].get();
+        material_mix->material_reflected_ = materials_[fresnel_mix_list.second[1]].get();
     }
     for (const auto& fresnel_mix_list: material_mix_list.fresnel_mix_in) {
-        auto* material_mix = std::get<0>(fresnel_mix_list);
-        material_mix->material_refracted_ = materials_[std::get<1>(fresnel_mix_list)[0]].get();
-        material_mix->material_reflected_ = materials_[std::get<1>(fresnel_mix_list)[1]].get();
+        auto* material_mix = fresnel_mix_list.first;
+        material_mix->material_refracted_ = materials_[fresnel_mix_list.second[0]].get();
+        material_mix->material_reflected_ = materials_[fresnel_mix_list.second[1]].get();
     }
     for (const auto& fresnel_mix_list: material_mix_list.fresnel_mix_normal) {
-        auto* material_mix = std::get<0>(fresnel_mix_list);
-        material_mix->material_refracted_ = materials_[std::get<1>(fresnel_mix_list)[0]].get();
-        material_mix->material_reflected_ = materials_[std::get<1>(fresnel_mix_list)[1]].get();
+        auto* material_mix = fresnel_mix_list.first;
+        material_mix->material_refracted_ = materials_[fresnel_mix_list.second[0]].get();
+        material_mix->material_reflected_ = materials_[fresnel_mix_list.second[1]].get();
     }
     for (const auto& fresnel_mix_list: material_mix_list.random_mix) {
-        auto* material_mix = std::get<0>(fresnel_mix_list);
-        material_mix->first_material_ = materials_[std::get<1>(fresnel_mix_list)[0]].get();
-        material_mix->second_material_ = materials_[std::get<1>(fresnel_mix_list)[1]].get();
+        auto* material_mix = fresnel_mix_list.first;
+        material_mix->first_material_ = materials_[fresnel_mix_list.second[0]].get();
+        material_mix->second_material_ = materials_[fresnel_mix_list.second[1]].get();
     }
     for (const auto& fresnel_mix_list: material_mix_list.random_mix_in) {
-        auto* material_mix = std::get<0>(fresnel_mix_list);
-        material_mix->first_material_ = materials_[std::get<1>(fresnel_mix_list)[0]].get();
-        material_mix->second_material_ = materials_[std::get<1>(fresnel_mix_list)[1]].get();
+        auto* material_mix = fresnel_mix_list.first;
+        material_mix->first_material_ = materials_[fresnel_mix_list.second[0]].get();
+        material_mix->second_material_ = materials_[fresnel_mix_list.second[1]].get();
     }
 
     // Materials medium list fix
     for (const auto& portal_list: materials_medium_list) {
-        auto* portal = std::get<0>(portal_list);
-        for (auto medium_index: std::get<1>(portal_list)) {
+        auto* portal = portal_list.first;
+        for (auto medium_index: portal_list.second) {
             portal->medium_list_.push_back(mediums_[medium_index].get());
         }
     }
 
     // Mediums medium list fix
     for (const auto& portal_scatterer_list: mediums_medium_list) {
-        auto* portal_scatterer = std::get<0>(portal_scatterer_list);
-        for (auto medium_index: std::get<1>(portal_scatterer_list)) {
+        auto* portal_scatterer = portal_scatterer_list.first;
+        for (auto medium_index: portal_scatterer_list.second) {
             portal_scatterer->medium_list_.push_back(mediums_[medium_index].get());
         }
     }
@@ -495,43 +495,23 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
     }
 
     // Materials
-    if (xml_materials != nullptr) {
-        size_t index = 0;
-        for (tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")) {
-            tinyxml2::XMLElement* transformations_pre = xml_material->FirstChildElement("transformations_pre");
-            if (transformations_pre != nullptr) {
-                auto* portal = dynamic_cast<APTracer::Materials::Portal_t*>(materials_[index].get());
-                if (portal == nullptr) {
-                    std::cerr << "Error, material #" << index << " has transformations, but it is not convertible to a portal. Ignoring." << std::endl;
-                }
-                else {
-                    for (tinyxml2::XMLElement* transformation_pre = transformations_pre->FirstChildElement("transformation_pre"); transformation_pre; transformation_pre = transformation_pre->NextSiblingElement("transformation_pre")) {
-                        apply_transformation(portal->transformation_, transformation_pre);
-                    }
-                }                
+    if (!material_transformations.transformations_pre.empty()) {
+        for (const auto& transformations_pre: material_transformations.transformations_pre) {
+            auto* portal = transformations_pre.first;
+            for (const tinyxml2::XMLElement* transformation_pre = transformations_pre.second->FirstChildElement("transformation_pre"); transformation_pre; transformation_pre = transformation_pre->NextSiblingElement("transformation_pre")) {
+                apply_transformation(portal->transformation_, transformation_pre);
             }
-            ++index;
         }
         std::cout << "Materials transformed." << std::endl;
     }
 
     // Mediums
-    if (xml_mediums != nullptr) {
-        size_t index = 0;
-        for (tinyxml2::XMLElement* xml_medium = xml_mediums->FirstChildElement("medium"); xml_medium; xml_medium = xml_medium->NextSiblingElement("medium")) {
-            tinyxml2::XMLElement* transformations_pre = xml_medium->FirstChildElement("transformations_pre");
-            if (transformations_pre != nullptr) {
-                auto* portal_scatterer = dynamic_cast<APTracer::Materials::PortalScatterer_t*>(mediums_[index].get());
-                if (portal_scatterer == nullptr) {
-                    std::cerr << "Error, medium #" << index << " has transformations, but it is not convertible to a portal. Ignoring." << std::endl;
-                }
-                else {
-                    for (tinyxml2::XMLElement* transformation_pre = transformations_pre->FirstChildElement("transformation_pre"); transformation_pre; transformation_pre = transformation_pre->NextSiblingElement("transformation_pre")) {
-                        apply_transformation(portal_scatterer->transformation_, transformation_pre);
-                    }
-                }                
+    if (!medium_transformations.transformations_pre.empty()) {
+        for (const auto& transformations_pre: medium_transformations.transformations_pre) {
+            auto* portal_scatterer = transformations_pre.first;
+            for (const tinyxml2::XMLElement* transformation_pre = transformations_pre.second->FirstChildElement("transformation_pre"); transformation_pre; transformation_pre = transformation_pre->NextSiblingElement("transformation_pre")) {
+                apply_transformation(portal_scatterer->transformation_, transformation_pre);
             }
-            ++index;
         }
         std::cout << "Mediums transformed." << std::endl;
     }
@@ -634,45 +614,25 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
     }
 
     // Materials
-    if (xml_materials != nullptr) {
-        size_t index = 0;
-        for (tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")) {
-            tinyxml2::XMLElement* transformations_post = xml_material->FirstChildElement("transformations_post");
-            if (transformations_post != nullptr) {
-                auto* portal = dynamic_cast<APTracer::Materials::Portal_t*>(materials_[index].get());
-                if (portal == nullptr) {
-                    std::cerr << "Error, material #" << index << " has transformations, but it is not convertible to a portal. Ignoring." << std::endl;
-                }
-                else {
-                    for (tinyxml2::XMLElement* transformation_post = transformations_post->FirstChildElement("transformation_post"); transformation_post; transformation_post = transformation_post->NextSiblingElement("transformation_post")) {
-                        apply_transformation(portal->transformation_, transformation_post);
-                    }
-                }                
+    if (!material_transformations.transformations_post.empty()) {
+        for (const auto& transformations_post: material_transformations.transformations_post) {
+            auto* portal = transformations_post.first;
+            for (const tinyxml2::XMLElement* transformation_post = transformations_post.second->FirstChildElement("transformation_post"); transformation_post; transformation_post = transformation_post->NextSiblingElement("transformation_post")) {
+                apply_transformation(portal->transformation_, transformation_post);
             }
-            ++index;
         }
         std::cout << "Materials transformed post." << std::endl;
     }
 
     // Mediums
-    if (xml_mediums != nullptr) {
-        size_t index = 0;
-        for (tinyxml2::XMLElement* xml_medium = xml_mediums->FirstChildElement("medium"); xml_medium; xml_medium = xml_medium->NextSiblingElement("medium")) {
-            tinyxml2::XMLElement* transformations_post = xml_medium->FirstChildElement("transformations_post");
-            if (transformations_post != nullptr) {
-                auto* portal_scatterer = dynamic_cast<APTracer::Materials::Portal_t*>(mediums_[index].get());
-                if (portal_scatterer == nullptr) {
-                    std::cerr << "Error, medium #" << index << " has transformations, but it is not convertible to a portal. Ignoring." << std::endl;
-                }
-                else {
-                    for (tinyxml2::XMLElement* transformation_post = transformations_post->FirstChildElement("transformation_post"); transformation_post; transformation_post = transformation_post->NextSiblingElement("transformation_post")) {
-                        apply_transformation(portal_scatterer->transformation_, transformation_post);
-                    }
-                }                
+    if (!medium_transformations.transformations_post.empty()) {
+        for (const auto& transformations_post: medium_transformations.transformations_post) {
+            auto* portal_scatterer = transformations_post.first;
+            for (const tinyxml2::XMLElement* transformation_post = transformations_post.second->FirstChildElement("transformation_post"); transformation_post; transformation_post = transformation_post->NextSiblingElement("transformation_post")) {
+                apply_transformation(portal_scatterer->transformation_, transformation_post);
             }
-            ++index;
         }
-        std::cout << "Mediums transformed post." << std::endl;
+        std::cout << "Materials transformed post." << std::endl;
     }
 
     // Directional lights
@@ -1039,7 +999,7 @@ auto APTracer::Entities::SceneContext_t::create_texture(const tinyxml2::XMLEleme
     exit(20);
 }
 
-auto APTracer::Entities::SceneContext_t::create_medium(const tinyxml2::XMLElement* xml_medium, std::list<std::tuple<APTracer::Materials::PortalScatterer_t*, std::list<size_t>>> &mediums_medium_list, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_mediums) -> std::unique_ptr<Medium_t> {
+auto APTracer::Entities::SceneContext_t::create_medium(const tinyxml2::XMLElement* xml_medium, std::list<std::pair<APTracer::Materials::PortalScatterer_t*, std::list<size_t>>> &mediums_medium_list,  MediumTransformations &medium_transformations, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_mediums) -> std::unique_ptr<Medium_t> {
     std::string type;
     const char* type_char = xml_medium->Attribute("type");
     if (type_char == nullptr) {
@@ -1070,7 +1030,15 @@ auto APTracer::Entities::SceneContext_t::create_medium(const tinyxml2::XMLElemen
         require_attributes(xml_medium, attributes);
         std::unique_ptr<APTracer::Materials::PortalScatterer_t> medium(new APTracer::Materials::PortalScatterer_t(get_transform_matrix(xml_medium->Attribute("transform_matrix"), xml_transform_matrices), std::list<Medium_t*>(), xml_medium->DoubleAttribute("scattering_distance"),
                                 xml_medium->DoubleAttribute("ind"), xml_medium->UnsignedAttribute("priority")));
-        mediums_medium_list.push_back(std::make_tuple(medium.get(), get_medium_index_list(xml_medium->Attribute("medium_list"), xml_mediums)));
+        mediums_medium_list.push_back(std::make_pair(medium.get(), get_medium_index_list(xml_medium->Attribute("medium_list"), xml_mediums)));
+        const tinyxml2::XMLElement* transformations_pre = xml_medium->FirstChildElement("transformations_pre");
+        if (transformations_pre != nullptr) {
+            medium_transformations.transformations_pre.push_back(std::make_pair(medium.get(), transformations_pre));
+        }
+        const tinyxml2::XMLElement* transformations_post = xml_medium->FirstChildElement("transformations_post");
+        if (transformations_post != nullptr) {
+            medium_transformations.transformations_post.push_back(std::make_pair(medium.get(), transformations_post));
+        }
         return medium;
     }
     if (type == "scatterer_exp") {
@@ -1118,7 +1086,7 @@ auto APTracer::Entities::SceneContext_t::create_medium(const tinyxml2::XMLElemen
     return std::unique_ptr<Medium_t>(new APTracer::Materials::NonAbsorber_t(1.0, 0));
 }
 
-auto APTracer::Entities::SceneContext_t::create_material(const tinyxml2::XMLElement* xml_material, std::list<std::tuple<APTracer::Materials::Portal_t*, std::list<size_t>>> &materials_medium_list, MaterialMixLists &material_mix_lists, std::unique_ptr<std::tuple<std::unique_ptr<std::list<size_t>>, std::unique_ptr<std::list<std::string>>>> &materials_aggregate_list, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_mediums) -> std::unique_ptr<Material_t> {
+auto APTracer::Entities::SceneContext_t::create_material(const tinyxml2::XMLElement* xml_material, std::list<std::pair<APTracer::Materials::Portal_t*, std::list<size_t>>> &materials_medium_list, MaterialMixLists &material_mix_lists, std::unique_ptr<std::tuple<std::unique_ptr<std::list<size_t>>, std::unique_ptr<std::list<std::string>>>> &materials_aggregate_list, MaterialTransformations &material_transformations, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_mediums) -> std::unique_ptr<Material_t> {
     std::string type;
     const char* type_char = xml_material->Attribute("type");
     if (type_char == nullptr) {
@@ -1170,7 +1138,7 @@ auto APTracer::Entities::SceneContext_t::create_material(const tinyxml2::XMLElem
         require_attributes(xml_material, attributes);
         std::unique_ptr<APTracer::Materials::FresnelMix_t> material(
                     new APTracer::Materials::FresnelMix_t(nullptr, nullptr, xml_material->DoubleAttribute("ind")));
-        material_mix_lists.fresnel_mix.push_back(std::make_tuple(material.get(), get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials)));
+        material_mix_lists.fresnel_mix.push_back(std::make_pair(material.get(), get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials)));
         return material;
     }
     if (type == "fresnelmix_normal") {
@@ -1178,7 +1146,7 @@ auto APTracer::Entities::SceneContext_t::create_material(const tinyxml2::XMLElem
         require_attributes(xml_material, attributes);
         std::unique_ptr<APTracer::Materials::FresnelMixNormal_t> material(
                     new APTracer::Materials::FresnelMixNormal_t(nullptr, nullptr, xml_material->DoubleAttribute("ind"), get_texture(xml_material->Attribute("normal_map"), xml_textures)));
-        material_mix_lists.fresnel_mix_normal.push_back(std::make_tuple(material.get(), get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials)));
+        material_mix_lists.fresnel_mix_normal.push_back(std::make_pair(material.get(), get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials)));
         return material;
     }
     if (type == "fresnelmix_in") {
@@ -1186,7 +1154,7 @@ auto APTracer::Entities::SceneContext_t::create_material(const tinyxml2::XMLElem
         require_attributes(xml_material, attributes);
         std::unique_ptr<APTracer::Materials::FresnelMixIn_t> material(
                     new APTracer::Materials::FresnelMixIn_t(nullptr, nullptr, xml_material->DoubleAttribute("ind")));
-        material_mix_lists.fresnel_mix_in.push_back(std::make_tuple(material.get(), get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials)));
+        material_mix_lists.fresnel_mix_in.push_back(std::make_pair(material.get(), get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials)));
         return material;
     }
     if (type == "normal_material") {
@@ -1202,8 +1170,15 @@ auto APTracer::Entities::SceneContext_t::create_material(const tinyxml2::XMLElem
         require_attributes(xml_material, attributes);
         std::unique_ptr<APTracer::Materials::Portal_t> material(
                     new APTracer::Materials::Portal_t(get_transform_matrix(xml_material->Attribute("transform_matrix"), xml_transform_matrices), std::list<Medium_t*>()));
-        materials_medium_list.push_back(std::make_tuple(material.get(), get_medium_index_list(xml_material->Attribute("medium_list"), xml_mediums)));
-
+        materials_medium_list.push_back(std::make_pair(material.get(), get_medium_index_list(xml_material->Attribute("medium_list"), xml_mediums)));
+        const tinyxml2::XMLElement* transformations_pre = xml_material->FirstChildElement("transformations_pre");
+        if (transformations_pre != nullptr) {
+            material_transformations.transformations_pre.push_back(std::make_pair(material.get(), transformations_pre));
+        }
+        const tinyxml2::XMLElement* transformations_post = xml_material->FirstChildElement("transformations_post");
+        if (transformations_post != nullptr) {
+            material_transformations.transformations_post.push_back(std::make_pair(material.get(), transformations_post));
+        }
         return material;
     }
     if (type == "portal_refractive") {
@@ -1215,7 +1190,7 @@ auto APTracer::Entities::SceneContext_t::create_material(const tinyxml2::XMLElem
         require_attributes(xml_material, attributes);
         std::unique_ptr<APTracer::Materials::RandomMix_t> material(
                     new APTracer::Materials::RandomMix_t(nullptr, nullptr, xml_material->DoubleAttribute("ratio")));
-        material_mix_lists.random_mix.push_back(std::make_tuple(material.get(), get_material_mix(xml_material->Attribute("first_material"), xml_material->Attribute("second_material"), xml_materials)));
+        material_mix_lists.random_mix.push_back(std::make_pair(material.get(), get_material_mix(xml_material->Attribute("first_material"), xml_material->Attribute("second_material"), xml_materials)));
         return material;
     }
     if (type == "randommix_in") {
@@ -1223,7 +1198,7 @@ auto APTracer::Entities::SceneContext_t::create_material(const tinyxml2::XMLElem
         require_attributes(xml_material, attributes);
         std::unique_ptr<APTracer::Materials::RandomMixIn_t> material(
                     new APTracer::Materials::RandomMixIn_t(nullptr, nullptr, xml_material->DoubleAttribute("ratio")));
-        material_mix_lists.random_mix_in.push_back(std::make_tuple(material.get(), get_material_mix(xml_material->Attribute("first_material"), xml_material->Attribute("second_material"), xml_materials)));
+        material_mix_lists.random_mix_in.push_back(std::make_pair(material.get(), get_material_mix(xml_material->Attribute("first_material"), xml_material->Attribute("second_material"), xml_materials)));
         return material;
     }
     if (type == "reflective") {
