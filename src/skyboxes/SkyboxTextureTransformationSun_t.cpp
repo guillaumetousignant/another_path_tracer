@@ -13,7 +13,7 @@ APTracer::Skyboxes::SkyboxTextureTransformationSun_t::SkyboxTextureTransformatio
 APTracer::Skyboxes::SkyboxTextureTransformationSun_t::~SkyboxTextureTransformationSun_t() = default;
 
 Vec3f APTracer::Skyboxes::SkyboxTextureTransformationSun_t::get(const Vec3f &xyz) const {
-    const Vec3f sph = transformation_->transformDir().multDir(xyz).to_sph(); // CHECK cache transformation_->transformDir()??
+    const Vec3f sph = transformation_->multDir(xyz).to_sph();
     const std::array<double, 2> xy{sph[2]/(2.0 * pi) + 0.5, 1.0 - sph[1]/pi};
 
     if ((std::pow(xy[0] - sun_pos_[0], 2) + std::pow(xy[1] - sun_pos_[1], 2)) < (std::pow(sun_rad_, 2))) {

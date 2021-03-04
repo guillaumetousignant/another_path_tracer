@@ -13,14 +13,12 @@ using APTracer::Entities::Vec3f;
 APTracer::Shapes::TriangleMesh_t::TriangleMesh_t(APTracer::Entities::Material_t *material, APTracer::Entities::TransformMatrix_t *transform_matrix, APTracer::Entities::MeshGeometry_t* geom, size_t index) 
     : Shape_t(material, transform_matrix), geom_(geom), index_(index) {
 
-    const APTracer::Entities::TransformMatrix_t transform_norm = transformation_->transformDir();
-
     points_ = {transformation_->multVec(geom_->v_[3 * index_]),
                transformation_->multVec(geom_->v_[3 * index_ + 1]),
                transformation_->multVec(geom_->v_[3 * index_ + 2])};
-    normals_ = {transform_norm.multDir(geom_->vn_[3 * index_]),
-                transform_norm.multDir(geom_->vn_[3 * index_ + 1]),
-                transform_norm.multDir(geom_->vn_[3 * index_ + 2])};
+    normals_ = {transformation_->multDir(geom_->vn_[3 * index_]),
+                transformation_->multDir(geom_->vn_[3 * index_ + 1]),
+                transformation_->multDir(geom_->vn_[3 * index_ + 2])};
 
     v0v1_ = points_[1] - points_[0];
     v0v2_ = points_[2] - points_[0];
@@ -45,14 +43,12 @@ APTracer::Shapes::TriangleMesh_t::TriangleMesh_t(APTracer::Entities::Material_t 
 APTracer::Shapes::TriangleMesh_t::~TriangleMesh_t() = default;
 
 void APTracer::Shapes::TriangleMesh_t::update() {
-    const APTracer::Entities::TransformMatrix_t transform_norm = transformation_->transformDir();
-
     points_ = {transformation_->multVec(geom_->v_[3 * index_]),
                transformation_->multVec(geom_->v_[3 * index_ + 1]),
                transformation_->multVec(geom_->v_[3 * index_ + 2])};
-    normals_ = {transform_norm.multDir(geom_->vn_[3 * index_]),
-                transform_norm.multDir(geom_->vn_[3 * index_ + 1]),
-                transform_norm.multDir(geom_->vn_[3 * index_ + 2])};
+    normals_ = {transformation_->multDir(geom_->vn_[3 * index_]),
+                transformation_->multDir(geom_->vn_[3 * index_ + 1]),
+                transformation_->multDir(geom_->vn_[3 * index_ + 2])};
 
     v0v1_ = points_[1] - points_[0];
     v0v2_ = points_[2] - points_[0];

@@ -16,7 +16,7 @@ bool APTracer::Materials::PortalScatterer_t::scatter(APTracer::Entities::Ray_t &
     else {
         ray.dist_ = distance;
         ray.origin_ = transformation_->multVec(ray.origin_ + ray.direction_ * ray.dist_);
-        ray.direction_ = transformation_->transformDir().multDir(ray.direction_).normalize_inplace(); // CHECK cache transformation_->transformDir()??
+        ray.direction_ = transformation_->multDir(ray.direction_);
         ray.medium_list_ = medium_list_;
         return true;
     }

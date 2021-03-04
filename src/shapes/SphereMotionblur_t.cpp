@@ -14,9 +14,8 @@ APTracer::Shapes::SphereMotionblur_t::SphereMotionblur_t(APTracer::Entities::Mat
     origin_last_ = origin_;
     radius_ = transformation_->getScale(); 
     radius_last_ = radius_;
-    const APTracer::Entities::TransformMatrix_t transform_norm = transformation_->transformDir();
-    const Vec3f direction = transform_norm.multDir(Vec3f(0.0, 0.0, 1.0)).to_sph(); 
-    const Vec3f direction2 = transform_norm.multDir(Vec3f(1.0, 0.0, 0.0)).to_sph();
+    const Vec3f direction = transformation_->multDir(Vec3f(0.0, 0.0, 1.0)).to_sph(); 
+    const Vec3f direction2 = transformation_->multDir(Vec3f(1.0, 0.0, 0.0)).to_sph();
     direction_sph_ = Vec3f(1.0, direction[1], direction2[2]);
     direction_sph_last_ = direction_sph_;
 }
@@ -30,9 +29,8 @@ void APTracer::Shapes::SphereMotionblur_t::update() {
 
     origin_ = transformation_->multVec(Vec3f());
     radius_ = transformation_->getScale();
-    const APTracer::Entities::TransformMatrix_t transform_norm = transformation_->transformDir();
-    const Vec3f direction = transform_norm.multDir(Vec3f(0.0, 0.0, 1.0)).to_sph(); 
-    const Vec3f direction2 = transform_norm.multDir(Vec3f(1.0, 0.0, 0.0)).to_sph();
+    const Vec3f direction = transformation_->multDir(Vec3f(0.0, 0.0, 1.0)).to_sph(); 
+    const Vec3f direction2 = transformation_->multDir(Vec3f(1.0, 0.0, 0.0)).to_sph();
     direction_sph_ = Vec3f(1.0, direction[1], direction2[2]);
 }
 

@@ -13,7 +13,7 @@ APTracer::Skyboxes::SkyboxTextureTransformation_t::SkyboxTextureTransformation_t
 APTracer::Skyboxes::SkyboxTextureTransformation_t::~SkyboxTextureTransformation_t() = default;
 
 Vec3f APTracer::Skyboxes::SkyboxTextureTransformation_t::get(const Vec3f &xyz) const {
-    const Vec3f sph = transformation_->transformDir().multDir(xyz).to_sph(); // CHECK cache transformation_->transformDir()??
+    const Vec3f sph = transformation_->multDir(xyz).to_sph();
     const std::array<double, 2> xy{sph[2]/(2.0 * pi) + 0.5, 1.0 - sph[1]/pi};
     return texture_->get(xy);
 }

@@ -11,9 +11,8 @@ using APTracer::Entities::Vec3f;
 APTracer::Shapes::Sphere_t::Sphere_t(APTracer::Entities::Material_t *material, APTracer::Entities::TransformMatrix_t *transform_matrix): Shape_t(material, transform_matrix) {
     origin_ = transformation_->multVec(Vec3f());
     radius_ = transformation_->getScale(); 
-    const APTracer::Entities::TransformMatrix_t transform_norm = transformation_->transformDir();
-    const Vec3f direction = transform_norm.multDir(Vec3f(0.0, 0.0, 1.0)).to_sph(); 
-    const Vec3f direction2 = transform_norm.multDir(Vec3f(1.0, 0.0, 0.0)).to_sph();
+    const Vec3f direction = transformation_->multDir(Vec3f(0.0, 0.0, 1.0)).to_sph(); 
+    const Vec3f direction2 = transformation_->multDir(Vec3f(1.0, 0.0, 0.0)).to_sph();
     direction_sph_ = Vec3f(1.0, direction[1], direction2[2]);
 }
 
@@ -22,9 +21,8 @@ APTracer::Shapes::Sphere_t::~Sphere_t() = default;
 void APTracer::Shapes::Sphere_t::update() {
     origin_ = transformation_->multVec(Vec3f());
     radius_ = transformation_->getScale();
-    const APTracer::Entities::TransformMatrix_t transform_norm = transformation_->transformDir();
-    const Vec3f direction = transform_norm.multDir(Vec3f(0.0, 0.0, 1.0)).to_sph(); 
-    const Vec3f direction2 = transform_norm.multDir(Vec3f(1.0, 0.0, 0.0)).to_sph();
+    const Vec3f direction = transformation_->multDir(Vec3f(0.0, 0.0, 1.0)).to_sph(); 
+    const Vec3f direction2 = transformation_->multDir(Vec3f(1.0, 0.0, 0.0)).to_sph();
     direction_sph_ = Vec3f(1.0, direction[1], direction2[2]);
 }
 

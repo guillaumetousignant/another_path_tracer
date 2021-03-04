@@ -35,14 +35,12 @@ APTracer::Shapes::TriangleMotionblur_t::TriangleMotionblur_t(APTracer::Entities:
                                 texcoord[4], texcoord[5]};
     }
 
-    const APTracer::Entities::TransformMatrix_t transform_norm = transformation_->transformDir();
-
     points_ = {transformation_->multVec(points_orig_[0]),
                transformation_->multVec(points_orig_[1]),
                transformation_->multVec(points_orig_[2])};
-    normals_ = {transform_norm.multDir(normals_orig_[0]),
-                transform_norm.multDir(normals_orig_[1]),
-                transform_norm.multDir(normals_orig_[2])};
+    normals_ = {transformation_->multDir(normals_orig_[0]),
+                transformation_->multDir(normals_orig_[1]),
+                transformation_->multDir(normals_orig_[2])};
     points_last_ = points_;
     normals_last_ = normals_;
 
@@ -68,16 +66,14 @@ APTracer::Shapes::TriangleMotionblur_t::TriangleMotionblur_t(APTracer::Entities:
 APTracer::Shapes::TriangleMotionblur_t::~TriangleMotionblur_t() = default;
 
 void APTracer::Shapes::TriangleMotionblur_t::update() {    
-    const APTracer::Entities::TransformMatrix_t transform_norm = transformation_->transformDir();
-
     points_last_ = points_;
     normals_last_ = normals_;
     points_ = {transformation_->multVec(points_orig_[0]),
                transformation_->multVec(points_orig_[1]),
                transformation_->multVec(points_orig_[2])};
-    normals_ = {transform_norm.multDir(normals_orig_[0]),
-                transform_norm.multDir(normals_orig_[1]),
-                transform_norm.multDir(normals_orig_[2])};
+    normals_ = {transformation_->multDir(normals_orig_[0]),
+                transformation_->multDir(normals_orig_[1]),
+                transformation_->multDir(normals_orig_[2])};
 
     v0v1_last_ = v0v1_;
     v0v2_last_ = v0v2_;

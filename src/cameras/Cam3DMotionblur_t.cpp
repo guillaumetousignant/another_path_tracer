@@ -68,7 +68,7 @@ void Cam3DMotionblur_t::update() {
     up_last_ = up_;
 
     origin_ = transformation_->multVec(Vec3f());
-    direction_ = transformation_->transformDir().multDir(Vec3f(0.0, 1.0, 0.0));
+    direction_ = transformation_->multDir(Vec3f(0.0, 1.0, 0.0));
     focal_length_ = focal_length_buffer_;
     up_ = up_buffer_;
 

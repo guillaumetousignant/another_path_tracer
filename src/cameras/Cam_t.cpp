@@ -24,7 +24,7 @@ Cam_t::~Cam_t() = default;
 
 void Cam_t::update() {
     origin_ = transformation_->multVec(Vec3f());
-    direction_ = transformation_->transformDir().multDir(Vec3f(0.0, 1.0, 0.0));
+    direction_ = transformation_->multDir(Vec3f(0.0, 1.0, 0.0));
     up_ = up_buffer_;
 }
 

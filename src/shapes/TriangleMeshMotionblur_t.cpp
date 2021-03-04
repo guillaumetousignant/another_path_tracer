@@ -13,14 +13,12 @@ using APTracer::Entities::Vec3f;
 APTracer::Shapes::TriangleMeshMotionblur_t::TriangleMeshMotionblur_t(APTracer::Entities::Material_t *material, APTracer::Entities::TransformMatrix_t *transform_matrix, APTracer::Entities::MeshGeometry_t* geom, size_t index) 
     : Shape_t(material, transform_matrix), geom_(geom), index_(index) {
 
-    const APTracer::Entities::TransformMatrix_t transform_norm = transformation_->transformDir();
-
     points_ = {transformation_->multVec(geom_->v_[3 * index_]),
                transformation_->multVec(geom_->v_[3 * index_ + 1]),
                transformation_->multVec(geom_->v_[3 * index_ + 2])};
-    normals_ = {transform_norm.multDir(geom_->vn_[3 * index_]),
-                transform_norm.multDir(geom_->vn_[3 * index_ + 1]),
-                transform_norm.multDir(geom_->vn_[3 * index_ + 2])};
+    normals_ = {transformation_->multDir(geom_->vn_[3 * index_]),
+                transformation_->multDir(geom_->vn_[3 * index_ + 1]),
+                transformation_->multDir(geom_->vn_[3 * index_ + 2])};
     points_last_ = points_;
     normals_last_ = normals_;
 
@@ -51,16 +49,14 @@ APTracer::Shapes::TriangleMeshMotionblur_t::TriangleMeshMotionblur_t(APTracer::E
 APTracer::Shapes::TriangleMeshMotionblur_t::~TriangleMeshMotionblur_t() = default;
 
 void APTracer::Shapes::TriangleMeshMotionblur_t::update() {
-    const APTracer::Entities::TransformMatrix_t transform_norm = transformation_->transformDir();
-
     points_last_ = points_;
     normals_last_ = normals_;
     points_ = {transformation_->multVec(geom_->v_[3 * index_]),
                transformation_->multVec(geom_->v_[3 * index_ + 1]),
                transformation_->multVec(geom_->v_[3 * index_ + 2])};
-    normals_ = {transform_norm.multDir(geom_->vn_[3 * index_]),
-                transform_norm.multDir(geom_->vn_[3 * index_ + 1]),
-                transform_norm.multDir(geom_->vn_[3 * index_ + 2])};
+    normals_ = {transformation_->multDir(geom_->vn_[3 * index_]),
+                transformation_->multDir(geom_->vn_[3 * index_ + 1]),
+                transformation_->multDir(geom_->vn_[3 * index_ + 2])};
 
     v0v1_last_ = v0v1_;
     v0v2_last_ = v0v2_;

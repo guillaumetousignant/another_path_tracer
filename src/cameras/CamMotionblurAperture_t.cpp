@@ -31,7 +31,7 @@ void CamMotionblurAperture_t::update() {
     focal_length_last_ = focal_length_;
 
     origin_ = transformation_->multVec(Vec3f());
-    direction_ = transformation_->transformDir().multDir(Vec3f(0.0, 1.0, 0.0));
+    direction_ = transformation_->multDir(Vec3f(0.0, 1.0, 0.0));
     focal_length_ = focal_length_buffer_;
     up_ = up_buffer_;
 }

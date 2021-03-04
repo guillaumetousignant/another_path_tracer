@@ -14,7 +14,7 @@ Camera_t::Camera_t(TransformMatrix_t* transformation, std::string filename, Vec3
             : transformation_(transformation), filename_(std::move(filename)), fov_{fov}, subpix_{subpix}, medium_list_(std::move(medium_list)), 
             skybox_(skybox), max_bounces_(max_bounces), gammaind_(gammaind), up_(up), up_buffer_(up) {
     origin_ = transformation_->multVec(Vec3f()); 
-    direction_ = transformation_->transformDir().multDir(Vec3f(0.0, 1.0, 0.0));
+    direction_ = transformation_->multDir(Vec3f(0.0, 1.0, 0.0));
 }
 
 void Camera_t::accumulate(const Scene_t* scene, unsigned int n_iter) {

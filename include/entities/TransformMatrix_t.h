@@ -65,6 +65,7 @@ namespace APTracer { namespace Entities {
             ~TransformMatrix_t() = default;
 
             std::array<double, 16> matrix_; /**< @brief Array of the 16 values in the 4x4 matrix.*/
+            std::array<double, 16> matrix_inverse_; /**< @brief Transposed inverted matrix, used to transform directions.*/
 
             /**
              * @brief Rotates the matrix around the x axis by a specified angle in radians.
@@ -254,21 +255,10 @@ namespace APTracer { namespace Entities {
             /**
              * @brief Transforms a direction, rotating it according to the operations made on the matrix.
              * 
-             * Should be used on the result of transformDir() to change a direction according to a transformation matrix.
-             * 
              * @param vec Direction to transform.
              * @return Vec3f Transformed direction.
              */
             auto multDir(const Vec3f &vec) const -> Vec3f;
-
-            /**
-             * @brief Returns the transposed inverted matrix, which can be used for multDir().
-             * 
-             * Use multDir() on the result of this function, not on the original transformation matrix.
-             * 
-             * @return TransformMatrix_t Transposed inverted matrix to be used for transforming directions.
-             */
-            auto transformDir() const -> TransformMatrix_t;
 
             /**
              * @brief Get the maximum scale of all three axis.
@@ -276,6 +266,14 @@ namespace APTracer { namespace Entities {
              * @return double Maximum scale of the matrix.
              */
             auto getScale() const -> double;
+
+        private:
+            /**
+             * @brief Builds the transposed inverse matrix, to transform directions.
+             * 
+             * This should be called after each transformation to ensure the inverse is up to date.
+             */
+            auto buildInverse() -> void;
     };
 }}
 

@@ -41,10 +41,9 @@ APTracer::Shapes::Triangle_t::Triangle_t(APTracer::Entities::Material_t *materia
                transformation_->multVec(points_orig_[2])};
 
     
-    const APTracer::Entities::TransformMatrix_t transform_norm = transformation_->transformDir();
-    normals_ = {transform_norm.multDir(normals_orig_[0]),
-                transform_norm.multDir(normals_orig_[1]),
-                transform_norm.multDir(normals_orig_[2])}; // was transformation_ before
+    normals_ = {transformation_->multDir(normals_orig_[0]),
+                transformation_->multDir(normals_orig_[1]),
+                transformation_->multDir(normals_orig_[2])}; // was transformation_ before
 
     v0v1_ = points_[1] - points_[0];
     v0v2_ = points_[2] - points_[0];
@@ -69,10 +68,9 @@ void APTracer::Shapes::Triangle_t::update() {
                transformation_->multVec(points_orig_[1]),
                transformation_->multVec(points_orig_[2])};
 
-    const APTracer::Entities::TransformMatrix_t transform_norm = transformation_->transformDir();
-    normals_ = {transform_norm.multDir(normals_orig_[0]),
-                transform_norm.multDir(normals_orig_[1]),
-                transform_norm.multDir(normals_orig_[2])};
+    normals_ = {transformation_->multDir(normals_orig_[0]),
+                transformation_->multDir(normals_orig_[1]),
+                transformation_->multDir(normals_orig_[2])};
 
     v0v1_ = points_[1] - points_[0];
     v0v2_ = points_[2] - points_[0];
