@@ -4,6 +4,7 @@
 #include "entities/Vec3f.h"
 #include <string>
 #include <array>
+#include <vector>
 
 namespace APTracer { namespace Entities {
 
@@ -25,11 +26,11 @@ namespace APTracer { namespace Entities {
             /**
              * @brief Destroy the Texture_t object, releasing the ressources held by it.
              */
-            ~Texture_t();
+            ~Texture_t() = default;
 
             size_t size_x_; /**< @brief Horizontal number of pixels in the texture*/
             size_t size_y_; /**< @brief Vertical number of pixels in the texture*/
-            Vec3f* img_; /**< @brief Array of 3-element pixels representing the values of all pixels of the texture.*/
+            std::vector<Vec3f> img_; /**< @brief Array of 3-element pixels representing the values of all pixels of the texture.*/
 
             /**
              * @brief Returns the value of the texture from 2D uniform coordinates, using bilinear filtering.

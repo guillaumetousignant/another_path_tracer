@@ -52,7 +52,7 @@ Texture_t::Texture_t(const std::string &filename) {
     size_x_ = image.width();
     size_y_ = image.height();
 
-    img_ = new Vec3f[size_y_*size_x_];
+    img_ = std::vector<Vec3f>(size_y_*size_x_);
 
     const auto n = static_cast<unsigned int>(size_x_ * size_y_);
 
@@ -62,10 +62,6 @@ Texture_t::Texture_t(const std::string &filename) {
             img_[(size_y_ - j - 1)*size_x_ + i] = Vec3f(image(static_cast<unsigned int>(i), static_cast<unsigned int>(j), 0, 0, n, n), image(static_cast<unsigned int>(i), static_cast<unsigned int>(j), 0, 1, n, n), image(static_cast<unsigned int>(i), static_cast<unsigned int>(j), 0, 2, n, n));
         }
     }
-}
-
-Texture_t::~Texture_t() {
-    delete [] img_;
 }
 
 auto Texture_t::get(std::array<double, 2> xy) const -> Vec3f {
