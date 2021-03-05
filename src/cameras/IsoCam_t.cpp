@@ -68,11 +68,12 @@ auto IsoCam_t::raytrace(const Scene_t* scene) -> void {
     }
 }
 
-auto IsoCam_t::write(std::string file_name /*= ""*/) -> void {
-    if (file_name.empty()) {
-        file_name = filename_;
-    }
+auto IsoCam_t::write(const std::string& file_name) -> void {
     image_->write(file_name);
+}
+
+auto IsoCam_t::write() -> void {
+    image_->write(filename_);
 }
 
 auto IsoCam_t::show() const -> void {

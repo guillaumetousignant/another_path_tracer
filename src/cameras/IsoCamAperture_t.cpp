@@ -97,11 +97,12 @@ auto IsoCamAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> pos
     focus(t);
 }
 
-auto IsoCamAperture_t::write(std::string file_name /*= ""*/) -> void {
-    if (file_name.empty()) {
-        file_name = filename_;
-    }
+auto IsoCamAperture_t::write(const std::string& file_name) -> void {
     image_->write(file_name);
+}
+
+auto IsoCamAperture_t::write() -> void {
+    image_->write(filename_);
 }
 
 auto IsoCamAperture_t::show() const -> void {

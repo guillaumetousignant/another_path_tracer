@@ -102,11 +102,12 @@ auto RecCamAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> pos
     focus(t);
 }
 
-auto RecCamAperture_t::write(std::string file_name /*= ""*/) -> void {
-    if (file_name.empty()) {
-        file_name = filename_;
-    }
+auto RecCamAperture_t::write(const std::string& file_name) -> void {
     image_->write(file_name);
+}
+
+auto RecCamAperture_t::write() -> void {
+    image_->write(filename_);
 }
 
 auto RecCamAperture_t::show() const -> void {

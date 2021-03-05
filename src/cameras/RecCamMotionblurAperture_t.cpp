@@ -128,11 +128,12 @@ auto RecCamMotionblurAperture_t::autoFocus(const Scene_t* scene, std::array<doub
     focus(t);
 }
 
-auto RecCamMotionblurAperture_t::write(std::string file_name /*= ""*/) -> void {
-    if (file_name.empty()) {
-        file_name = filename_;
-    }
+auto RecCamMotionblurAperture_t::write(const std::string& file_name) -> void {
     image_->write(file_name);
+}
+
+auto RecCamMotionblurAperture_t::write() -> void {
+    image_->write(filename_);
 }
 
 auto RecCamMotionblurAperture_t::show() const -> void {

@@ -98,7 +98,7 @@ namespace APTracer { namespace Entities {
              * 
              * @param filename File to which the image will be saved.
              */
-            void write(std::string &filename) const;
+            void write(const std::string &filename) const;
 
             /**
              * @brief Writes the image to disk using the provided filename and gamma.
@@ -109,7 +109,7 @@ namespace APTracer { namespace Entities {
              * @param filename File to which the image will be saved.
              * @param gammaind Gamma used to encode the image.
              */
-            void write(std::string &filename, double gammaind) const;
+            void write(const std::string &filename, double gammaind) const;
     };
 }}
 #endif

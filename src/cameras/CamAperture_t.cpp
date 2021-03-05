@@ -98,11 +98,12 @@ auto CamAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> positi
     focus(t);
 }
 
-auto CamAperture_t::write(std::string file_name /*= ""*/) -> void {
-    if (file_name.empty()) {
-        file_name = filename_;
-    }
+auto CamAperture_t::write(const std::string& file_name) -> void {
     image_->write(file_name, gammaind_);
+}
+
+auto CamAperture_t::write() -> void {
+    image_->write(filename_, gammaind_);
 }
 
 auto CamAperture_t::show() const -> void {

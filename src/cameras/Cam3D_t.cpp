@@ -83,30 +83,29 @@ auto Cam3D_t::raytrace(const Scene_t* scene) -> void {
     }
 }
 
-auto Cam3D_t::write(std::string file_name /*= ""*/) -> void {
-    std::string filename_S, filename_L, filename_R;
+auto Cam3D_t::write(const std::string& file_name) -> void {
+    std::string filename_L;
+    std::string filename_R;
 
-    if (file_name.empty()) {
-        filename_L = "";
-        filename_R = "";
-        filename_S = filename_;
+    const size_t point = file_name.find_last_of('.');
+    if (point != std::string::npos) {
+        filename_L = file_name.substr(0, point) + "_L" + file_name.substr(point);
+        filename_R = file_name.substr(0, point) + "_R" + file_name.substr(point);
     }
     else {
-        const size_t point = file_name.find_last_of('.');
-        if (point != std::string::npos) {
-            filename_L = file_name.substr(0, point) + "_L" + file_name.substr(point);
-            filename_R = file_name.substr(0, point) + "_R" + file_name.substr(point);
-            filename_S = file_name;
-        }
-        else {
-            filename_L = file_name + "_L.png";
-            filename_R = file_name + "_R.png";
-            filename_S = file_name;
-        }
+        filename_L = file_name + "_L.png";
+        filename_R = file_name + "_R.png";
     }
+
     camera_L_->write(filename_L);
     camera_R_->write(filename_R);
-    image_->write(filename_S);
+    image_->write(file_name);
+}
+
+auto Cam3D_t::write() -> void {
+    camera_L_->write();
+    camera_R_->write();
+    image_->write(filename_);
 }
 
 auto Cam3D_t::show() const -> void {

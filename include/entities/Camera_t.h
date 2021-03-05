@@ -156,14 +156,22 @@ namespace APTracer { namespace Entities {
             auto setUp(Vec3f &new_up) -> void;
 
             /**
-             * @brief Writes the image buffer to disk with the provided name, or the camera's filename if empty.
+             * @brief Writes the image buffer to disk with the provided name.
              * 
-             * This will write the camera's image to disk or otherwise. It uses the input name, or the camera's filename_ if called with "". The actual name may be prefixed or modified, especially if 
+             * This will write the camera's image to disk or otherwise. It uses the input name. The actual name may be prefixed or modified, especially if 
              * multiple images are written.
              * 
-             * @param file_name Filename used to write the images. If "", uses the camera's filename_. May be changed or prefixed.
+             * @param file_name Filename used to write the images. May be changed or prefixed.
              */
-            virtual auto write(std::string file_name = "") -> void = 0;
+            virtual auto write(const std::string& file_name) -> void = 0;
+
+            /**
+             * @brief Writes the image buffer to disk with the camera's filename if empty.
+             * 
+             * This will write the camera's image to disk or otherwise. It uses the camera's filename_. The actual name may be prefixed or modified, especially if 
+             * multiple images are written.
+             */
+            virtual auto write() -> void = 0;
 
             /**
              * @brief Shows the image on screen. Currently not implemented. Use ImgBufferOpenGL_t instead.

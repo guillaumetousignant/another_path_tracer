@@ -80,11 +80,12 @@ auto IsoCamMotionblur_t::raytrace(const Scene_t* scene) -> void {
     }
 }
 
-auto IsoCamMotionblur_t::write(std::string file_name /*= ""*/) -> void {
-    if (file_name.empty()) {
-        file_name = filename_;
-    }
+auto IsoCamMotionblur_t::write(const std::string& file_name) -> void {
     image_->write(file_name);
+}
+
+auto IsoCamMotionblur_t::write() -> void {
+    image_->write(filename_);
 }
 
 auto IsoCamMotionblur_t::show() const -> void {

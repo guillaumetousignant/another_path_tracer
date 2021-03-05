@@ -85,11 +85,12 @@ auto RecCamMotionblur_t::raytrace(const Scene_t* scene) -> void {
     }
 }
 
-auto RecCamMotionblur_t::write(std::string file_name /*= ""*/) -> void {
-    if (file_name.empty()) {
-        file_name = filename_;
-    }
+auto RecCamMotionblur_t::write(const std::string& file_name) -> void {
     image_->write(file_name);
+}
+
+auto RecCamMotionblur_t::write() -> void {
+    image_->write(filename_);
 }
 
 auto RecCamMotionblur_t::show() const -> void {

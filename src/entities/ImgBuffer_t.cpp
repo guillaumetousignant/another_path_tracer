@@ -66,7 +66,7 @@ void ImgBuffer_t::set(const Vec3f &colour, size_t pos_x, size_t pos_y) {
     img_[pos_y*size_x_ + pos_x] = colour;
 }
 
-void ImgBuffer_t::write(std::string &filename) const {
+void ImgBuffer_t::write(const std::string &filename) const {
     const double update_mult = 1.0/static_cast<double>(updates_);
     cimg_library::CImg<unsigned short> image(static_cast<unsigned int>(size_x_), static_cast<unsigned int>(size_y_), 1, 3);
     const unsigned int n = static_cast<unsigned int>(size_x_ * size_y_);
@@ -89,7 +89,7 @@ void ImgBuffer_t::write(std::string &filename) const {
     image.save_png(filename.c_str());
 }
 
-void ImgBuffer_t::write(std::string &filename, double gammaind) const {
+void ImgBuffer_t::write(const std::string &filename, double gammaind) const {
     const double update_mult = 1.0/static_cast<double>(updates_);
     cimg_library::CImg<unsigned short> image(static_cast<unsigned int>(size_x_), static_cast<unsigned int>(size_y_), 1, 3);
     const unsigned int n = static_cast<unsigned int>(size_x_ * size_y_);

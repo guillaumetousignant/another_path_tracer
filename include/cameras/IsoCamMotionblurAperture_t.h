@@ -126,14 +126,22 @@ namespace APTracer { namespace Cameras {
             virtual auto autoFocus(const Scene_t* scene, std::array<double, 2> position) -> void final;
 
             /**
-             * @brief Writes the image buffer to disk with the provided name, or the camera's filename if empty.
+             * @brief Writes the image buffer to disk with the provided name.
              * 
-             * This will write the camera's image to disk. It uses the input name, or the camera's filename_ if called with "".
+             * This will write the camera's image to disk. It uses the input name.
              * This calls the image buffer's write function. Directory must exist.
              * 
-             * @param file_name Filename used to write the images. If "", uses the camera's filename_.
+             * @param file_name Filename used to write the images.
              */
-            virtual auto write(std::string file_name = "") -> void final;
+            virtual auto  write(const std::string& file_name) -> void final;
+
+            /**
+             * @brief Writes the image buffer to disk with the camera's filename.
+             * 
+             * This will write the camera's image to disk. It uses the camera's filename_.
+             * This calls the image buffer's write function. Directory must exist.
+             */
+            virtual auto write() -> void final;
 
             /**
              * @brief Shows the image on screen. Currently not implemented. Use ImgBufferOpenGL_t instead.

@@ -113,11 +113,12 @@ auto CamMotionblurAperture_t::autoFocus(const Scene_t* scene, std::array<double,
     focus(t);
 }
 
-auto CamMotionblurAperture_t::write(std::string file_name /*= ""*/) -> void {
-    if (file_name.empty()) {
-        file_name = filename_;
-    }
+auto CamMotionblurAperture_t::write(const std::string& file_name) -> void {
     image_->write(file_name, gammaind_);
+}
+
+auto CamMotionblurAperture_t::write() -> void {
+    image_->write(filename_, gammaind_);
 }
 
 auto CamMotionblurAperture_t::show() const -> void {

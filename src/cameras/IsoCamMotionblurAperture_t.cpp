@@ -112,11 +112,12 @@ auto IsoCamMotionblurAperture_t::autoFocus(const Scene_t* scene, std::array<doub
     focus(t);
 }
 
-auto IsoCamMotionblurAperture_t::write(std::string file_name /*= ""*/) -> void {
-    if (file_name.empty()) {
-        file_name = filename_;
-    }
+auto IsoCamMotionblurAperture_t::write(const std::string& file_name) -> void {
     image_->write(file_name);
+}
+
+auto IsoCamMotionblurAperture_t::write() -> void {
+    image_->write(filename_);
 }
 
 auto IsoCamMotionblurAperture_t::show() const -> void {
