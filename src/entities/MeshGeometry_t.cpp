@@ -23,13 +23,6 @@ MeshGeometry_t::MeshGeometry_t(const std::string &filename) {
     deNan();
 }
 
-MeshGeometry_t::~MeshGeometry_t() {
-    delete [] mat_;
-    delete [] v_;
-    delete [] vn_;
-    delete [] vt_;
-}
-
 auto MeshGeometry_t::readObj(const std::string &filename) -> void {
     size_t nv = 0;
     size_t nvt = 0;
@@ -77,9 +70,9 @@ auto MeshGeometry_t::readObj(const std::string &filename) -> void {
     double val1;
     double val2;
 
-    auto v = new Vec3f[nv];
-    auto vt = new double[2 * nvt];
-    auto vn = new Vec3f[nvn];
+    std::vector<Vec3f> v(nv);
+    std::vector<double> vt(2 * nvt);
+    std::vector<Vec3f> vn(nvn);
 
     meshfile.clear();
     meshfile.seekg(0, std::ios::beg);
@@ -114,10 +107,10 @@ auto MeshGeometry_t::readObj(const std::string &filename) -> void {
     size_t pos;
 
     n_tris_ = nf;
-    mat_ = new std::string[n_tris_];
-    v_ = new Vec3f[3*n_tris_];
-    vt_ = new double[6*n_tris_];
-    vn_ = new Vec3f[3*n_tris_];
+    mat_ = std::vector<std::string>(n_tris_);
+    v_ = std::vector<Vec3f>(3*n_tris_);
+    vt_ = std::vector<double>(6*n_tris_);
+    vn_ = std::vector<Vec3f>(3*n_tris_);
 
     meshfile.clear();
     meshfile.seekg(0, std::ios::beg);
@@ -178,10 +171,6 @@ auto MeshGeometry_t::readObj(const std::string &filename) -> void {
     }    
 
     meshfile.close();
-
-    delete [] v;
-    delete [] vt;
-    delete [] vn;
 }
 
 auto MeshGeometry_t::readSU2(const std::string &filename) -> void {
@@ -240,7 +229,7 @@ auto MeshGeometry_t::readSU2(const std::string &filename) -> void {
     double val2;
     bool points_started = false;
 
-    auto v = new Vec3f[nv];
+    std::vector<Vec3f> v(nv);
 
     meshfile.clear();
     meshfile.seekg(0, std::ios::beg);
@@ -278,10 +267,10 @@ auto MeshGeometry_t::readSU2(const std::string &filename) -> void {
     std::string marker_token;
 
     n_tris_ = nf;
-    mat_ = new std::string[n_tris_];
-    v_ = new Vec3f[3*n_tris_];
-    vt_ = new double[6*n_tris_];
-    vn_ = new Vec3f[3*n_tris_];
+    mat_ = std::vector<std::string>(n_tris_);
+    v_ = std::vector<Vec3f>(3*n_tris_);
+    vt_ = std::vector<double>(6*n_tris_);
+    vn_ = std::vector<Vec3f>(3*n_tris_);
 
     meshfile.clear();
     meshfile.seekg(0, std::ios::beg);
@@ -349,7 +338,6 @@ auto MeshGeometry_t::readSU2(const std::string &filename) -> void {
     } 
 
     meshfile.close();
-    delete [] v;
 }
 
 auto MeshGeometry_t::deNan() -> void {

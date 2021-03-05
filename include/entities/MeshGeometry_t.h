@@ -1,8 +1,9 @@
 #ifndef APTRACER_MESHGEOMETRY_T_H
 #define APTRACER_MESHGEOMETRY_T_H
 
-#include <string>
 #include "entities/Vec3f.h"
+#include <string>
+#include <vector>
 
 namespace APTracer { namespace Entities {
 
@@ -28,13 +29,13 @@ namespace APTracer { namespace Entities {
             /**
              * @brief Destroy the MeshGeometry_t object, freeing the memory ressources held by it.
              */
-            ~MeshGeometry_t();
+            ~MeshGeometry_t() = default;
 
             size_t n_tris_; /**< @brief Number of triangular faces held by the mesh geometry.*/
-            std::string* mat_; /**< @brief Array of strings representing each face's material's name. Size: n_tris_.*/
-            Vec3f* v_; /**< @brief Array of points representing the triangular faces. Size: 3*n_tris_. Face i has the points v_[3*i], v_[3*i + 1], v_[3*i + 2].*/
-            double* vt_; /**< @brief Array of uv coordinates representing the triangular faces' texture coordinates. Size: 6*n_tris_. Face i has the uvs [vt_[6*i], vt_[6*i+1]], [vt_[6*i+2], vt_[6*i+3]], [vt_[6*i+4], vt_[6*i+5]].*/
-            Vec3f* vn_; /**< @brief Array of normals representing the triangular faces' normals. Size: 3*n_tris_. Face i has the normals vn_[3*i], vn_[3*i + 1], vn_[3*i + 2].*/
+            std::vector<std::string> mat_; /**< @brief Array of strings representing each face's material's name. Size: n_tris_.*/
+            std::vector<Vec3f> v_; /**< @brief Array of points representing the triangular faces. Size: 3*n_tris_. Face i has the points v_[3*i], v_[3*i + 1], v_[3*i + 2].*/
+            std::vector<double> vt_; /**< @brief Array of uv coordinates representing the triangular faces' texture coordinates. Size: 6*n_tris_. Face i has the uvs [vt_[6*i], vt_[6*i+1]], [vt_[6*i+2], vt_[6*i+3]], [vt_[6*i+4], vt_[6*i+5]].*/
+            std::vector<Vec3f> vn_; /**< @brief Array of normals representing the triangular faces' normals. Size: 3*n_tris_. Face i has the normals vn_[3*i], vn_[3*i + 1], vn_[3*i + 2].*/
         
         private:
             /**
