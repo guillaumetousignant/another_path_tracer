@@ -24,14 +24,14 @@ IsoCamAperture_t::IsoCamAperture_t(TransformMatrix_t* transformation, const std:
 
 IsoCamAperture_t::~IsoCamAperture_t() = default;
 
-void IsoCamAperture_t::update() {
+auto IsoCamAperture_t::update() -> void {
     origin_ = transformation_->multVec(Vec3f());
     direction_ = transformation_->multDir(Vec3f(0.0, 1.0, 0.0));
     focal_length_ = focal_length_buffer_;
     up_ = up_buffer_;
 }
 
-void IsoCamAperture_t::raytrace(const Scene_t* scene) {
+auto IsoCamAperture_t::raytrace(const Scene_t* scene) -> void {
     const Vec3f horizontal = direction_.cross(up_).normalize_inplace();
     const Vec3f vertical = horizontal.cross(direction_).normalize_inplace();
     const double tot_subpix = subpix_[0]*subpix_[1];
@@ -76,11 +76,11 @@ void IsoCamAperture_t::raytrace(const Scene_t* scene) {
     }
 }
 
-void IsoCamAperture_t::focus(double focus_distance) {
+auto IsoCamAperture_t::focus(double focus_distance) -> void {
     focal_length_buffer_ = focus_distance;
 }
 
-void IsoCamAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> position) {
+auto IsoCamAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> position) -> void {
     double t = std::numeric_limits<double>::infinity();
     std::array<double, 2> uv;
 
@@ -97,17 +97,17 @@ void IsoCamAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> pos
     focus(t);
 }
 
-void IsoCamAperture_t::write(std::string file_name /*= ""*/) {
+auto IsoCamAperture_t::write(std::string file_name /*= ""*/) -> void {
     if (file_name.empty()) {
         file_name = filename_;
     }
     image_->write(file_name);
 }
 
-void IsoCamAperture_t::show() const {
+auto IsoCamAperture_t::show() const -> void {
     // What to do here?
 }
 
-void IsoCamAperture_t::reset() {
+auto IsoCamAperture_t::reset() -> void {
     image_->reset();
 }

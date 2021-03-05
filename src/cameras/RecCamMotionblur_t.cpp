@@ -22,7 +22,7 @@ RecCamMotionblur_t::RecCamMotionblur_t(TransformMatrix_t* transformation, const 
 
 RecCamMotionblur_t::~RecCamMotionblur_t() = default;
 
-void RecCamMotionblur_t::update() {
+auto RecCamMotionblur_t::update() -> void {
     origin_last_ = origin_;
     direction_last_ = direction_;
     up_last_ = up_;
@@ -32,7 +32,7 @@ void RecCamMotionblur_t::update() {
     up_ = up_buffer_;
 }
 
-void RecCamMotionblur_t::raytrace(const Scene_t* scene) {
+auto RecCamMotionblur_t::raytrace(const Scene_t* scene) -> void {
     const Vec3f horizontal = direction_.cross(up_).normalize_inplace();
     const Vec3f vertical = horizontal.cross(direction_).normalize_inplace();
     const Vec3f horizontal_last = direction_last_.cross(up_last_).normalize_inplace();
@@ -85,17 +85,17 @@ void RecCamMotionblur_t::raytrace(const Scene_t* scene) {
     }
 }
 
-void RecCamMotionblur_t::write(std::string file_name /*= ""*/) {
+auto RecCamMotionblur_t::write(std::string file_name /*= ""*/) -> void {
     if (file_name.empty()) {
         file_name = filename_;
     }
     image_->write(file_name);
 }
 
-void RecCamMotionblur_t::show() const {
+auto RecCamMotionblur_t::show() const -> void {
     // What to do here?
 }
 
-void RecCamMotionblur_t::reset() {
+auto RecCamMotionblur_t::reset() -> void {
     image_->reset();
 }

@@ -22,13 +22,13 @@ Cam_t::Cam_t(TransformMatrix_t* transformation, const std::string &filename, Vec
 
 Cam_t::~Cam_t() = default;
 
-void Cam_t::update() {
+auto Cam_t::update() -> void {
     origin_ = transformation_->multVec(Vec3f());
     direction_ = transformation_->multDir(Vec3f(0.0, 1.0, 0.0));
     up_ = up_buffer_;
 }
 
-void Cam_t::raytrace(const Scene_t* scene) {
+auto Cam_t::raytrace(const Scene_t* scene) -> void {
     const double tot_subpix = subpix_[0]*subpix_[1];
     const double pixel_span_y = fov_[0]/image_->size_y_;
     const double pixel_span_x = fov_[1]/image_->size_x_;
@@ -69,17 +69,17 @@ void Cam_t::raytrace(const Scene_t* scene) {
     }
 }
 
-void Cam_t::write(std::string file_name /*= ""*/) {
+auto Cam_t::write(std::string file_name /*= ""*/) -> void {
     if (file_name.empty()) {
         file_name = filename_;
     }
     image_->write(file_name, gammaind_);
 }
 
-void Cam_t::show() const {
+auto Cam_t::show() const -> void {
     // What to do here?
 }
 
-void Cam_t::reset() {
+auto Cam_t::reset() -> void {
     image_->reset();
 }

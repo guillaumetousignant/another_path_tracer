@@ -24,14 +24,14 @@ CamAperture_t::CamAperture_t(TransformMatrix_t* transformation, const std::strin
 
 CamAperture_t::~CamAperture_t() = default;
 
-void CamAperture_t::update() {
+auto CamAperture_t::update() -> void {
     origin_ = transformation_->multVec(Vec3f());
     direction_ = transformation_->multDir(Vec3f(0.0, 1.0, 0.0));
     focal_length_ = focal_length_buffer_;
     up_ = up_buffer_;
 }
 
-void CamAperture_t::raytrace(const Scene_t* scene) {
+auto CamAperture_t::raytrace(const Scene_t* scene) -> void {
     const double tot_subpix = subpix_[0]*subpix_[1];
     const double pixel_span_y = fov_[0]/image_->size_y_;
     const double pixel_span_x = fov_[1]/image_->size_x_;
@@ -77,11 +77,11 @@ void CamAperture_t::raytrace(const Scene_t* scene) {
     }
 }
 
-void CamAperture_t::focus(double focus_distance) {
+auto CamAperture_t::focus(double focus_distance) -> void {
     focal_length_buffer_ = focus_distance;
 }
 
-void CamAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> position) {
+auto CamAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> position) -> void {
     double t = std::numeric_limits<double>::infinity();
     std::array<double, 2> uv;
 
@@ -98,17 +98,17 @@ void CamAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> positi
     focus(t);
 }
 
-void CamAperture_t::write(std::string file_name /*= ""*/) {
+auto CamAperture_t::write(std::string file_name /*= ""*/) -> void {
     if (file_name.empty()) {
         file_name = filename_;
     }
     image_->write(file_name, gammaind_);
 }
 
-void CamAperture_t::show() const {
+auto CamAperture_t::show() const -> void {
     // What to do here?
 }
 
-void CamAperture_t::reset() {
+auto CamAperture_t::reset() -> void {
     image_->reset();
 }

@@ -22,7 +22,7 @@ IsoCamMotionblur_t::IsoCamMotionblur_t(TransformMatrix_t* transformation, const 
 
 IsoCamMotionblur_t::~IsoCamMotionblur_t() = default;
 
-void IsoCamMotionblur_t::update() {
+auto IsoCamMotionblur_t::update() -> void {
     origin_last_ = origin_;
     direction_last_ = direction_;
     up_last_ = up_;
@@ -32,7 +32,7 @@ void IsoCamMotionblur_t::update() {
     up_ = up_buffer_;
 }
 
-void IsoCamMotionblur_t::raytrace(const Scene_t* scene) {
+auto IsoCamMotionblur_t::raytrace(const Scene_t* scene) -> void {
     const Vec3f horizontal = direction_.cross(up_).normalize_inplace();
     const Vec3f vertical = horizontal.cross(direction_).normalize_inplace();
     const Vec3f horizontal_last = direction_last_.cross(up_last_).normalize_inplace();
@@ -80,17 +80,17 @@ void IsoCamMotionblur_t::raytrace(const Scene_t* scene) {
     }
 }
 
-void IsoCamMotionblur_t::write(std::string file_name /*= ""*/) {
+auto IsoCamMotionblur_t::write(std::string file_name /*= ""*/) -> void {
     if (file_name.empty()) {
         file_name = filename_;
     }
     image_->write(file_name);
 }
 
-void IsoCamMotionblur_t::show() const {
+auto IsoCamMotionblur_t::show() const -> void {
     // What to do here?
 }
 
-void IsoCamMotionblur_t::reset() {
+auto IsoCamMotionblur_t::reset() -> void {
     image_->reset();
 }

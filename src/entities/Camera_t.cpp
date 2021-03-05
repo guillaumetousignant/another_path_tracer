@@ -17,7 +17,7 @@ Camera_t::Camera_t(TransformMatrix_t* transformation, std::string filename, Vec3
     direction_ = transformation_->multDir(Vec3f(0.0, 1.0, 0.0));
 }
 
-void Camera_t::accumulate(const Scene_t* scene, unsigned int n_iter) {
+auto Camera_t::accumulate(const Scene_t* scene, unsigned int n_iter) -> void {
     unsigned int n = 0;
     while (n < n_iter) {
         ++n;
@@ -32,7 +32,7 @@ void Camera_t::accumulate(const Scene_t* scene, unsigned int n_iter) {
     }
 }
 
-void Camera_t::accumulate(const Scene_t* scene) {
+auto Camera_t::accumulate(const Scene_t* scene) -> void {
     unsigned int n = 0;
     while (true) {
         ++n;
@@ -47,7 +47,7 @@ void Camera_t::accumulate(const Scene_t* scene) {
     }
 }
 
-void Camera_t::accumulateWrite(const Scene_t* scene, unsigned int n_iter, unsigned int interval) {
+auto Camera_t::accumulateWrite(const Scene_t* scene, unsigned int n_iter, unsigned int interval) -> void {
     //std::chrono::steady_clock::time_point t_start, t_end;
     unsigned int n = 0;
     while (n < n_iter) {
@@ -75,7 +75,7 @@ void Camera_t::accumulateWrite(const Scene_t* scene, unsigned int n_iter, unsign
     }
 }
 
-void Camera_t::accumulateWrite(const Scene_t* scene, unsigned int interval) {
+auto Camera_t::accumulateWrite(const Scene_t* scene, unsigned int interval) -> void {
     //std::chrono::steady_clock::time_point t_start, t_end;
     unsigned int n = 0;
     while (true) {
@@ -103,7 +103,7 @@ void Camera_t::accumulateWrite(const Scene_t* scene, unsigned int interval) {
     }
 }
 
-void Camera_t::accumulateWrite(const Scene_t* scene) {
+auto Camera_t::accumulateWrite(const Scene_t* scene) -> void {
     //std::chrono::steady_clock::time_point t_start, t_end;
     unsigned int n = 0;
     while (true) {
@@ -130,6 +130,6 @@ void Camera_t::accumulateWrite(const Scene_t* scene) {
     }
 }
 
-void Camera_t::setUp(Vec3f &new_up) {
+auto Camera_t::setUp(Vec3f &new_up) -> void {
     up_buffer_ = new_up;
 }

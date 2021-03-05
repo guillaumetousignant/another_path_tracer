@@ -64,7 +64,7 @@ namespace APTracer { namespace Entities {
              * 
              * This is used to set the new direction, origin, up, and other variables. Should be called once per frame, before rendering. This is how the changes to the transformation matrix and functions like setUp take effect.
              */
-            virtual void update() = 0;
+            virtual auto update() -> void = 0;
 
             /**
              * @brief Sends rays through the scene, to generate an image.
@@ -73,7 +73,7 @@ namespace APTracer { namespace Entities {
              * 
              * @param scene Scene that will be used to find what each ray hits.
              */
-            virtual void raytrace(const Scene_t* scene) = 0;
+            virtual auto raytrace(const Scene_t* scene) -> void = 0;
 
             /**
              * @brief Raytraces the scene multiple times to get more samples per pixel.
@@ -83,7 +83,7 @@ namespace APTracer { namespace Entities {
              * @param scene Scene that will be used to find what each ray hits.
              * @param n_iter Number of times the scene will be raytraced.
              */
-            void accumulate(const Scene_t* scene, unsigned int n_iter);
+            auto accumulate(const Scene_t* scene, unsigned int n_iter) -> void;
 
             /**
              * @brief Raytraces the scene indefinitely to get more samples per pixel.
@@ -92,7 +92,7 @@ namespace APTracer { namespace Entities {
              * 
              * @param scene Scene that will be used to find what each ray hits.
              */
-            void accumulate(const Scene_t* scene);
+            auto accumulate(const Scene_t* scene) -> void;
 
             /**
              * @brief Raytraces the scene multiple times to get more samples per pixel, saving the image every so often.
@@ -103,7 +103,7 @@ namespace APTracer { namespace Entities {
              * @param n_iter Number of times the scene will be raytraced.
              * @param interval Saves the image every x frames by calling write().
              */
-            void accumulateWrite(const Scene_t* scene, unsigned int n_iter, unsigned int interval);
+            auto accumulateWrite(const Scene_t* scene, unsigned int n_iter, unsigned int interval) -> void;
 
             /**
              * @brief Raytraces the scene indefinitely to get more samples per pixel, saving the image every so often.
@@ -113,7 +113,7 @@ namespace APTracer { namespace Entities {
              * @param scene Scene that will be used to find what each ray hits.
              * @param interval Saves the image every x frames by calling write().
              */
-            void accumulateWrite(const Scene_t* scene, unsigned int interval);
+            auto accumulateWrite(const Scene_t* scene, unsigned int interval) -> void;
 
             /**
              * @brief Raytraces the scene indefinitely to get more samples per pixel, saving the image frame.
@@ -122,7 +122,7 @@ namespace APTracer { namespace Entities {
              * 
              * @param scene Scene that will be used to find what each ray hits.
              */
-            void accumulateWrite(const Scene_t* scene);
+            auto accumulateWrite(const Scene_t* scene) -> void;
 
             /**
              * @brief Sets the focal length of the camera to a specific distance.
@@ -132,7 +132,7 @@ namespace APTracer { namespace Entities {
              * 
              * @param focus_distance How far will the focal plane be.
              */
-            virtual void focus(double focus_distance) {};
+            virtual auto focus(double focus_distance) -> void {};
 
             /**
              * @brief Sets the focal length of the camera to put an object in focus.
@@ -144,7 +144,7 @@ namespace APTracer { namespace Entities {
              * @param scene Scene that will be used to find what object the ray hits and its distance.
              * @param position Where in the frame will the ray be sent. [horizontal, vertical], both from 0 to 1, starting from bottom left.
              */
-            virtual void autoFocus(const Scene_t* scene, std::array<double, 2> position) {};
+            virtual auto autoFocus(const Scene_t* scene, std::array<double, 2> position) -> void {};
 
             /**
              * @brief Set the up vector of the camera.
@@ -153,7 +153,7 @@ namespace APTracer { namespace Entities {
              * 
              * @param new_up New up vector for the camera.
              */
-            void setUp(Vec3f &new_up);
+            auto setUp(Vec3f &new_up) -> void;
 
             /**
              * @brief Writes the image buffer to disk with the provided name, or the camera's filename if empty.
@@ -163,19 +163,19 @@ namespace APTracer { namespace Entities {
              * 
              * @param file_name Filename used to write the images. If "", uses the camera's filename_. May be changed or prefixed.
              */
-            virtual void write(std::string file_name = "") = 0;
+            virtual auto write(std::string file_name = "") -> void = 0;
 
             /**
              * @brief Shows the image on screen. Currently not implemented. Use ImgBufferOpenGL_t instead.
              */
-            virtual void show() const = 0;
+            virtual auto show() const -> void = 0;
 
             /**
              * @brief Resets the camera's image buffer(s), for when the scene or camera has changed.
              * 
              * This will discard all accumulated samples and start accumulation from scratch.
              */
-            virtual void reset() = 0;
+            virtual auto reset() -> void = 0;
     };
 }}
 

@@ -21,13 +21,13 @@ RecCam_t::RecCam_t(TransformMatrix_t* transformation, const std::string &filenam
 
 RecCam_t::~RecCam_t() = default;
 
-void RecCam_t::update() {
+auto RecCam_t::update() -> void {
     origin_ = transformation_->multVec(Vec3f());
     direction_ = transformation_->multDir(Vec3f(0.0, 1.0, 0.0));
     up_ = up_buffer_;
 }
 
-void RecCam_t::raytrace(const Scene_t* scene) {
+auto RecCam_t::raytrace(const Scene_t* scene) -> void {
     const Vec3f horizontal = direction_.cross(up_).normalize_inplace();
     const Vec3f vertical = horizontal.cross(direction_).normalize_inplace();
     const Vec3f focus_point = origin_ + direction_;
@@ -69,17 +69,17 @@ void RecCam_t::raytrace(const Scene_t* scene) {
     }
 }
 
-void RecCam_t::write(std::string file_name /*= ""*/) {
+auto RecCam_t::write(std::string file_name /*= ""*/) -> void {
     if (file_name.empty()) {
         file_name = filename_;
     }
     image_->write(file_name);
 }
 
-void RecCam_t::show() const {
+auto RecCam_t::show() const -> void {
     // What to do here?
 }
 
-void RecCam_t::reset() {
+auto RecCam_t::reset() -> void {
     image_->reset();
 }

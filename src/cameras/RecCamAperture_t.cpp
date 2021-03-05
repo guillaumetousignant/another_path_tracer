@@ -25,14 +25,14 @@ RecCamAperture_t::RecCamAperture_t(TransformMatrix_t* transformation, const std:
 
 RecCamAperture_t::~RecCamAperture_t() = default;
 
-void RecCamAperture_t::update() {
+auto RecCamAperture_t::update() -> void {
     origin_ = transformation_->multVec(Vec3f());
     direction_ = transformation_->multDir(Vec3f(0.0, 1.0, 0.0));
     focal_length_ = focal_length_buffer_;
     up_ = up_buffer_;
 }
 
-void RecCamAperture_t::raytrace(const Scene_t* scene) {
+auto RecCamAperture_t::raytrace(const Scene_t* scene) -> void {
     const Vec3f horizontal = direction_.cross(up_).normalize_inplace();
     const Vec3f vertical = horizontal.cross(direction_).normalize_inplace();
     const Vec3f focus_point = origin_ + direction_ * focal_length_;
@@ -78,11 +78,11 @@ void RecCamAperture_t::raytrace(const Scene_t* scene) {
     }
 }
 
-void RecCamAperture_t::focus(double focus_distance) {
+auto RecCamAperture_t::focus(double focus_distance) -> void {
     focal_length_buffer_ = focus_distance;
 }
 
-void RecCamAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> position) {
+auto RecCamAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> position) -> void {
     double t = std::numeric_limits<double>::infinity();
     std::array<double, 2> uv;
 
@@ -102,17 +102,17 @@ void RecCamAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> pos
     focus(t);
 }
 
-void RecCamAperture_t::write(std::string file_name /*= ""*/) {
+auto RecCamAperture_t::write(std::string file_name /*= ""*/) -> void {
     if (file_name.empty()) {
         file_name = filename_;
     }
     image_->write(file_name);
 }
 
-void RecCamAperture_t::show() const {
+auto RecCamAperture_t::show() const -> void {
     // What to do here?
 }
 
-void RecCamAperture_t::reset() {
+auto RecCamAperture_t::reset() -> void {
     image_->reset();
 }

@@ -97,7 +97,7 @@ namespace APTracer { namespace Cameras {
              * Stores the previous state in the _last variables, so that state can be interpolated according to time.
              * The left and right eye cameras are also updated directly.
              */
-            virtual void update() final;
+            virtual auto update() -> void final;
 
             /**
              * @brief Sends rays through the scene, to generate an image.
@@ -110,7 +110,7 @@ namespace APTracer { namespace Cameras {
              * 
              * @param scene Scene that will be used to find what each ray hits.
              */
-            virtual void raytrace(const Scene_t* scene) final;
+            virtual auto raytrace(const Scene_t* scene) -> void final;
 
             /**
              * @brief Writes the image buffer and the left and right eye images to disk with the provided name, or the camera's filename if empty.
@@ -121,12 +121,12 @@ namespace APTracer { namespace Cameras {
              * 
              * @param file_name Filename used to write the 3D image and the left and right images will have _L and _R suffixes. If "", uses the camera's filename_.
              */
-            virtual void write(std::string file_name = "") final;
+            virtual auto write(std::string file_name = "") -> void final;
 
             /**
              * @brief Shows the image on screen. Currently not implemented. Use ImgBufferOpenGL_t instead.
              */
-            virtual void show() const final;
+            virtual auto show() const -> void final;
 
             /**
              * @brief Resets the camera's and left and right cameras' image buffers, for when the scene or camera has changed.
@@ -134,7 +134,7 @@ namespace APTracer { namespace Cameras {
              * This will discard all accumulated samples and start accumulation from scratch. Calls the image buffers'
              * reset functions.
              */
-            virtual void reset() final;
+            virtual auto reset() -> void final;
 
             /**
              * @brief Sets the focal length of the camera, the distance at which both eye cameras converge.
@@ -145,7 +145,7 @@ namespace APTracer { namespace Cameras {
              * 
              * @param focus_distance New focal length of the camera. Distance at which both eye cameras converge.
              */
-            virtual void focus(double focus_distance) final;
+            virtual auto focus(double focus_distance) -> void final;
 
             /**
              * @brief Focusses the camera on a point in its field of view.
@@ -160,7 +160,7 @@ namespace APTracer { namespace Cameras {
              * @param scene Scene to use to find the object to focus on.
              * @param position Image space coordinates on which to focus. [horizontal, vertical] from 0 to 1, from left to right and bottom to top.
              */
-            virtual void autoFocus(const Scene_t* scene, std::array<double, 2> position) final;
+            virtual auto autoFocus(const Scene_t* scene, std::array<double, 2> position) -> void final;
     };
 }}
 #endif

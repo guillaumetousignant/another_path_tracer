@@ -23,7 +23,7 @@ CamMotionblur_t::CamMotionblur_t(TransformMatrix_t* transformation, const std::s
 
 CamMotionblur_t::~CamMotionblur_t() = default;
 
-void CamMotionblur_t::update() {
+auto CamMotionblur_t::update() -> void {
     origin_last_ = origin_;
     direction_last_ = direction_;
     up_last_ = up_;
@@ -33,7 +33,7 @@ void CamMotionblur_t::update() {
     up_ = up_buffer_;
 }
 
-void CamMotionblur_t::raytrace(const Scene_t* scene) {
+auto CamMotionblur_t::raytrace(const Scene_t* scene) -> void {
     const double tot_subpix = subpix_[0]*subpix_[1];
     const double pixel_span_y = fov_[0]/image_->size_y_;
     const double pixel_span_x = fov_[1]/image_->size_x_;
@@ -83,17 +83,17 @@ void CamMotionblur_t::raytrace(const Scene_t* scene) {
     }
 }
 
-void CamMotionblur_t::write(std::string file_name /*= ""*/) {
+auto CamMotionblur_t::write(std::string file_name /*= ""*/) -> void {
     if (file_name.empty()) {
         file_name = filename_;
     }
     image_->write(file_name, gammaind_);
 }
 
-void CamMotionblur_t::show() const {
+auto CamMotionblur_t::show() const -> void {
     // What to do here?
 }
 
-void CamMotionblur_t::reset() {
+auto CamMotionblur_t::reset() -> void {
     image_->reset();
 }

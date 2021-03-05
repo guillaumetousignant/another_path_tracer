@@ -21,13 +21,13 @@ IsoCam_t::IsoCam_t(TransformMatrix_t* transformation, const std::string &filenam
 
 IsoCam_t::~IsoCam_t() = default;
 
-void IsoCam_t::update() {
+auto IsoCam_t::update() -> void {
     origin_ = transformation_->multVec(Vec3f());
     direction_ = transformation_->multDir(Vec3f(0.0, 1.0, 0.0));
     up_ = up_buffer_;
 }
 
-void IsoCam_t::raytrace(const Scene_t* scene) {
+auto IsoCam_t::raytrace(const Scene_t* scene) -> void {
     const Vec3f horizontal = direction_.cross(up_).normalize_inplace();
     const Vec3f vertical = horizontal.cross(direction_).normalize_inplace();
     const double tot_subpix = subpix_[0]*subpix_[1];
@@ -68,17 +68,17 @@ void IsoCam_t::raytrace(const Scene_t* scene) {
     }
 }
 
-void IsoCam_t::write(std::string file_name /*= ""*/) {
+auto IsoCam_t::write(std::string file_name /*= ""*/) -> void {
     if (file_name.empty()) {
         file_name = filename_;
     }
     image_->write(file_name);
 }
 
-void IsoCam_t::show() const {
+auto IsoCam_t::show() const -> void {
     // What to do here?
 }
 
-void IsoCam_t::reset() {
+auto IsoCam_t::reset() -> void {
     image_->reset();
 }

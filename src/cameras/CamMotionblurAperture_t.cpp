@@ -24,7 +24,7 @@ CamMotionblurAperture_t::CamMotionblurAperture_t(TransformMatrix_t* transformati
 
 CamMotionblurAperture_t::~CamMotionblurAperture_t() = default;
 
-void CamMotionblurAperture_t::update() {
+auto CamMotionblurAperture_t::update() -> void {
     origin_last_ = origin_;
     direction_last_ = direction_;
     up_last_ = up_;
@@ -36,7 +36,7 @@ void CamMotionblurAperture_t::update() {
     up_ = up_buffer_;
 }
 
-void CamMotionblurAperture_t::raytrace(const Scene_t* scene) {
+auto CamMotionblurAperture_t::raytrace(const Scene_t* scene) -> void {
     const double tot_subpix = subpix_[0]*subpix_[1];
     const double pixel_span_y = fov_[0]/image_->size_y_;
     const double pixel_span_x = fov_[1]/image_->size_x_;
@@ -92,11 +92,11 @@ void CamMotionblurAperture_t::raytrace(const Scene_t* scene) {
     }
 }
 
-void CamMotionblurAperture_t::focus(double focus_distance) {
+auto CamMotionblurAperture_t::focus(double focus_distance) -> void {
     focal_length_buffer_ = focus_distance;
 }
 
-void CamMotionblurAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> position) {
+auto CamMotionblurAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> position) -> void {
     double t = std::numeric_limits<double>::infinity();
     std::array<double, 2> uv;
 
@@ -113,17 +113,17 @@ void CamMotionblurAperture_t::autoFocus(const Scene_t* scene, std::array<double,
     focus(t);
 }
 
-void CamMotionblurAperture_t::write(std::string file_name /*= ""*/) {
+auto CamMotionblurAperture_t::write(std::string file_name /*= ""*/) -> void {
     if (file_name.empty()) {
         file_name = filename_;
     }
     image_->write(file_name, gammaind_);
 }
 
-void CamMotionblurAperture_t::show() const {
+auto CamMotionblurAperture_t::show() const -> void {
     // What to do here?
 }
 
-void CamMotionblurAperture_t::reset() {
+auto CamMotionblurAperture_t::reset() -> void {
     image_->reset();
 }

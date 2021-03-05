@@ -59,7 +59,7 @@ Cam3DAperture_t::~Cam3DAperture_t() {
     delete camera_R_;
 }
 
-void Cam3DAperture_t::update() {
+auto Cam3DAperture_t::update() -> void {
     origin_ = transformation_->multVec(Vec3f());
     direction_ = transformation_->multDir(Vec3f(0.0, 1.0, 0.0));
     focal_length_ = focal_length_buffer_;
@@ -77,7 +77,7 @@ void Cam3DAperture_t::update() {
     camera_R_->direction_ = (direction_ * focal_length_ - horizontal * eye_dist_).normalize_inplace();
 }
 
-void Cam3DAperture_t::raytrace(const Scene_t* scene) {
+auto Cam3DAperture_t::raytrace(const Scene_t* scene) -> void {
     camera_L_->raytrace(scene);
     camera_R_->raytrace(scene);
 
@@ -89,7 +89,7 @@ void Cam3DAperture_t::raytrace(const Scene_t* scene) {
     }
 }
 
-void Cam3DAperture_t::write(std::string file_name /*= ""*/) {
+auto Cam3DAperture_t::write(std::string file_name /*= ""*/) -> void {
     std::string filename_S, filename_L, filename_R;
 
     if (file_name.empty()) {
@@ -115,21 +115,21 @@ void Cam3DAperture_t::write(std::string file_name /*= ""*/) {
     image_->write(filename_S);
 }
 
-void Cam3DAperture_t::show() const {
+auto Cam3DAperture_t::show() const -> void {
     // What to do here?
 }
 
-void Cam3DAperture_t::reset() {
+auto Cam3DAperture_t::reset() -> void {
     camera_L_->reset();
     camera_R_->reset();
     image_->reset();
 }
 
-void Cam3DAperture_t::focus(double focus_distance) {
+auto Cam3DAperture_t::focus(double focus_distance) -> void {
     focal_length_buffer_ = focus_distance;
 }
 
-void Cam3DAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> position) {
+auto Cam3DAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> position) -> void {
     double t = std::numeric_limits<double>::infinity();
     std::array<double, 2> uv;
 

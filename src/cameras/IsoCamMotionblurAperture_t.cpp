@@ -25,7 +25,7 @@ IsoCamMotionblurAperture_t::IsoCamMotionblurAperture_t(TransformMatrix_t* transf
 
 IsoCamMotionblurAperture_t::~IsoCamMotionblurAperture_t() = default;
 
-void IsoCamMotionblurAperture_t::update() {
+auto IsoCamMotionblurAperture_t::update() -> void {
     origin_last_ = origin_;
     direction_last_ = direction_;
     up_last_ = up_;
@@ -37,7 +37,7 @@ void IsoCamMotionblurAperture_t::update() {
     up_ = up_buffer_;
 }
 
-void IsoCamMotionblurAperture_t::raytrace(const Scene_t* scene) {
+auto IsoCamMotionblurAperture_t::raytrace(const Scene_t* scene) -> void {
     const Vec3f horizontal = direction_.cross(up_).normalize_inplace();
     const Vec3f vertical = horizontal.cross(direction_).normalize_inplace();
     const Vec3f horizontal_last = direction_last_.cross(up_last_).normalize_inplace();
@@ -91,11 +91,11 @@ void IsoCamMotionblurAperture_t::raytrace(const Scene_t* scene) {
     }
 }
 
-void IsoCamMotionblurAperture_t::focus(double focus_distance) {
+auto IsoCamMotionblurAperture_t::focus(double focus_distance) -> void {
     focal_length_buffer_ = focus_distance;
 }
 
-void IsoCamMotionblurAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> position) {
+auto IsoCamMotionblurAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> position) -> void {
     double t = std::numeric_limits<double>::infinity();
     std::array<double, 2> uv;
 
@@ -112,17 +112,17 @@ void IsoCamMotionblurAperture_t::autoFocus(const Scene_t* scene, std::array<doub
     focus(t);
 }
 
-void IsoCamMotionblurAperture_t::write(std::string file_name /*= ""*/) {
+auto IsoCamMotionblurAperture_t::write(std::string file_name /*= ""*/) -> void {
     if (file_name.empty()) {
         file_name = filename_;
     }
     image_->write(file_name);
 }
 
-void IsoCamMotionblurAperture_t::show() const {
+auto IsoCamMotionblurAperture_t::show() const -> void {
     // What to do here?
 }
 
-void IsoCamMotionblurAperture_t::reset() {
+auto IsoCamMotionblurAperture_t::reset() -> void {
     image_->reset();
 }
