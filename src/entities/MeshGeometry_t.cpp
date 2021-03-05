@@ -73,12 +73,13 @@ void MeshGeometry_t::readObj(const std::string &filename) {
     size_t v_counter = 0;
     size_t vt_counter = 0;
     size_t vn_counter = 0;
-    double val0, val1, val2;
+    double val0;
+    double val1;
+    double val2;
 
-    Vec3f* v = new Vec3f[nv];
-    double* vt = new double[2 * nvt];
-    Vec3f* vn = new Vec3f[nvn];
-
+    auto v = new Vec3f[nv];
+    auto vt = new double[2 * nvt];
+    auto vn = new Vec3f[nvn];
 
     meshfile.clear();
     meshfile.seekg(0, std::ios::beg);
@@ -234,10 +235,12 @@ void MeshGeometry_t::readSU2(const std::string &filename) {
     
     // Getting normals, vertex coordinates and texture coordinates
     size_t v_counter = 0;
-    double val0, val1, val2;
+    double val0;
+    double val1;
+    double val2;
     bool points_started = false;
 
-    Vec3f* v = new Vec3f[nv];
+    auto v = new Vec3f[nv];
 
     meshfile.clear();
     meshfile.seekg(0, std::ios::beg);

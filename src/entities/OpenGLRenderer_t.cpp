@@ -41,7 +41,6 @@ using APTracer::Entities::Vec3f;
 OpenGLRenderer_t* OpenGLRenderer_t::renderer_ = nullptr;
 
 OpenGLRenderer_t::OpenGLRenderer_t() :
-    camera_(nullptr), scene_(nullptr), imgbuffer_(nullptr), 
     right_x_pos_(0), right_y_pos_(0), left_x_pos_(0), left_y_pos_(0), middle_x_pos_(0), 
     middle_y_pos_(0), right_clicked_(false), left_clicked_(false), middle_clicked_(false),
     focus_point_(Vec3f()), camera_dist_(0), updated_(false), write_interval_(1),

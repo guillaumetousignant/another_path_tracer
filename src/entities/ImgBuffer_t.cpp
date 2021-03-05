@@ -69,7 +69,7 @@ void ImgBuffer_t::set(const Vec3f &colour, size_t pos_x, size_t pos_y) {
 void ImgBuffer_t::write(const std::string &filename) const {
     const double update_mult = 1.0/static_cast<double>(updates_);
     cimg_library::CImg<unsigned short> image(static_cast<unsigned int>(size_x_), static_cast<unsigned int>(size_y_), 1, 3);
-    const unsigned int n = static_cast<unsigned int>(size_x_ * size_y_);
+    const auto n = static_cast<unsigned int>(size_x_ * size_y_);
 
     //constexpr unsigned int bit_depth = 16;
     //constexpr double bit_multiplier = std::pow(2.0, bit_depth) - 1.0;
@@ -92,7 +92,7 @@ void ImgBuffer_t::write(const std::string &filename) const {
 void ImgBuffer_t::write(const std::string &filename, double gammaind) const {
     const double update_mult = 1.0/static_cast<double>(updates_);
     cimg_library::CImg<unsigned short> image(static_cast<unsigned int>(size_x_), static_cast<unsigned int>(size_y_), 1, 3);
-    const unsigned int n = static_cast<unsigned int>(size_x_ * size_y_);
+    const auto n = static_cast<unsigned int>(size_x_ * size_y_);
 
     //constexpr unsigned int bit_depth = 16;
     //constexpr double bit_multiplier = std::pow(2.0, bit_depth) - 1.0;

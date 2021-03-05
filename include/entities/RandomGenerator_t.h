@@ -21,6 +21,6 @@ namespace APTracer { namespace Entities {
      * 
      * @return std::mt19937& Reference to this thread's random generator.
      */
-    std::mt19937& rng(); /**< @brief Global random generator initialised once per thread and used through the program.*/
+    std::mt19937& rng();
 }}
 #endif
