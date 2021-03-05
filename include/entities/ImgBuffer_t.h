@@ -3,6 +3,7 @@
 
 #include "entities/Vec3f.h"
 #include <string>
+#include <vector>
 
 namespace APTracer { namespace Entities {
     /**
@@ -24,12 +25,12 @@ namespace APTracer { namespace Entities {
             /**
              * @brief Destroy the ImgBuffer_t object, freeing the memory taken up by the image.
              */
-            virtual ~ImgBuffer_t();
+            virtual ~ImgBuffer_t() = default;
 
             size_t size_x_; /**< @brief Horizontal number of pixels in the image. Main axis of the layout.*/
             size_t size_y_; /**< @brief Vertical number of pixels in the image. Secondary axis of the layout.*/
             unsigned int updates_; /**< @brief Number of times the whole image was updated. Number of samples that each pixel holds.*/
-            Vec3f* img_; /**< @brief Array of colour pixels representing the image, of length size_x_*size_y_. Stored in a x-major fashion, accessed with: pos_y*size_x_ + pos_x.*/
+            std::vector<Vec3f> img_; /**< @brief Array of colour pixels representing the image, of length size_x_*size_y_. Stored in a x-major fashion, accessed with: pos_y*size_x_ + pos_x.*/
 
             /**
              * @brief Resets the image, discarding all samples to date.
