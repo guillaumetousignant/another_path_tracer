@@ -3,6 +3,7 @@
 
 #include "entities/Skybox_t.h"
 #include "entities/Vec3f.h"
+#include <vector>
 
 namespace APTracer { namespace Entities {
     class DirectionalLight_t;
@@ -41,11 +42,11 @@ namespace APTracer { namespace Skyboxes {
             /**
              * @brief Destroy the SkyboxFlatSun_t object, freeing the light array it holds.
              */
-            virtual ~SkyboxFlatSun_t() final;
+            virtual ~SkyboxFlatSun_t() final = default;
 
             Vec3f background_; /**< @brief Colour of the skybox if a light is not hit.*/
-            DirectionalLight_t** lights_; /**< @brief Array of directional lights in the skybox.*/
             size_t n_lights_; /**< @brief Number of directional lights in the skybox.*/
+            std::vector<DirectionalLight_t*> lights_; /**< @brief Array of directional lights in the skybox.*/
 
             virtual Vec3f get(const Vec3f &xyz) const final;
     };
