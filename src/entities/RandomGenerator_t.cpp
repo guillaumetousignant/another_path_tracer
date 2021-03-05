@@ -3,7 +3,7 @@
 #include <omp.h>
 #endif
 
-std::vector<std::mt19937> APTracer::Entities::build_rng_vec() {
+auto APTracer::Entities::build_rng_vec() -> std::vector<std::mt19937> {
     std::vector<std::mt19937> generators;
     std::random_device rd;
 
@@ -13,6 +13,8 @@ std::vector<std::mt19937> APTracer::Entities::build_rng_vec() {
     const int N = 1;
     #endif
 
+    generators.reserve(N);
+
     for (int i = 0; i < N; ++i) {
         generators.emplace_back(rd());
     }
@@ -21,7 +23,7 @@ std::vector<std::mt19937> APTracer::Entities::build_rng_vec() {
 
 std::vector<std::mt19937> APTracer::Entities::rng_vec = APTracer::Entities::build_rng_vec();
 
-std::mt19937& APTracer::Entities::rng() {
+auto APTracer::Entities::rng() -> std::mt19937& {
     #ifdef APTRACER_USE_OPENMP
     return rng_vec[omp_get_thread_num()];
     #else

@@ -14,13 +14,13 @@ namespace APTracer { namespace Entities {
      * 
      * @return std::vector<std::mt19937> 
      */
-    std::vector<std::mt19937> build_rng_vec();
+    auto build_rng_vec() -> std::vector<std::mt19937>;
 
     /**
      * @brief Returns the thread's random generator within rng_vec.
      * 
      * @return std::mt19937& Reference to this thread's random generator.
      */
-    std::mt19937& rng();
+    auto rng() -> std::mt19937&;
 }}
 #endif
