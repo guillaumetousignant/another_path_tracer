@@ -41,7 +41,7 @@ namespace APTracer { namespace Entities {
              * Usually called once per frame, will modify the shape once with all changes that have been made to the transformation
              * matrix since last update.
              */
-            virtual void update() = 0;
+            virtual auto update() -> void = 0;
 
             /**
              * @brief Calculate the intersection between a ray and a shape, and stores information about this intersection.
@@ -56,7 +56,7 @@ namespace APTracer { namespace Entities {
              * @return true The ray intersected the shape, t and uv are defined.
              * @return false The ray doesn't intersect the shape, t and uv are undefined.
              */
-            virtual bool intersection(const Ray_t &ray, double &t, std::array<double, 2> &uv) const = 0;
+            virtual auto intersection(const Ray_t &ray, double &t, std::array<double, 2> &uv) const -> bool = 0;
 
             /**
              * @brief Returns the surface normal at a point in object coordinates.
@@ -68,7 +68,7 @@ namespace APTracer { namespace Entities {
              * @param uv Object coordinates at which we want to find the normal.
              * @return Vec3f Normal vector at the specified coordinates and time.
              */
-            virtual Vec3f normal(double time, std::array<double, 2> uv) const = 0;
+            virtual auto normal(double time, std::array<double, 2> uv) const -> Vec3f = 0;
 
             /**
              * @brief Returns the surface normal and texture coordinates at a point in object coordinates.
@@ -82,7 +82,7 @@ namespace APTracer { namespace Entities {
              * @param[out] tuv Texture coordinates at the specified coordinates and time.
              * @return Vec3f Normal vector at the specified coordinates and time.
              */
-            virtual Vec3f normaluv(double time, std::array<double, 2> uv, std::array<double, 2> &tuv) const = 0;
+            virtual auto normaluv(double time, std::array<double, 2> uv, std::array<double, 2> &tuv) const -> Vec3f = 0;
 
             /**
              * @brief Returns the surface normal, texture coordinates and tangent vector at a point in object coordinates.
@@ -98,7 +98,7 @@ namespace APTracer { namespace Entities {
              * @param[out] tangentvec Tangent vector at the specified coordinates and time.
              * @return Vec3f Normal vector at the specified coordinates and time.
              */
-            virtual Vec3f normal_uv_tangent(double time, std::array<double, 2> uv, std::array<double, 2> &tuv, Vec3f &tangentvec) const = 0;
+            virtual auto normal_uv_tangent(double time, std::array<double, 2> uv, std::array<double, 2> &tuv, Vec3f &tangentvec) const -> Vec3f = 0;
 
             /**
              * @brief Minimum coordinates of an axis-aligned bounding box around the shape.
@@ -108,7 +108,7 @@ namespace APTracer { namespace Entities {
              * 
              * @return Vec3f Minimum coordinates of an axis-aligned bounding box around the shape.
              */
-            virtual Vec3f mincoord() const = 0;
+            virtual auto mincoord() const -> Vec3f = 0;
 
             /**
              * @brief Maximum coordinates of an axis-aligned bounding box around the shape.
@@ -118,7 +118,7 @@ namespace APTracer { namespace Entities {
              * 
              * @return Vec3f Maximum coordinates of an axis-aligned bounding box around the shape.
              */
-            virtual Vec3f maxcoord() const = 0;
+            virtual auto maxcoord() const -> Vec3f = 0;
     };
 }}
 #endif

@@ -70,10 +70,10 @@ namespace APTracer { namespace Entities {
              * @param[in] max_bounces Upper bound of number of bounces. Number of bounces may be less if no object is hit or ray can't be illuminated anymore.
              * @param[in] skybox Skybox that will be intersected if no object is hit.
              */
-            void raycast(const Scene_t* scene, unsigned int max_bounces, const Skybox_t* skybox);
+            auto raycast(const Scene_t* scene, unsigned int max_bounces, const Skybox_t* skybox) -> void;
             
             /**
-             * @brief Adds a medium to a ray's list of mediums, accordint to the medium's prioriy.
+             * @brief Adds a medium to a ray's list of mediums, accordint to the medium's priority.
              * 
              * Adds a medium to a ray's list of mediums. The input medium will be added before the first
              * medium from the list which has a priority equal or superior to the input medium's 
@@ -81,7 +81,7 @@ namespace APTracer { namespace Entities {
              * 
              * @param[in] medium Medium to be added to list of mediums.
              */
-            void add_to_mediums(Medium_t* medium);
+            auto add_to_mediums(Medium_t* medium) -> void;
 
             /**
              * @brief Removes the first instance of the input medium in the list of mediums.
@@ -92,7 +92,7 @@ namespace APTracer { namespace Entities {
              * 
              * @param[in] medium Medium to be removed from the list of mediums.
              */
-            void remove_from_mediums(Medium_t* medium);
+            auto remove_from_mediums(Medium_t* medium) -> void;
     };
 }}
 

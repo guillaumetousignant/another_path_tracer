@@ -29,7 +29,7 @@ namespace APTracer { namespace Entities {
              * @param xyz Direction in cartesian coordinates for which we want the colour.
              * @return Vec3f Colour of the skybox for the given direction.
              */
-            virtual Vec3f get(const Vec3f &xyz) const = 0;
+            virtual auto get(const Vec3f &xyz) const -> Vec3f = 0;
     };
 }}
 
