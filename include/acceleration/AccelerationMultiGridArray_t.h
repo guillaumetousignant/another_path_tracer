@@ -72,10 +72,10 @@ namespace APTracer { namespace Acceleration {
             size_t max_cell_content_; /**< @brief Maximum number of shapes in a cell before it is changed to a subgrid.*/
             unsigned int max_grid_level_; /**< @brief Maximum recursion level of the grid. 0 is no subgrids, 1 means cells from the top-level grid can be single level grids, etc.*/
 
-            virtual Shape_t* intersect(const Ray_t &ray, double &t, std::array<double, 2> &uv) const final;
-            virtual void add(Shape_t* item) final;
-            virtual void remove(const Shape_t* item) final;
-            virtual void move(Shape_t* item) final;
+            virtual auto intersect(const Ray_t &ray, double &t, std::array<double, 2> &uv) const -> Shape_t* final;
+            virtual auto add(Shape_t* item) -> void final;
+            virtual auto remove(const Shape_t* item) -> void final;
+            virtual auto move(Shape_t* item) -> void final;
     };
 }}
 #endif

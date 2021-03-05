@@ -42,22 +42,22 @@ namespace APTracer { namespace Acceleration {
             Shape_t** items_; /**< @brief Array of shapes contained in the cell. This allows fast iterating and lowest memory use.*/
             size_t increment_size_; /**< @brief Size that will be allocated next time 'reserve()' is called. Increased with 'operator++'.*/
 
-            virtual Shape_t* intersect(const Ray_t &ray, double &t, std::array<double, 2> &uv) const final;
-            virtual void add(Shape_t* item) final;
-            virtual void remove(const Shape_t* item) final;
-            virtual void move(Shape_t* item) final;
+            virtual auto intersect(const Ray_t &ray, double &t, std::array<double, 2> &uv) const -> Shape_t* final;
+            virtual auto add(Shape_t* item) -> void final;
+            virtual auto remove(const Shape_t* item) -> void final;
+            virtual auto move(Shape_t* item) -> void final;
 
             /**
              * @brief Increases 'size_' to 'increment_size_', allocating the array with a new size and transfering existing shapes.
              */
-            void reserve();
+            auto reserve() -> void;
 
             /**
              * @brief Increase 'increment_size_', to eventually reserve the new size of the array with 'reserve()'.
              * 
              * @return GridCellArray_t& Reference to this, for chaining operations.
              */
-            GridCellArray_t& operator++();
+            auto operator++() -> GridCellArray_t&;
     };
 }}
 #endif

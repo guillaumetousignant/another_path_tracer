@@ -16,7 +16,7 @@ GridCellArray_t::~GridCellArray_t() {
     delete [] items_;
 }
 
-Shape_t* GridCellArray_t::intersect(const Ray_t &ray, double &t, std::array<double, 2> &uv) const {
+auto GridCellArray_t::intersect(const Ray_t &ray, double &t, std::array<double, 2> &uv) const -> Shape_t* {
     double t_temp;
     std::array<double, 2> uv_temp;
 
@@ -33,7 +33,7 @@ Shape_t* GridCellArray_t::intersect(const Ray_t &ray, double &t, std::array<doub
     return hit_obj;
 }
 
-void GridCellArray_t::add(Shape_t* item) {
+auto GridCellArray_t::add(Shape_t* item) -> void {
     if (n_obj_ < size_) {
         items_[n_obj_] = item;
     }
@@ -53,7 +53,7 @@ void GridCellArray_t::add(Shape_t* item) {
     ++n_obj_;
 }
 
-void GridCellArray_t::remove(const Shape_t* item) {
+auto GridCellArray_t::remove(const Shape_t* item) -> void {
     for (size_t i = 0; i < n_obj_; i++) {
         if (items_[i] == item) {
             for (size_t j = i+1; j < n_obj_; ++j) {
@@ -65,11 +65,11 @@ void GridCellArray_t::remove(const Shape_t* item) {
     }  
 }
 
-void GridCellArray_t::move(Shape_t* item) {
+auto GridCellArray_t::move(Shape_t* item) -> void {
     
 }
 
-void GridCellArray_t::reserve() {
+auto GridCellArray_t::reserve() -> void {
     if (n_obj_ > 0) {
         Shape_t** items_temp = new Shape_t*[increment_size_];
         for (size_t i = 0; i < n_obj_; ++i) {
@@ -85,7 +85,7 @@ void GridCellArray_t::reserve() {
     size_ = increment_size_;
 }
 
-GridCellArray_t& GridCellArray_t::operator++() {
+auto GridCellArray_t::operator++() -> GridCellArray_t& {
     ++increment_size_;
     return *this;
 }

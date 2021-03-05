@@ -55,9 +55,9 @@ AccelerationMultiGridVector_t::AccelerationMultiGridVector_t(Shape_t** items, si
         min1.min(cell_res);
         max1.min(cell_res);
         
-        for (size_t z = static_cast<size_t>(min1[2]); z <= static_cast<size_t>(max1[2]); ++z) {
-            for (size_t y = static_cast<size_t>(min1[1]); y <= static_cast<size_t>(max1[1]); ++y) {
-                for (size_t x = static_cast<size_t>(min1[0]); x <= static_cast<size_t>(max1[0]); ++x) {
+        for (auto z = static_cast<size_t>(min1[2]); z <= static_cast<size_t>(max1[2]); ++z) {
+            for (auto y = static_cast<size_t>(min1[1]); y <= static_cast<size_t>(max1[1]); ++y) {
+                for (auto x = static_cast<size_t>(min1[0]); x <= static_cast<size_t>(max1[0]); ++x) {
                     if (temp_cells[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] == nullptr) {
                         temp_cells[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] = new GridCellVector_t;
                     }
@@ -132,9 +132,9 @@ AccelerationMultiGridVector_t::AccelerationMultiGridVector_t(Shape_t** items, si
         min1.min(cell_res);
         max1.min(cell_res);
         
-        for (size_t z = static_cast<size_t>(min1[2]); z <= static_cast<size_t>(max1[2]); ++z) {
-            for (size_t y = static_cast<size_t>(min1[1]); y <= static_cast<size_t>(max1[1]); ++y) {
-                for (size_t x = static_cast<size_t>(min1[0]); x <= static_cast<size_t>(max1[0]); ++x) {
+        for (auto z = static_cast<size_t>(min1[2]); z <= static_cast<size_t>(max1[2]); ++z) {
+            for (auto y = static_cast<size_t>(min1[1]); y <= static_cast<size_t>(max1[1]); ++y) {
+                for (auto x = static_cast<size_t>(min1[0]); x <= static_cast<size_t>(max1[0]); ++x) {
                     if (temp_cells[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] == nullptr) {
                         temp_cells[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] = new GridCellVector_t;
                     }
@@ -176,7 +176,7 @@ AccelerationMultiGridVector_t::~AccelerationMultiGridVector_t() {
     delete [] cells_;
 }
 
-Shape_t* AccelerationMultiGridVector_t::intersect(const Ray_t &ray, double &t, std::array<double, 2> &uv) const {
+auto AccelerationMultiGridVector_t::intersect(const Ray_t &ray, double &t, std::array<double, 2> &uv) const -> Shape_t* {
     double tbbox;
     std::array<long long, 3> cellexit {0, 0, 0};
     std::array<int, 3> cellstep {0, 0, 0};
@@ -237,7 +237,7 @@ Shape_t* AccelerationMultiGridVector_t::intersect(const Ray_t &ray, double &t, s
     return hit_obj;
 }
 
-void AccelerationMultiGridVector_t::add(Shape_t* item) {
+auto AccelerationMultiGridVector_t::add(Shape_t* item) -> void {
     Vec3f min1 = Vec3f(std::numeric_limits<double>::infinity());                        
     Vec3f max1 = Vec3f(-std::numeric_limits<double>::infinity());
 
@@ -252,9 +252,9 @@ void AccelerationMultiGridVector_t::add(Shape_t* item) {
     min1.min(cell_res);
     max1.min(cell_res);
 
-    for (size_t z = static_cast<size_t>(min1[2]); z <= static_cast<size_t>(max1[2]); ++z) {
-        for (size_t y = static_cast<size_t>(min1[1]); y <= static_cast<size_t>(max1[1]); ++y) {
-            for (size_t x = static_cast<size_t>(min1[0]); x <= static_cast<size_t>(max1[0]); ++x) {
+    for (auto z = static_cast<size_t>(min1[2]); z <= static_cast<size_t>(max1[2]); ++z) {
+        for (auto y = static_cast<size_t>(min1[1]); y <= static_cast<size_t>(max1[1]); ++y) {
+            for (auto x = static_cast<size_t>(min1[0]); x <= static_cast<size_t>(max1[0]); ++x) {
                 if (cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] == nullptr) {
                     cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] = new GridCellVector_t;
                 }
@@ -264,7 +264,7 @@ void AccelerationMultiGridVector_t::add(Shape_t* item) {
     }
 }
 
-void AccelerationMultiGridVector_t::remove(const Shape_t* item) {
+auto AccelerationMultiGridVector_t::remove(const Shape_t* item) -> void {
     Vec3f min1 = Vec3f(std::numeric_limits<double>::infinity());                        
     Vec3f max1 = Vec3f(-std::numeric_limits<double>::infinity());
 
@@ -279,9 +279,9 @@ void AccelerationMultiGridVector_t::remove(const Shape_t* item) {
     min1.min(cell_res);
     max1.min(cell_res);
 
-    for (size_t z = static_cast<size_t>(min1[2]); z <= static_cast<size_t>(max1[2]); ++z) {
-        for (size_t y = static_cast<size_t>(min1[1]); y <= static_cast<size_t>(max1[1]); ++y) {
-            for (size_t x = static_cast<size_t>(min1[0]); x <= static_cast<size_t>(max1[0]); ++x) {
+    for (auto z = static_cast<size_t>(min1[2]); z <= static_cast<size_t>(max1[2]); ++z) {
+        for (auto y = static_cast<size_t>(min1[1]); y <= static_cast<size_t>(max1[1]); ++y) {
+            for (auto x = static_cast<size_t>(min1[0]); x <= static_cast<size_t>(max1[0]); ++x) {
                 if (cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] == nullptr) {
                     cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]]->remove(item);
                 }
@@ -290,6 +290,6 @@ void AccelerationMultiGridVector_t::remove(const Shape_t* item) {
     }
 }
 
-void AccelerationMultiGridVector_t::move(Shape_t* item) {
+auto AccelerationMultiGridVector_t::move(Shape_t* item) -> void {
 
 }

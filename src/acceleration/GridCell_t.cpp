@@ -11,7 +11,7 @@ GridCell_t::GridCell_t() : items_(std::list<Shape_t*>()) {
 
 GridCell_t::~GridCell_t() = default;
 
-Shape_t* GridCell_t::intersect(const Ray_t &ray, double &t, std::array<double, 2> &uv) const {
+auto GridCell_t::intersect(const Ray_t &ray, double &t, std::array<double, 2> &uv) const -> Shape_t* {
     double t_temp;
     std::array<double, 2> uv_temp;
 
@@ -28,12 +28,12 @@ Shape_t* GridCell_t::intersect(const Ray_t &ray, double &t, std::array<double, 2
     return hit_obj;
 }
 
-void GridCell_t::add(Shape_t* item) {
+auto GridCell_t::add(Shape_t* item) -> void {
     items_.push_back(item);
     ++n_obj_;
 }
 
-void GridCell_t::remove(const Shape_t* item) {
+auto GridCell_t::remove(const Shape_t* item) -> void {
     for (std::list<Shape_t*>::iterator it = items_.begin(); it != items_.end(); ++it) {
         if ((*it) == item) {
             items_.erase(it);
@@ -43,6 +43,6 @@ void GridCell_t::remove(const Shape_t* item) {
     }
 }
 
-void GridCell_t::move(Shape_t* item) {
+auto GridCell_t::move(Shape_t* item) -> void {
     
 }

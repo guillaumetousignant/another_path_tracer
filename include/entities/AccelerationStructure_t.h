@@ -41,7 +41,7 @@ namespace APTracer { namespace Entities {
              * @param[out] uv 2D object-space coordinates of the intersection.
              * @return Shape_t* Pointer of the intersected shape. Returns nullptr if there is no intersection.
              */
-            virtual Shape_t* intersect(const Ray_t &ray, double &t, std::array<double, 2> &uv) const = 0;
+            virtual auto intersect(const Ray_t &ray, double &t, std::array<double, 2> &uv) const -> Shape_t* = 0;
             
             /**
              * @brief Adds a shape to the acceleration structure.
@@ -54,7 +54,7 @@ namespace APTracer { namespace Entities {
              * 
              * @param[in] item Shape to be added to the acceleration structure.
              */
-            virtual void add(Shape_t* item) = 0;
+            virtual auto add(Shape_t* item) -> void = 0;
 
             /**
              * @brief Removes a shape from the acceleration structure.
@@ -67,7 +67,7 @@ namespace APTracer { namespace Entities {
              * 
              * @param item Shape to be removed from the acceleration structure.
              */
-            virtual void remove(const Shape_t* item) = 0;
+            virtual auto remove(const Shape_t* item) -> void = 0;
 
             /**
              * @brief Moves a shape in the acceleration structure.
@@ -80,7 +80,7 @@ namespace APTracer { namespace Entities {
              * 
              * @param item Shape to be removed from the acceleration structure.
              */
-            virtual void move(Shape_t* item) = 0;
+            virtual auto move(Shape_t* item) -> void = 0;
     };
 }}
 

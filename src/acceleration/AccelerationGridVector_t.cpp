@@ -50,9 +50,9 @@ AccelerationGridVector_t::AccelerationGridVector_t(Shape_t** items, size_t n_ite
         min1.min(cell_res);
         max1.min(cell_res);
         
-        for (size_t z = static_cast<size_t>(min1[2]); z <= static_cast<size_t>(max1[2]); ++z) {
-            for (size_t y = static_cast<size_t>(min1[1]); y <= static_cast<size_t>(max1[1]); ++y) {
-                for (size_t x = static_cast<size_t>(min1[0]); x <= static_cast<size_t>(max1[0]); ++x) {
+        for (auto z = static_cast<size_t>(min1[2]); z <= static_cast<size_t>(max1[2]); ++z) {
+            for (auto y = static_cast<size_t>(min1[1]); y <= static_cast<size_t>(max1[1]); ++y) {
+                for (auto x = static_cast<size_t>(min1[0]); x <= static_cast<size_t>(max1[0]); ++x) {
                     if (cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] == nullptr) {
                         cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] = new GridCellVector_t;
                     }
@@ -100,9 +100,9 @@ AccelerationGridVector_t::AccelerationGridVector_t(Shape_t** items, size_t n_ite
         min1.min(cell_res);
         max1.min(cell_res);
         
-        for (size_t z = static_cast<size_t>(min1[2]); z <= static_cast<size_t>(max1[2]); ++z) {
-            for (size_t y = static_cast<size_t>(min1[1]); y <= static_cast<size_t>(max1[1]); ++y) {
-                for (size_t x = static_cast<size_t>(min1[0]); x <= static_cast<size_t>(max1[0]); ++x) {
+        for (auto z = static_cast<size_t>(min1[2]); z <= static_cast<size_t>(max1[2]); ++z) {
+            for (auto y = static_cast<size_t>(min1[1]); y <= static_cast<size_t>(max1[1]); ++y) {
+                for (auto x = static_cast<size_t>(min1[0]); x <= static_cast<size_t>(max1[0]); ++x) {
                     if (cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] == nullptr) {
                         cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] = new GridCellVector_t;
                     }
@@ -120,7 +120,7 @@ AccelerationGridVector_t::~AccelerationGridVector_t() {
     delete [] cells_;
 }
 
-Shape_t* AccelerationGridVector_t::intersect(const Ray_t &ray, double &t, std::array<double, 2> &uv) const {
+auto AccelerationGridVector_t::intersect(const Ray_t &ray, double &t, std::array<double, 2> &uv) const -> Shape_t* {
     double tbbox;
     std::array<long long, 3> cellexit {0, 0, 0};
     std::array<int, 3> cellstep {0, 0, 0};
@@ -181,7 +181,7 @@ Shape_t* AccelerationGridVector_t::intersect(const Ray_t &ray, double &t, std::a
     return hit_obj;
 }
 
-void AccelerationGridVector_t::add(Shape_t* item) {
+auto AccelerationGridVector_t::add(Shape_t* item) -> void {
     Vec3f min1 = Vec3f(std::numeric_limits<double>::infinity());
     Vec3f max1 = Vec3f(-std::numeric_limits<double>::infinity());
 
@@ -196,9 +196,9 @@ void AccelerationGridVector_t::add(Shape_t* item) {
     min1.min(cell_res);
     max1.min(cell_res);
 
-    for (size_t z = static_cast<size_t>(min1[2]); z <= static_cast<size_t>(max1[2]); ++z) {
-        for (size_t y = static_cast<size_t>(min1[1]); y <= static_cast<size_t>(max1[1]); ++y) {
-            for (size_t x = static_cast<size_t>(min1[0]); x <= static_cast<size_t>(max1[0]); ++x) {
+    for (auto z = static_cast<size_t>(min1[2]); z <= static_cast<size_t>(max1[2]); ++z) {
+        for (auto y = static_cast<size_t>(min1[1]); y <= static_cast<size_t>(max1[1]); ++y) {
+            for (auto x = static_cast<size_t>(min1[0]); x <= static_cast<size_t>(max1[0]); ++x) {
                 if (cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] == nullptr) {
                     cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] = new GridCellVector_t;
                 }
@@ -208,7 +208,7 @@ void AccelerationGridVector_t::add(Shape_t* item) {
     }
 }
 
-void AccelerationGridVector_t::remove(const Shape_t* item) {
+auto AccelerationGridVector_t::remove(const Shape_t* item) -> void {
     Vec3f min1 = Vec3f(std::numeric_limits<double>::infinity());
     Vec3f max1 = Vec3f(-std::numeric_limits<double>::infinity());
 
@@ -223,9 +223,9 @@ void AccelerationGridVector_t::remove(const Shape_t* item) {
     min1.min(cell_res);
     max1.min(cell_res);
 
-    for (size_t z = static_cast<size_t>(min1[2]); z <= static_cast<size_t>(max1[2]); ++z) {
-        for (size_t y = static_cast<size_t>(min1[1]); y <= static_cast<size_t>(max1[1]); ++y) {
-            for (size_t x = static_cast<size_t>(min1[0]); x <= static_cast<size_t>(max1[0]); ++x) {
+    for (auto z = static_cast<size_t>(min1[2]); z <= static_cast<size_t>(max1[2]); ++z) {
+        for (auto y = static_cast<size_t>(min1[1]); y <= static_cast<size_t>(max1[1]); ++y) {
+            for (auto x = static_cast<size_t>(min1[0]); x <= static_cast<size_t>(max1[0]); ++x) {
                 if (cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] == nullptr) {
                     cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]]->remove(item);
                 }
@@ -234,6 +234,6 @@ void AccelerationGridVector_t::remove(const Shape_t* item) {
     }
 }
 
-void AccelerationGridVector_t::move(Shape_t* item) {
+auto AccelerationGridVector_t::move(Shape_t* item) -> void {
 
 }
