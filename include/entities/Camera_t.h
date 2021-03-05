@@ -44,7 +44,7 @@ namespace APTracer { namespace Entities {
             /**
              * @brief Destroy the Camera_t object. Does nothing.
              */
-            virtual ~Camera_t() {};
+            virtual ~Camera_t() = default;
 
             TransformMatrix_t* transformation_; /**< @brief Transformation matrix used by the camera. Sets the camera's origin and direction when created and updated.*/
             std::string filename_; /**< @brief Filename used by the camera when saving an image. Not used by all cameras, and some might modify it or save multiple pictures with variations of the name.*/

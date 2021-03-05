@@ -5,6 +5,7 @@
 #include "entities/AccelerationStructure_t.h"
 #include "entities/Vec3f.h"
 #include "shapes/Box_t.h"
+#include <vector>
 
 namespace APTracer { namespace Entities {
     class Shape_t;
@@ -55,9 +56,9 @@ namespace APTracer { namespace Acceleration {
             /**
              * @brief Destroy the AccelerationGridArray_t object, destroying the cells it owns.
              */
-            virtual ~AccelerationGridArray_t() final;
+            virtual ~AccelerationGridArray_t() final = default;
 
-            GridCellArray_t** cells_; /**< @brief Array of all the cells contained in the acceleration structure. Cells use arrays of shapes, for fast iteraring and lowest memory use.*/
+            std::vector<std::unique_ptr<GridCellArray_t>> cells_; /**< @brief Array of all the cells contained in the acceleration structure. Cells use arrays of shapes, for fast iteraring and lowest memory use.*/
             std::array<size_t, 3> cell_res_; /**< @brief Number of cells in the x, y, and z direction.*/
             Vec3f cell_size_; /**< @brief Span of the cells in the x, y, and z direction.*/
             Box_t bounding_box_; /**< @brief Box representing the space encompassed by the grid.*/
