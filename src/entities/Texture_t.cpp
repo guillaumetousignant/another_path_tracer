@@ -54,7 +54,7 @@ Texture_t::Texture_t(const std::string &filename) {
 
     img_ = new Vec3f[size_y_*size_x_];
 
-    const unsigned int n = static_cast<unsigned int>(size_x_ * size_y_);
+    const auto n = static_cast<unsigned int>(size_x_ * size_y_);
 
     for (size_t j = 0; j < size_y_; ++j) {
         for (size_t i = 0; i < size_x_; ++i) {
