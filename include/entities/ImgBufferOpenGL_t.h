@@ -42,9 +42,9 @@ namespace APTracer { namespace Entities {
             /**
              * @brief Destroy the ImgBufferOpenGL_t object, freeing the memory taken up by the image.
              */
-            virtual ~ImgBufferOpenGL_t() final;
+            virtual ~ImgBufferOpenGL_t() final = default;
 
-            unsigned char* img_gl_; /**< @brief Array of colour pixels representing the image, of length size_x_*size_y_. In integer format, the actual data used by OpenGL to display the image.*/
+            std::vector<unsigned char> img_gl_; /**< @brief Array of colour pixels representing the image, of length size_x_*size_y_. In integer format, the actual data used by OpenGL to display the image.*/
             GLuint tex_; /**< @brief OpenGL ID of the image. This represents the texture to which the program renders the image.*/
 
             /**

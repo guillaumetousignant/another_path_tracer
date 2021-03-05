@@ -5,20 +5,10 @@
 using APTracer::Entities::ImgBufferOpenGL_t;
 using APTracer::Entities::Vec3f;
 
-ImgBufferOpenGL_t::ImgBufferOpenGL_t(size_t size_x, size_t size_y): ImgBuffer_t(size_x, size_y) {
+ImgBufferOpenGL_t::ImgBufferOpenGL_t(size_t size_x, size_t size_y): ImgBuffer_t(size_x, size_y), img_gl_(size_x_*size_y_*3), tex_(0) {
     #ifndef APTRACER_USE_OPENGL
     std::cerr << "Error: OpenGL image buffer created, but the library wasn't compiled with 'APTRACER_USE_OPENGL' defined. The image won't be shown on screen." << std::endl;
     #endif
-
-    img_gl_ = new unsigned char[size_x_*size_y_*3];
-    for (size_t i = 0; i < size_x_*size_y_*3; ++i) {
-        img_gl_[i] = 0;
-    }
-    tex_ = 0;
-}
-
-ImgBufferOpenGL_t::~ImgBufferOpenGL_t() {
-    delete [] img_gl_;
 }
 
 auto ImgBufferOpenGL_t::reset() -> void {
