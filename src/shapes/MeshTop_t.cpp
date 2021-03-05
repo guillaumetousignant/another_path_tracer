@@ -8,7 +8,13 @@ using APTracer::Entities::Vec3f;
 
 APTracer::Shapes::MeshTop_t::MeshTop_t(APTracer::Entities::Material_t *material, APTracer::Entities::TransformMatrix_t *transform_matrix, APTracer::Entities::MeshGeometry_t* geom) 
     : material_(material), transformation_(transform_matrix), geom_(geom), n_tris_(geom->n_tris_) {
-}      
+}   
+
+APTracer::Shapes::MeshTop_t::~MeshTop_t() {
+    for (auto* triangle: triangles_) {
+        delete triangle;
+    }
+}
 
 void APTracer::Shapes::MeshTop_t::update() {
     for (auto* triangle: triangles_) {

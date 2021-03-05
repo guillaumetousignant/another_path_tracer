@@ -45,7 +45,7 @@ namespace APTracer { namespace Shapes {
             /**
              * @brief Destroy the MeshTop_t object, deleting its triangles.
              */
-            virtual ~MeshTop_t() = default;
+            virtual ~MeshTop_t();
 
             Material_t *material_; /**< @brief Dummy material, in case it is used as a shape. Defaults to the first material of a material map if present.*/
             TransformMatrix_t *transformation_; /**< @brief Transformation matrix used for the mesh and all triangles inside it.*/

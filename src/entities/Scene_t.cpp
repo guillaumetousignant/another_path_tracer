@@ -17,11 +17,11 @@ Scene_t::Scene_t(Shape_t* shape) : geometry_(1, shape) {}
 
 Scene_t::Scene_t(Shape_t** shapes, size_t n_shapes) : geometry_(shapes, shapes + n_shapes) {}
 
-Scene_t::Scene_t(MeshTop_t* mesh) : geometry_(mesh->triangles_, mesh->triangles_ + mesh->n_tris_) {}
+Scene_t::Scene_t(MeshTop_t* mesh) : geometry_(mesh->triangles_) {}
 
 Scene_t::Scene_t(MeshTop_t** meshes, size_t n_meshes) {
     for (size_t i = 0; i < n_meshes; i++) {
-        geometry_.insert(geometry_.end(), meshes[i]->triangles_, meshes[i]->triangles_ + meshes[i]->n_tris_);
+        geometry_.insert(geometry_.end(), meshes[i]->triangles_.begin(), meshes[i]->triangles_.end());
     }
 }
 
@@ -34,12 +34,17 @@ auto Scene_t::add(Shape_t** shapes, size_t n_shapes) -> void {
 }
 
 auto Scene_t::add(MeshTop_t* mesh) -> void {
-    geometry_.insert(geometry_.end(), mesh->triangles_, mesh->triangles_ + mesh->n_tris_);
+    geometry_.insert(geometry_.end(), mesh->triangles_.begin(), mesh->triangles_.end());
 }
 
 auto Scene_t::add(MeshTop_t** meshes, size_t n_meshes) -> void {
+    size_t new_size = geometry_.size();
     for (size_t i = 0; i < n_meshes; i++) {
-        geometry_.insert(geometry_.end(), meshes[i]->triangles_, meshes[i]->triangles_ + meshes[i]->n_tris_);
+        new_size += meshes[i]->triangles_.size();
+    }
+    geometry_.reserve(new_size);
+    for (size_t i = 0; i < n_meshes; i++) {
+        geometry_.insert(geometry_.end(), meshes[i]->triangles_.begin(), meshes[i]->triangles_.end());
     }
 }
 
