@@ -6,6 +6,7 @@
 #include "entities/Vec3f.h"
 #include "shapes/Box_t.h"
 #include <vector>
+#include <memory>
 
 namespace APTracer { namespace Entities {
     class Shape_t;
