@@ -37,8 +37,8 @@ Cam3DMotionblurAperture_t::Cam3DMotionblurAperture_t(TransformMatrix_t* transfor
         filename_R = filename + "_R.png";
     }
 
-    camera_L_ = new CamMotionblurAperture_t(transformation, filename_L, up_, fov_, subpix_, image_L, medium_list_, skybox_, max_bounces_, focal_length_, aperture_, time_, gammaind_);
-    camera_R_ = new CamMotionblurAperture_t(transformation, filename_R, up_, fov_, subpix_, image_R, medium_list_, skybox_, max_bounces_, focal_length_, aperture_, time_, gammaind_);
+    camera_L_ = std::unique_ptr<CamMotionblurAperture_t>(new CamMotionblurAperture_t(transformation, filename_L, up_, fov_, subpix_, image_L, medium_list_, skybox_, max_bounces_, focal_length_, aperture_, time_, gammaind_));
+    camera_R_ = std::unique_ptr<CamMotionblurAperture_t>(new CamMotionblurAperture_t(transformation, filename_R, up_, fov_, subpix_, image_R, medium_list_, skybox_, max_bounces_, focal_length_, aperture_, time_, gammaind_));
 
     const Vec3f horizontal = direction_.cross(up).normalize_inplace();
 
@@ -54,11 +54,6 @@ Cam3DMotionblurAperture_t::Cam3DMotionblurAperture_t(TransformMatrix_t* transfor
     camera_R_->direction_ = (direction_ * focal_length_ - horizontal * eye_dist_).normalize_inplace();
     camera_L_->direction_last_ = camera_L_->direction_;
     camera_R_->direction_last_ = camera_R_->direction_;
-}
-
-Cam3DMotionblurAperture_t::~Cam3DMotionblurAperture_t() {
-    delete camera_L_;
-    delete camera_R_;
 }
 
 auto Cam3DMotionblurAperture_t::update() -> void {

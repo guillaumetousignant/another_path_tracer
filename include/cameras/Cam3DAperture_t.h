@@ -6,6 +6,7 @@
 #include <string>
 #include <list>
 #include <random>
+#include <memory>
 
 namespace APTracer { namespace Entities {
     class TransformMatrix_t;
@@ -66,7 +67,7 @@ namespace APTracer { namespace Cameras {
             /**
              * @brief Destroy the Cam3DAperture_t object, deleting the dependant cameras.
              */
-            virtual ~Cam3DAperture_t() final;
+            virtual ~Cam3DAperture_t() final = default;
 
             ImgBuffer_t* image_; /**< @brief Image buffer into which the resulting 3D anaglyph image is stored.*/
             std::uniform_real_distribution<double> unif_; /**< @brief Uniform random distribution used for generating random numbers.*/
@@ -74,8 +75,8 @@ namespace APTracer { namespace Cameras {
             double focal_length_; /**< @brief Distance of the focal plane to the camera origin. Objects away from that distance will be out of focus. The focal plane has the shape of a sphere with this radius. Distance at which both eye cameras converge.*/
             double focal_length_buffer_; /**< @brief Focal length to be modified between updates. Its value is given to the real focal length on update.*/
             double aperture_; /**< @brief Radius of the disk on which rays are created around the origin. Higher values will cause stronger depth of field, objects out of focus will be blurrier.*/
-            CamAperture_t* camera_L_; /**< @brief Left eye camera. Managed by the 3D camera, do not update directly.*/
-            CamAperture_t* camera_R_; /**< @brief Right eye camera. Managed by the 3D camera, do not update directly.*/
+            std::unique_ptr<CamAperture_t> camera_L_; /**< @brief Left eye camera. Managed by the 3D camera, do not update directly.*/
+            std::unique_ptr<CamAperture_t> camera_R_; /**< @brief Right eye camera. Managed by the 3D camera, do not update directly.*/
 
             /**
              * @brief Updates the camera's members and the dependant cameras.

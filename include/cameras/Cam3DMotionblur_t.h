@@ -6,6 +6,7 @@
 #include <string>
 #include <list>
 #include <random>
+#include <memory>
 
 namespace APTracer { namespace Entities {
     class TransformMatrix_t;
@@ -66,7 +67,7 @@ namespace APTracer { namespace Cameras {
             /**
              * @brief Destroy the Cam3DMotionblur_t object, deleting the dependant cameras.
              */
-            virtual ~Cam3DMotionblur_t() final;
+            virtual ~Cam3DMotionblur_t() final = default;
 
             ImgBuffer_t* image_; /**< @brief Image buffer into which the resulting 3D anaglyph image is stored.*/
             std::uniform_real_distribution<double> unif_; /**< @brief Uniform random distribution used for generating random numbers.*/
@@ -80,8 +81,8 @@ namespace APTracer { namespace Cameras {
             std::array<double, 2> time_; /**< @brief Opening and closing time of the shutter. [open, close], from 0 to 1, where 0 is last state and current state. Rays are created at a time in this interval. Enables motion blur.*/
             Vec3f up_last_; /**< @brief Vector pointing up before last update. Used for motion blur.*/
 
-            CamMotionblur_t* camera_L_; /**< @brief Left eye camera. Managed by the 3D camera, do not update directly.*/
-            CamMotionblur_t* camera_R_; /**< @brief Right eye camera. Managed by the 3D camera, do not update directly.*/
+            std::unique_ptr<CamMotionblur_t> camera_L_; /**< @brief Left eye camera. Managed by the 3D camera, do not update directly.*/
+            std::unique_ptr<CamMotionblur_t> camera_R_; /**< @brief Right eye camera. Managed by the 3D camera, do not update directly.*/
 
             /**
              * @brief Updates the camera's members and the dependant cameras.
