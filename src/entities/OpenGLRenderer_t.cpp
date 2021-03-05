@@ -38,7 +38,7 @@ using APTracer::Entities::Camera_t;
 using APTracer::Entities::ImgBufferOpenGL_t;
 using APTracer::Entities::Vec3f;
 
-OpenGLRenderer_t* OpenGLRenderer_t::renderer_ = nullptr;
+std::unique_ptr<OpenGLRenderer_t> OpenGLRenderer_t::renderer_;
 
 OpenGLRenderer_t::OpenGLRenderer_t() :
     right_x_pos_(0), right_y_pos_(0), left_x_pos_(0), left_y_pos_(0), middle_x_pos_(0), 
@@ -49,8 +49,7 @@ OpenGLRenderer_t::OpenGLRenderer_t() :
         std::cerr << "Error: OpenGL renderer created, but the library wasn't compiled with 'APTRACER_USE_OPENGL' defined. It will not work correctly." << std::endl;
         #endif
 
-        delete renderer_;
-        renderer_ = this;
+        renderer_ = std::unique_ptr<OpenGLRenderer_t>(this);
 }
 
 OpenGLRenderer_t::OpenGLRenderer_t(Scene_t* scene, Camera_t* camera, ImgBufferOpenGL_t* imgbuffer) :
@@ -63,15 +62,10 @@ OpenGLRenderer_t::OpenGLRenderer_t(Scene_t* scene, Camera_t* camera, ImgBufferOp
         std::cerr << "Error: OpenGL renderer created, but the library wasn't compiled with 'APTRACER_USE_OPENGL' defined. It will not work correctly." << std::endl;
         #endif
 
-        delete renderer_;
-        renderer_ = this;
+        renderer_ = std::unique_ptr<OpenGLRenderer_t>(this);
         if (camera_dist_ < 0.1) {
             camera_dist_ = 0.1;
         }
-}
-
-OpenGLRenderer_t::~OpenGLRenderer_t() {
-    renderer_ = nullptr;
 }
 
 auto OpenGLRenderer_t::accumulate() -> void {

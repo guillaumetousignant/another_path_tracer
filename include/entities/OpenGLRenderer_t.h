@@ -2,6 +2,7 @@
 #define APTRACER_OPENGLRENDERER_T_H
 
 #include <string>
+#include <memory>
 #include "entities/Vec3f.h"
 
 namespace APTracer { namespace Entities {
@@ -43,9 +44,9 @@ namespace APTracer { namespace Entities {
             /**
              * @brief Destroy the OpenGLRenderer_t object, freeing the ressources held by it and setting renderer_ as nullptr.
              */
-            ~OpenGLRenderer_t();
+            ~OpenGLRenderer_t() = default;
 
-            static OpenGLRenderer_t* renderer_; /**< @brief Single OpenGLRenderer_t instance to be used by OpenGL.*/
+            static std::unique_ptr<OpenGLRenderer_t> renderer_; /**< @brief Single OpenGLRenderer_t instance to be used by OpenGL.*/
             Camera_t* camera_ = nullptr; /**< @brief Camera used to render the scene, and be moved by user input.*/
             Scene_t* scene_ = nullptr; /**< @brief Scene rendered by the camera and used for autofocus.*/
             ImgBufferOpenGL_t* imgbuffer_ = nullptr; /**< @brief Image buffer displayed on the screen and used by the renderer.*/
