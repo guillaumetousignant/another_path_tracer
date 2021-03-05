@@ -1757,7 +1757,8 @@ auto APTracer::Entities::SceneContext_t::create_camera(const tinyxml2::XMLElemen
 
 auto APTracer::Entities::SceneContext_t::create_acceleration_structure(const tinyxml2::XMLElement* xml_acceleration_structure) -> void {
     if (xml_acceleration_structure == nullptr) {
-        scene_->acc_ = new APTracer::Acceleration::AccelerationMultiGridVector_t(scene_->geometry_.data(), scene_->geometry_.size(), 1, 128, 32, 1);
+        scene_->acc_ = std::unique_ptr<APTracer::Entities::AccelerationStructure_t>(
+                            new APTracer::Acceleration::AccelerationMultiGridVector_t(scene_->geometry_.data(), scene_->geometry_.size(), 1, 128, 32, 1));
         return;
     }
 
@@ -1773,26 +1774,33 @@ auto APTracer::Entities::SceneContext_t::create_acceleration_structure(const tin
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
     if (type == "grid") {
-        scene_->acc_ = new APTracer::Acceleration::AccelerationGrid_t(scene_->geometry_.data(), scene_->geometry_.size(), xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128));
+        scene_->acc_ = std::unique_ptr<APTracer::Entities::AccelerationStructure_t>(
+                        new APTracer::Acceleration::AccelerationGrid_t(scene_->geometry_.data(), scene_->geometry_.size(), xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128)));
     }
     else if (type == "grid_array") {
-        scene_->acc_ = new APTracer::Acceleration::AccelerationGridArray_t(scene_->geometry_.data(), scene_->geometry_.size(), xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128));
+        scene_->acc_ = std::unique_ptr<APTracer::Entities::AccelerationStructure_t>(
+                        new APTracer::Acceleration::AccelerationGridArray_t(scene_->geometry_.data(), scene_->geometry_.size(), xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128)));
     }
     else if (type == "grid_vector") {
-        scene_->acc_ = new APTracer::Acceleration::AccelerationGridVector_t(scene_->geometry_.data(), scene_->geometry_.size(), xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128));
+        scene_->acc_ = std::unique_ptr<APTracer::Entities::AccelerationStructure_t>(
+                        new APTracer::Acceleration::AccelerationGridVector_t(scene_->geometry_.data(), scene_->geometry_.size(), xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128)));
     }
     else if (type == "multi_grid") {
-        scene_->acc_ = new APTracer::Acceleration::AccelerationMultiGrid_t(scene_->geometry_.data(), scene_->geometry_.size(), xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128), xml_acceleration_structure->UnsignedAttribute("max_cell_content", 32), xml_acceleration_structure->UnsignedAttribute("max_grid_level", 1));
+        scene_->acc_ = std::unique_ptr<APTracer::Entities::AccelerationStructure_t>(
+                        new APTracer::Acceleration::AccelerationMultiGrid_t(scene_->geometry_.data(), scene_->geometry_.size(), xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128), xml_acceleration_structure->UnsignedAttribute("max_cell_content", 32), xml_acceleration_structure->UnsignedAttribute("max_grid_level", 1)));
     }
     else if (type == "multi_grid_array") {
-        scene_->acc_ = new APTracer::Acceleration::AccelerationMultiGridArray_t(scene_->geometry_.data(), scene_->geometry_.size(), xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128), xml_acceleration_structure->UnsignedAttribute("max_cell_content", 32), xml_acceleration_structure->UnsignedAttribute("max_grid_level", 1));
+        scene_->acc_ = std::unique_ptr<APTracer::Entities::AccelerationStructure_t>(
+                        new APTracer::Acceleration::AccelerationMultiGridArray_t(scene_->geometry_.data(), scene_->geometry_.size(), xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128), xml_acceleration_structure->UnsignedAttribute("max_cell_content", 32), xml_acceleration_structure->UnsignedAttribute("max_grid_level", 1)));
     }
     else if (type == "multi_grid_vector") {
-        scene_->acc_ = new APTracer::Acceleration::AccelerationMultiGridVector_t(scene_->geometry_.data(), scene_->geometry_.size(), xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128), xml_acceleration_structure->UnsignedAttribute("max_cell_content", 32), xml_acceleration_structure->UnsignedAttribute("max_grid_level", 1));
+        scene_->acc_ = std::unique_ptr<APTracer::Entities::AccelerationStructure_t>(
+                        new APTracer::Acceleration::AccelerationMultiGridVector_t(scene_->geometry_.data(), scene_->geometry_.size(), xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128), xml_acceleration_structure->UnsignedAttribute("max_cell_content", 32), xml_acceleration_structure->UnsignedAttribute("max_grid_level", 1)));
     }
     else {
         std::cerr << "Error, acceleration structure type '" << type << "' not implemented. Using 'multi_grid_vector'." << std::endl; 
-        scene_->acc_ = new APTracer::Acceleration::AccelerationMultiGridVector_t(scene_->geometry_.data(), scene_->geometry_.size(), 1, 128, 32, 1);
+        scene_->acc_ = std::unique_ptr<APTracer::Entities::AccelerationStructure_t>(
+                        new APTracer::Acceleration::AccelerationMultiGridVector_t(scene_->geometry_.data(), scene_->geometry_.size(), 1, 128, 32, 1));
     }
 }
 

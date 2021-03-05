@@ -11,22 +11,18 @@ using APTracer::Entities::Shape_t;
 using APTracer::Shapes::MeshTop_t;
 using APTracer::Acceleration::AccelerationMultiGridVector_t;
 
-Scene_t::Scene_t() : acc_(nullptr) {}
+Scene_t::Scene_t() {}
 
-Scene_t::Scene_t(Shape_t* shape) : geometry_(1, shape), acc_(nullptr) {}
+Scene_t::Scene_t(Shape_t* shape) : geometry_(1, shape) {}
 
-Scene_t::Scene_t(Shape_t** shapes, size_t n_shapes) : geometry_(shapes, shapes + n_shapes), acc_(nullptr) {}
+Scene_t::Scene_t(Shape_t** shapes, size_t n_shapes) : geometry_(shapes, shapes + n_shapes) {}
 
-Scene_t::Scene_t(MeshTop_t* mesh) : geometry_(mesh->triangles_, mesh->triangles_ + mesh->n_tris_), acc_(nullptr) {}
+Scene_t::Scene_t(MeshTop_t* mesh) : geometry_(mesh->triangles_, mesh->triangles_ + mesh->n_tris_) {}
 
-Scene_t::Scene_t(MeshTop_t** meshes, size_t n_meshes) :acc_(nullptr) {
+Scene_t::Scene_t(MeshTop_t** meshes, size_t n_meshes) {
     for (size_t i = 0; i < n_meshes; i++) {
         geometry_.insert(geometry_.end(), meshes[i]->triangles_, meshes[i]->triangles_ + meshes[i]->n_tris_);
     }
-}
-
-Scene_t::~Scene_t() {
-    delete acc_;
 }
 
 auto Scene_t::add(Shape_t* shape) -> void {
@@ -98,8 +94,7 @@ auto Scene_t::update() -> void {
 }
 
 auto Scene_t::build_acc() -> void {
-    delete acc_;
-    acc_ = new AccelerationMultiGridVector_t(geometry_.data(), geometry_.size(), 1, 128, 32, 1);
+    acc_ = std::unique_ptr<AccelerationStructure_t>(new AccelerationMultiGridVector_t(geometry_.data(), geometry_.size(), 1, 128, 32, 1));
 }
 
 auto Scene_t::intersect_brute(const Ray_t &ray, double &t, std::array<double, 2> &uv) const -> Shape_t* {

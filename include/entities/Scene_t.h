@@ -4,6 +4,7 @@
 #include "entities/Ray_t.h"
 #include <vector>
 #include <array>
+#include <memory>
 
 namespace APTracer { namespace Shapes {
     class MeshTop_t;
@@ -62,14 +63,11 @@ namespace APTracer { namespace Entities {
 
             /**
              * @brief Destroy the Scene_t object, freeing the ressources held by it and the acceleration structure acc_.
-             * 
-             * This will also delete the scene's acceleration structure, acc_, so be mindful to not delete it twice
-             * if it wasn't created by the scene object.
              */
-            ~Scene_t();
+            ~Scene_t() = default;
 
             std::vector<Shape_t*> geometry_; /**< @brief Vector of shapes to be drawn.*/
-            AccelerationStructure_t* acc_; /**< @brief Acceleration structure containing the shapes, used to accelerate intersection.*/
+            std::unique_ptr<AccelerationStructure_t> acc_; /**< @brief Acceleration structure containing the shapes, used to accelerate intersection.*/
 
             /**
              * @brief Adds a single shape to the scene.

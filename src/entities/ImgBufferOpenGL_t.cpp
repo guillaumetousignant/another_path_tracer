@@ -23,8 +23,8 @@ ImgBufferOpenGL_t::~ImgBufferOpenGL_t() {
 
 auto ImgBufferOpenGL_t::reset() -> void {
     updates_ = 0;
-    for (size_t j = 0; j < size_y_*size_x_; ++j) {
-        img_[j] = Vec3f();
+    for (auto& pixel : img_) {
+        pixel = Vec3f();
     }
 }
 
