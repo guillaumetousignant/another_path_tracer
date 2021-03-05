@@ -22,25 +22,22 @@ Cam3DAperture_t::Cam3DAperture_t(TransformMatrix_t* transformation, const std::s
     Camera_t(transformation, filename, up, fov, subpix, std::move(medium_list), skybox, max_bounces, gammaind), 
     image_(image), unif_(0.0, 1.0), eye_dist_(eye_dist/2.0), focal_length_(focal_length), focal_length_buffer_(focal_length), aperture_(aperture) {
 
-    std::string filename_S, filename_L, filename_R;
+    std::string filename_L;
+    std::string filename_R;
     
     const size_t point = filename.find_last_of('.');
 
     if (point != std::string::npos) {
         filename_L = filename.substr(0, point) + "_L" + filename.substr(point);
         filename_R = filename.substr(0, point) + "_R" + filename.substr(point);
-        filename_S = filename;
     }
     else {
         filename_L = filename + "_L.png";
         filename_R = filename + "_R.png";
-        filename_S = filename;
     }
 
     camera_L_ = new CamAperture_t(transformation, filename_L, up_, fov_, subpix_, image_L, medium_list_, skybox_, max_bounces_, focal_length_, aperture_, gammaind_);
     camera_R_ = new CamAperture_t(transformation, filename_R, up_, fov_, subpix_, image_R, medium_list_, skybox_, max_bounces_, focal_length_, aperture_, gammaind_);
-
-    filename_ = filename_S;
 
     const Vec3f horizontal = direction_.cross(up).normalize_inplace();
 
