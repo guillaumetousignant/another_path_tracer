@@ -10,7 +10,7 @@ DirectionalLight_t::DirectionalLight_t(const Vec3f &intensity, TransformMatrix_t
     radius_ = transformation_->getScale(); 
 }
 
-void DirectionalLight_t::update() {
+auto DirectionalLight_t::update() -> void {
     direction_ = transformation_->multDir(Vec3f(0.0, 1.0, 0.0));
     radius_ = transformation_->getScale();
 }

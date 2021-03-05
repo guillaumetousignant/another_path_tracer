@@ -67,26 +67,26 @@ namespace APTracer { namespace Entities {
             /**
              * @brief Function used every frame when the rendering is on pause. Does nothing.
              */
-            void dummyDisp() {};
+            auto dummyDisp() -> void {};
 
             /**
              * @brief Function used every frame to accumulate one sample per pixel for the whole image.
              * 
              * Uses the renderer's camera, scene and image buffer. 
              */
-            void accumulate();
+            auto accumulate() -> void;
 
             /**
              * @brief Function used every frame to accumulate one sample per pixel for the whole image, and save the image every write_interval_ samples.
              * 
              * Uses the renderer's camera, scene and image buffer. 
              */
-            void accumulate_write();
+            auto accumulate_write() -> void;
 
             /**
              * @brief Resets the camera and its image buffer, and starts accumulating samples from scratch.
              */
-            void resetDisplay(void);
+            auto resetDisplay(void) -> void;
 
             /**
              * @brief Function called by OpenGL on mouse movement. Moves the camera.
@@ -96,7 +96,7 @@ namespace APTracer { namespace Entities {
              * @param x Horizontal position of the cursor in pixels along the window from the left side.
              * @param y Vertical position of the cursor in pixels along the window from the bottom.
              */
-            void mouseMovement(int x, int y);
+            auto mouseMovement(int x, int y) -> void;
 
             /**
              * @brief Function called by OpenGL on mouse clicks. Saves this state for camera move.
@@ -106,7 +106,7 @@ namespace APTracer { namespace Entities {
              * @param x Horizontal position of the cursor in pixels along the window from the left side.
              * @param y Vertical position of the cursor in pixels along the window from the bottom.
              */
-            void mouseClick(int button, int state, int x, int y);
+            auto mouseClick(int button, int state, int x, int y) -> void;
 
             /**
              * @brief Function called by OpenGL on keyboard presses. Used when the rendering is paused.
@@ -117,7 +117,7 @@ namespace APTracer { namespace Entities {
              * @param x Horizontal position of the cursor in pixels along the window from the left side.
              * @param y Vertical position of the cursor in pixels along the window from the bottom.
              */
-            void keyboardPaused(unsigned char key, int x, int y);
+            auto keyboardPaused(unsigned char key, int x, int y) -> void;
 
             /**
              * @brief Function called by OpenGL on keyboard presses. Used when the rendering is running.
@@ -128,36 +128,36 @@ namespace APTracer { namespace Entities {
              * @param x Horizontal position of the cursor in pixels along the window from the left side.
              * @param y Vertical position of the cursor in pixels along the window from the bottom.
              */
-            void keyboard(unsigned char key, int x, int y);
+            auto keyboard(unsigned char key, int x, int y) -> void;
 
             /**
              * @brief Initialises the OpenGL environment and binds the render output to it.
              */
-            void initialise();
+            auto initialise() -> void;
 
             /**
              * @brief Launches the rendering, calling glutMainLoop.
              */
-            void render();
+            auto render() -> void;
 
             /**
              * @brief Launches the rendering, calling glutMainLoop, and save the image every sample.
              */
-            void render_write();
+            auto render_write() -> void;
 
             /**
              * @brief Launches the rendering, calling glutMainLoop, and save the image every write_interval_ samples.
              * 
              * @param write_interval Number of samples between image saves.
              */
-            void render_write(unsigned int write_interval);
+            auto render_write(unsigned int write_interval) -> void;
         
             /**
              * @brief Wrapper function used every frame when the rendering is on pause. Does nothing.
              * 
              * This calls the dummyDisp function on the singleton OpenGLRenderer_t object.
              */
-            static void openGL_dummyDisp();
+            static auto openGL_dummyDisp() -> void;
 
             /**
              * @brief Wrapper function used every frame to accumulate one sample per pixel for the whole image.
@@ -165,7 +165,7 @@ namespace APTracer { namespace Entities {
              * Uses the renderer's camera, scene and image buffer. 
              * This calls the accumulate function on the singleton OpenGLRenderer_t object.
              */
-            static void openGL_accumulate();
+            static auto openGL_accumulate() -> void;
 
             /**
              * @brief Wrapper function used every frame to accumulate one sample per pixel for the whole image, and save the image every write_interval_ samples.
@@ -173,14 +173,14 @@ namespace APTracer { namespace Entities {
              * Uses the renderer's camera, scene and image buffer. 
              * This calls the accumulate_write function on the singleton OpenGLRenderer_t object.
              */
-            static void openGL_accumulate_write();
+            static auto openGL_accumulate_write() -> void;
 
             /**
              * @brief Wrapper function that resets the camera and its image buffer, and starts accumulating samples from scratch.
              * 
              * This calls the accumulate_write function on the singleton OpenGLRenderer_t object.
              */
-            static void openGL_resetDisplay(void);
+            static auto openGL_resetDisplay(void) -> void;
 
             /**
              * @brief Wrapper function called by OpenGL on mouse movement. Moves the camera.
@@ -191,7 +191,7 @@ namespace APTracer { namespace Entities {
              * @param x Horizontal position of the cursor in pixels along the window from the left side.
              * @param y Vertical position of the cursor in pixels along the window from the bottom.
              */
-            static void openGL_mouseMovement(int x, int y);
+            static auto openGL_mouseMovement(int x, int y) -> void;
 
             /**
              * @brief Wrapper function called by OpenGL on mouse clicks. Saves this state for camera move.
@@ -203,7 +203,7 @@ namespace APTracer { namespace Entities {
              * @param x Horizontal position of the cursor in pixels along the window from the left side.
              * @param y Vertical position of the cursor in pixels along the window from the bottom.
              */
-            static void openGL_mouseClick(int button, int state, int x, int y);
+            static auto openGL_mouseClick(int button, int state, int x, int y) -> void;
 
             /**
              * @brief Wrapper function called by OpenGL on keyboard presses. Used when the rendering is paused.
@@ -215,7 +215,7 @@ namespace APTracer { namespace Entities {
              * @param x Horizontal position of the cursor in pixels along the window from the left side.
              * @param y Vertical position of the cursor in pixels along the window from the bottom.
              */
-            static void openGL_keyboardPaused(unsigned char key, int x, int y);
+            static auto openGL_keyboardPaused(unsigned char key, int x, int y) -> void;
 
             /**
              * @brief Wrapper function called by OpenGL on keyboard presses. Used when the rendering is running.
@@ -227,7 +227,7 @@ namespace APTracer { namespace Entities {
              * @param x Horizontal position of the cursor in pixels along the window from the left side.
              * @param y Vertical position of the cursor in pixels along the window from the bottom.
              */
-            static void openGL_keyboard(unsigned char key, int x, int y);
+            static auto openGL_keyboard(unsigned char key, int x, int y) -> void;
     };
 }}
 #endif

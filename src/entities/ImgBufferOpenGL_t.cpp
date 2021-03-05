@@ -21,14 +21,14 @@ ImgBufferOpenGL_t::~ImgBufferOpenGL_t() {
     delete [] img_gl_;
 }
 
-void ImgBufferOpenGL_t::reset() {
+auto ImgBufferOpenGL_t::reset() -> void {
     updates_ = 0;
     for (size_t j = 0; j < size_y_*size_x_; ++j) {
         img_[j] = Vec3f();
     }
 }
 
-void ImgBufferOpenGL_t::update(const Vec3f* img, size_t size_x, size_t size_y) {
+auto ImgBufferOpenGL_t::update(const Vec3f* img, size_t size_x, size_t size_y) -> void {
     ++updates_;
 
     for (size_t j = 0; j < size_y*size_x; ++j) {
@@ -36,7 +36,7 @@ void ImgBufferOpenGL_t::update(const Vec3f* img, size_t size_x, size_t size_y) {
     }
 }
 
-void ImgBufferOpenGL_t::update() {
+auto ImgBufferOpenGL_t::update() -> void {
     ++updates_;
     
     #ifdef APTRACER_USE_OPENGL
@@ -76,7 +76,7 @@ void ImgBufferOpenGL_t::update() {
     #endif
 }
 
-void ImgBufferOpenGL_t::update(const Vec3f &colour, size_t pos_x, size_t pos_y) {
+auto ImgBufferOpenGL_t::update(const Vec3f &colour, size_t pos_x, size_t pos_y) -> void {
     //img_[pos_y][pos_x] = img_[pos_y][pos_x] * (1.0 - 1.0/static_cast<double>(updates_)) + colour/static_cast<double>(updates_);
     img_[pos_y*size_x_ + pos_x] += colour;
     img_gl_[((size_y_-1-pos_y)*size_x_ + pos_x)*3] = static_cast<unsigned char>(std::lround(std::max(std::min(1.0, img_[pos_y*size_x_ + pos_x][0]/updates_), 0.0) * 255.0));
@@ -84,14 +84,14 @@ void ImgBufferOpenGL_t::update(const Vec3f &colour, size_t pos_x, size_t pos_y) 
     img_gl_[((size_y_-1-pos_y)*size_x_ + pos_x)*3+2] = static_cast<unsigned char>(std::lround(std::max(std::min(1.0, img_[pos_y*size_x_ + pos_x][2]/updates_), 0.0) * 255.0));
 }
 
-void ImgBufferOpenGL_t::set(const Vec3f* img, size_t size_x, size_t size_y) {
+auto ImgBufferOpenGL_t::set(const Vec3f* img, size_t size_x, size_t size_y) -> void {
     updates_ = 1;
     for (size_t j = 0; j < size_y*size_x; ++j) {
         img_[j] = img[j];
     }
 }
 
-void ImgBufferOpenGL_t::set(const Vec3f &colour, size_t pos_x, size_t pos_y) {
+auto ImgBufferOpenGL_t::set(const Vec3f &colour, size_t pos_x, size_t pos_y) -> void {
     img_[pos_y*size_x_ + pos_x] = colour;
     img_gl_[((size_y_-1-pos_y)*size_x_ + pos_x)*3] = static_cast<unsigned char>(std::lround(std::max(std::min(1.0, img_[pos_y*size_x_ + pos_x][0]/updates_), 0.0) * 255.0));
     img_gl_[((size_y_-1-pos_y)*size_x_ + pos_x)*3+1] = static_cast<unsigned char>(std::lround(std::max(std::min(1.0, img_[pos_y*size_x_ + pos_x][1]/updates_), 0.0) * 255.0));

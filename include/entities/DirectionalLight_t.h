@@ -36,7 +36,7 @@ namespace APTracer { namespace Entities {
              * 
              * This changes the light's direction and radius as per the transformation matrix. The radius is changed by the transformation matrix's scale. This is how changes to the transformation matrix tak eeffect.
              */
-            void update();
+            auto update() -> void;
     };
 }}
 

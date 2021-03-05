@@ -42,7 +42,7 @@ namespace APTracer { namespace Entities {
              * 
              * @param filename Path to a geometry file in .obj format.
              */
-            void readObj(const std::string &filename);
+            auto readObj(const std::string &filename) -> void;
 
             /**
              * @brief Fills the class' members form a .su2 file.
@@ -51,14 +51,14 @@ namespace APTracer { namespace Entities {
              * 
              * @param filename Path to a geometry file in .su2 format.
              */
-            void readSU2(const std::string &filename);
+            auto readSU2(const std::string &filename) -> void;
 
             /**
              * @brief Constructs the face normals from the face points when none are supplied in the file.
              * 
              * This will give a facetted look, as the faces will have the same normal at all points.
              */
-            void deNan();
+            auto deNan() -> void;
     };
 }}
 

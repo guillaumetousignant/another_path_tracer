@@ -36,7 +36,7 @@ namespace APTracer { namespace Entities {
              * 
              * Sets the number of updates to 0, and sets all pixels to 0, 0, 0.
              */
-            virtual void reset();
+            virtual auto reset() -> void;
 
             /**
              * @brief Updates the whole image, adding the contribution of all pixels in the input.
@@ -47,7 +47,7 @@ namespace APTracer { namespace Entities {
              * @param size_x Horizontal size of the image to be added.
              * @param size_y Vertical size of the image to be added.
              */
-            virtual void update(const Vec3f* img, size_t size_x, size_t size_y);
+            virtual auto update(const Vec3f* img, size_t size_x, size_t size_y) -> void;
 
             /**
              * @brief Increments the number of updates of the image by 1.
@@ -55,7 +55,7 @@ namespace APTracer { namespace Entities {
              * This increments the number of samples in the image. Useful when updating pixels individually, 
              * which doesn't change the number of updates of the image.
              */
-            virtual void update();
+            virtual auto update() -> void;
 
             /**
              * @brief Updates a single pixel of the image, adding the contribution of the input.
@@ -66,7 +66,7 @@ namespace APTracer { namespace Entities {
              * @param pos_x Horizontal coordinate of the pixel to be updated.
              * @param pos_y Vertical coordinate of the pixel to be updated.
              */
-            virtual void update(const Vec3f &colour, size_t pos_x, size_t pos_y);
+            virtual auto update(const Vec3f &colour, size_t pos_x, size_t pos_y) -> void;
 
             /**
              * @brief Sets the value of the whole image to the value of all pixels in the input.
@@ -77,7 +77,7 @@ namespace APTracer { namespace Entities {
              * @param size_x Horizontal size of the image to be set.
              * @param size_y Vertical size of the image to be set.
              */
-            virtual void set(const Vec3f* img, size_t size_x, size_t size_y);
+            virtual auto set(const Vec3f* img, size_t size_x, size_t size_y) -> void;
 
             /**
              * @brief Sets the value of a single pixel of the image to the value of the input.
@@ -88,7 +88,7 @@ namespace APTracer { namespace Entities {
              * @param pos_x Horizontal coordinate of the pixel to be set.
              * @param pos_y Vertical coordinate of the pixel to be set.
              */
-            virtual void set(const Vec3f &colour, size_t pos_x, size_t pos_y);
+            virtual auto set(const Vec3f &colour, size_t pos_x, size_t pos_y) -> void;
 
             /**
              * @brief Writes the image to disk using the provided filename.
@@ -98,7 +98,7 @@ namespace APTracer { namespace Entities {
              * 
              * @param filename File to which the image will be saved.
              */
-            void write(const std::string &filename) const;
+            auto write(const std::string &filename) const -> void;
 
             /**
              * @brief Writes the image to disk using the provided filename and gamma.
@@ -109,7 +109,7 @@ namespace APTracer { namespace Entities {
              * @param filename File to which the image will be saved.
              * @param gammaind Gamma used to encode the image.
              */
-            void write(const std::string &filename, double gammaind) const;
+            auto write(const std::string &filename, double gammaind) const -> void;
     };
 }}
 #endif

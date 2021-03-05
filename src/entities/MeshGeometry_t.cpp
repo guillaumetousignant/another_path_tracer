@@ -30,7 +30,7 @@ MeshGeometry_t::~MeshGeometry_t() {
     delete [] vt_;
 }
 
-void MeshGeometry_t::readObj(const std::string &filename) {
+auto MeshGeometry_t::readObj(const std::string &filename) -> void {
     size_t nv = 0;
     size_t nvt = 0;
     size_t nvn = 0;
@@ -184,7 +184,7 @@ void MeshGeometry_t::readObj(const std::string &filename) {
     delete [] vn;
 }
 
-void MeshGeometry_t::readSU2(const std::string &filename) {
+auto MeshGeometry_t::readSU2(const std::string &filename) -> void {
     size_t nv = 0;
     size_t nf = 0;
     std::string line;
@@ -352,7 +352,7 @@ void MeshGeometry_t::readSU2(const std::string &filename) {
     delete [] v;
 }
 
-void MeshGeometry_t::deNan() {
+auto MeshGeometry_t::deNan() -> void {
     for (size_t i = 0; i < n_tris_; ++i) {
         for (unsigned int j = 0; j < 3; ++j) {
             if (std::isnan(vn_[3*i + j][0])) { // Just checking first value, maybe add isnan to vec3f class?

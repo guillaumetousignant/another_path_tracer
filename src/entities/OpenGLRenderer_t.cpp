@@ -74,7 +74,7 @@ OpenGLRenderer_t::~OpenGLRenderer_t() {
     renderer_ = nullptr;
 }
 
-void OpenGLRenderer_t::accumulate() {
+auto OpenGLRenderer_t::accumulate() -> void {
     if (updated_) {
         const Vec3f newdir = camera_->transformation_->multDir(Vec3f(0.0, 1.0, 0.0));
         camera_->transformation_->translate(focus_point_ - newdir * camera_dist_ - camera_->origin_);
@@ -96,7 +96,7 @@ void OpenGLRenderer_t::accumulate() {
     #endif
 }
 
-void OpenGLRenderer_t::accumulate_write() {
+auto OpenGLRenderer_t::accumulate_write() -> void {
     if (updated_) {
         const Vec3f newdir = camera_->transformation_->multDir(Vec3f(0.0, 1.0, 0.0));
         camera_->transformation_->translate(focus_point_ - newdir * camera_dist_ - camera_->origin_);
@@ -129,11 +129,11 @@ void OpenGLRenderer_t::accumulate_write() {
     #endif
 }
 
-void OpenGLRenderer_t::resetDisplay(void) {
+auto OpenGLRenderer_t::resetDisplay(void) -> void {
     camera_->reset();
 }
 
-void OpenGLRenderer_t::mouseMovement(int x, int y) {
+auto OpenGLRenderer_t::mouseMovement(int x, int y) -> void {
     //Vec3f newdir = camera_->direction_;
     if (middle_clicked_) {
         #ifdef APTRACER_USE_OPENGL
@@ -183,7 +183,7 @@ void OpenGLRenderer_t::mouseMovement(int x, int y) {
     //updated_ = true;
 }
 
-void OpenGLRenderer_t::mouseClick(int button, int state, int x, int y) {
+auto OpenGLRenderer_t::mouseClick(int button, int state, int x, int y) -> void {
     switch (button) {
         case GLUT_LEFT_BUTTON:
             if(state == GLUT_DOWN) {            
@@ -220,7 +220,7 @@ void OpenGLRenderer_t::mouseClick(int button, int state, int x, int y) {
     }
 }
 
-void OpenGLRenderer_t::keyboardPaused(unsigned char key, int x, int y) {
+auto OpenGLRenderer_t::keyboardPaused(unsigned char key, int x, int y) -> void {
     auto t_start_write = std::chrono::high_resolution_clock::now(); // why is this needed?
     auto t_end_write = t_start_write;
 
@@ -256,7 +256,7 @@ void OpenGLRenderer_t::keyboardPaused(unsigned char key, int x, int y) {
     }
 }
 
-void OpenGLRenderer_t::keyboard(unsigned char key, int x, int y) {
+auto OpenGLRenderer_t::keyboard(unsigned char key, int x, int y) -> void {
     auto t_start_write = std::chrono::high_resolution_clock::now(); // why is this needed?
     auto t_end_write = t_start_write;
     
@@ -301,7 +301,7 @@ void OpenGLRenderer_t::keyboard(unsigned char key, int x, int y) {
     }
 }
 
-void OpenGLRenderer_t::initialise() {
+auto OpenGLRenderer_t::initialise() -> void {
     #ifdef APTRACER_USE_OPENGL
     int gl_argc = 1;
     char* gl_argv[1];
@@ -327,13 +327,13 @@ void OpenGLRenderer_t::initialise() {
     #endif
 }
 
-void OpenGLRenderer_t::render() {
+auto OpenGLRenderer_t::render() -> void {
     #ifdef APTRACER_USE_OPENGL
     glutMainLoop();
     #endif
 }
 
-void OpenGLRenderer_t::render_write() {
+auto OpenGLRenderer_t::render_write() -> void {
     write_interval_ = 1;
     render_function_ = openGL_accumulate_write;
     #ifdef APTRACER_USE_OPENGL
@@ -342,7 +342,7 @@ void OpenGLRenderer_t::render_write() {
     #endif
 }
 
-void OpenGLRenderer_t::render_write(unsigned int write_interval) {
+auto OpenGLRenderer_t::render_write(unsigned int write_interval) -> void {
     write_interval_ = write_interval;
     render_function_ = openGL_accumulate_write;
     #ifdef APTRACER_USE_OPENGL
@@ -351,34 +351,34 @@ void OpenGLRenderer_t::render_write(unsigned int write_interval) {
     #endif
 }
 
-void OpenGLRenderer_t::openGL_dummyDisp() {
+auto OpenGLRenderer_t::openGL_dummyDisp() -> void {
     renderer_->dummyDisp();
 }
 
-void OpenGLRenderer_t::openGL_accumulate() {
+auto OpenGLRenderer_t::openGL_accumulate() -> void {
     renderer_->accumulate();
 }
 
-void OpenGLRenderer_t::openGL_accumulate_write() {
+auto OpenGLRenderer_t::openGL_accumulate_write() -> void {
     renderer_->accumulate_write();
 }
 
-void OpenGLRenderer_t::openGL_resetDisplay(void) {
+auto OpenGLRenderer_t::openGL_resetDisplay(void) -> void {
     renderer_->resetDisplay();
 }
 
-void OpenGLRenderer_t::openGL_mouseMovement(int x, int y) {
+auto OpenGLRenderer_t::openGL_mouseMovement(int x, int y) -> void {
     renderer_->mouseMovement(std::forward<int>(x), std::forward<int>(y));
 }
 
-void OpenGLRenderer_t::openGL_mouseClick(int button, int state, int x, int y) {
+auto OpenGLRenderer_t::openGL_mouseClick(int button, int state, int x, int y) -> void {
     renderer_->mouseClick(std::forward<int>(button), std::forward<int>(state), std::forward<int>(x), std::forward<int>(y));
 }
 
-void OpenGLRenderer_t::openGL_keyboardPaused(unsigned char key, int x, int y) {
+auto OpenGLRenderer_t::openGL_keyboardPaused(unsigned char key, int x, int y) -> void {
     renderer_->keyboardPaused(std::forward<unsigned char>(key), std::forward<int>(x), std::forward<int>(y));
 }
 
-void OpenGLRenderer_t::openGL_keyboard(unsigned char key, int x, int y) {
+auto OpenGLRenderer_t::openGL_keyboard(unsigned char key, int x, int y) -> void {
     renderer_->keyboard(std::forward<unsigned char>(key), std::forward<int>(x), std::forward<int>(y));
 }

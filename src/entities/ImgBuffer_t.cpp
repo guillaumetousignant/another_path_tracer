@@ -30,14 +30,14 @@ ImgBuffer_t::~ImgBuffer_t() {
     delete [] img_;
 }
 
-void ImgBuffer_t::reset() {
+auto ImgBuffer_t::reset() -> void {
     updates_ = 0;
     for (size_t j = 0; j < size_y_*size_x_; ++j) {
         img_[j] = Vec3f();
     }
 }
 
-void ImgBuffer_t::update(const Vec3f* img, size_t size_x, size_t size_y) {
+auto ImgBuffer_t::update(const Vec3f* img, size_t size_x, size_t size_y) -> void {
     updates_++;
 
     for (size_t j = 0; j < size_y*size_x; ++j) {
@@ -46,27 +46,27 @@ void ImgBuffer_t::update(const Vec3f* img, size_t size_x, size_t size_y) {
     }
 }
 
-void ImgBuffer_t::update() {
+auto ImgBuffer_t::update() -> void {
     ++updates_;
 }
 
-void ImgBuffer_t::update(const Vec3f &colour, size_t pos_x, size_t pos_y) {
+auto ImgBuffer_t::update(const Vec3f &colour, size_t pos_x, size_t pos_y) -> void {
     //img_[pos_y][pos_x] = img_[pos_y][pos_x] * (1.0 - 1.0/static_cast<double>(updates_)) + colour/static_cast<double>(updates_);
     img_[pos_y*size_x_ + pos_x] += colour;
 }
 
-void ImgBuffer_t::set(const Vec3f* img, size_t size_x, size_t size_y) {
+auto ImgBuffer_t::set(const Vec3f* img, size_t size_x, size_t size_y) -> void {
     updates_ = 1;
     for (size_t j = 0; j < size_y*size_x; ++j) {
         img_[j] = img[j];
     }
 }
 
-void ImgBuffer_t::set(const Vec3f &colour, size_t pos_x, size_t pos_y) {
+auto ImgBuffer_t::set(const Vec3f &colour, size_t pos_x, size_t pos_y) -> void {
     img_[pos_y*size_x_ + pos_x] = colour;
 }
 
-void ImgBuffer_t::write(const std::string &filename) const {
+auto ImgBuffer_t::write(const std::string &filename) const -> void {
     const double update_mult = 1.0/static_cast<double>(updates_);
     cimg_library::CImg<unsigned short> image(static_cast<unsigned int>(size_x_), static_cast<unsigned int>(size_y_), 1, 3);
     const auto n = static_cast<unsigned int>(size_x_ * size_y_);
@@ -89,7 +89,7 @@ void ImgBuffer_t::write(const std::string &filename) const {
     image.save_png(filename.c_str());
 }
 
-void ImgBuffer_t::write(const std::string &filename, double gammaind) const {
+auto ImgBuffer_t::write(const std::string &filename, double gammaind) const -> void {
     const double update_mult = 1.0/static_cast<double>(updates_);
     cimg_library::CImg<unsigned short> image(static_cast<unsigned int>(size_x_), static_cast<unsigned int>(size_y_), 1, 3);
     const auto n = static_cast<unsigned int>(size_x_ * size_y_);
