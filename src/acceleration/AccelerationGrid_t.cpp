@@ -226,9 +226,9 @@ auto AccelerationGrid_t::remove(const Shape_t* item) -> void {
     min1.min(cell_res);
     max1.min(cell_res);
 
-    for (size_t z = static_cast<size_t>(min1[2]); z <= static_cast<size_t>(max1[2]); ++z) {
-        for (size_t y = static_cast<size_t>(min1[1]); y <= static_cast<size_t>(max1[1]); ++y) {
-            for (size_t x = static_cast<size_t>(min1[0]); x <= static_cast<size_t>(max1[0]); ++x) {
+    for (auto z = static_cast<size_t>(min1[2]); z <= static_cast<size_t>(max1[2]); ++z) {
+        for (auto y = static_cast<size_t>(min1[1]); y <= static_cast<size_t>(max1[1]); ++y) {
+            for (auto x = static_cast<size_t>(min1[0]); x <= static_cast<size_t>(max1[0]); ++x) {
                 if (cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] != nullptr) {
                     cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]]->remove(item);
                 }
