@@ -18,9 +18,9 @@ auto GridCell_t::intersect(const Ray_t &ray, double &t, std::array<double, 2> &u
     Shape_t* hit_obj = nullptr; // dunno if this is needed    
     t = std::numeric_limits<double>::infinity();
 
-    for (auto it = items_.begin(); it != items_.end(); ++it) {
-        if ((*it)->intersection(ray, t_temp, uv_temp) && (t_temp < t)) {
-            hit_obj = *it;
+    for (auto shape : items_) {
+        if (shape->intersection(ray, t_temp, uv_temp) && (t_temp < t)) {
+            hit_obj = shape;
             uv = uv_temp;
             t = t_temp;
         }
@@ -34,7 +34,7 @@ auto GridCell_t::add(Shape_t* item) -> void {
 }
 
 auto GridCell_t::remove(const Shape_t* item) -> void {
-    for (std::list<Shape_t*>::iterator it = items_.begin(); it != items_.end(); ++it) {
+    for (auto it = items_.begin(); it != items_.end(); ++it) {
         if ((*it) == item) {
             items_.erase(it);
             --n_obj_;

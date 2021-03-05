@@ -8,7 +8,8 @@ using APTracer::Acceleration::AccelerationGridArray_t;
 
 AccelerationGridArray_t::AccelerationGridArray_t(Shape_t** items, size_t n_items, size_t min_res, size_t max_res) : 
         level_(0), min_res_(min_res), max_res_(max_res) {
-    Vec3f min1, max1;
+    Vec3f min1;
+    Vec3f max1;
 
     n_obj_ = n_items;
 
@@ -97,7 +98,8 @@ AccelerationGridArray_t::AccelerationGridArray_t(Shape_t** items, size_t n_items
 
 AccelerationGridArray_t::AccelerationGridArray_t(Shape_t** items, size_t n_items, std::array<Vec3f, 2> coordinates, unsigned int level, size_t min_res, size_t max_res) : 
         level_(level), min_res_(min_res), max_res_(max_res) {
-    Vec3f min1, max1;
+    Vec3f min1;
+    Vec3f max1;
 
     n_obj_ = n_items;
 
@@ -221,7 +223,7 @@ auto AccelerationGridArray_t::intersect(const Ray_t &ray, double &t, std::array<
         }
     }
 
-    int cellcoordint[3] = {static_cast<int>(cellcoord[0]), static_cast<int>(cellcoord[1]), static_cast<int>(cellcoord[2])};
+    std::array<int, 3> cellcoordint {static_cast<int>(cellcoord[0]), static_cast<int>(cellcoord[1]), static_cast<int>(cellcoord[2])};
     Shape_t* hit_obj = nullptr;
 
     while (true) {

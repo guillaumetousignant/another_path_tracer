@@ -8,7 +8,8 @@ using APTracer::Acceleration::AccelerationMultiGrid_t;
 
 AccelerationMultiGrid_t::AccelerationMultiGrid_t(Shape_t** items, size_t n_items, size_t min_res, size_t max_res, size_t max_cell_content, unsigned int max_grid_level) : 
         level_(0), min_res_(min_res), max_res_(max_res), max_cell_content_(max_cell_content), max_grid_level_(max_grid_level) {
-    Vec3f min1, max1;
+    Vec3f min1;
+    Vec3f max1;
     GridCell_t** temp_cells;
 
     Shape_t** temp_elements = nullptr;
@@ -72,8 +73,8 @@ AccelerationMultiGrid_t::AccelerationMultiGrid_t(Shape_t** items, size_t n_items
             if ((temp_cells[i]->n_obj_ > max_cell_content_) && (level_ < max_grid_level_)) {
                 temp_elements = new Shape_t*[temp_cells[i]->n_obj_];
                 size_t element_index = 0;
-                for (auto it = temp_cells[i]->items_.begin(); it != temp_cells[i]->items_.end(); ++it) {
-                    temp_elements[element_index] = *it;
+                for (auto & shape : temp_cells[i]->items_) {
+                    temp_elements[element_index] = shape;
                     element_index++;
                 }
 
@@ -103,7 +104,8 @@ AccelerationMultiGrid_t::AccelerationMultiGrid_t(Shape_t** items, size_t n_items
 
 AccelerationMultiGrid_t::AccelerationMultiGrid_t(Shape_t** items, size_t n_items, std::array<Vec3f, 2> coordinates, unsigned int level, size_t min_res, size_t max_res, size_t max_cell_content, unsigned int max_grid_level) : 
         level_(level), min_res_(min_res), max_res_(max_res), max_cell_content_(max_cell_content), max_grid_level_(max_grid_level) {
-    Vec3f min1, max1;
+    Vec3f min1;
+    Vec3f max1;
     GridCell_t** temp_cells;
 
     Shape_t** temp_elements = nullptr;
@@ -160,8 +162,8 @@ AccelerationMultiGrid_t::AccelerationMultiGrid_t(Shape_t** items, size_t n_items
             if ((temp_cells[i]->n_obj_ > max_cell_content_) && (level_ < max_grid_level_)) {
                 temp_elements = new Shape_t*[temp_cells[i]->n_obj_];
                 size_t element_index = 0;
-                for (auto it = temp_cells[i]->items_.begin(); it != temp_cells[i]->items_.end(); ++it) {
-                    temp_elements[element_index] = *it;
+                for (auto& shape : temp_cells[i]->items_) {
+                    temp_elements[element_index] = shape;
                     element_index++;
                 }
 
@@ -233,7 +235,7 @@ auto AccelerationMultiGrid_t::intersect(const Ray_t &ray, double &t, std::array<
         }
     }
 
-    int cellcoordint[3] = {static_cast<int>(cellcoord[0]), static_cast<int>(cellcoord[1]), static_cast<int>(cellcoord[2])};
+    std::array<int, 3> cellcoordint {static_cast<int>(cellcoord[0]), static_cast<int>(cellcoord[1]), static_cast<int>(cellcoord[2])};
     Shape_t* hit_obj = nullptr;
 
     while (true) {

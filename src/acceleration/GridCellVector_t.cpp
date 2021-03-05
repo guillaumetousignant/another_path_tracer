@@ -23,9 +23,9 @@ auto GridCellVector_t::intersect(const Ray_t &ray, double &t, std::array<double,
     Shape_t* hit_obj = nullptr; // dunno if this is needed    
     t = std::numeric_limits<double>::infinity();
 
-    for (size_t i = 0; i < items_.size(); i++) {
-        if (items_[i]->intersection(ray, t_temp, uv_temp) && (t_temp < t)) {
-            hit_obj = items_[i];
+    for (auto shape : items_) {
+        if (shape->intersection(ray, t_temp, uv_temp) && (t_temp < t)) {
+            hit_obj = shape;
             uv = uv_temp;
             t = t_temp;
         }

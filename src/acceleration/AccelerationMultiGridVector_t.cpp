@@ -10,7 +10,8 @@ using APTracer::Acceleration::GridCellVector_t;
 
 AccelerationMultiGridVector_t::AccelerationMultiGridVector_t(Shape_t** items, size_t n_items, size_t min_res, size_t max_res, size_t max_cell_content, unsigned int max_grid_level) : 
         level_(0), min_res_(min_res), max_res_(max_res), max_cell_content_(max_cell_content), max_grid_level_(max_grid_level) {
-    Vec3f min1, max1;
+    Vec3f min1;
+    Vec3f max1;
     GridCellVector_t** temp_cells;
 
     n_obj_ = n_items;
@@ -94,7 +95,8 @@ AccelerationMultiGridVector_t::AccelerationMultiGridVector_t(Shape_t** items, si
 
 AccelerationMultiGridVector_t::AccelerationMultiGridVector_t(Shape_t** items, size_t n_items, std::array<Vec3f, 2> coordinates, unsigned int level, size_t min_res, size_t max_res, size_t max_cell_content, unsigned int max_grid_level) : 
         level_(level), min_res_(min_res), max_res_(max_res), max_cell_content_(max_cell_content), max_grid_level_(max_grid_level) {
-    Vec3f min1, max1;
+    Vec3f min1;
+    Vec3f max1;
     GridCellVector_t** temp_cells;
 
     n_obj_ = n_items;
@@ -213,7 +215,7 @@ auto AccelerationMultiGridVector_t::intersect(const Ray_t &ray, double &t, std::
         }
     }
 
-    int cellcoordint[3] = {static_cast<int>(cellcoord[0]), static_cast<int>(cellcoord[1]), static_cast<int>(cellcoord[2])};
+    std::array<int, 3> cellcoordint {static_cast<int>(cellcoord[0]), static_cast<int>(cellcoord[1]), static_cast<int>(cellcoord[2])};
     Shape_t* hit_obj = nullptr;
 
     while (true) {

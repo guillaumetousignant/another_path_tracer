@@ -38,7 +38,7 @@ auto GridCellArray_t::add(Shape_t* item) -> void {
         items_[n_obj_] = item;
     }
     else {
-        Shape_t** items2 = new Shape_t*[n_obj_+1];
+        auto items2 = new Shape_t*[n_obj_+1];
         for (size_t i = 0; i < n_obj_; i++) {
             items2[i] = items_[i];
         }
@@ -71,7 +71,7 @@ auto GridCellArray_t::move(Shape_t* item) -> void {
 
 auto GridCellArray_t::reserve() -> void {
     if (n_obj_ > 0) {
-        Shape_t** items_temp = new Shape_t*[increment_size_];
+        auto items_temp = new Shape_t*[increment_size_];
         for (size_t i = 0; i < n_obj_; ++i) {
             items_temp[i] = items_[i];
         }
