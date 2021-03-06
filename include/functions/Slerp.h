@@ -12,7 +12,7 @@ namespace APTracer {
      * @param t Interpolation point between the two angles. Between 0 and 1, 0 gives phi_1 and 1 gives phi_2.
      * @return double Interpolated angle.
      */
-    double slerp(double phi_1, double phi_2, double t);
+    auto slerp(double phi_1, double phi_2, double t) -> double;
 }
 
 #endif

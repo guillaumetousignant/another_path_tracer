@@ -13,7 +13,7 @@ namespace APTracer {
      * @param prefix Start of the filename, to be appended with a sequential number. Can have an extension.
      * @return std::string Next sequential valid free filename.
      */
-    std::string next_filename(const std::string &prefix);
+    auto next_filename(const std::string &prefix) -> std::string;
 }
 
 #endif
