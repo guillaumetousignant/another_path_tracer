@@ -52,6 +52,36 @@ namespace APTracer { namespace Shapes {
             virtual ~MeshMotionblur_t() final;
 
             /**
+             * @brief Copy constructor.
+             * 
+             * @param other Mesh to be copied.
+             */
+            MeshMotionblur_t(const MeshMotionblur_t& other);
+        
+            /**
+             * @brief Move constructor.
+             * 
+             * @param other Mesh to be moved.
+             */
+            MeshMotionblur_t(MeshMotionblur_t&& other);
+        
+            /**
+             * @brief Copy assignment.
+             * 
+             * @param other Mesh to be copied.
+             * @return MeshMotionblur_t& Reference to this mesh.
+             */
+            MeshMotionblur_t& operator=(const MeshMotionblur_t& other);
+        
+            /**
+             * @brief Move assignment.
+             * 
+             * @param other Mesh to be moved.
+             * @return MeshMotionblur_t& Reference to this mesh.
+             */
+            MeshMotionblur_t& operator=(MeshMotionblur_t&& other);
+
+            /**
              * @brief Creates the triangles of the mesh, with a reference to the mesh geometry and their index into it.
              * 
              * his creates motionblur triangles, and assigns them the mesh's material.

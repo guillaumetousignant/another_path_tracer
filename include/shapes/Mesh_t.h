@@ -52,6 +52,36 @@ namespace APTracer { namespace Shapes {
             virtual ~Mesh_t() final;
 
             /**
+             * @brief Copy constructor.
+             * 
+             * @param other Mesh to be copied.
+             */
+            Mesh_t(const Mesh_t& other);
+        
+            /**
+             * @brief Move constructor.
+             * 
+             * @param other Mesh to be moved.
+             */
+            Mesh_t(Mesh_t&& other);
+        
+            /**
+             * @brief Copy assignment.
+             * 
+             * @param other Mesh to be copied.
+             * @return Mesh_t& Reference to this mesh.
+             */
+            Mesh_t& operator=(const Mesh_t& other);
+        
+            /**
+             * @brief Move assignment.
+             * 
+             * @param other Mesh to be moved.
+             * @return Mesh_t& Reference to this mesh.
+             */
+            Mesh_t& operator=(Mesh_t&& other);
+
+            /**
              * @brief Creates the triangles of the mesh, with a reference to the mesh geometry and their index into it.
              * 
              * This creates regular triangles, and assigns them the mesh's material.

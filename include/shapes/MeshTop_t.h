@@ -38,7 +38,7 @@ namespace APTracer { namespace Shapes {
              * 
              * @param material Dummy material assigned to the mesh. First material in case of a material map.
              * @param transform_matrix Transformation matrix used for the mesh and all triangles inside it.
-             * @param geom c
+             * @param geom Mesh geometry used by the mesh and its triangles, which index into it.
              */
             MeshTop_t(Material_t *material, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom);
 
@@ -47,8 +47,8 @@ namespace APTracer { namespace Shapes {
              */
             virtual ~MeshTop_t();
 
-            Material_t *material_; /**< @brief Dummy material, in case it is used as a shape. Defaults to the first material of a material map if present.*/
-            TransformMatrix_t *transformation_; /**< @brief Transformation matrix used for the mesh and all triangles inside it.*/
+            Material_t* material_; /**< @brief Dummy material, in case it is used as a shape. Defaults to the first material of a material map if present.*/
+            TransformMatrix_t* transformation_; /**< @brief Transformation matrix used for the mesh and all triangles inside it.*/
             MeshGeometry_t* geom_; /**< @brief Mesh geometry used by the mesh and its triangles, which index into it.*/
             size_t n_tris_; /**< @brief Number of triangles held by the mesh.*/
             std::vector<Shape_t*> triangles_; /**< @brief Array of triangles held by the mesh.*/
