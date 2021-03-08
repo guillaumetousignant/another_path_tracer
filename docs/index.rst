@@ -45,9 +45,6 @@ Docs
 .. doxygenclass:: APTracer::Entities::MaterialMap_t
    :members:
 
-.. doxygenclass:: APTracer::Entities::MaterialMix_t
-   :members:
-
 .. doxygenclass:: APTracer::Entities::Medium_t
    :members:
 
@@ -214,12 +211,6 @@ Docs
    :members:
 
 .. doxygenclass:: APTracer::Materials::PortalScatterer_t
-   :members:
-
-.. doxygenclass:: APTracer::Materials::PortalScattererTop_t
-   :members:
-
-.. doxygenclass:: APTracer::Materials::PortalTop_t
    :members:
 
 .. doxygenclass:: APTracer::Materials::RandomMix_t
