@@ -26,12 +26,12 @@ namespace APTracer { namespace Materials {
             /**
              * @brief Construct a new NormalMaterial_t object.
              */
-            NormalMaterial_t();
+            NormalMaterial_t() = default;
 
             /**
              * @brief Destroy the NormalMaterial_t object. Does nothing.
              */
-            virtual ~NormalMaterial_t() final;
+            virtual ~NormalMaterial_t() final = default;
 
             /**
              * @brief Bounces a ray of light on the material.

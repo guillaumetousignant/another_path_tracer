@@ -9,9 +9,7 @@ APTracer::Shapes::Box_t::Box_t() : coordinates_{Vec3f(), Vec3f()} {}
 
 APTracer::Shapes::Box_t::Box_t(std::array<Vec3f, 2> coord) : coordinates_{coord} {}
 
-APTracer::Shapes::Box_t::~Box_t() = default;
-
-bool APTracer::Shapes::Box_t::intersection(const APTracer::Entities::Ray_t &ray, double &t) const {
+auto APTracer::Shapes::Box_t::intersection(const APTracer::Entities::Ray_t &ray, double &t) const -> bool {
     const Vec3f invdir = Vec3f(1.0)/ray.direction_;
     const std::array<bool, 3> sign{invdir[0] < 0,
                             invdir[1] < 0,

@@ -63,7 +63,7 @@ namespace APTracer { namespace Shapes {
              * 
              * @param other Mesh to be moved.
              */
-            MeshMotionblur_t(MeshMotionblur_t&& other);
+            MeshMotionblur_t(MeshMotionblur_t&& other) noexcept;
         
             /**
              * @brief Copy assignment.
@@ -71,7 +71,7 @@ namespace APTracer { namespace Shapes {
              * @param other Mesh to be copied.
              * @return MeshMotionblur_t& Reference to this mesh.
              */
-            MeshMotionblur_t& operator=(const MeshMotionblur_t& other);
+            auto operator=(const MeshMotionblur_t& other) -> MeshMotionblur_t&;
         
             /**
              * @brief Move assignment.
@@ -79,14 +79,14 @@ namespace APTracer { namespace Shapes {
              * @param other Mesh to be moved.
              * @return MeshMotionblur_t& Reference to this mesh.
              */
-            MeshMotionblur_t& operator=(MeshMotionblur_t&& other);
+            auto operator=(MeshMotionblur_t&& other) noexcept -> MeshMotionblur_t&;
 
             /**
              * @brief Creates the triangles of the mesh, with a reference to the mesh geometry and their index into it.
              * 
              * his creates motionblur triangles, and assigns them the mesh's material.
              */
-            virtual void createTriangles() final;
+            virtual auto createTriangles() -> void final;
 
             /**
              * @brief Creates the triangles of the mesh, with a reference to the mesh geometry and their index into it, using a material map.
@@ -96,7 +96,7 @@ namespace APTracer { namespace Shapes {
              * 
              * @param materialmap Material map used to assign materials to the triangles according to their material name in the mesh geometry.
              */
-            virtual void createTriangles(MaterialMap_t *materialmap) final;
+            virtual auto createTriangles(MaterialMap_t *materialmap) -> void final;
     };
 }}
 #endif

@@ -19,7 +19,8 @@ auto APTracer::Materials::RefractiveFuzz_t::bounce(std::array<double, 2> uv, con
     Vec3f newdir;
 
     if (medium_->priority_ >= ray.medium_list_.front()->priority_) { // CHECK also discard if priority is equal, but watch for going out case
-        double etai, etat;
+        double etai;
+        double etat;
 
         const double rand1 = unif_(APTracer::Entities::rng()) * 2.0 * pi;
         const double rand2 = std::pow(unif_(APTracer::Entities::rng()), order_) * diffusivity_;

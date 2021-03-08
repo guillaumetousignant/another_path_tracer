@@ -32,7 +32,7 @@ namespace APTracer { namespace Shapes {
             /**
              * @brief Destroy the Box_t object. Does nothing.
              */
-            ~Box_t();
+            ~Box_t() = default;
 
             std::array<Vec3f, 2> coordinates_; /**< @brief Array of [minimum, maximum] coordinates in the three axis for the bounding box.*/
 
@@ -44,7 +44,7 @@ namespace APTracer { namespace Shapes {
              * @return true The ray intersects the bounding box. t is set to the intersection distance.
              * @return false The ray doesn't intersect the bounding box. t is undefined.
              */
-            bool intersection(const Ray_t &ray, double &t) const;
+            auto intersection(const Ray_t &ray, double &t) const -> bool;
     };
 }}
 #endif

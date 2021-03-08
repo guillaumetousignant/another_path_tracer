@@ -22,27 +22,26 @@ auto APTracer::Materials::ScattererFull_t::scatter(APTracer::Entities::Ray_t &ra
         ray.mask_ *= (-colour_vol_ * ray.dist_).exp();
         return false;
     }
-    else {
-        ray.dist_ = distance;
-        ray.origin_ += ray.direction_ * distance;
 
-        const double rand1 = unif_(APTracer::Entities::rng()) * 2.0 * pi;
-        const double rand2 = unif_(APTracer::Entities::rng()) * pi;
+    ray.dist_ = distance;
+    ray.origin_ += ray.direction_ * distance;
 
-        const Vec3f axis = ray.direction_[0] > 0.1 ? Vec3f(0.0, 1.0, 0.0) : Vec3f(1.0, 0.0, 0.0);
+    const double rand1 = unif_(APTracer::Entities::rng()) * 2.0 * pi;
+    const double rand2 = unif_(APTracer::Entities::rng()) * pi;
 
-        const Vec3f u = axis.cross(ray.direction_).normalize_inplace();
-        const Vec3f v = ray.direction_.cross(u).normalize_inplace();
+    const Vec3f axis = ray.direction_[0] > 0.1 ? Vec3f(0.0, 1.0, 0.0) : Vec3f(1.0, 0.0, 0.0);
 
-        const Vec3f direction_fuzz = (u * std::cos(rand1) * std::sin(rand2) + v * std::sin(rand1) * std::sin(rand2) + ray.direction_ * std::cos(rand2)).normalize_inplace();
+    const Vec3f u = axis.cross(ray.direction_).normalize_inplace();
+    const Vec3f v = ray.direction_.cross(u).normalize_inplace();
 
-        ray.direction_ = direction_fuzz; //is this [normalize] needed? prob because of the cross() calls.
+    const Vec3f direction_fuzz = (u * std::cos(rand1) * std::sin(rand2) + v * std::sin(rand1) * std::sin(rand2) + ray.direction_ * std::cos(rand2)).normalize_inplace();
 
-        ray.colour_ += ray.mask_ * (emission_vol_ * ray.dist_).sqrt(); // sqrt may be slow
-        ray.mask_ *= (-colour_vol_ * ray.dist_).exp();
+    ray.direction_ = direction_fuzz; //is this [normalize] needed? prob because of the cross() calls.
 
-        ray.colour_ += ray.mask_ * emission_scat_;
-        ray.mask_ *= emission_scat_; // * pow(newdir.dot(normal), roughness_);
-        return true;
-    }    
+    ray.colour_ += ray.mask_ * (emission_vol_ * ray.dist_).sqrt(); // sqrt may be slow
+    ray.mask_ *= (-colour_vol_ * ray.dist_).exp();
+
+    ray.colour_ += ray.mask_ * emission_scat_;
+    ray.mask_ *= emission_scat_; // * pow(newdir.dot(normal), roughness_);
+    return true;
 }

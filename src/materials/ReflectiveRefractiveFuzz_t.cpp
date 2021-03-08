@@ -20,7 +20,8 @@ auto APTracer::Materials::ReflectiveRefractiveFuzz_t::bounce(std::array<double, 
 
     if (medium_->priority_ >= ray.medium_list_.front()->priority_) { // CHECK also discard if priority is equal, but watch for going out case  
         Vec3f newdir;
-        double etai, etat;
+        double etai;
+        double etat;
         double kr;
 
         const double rand1 = unif_(APTracer::Entities::rng()) * 2.0 * pi;

@@ -21,7 +21,8 @@ auto APTracer::Materials::ReflectiveRefractive_t::bounce(std::array<double, 2> u
 
     if (medium_->priority_ >= ray.medium_list_.front()->priority_) { // CHECK also discard if priority is equal, but watch for going out case
         Vec3f n;
-        double etai, etat;
+        double etai;
+        double etat;
         double kr;
 
         if (cosi < 0) { // Coming in

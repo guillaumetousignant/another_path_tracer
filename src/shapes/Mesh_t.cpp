@@ -29,7 +29,7 @@ APTracer::Shapes::Mesh_t::Mesh_t(APTracer::Shapes::Mesh_t&& other)
     triangles_ = std::move(other.triangles_);
 }
 
-APTracer::Shapes::Mesh_t& APTracer::Shapes::Mesh_t::operator=(const APTracer::Shapes::Mesh_t& other) {
+auto APTracer::Shapes::Mesh_t::operator=(const APTracer::Shapes::Mesh_t& other) -> APTracer::Shapes::Mesh_t& {
     material_ = other.material_;
     transformation_ = other.transformation_;
     geom_ = other.geom_;
@@ -43,7 +43,7 @@ APTracer::Shapes::Mesh_t& APTracer::Shapes::Mesh_t::operator=(const APTracer::Sh
     return *this;
 }
 
-APTracer::Shapes::Mesh_t& APTracer::Shapes::Mesh_t::operator=(APTracer::Shapes::Mesh_t&& other) {
+auto APTracer::Shapes::Mesh_t::operator=(APTracer::Shapes::Mesh_t&& other) -> APTracer::Shapes::Mesh_t& {
     material_ = other.material_;
     transformation_ = other.transformation_;
     geom_ = other.geom_;
@@ -53,14 +53,14 @@ APTracer::Shapes::Mesh_t& APTracer::Shapes::Mesh_t::operator=(APTracer::Shapes::
     return *this;
 }
 
-void APTracer::Shapes::Mesh_t::createTriangles() {    
+auto APTracer::Shapes::Mesh_t::createTriangles() -> void {    
     triangles_ = std::vector<APTracer::Entities::Shape_t*>(n_tris_);
     for (size_t i = 0; i < n_tris_; i++) {
         triangles_[i] = new APTracer::Shapes::TriangleMesh_t(material_, transformation_, geom_, i);
     }
 }
 
-void APTracer::Shapes::Mesh_t::createTriangles(APTracer::Entities::MaterialMap_t *materialmap) {
+auto APTracer::Shapes::Mesh_t::createTriangles(APTracer::Entities::MaterialMap_t *materialmap) -> void {
     triangles_ = std::vector<APTracer::Entities::Shape_t*>(n_tris_);
     for (size_t i = 0; i < n_tris_; i++) {
         triangles_[i] = new APTracer::Shapes::TriangleMesh_t(materialmap->getMaterial(geom_->mat_[i]), transformation_, geom_, i);

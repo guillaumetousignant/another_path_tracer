@@ -27,7 +27,7 @@ APTracer::Shapes::MeshMotionblur_t::MeshMotionblur_t(APTracer::Shapes::MeshMotio
     triangles_ = std::move(other.triangles_);
 }
 
-APTracer::Shapes::MeshMotionblur_t& APTracer::Shapes::MeshMotionblur_t::operator=(const APTracer::Shapes::MeshMotionblur_t& other) {
+auto APTracer::Shapes::MeshMotionblur_t::operator=(const APTracer::Shapes::MeshMotionblur_t& other) -> APTracer::Shapes::MeshMotionblur_t& {
     material_ = other.material_;
     transformation_ = other.transformation_;
     geom_ = other.geom_;
@@ -41,7 +41,7 @@ APTracer::Shapes::MeshMotionblur_t& APTracer::Shapes::MeshMotionblur_t::operator
     return *this;
 }
 
-APTracer::Shapes::MeshMotionblur_t& APTracer::Shapes::MeshMotionblur_t::operator=(APTracer::Shapes::MeshMotionblur_t&& other) {
+auto APTracer::Shapes::MeshMotionblur_t::operator=(APTracer::Shapes::MeshMotionblur_t&& other) -> APTracer::Shapes::MeshMotionblur_t& {
     material_ = other.material_;
     transformation_ = other.transformation_;
     geom_ = other.geom_;
@@ -51,14 +51,14 @@ APTracer::Shapes::MeshMotionblur_t& APTracer::Shapes::MeshMotionblur_t::operator
     return *this;
 }
 
-void APTracer::Shapes::MeshMotionblur_t::createTriangles() {
+auto APTracer::Shapes::MeshMotionblur_t::createTriangles() -> void {
     triangles_ = std::vector<APTracer::Entities::Shape_t*>(n_tris_);
     for (size_t i = 0; i < n_tris_; i++) {
         triangles_[i] = new APTracer::Shapes::TriangleMeshMotionblur_t(material_, transformation_, geom_, i);
     }
 }
 
-void APTracer::Shapes::MeshMotionblur_t::createTriangles(MaterialMap_t *materialmap) {
+auto APTracer::Shapes::MeshMotionblur_t::createTriangles(MaterialMap_t *materialmap) -> void {
     triangles_ = std::vector<APTracer::Entities::Shape_t*>(n_tris_);
     for (size_t i = 0; i < n_tris_; i++) {
         triangles_[i] = new APTracer::Shapes::TriangleMeshMotionblur_t(materialmap->getMaterial(geom_->mat_[i]), transformation_, geom_, i);

@@ -9,7 +9,7 @@ constexpr double epsilon = 0.00000001;
 using APTracer::Entities::Vec3f;
 
 APTracer::Materials::Portal_t::Portal_t(APTracer::Entities::TransformMatrix_t* transformation, std::list<APTracer::Entities::Medium_t*> medium_list) 
-    : transformation_(transformation), medium_list_(medium_list) {}
+    : transformation_(transformation), medium_list_(std::move(medium_list)) {}
 
 APTracer::Materials::Portal_t::~Portal_t() = default;
 
