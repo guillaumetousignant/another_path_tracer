@@ -18,7 +18,7 @@ APTracer::Shapes::Sphere_t::Sphere_t(APTracer::Entities::Material_t *material, A
 
 APTracer::Shapes::Sphere_t::~Sphere_t() = default;
 
-void APTracer::Shapes::Sphere_t::update() {
+auto APTracer::Shapes::Sphere_t::update() -> void {
     origin_ = transformation_->multVec(Vec3f());
     radius_ = transformation_->getScale();
     const Vec3f direction = transformation_->multDir(Vec3f(0.0, 0.0, 1.0)).to_sph(); 
@@ -26,7 +26,7 @@ void APTracer::Shapes::Sphere_t::update() {
     direction_sph_ = Vec3f(1.0, direction[1], direction2[2]);
 }
 
-bool APTracer::Shapes::Sphere_t::intersection(const APTracer::Entities::Ray_t &ray, double &t, std::array<double, 2> &uv) const {
+auto APTracer::Shapes::Sphere_t::intersection(const APTracer::Entities::Ray_t &ray, double &t, std::array<double, 2> &uv) const -> bool {
     const Vec3f to_center = origin_ - ray.origin_;
     const double b = to_center.dot(ray.direction_);
     const double c = to_center.dot(to_center) - pow(radius_, 2);
@@ -53,7 +53,7 @@ bool APTracer::Shapes::Sphere_t::intersection(const APTracer::Entities::Ray_t &r
     return true;
 }
 
-Vec3f APTracer::Shapes::Sphere_t::normaluv(double time, std::array<double, 2> uv, std::array<double, 2> &tuv) const {
+auto APTracer::Shapes::Sphere_t::normaluv(double time, std::array<double, 2> uv, std::array<double, 2> &tuv) const -> Vec3f {
     Vec3f sph = Vec3f(1.0, (1.0 - uv[1]) * pi, (uv[0] - 0.5) * 2.0 * pi);
     const Vec3f normalvec = sph.get_xyz();
 
@@ -81,11 +81,11 @@ Vec3f APTracer::Shapes::Sphere_t::normaluv(double time, std::array<double, 2> uv
     return normalvec;
 }
 
-Vec3f APTracer::Shapes::Sphere_t::normal(double time, std::array<double, 2> uv) const {
+auto APTracer::Shapes::Sphere_t::normal(double time, std::array<double, 2> uv) const -> Vec3f {
     return Vec3f(1.0, (1.0 - uv[1]) * pi, (uv[0] - 0.5) * 2.0 * pi).to_xyz();
 }
 
-Vec3f APTracer::Shapes::Sphere_t::normal_uv_tangent(double time, std::array<double, 2> uv, std::array<double, 2> &tuv, Vec3f &tangentvec) const {
+auto APTracer::Shapes::Sphere_t::normal_uv_tangent(double time, std::array<double, 2> uv, std::array<double, 2> &tuv, Vec3f &tangentvec) const -> Vec3f {
     Vec3f sph = Vec3f(1.0, (1.0 - uv[1]) * pi, (uv[0] - 0.5) * 2.0 * pi);
     const Vec3f normalvec = sph.get_xyz();
 
@@ -115,10 +115,10 @@ Vec3f APTracer::Shapes::Sphere_t::normal_uv_tangent(double time, std::array<doub
     return normalvec;
 } 
 
-Vec3f APTracer::Shapes::Sphere_t::mincoord() const {
+auto APTracer::Shapes::Sphere_t::mincoord() const -> Vec3f {
     return origin_ - radius_;
 }
 
-Vec3f APTracer::Shapes::Sphere_t::maxcoord() const {
+auto APTracer::Shapes::Sphere_t::maxcoord() const -> Vec3f {
     return origin_ + radius_;
 }
