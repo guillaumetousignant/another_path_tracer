@@ -60,7 +60,7 @@ namespace APTracer { namespace Shapes {
              * 
              * The points are created from the mesh geometry using the triangle's index, and the transformation matrix.
              */
-            virtual void update() final;
+            virtual auto update() -> void final;
 
             /**
              * @brief Intersects a ray with the triangle, and stores information about the intersection.
@@ -90,7 +90,7 @@ namespace APTracer { namespace Shapes {
              * @param[out] tuv Texture coordinates at the specified coordinates.
              * @return Vec3f Normal vector at the specified coordinates.
              */
-            virtual Vec3f normaluv(double time, std::array<double, 2> uv, std::array<double, 2> &tuv) const final;
+            virtual auto normaluv(double time, std::array<double, 2> uv, std::array<double, 2> &tuv) const -> Vec3f final;
 
             /**
              * @brief Returns the surface normal at a point in object coordinates.
@@ -103,7 +103,7 @@ namespace APTracer { namespace Shapes {
              * @param[in] uv Object coordinates at which we want to find the normal. The coordinates are in barycentric coordinates, minus w [u, v].
              * @return Vec3f Normal vector at the specified coordinates. 
              */
-            virtual Vec3f normal(double time, std::array<double, 2> uv) const final;
+            virtual auto normal(double time, std::array<double, 2> uv) const -> Vec3f final;
 
             /**
              * @brief Returns the surface normal, texture coordinates and tangent vector at a point in object coordinates.
@@ -120,7 +120,7 @@ namespace APTracer { namespace Shapes {
              * @param[out] tangentvec Tangent vector at the specified coordinates.
              * @return Vec3f Normal vector at the specified coordinates. 
              */
-            virtual Vec3f normal_uv_tangent(double time, std::array<double, 2> uv, std::array<double, 2> &tuv, Vec3f &tangentvec) const final;
+            virtual auto normal_uv_tangent(double time, std::array<double, 2> uv, std::array<double, 2> &tuv, Vec3f &tangentvec) const -> Vec3f final;
 
             /**
              * @brief Returns the geometric surface normal of the triangle, not the interpolated one from vertex normals.
@@ -130,7 +130,7 @@ namespace APTracer { namespace Shapes {
              * @param time Time at which we want the normal. Used when motion blur is used. Not used here.
              * @return Vec3f Normal vector of the triangle.
              */
-            virtual Vec3f normal_face(double time) const final;
+            virtual auto normal_face(double time) const -> Vec3f final;
 
             /**
              * @brief Minimum coordinates of an axis-aligned bounding box around the triangle.
@@ -140,7 +140,7 @@ namespace APTracer { namespace Shapes {
              * 
              * @return Vec3f Minimum coordinates of an axis-aligned bounding box around the triangle.
              */
-            virtual Vec3f mincoord() const final;
+            virtual auto mincoord() const -> Vec3f final;
 
             /**
              * @brief Maximum coordinates of an axis-aligned bounding box around the triangle.
@@ -150,7 +150,7 @@ namespace APTracer { namespace Shapes {
              * 
              * @return Vec3f Maximum coordinates of an axis-aligned bounding box around the triangle.
              */
-            virtual Vec3f maxcoord() const final;
+            virtual auto maxcoord() const -> Vec3f final;
     };
 }}
 #endif

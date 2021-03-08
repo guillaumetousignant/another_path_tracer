@@ -64,7 +64,7 @@ namespace APTracer { namespace Shapes {
              * Stores the previous state in the _last variables, so that state can be interpolated according to time.
              * The points are created from the transformation matrix and the original points, stored in normals_orig_.
              */
-            virtual void update() final;
+            virtual auto update() -> void final;
 
             /**
              * @brief Intersects a ray with the triangle at a specific time, and stores information about the intersection.
@@ -80,7 +80,7 @@ namespace APTracer { namespace Shapes {
              * @return true The ray intersected the triangle, t and uv are defined.
              * @return false The ray doesn't intersect the triangle, t and uv are undefined.
              */
-            virtual bool intersection(const Ray_t &ray, double &t, std::array<double, 2> &uv) const final; 
+            virtual auto intersection(const Ray_t &ray, double &t, std::array<double, 2> &uv) const -> bool final; 
 
             /**
              * @brief Returns the surface normal and texture coordinates at a point in object coordinates and a specific time.
@@ -94,7 +94,7 @@ namespace APTracer { namespace Shapes {
              * @param[out] tuv Texture coordinates at the specified coordinates and time.
              * @return Vec3f Normal vector at the specified coordinates and time.
              */
-            virtual Vec3f normaluv(double time, std::array<double, 2> uv, std::array<double, 2> &tuv) const final;
+            virtual auto normaluv(double time, std::array<double, 2> uv, std::array<double, 2> &tuv) const -> Vec3f final;
 
             /**
              * @brief Returns the surface normal at a point in object coordinates and a specific time.
@@ -107,7 +107,7 @@ namespace APTracer { namespace Shapes {
              * @param[in] uv Object coordinates at which we want to find the normal. The coordinates are in barycentric coordinates, minus w [u, v].
              * @return Vec3f Normal vector at the specified coordinates and time.
              */
-            virtual Vec3f normal(double time, std::array<double, 2> uv) const final;
+            virtual auto normal(double time, std::array<double, 2> uv) const -> Vec3f final;
 
             /**
              * @brief Returns the surface normal, texture coordinates and tangent vector at a point in object coordinates and a specific time.
@@ -124,7 +124,7 @@ namespace APTracer { namespace Shapes {
              * @param[out] tangentvec Tangent vector at the specified coordinates and time.
              * @return Vec3f Normal vector at the specified coordinates and time.
              */
-            virtual Vec3f normal_uv_tangent(double time, std::array<double, 2> uv, std::array<double, 2> &tuv, Vec3f &tangentvec) const final;
+            virtual auto normal_uv_tangent(double time, std::array<double, 2> uv, std::array<double, 2> &tuv, Vec3f &tangentvec) const -> Vec3f final;
 
             /**
              * @brief Returns the geometric surface normal of the triangle at a specific time, not the interpolated one from vertex normals.
@@ -134,7 +134,7 @@ namespace APTracer { namespace Shapes {
              * @param time Time at which we want the normal, from 0 to 1 for previous and current states.
              * @return Vec3f Normal vector of the triangle at the specified time.
              */
-            virtual Vec3f normal_face(double time) const final;
+            virtual auto normal_face(double time) const -> Vec3f final;
 
             /**
              * @brief Minimum coordinates of an axis-aligned bounding box around the triangle.
@@ -145,7 +145,7 @@ namespace APTracer { namespace Shapes {
              * 
              * @return Vec3f Minimum coordinates of an axis-aligned bounding box around the triangle.
              */
-            virtual Vec3f mincoord() const final;
+            virtual auto mincoord() const -> Vec3f final;
 
             /**
              * @brief Maximum coordinates of an axis-aligned bounding box around the triangle.
@@ -156,7 +156,7 @@ namespace APTracer { namespace Shapes {
              * 
              * @return Vec3f Maximum coordinates of an axis-aligned bounding box around the triangle.
              */
-            virtual Vec3f maxcoord() const final;
+            virtual auto maxcoord() const -> Vec3f final;
     };
 }}
 #endif
