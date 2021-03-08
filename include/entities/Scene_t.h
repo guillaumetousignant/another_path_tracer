@@ -29,7 +29,7 @@ namespace APTracer { namespace Entities {
             /**
              * @brief Construct a new empty Scene_t object.
              */
-            Scene_t();
+            Scene_t() = default;
 
             /**
              * @brief Construct a new Scene_t object containing a single shape.

@@ -11,8 +11,6 @@ using APTracer::Entities::Shape_t;
 using APTracer::Shapes::MeshTop_t;
 using APTracer::Acceleration::AccelerationMultiGridVector_t;
 
-Scene_t::Scene_t() {}
-
 Scene_t::Scene_t(Shape_t* shape) : geometry_(1, shape) {}
 
 Scene_t::Scene_t(Shape_t** shapes, size_t n_shapes) : geometry_(shapes, shapes + n_shapes) {}
