@@ -12,7 +12,7 @@ APTracer::Materials::Refractive_t::Refractive_t(const Vec3f &emission, const Vec
 
 APTracer::Materials::Refractive_t::~Refractive_t() = default;
 
-void APTracer::Materials::Refractive_t::bounce(std::array<double, 2> uv, const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
+auto APTracer::Materials::Refractive_t::bounce(std::array<double, 2> uv, const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) -> void {
     const Vec3f normal = hit_obj->normal(ray.time_, uv);
     Vec3f newdir;
 

@@ -28,7 +28,7 @@ namespace APTracer { namespace Materials {
             std::uniform_real_distribution<double> unif_;
             Medium_t* medium_;
 
-            virtual void bounce(std::array<double, 2> uv, const Shape_t* hit_obj, Ray_t &ray) final;
+            virtual auto bounce(std::array<double, 2> uv, const Shape_t* hit_obj, Ray_t &ray) -> void final;
     };
 }}
 #endif

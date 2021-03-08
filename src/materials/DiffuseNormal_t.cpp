@@ -14,7 +14,7 @@ APTracer::Materials::DiffuseNormal_t::DiffuseNormal_t(const Vec3f &emission, con
 
 APTracer::Materials::DiffuseNormal_t::~DiffuseNormal_t() = default;
 
-void APTracer::Materials::DiffuseNormal_t::bounce(std::array<double, 2> uv, const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
+auto APTracer::Materials::DiffuseNormal_t::bounce(std::array<double, 2> uv, const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) -> void {
     Vec3f tangent;
     Vec3f bitangent;
     Vec3f tangent_weights;

@@ -14,7 +14,7 @@ APTracer::Materials::ReflectiveFuzzTex_t::ReflectiveFuzzTex_t(const Vec3f &emiss
 
 APTracer::Materials::ReflectiveFuzzTex_t::~ReflectiveFuzzTex_t() = default;
 
-void APTracer::Materials::ReflectiveFuzzTex_t::bounce(std::array<double, 2> uv, const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
+auto APTracer::Materials::ReflectiveFuzzTex_t::bounce(std::array<double, 2> uv, const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) -> void {
     std::array<double, 2> tuv;
     Vec3f normal = hit_obj->normaluv(ray.time_, uv, tuv);
 

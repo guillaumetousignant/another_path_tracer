@@ -39,7 +39,7 @@ namespace APTracer { namespace Materials {
              * @return true Returns true if the ray has been scattered, meaning that its origin and/or direction has changed and the material bounce should not be performed. Never the case for a non absorber.
              * @return false Returns false when the ray's path has not been changed, and it should bounce on the intersected material as planned. Always the case for a non absorber.
              */
-            virtual bool scatter(Ray_t &ray) final; 
+            virtual auto scatter(Ray_t &ray) -> bool final; 
     };
 }}
 #endif

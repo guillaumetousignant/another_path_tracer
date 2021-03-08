@@ -25,7 +25,7 @@ namespace APTracer { namespace Materials {
             double scattering_angle_; // between 0 and 1, portion of the hemisphere reflected to.
             std::uniform_real_distribution<double> unif_;
 
-            virtual bool scatter(Ray_t &ray) final; 
+            virtual auto scatter(Ray_t &ray) -> bool final; 
     };
 }}
 #endif

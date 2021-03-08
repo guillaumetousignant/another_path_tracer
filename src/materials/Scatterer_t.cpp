@@ -15,7 +15,7 @@ APTracer::Materials::Scatterer_t::Scatterer_t(Vec3f emi_vol, Vec3f col_vol, doub
 
 APTracer::Materials::Scatterer_t::~Scatterer_t() = default;
 
-bool APTracer::Materials::Scatterer_t::scatter(APTracer::Entities::Ray_t &ray) {
+auto APTracer::Materials::Scatterer_t::scatter(APTracer::Entities::Ray_t &ray) -> bool {
     const double distance = -std::log(unif_(APTracer::Entities::rng()))/scattering_coefficient_;
     bool intersected = false;
     if (distance < ray.dist_) {

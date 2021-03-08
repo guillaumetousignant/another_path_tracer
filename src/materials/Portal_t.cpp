@@ -13,7 +13,7 @@ APTracer::Materials::Portal_t::Portal_t(APTracer::Entities::TransformMatrix_t* t
 
 APTracer::Materials::Portal_t::~Portal_t() = default;
 
-void APTracer::Materials::Portal_t::bounce(std::array<double, 2> uv, const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
+auto APTracer::Materials::Portal_t::bounce(std::array<double, 2> uv, const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) -> void {
     const Vec3f normal = hit_obj->normal(ray.time_, uv);
 
     if (ray.direction_.dot(normal) < 0) {

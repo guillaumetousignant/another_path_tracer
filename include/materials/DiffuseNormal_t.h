@@ -67,7 +67,7 @@ namespace APTracer { namespace Materials {
              * @param hit_obj Pointer to the shape that was hit by the ray.
              * @param ray Ray that has intersected the shape.
              */
-            virtual void bounce(std::array<double, 2> uv, const Shape_t* hit_obj, Ray_t &ray) final;
+            virtual auto bounce(std::array<double, 2> uv, const Shape_t* hit_obj, Ray_t &ray) -> void final;
     };
 }}
 #endif

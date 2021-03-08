@@ -23,7 +23,7 @@ namespace APTracer { namespace Materials {
             double scattering_coefficient_;
             std::uniform_real_distribution<double> unif_;
 
-            virtual bool scatter(Ray_t &ray) final; 
+            virtual auto scatter(Ray_t &ray) -> bool final; 
     };
 }}
 #endif

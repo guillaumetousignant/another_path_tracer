@@ -11,7 +11,7 @@ APTracer::Materials::FresnelMix_t::FresnelMix_t(APTracer::Entities::Material_t* 
 
 APTracer::Materials::FresnelMix_t::~FresnelMix_t() = default;
 
-void APTracer::Materials::FresnelMix_t::bounce(std::array<double, 2> uv, const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) {
+auto APTracer::Materials::FresnelMix_t::bounce(std::array<double, 2> uv, const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) -> void {
     Vec3f normal = hit_obj->normal(ray.time_, uv);
     double kr;
 

@@ -15,7 +15,7 @@ APTracer::Materials::ScattererExpFull_t::ScattererExpFull_t(Vec3f emi_vol, Vec3f
 
 APTracer::Materials::ScattererExpFull_t::~ScattererExpFull_t() = default;
 
-bool APTracer::Materials::ScattererExpFull_t::scatter(APTracer::Entities::Ray_t &ray) {
+auto APTracer::Materials::ScattererExpFull_t::scatter(APTracer::Entities::Ray_t &ray) -> bool {
     const double distance = -std::log(unif_(APTracer::Entities::rng()))/scattering_coefficient_;
     if (distance >= ray.dist_) {
         ray.colour_ += ray.mask_ * (emission_vol_ * ray.dist_).sqrt(); // sqrt may be slow

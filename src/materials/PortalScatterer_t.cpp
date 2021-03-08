@@ -7,7 +7,7 @@ APTracer::Materials::PortalScatterer_t::PortalScatterer_t(APTracer::Entities::Tr
 
 APTracer::Materials::PortalScatterer_t::~PortalScatterer_t() = default;
 
-bool APTracer::Materials::PortalScatterer_t::scatter(APTracer::Entities::Ray_t &ray) {
+auto APTracer::Materials::PortalScatterer_t::scatter(APTracer::Entities::Ray_t &ray) -> bool {
     const double distance = -std::log(unif_(APTracer::Entities::rng()))/scattering_coefficient_;
 
     if (distance >= ray.dist_) {
