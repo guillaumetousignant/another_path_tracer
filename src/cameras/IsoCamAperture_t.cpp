@@ -22,8 +22,6 @@ IsoCamAperture_t::IsoCamAperture_t(TransformMatrix_t* transformation, const std:
     : Camera_t(transformation, filename, up, fov, subpix, std::move(medium_list), skybox, max_bounces, gammaind), 
     image_(image), unif_(0.0, 1.0), focal_length_(focal_length), aperture_(aperture), focal_length_buffer_(focal_length)  {}
 
-IsoCamAperture_t::~IsoCamAperture_t() = default;
-
 auto IsoCamAperture_t::update() -> void {
     origin_ = transformation_->multVec(Vec3f());
     direction_ = transformation_->multDir(Vec3f(0.0, 1.0, 0.0));

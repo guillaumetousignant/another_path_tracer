@@ -20,8 +20,6 @@ RecCamMotionblur_t::RecCamMotionblur_t(TransformMatrix_t* transformation, const 
     : Camera_t(transformation, filename, up, fov, subpix, std::move(medium_list), skybox, max_bounces, gammaind), 
     image_(image), unif_(0.0, 1.0), direction_last_(direction_), origin_last_(origin_), time_{time}, up_last_(up_) {}
 
-RecCamMotionblur_t::~RecCamMotionblur_t() = default;
-
 auto RecCamMotionblur_t::update() -> void {
     origin_last_ = origin_;
     direction_last_ = direction_;

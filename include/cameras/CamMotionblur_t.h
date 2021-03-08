@@ -60,7 +60,7 @@ namespace APTracer { namespace Cameras {
             /**
              * @brief Destroy the CamMotionblur_t object. Does nothing.
              */
-            virtual ~CamMotionblur_t() final;
+            virtual ~CamMotionblur_t() final = default;
 
             ImgBuffer_t* image_; /**< @brief Image buffer into which the image is stored.*/
             std::uniform_real_distribution<double> unif_; /**< @brief Uniform random distribution used for generating random numbers.*/

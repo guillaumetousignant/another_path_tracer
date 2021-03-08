@@ -23,8 +23,6 @@ RecCamMotionblurAperture_t::RecCamMotionblurAperture_t(TransformMatrix_t* transf
     image_(image), unif_(0.0, 1.0), direction_last_(direction_), origin_last_(origin_), time_{time}, up_last_(up_),
     focal_length_(focal_length), focal_length_last_(focal_length), aperture_(aperture), focal_length_buffer_(focal_length) {}
 
-RecCamMotionblurAperture_t::~RecCamMotionblurAperture_t() = default;
-
 auto RecCamMotionblurAperture_t::update() -> void {
     origin_last_ = origin_;
     direction_last_ = direction_;

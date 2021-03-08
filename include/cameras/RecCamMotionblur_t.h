@@ -60,7 +60,7 @@ namespace APTracer { namespace Cameras {
             /**
              * @brief Destroy the RecCamMotionblur_t object. Does nothing.
              */
-            virtual ~RecCamMotionblur_t() final;
+            virtual ~RecCamMotionblur_t() final = default;
 
             ImgBuffer_t* image_; /**< @brief Image buffer into which the image is stored.*/
             std::uniform_real_distribution<double> unif_; /**< @brief Uniform random distribution used for generating random numbers.*/
@@ -76,7 +76,7 @@ namespace APTracer { namespace Cameras {
              * This is how the changes to the transformation matrix and functions like setUp take effect.
              * Stores the previous state in the _last variables, so that state can be interpolated according to time.
              */
-            virtual auto update()  -> void final;
+            virtual auto update() -> void final;
 
             /**
              * @brief Sends rays through the scene, to generate an image.
