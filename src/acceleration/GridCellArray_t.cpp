@@ -13,7 +13,42 @@ GridCellArray_t::GridCellArray_t(size_t size) : size_(size), items_(new Shape_t*
 }
 
 GridCellArray_t::~GridCellArray_t() {
-    delete [] items_;
+    delete[] items_;
+}
+
+GridCellArray_t::GridCellArray_t(const GridCellArray_t& other)
+        : size_(other.size_), items_(new Shape_t*[size_]), increment_size_(other.increment_size_) {
+    std::copy(other.items_, other.items_ + size_, items_);
+}
+
+GridCellArray_t::GridCellArray_t(GridCellArray_t&& other) noexcept
+        : size_(other.size_), items_(other.items_), increment_size_(other.increment_size_) {
+    other.items_ = nullptr;
+}
+
+auto GridCellArray_t::operator=(const GridCellArray_t& other) -> GridCellArray_t& {
+    if (&other == this) {
+        return *this;
+    }
+
+    if (size_ != other.size_) {
+        delete[] items_;
+        items_ = new Shape_t*[other.size_];
+    }
+
+    size_ = other.size_;
+    increment_size_ = other.increment_size_;
+    std::copy(other.items_, other.items_ + size_, items_);
+
+    return *this;
+}
+
+auto GridCellArray_t::operator=(GridCellArray_t&& other) noexcept -> GridCellArray_t& {
+    size_ = other.size_;
+    increment_size_ = other.increment_size_;
+    std::swap(items_, other.items_);
+    
+    return *this;
 }
 
 auto GridCellArray_t::intersect(const Ray_t &ray, double &t, std::array<double, 2> &uv) const -> Shape_t* {

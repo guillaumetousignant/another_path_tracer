@@ -38,6 +38,36 @@ namespace APTracer { namespace Acceleration {
              */
             virtual ~GridCellArray_t() final;
 
+            /**
+             * @brief Copy constructor.
+             * 
+             * @param other Cell to be copied.
+             */
+            GridCellArray_t(const GridCellArray_t& other);
+        
+            /**
+             * @brief Move constructor.
+             * 
+             * @param other Cell to be moved.
+             */
+            GridCellArray_t(GridCellArray_t&& other) noexcept;
+        
+            /**
+             * @brief Copy assignment.
+             * 
+             * @param other Cell to be copied.
+             * @return GridCellArray_t& Reference to this mesh.
+             */
+            auto operator=(const GridCellArray_t& other) -> GridCellArray_t&;
+        
+            /**
+             * @brief Move assignment.
+             * 
+             * @param other Cell to be moved.
+             * @return GridCellArray_t& Reference to this cell.
+             */
+            auto operator=(GridCellArray_t&& other) noexcept -> GridCellArray_t&;
+
             size_t size_; /**< @brief Size of the array. Number of shapes that can be held by the cell without reallocating.*/
             Shape_t** items_; /**< @brief Array of shapes contained in the cell. This allows fast iterating and lowest memory use.*/
             size_t increment_size_; /**< @brief Size that will be allocated next time 'reserve()' is called. Increased with 'operator++'.*/

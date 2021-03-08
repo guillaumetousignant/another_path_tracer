@@ -37,7 +37,7 @@ namespace APTracer { namespace Acceleration {
             /**
              * @brief Destroy the GridCellVector_t object, destroying its list of shapes.
              */
-            virtual ~GridCellVector_t() final;
+            virtual ~GridCellVector_t() final = default;
 
             std::vector<Shape_t*> items_; /**< @brief Vector of shapes contained in the cell. This allows fast iterating and low memory use.*/
             size_t size_; /**< @brief Size that will be allocated next time 'reserve()' is called. Increased with 'operator++'.*/
