@@ -56,7 +56,7 @@ namespace APTracer { namespace Shapes {
             /**
              * @brief Updates all the triangles held by the mesh.
              */
-            virtual void update();
+            virtual auto update() -> void;
 
             /**
              * @brief Calculate the intersection between a ray and the mesh, and stores information about this intersection. Placeholder
@@ -68,7 +68,7 @@ namespace APTracer { namespace Shapes {
              * @param[out] t Distance from the ray origin to the intersection point.
              * @param[out] uv 2D coordinates of the intersection point in object space.
              */
-            virtual void intersection(const Ray_t &ray, bool &intersected, double &t, std::array<double, 2> &uv) const; // Never use this
+            virtual auto intersection(const Ray_t &ray, bool &intersected, double &t, std::array<double, 2> &uv) const -> void; // Never use this
 
             /**
              * @brief Returns the surface normal and texture coordinates at a point in object coordinates. Placeholder
@@ -80,7 +80,7 @@ namespace APTracer { namespace Shapes {
              * @param[out] tuv Texture coordinates at the specified coordinates and time.
              * @param[out] normalvec Normal vector at the specified coordinates and time.
              */
-            virtual void normaluv(const Ray_t &ray, std::array<double, 2> uv, std::array<double, 2> &tuv, Vec3f &normalvec) const;
+            virtual auto normaluv(const Ray_t &ray, std::array<double, 2> uv, std::array<double, 2> &tuv, Vec3f &normalvec) const -> void;
 
             /**
              * @brief Returns the surface normal at a point in object coordinates. Placeholder
@@ -91,7 +91,7 @@ namespace APTracer { namespace Shapes {
              * @param uv Texture coordinates at the specified coordinates and time.
              * @param[out] normalvec Normal vector at the specified coordinates and time.
              */
-            virtual void normal(const Ray_t &ray, std::array<double, 2> uv, Vec3f &normalvec) const;
+            virtual auto normal(const Ray_t &ray, std::array<double, 2> uv, Vec3f &normalvec) const -> void;
 
             /**
              * @brief Minimum coordinates of an axis-aligned bounding box around the mesh.
@@ -101,7 +101,7 @@ namespace APTracer { namespace Shapes {
              * 
              * @return Vec3f Minimum coordinates of an axis-aligned bounding box around the mesh.
              */
-            virtual Vec3f mincoord() const;
+            virtual auto mincoord() const -> Vec3f;
 
             /**
              * @brief Maximum coordinates of an axis-aligned bounding box around the mesh.
@@ -111,7 +111,7 @@ namespace APTracer { namespace Shapes {
              * 
              * @return Vec3f Maximum coordinates of an axis-aligned bounding box around the shape.
              */
-            virtual Vec3f maxcoord() const;
+            virtual auto maxcoord() const -> Vec3f;
 
             /**
              * @brief Virtual function in charge of creating the triangles for the different mesh types.
@@ -119,7 +119,7 @@ namespace APTracer { namespace Shapes {
              * This is so regular meshes can use regular triangles, and motionblur meshes can use motionblur triangles. Called after the constructor.
              * This function will assign the mesh material to all triangles.
              */
-            virtual void createTriangles() = 0;
+            virtual auto createTriangles() -> void = 0;
 
             /**
              * @brief Virtual function in charge of creating the triangles for the different mesh types, using a material map.
@@ -130,7 +130,7 @@ namespace APTracer { namespace Shapes {
              * 
              * @param materialmap Material map used to assign materials to the triangles according to their material name in the mesh geometry.
              */
-            virtual void createTriangles(MaterialMap_t *materialmap) = 0;
+            virtual auto createTriangles(MaterialMap_t *materialmap) -> void = 0;
     };
 }}
 #endif
