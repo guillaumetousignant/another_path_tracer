@@ -12,7 +12,7 @@ APTracer::Materials::FresnelMixIn_t::FresnelMixIn_t(APTracer::Entities::Material
 APTracer::Materials::FresnelMixIn_t::~FresnelMixIn_t() = default;
 
 auto APTracer::Materials::FresnelMixIn_t::bounce(std::array<double, 2> uv, const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) -> void {
-    Vec3f normal = hit_obj->normal(ray.time_, uv);
+    const Vec3f normal = hit_obj->normal(ray.time_, uv);
     double kr;
 
     double cosi = ray.direction_.dot(normal);
@@ -20,9 +20,8 @@ auto APTracer::Materials::FresnelMixIn_t::bounce(std::array<double, 2> uv, const
         material_refracted_->bounce(uv, hit_obj, ray);
         return;
     }
-    else {
-        cosi *= -1.0;
-    }
+
+    cosi *= -1.0;
 
     const double etai = ray.medium_list_.front()->ind_;
     const double etat = ind_;

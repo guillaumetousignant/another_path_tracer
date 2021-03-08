@@ -14,14 +14,12 @@ APTracer::Materials::FresnelMixNormal_t::~FresnelMixNormal_t() = default;
 
 auto APTracer::Materials::FresnelMixNormal_t::bounce(std::array<double, 2> uv, const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) -> void {
     Vec3f tangent;
-    Vec3f bitangent;
-    Vec3f tangent_weights;
     std::array<double, 2> tuv;
     double kr;
     Vec3f normal = hit_obj->normal_uv_tangent(ray.time_, uv, tuv, tangent);
     
-    bitangent = normal.cross(tangent);
-    tangent_weights = normal_map_->get(tuv) * 2.0 - 1.0;
+    const Vec3f bitangent = normal.cross(tangent);
+    const Vec3f tangent_weights = normal_map_->get(tuv) * 2.0 - 1.0;
     normal = (tangent * tangent_weights[0] + bitangent * tangent_weights[1] + normal * tangent_weights[2]).normalize_inplace();
 
     const double cosi = std::abs(ray.direction_.dot(normal));

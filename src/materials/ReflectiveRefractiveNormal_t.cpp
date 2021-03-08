@@ -16,15 +16,13 @@ APTracer::Materials::ReflectiveRefractiveNormal_t::~ReflectiveRefractiveNormal_t
 
 auto APTracer::Materials::ReflectiveRefractiveNormal_t::bounce(std::array<double, 2> uv, const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) -> void {
     Vec3f tangent;
-    Vec3f bitangent;
-    Vec3f tangent_weights;
     std::array<double, 2> tuv;
     Vec3f newdir;
     //bool coming_out;
 
     Vec3f normal = hit_obj->normal_uv_tangent(ray.time_, uv, tuv, tangent);
-    bitangent = normal.cross(tangent);
-    tangent_weights = normal_map_->get(tuv) * 2.0 - 1.0;
+    const Vec3f bitangent = normal.cross(tangent);
+    const Vec3f tangent_weights = normal_map_->get(tuv) * 2.0 - 1.0;
     normal = (tangent * tangent_weights[0] + bitangent * tangent_weights[1] + normal * tangent_weights[2]).normalize_inplace();
 
     double cosi = ray.direction_.dot(normal);
@@ -41,7 +39,7 @@ auto APTracer::Materials::ReflectiveRefractiveNormal_t::bounce(std::array<double
             n = normal;
             //coming_out = false;
         }
-        else { // Goind out
+        else { // Going out
             etat = (*std::next(ray.medium_list_.begin()))->ind_;
             etai = medium_->ind_;
             n = -normal;
