@@ -24,9 +24,7 @@ using APTracer::Entities::Vec3f;
 Texture_t::Texture_t(const std::string &filename) {
     cimg_library::CImg<double> image;
     std::string extension = filename.substr(filename.find_last_of('.') + 1);
-    std::for_each(extension.begin(), extension.end(), [](char & c) {
-        c = std::tolower(c);
-    });
+    std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
 
     if (extension == "jpeg" || extension == "jpg") { 
         image.load_jpeg(filename.c_str());
