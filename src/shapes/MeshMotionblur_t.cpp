@@ -28,6 +28,10 @@ APTracer::Shapes::MeshMotionblur_t::MeshMotionblur_t(APTracer::Shapes::MeshMotio
 }
 
 auto APTracer::Shapes::MeshMotionblur_t::operator=(const APTracer::Shapes::MeshMotionblur_t& other) -> APTracer::Shapes::MeshMotionblur_t& {
+    if (&other == this) {
+        return *this;
+    }
+    
     material_ = other.material_;
     transformation_ = other.transformation_;
     geom_ = other.geom_;

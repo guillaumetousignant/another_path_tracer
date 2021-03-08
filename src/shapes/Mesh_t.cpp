@@ -30,6 +30,10 @@ APTracer::Shapes::Mesh_t::Mesh_t(APTracer::Shapes::Mesh_t&& other) noexcept
 }
 
 auto APTracer::Shapes::Mesh_t::operator=(const APTracer::Shapes::Mesh_t& other) -> APTracer::Shapes::Mesh_t& {
+    if (&other == this) {
+        return *this;
+    }
+
     material_ = other.material_;
     transformation_ = other.transformation_;
     geom_ = other.geom_;
