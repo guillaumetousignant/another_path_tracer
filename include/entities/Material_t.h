@@ -20,12 +20,7 @@ namespace APTracer { namespace Entities {
             /**
              * @brief Construct a new Material_t object. Never called directly.
              */
-            Material_t() {};
-
-            /**
-             * @brief Destroy the Material_t object. Does nothing.
-             */
-            virtual ~Material_t() {};
+            Material_t() = default;
 
             /**
              * @brief Bounces a ray of light on the material.

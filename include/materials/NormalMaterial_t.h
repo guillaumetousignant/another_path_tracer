@@ -29,11 +29,6 @@ namespace APTracer { namespace Materials {
             NormalMaterial_t() = default;
 
             /**
-             * @brief Destroy the NormalMaterial_t object. Does nothing.
-             */
-            virtual ~NormalMaterial_t() final = default;
-
-            /**
              * @brief Bounces a ray of light on the material.
              * 
              * The ray is coloured according to the surface normal at the hit point, x y and z being red green and blue, respectively.

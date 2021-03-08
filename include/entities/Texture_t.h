@@ -23,11 +23,6 @@ namespace APTracer { namespace Entities {
              */
             Texture_t(const std::string &filename);
 
-            /**
-             * @brief Destroy the Texture_t object, releasing the ressources held by it.
-             */
-            ~Texture_t() = default;
-
             size_t size_x_; /**< @brief Horizontal number of pixels in the texture*/
             size_t size_y_; /**< @brief Vertical number of pixels in the texture*/
             std::vector<Vec3f> img_; /**< @brief Array of 3-element pixels representing the values of all pixels of the texture.*/

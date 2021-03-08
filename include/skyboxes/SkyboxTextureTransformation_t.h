@@ -31,11 +31,6 @@ namespace APTracer { namespace Skyboxes {
              */
             SkyboxTextureTransformation_t(Texture_t* texture, TransformMatrix_t* transformation);
 
-            /**
-             * @brief Destroy the SkyboxTextureTransformation_t object. Does nothing.
-             */
-            virtual ~SkyboxTextureTransformation_t() final;
-
             Texture_t* texture_; /**< @brief Texture used as the background of the skybox.*/
             TransformMatrix_t* transformation_; /**< @brief Transformation matrix moving the skybox.*/
             

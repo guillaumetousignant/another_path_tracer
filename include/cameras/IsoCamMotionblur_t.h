@@ -57,11 +57,6 @@ namespace APTracer { namespace Cameras {
              */
             IsoCamMotionblur_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, std::array<double, 2> fov, std::array<unsigned int, 2> subpix, ImgBuffer_t* image, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, std::array<double, 2> time, double gammaind);
             
-            /**
-             * @brief Destroy the IsoCamMotionblur_t object. Does nothing.
-             */
-            virtual ~IsoCamMotionblur_t() final = default;
-
             ImgBuffer_t* image_; /**< @brief Image buffer into which the image is stored.*/
             std::uniform_real_distribution<double> unif_; /**< @brief Uniform random distribution used for generating random numbers.*/
             Vec3f direction_last_; /**< @brief Direction in which the camera points before last update. Used for motion blur.*/

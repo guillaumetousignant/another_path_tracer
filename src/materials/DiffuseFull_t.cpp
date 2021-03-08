@@ -12,8 +12,6 @@ using APTracer::Entities::Vec3f;
 APTracer::Materials::DiffuseFull_t::DiffuseFull_t(const APTracer::Entities::Texture_t* emission_map, const APTracer::Entities::Texture_t* texture, double roughness) : 
     emission_map_(emission_map), texture_(texture), roughness_(roughness), unif_(std::uniform_real_distribution<double>(0, 1)) {}
 
-APTracer::Materials::DiffuseFull_t::~DiffuseFull_t() = default;
-
 auto APTracer::Materials::DiffuseFull_t::bounce(std::array<double, 2> uv, const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) -> void {
     std::array<double, 2> tuv;
     Vec3f normal = hit_obj->normaluv(ray.time_, uv, tuv);

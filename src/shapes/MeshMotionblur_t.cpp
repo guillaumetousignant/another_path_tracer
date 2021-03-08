@@ -15,8 +15,6 @@ APTracer::Shapes::MeshMotionblur_t::MeshMotionblur_t(APTracer::Entities::Materia
     createTriangles(materialmap);
 }      
 
-APTracer::Shapes::MeshMotionblur_t::~MeshMotionblur_t() = default;  
-
 APTracer::Shapes::MeshMotionblur_t::MeshMotionblur_t(const APTracer::Shapes::MeshMotionblur_t& other)
         : MeshTop_t(other.material_, other.transformation_, other.geom_) {
     createTriangles();

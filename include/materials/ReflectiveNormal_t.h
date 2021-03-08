@@ -20,7 +20,6 @@ namespace APTracer { namespace Materials {
     class ReflectiveNormal_t final : public Material_t{
         public:
             ReflectiveNormal_t(const Vec3f &emission, const Vec3f &colour, const Texture_t* normal_map);
-            virtual ~ReflectiveNormal_t() final;
 
             Vec3f emission_;
             Vec3f colour_;

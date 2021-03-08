@@ -31,11 +31,6 @@ namespace APTracer { namespace Skyboxes {
              */
             SkyboxTextureSun_t(Texture_t* texture, std::array<double, 2> sun_pos, Vec3f sun_col, double sun_rad);
 
-            /**
-             * @brief Destroy the SkyboxTextureSun_t object. Does nothing.
-             */
-            virtual ~SkyboxTextureSun_t() final;
-
             Texture_t* texture_; /**< @brief Texture used as the background of the skybox.*/
             std::array<double, 2> sun_pos_; /**< @brief Position of the light source in normalized coordinates on the image, [x, y] both from 0 to 1, from bottom left corner.*/
             Vec3f sun_col_; /**< @brief Colour of the light source. Can be above [1, 1, 1].*/

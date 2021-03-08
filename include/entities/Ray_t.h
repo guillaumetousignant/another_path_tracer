@@ -40,12 +40,6 @@ namespace APTracer { namespace Entities {
              * @param[in] time Time at which the ray is emitted. From 0 for exposure start to 1 for exposure end.
              */
             Ray_t(const Vec3f &origin, const Vec3f &direction, const Vec3f &colour, const Vec3f &mask, std::list<Medium_t*> medium_list, double time);
-            
-            /**
-             * @brief Destroy the Ray_t object, nothing to be done here.
-             * 
-             */
-            ~Ray_t();
 
             Vec3f origin_; /**< @brief Origin of the ray. Changed by materials on bounce.*/
             Vec3f direction_; /**< @brief Direction of the ray. Changed by materials on bounce.*/

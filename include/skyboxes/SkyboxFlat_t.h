@@ -22,11 +22,6 @@ namespace APTracer { namespace Skyboxes {
              */
             SkyboxFlat_t(const Vec3f &background);
 
-            /**
-             * @brief Destroy the SkyboxFlat_t object. Does nothing.
-             */
-            virtual ~SkyboxFlat_t() final;
-
             Vec3f background_; /**< @brief Colour of the skybox, in all directions.*/
 
             virtual auto get(const Vec3f &xyz) const -> Vec3f final;

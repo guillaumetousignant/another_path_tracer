@@ -33,11 +33,6 @@ namespace APTracer { namespace Materials {
              */
             Toon_t(const Vec3f &colour);
 
-            /**
-             * @brief Destroy the Toon_t object. Does nothing.
-             */
-            virtual ~Toon_t() final;
-
             Vec3f colour_; /**< @brief Colour of the material, regardless of shading.*/
 
             /**

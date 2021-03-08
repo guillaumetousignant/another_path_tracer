@@ -10,8 +10,6 @@ MaterialMap_t::MaterialMap_t(std::string* names, Material_t** materials, size_t 
     }
 }
 
-MaterialMap_t::~MaterialMap_t() = default;
-
 auto MaterialMap_t::getMaterial(const std::string &key) const -> Material_t* {
     return materials_.at(key);
 }

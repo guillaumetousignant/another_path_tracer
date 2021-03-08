@@ -15,9 +15,7 @@ APTracer::Shapes::Mesh_t::Mesh_t(APTracer::Entities::MaterialMap_t *materialmap,
         : MeshTop_t(materialmap->getFirst(), transform_matrix, geom) {
 
     createTriangles(materialmap);
-}        
-
-APTracer::Shapes::Mesh_t::~Mesh_t() = default;
+}
 
 APTracer::Shapes::Mesh_t::Mesh_t(const APTracer::Shapes::Mesh_t& other)
         : MeshTop_t(other.material_, other.transformation_, other.geom_) {

@@ -16,8 +16,6 @@ APTracer::Shapes::Sphere_t::Sphere_t(APTracer::Entities::Material_t *material, A
     direction_sph_ = Vec3f(1.0, direction[1], direction2[2]);
 }
 
-APTracer::Shapes::Sphere_t::~Sphere_t() = default;
-
 auto APTracer::Shapes::Sphere_t::update() -> void {
     origin_ = transformation_->multVec(Vec3f());
     radius_ = transformation_->getScale();

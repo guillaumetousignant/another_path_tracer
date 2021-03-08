@@ -35,11 +35,6 @@ namespace APTracer { namespace Materials {
              */
             Transparent_t(Medium_t* medium);
 
-            /**
-             * @brief Destroy the Transparent_t object. Does nothing.
-             */
-            virtual ~Transparent_t() final;
-
             Medium_t* medium_; /**< @brief Medium on the inside of the material. It is added to a ray's medium list when entering the material and removed when exiting it.*/
 
             /**

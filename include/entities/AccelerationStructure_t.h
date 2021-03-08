@@ -19,12 +19,7 @@ namespace APTracer { namespace Entities {
             /**
              * @brief Construct a new AccelerationStructure_t object. Does nothing.
              */
-            AccelerationStructure_t() {};
-
-            /**
-             * @brief Destroy the AccelerationStructure_t object. Does nothing.
-             */
-            virtual ~AccelerationStructure_t() {};
+            AccelerationStructure_t() = default;
 
             size_t n_obj_; /**< @brief Number of shapes currently held in the acceleration structure.*/
 

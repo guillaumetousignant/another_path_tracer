@@ -26,11 +26,6 @@ namespace APTracer { namespace Acceleration {
              */
             GridCell_t();
 
-            /**
-             * @brief Destroy the GridCell_t object, destroying its list of shapes.
-             */
-            virtual ~GridCell_t() final = default;
-
             std::list<Shape_t*> items_; /**< @brief List of shapes contained in the cell. This allows constant time adding and removal of shapes.*/
 
             virtual auto intersect(const Ray_t &ray, double &t, std::array<double, 2> &uv) const -> Shape_t* final;

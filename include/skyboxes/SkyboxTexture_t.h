@@ -27,11 +27,6 @@ namespace APTracer { namespace Skyboxes {
              */
             SkyboxTexture_t(Texture_t* texture);
 
-            /**
-             * @brief Destroy the SkyboxTexture_t object. Does nothing.
-             */
-            virtual ~SkyboxTexture_t() final;
-
             Texture_t* texture_; /**< @brief Texture used as the background of the skybox.*/
 
             virtual auto get(const Vec3f &xyz) const -> Vec3f final;

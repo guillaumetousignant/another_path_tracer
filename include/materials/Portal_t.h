@@ -37,11 +37,6 @@ namespace APTracer { namespace Materials {
              */
             Portal_t(TransformMatrix_t* transformation, std::list<Medium_t*> medium_list);
 
-            /**
-             * @brief Destroy the Portal_t object. Does nothing.
-             */
-            virtual ~Portal_t() final;
-
             TransformMatrix_t* transformation_; /**< @brief Transformation matrix which transforms the rays on hit, potentially moving them to another location.*/
             std::list<Medium_t*> medium_list_; /**< @brief List of materials in which the portal end is placed. Should have at least two copies of an "outside" medium not assigned to any object (issue #25).*/
 

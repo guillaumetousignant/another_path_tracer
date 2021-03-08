@@ -38,11 +38,6 @@ namespace APTracer { namespace Shapes {
              */
             TriangleMotionblur_t(Material_t *material, TransformMatrix_t *transform_matrix, std::array<Vec3f, 3> points, const Vec3f* normals, const double* texcoord);
 
-            /**
-             * @brief Destroy the TriangleMotionblur_t object. Does nothing.
-             */
-            virtual ~TriangleMotionblur_t() final;
-
             std::array<Vec3f, 3> points_orig_; /**< @brief Array of the three un-transformed points of the triangle, in counter-clockwise order. Transformed by the transform matrix on update to give points.*/
             std::array<Vec3f, 3> normals_orig_; /**< @brief Array of the three un-transformed normals of the triangle, in counter-clockwise order. Transformed by the transform matrix on update to give normals.*/
             std::array<double, 6> texture_coordinates_; /**< @brief Array of the three texture coordinates with two components of the triangle, in counter-clockwise order. Transformed by the transform matrix on update to give texture coordinates. [x0, y0, x1, y1, x2, y2]*/

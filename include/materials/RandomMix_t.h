@@ -33,11 +33,6 @@ namespace APTracer { namespace Materials {
              * @param ratio Proportion of the light bounced by the first material, from 0 to 1.
              */
             RandomMix_t(Material_t* first_material, Material_t* second_material, double ratio);
-            
-            /**
-             * @brief Destroy the RandomMix_t object. Does nothing.
-             */
-            virtual ~RandomMix_t() final;
 
             Material_t* first_material_; /**< @brief Material that will be bounced in proportion to the ratio.*/
             Material_t* second_material_; /**< @brief Material that will be bounced in proportion to (1 - ratio).*/  

@@ -18,7 +18,6 @@ namespace APTracer { namespace Materials {
     class Reflective_t final : public Material_t{
         public:
             Reflective_t(const Vec3f &emission, const Vec3f &colour);
-            virtual ~Reflective_t() final;
 
             Vec3f emission_;
             Vec3f colour_;

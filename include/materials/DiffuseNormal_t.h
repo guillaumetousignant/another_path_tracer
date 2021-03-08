@@ -41,11 +41,6 @@ namespace APTracer { namespace Materials {
              * @param roughness Attenuation of the colour as the angle between the incident ray and the surface normal increase. 0 to 1, 0 being very rough (no attenuation) and 1 being an ideal diffusely reflective surface, obeying Lambert's cosine law.
              */
             DiffuseNormal_t(const Vec3f &emission, const Vec3f &colour, const Texture_t* normal_map, double roughness);
-            
-            /**
-             * @brief Destroy the DiffuseNormal_t object. Does nothing.
-             */
-            virtual ~DiffuseNormal_t() final;
 
             Vec3f emission_; /**< @brief Colour emitted by the material at each bounce.*/
             Vec3f colour_; /**< @brief Colour reflected by the material at each bounce.*/

@@ -35,11 +35,6 @@ namespace APTracer { namespace Materials {
              */
             Absorber_t(Vec3f emi_vol, Vec3f col_vol, double abs_dist_emi, double abs_dist_col, double ind, unsigned int priority);
 
-            /**
-             * @brief Destroy the Absorber_t object. Does nothing.
-             */
-            virtual ~Absorber_t() final;
-
             Vec3f emission_vol_; /**< @brief Colour emitted by the medium in exponential form.*/
             Vec3f colour_vol_; /**< @brief Colour absorbed by the medium in exponential form.*/
 

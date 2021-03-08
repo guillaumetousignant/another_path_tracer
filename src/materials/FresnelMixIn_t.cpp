@@ -9,8 +9,6 @@ using APTracer::Entities::Vec3f;
 APTracer::Materials::FresnelMixIn_t::FresnelMixIn_t(APTracer::Entities::Material_t* material_refracted, APTracer::Entities::Material_t* material_reflected, double ind) : 
     material_refracted_(material_refracted), material_reflected_(material_reflected), ind_(ind), unif_(std::uniform_real_distribution<double>(0, 1)) {}
 
-APTracer::Materials::FresnelMixIn_t::~FresnelMixIn_t() = default;
-
 auto APTracer::Materials::FresnelMixIn_t::bounce(std::array<double, 2> uv, const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) -> void {
     const Vec3f normal = hit_obj->normal(ray.time_, uv);
     double kr;

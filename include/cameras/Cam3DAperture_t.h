@@ -63,11 +63,6 @@ namespace APTracer { namespace Cameras {
              * @param gammaind Gamma of the saved picture. A value of 1 should be used for usual cases.
              */
             Cam3DAperture_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, std::array<double, 2> fov, std::array<unsigned int, 2> subpix, ImgBuffer_t* image, ImgBuffer_t* image_L, ImgBuffer_t* image_R, double eye_dist, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double focal_length, double aperture, double gammaind);
-            
-            /**
-             * @brief Destroy the Cam3DAperture_t object, deleting the dependant cameras.
-             */
-            virtual ~Cam3DAperture_t() final = default;
 
             ImgBuffer_t* image_; /**< @brief Image buffer into which the resulting 3D anaglyph image is stored.*/
             std::uniform_real_distribution<double> unif_; /**< @brief Uniform random distribution used for generating random numbers.*/

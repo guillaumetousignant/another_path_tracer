@@ -11,8 +11,6 @@ using APTracer::Entities::Vec3f;
 APTracer::Materials::Portal_t::Portal_t(APTracer::Entities::TransformMatrix_t* transformation, std::list<APTracer::Entities::Medium_t*> medium_list) 
     : transformation_(transformation), medium_list_(std::move(medium_list)) {}
 
-APTracer::Materials::Portal_t::~Portal_t() = default;
-
 auto APTracer::Materials::Portal_t::bounce(std::array<double, 2> uv, const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) -> void {
     const Vec3f normal = hit_obj->normal(ray.time_, uv);
 

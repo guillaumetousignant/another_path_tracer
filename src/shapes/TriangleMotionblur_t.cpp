@@ -63,8 +63,6 @@ APTracer::Shapes::TriangleMotionblur_t::TriangleMotionblur_t(APTracer::Entities:
     tangent_vec_last_ = tangent_vec_;
 }
 
-APTracer::Shapes::TriangleMotionblur_t::~TriangleMotionblur_t() = default;
-
 auto APTracer::Shapes::TriangleMotionblur_t::update() -> void {    
     points_last_ = points_;
     normals_last_ = normals_;

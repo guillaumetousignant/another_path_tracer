@@ -21,7 +21,6 @@ namespace APTracer { namespace Materials {
     class ReflectiveFuzzTex_t final : public Material_t{
         public:
             ReflectiveFuzzTex_t(const Vec3f &emission_, Texture_t* texture, double order, double diffusivity);
-            virtual ~ReflectiveFuzzTex_t() final;
 
             Texture_t* texture_;
             Vec3f emission_;

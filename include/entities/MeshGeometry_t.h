@@ -26,11 +26,6 @@ namespace APTracer { namespace Entities {
              */
             MeshGeometry_t(const std::string &filename);
 
-            /**
-             * @brief Destroy the MeshGeometry_t object, freeing the memory ressources held by it.
-             */
-            ~MeshGeometry_t() = default;
-
             size_t n_tris_; /**< @brief Number of triangular faces held by the mesh geometry.*/
             std::vector<std::string> mat_; /**< @brief Array of strings representing each face's material's name. Size: n_tris_.*/
             std::vector<Vec3f> v_; /**< @brief Array of points representing the triangular faces. Size: 3*n_tris_. Face i has the points v_[3*i], v_[3*i + 1], v_[3*i + 2].*/

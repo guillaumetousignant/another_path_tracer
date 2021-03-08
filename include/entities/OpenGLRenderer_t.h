@@ -41,11 +41,6 @@ namespace APTracer { namespace Entities {
              */
             OpenGLRenderer_t(Scene_t* scene, Camera_t* camera, ImgBufferOpenGL_t* imgbuffer);
 
-            /**
-             * @brief Destroy the OpenGLRenderer_t object, freeing the ressources held by it and setting renderer_ as nullptr.
-             */
-            ~OpenGLRenderer_t() = default;
-
             static std::unique_ptr<OpenGLRenderer_t> renderer_; /**< @brief Single OpenGLRenderer_t instance to be used by OpenGL.*/
             Camera_t* camera_ = nullptr; /**< @brief Camera used to render the scene, and be moved by user input.*/
             Scene_t* scene_ = nullptr; /**< @brief Scene rendered by the camera and used for autofocus.*/

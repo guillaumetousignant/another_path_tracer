@@ -29,11 +29,6 @@ namespace APTracer { namespace Shapes {
              */
             Box_t(std::array<Vec3f, 2> coord);
 
-            /**
-             * @brief Destroy the Box_t object. Does nothing.
-             */
-            ~Box_t() = default;
-
             std::array<Vec3f, 2> coordinates_; /**< @brief Array of [minimum, maximum] coordinates in the three axis for the bounding box.*/
 
             /**

@@ -10,8 +10,6 @@ using APTracer::Entities::Vec3f;
 APTracer::Materials::FresnelMixNormal_t::FresnelMixNormal_t(APTracer::Entities::Material_t* material_refracted, APTracer::Entities::Material_t* material_reflected, double ind, const APTracer::Entities::Texture_t* normal_map) : 
     material_refracted_(material_refracted), material_reflected_(material_reflected), ind_(ind), normal_map_(normal_map), unif_(std::uniform_real_distribution<double>(0, 1)) {}
 
-APTracer::Materials::FresnelMixNormal_t::~FresnelMixNormal_t() = default;
-
 auto APTracer::Materials::FresnelMixNormal_t::bounce(std::array<double, 2> uv, const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) -> void {
     Vec3f tangent;
     std::array<double, 2> tuv;

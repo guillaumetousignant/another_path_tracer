@@ -34,11 +34,6 @@ namespace APTracer { namespace Materials {
              */
             DistanceMaterial_t(double focal_length, double exponent);
 
-            /**
-             * @brief Destroy the DistanceMaterial_t object. Does nothing.
-             */
-            virtual ~DistanceMaterial_t() final;
-
             double focal_length_; /**< @brief Distance at which the colour of the material will be white.*/
             double exponent_; /**< @brief Exponent on the difference between the target distance and the distance traveled. Higher numbers make the colour darker until is is very close to the target distance.*/
 

@@ -58,11 +58,6 @@ namespace APTracer { namespace Cameras {
              */
             IsoCamAperture_t(TransformMatrix_t* transformation, const std::string &filename, APTracer::Entities::Vec3f up, std::array<double, 2> fov, std::array<unsigned int, 2> subpix, ImgBuffer_t* image, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double focal_length, double aperture, double gammaind);
             
-            /**
-             * @brief Destroy the IsoCamAperture_t object. Does nothing.
-             */
-            virtual ~IsoCamAperture_t() final = default;
-
             ImgBuffer_t* image_; /**< @brief Image buffer into which the image is stored.*/
             std::uniform_real_distribution<double> unif_; /**< @brief Uniform random distribution used for generating random numbers.*/
             double focal_length_; /**< @brief Distance of the focal plane to the camera origin. Objects away from that distance will be out of focus. The focal plane has the shape of a plane at this distance from the camera.*/

@@ -42,11 +42,6 @@ namespace APTracer { namespace Materials {
              * @param normal_map Texture containing the surface normal in object coordinates.
              */
             FresnelMixNormal_t(Material_t* material_refracted, Material_t* material_reflected, double ind, const Texture_t* normal_map);
-            
-            /**
-             * @brief Destroy the FresnelMixNormal_t object. Does nothing.
-             */
-            virtual ~FresnelMixNormal_t() final;
 
             Material_t* material_refracted_; /**< @brief Material that will be bounced in proportion to the refracted part of light according to the Fresnel equations.*/
             Material_t* material_reflected_; /**< @brief Material that will be bounced in proportion to the reflected part of light according to the Fresnel equations.*/  

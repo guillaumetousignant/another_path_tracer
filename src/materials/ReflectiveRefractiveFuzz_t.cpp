@@ -12,8 +12,6 @@ using APTracer::Entities::Vec3f;
 APTracer::Materials::ReflectiveRefractiveFuzz_t::ReflectiveRefractiveFuzz_t(const Vec3f &emission, const Vec3f &colour, double order, double diffusivity, Medium_t* medium) : 
     emission_(emission), colour_(colour), order_(order), diffusivity_(diffusivity), medium_(medium) {}
 
-APTracer::Materials::ReflectiveRefractiveFuzz_t::~ReflectiveRefractiveFuzz_t() = default;
-
 auto APTracer::Materials::ReflectiveRefractiveFuzz_t::bounce(std::array<double, 2> uv, const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t &ray) -> void {
     const Vec3f normal = hit_obj->normal(ray.time_, uv);
     double cosi = ray.direction_.dot(normal);

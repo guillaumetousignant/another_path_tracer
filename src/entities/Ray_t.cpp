@@ -18,8 +18,6 @@ Ray_t::Ray_t(const Vec3f &origin, const Vec3f &direction, const Vec3f &colour, c
 Ray_t::Ray_t(const Vec3f &origin, const Vec3f &direction, const Vec3f &colour, const Vec3f &mask, std::list<Medium_t*> medium_list, double time) : 
     origin_(origin), direction_(direction), colour_(colour), mask_(mask), dist_(0.0), medium_list_(std::move(medium_list)), time_(time) {}  
 
-Ray_t::~Ray_t() = default;
-
 auto Ray_t::raycast(const Scene_t* scene, unsigned int max_bounces, const Skybox_t* skybox) -> void {
     unsigned int bounces = 0;
 

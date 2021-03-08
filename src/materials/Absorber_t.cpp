@@ -8,8 +8,6 @@ APTracer::Materials::Absorber_t::Absorber_t(Vec3f emi_vol, Vec3f col_vol, double
     emission_vol_ = emi_vol*emi_vol/abs_dist_emi; // CHECK probably not right.
 }
 
-APTracer::Materials::Absorber_t::~Absorber_t() = default;
-
 auto APTracer::Materials::Absorber_t::scatter(APTracer::Entities::Ray_t &ray) -> bool {
     //ray.colour = ray.colour + ray.mask .* exp(-obj.emission_vol * ray.dist);
     ray.colour_ += ray.mask_ * (emission_vol_ * ray.dist_).sqrt(); // sqrt may be slow

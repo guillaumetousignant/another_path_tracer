@@ -47,11 +47,6 @@ namespace APTracer { namespace Shapes {
             MeshMotionblur_t(MaterialMap_t *materialmap, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom);
 
             /**
-             * @brief Destroy the MeshMotionblur_t object, deleting its triangles.
-             */
-            virtual ~MeshMotionblur_t() final;
-
-            /**
              * @brief Copy constructor.
              * 
              * @param other Mesh to be copied.

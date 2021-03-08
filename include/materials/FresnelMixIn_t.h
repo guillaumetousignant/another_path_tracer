@@ -40,11 +40,6 @@ namespace APTracer { namespace Materials {
              * @param ind Refractive index of the material.
              */
             FresnelMixIn_t(Material_t* material_refracted, Material_t* material_reflected, double ind);
-            
-            /**
-             * @brief Destroy the FresnelMixIn_t object. Does nothing.
-             */
-            virtual ~FresnelMixIn_t() final;
 
             Material_t* material_refracted_; /**< @brief Material that will be bounced in proportion to the refracted part of light according to the Fresnel equations, and always on exit.*/
             Material_t* material_reflected_; /**< @brief Material that will be bounced in proportion to the reflected part of light according to the Fresnel equations.*/  

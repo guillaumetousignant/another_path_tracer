@@ -32,11 +32,6 @@ namespace APTracer { namespace Shapes {
              */
             Sphere_t(Material_t *material, TransformMatrix_t *transform_matrix);
 
-            /**
-             * @brief Destroy the Sphere_t object. Does nothing.
-             */
-            virtual ~Sphere_t() final;
-
             double radius_; /**< @brief Radius of the sphere. Determined by the maximum scale of its transformation matrix.*/
             Vec3f origin_; /**< @brief Origin of the sphere. Position of its center.*/
             Vec3f direction_sph_; /**< @brief Rotation of the sphere, in spherical coordinates. Used for uv mapping.*/

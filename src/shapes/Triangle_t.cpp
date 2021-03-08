@@ -61,8 +61,6 @@ APTracer::Shapes::Triangle_t::Triangle_t(APTracer::Entities::Material_t *materia
     tangent_vec_ = v0v1_ * tuv_to_world_[0] + v0v2_ * tuv_to_world_[1];
 }
 
-APTracer::Shapes::Triangle_t::~Triangle_t() = default;
-
 auto APTracer::Shapes::Triangle_t::update() -> void {
     points_ = {transformation_->multVec(points_orig_[0]),
                transformation_->multVec(points_orig_[1]),

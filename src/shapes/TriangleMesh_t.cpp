@@ -40,8 +40,6 @@ APTracer::Shapes::TriangleMesh_t::TriangleMesh_t(APTracer::Entities::Material_t 
     tangent_vec_ = v0v1_ * tuv_to_world_[0] + v0v2_ * tuv_to_world_[1];
 }
 
-APTracer::Shapes::TriangleMesh_t::~TriangleMesh_t() = default;
-
 auto APTracer::Shapes::TriangleMesh_t::update() -> void {
     points_ = {transformation_->multVec(geom_->v_[3 * index_]),
                transformation_->multVec(geom_->v_[3 * index_ + 1]),

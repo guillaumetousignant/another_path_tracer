@@ -23,11 +23,6 @@ namespace APTracer { namespace Entities {
              */
             MaterialMap_t(std::string* names, Material_t** materials, size_t n);
 
-            /**
-             * @brief Destroy the MaterialMap_t object. Does nothing.
-             */
-            ~MaterialMap_t();
-
             std::unordered_map<std::string, Material_t*> materials_; /**< @brief Map of material pointers using string as keys. The keys represent the materials' names.*/
 
             /**

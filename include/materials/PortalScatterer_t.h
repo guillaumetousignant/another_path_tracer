@@ -38,11 +38,6 @@ namespace APTracer { namespace Materials {
              */
             PortalScatterer_t(TransformMatrix_t* transformation, std::list<Medium_t*> medium_list, double scattering_distance, double ind, unsigned int priority);
 
-            /**
-             * @brief Destroy the PortalScatterer_t object. Does nothing.
-             */
-            virtual ~PortalScatterer_t() final;
-
             TransformMatrix_t* transformation_; /**< @brief Transformation matrix which transforms the rays when scattered, potentially moving them to another location.*/
             std::list<Medium_t*> medium_list_; /**< @brief List of materials in which the portal end is placed. Should have at least two copies of an "outside" medium not assigned to any object (issue #25).*/
             double scattering_coefficient_; /**< @brief Scattering coefficient, inverse of the average scattering distance. A higher coefficient will Have more chance to scatter rays.*/

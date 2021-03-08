@@ -59,11 +59,6 @@ namespace APTracer { namespace Entities {
              */
             TransformMatrix_t(const TransformMatrix_t &other) = default;
 
-            /**
-             * @brief Destroy the TransformMatrix_t object.
-             */
-            ~TransformMatrix_t() = default;
-
             std::array<double, 16> matrix_; /**< @brief Array of the 16 values in the 4x4 matrix.*/
             std::array<double, 16> matrix_inverse_; /**< @brief Transposed inverted matrix, used to transform directions.*/
 

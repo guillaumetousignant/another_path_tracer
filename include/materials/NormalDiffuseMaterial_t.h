@@ -32,11 +32,6 @@ namespace APTracer { namespace Materials {
              */
             NormalDiffuseMaterial_t(double roughness);
 
-            /**
-             * @brief Destroy the NormalDiffuseMaterial_t object. Does nothing.
-             */
-            virtual ~NormalDiffuseMaterial_t() final;
-
             double roughness_;/**< @brief Attenuation of the colour as the angle between the incident ray and the surface normal increase. 0 to 1, 0 being very rough (no attenuation) and 1 being an ideal diffusely reflective surface, obeying Lambert's cosine law.*/
             std::uniform_real_distribution<double> unif_; /**< @brief Uniform random distribution used for generating random numbers.*/
 

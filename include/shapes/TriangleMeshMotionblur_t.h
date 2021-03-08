@@ -42,11 +42,6 @@ namespace APTracer { namespace Shapes {
              */
             TriangleMeshMotionblur_t(Material_t *material, TransformMatrix_t *transform_matrix, MeshGeometry_t* geom, size_t index);
 
-            /**
-             * @brief Destroy the TriangleMeshMotionblur_t object. Does nothing.
-             */
-            virtual ~TriangleMeshMotionblur_t() final;
-
             MeshGeometry_t* geom_; /**< @brief Mesh geometry containing the triangle.*/
             size_t index_; /**< @brief Index of the triangle within the mesh geometry.*/
             std::array<double, 6> texture_coordinates_; /**< @brief Array of the three texture coordinates with two components of the triangle, in counter-clockwise order. Transformed by the transform matrix on update to give texture coordinates. [x0, y0, x1, y1, x2, y2]*/

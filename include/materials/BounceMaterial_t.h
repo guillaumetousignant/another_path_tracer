@@ -39,11 +39,6 @@ namespace APTracer { namespace Materials {
              */
             BounceMaterial_t(unsigned int max_bounces);
 
-            /**
-             * @brief Destroy the BounceMaterial_t object. Does nothing.
-             */
-            virtual ~BounceMaterial_t() final;
-
             Vec3f emission_; /**< @brief Colour emitted by the material at each bounce.*/  
             std::uniform_real_distribution<double> unif_; /**< @brief Uniform random distribution used for generating random numbers.*/
 

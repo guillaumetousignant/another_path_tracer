@@ -54,11 +54,6 @@ namespace APTracer { namespace Acceleration {
              */
             AccelerationGridVector_t(Shape_t** items, size_t n_items, std::array<Vec3f, 2> coordinates, unsigned int level, size_t min_res, size_t max_res);
 
-            /**
-             * @brief Destroy the AccelerationGridVector_t object, destroying the cells it owns.
-             */
-            virtual ~AccelerationGridVector_t() final = default;
-
             std::vector<std::unique_ptr<GridCellVector_t>> cells_; /**< @brief Array of all the cells contained in the acceleration structure. Cells use vectors of shapes, for fast iteraring and low memory use.*/
             std::array<size_t, 3> cell_res_; /**< @brief Number of cells in the x, y, and z direction.*/
             Vec3f cell_size_; /**< @brief Span of the cells in the x, y, and z direction.*/

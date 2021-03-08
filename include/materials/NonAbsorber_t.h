@@ -26,11 +26,6 @@ namespace APTracer { namespace Materials {
             NonAbsorber_t(double ind, unsigned int priority);
 
             /**
-             * @brief Destroy the NonAbsorber_t object. Does nothing.
-             */
-            virtual ~NonAbsorber_t() final;
-
-            /**
              * @brief Defines the interaction between a ray and the medium.
              * 
              * This medium doesn't interact with light, and as such a ray is not changed here.

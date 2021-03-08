@@ -20,8 +20,6 @@ APTracer::Shapes::SphereMotionblur_t::SphereMotionblur_t(APTracer::Entities::Mat
     direction_sph_last_ = direction_sph_;
 }
 
-APTracer::Shapes::SphereMotionblur_t::~SphereMotionblur_t() = default;
-
 auto APTracer::Shapes::SphereMotionblur_t::update() -> void {
     radius_last_ = radius_;
     origin_last_ = origin_;

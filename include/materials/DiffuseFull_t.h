@@ -40,11 +40,6 @@ namespace APTracer { namespace Materials {
              */
             DiffuseFull_t(const Texture_t* emission_map, const Texture_t* texture, double roughness);
 
-            /**
-             * @brief Destroy the DiffuseFull_t object. Does nothing.
-             */
-            virtual ~DiffuseFull_t() final;
-
             const Texture_t* emission_map_; /**< @brief Texture containing the colour emitted by the material, mapped by object space coordinates.*/
             const Texture_t* texture_; /**< @brief Texture containing the colour reflected by the material, mapped by object space coordinates.*/
             double roughness_; /**< @brief Attenuation of the colour as the angle between the incident ray and the surface normal increase. 0 to 1, 0 being very rough (no attenuation) and 1 being an ideal diffusely reflective surface, obeying Lambert's cosine law.*/

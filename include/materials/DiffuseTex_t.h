@@ -41,11 +41,6 @@ namespace APTracer { namespace Materials {
              */
             DiffuseTex_t(const Vec3f &emission, const Texture_t* texture, double roughness);
 
-            /**
-             * @brief Destroy the DiffuseTex_t object. Does nothing.
-             */
-            virtual ~DiffuseTex_t() final;
-
             Vec3f emission_; /**< @brief Colour emitted by the material at each bounce.*/
             const Texture_t* texture_; /**< @brief Texture containing the colour reflected by the material, mapped by object space coordinates.*/
             double roughness_; /**< @brief Attenuation of the colour as the angle between the incident ray and the surface normal increase. 0 to 1, 0 being very rough (no attenuation) and 1 being an ideal diffusely reflective surface, obeying Lambert's cosine law.*/

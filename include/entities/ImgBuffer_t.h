@@ -22,11 +22,6 @@ namespace APTracer { namespace Entities {
              */
             ImgBuffer_t(size_t size_x, size_t size_y);
 
-            /**
-             * @brief Destroy the ImgBuffer_t object, freeing the memory taken up by the image.
-             */
-            virtual ~ImgBuffer_t() = default;
-
             size_t size_x_; /**< @brief Horizontal number of pixels in the image. Main axis of the layout.*/
             size_t size_y_; /**< @brief Vertical number of pixels in the image. Secondary axis of the layout.*/
             unsigned int updates_; /**< @brief Number of times the whole image was updated. Number of samples that each pixel holds.*/

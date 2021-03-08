@@ -61,11 +61,6 @@ namespace APTracer { namespace Entities {
              */
             Scene_t(MeshTop_t** meshes, size_t n_meshes);
 
-            /**
-             * @brief Destroy the Scene_t object, freeing the ressources held by it and the acceleration structure acc_.
-             */
-            ~Scene_t() = default;
-
             std::vector<Shape_t*> geometry_; /**< @brief Vector of shapes to be drawn.*/
             std::unique_ptr<AccelerationStructure_t> acc_; /**< @brief Acceleration structure containing the shapes, used to accelerate intersection.*/
 
