@@ -30,7 +30,7 @@ namespace APTracer { namespace Acceleration {
      * This structure with its vector representation is more geared toward static scenes, as the cost to remove, add or move shapes from one cell to another is higher. With vectors, iteration on
      * shapes is slightly faster, and the memory used is low.
      */
-    class AccelerationGridVector_t final : public AccelerationStructure_t{
+    class AccelerationGridVector_t final : public AccelerationStructure_t {
         public:
             /**
              * @brief Construct a new top-level AccelerationGridVector_t object from an array of shapes.

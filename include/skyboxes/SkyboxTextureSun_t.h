@@ -19,7 +19,7 @@ namespace APTracer { namespace Skyboxes {
      * 
      * This will use an image as the background of the scene, and return the sun colour if inside its radius.
      */
-    class SkyboxTextureSun_t final : public Skybox_t{
+    class SkyboxTextureSun_t final : public Skybox_t {
         public:
             /**
              * @brief Construct a new SkyboxTextureSun_t object from a texture and a light source.

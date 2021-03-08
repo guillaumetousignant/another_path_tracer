@@ -30,7 +30,7 @@ namespace APTracer { namespace Materials {
      * This material represents uniformly and finely rough surfaces that are not flat, 
      * such as brick, textured clay, and wood.
      */
-    class DiffuseNormal_t final : public Material_t{
+    class DiffuseNormal_t final : public Material_t {
         public:
             /**
              * @brief Construct a new DiffuseNormal_t object with an emissive and reflective colour, a roughness and a normal map.

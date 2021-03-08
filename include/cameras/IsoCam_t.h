@@ -34,7 +34,7 @@ namespace APTracer { namespace Cameras {
      * This camera stores the result from its rays in a single image buffer, and has no
      * other effects like motion blur or aperture.
      */
-    class IsoCam_t  final: public Camera_t{
+    class IsoCam_t  final: public Camera_t {
         public:
             /**
              * @brief Construct a new IsoCam_t object. Most arguments are passed to the Camera_t constructor.

@@ -19,7 +19,7 @@ namespace APTracer { namespace Acceleration {
      * 
      * This structure with its list representation is more geared toward moving scenes, as the cost to remove, add or move shapes from one cell to another is lower.
      */
-    class GridCell_t final : public AccelerationStructure_t{
+    class GridCell_t final : public AccelerationStructure_t {
         public:
             /**
              * @brief Construct a new GridCell_t object containing no shapes.

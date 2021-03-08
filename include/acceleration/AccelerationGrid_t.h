@@ -29,7 +29,7 @@ namespace APTracer { namespace Acceleration {
      * A heuristic is used to determine grid resolution, taking into account the number of shapes and the span.
      * This structure with its list representation is more geared toward moving scenes, as the cost to remove, add or move shapes from one cell to another is lower.
      */
-    class AccelerationGrid_t final : public AccelerationStructure_t{
+    class AccelerationGrid_t final : public AccelerationStructure_t {
         public:
             /**
              * @brief Construct a new top-level AccelerationGrid_t object from an array of shapes.

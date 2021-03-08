@@ -12,7 +12,7 @@ namespace APTracer { namespace Entities {
      * This is the class that stores the results of the intersections. Generally, cameras shoot rays through a scene, and afterwards 
      * add that ray's contribution to the image buffer.
      */
-    class ImgBuffer_t{
+    class ImgBuffer_t {
         public:
             /**
              * @brief Construct a new ImgBuffer_t object with the given dimensions.
@@ -21,6 +21,11 @@ namespace APTracer { namespace Entities {
              * @param size_y Vertical number of pixels in the image.
              */
             ImgBuffer_t(size_t size_x, size_t size_y);
+
+            /**
+             * @brief Destroy the ImgBuffer_t object, freeing the memory taken up by the image.
+             */
+            virtual ~ImgBuffer_t() = default;  
 
             size_t size_x_; /**< @brief Horizontal number of pixels in the image. Main axis of the layout.*/
             size_t size_y_; /**< @brief Vertical number of pixels in the image. Secondary axis of the layout.*/

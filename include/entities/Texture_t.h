@@ -14,7 +14,7 @@ namespace APTracer { namespace Entities {
      * This is used to store image or other 2D maps, such as normal maps or emissivity maps. They can be accessed
      * in 2D coordinates, for example using texture coordinates from meshes.
      */
-    class Texture_t{
+    class Texture_t {
         public:
             /**
              * @brief Construct a new Texture_t object from an image file.

@@ -14,7 +14,7 @@ namespace APTracer { namespace Entities {
      * then use the transformation matrix to modify themselves. All objects using transformation matrices can therefore be modified
      * in a single unified way, without modifying the underlying objects. This enables basic instancing.
      */
-    class TransformMatrix_t{
+    class TransformMatrix_t {
         public:
             /**
              * @brief Construct a new TransformMatrix_t object as the identity transformation matrix, which does not modify objects.

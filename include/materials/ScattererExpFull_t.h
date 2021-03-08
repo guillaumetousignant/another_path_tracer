@@ -11,7 +11,7 @@ using APTracer::Entities::Vec3f;
 using APTracer::Entities::Ray_t;
 
 namespace APTracer { namespace Materials {
-    class ScattererExpFull_t final : public Medium_t{
+    class ScattererExpFull_t final : public Medium_t {
         public:
             ScattererExpFull_t(Vec3f emi_vol, Vec3f col_vol, Vec3f emi_scat, Vec3f col_scat, double abs_dist_emi, double abs_dist_col, double scat_dist, double order, double scattering_angle, double ind, unsigned int priority);
 

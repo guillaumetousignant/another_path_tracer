@@ -31,7 +31,7 @@ namespace APTracer { namespace Materials {
      * plastic, etc. Reflective and refractive surfaces like glass and water should use the dedicated
      * ReflectiveRefractive materials as they are faster.
      */
-    class FresnelMixNormal_t final : public Material_t{
+    class FresnelMixNormal_t final : public Material_t {
         public:
             /**
              * @brief Construct a new FresnelMixNormal_t object from a refracted and reflected material, a refractive index, and a normal map.

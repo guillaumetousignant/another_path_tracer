@@ -24,7 +24,7 @@ namespace APTracer { namespace Shapes {
      * A triangle is defined by three points, in counter-clockwise order. Its transformation matrix is used 
      * to modify those points.
      */
-    class Triangle_t final : public Shape_t{
+    class Triangle_t final : public Shape_t {
         public:
             /**
              * @brief Construct a new Triangle_t object with a transformation matrix and material from three points.

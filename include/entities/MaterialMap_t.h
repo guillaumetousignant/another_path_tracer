@@ -12,7 +12,7 @@ namespace APTracer { namespace Entities {
      * 
      * This is the class used to initialise mesh geometries with multiple materials.
      */
-    class MaterialMap_t{
+    class MaterialMap_t {
         public:
             /**
              * @brief Construct a new MaterialMap_t object

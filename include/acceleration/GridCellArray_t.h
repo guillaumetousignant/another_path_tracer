@@ -19,7 +19,7 @@ namespace APTracer { namespace Acceleration {
      * This structure with its array representation is more geared toward static scenes, as the cost to remove, add or move shapes from one cell to another is highest. With arrays, iteration on
      * shapes is slightly faster, and the memory used is lowest. Slightly longer to build, needs two passes.
      */
-    class GridCellArray_t final : public AccelerationStructure_t{
+    class GridCellArray_t final : public AccelerationStructure_t {
         public:
             /**
              * @brief Construct a new GridCellArray_t object with no shapes.

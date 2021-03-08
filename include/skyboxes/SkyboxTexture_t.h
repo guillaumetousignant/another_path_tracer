@@ -18,7 +18,7 @@ namespace APTracer { namespace Skyboxes {
      * 
      * This will use an image as the background of the scene.
      */
-    class SkyboxTexture_t final : public Skybox_t{
+    class SkyboxTexture_t final : public Skybox_t {
         public:
             /**
              * @brief Construct a new SkyboxTexture_t object from a texture.

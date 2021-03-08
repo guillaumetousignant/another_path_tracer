@@ -17,7 +17,7 @@ using APTracer::Entities::Shape_t;
 using APTracer::Entities::Texture_t;
 
 namespace APTracer { namespace Materials {
-    class ReflectiveNormal_t final : public Material_t{
+    class ReflectiveNormal_t final : public Material_t {
         public:
             ReflectiveNormal_t(const Vec3f &emission, const Vec3f &colour, const Texture_t* normal_map);
 

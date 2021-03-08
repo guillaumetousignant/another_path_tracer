@@ -14,12 +14,17 @@ namespace APTracer { namespace Entities {
      * class, defining what a concrete acceleration structure must implement. An acceleration
      * structure should accelerate ray intersection compared to a brute-force approach.
      */
-    class AccelerationStructure_t{
+    class AccelerationStructure_t {
         public:
             /**
              * @brief Construct a new AccelerationStructure_t object. Does nothing.
              */
             AccelerationStructure_t() = default;
+
+            /**
+             * @brief Destroy the AccelerationStructure_t object. Does nothing.
+             */
+            virtual ~AccelerationStructure_t() = default;
 
             size_t n_obj_; /**< @brief Number of shapes currently held in the acceleration structure.*/
 

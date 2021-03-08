@@ -21,7 +21,7 @@ namespace APTracer { namespace Materials {
      * It then resets the ray's mask to 0 in order to stop it from being cast again. 
      * This material is more useful for debugging than for display purposes.
      */
-    class NormalMaterial_t final : public Material_t{
+    class NormalMaterial_t final : public Material_t {
         public:
             /**
              * @brief Construct a new NormalMaterial_t object.

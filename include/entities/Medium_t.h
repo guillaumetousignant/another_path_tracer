@@ -26,6 +26,11 @@ namespace APTracer { namespace Entities {
              */
             Medium_t(double ind, unsigned int priority): ind_(ind), priority_(priority) {};
 
+            /**
+             * @brief Destroy the Medium_t object. Does nothing.
+             */
+            virtual ~Medium_t() = default;
+
             double ind_; /**< @brief Refractive index of the medium. Used to calculate a ray's change of direction when going from a medium to another, and reflection ratio of refractive surfaces.*/
             unsigned int priority_; /**< @brief Priority of the medium over other mediums. A ray's current medium is the one with the highest priority, and intersections with lower priority mediums are ignored when there is an overlap.*/
 

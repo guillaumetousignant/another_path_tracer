@@ -18,7 +18,7 @@ namespace APTracer { namespace Entities {
      * each frame, and the camera is reset if it is moved. It uses a singleton pattern and all functions are duplicated to
      * work with the OpenGL C-style API, which uses function pointers for callbacks.
      */
-    class OpenGLRenderer_t{
+    class OpenGLRenderer_t {
         public:
             /**
              * @brief Construct a new OpenGLRenderer_t object with default state and no bound objects.

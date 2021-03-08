@@ -18,7 +18,7 @@ using APTracer::Entities::Shape_t;
 using APTracer::Entities::Medium_t;
 
 namespace APTracer { namespace Materials {
-    class RefractiveFuzz_t final : public Material_t{
+    class RefractiveFuzz_t final : public Material_t {
         public:
             RefractiveFuzz_t(const Vec3f &emission, const Vec3f &colour, double order, double diffusivity, Medium_t* medium);
 

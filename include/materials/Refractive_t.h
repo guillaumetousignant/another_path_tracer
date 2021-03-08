@@ -17,7 +17,7 @@ using APTracer::Entities::Shape_t;
 using APTracer::Entities::Medium_t;
 
 namespace APTracer { namespace Materials {
-    class Refractive_t final : public Material_t{
+    class Refractive_t final : public Material_t {
         public:
             Refractive_t(const Vec3f &emission, const Vec3f &colour, Medium_t* medium);
 

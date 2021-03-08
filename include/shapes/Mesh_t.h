@@ -26,7 +26,7 @@ namespace APTracer { namespace Shapes {
      * take their data from the mesh geometry and their index within it. The transformation matrix is used for all triangles,
      * so modifying the transformation matrix transforms all triangles.
      */
-    class Mesh_t final : public MeshTop_t{
+    class Mesh_t final : public MeshTop_t {
         public:
             /**
              * @brief Construct a new Mesh_t object with a single material.

@@ -53,7 +53,7 @@ namespace APTracer { namespace Entities {
      * The scene context can be initialised by hand, or can read from xml scene files. Several of those files are included with the project, in the
      * scenes folder. Refer to them for format.
      */
-    class SceneContext_t{
+    class SceneContext_t {
         public:
             /**
              * @brief Construct a new empty SceneContext_t object.

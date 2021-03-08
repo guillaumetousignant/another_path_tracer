@@ -24,7 +24,7 @@ namespace APTracer { namespace Materials {
      * This material is more useful for debugging, to force a specific colour, 
      * to create impossible lighting and for toon-like shading.
      */
-    class Toon_t final : public Material_t{
+    class Toon_t final : public Material_t {
         public:
             /**
              * @brief Construct a new Toon_t object with a colour.

@@ -11,7 +11,7 @@ namespace APTracer { namespace Entities {
      * 
      * These can be used to check intersection agains a ray and colour it if hit.
      */
-    class DirectionalLight_t{
+    class DirectionalLight_t {
         public:
             /**
              * @brief Construct a new DirectionalLight_t object
@@ -20,6 +20,11 @@ namespace APTracer { namespace Entities {
              * @param transformation Transformation matrix used by the light. Sets the light's direction and radius when created and updated.
              */
             DirectionalLight_t(const Vec3f &intensity, TransformMatrix_t* transformation);
+
+            /**
+             * @brief Destroy the DirectionalLight_t object. Does nothing.
+             */
+            ~DirectionalLight_t() = default;
 
             Vec3f direction_; /**< @brief Direction of the light. Defines towards where the light points. Changed by modifying the light's transformation matrix.*/
             Vec3f intensity_; /**< @brief Colour of the light. Defines the value that will be multiplied with a ray's mask to set the ray's colour on intersection.*/

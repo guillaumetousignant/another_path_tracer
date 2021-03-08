@@ -19,7 +19,7 @@ namespace APTracer { namespace Materials {
      * This medium can be used to represent light interacting media like light fog, atmospheric scattering, or
      * clear water.
      */
-    class Absorber_t final : public Medium_t{
+    class Absorber_t final : public Medium_t {
         public:
             /**
              * @brief Construct a new Absorber_t object with a colour, emissive colour, and their respective absorption/emission distance.

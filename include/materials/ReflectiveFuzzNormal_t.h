@@ -18,7 +18,7 @@ using APTracer::Entities::Shape_t;
 using APTracer::Entities::Texture_t;
 
 namespace APTracer { namespace Materials {
-    class ReflectiveFuzzNormal_t final : public Material_t{
+    class ReflectiveFuzzNormal_t final : public Material_t {
         public:
             ReflectiveFuzzNormal_t(const Vec3f &emission, const Vec3f &colour, const Texture_t* normal_map, double order, double diffusivity);
 

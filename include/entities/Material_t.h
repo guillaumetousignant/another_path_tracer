@@ -15,12 +15,17 @@ namespace APTracer { namespace Entities {
      * direction and origin, to model the light path change from the intersection. It can 
      * also change the ray's colour and mask to model light absorption and emission.
      */
-    class Material_t{
+    class Material_t {
         public:
             /**
              * @brief Construct a new Material_t object. Never called directly.
              */
             Material_t() = default;
+
+            /**
+             * @brief Destroy the Material_t object. Does nothing.
+             */
+            virtual ~Material_t() = default;
 
             /**
              * @brief Bounces a ray of light on the material.

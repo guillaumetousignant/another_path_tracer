@@ -16,7 +16,7 @@ namespace APTracer { namespace Entities {
      * It also has colour data. It can be intersected with shapes or any intersectable object.
      * It holds a list a mediums to figure out in what material it is.
      */
-    class Ray_t{
+    class Ray_t {
         public:
             /**
              * @brief Construct a new Ray_t object.

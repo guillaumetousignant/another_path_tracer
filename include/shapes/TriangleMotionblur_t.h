@@ -25,7 +25,7 @@ namespace APTracer { namespace Shapes {
      * to modify those points. This shape remembers its last state to enable motion blur. The state is interpolated between current and previous
      * states according to a ray's time.
      */
-    class TriangleMotionblur_t final : public Shape_t{
+    class TriangleMotionblur_t final : public Shape_t {
         public:
             /**
              * @brief Construct a new TriangleMotionblur_t object with a transformation matrix and material from three points.

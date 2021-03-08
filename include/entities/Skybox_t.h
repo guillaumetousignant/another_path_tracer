@@ -11,12 +11,17 @@ namespace APTracer { namespace Entities {
      * Skyboxes return the colour of the background based on ray direction only. Using only the direction places the skybox infinitely far.
      * The colour returned is used as an emissive colour, and thus lights up the scene as a colour source.
      */
-    class Skybox_t{
+    class Skybox_t {
         public:
             /**
              * @brief Construct a new Skybox_t object. Does nothing.
              */
             Skybox_t() = default;
+
+            /**
+             * @brief Destroy the Skybox_t object. Does nothing.
+             */
+            virtual ~Skybox_t() = default;
 
             /**
              * @brief Returns the colour of the skybox for a given direction.

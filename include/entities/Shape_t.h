@@ -17,7 +17,7 @@ namespace APTracer { namespace Entities {
      * in an acceleration structure, and as such must provide the mincoord and maxcoord functions to be spatially sorted. The shapes can be modified 
      * by applying transformations to their transformation matrix. These changes are propagated on update.
      */
-    class Shape_t{
+    class Shape_t {
         public:
             /**
              * @brief Construct a new Shape_t object with a material and a transformation matrix.
@@ -26,6 +26,11 @@ namespace APTracer { namespace Entities {
              * @param transform_matrix Transformation matrix used to transform and move the shape.
              */
             Shape_t(Material_t *material, TransformMatrix_t *transform_matrix): material_(material), transformation_(transform_matrix) {};
+
+            /**
+             * @brief Destroy the Shape_t object. Does nothing.
+             */
+            virtual ~Shape_t() = default;
 
             Material_t *material_; /**< @brief Material of which the shape is made of.*/
             TransformMatrix_t *transformation_; /**< @brief Transformation matrix used to modify the position and other transformations of the shape.*/

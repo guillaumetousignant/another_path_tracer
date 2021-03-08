@@ -41,7 +41,7 @@ namespace APTracer { namespace Cameras {
      * of focal_length_ radius centered on the origin.
      * This camera stores the result from its rays in a single image buffer.
      */
-    class CamMotionblurAperture_t final : public Camera_t{
+    class CamMotionblurAperture_t final : public Camera_t {
         public:
             /**
              * @brief Construct a new CamMotionblurAperture_t object. Most arguments are passed to the Camera_t constructor.

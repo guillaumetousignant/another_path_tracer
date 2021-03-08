@@ -14,7 +14,7 @@ namespace APTracer { namespace Entities {
      * while using different transformations, enabling instanciating and saving ressources. This class is constructed from geometry
      * input files. Currently, .obj and .su2 files are supported.
      */
-    class MeshGeometry_t{
+    class MeshGeometry_t {
         public:
             /**
              * @brief Construct a new MeshGeometry_t object from a geometry input file.

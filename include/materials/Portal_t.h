@@ -27,7 +27,7 @@ namespace APTracer { namespace Materials {
      * This material can represent portals, screens showing another area, or impossible geometry.
      * It is one-way, as there is no linked object at the outlet of the portal to be intersected.
      */
-    class Portal_t final : public Material_t{
+    class Portal_t final : public Material_t {
         public:
             /**
              * @brief Construct a new Portal_t object with a transformation matrix and a medium list.

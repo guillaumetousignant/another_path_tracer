@@ -24,7 +24,7 @@ namespace APTracer { namespace Entities {
      * without the acceleration structure with intersect_brute, at a much slower pace when there are many shapes. Shapes can be added and 
      * removed from the scene, but these operations are costly so should be batched.
      */
-    class Scene_t{
+    class Scene_t {
         public:
             /**
              * @brief Construct a new empty Scene_t object.

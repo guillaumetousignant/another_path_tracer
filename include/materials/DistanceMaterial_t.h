@@ -21,7 +21,7 @@ namespace APTracer { namespace Materials {
      * ray's mask to 0 in order to stop it from being cast again. 
      * This material is more useful for debugging than for display purposes.
      */
-    class DistanceMaterial_t final : public Material_t{
+    class DistanceMaterial_t final : public Material_t {
         public:
             /**
              * @brief Construct a new DistanceMaterial_t object with a target distance and an exponent.

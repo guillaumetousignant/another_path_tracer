@@ -21,7 +21,7 @@ namespace APTracer { namespace Skyboxes {
      * This will use an image as the background of the scene. The skybox can be rotated by modifying its 
      * transformation matrix.
      */
-    class SkyboxTextureTransformation_t final : public Skybox_t{
+    class SkyboxTextureTransformation_t final : public Skybox_t {
         public:
             /**
              * @brief Construct a new SkyboxTextureTransformation_t object from a texture.

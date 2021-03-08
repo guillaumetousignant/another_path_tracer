@@ -20,7 +20,7 @@ namespace APTracer { namespace Skyboxes {
      * The colour returned is independent of direction, and is 'background_', unless it falls in the radius of a light, in which case
      * the colour of the light is returned.
      */
-    class SkyboxFlatSun_t final : public Skybox_t{
+    class SkyboxFlatSun_t final : public Skybox_t {
         public:
             /**
              * @brief Construct a new SkyboxFlatSun_t object of the provided colour with one light.

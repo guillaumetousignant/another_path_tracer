@@ -15,7 +15,7 @@ namespace APTracer { namespace Materials {
      * This medium does nothing by itself, it is the identity medium.
      * This medium can be used to represent non interacting media like clear air or emptiness.
      */
-    class NonAbsorber_t final : public Medium_t{
+    class NonAbsorber_t final : public Medium_t {
         public:
             /**
              * @brief Construct a new NonAbsorber_t object.

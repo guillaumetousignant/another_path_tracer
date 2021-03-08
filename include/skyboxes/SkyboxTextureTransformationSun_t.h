@@ -22,7 +22,7 @@ namespace APTracer { namespace Skyboxes {
      * This will use an image as the background of the scene, and return the sun colour if inside its radius. The skybox can be rotated by modifying its 
      * transformation matrix.
      */
-    class SkyboxTextureTransformationSun_t final : public Skybox_t{
+    class SkyboxTextureTransformationSun_t final : public Skybox_t {
         public:
             /**
              * @brief Construct a new SkyboxTextureTransformationSun_t object from a texture and a light source.

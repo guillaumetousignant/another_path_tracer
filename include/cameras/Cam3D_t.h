@@ -37,7 +37,7 @@ namespace APTracer { namespace Cameras {
      * This camera generates two images from offset positions and combines them to
      * create a 3D anaglyph image.
      */
-    class Cam3D_t  final: public Camera_t{
+    class Cam3D_t  final: public Camera_t {
         public:
             /**
              * @brief Construct a new Cam3D_t object. Creates two dependant cameras, one for each eye. Most arguments are passed to them.

@@ -28,7 +28,7 @@ namespace APTracer { namespace Shapes {
      * mesh and the mesh's transformation matrix. They hold a reference to their mesh geometry and their index into it.
      * They use that data to populate their points.
      */
-    class TriangleMesh_t final : public Shape_t{
+    class TriangleMesh_t final : public Shape_t {
         public:
             /**
              * @brief Construct a new TriangleMesh_t object with a material from a mesh geometry, an index within it, and the mesh's transformation matrix.

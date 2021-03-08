@@ -24,7 +24,7 @@ namespace APTracer { namespace Materials {
      * This material models surfaces that are a mix of two materials, like dusty surfaces or surfaces
      * that partly emit light.
      */
-    class RandomMixIn_t final : public Material_t{
+    class RandomMixIn_t final : public Material_t {
         public:
             /**
              * @brief Construct a new RandomMixIn_t object from two materials and a ratio.

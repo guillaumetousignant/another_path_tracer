@@ -29,7 +29,7 @@ namespace APTracer { namespace Acceleration {
      * grid recursion level.
      * This structure with its list representation is more geared toward moving scenes, as the cost to remove, add or move shapes from one cell to another is lower.
      */
-    class AccelerationMultiGrid_t final : public AccelerationStructure_t{
+    class AccelerationMultiGrid_t final : public AccelerationStructure_t {
         public:
             /**
              * @brief Construct a new top-level AccelerationMultiGrid_t object from an array of shapes.

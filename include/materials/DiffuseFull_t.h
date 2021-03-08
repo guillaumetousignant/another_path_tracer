@@ -29,7 +29,7 @@ namespace APTracer { namespace Materials {
      * This material represents uniformly and finely rough surfaces, such as matte paint,
      * chalk, and non-shiny plastic.
      */
-    class DiffuseFull_t final : public Material_t{
+    class DiffuseFull_t final : public Material_t {
         public:
             /**
              * @brief Construct a new DiffuseFull_t object with an emissive and reflective texture, and a roughness.

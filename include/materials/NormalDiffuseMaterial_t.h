@@ -23,7 +23,7 @@ namespace APTracer { namespace Materials {
      * This models diffuse reflection, which reflect light in all directions.
      * This material is more useful for debugging than for display purposes.
      */
-    class NormalDiffuseMaterial_t final : public Material_t{
+    class NormalDiffuseMaterial_t final : public Material_t {
         public:
             /**
              * @brief Construct a new NormalDiffuseMaterial_t object with a roughness.

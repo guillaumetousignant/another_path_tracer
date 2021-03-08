@@ -26,7 +26,7 @@ namespace APTracer { namespace Materials {
      * This material is more useful for debugging than for display purposes, as it works best when all objects of the scene are
      * made of this material.
      */
-    class BounceMaterial_t final : public Material_t{
+    class BounceMaterial_t final : public Material_t {
         public:
             /**
              * @brief Construct a new BounceMaterial_t object with a maximum number of bounces.

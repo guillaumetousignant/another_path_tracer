@@ -21,7 +21,7 @@ namespace APTracer { namespace Entities {
      * the needed image buffer(s) vary by configuration, or are even not needed for some specific
      * situations.
      */
-    class Camera_t{
+    class Camera_t {
         public:
             /**
              * @brief Construct a new Camera_t object. Never called directly.
@@ -40,6 +40,11 @@ namespace APTracer { namespace Entities {
              * @param gammaind Gamma of the saved picture. A value of 1 should be used for usual cases.
              */
             Camera_t(TransformMatrix_t* transformation, std::string filename, Vec3f up, std::array<double, 2> fov, std::array<unsigned int, 2> subpix, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double gammaind);
+
+            /**
+             * @brief Destroy the Camera_t object. Does nothing.
+             */
+            virtual ~Camera_t() = default;
 
             TransformMatrix_t* transformation_; /**< @brief Transformation matrix used by the camera. Sets the camera's origin and direction when created and updated.*/
             std::string filename_; /**< @brief Filename used by the camera when saving an image. Not used by all cameras, and some might modify it or save multiple pictures with variations of the name.*/

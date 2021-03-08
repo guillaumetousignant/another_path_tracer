@@ -22,7 +22,7 @@ namespace APTracer { namespace Shapes {
      * 
      * A sphere is defined by an origin and a radius. Its transformation matrix is used to modify those caracteristics.
      */
-    class Sphere_t final : public Shape_t{
+    class Sphere_t final : public Shape_t {
         public:
             /**
              * @brief Construct a new Sphere_t object with a transformation matrix and material.

@@ -29,7 +29,7 @@ namespace APTracer { namespace Entities {
      * 
      * This class is derived from ImgBuffer_t, adding the capability to be shown on screen and interact with OpenGL.
      */
-    class ImgBufferOpenGL_t final : public ImgBuffer_t{
+    class ImgBufferOpenGL_t final : public ImgBuffer_t {
         public:
             /**
              * @brief Construct a new ImgBufferOpenGL_t object with the given dimensions.
