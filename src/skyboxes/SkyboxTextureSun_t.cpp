@@ -12,7 +12,7 @@ APTracer::Skyboxes::SkyboxTextureSun_t::SkyboxTextureSun_t(APTracer::Entities::T
 
 APTracer::Skyboxes::SkyboxTextureSun_t::~SkyboxTextureSun_t() = default;
 
-Vec3f APTracer::Skyboxes::SkyboxTextureSun_t::get(const Vec3f &xyz) const {
+auto APTracer::Skyboxes::SkyboxTextureSun_t::get(const Vec3f &xyz) const -> Vec3f {
     const Vec3f sph = xyz.get_sph();
     const std::array<double, 2> xy{sph[2]/(2.0 * pi) + 0.5, 1.0 - sph[1]/pi};
 

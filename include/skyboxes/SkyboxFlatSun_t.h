@@ -48,7 +48,7 @@ namespace APTracer { namespace Skyboxes {
             size_t n_lights_; /**< @brief Number of directional lights in the skybox.*/
             std::vector<DirectionalLight_t*> lights_; /**< @brief Array of directional lights in the skybox.*/
 
-            virtual Vec3f get(const Vec3f &xyz) const final;
+            virtual auto get(const Vec3f &xyz) const -> Vec3f final;
     };
 }}
 #endif

@@ -6,6 +6,6 @@ APTracer::Skyboxes::SkyboxFlat_t::SkyboxFlat_t(const Vec3f &background) : backgr
 
 APTracer::Skyboxes::SkyboxFlat_t::~SkyboxFlat_t() = default;
 
-Vec3f APTracer::Skyboxes::SkyboxFlat_t::get(const Vec3f &xyz) const {
+auto APTracer::Skyboxes::SkyboxFlat_t::get(const Vec3f &xyz) const -> Vec3f {
     return background_;
 }

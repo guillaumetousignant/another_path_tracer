@@ -29,7 +29,7 @@ namespace APTracer { namespace Skyboxes {
 
             Vec3f background_; /**< @brief Colour of the skybox, in all directions.*/
 
-            virtual Vec3f get(const Vec3f &xyz) const final;
+            virtual auto get(const Vec3f &xyz) const -> Vec3f final;
     };
 }}
 #endif

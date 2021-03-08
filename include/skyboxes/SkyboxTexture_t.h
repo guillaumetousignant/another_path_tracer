@@ -34,7 +34,7 @@ namespace APTracer { namespace Skyboxes {
 
             Texture_t* texture_; /**< @brief Texture used as the background of the skybox.*/
 
-            virtual Vec3f get(const Vec3f &xyz) const final;
+            virtual auto get(const Vec3f &xyz) const -> Vec3f final;
     };
 }}
 #endif

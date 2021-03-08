@@ -41,7 +41,7 @@ namespace APTracer { namespace Skyboxes {
             Vec3f sun_col_; /**< @brief Colour of the light source. Can be above [1, 1, 1].*/
             double sun_rad_; /**< @brief Radius of the light source in normalized coordinates, from 0 to sqrt(2). sqrt(2) is max distance in 2D space of [0..1, 0..1].*/
 
-            virtual Vec3f get(const Vec3f &xyz) const final;
+            virtual auto get(const Vec3f &xyz) const -> Vec3f final;
     };
 }}
 #endif

@@ -13,7 +13,7 @@ APTracer::Skyboxes::SkyboxFlatSun_t::SkyboxFlatSun_t(const Vec3f &background, AP
     }
 }
 
-Vec3f APTracer::Skyboxes::SkyboxFlatSun_t::get(const Vec3f &xyz) const {
+auto APTracer::Skyboxes::SkyboxFlatSun_t::get(const Vec3f &xyz) const -> Vec3f {
     Vec3f colour = Vec3f();
     for (auto* light: lights_) {
         if (xyz.dot(light->direction_) < -light->radius_) {
