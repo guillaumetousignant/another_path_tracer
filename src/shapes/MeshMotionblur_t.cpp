@@ -22,7 +22,7 @@ APTracer::Shapes::MeshMotionblur_t::MeshMotionblur_t(const APTracer::Shapes::Mes
     createTriangles();
 }
 
-APTracer::Shapes::MeshMotionblur_t::MeshMotionblur_t(APTracer::Shapes::MeshMotionblur_t&& other)
+APTracer::Shapes::MeshMotionblur_t::MeshMotionblur_t(APTracer::Shapes::MeshMotionblur_t&& other) noexcept
         : MeshTop_t(other.material_, other.transformation_, other.geom_) {
     triangles_ = std::move(other.triangles_);
 }
@@ -41,7 +41,7 @@ auto APTracer::Shapes::MeshMotionblur_t::operator=(const APTracer::Shapes::MeshM
     return *this;
 }
 
-auto APTracer::Shapes::MeshMotionblur_t::operator=(APTracer::Shapes::MeshMotionblur_t&& other) -> APTracer::Shapes::MeshMotionblur_t& {
+auto APTracer::Shapes::MeshMotionblur_t::operator=(APTracer::Shapes::MeshMotionblur_t&& other) noexcept -> APTracer::Shapes::MeshMotionblur_t& {
     material_ = other.material_;
     transformation_ = other.transformation_;
     geom_ = other.geom_;
