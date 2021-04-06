@@ -53,7 +53,7 @@ namespace APTracer { namespace Materials {
              * 
              * The ray's mask is attenuated with the material's colour to model part of the light being absorbed.
              * Then, the material's emissive colour is multiplied with the ray's mask and added to the ray's colour
-             * to model light being emitted bi the material.
+             * to model light being emitted by the material.
              * The ray's origin is set to the hit point, and is normal is randomly selected within the hemisphere
              * around the normal to model diffuse reflection. The normal of the material at the hit point is
              * determined by reading the texture at the hit point, in object coordinates.

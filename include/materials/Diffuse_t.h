@@ -47,8 +47,8 @@ namespace APTracer { namespace Materials {
              * 
              * The ray's mask is attenuated with the material's colour to model part of the light being absorbed.
              * Then, the material's emissive colour is multiplied with the ray's mask and added to the ray's colour
-             * to model light being emitted bi the material.
-             * The ray's origin is set to the hit point, and is normal is randomly selected within the hemisphere
+             * to model light being emitted by the material.
+             * The ray's origin is set to the hit point, and its direction is randomly selected within the hemisphere
              * above the hit point to model diffuse reflection.
              * 
              * @param uv Object space coordinates of the hit point. Used to query the shape for values at coordinates on it. Two components, u, and v, that can change meaning depending on the shape.
