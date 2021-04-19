@@ -1,7 +1,7 @@
 #ifndef APTRACER_COLOURS_H
 #define APTRACER_COLOURS_H
 
-#include <map> 
+#include <unordered_map> 
 #include <string>
 #include "entities/Vec3f.h"
 
@@ -13,6 +13,6 @@ namespace APTracer { namespace Colours {
      * 
      * This is used to reference colours in scenes without having to type colour values.
      */
-    extern const std::map<std::string, Vec3f> colours;
+    extern const std::unordered_map<std::string, Vec3f> colours;
 }}
 #endif
