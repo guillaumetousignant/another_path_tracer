@@ -57,7 +57,7 @@ namespace APTracer { namespace Materials {
              * The normal has a random disruption applied to it to move it within a portion of its hemisphere, with 
              * the portion being represented by the diffusivity parameter, and the probability distribution within 
              * the portion being governed by the order parameter.
-             * This is a glossy reflection, to model specular reflection.
+             * This is a straight reflection, to model glossy reflection.
              * 
              * @param uv Object space coordinates of the hit point. Used to query the shape for values at coordinates on it. Two components, u, and v, that can change meaning depending on the shape.
              * @param hit_obj Pointer to the shape that was hit by the ray.

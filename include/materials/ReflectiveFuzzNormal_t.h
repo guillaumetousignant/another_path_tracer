@@ -64,7 +64,7 @@ namespace APTracer { namespace Materials {
              * the portion being governed by the order parameter.
              * The normal of the material at the hit point is determined by reading the texture at the hit point, 
              * in object coordinates.
-             * This is a glossy reflection, to model specular reflection.
+             * This is a straight reflection, to model glossy reflection.
              * 
              * @param uv Object space coordinates of the hit point. Used to query the shape for values at coordinates on it. Two components, u, and v, that can change meaning depending on the shape.
              * @param hit_obj Pointer to the shape that was hit by the ray.
