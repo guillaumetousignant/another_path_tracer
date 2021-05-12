@@ -12,9 +12,10 @@ using APTracer::Entities::Ray_t;
 namespace APTracer { namespace Materials {
 
     /**
-     * @brief The absorber class describes a medium that can absorb or emit light as a ray goes through it.
+     * @brief The absorber class describes a medium that can absorb and emit light as a ray goes through it.
      * 
-     * Light is absorbed and/or emitted logarithmically with regards to the distance travelled within it by a ray.
+     * Light is absorbed and/or emitted logarithmically with regards to the distance travelled within it by a ray,
+     * according to the Beer-Lambert law.
      * The ray will not change direction when interacting with this medium.
      * This medium can be used to represent light interacting media like light fog, atmospheric scattering, or
      * clear water.
@@ -35,13 +36,13 @@ namespace APTracer { namespace Materials {
              */
             Absorber_t(Vec3f emi_vol, Vec3f col_vol, double abs_dist_emi, double abs_dist_col, double ind, unsigned int priority);
 
-            Vec3f emission_vol_; /**< @brief Colour emitted by the medium in exponential form.*/
-            Vec3f colour_vol_; /**< @brief Colour absorbed by the medium in exponential form.*/
+            Vec3f emission_vol_; /**< @brief Volumetric colour emitted by the medium in exponential form.*/
+            Vec3f colour_vol_; /**< @brief Volumetric colour absorbed by the medium in exponential form.*/
 
             /**
              * @brief Defines the interaction between a ray and the medium.
              * 
-             * In this medium, light is absorbed and/or emitted logarithmically with regards to the distance travelled within it by a ray.
+             * In this medium, light is absorbed and/or emitted logarithmically with regards to the distance travelled within it by a ray according to the Beer-Lambert law.
              * 
              * @param ray Ray modified by the medium. Its colour and mask can be changed.
              * @return true Returns true if the ray has been scattered, meaning that its origin and/or direction has changed and the material bounce should not be performed. Never the case for an absorber.
