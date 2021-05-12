@@ -73,10 +73,15 @@ namespace APTracer { namespace Entities {
              * can't be stored in the material mix.
              */
             struct MaterialMixLists {
+                /** @brief List containing fresnel mixes and their materials.*/
                 std::list<std::pair<APTracer::Materials::FresnelMix_t*, std::array<size_t, 2>>> fresnel_mix;
+                /** @brief List containing fresnel mixes in and their materials.*/
                 std::list<std::pair<APTracer::Materials::FresnelMixIn_t*, std::array<size_t, 2>>> fresnel_mix_in;
+                /** @brief List containing normal-mapped fresnel mixes and their materials.*/
                 std::list<std::pair<APTracer::Materials::FresnelMixNormal_t*, std::array<size_t, 2>>> fresnel_mix_normal;
+                /** @brief List containing random mixes and their materials.*/
                 std::list<std::pair<APTracer::Materials::RandomMix_t*, std::array<size_t, 2>>> random_mix;
+                /** @brief List containing random mixes in and their materials.*/
                 std::list<std::pair<APTracer::Materials::RandomMixIn_t*, std::array<size_t, 2>>> random_mix_in;
             };
 
@@ -86,7 +91,9 @@ namespace APTracer { namespace Entities {
              * This is needed because the materials have to be transformed after their creation.
              */
             struct MaterialTransformations {
+                /** @brief List containing portal materials and their pre-update transformations.*/
                 std::list<std::pair<APTracer::Materials::Portal_t*, const tinyxml2::XMLElement*>> transformations_pre;
+                /** @brief List containing portal materials and their post-update transformations.*/
                 std::list<std::pair<APTracer::Materials::Portal_t*, const tinyxml2::XMLElement*>> transformations_post;
             };
 
@@ -96,7 +103,9 @@ namespace APTracer { namespace Entities {
              * This is needed because the mediums have to be transformed after their creation.
              */
             struct MediumTransformations {
+                /** @brief List containing portal scatterers and their pre-update transformations.*/
                 std::list<std::pair<APTracer::Materials::PortalScatterer_t*, const tinyxml2::XMLElement*>> transformations_pre;
+                /** @brief List containing portal scatterers and their post-update transformations.*/
                 std::list<std::pair<APTracer::Materials::PortalScatterer_t*, const tinyxml2::XMLElement*>> transformations_post;
             };
 
