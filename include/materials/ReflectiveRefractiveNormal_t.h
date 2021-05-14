@@ -20,16 +20,58 @@ using APTracer::Entities::Medium_t;
 using APTracer::Entities::Texture_t;
 
 namespace APTracer { namespace Materials {
+
+    /**
+     * @brief The reflective refractive class describes a material that reflects and refracts rays around the surface normal taken from a normal map, to model refractive surfaces.
+     * 
+     * This material has an emissive and reflective colour, applied to rays on bounce.
+     * Part of the rays are reflected and the rest are refracted, according to the Fresnel equations.
+     * The rays are refracted according to Snell's law.
+     * The rays are reflected with the same angle between the outgoing ray and the surface normal
+     * as between the incident ray and the surface normal, but on he opposite side of the normal.
+     * The normal is fetched from a normal map based on the object space coordinates of the bounce.
+     * This models real refractive surfaces refraction, only a portion of the light entering the surface.
+     * This material represents transparents patterned surfaces, such as non-still water, shaped glass, and sculpted ice.
+     */
     class ReflectiveRefractiveNormal_t final : public Material_t {
         public:
+            /**
+             * @brief Construct a new ReflectiveRefractiveNormal_t object with an emissive and reflective colour, a medium, and a normal map.
+             * 
+             * @param emission Colour emitted by the material when a ray bounces on it.
+             * @param colour Colour reflected by the material when a ray bounces on it.
+             * @param normal_map Texture containing the surface normal in object coordinates.
+             * @param medium Medium representing the inside of the material.
+             */
             ReflectiveRefractiveNormal_t(const Vec3f &emission, const Vec3f &colour, const Texture_t* normal_map, Medium_t* medium);
 
-            Vec3f emission_;
-            Vec3f colour_;
-            const Texture_t* normal_map_;
-            std::uniform_real_distribution<double> unif_;
-            Medium_t* medium_;
+            Vec3f emission_; /**< @brief Colour emitted by the material at each bounce.*/
+            Vec3f colour_; /**< @brief Colour reflected by the material at each bounce.*/
+            const Texture_t* normal_map_; /**< @brief Texture containing the surface normal of the material in object coordinates, mapped by object space coordinates.*/
+            std::uniform_real_distribution<double> unif_; /**< @brief Uniform random distribution used for generating random numbers.*/
+            Medium_t* medium_; /**< @brief Medium representing the inside of the material. It is added to rays' medium list when entering the material, and removed when exiting it.*/
 
+            /**
+             * @brief Bounces a ray of light on the material.
+             * 
+             * The ray's mask is attenuated with the material's colour to model part of the light being absorbed.
+             * Then, the material's emissive colour is multiplied with the ray's mask and added to the ray's colour
+             * to model light being emitted by the material.
+             * Part of the rays are reflected and the rest are refracted, according to the Fresnel equations.
+             * Refracted rays are refracted around the normal by the material, according to Snell's law. The normal of the material 
+             * at the hit point is determined by reading the texture at the hit point, in object coordinates.
+             * Depending on its direction, the ray can enter, exit or stay inside the material. Its origin is set to the hit 
+             * point, and its direction is adjusted accordingly. If the ray enters or exits the material, the 
+             * material's medium is added or removed, respectively, from the ray's medium list. This sets in which 
+             * medium the ray is travelling. This models light refraction.
+             * Reflected rays' direction is set with the same angle as between the 
+             * incident ray and the surface normal, but on he opposite side of the normal. This is a straight reflection,
+             * to model specular reflection.
+             * 
+             * @param uv Object space coordinates of the hit point. Used to query the shape for values at coordinates on it. Two components, u, and v, that can change meaning depending on the shape.
+             * @param hit_obj Pointer to the shape that was hit by the ray.
+             * @param ray Ray that has intersected the shape.
+             */
             virtual auto bounce(std::array<double, 2> uv, const Shape_t* hit_obj, Ray_t &ray) -> void final;
     };
 }}
