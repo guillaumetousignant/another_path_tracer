@@ -329,19 +329,3 @@ Docs
 .. doxygenfunction:: APTracer::slerp
 
 .. doxygenvariable:: APTracer::Colours::colours
-
-.. Namespaces
-
-.. doxygennamespace:: APTracer
-
-.. doxygennamespace:: APTracer::Acceleration
-
-.. doxygennamespace:: APTracer::Entities
-
-.. doxygennamespace:: APTracer::Colours
-
-.. doxygennamespace:: APTracer::Materials
-
-.. doxygennamespace:: APTracer::Shapes
-
-.. doxygennamespace:: APTracer::Skyboxes
