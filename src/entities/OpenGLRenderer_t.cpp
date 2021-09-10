@@ -211,6 +211,22 @@ auto OpenGLRenderer_t::mouseClick(int button, int state, int x, int y) -> void {
                 right_clicked_ = false;
             }
             break;
+
+        case 3:
+            if(state == GLUT_DOWN) {
+                camera_->fov_[0] /= 1.1;
+                camera_->fov_[1] /= 1.1;
+                updated_ = true;
+            }
+            break;
+
+        case 4:
+            if(state == GLUT_DOWN) {
+                camera_->fov_[0] *= 1.1;
+                camera_->fov_[1] *= 1.1;
+                updated_ = true;
+            }
+            break;
     }
 }
 
