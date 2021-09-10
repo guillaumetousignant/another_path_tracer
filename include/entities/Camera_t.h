@@ -1,5 +1,5 @@
-#ifndef APTRACER_CAMERA_T_H
-#define APTRACER_CAMERA_T_H
+#ifndef APTRACER_ENTITIES_CAMERA_T_H
+#define APTRACER_ENTITIES_CAMERA_T_H
 
 #include "entities/Vec3f.h"
 #include <string>

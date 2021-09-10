@@ -1,5 +1,5 @@
-#ifndef APTRACER_TRANSPARENT_T_H
-#define APTRACER_TRANSPARENT_T_H
+#ifndef APTRACER_MATERIALS_TRANSPARENT_T_H
+#define APTRACER_MATERIALS_TRANSPARENT_T_H
 
 #include "entities/Material_t.h"
 #include "entities/Vec3f.h"

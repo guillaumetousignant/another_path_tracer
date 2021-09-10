@@ -1,5 +1,5 @@
-#ifndef APTRACER_DISTANCEMATERIAL_T_H
-#define APTRACER_DISTANCEMATERIAL_T_H
+#ifndef APTRACER_MATERIALS_DISTANCEMATERIAL_T_H
+#define APTRACER_MATERIALS_DISTANCEMATERIAL_T_H
 
 #include "entities/Material_t.h"
 #include "entities/Ray_t.h"

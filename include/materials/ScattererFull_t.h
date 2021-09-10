@@ -1,5 +1,5 @@
-#ifndef APTRACER_SCATTERERFULL_T_H
-#define APTRACER_SCATTERERFULL_T_H
+#ifndef APTRACER_MATERIALS_SCATTERERFULL_T_H
+#define APTRACER_MATERIALS_SCATTERERFULL_T_H
 
 #include "entities/Medium_t.h"
 #include "entities/Ray_t.h"

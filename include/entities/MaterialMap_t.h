@@ -1,5 +1,5 @@
-#ifndef APTRACER_MATERIALMAP_T_H
-#define APTRACER_MATERIALMAP_T_H
+#ifndef APTRACER_ENTITIES_MATERIALMAP_T_H
+#define APTRACER_ENTITIES_MATERIALMAP_T_H
 
 #include <string>
 #include <unordered_map>

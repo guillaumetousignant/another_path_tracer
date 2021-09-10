@@ -1,5 +1,5 @@
-#ifndef APTRACER_SCENECONTEXT_T_H
-#define APTRACER_SCENECONTEXT_T_H
+#ifndef APTRACER_ENTITIES_SCENECONTEXT_T_H
+#define APTRACER_ENTITIES_SCENECONTEXT_T_H
 
 #include <iostream>
 #include <string>

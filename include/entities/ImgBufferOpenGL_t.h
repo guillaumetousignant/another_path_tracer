@@ -1,5 +1,5 @@
-#ifndef APTRACER_IMGBUFFEROPENGL_T_H
-#define APTRACER_IMGBUFFEROPENGL_T_H
+#ifndef APTRACER_ENTITIES_IMGBUFFEROPENGL_T_H
+#define APTRACER_ENTITIES_IMGBUFFEROPENGL_T_H
 
 #include "entities/ImgBuffer_t.h"
 #include "entities/Vec3f.h"

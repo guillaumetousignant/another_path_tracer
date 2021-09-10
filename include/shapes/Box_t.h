@@ -1,5 +1,5 @@
-#ifndef APTRACER_BOX_T_H
-#define APTRACER_BOX_T_H
+#ifndef APTRACER_SHAPES_BOX_T_H
+#define APTRACER_SHAPES_BOX_T_H
 
 #include "entities/Ray_t.h"
 #include "entities/Vec3f.h"

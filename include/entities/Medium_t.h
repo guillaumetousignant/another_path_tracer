@@ -1,5 +1,5 @@
-#ifndef APTRACER_MEDIUM_T_H
-#define APTRACER_MEDIUM_T_H
+#ifndef APTRACER_ENTITIES_MEDIUM_T_H
+#define APTRACER_ENTITIES_MEDIUM_T_H
 
 #include "entities/Ray_t.h"
 

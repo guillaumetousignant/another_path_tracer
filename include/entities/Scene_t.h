@@ -1,5 +1,5 @@
-#ifndef APTRACER_SCENE_T_H
-#define APTRACER_SCENE_T_H
+#ifndef APTRACER_ENTITIES_SCENE_T_H
+#define APTRACER_ENTITIES_SCENE_T_H
 
 #include "entities/Ray_t.h"
 #include <vector>

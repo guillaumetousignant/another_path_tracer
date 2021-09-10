@@ -1,5 +1,5 @@
-#ifndef APTRACER_NORMALMATERIAL_T_H
-#define APTRACER_NORMALMATERIAL_T_H
+#ifndef APTRACER_MATERIALS_NORMALMATERIAL_T_H
+#define APTRACER_MATERIALS_NORMALMATERIAL_T_H
 
 #include "entities/Material_t.h"
 #include "entities/Ray_t.h"

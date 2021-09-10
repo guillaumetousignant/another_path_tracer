@@ -1,5 +1,5 @@
-#ifndef APTRACER_CAMERAS_H
-#define APTRACER_CAMERAS_H
+#ifndef APTRACER_CAMERAS_CAMERAS_H
+#define APTRACER_CAMERAS_CAMERAS_H
 
 namespace APTracer { 
     /**

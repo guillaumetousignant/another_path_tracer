@@ -1,5 +1,5 @@
-#ifndef APTRACER_FISHCAM_T_H
-#define APTRACER_FISHCAM_T_H
+#ifndef APTRACER_CAMERAS_FISHCAM_T_H
+#define APTRACER_CAMERAS_FISHCAM_T_H
 
 #include "entities/Camera_t.h"
 #include "entities/Vec3f.h"

@@ -1,5 +1,5 @@
-#ifndef APTRACER_COLOURS_H
-#define APTRACER_COLOURS_H
+#ifndef APTRACER_FUNCTIONS_COLOURS_H
+#define APTRACER_FUNCTIONS_COLOURS_H
 
 #include <unordered_map> 
 #include <string>

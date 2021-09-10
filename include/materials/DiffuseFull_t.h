@@ -1,5 +1,5 @@
-#ifndef APTRACER_DIFFUSEFULL_T_H
-#define APTRACER_DIFFUSEFULL_T_H
+#ifndef APTRACER_MATERIALS_DIFFUSEFULL_T_H
+#define APTRACER_MATERIALS_DIFFUSEFULL_T_H
 
 #include "entities/Material_t.h"
 #include "entities/Vec3f.h"

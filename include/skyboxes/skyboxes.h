@@ -1,5 +1,5 @@
-#ifndef APTRACER_SKYBOXES_H
-#define APTRACER_SKYBOXES_H
+#ifndef APTRACER_SKYBOXES_SKYBOXES_H
+#define APTRACER_SKYBOXES_SKYBOXES_H
 
 namespace APTracer { 
     /**
