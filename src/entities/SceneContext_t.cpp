@@ -127,14 +127,14 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
     tinyxml2::XMLDocument xml_scene;
 	xml_scene.LoadFile(filename.c_str());
     if (xml_scene.Error()) {
-        std::cout << "There was an error while opening or parsing file '" << filename << "'. Exiting." << std::endl;
+        std::cerr << "Error: There was an error while opening or parsing file '" << filename << "'. Exiting." << std::endl;
         return;
     }
 
     tinyxml2::XMLElement* xml_top = xml_scene.FirstChildElement();
     const char* temp_name = xml_top->Attribute("name");
     if (temp_name == nullptr) {
-        std::cout << "Scene name not found. XML scene should have a 'name' attribute. Using 'null'." << std::endl;
+        std::cerr << "Warning: Scene name not found. XML scene should have a 'name' attribute. Using 'null'." << std::endl;
         scene_name_ = "null";
     }
     else {
@@ -719,7 +719,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
                     const char* focus_position_char = xml_camera->Attribute("focus_position");
                     std::string focus_position;
                     if (focus_position_char == nullptr) {
-                        std::cerr << "Error: Cameras with nan as 'focal_length' attribute should have a 'focus_position' attribute. Using 0.5 0.5." << std::endl;
+                        std::cerr << "Warning: Cameras with nan as 'focal_length' attribute should have a 'focus_position' attribute. Using 0.5 0.5." << std::endl;
                         focus_position = "0.5 0.5";
                     }
                     else {
@@ -754,7 +754,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
             std::string render_mode;
             const char* render_mode_char = xml_camera->Attribute("rendermode");
             if (render_mode_char == nullptr) {
-                std::cerr << "Error: XML cameras should have a 'rendermode' attribute. Using 'single'." << std::endl;
+                std::cerr << "Warning: XML cameras should have a 'rendermode' attribute. Using 'single'." << std::endl;
                 render_mode = "single";
             }
             else {
@@ -768,7 +768,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
                 std::string n_iter;
                 const char* n_iter_char = xml_camera->Attribute("n_iter");
                 if (n_iter_char == nullptr) {
-                    std::cerr << "Error: XML cameras in accumulation mode should have a 'n_iter' attribute. Using 1." << std::endl;
+                    std::cerr << "Warning: XML cameras in accumulation mode should have a 'n_iter' attribute. Using 1." << std::endl;
                     n_iter = "1";
                 }
                 else {
@@ -789,14 +789,14 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
                 const char* n_iter_char = xml_camera->Attribute("n_iter");
                 const char* write_interval_char = xml_camera->Attribute("write_interval");
                 if (n_iter_char == nullptr) {
-                    std::cerr << "Error: XML cameras in accumulation mode should have a 'n_iter' attribute. Using 1." << std::endl;
+                    std::cerr << "Warning: XML cameras in accumulation mode should have a 'n_iter' attribute. Using 1." << std::endl;
                     n_iter = "1";
                 }
                 else {
                     n_iter = n_iter_char;
                 }
                 if (write_interval_char == nullptr) {
-                    std::cerr << "Error: XML cameras in accumulation_write mode should have a 'write_interval' attribute. Using 1." << std::endl;
+                    std::cerr << "Warning: XML cameras in accumulation_write mode should have a 'write_interval' attribute. Using 1." << std::endl;
                     write_interval = "1";
                 }
                 else {
@@ -825,11 +825,11 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
                 camera_rendermode_[index] = "single";
             }
             else if (render_mode == "motion") {
-                std::cerr << "Error, motion render mode not implemented yet. Single frame render fallback." << std::endl;
+                std::cerr << "Warning: Motion render mode not implemented yet. Single frame render fallback." << std::endl;
                 camera_rendermode_[index] = "single";
             }
             else {
-                std::cerr << "Error, render mode '" << render_mode << "', used by camera #" << index << ", is unknown. Only 'accumulation', 'accumulation_write', 'single', and 'motion' exist for now. Ignoring." << std::endl;
+                std::cerr << "Warning: Render mode '" << render_mode << "', used by camera #" << index << ", is unknown. Only 'accumulation', 'accumulation_write', 'single', and 'motion' exist for now. Ignoring." << std::endl;
                 camera_rendermode_[index] = "";
             }
 
@@ -860,14 +860,14 @@ auto APTracer::Entities::SceneContext_t::render() -> void {
             opengl_renderer_->render_write();
         }
         else if (render_mode == "motion") {
-            std::cerr << "Error, motion render mode not implemented yet. Accumulation render fallback." << std::endl;
+            std::cerr << "Warning: Motion render mode not implemented yet. Accumulation render fallback." << std::endl;
             opengl_renderer_->render();
         }
         else if (render_mode.empty()) {
 
         }
         else {
-            std::cerr << "Error, render mode '" << render_mode << "', used by camera #" << 0 << ", is unknown. Only 'accumulation', 'accumulation_write', 'single', and 'motion' exist for now. Ignoring." << std::endl;
+            std::cerr << "Warning: Render mode '" << render_mode << "', used by camera #" << 0 << ", is unknown. Only 'accumulation', 'accumulation_write', 'single', and 'motion' exist for now. Ignoring." << std::endl;
         }
     }
     else {
@@ -900,7 +900,7 @@ auto APTracer::Entities::SceneContext_t::render() -> void {
                 cameras_[i]->write();
             }
             else if (render_mode == "motion") {
-                std::cerr << "Error, motion render mode not implemented yet. Single frame render fallback." << std::endl;
+                std::cerr << "Warning: Motion render mode not implemented yet. Single frame render fallback." << std::endl;
                 cameras_[i]->raytrace(scene_.get());
                 cameras_[i]->write();
             }
@@ -908,7 +908,7 @@ auto APTracer::Entities::SceneContext_t::render() -> void {
 
             }
             else {
-                std::cerr << "Error, render mode '" << render_mode << "', used by camera #" << i << ", is unknown. Only 'accumulation', 'accumulation_write', 'single', and 'motion' exist for now. Ignoring." << std::endl;
+                std::cerr << "Warning: Render mode '" << render_mode << "', used by camera #" << i << ", is unknown. Only 'accumulation', 'accumulation_write', 'single', and 'motion' exist for now. Ignoring." << std::endl;
             }
         }
     }
@@ -936,7 +936,7 @@ auto APTracer::Entities::SceneContext_t::create_transform_matrix(const tinyxml2:
     std::string string_transform_matrix;
     const char* transform_matrix_char = xml_transform_matrix->Attribute("value");
     if (transform_matrix_char == nullptr) {
-        std::cerr << "Error: XML transform matrices should have a 'value' attribute. Using identity." << std::endl;
+        std::cerr << "Warning: XML transform matrices should have a 'value' attribute. Using identity." << std::endl;
         string_transform_matrix = "nan";
     }
     else {
@@ -960,7 +960,7 @@ auto APTracer::Entities::SceneContext_t::create_transform_matrix(const tinyxml2:
         ++count;
     }
     if (count != 16) {
-        std::cerr << "Error, transform matrix value should be 16 values seperated by spaces, or nan. Current number of values is " << count << ". Ignoring." << std::endl;
+        std::cerr << "Warning: Transform matrix value should be 16 values seperated by spaces, or nan. Current number of values is " << count << ". Using identity." << std::endl;
         return std::unique_ptr<TransformMatrix_t>(new TransformMatrix_t());
     }
     
@@ -972,7 +972,7 @@ auto APTracer::Entities::SceneContext_t::create_texture(const tinyxml2::XMLEleme
     std::string type;
     const char* type_char = xml_texture->Attribute("type");
     if (type_char == nullptr) {
-        std::cerr << "Error: XML textures should have a 'type' attribute. Using 'texture'." << std::endl;
+        std::cerr << "Warning: XML textures should have a 'type' attribute. Using 'texture'." << std::endl;
         type = "texture";
     }
     else {
@@ -999,7 +999,7 @@ auto APTracer::Entities::SceneContext_t::create_texture(const tinyxml2::XMLEleme
         return std::unique_ptr<Texture_t>(new Texture_t(filename));
     }
 
-    std::cerr << "Error, texture type '" << type << "' not implemented. Only 'texture' exists for now. Exiting." << std::endl; 
+    std::cerr << "Error: Texture type '" << type << "' not implemented. Only 'texture' exists for now. Exiting." << std::endl; 
     exit(20);
 }
 
@@ -1007,7 +1007,7 @@ auto APTracer::Entities::SceneContext_t::create_medium(const tinyxml2::XMLElemen
     std::string type;
     const char* type_char = xml_medium->Attribute("type");
     if (type_char == nullptr) {
-        std::cerr << "Error: XML mediums should have a 'type' attribute. Using 'nonabsorber'." << std::endl;
+        std::cerr << "Warning: XML mediums should have a 'type' attribute. Using 'nonabsorber'." << std::endl;
         type = "nonabsorber";
     }
     else {
@@ -1086,7 +1086,7 @@ auto APTracer::Entities::SceneContext_t::create_medium(const tinyxml2::XMLElemen
                                 xml_medium->UnsignedAttribute("priority")));
     }
 
-    std::cerr << "Error, medium type '" << type << "' not implemented. Only 'absorber', 'nonabsorber', 'portal_scatterer', 'scatterer_exp', and 'scatterer' exists for now. Ignoring." << std::endl; 
+    std::cerr << "Warning: Medium type '" << type << "' not implemented. Only 'absorber', 'nonabsorber', 'portal_scatterer', 'scatterer_exp', and 'scatterer' exists for now. Using 'nonabsorber'." << std::endl; 
     return std::unique_ptr<Medium_t>(new APTracer::Materials::NonAbsorber_t(1.0, 0));
 }
 
@@ -1094,7 +1094,7 @@ auto APTracer::Entities::SceneContext_t::create_material(const tinyxml2::XMLElem
     std::string type;
     const char* type_char = xml_material->Attribute("type");
     if (type_char == nullptr) {
-        std::cerr << "Error: XML materials should have a 'type' attribute. Using 'normal_material'." << std::endl;
+        std::cerr << "Warning: XML materials should have a 'type' attribute. Using 'normal_material'." << std::endl;
         type = "normal_material";
     }
     else {
@@ -1186,7 +1186,7 @@ auto APTracer::Entities::SceneContext_t::create_material(const tinyxml2::XMLElem
         return material;
     }
     if (type == "portal_refractive") {
-        std::cerr << "Error, refractive portal not implemented yet. Ignoring." << std::endl; 
+        std::cerr << "Warning: refractive portal not implemented yet. Ussing 'diffuse'." << std::endl; 
         return std::unique_ptr<Material_t>(new APTracer::Materials::Diffuse_t(Vec3f(), Vec3f(0.5), 1.0));
     }
     if (type == "randommix") {
@@ -1307,7 +1307,7 @@ auto APTracer::Entities::SceneContext_t::create_material(const tinyxml2::XMLElem
         // CHECK add aggregates
     }
 
-    std::cerr << "Error, material type '" << type << "' not implemented. Ignoring." << std::endl; 
+    std::cerr << "Warning: Material type '" << type << "' not implemented. Using 'normal_material'." << std::endl; 
     return std::unique_ptr<Material_t>(new APTracer::Materials::NormalMaterial_t());
 }
 
@@ -1315,7 +1315,7 @@ auto APTracer::Entities::SceneContext_t::create_mesh_geometry(const tinyxml2::XM
     std::string type;
     const char* type_char = xml_mesh_geometry->Attribute("type");
     if (type_char == nullptr) {
-        std::cerr << "Error: XML mesh geometries should have a 'type' attribute. Using 'mesh_geometry'." << std::endl;
+        std::cerr << "Warning: XML mesh geometries should have a 'type' attribute. Using 'mesh_geometry'." << std::endl;
         type = "mesh_geometry";
     }
     else {
@@ -1342,7 +1342,7 @@ auto APTracer::Entities::SceneContext_t::create_mesh_geometry(const tinyxml2::XM
         return std::unique_ptr<MeshGeometry_t>(new MeshGeometry_t(filename));
     }
 
-    std::cerr << "Error, mesh geometry type '" << type << "' not implemented. Only 'mesh_geometry' exists for now. Exiting." << std::endl; 
+    std::cerr << "Error: Mesh geometry type '" << type << "' not implemented. Only 'mesh_geometry' exists for now. Exiting." << std::endl; 
     exit(50);
 }
 
@@ -1350,7 +1350,7 @@ auto APTracer::Entities::SceneContext_t::create_object(const tinyxml2::XMLElemen
     std::string type;
     const char* type_char = xml_object->Attribute("type");
     if (type_char == nullptr) {
-        std::cerr << "Error: XML objects should have a 'type' attribute. Using 'sphere'." << std::endl;
+        std::cerr << "Warning: XML objects should have a 'type' attribute. Using 'sphere'." << std::endl;
         type = "sphere";
     }
     else {
@@ -1407,7 +1407,7 @@ auto APTracer::Entities::SceneContext_t::create_object(const tinyxml2::XMLElemen
         std::array<Vec3f, 3> points;
 
         if (points_vec.empty()) {
-            std::cerr << "Error, triangle points should not be empty. Exiting." << std::endl;
+            std::cerr << "Error: Triangle points should not be empty. Exiting." << std::endl;
             exit(69);
         }
 
@@ -1430,7 +1430,7 @@ auto APTracer::Entities::SceneContext_t::create_object(const tinyxml2::XMLElemen
         std::array<Vec3f, 3> points;
 
         if (points_vec.empty()) {
-            std::cerr << "Error, triangle points should not be empty. Exiting." << std::endl;
+            std::cerr << "Error: Triangle points should not be empty. Exiting." << std::endl;
             exit(69);
         }
 
@@ -1457,7 +1457,7 @@ auto APTracer::Entities::SceneContext_t::create_object(const tinyxml2::XMLElemen
                     new TriangleMeshMotionblur_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries), xml_object->UnsignedAttribute("index")));
     }
     
-    std::cerr << "Error, object type '" << type << "' not implemented. Exiting." << std::endl; 
+    std::cerr << "Error: Object type '" << type << "' not implemented. Exiting." << std::endl; 
     exit(60);
 }
 
@@ -1465,7 +1465,7 @@ auto APTracer::Entities::SceneContext_t::create_directional_light(const tinyxml2
     std::string type;
     const char* type_char = xml_directional_light->Attribute("type");
     if (type_char == nullptr) {
-        std::cerr << "Error: XML directional lights should have a 'type' attribute. Using 'directional_light'." << std::endl;
+        std::cerr << "Warning: XML directional lights should have a 'type' attribute. Using 'directional_light'." << std::endl;
         type = "directional_light";
     }
     else {
@@ -1480,7 +1480,7 @@ auto APTracer::Entities::SceneContext_t::create_directional_light(const tinyxml2
                     new DirectionalLight_t(APTracer::get_colour(xml_directional_light->Attribute("colour")), get_transform_matrix(xml_directional_light->Attribute("transform_matrix"), xml_transform_matrices)));
     }
 
-    std::cerr << "Error, directional light type '" << type << "' not implemented. Only 'directional_light' exists for now. Exiting." << std::endl; 
+    std::cerr << "Error: Directional light type '" << type << "' not implemented. Only 'directional_light' exists for now. Exiting." << std::endl; 
     exit(70);
 }
 
@@ -1488,7 +1488,7 @@ auto APTracer::Entities::SceneContext_t::create_skybox(const tinyxml2::XMLElemen
     std::string type;
     const char* type_char = xml_skybox->Attribute("type");
     if (type_char == nullptr) {
-        std::cerr << "Error: XML skyboxes should have a 'type' attribute. Using 'skybox_flat'." << std::endl;
+        std::cerr << "Warning: XML skyboxes should have a 'type' attribute. Using 'skybox_flat'." << std::endl;
         type = "skybox_flat";
     }
     else {
@@ -1538,7 +1538,7 @@ auto APTracer::Entities::SceneContext_t::create_skybox(const tinyxml2::XMLElemen
                     new APTracer::Skyboxes::SkyboxTextureTransformationSun_t(get_texture(xml_skybox->Attribute("texture"), xml_textures), get_transform_matrix(xml_skybox->Attribute("transform_matrix"), xml_transform_matrices), get_xy<double>(xml_skybox->Attribute("light_position")), APTracer::get_colour(xml_skybox->Attribute("light_colour")), xml_skybox->DoubleAttribute("light_radius")));
     }
 
-    std::cerr << "Error, skybox type '" << type << "' not implemented. Ignoring." << std::endl; 
+    std::cerr << "Warning: Skybox type '" << type << "' not implemented. Using 'skybox_flat'." << std::endl; 
     return std::unique_ptr<Skybox_t>(new APTracer::Skyboxes::SkyboxFlat_t(Vec3f(0.5)));
 }
 
@@ -1568,7 +1568,7 @@ auto APTracer::Entities::SceneContext_t::create_imgbuffer(const tinyxml2::XMLEle
         return std::unique_ptr<ImgBuffer_t>(opengl_imgbuffer_);
     }
 
-    std::cerr << "Error, imgbuffer type '" << type << "' not implemented. Only 'imgbuffer', and 'imgbuffer_opengl' exist for now. Ignoring." << std::endl; 
+    std::cerr << "Warning: Imgbuffer type '" << type << "' not implemented. Only 'imgbuffer', and 'imgbuffer_opengl' exist for now. Using 'imgbuffer'." << std::endl; 
     return std::unique_ptr<ImgBuffer_t>(new ImgBuffer_t(300, 200));
 }
 
@@ -1576,7 +1576,7 @@ auto APTracer::Entities::SceneContext_t::create_camera(const tinyxml2::XMLElemen
     std::string type;
     const char* type_char = xml_camera->Attribute("type");
     if (type_char == nullptr) {
-        std::cerr << "Error: XML cameras should have a 'type' attribute. Using 'cam'." << std::endl;
+        std::cerr << "Warning: XML cameras should have a 'type' attribute. Using 'cam'." << std::endl;
         type = "cam";
     }
     else {
@@ -1789,7 +1789,7 @@ auto APTracer::Entities::SceneContext_t::create_camera(const tinyxml2::XMLElemen
                             get_xy<double>(xml_camera->Attribute("time")), xml_camera->DoubleAttribute("gammaind")));
     }
 
-    std::cerr << "Error, camera type '" << type << "' not implemented. Exiting." << std::endl; 
+    std::cerr << "Error: Camera type '" << type << "' not implemented. Exiting." << std::endl; 
     exit(100);
 }
 
@@ -1803,7 +1803,7 @@ auto APTracer::Entities::SceneContext_t::create_acceleration_structure(const tin
     std::string type;
     const char* type_char = xml_acceleration_structure->Attribute("type");
     if (type_char == nullptr) {
-        std::cerr << "Error: XML acceleration structures should have a 'type' attribute. Using 'multi_grid_vector'." << std::endl;
+        std::cerr << "Warning: XML acceleration structures should have a 'type' attribute. Using 'multi_grid_vector'." << std::endl;
         type = "multi_grid_vector";
     }
     else {
@@ -1836,7 +1836,7 @@ auto APTracer::Entities::SceneContext_t::create_acceleration_structure(const tin
                         new APTracer::Acceleration::AccelerationMultiGridVector_t(scene_->geometry_.data(), scene_->geometry_.size(), xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128), xml_acceleration_structure->UnsignedAttribute("max_cell_content", 32), xml_acceleration_structure->UnsignedAttribute("max_grid_level", 1)));
     }
     else {
-        std::cerr << "Error, acceleration structure type '" << type << "' not implemented. Using 'multi_grid_vector'." << std::endl; 
+        std::cerr << "Warning: Acceleration structure type '" << type << "' not implemented. Using 'multi_grid_vector'." << std::endl; 
         scene_->acc_ = std::unique_ptr<APTracer::Entities::AccelerationStructure_t>(
                         new APTracer::Acceleration::AccelerationMultiGridVector_t(scene_->geometry_.data(), scene_->geometry_.size(), 1, 128, 32, 1));
     }
@@ -1868,7 +1868,7 @@ auto APTracer::Entities::SceneContext_t::get_transform_matrix(std::string transf
         }
     }
 
-    std::cerr << "Error, transformation matrix '" << transform_matrix << "' not found. Ignoring. This causes a memory leak." << std::endl;
+    std::cerr << "Warning: Transformation matrix '" << transform_matrix << "' not found. Using identity. This causes a memory leak." << std::endl;
     return new TransformMatrix_t();
 }
 
@@ -1903,12 +1903,12 @@ auto APTracer::Entities::SceneContext_t::get_material_index_list(std::string str
                     ++index;
                 }
                 if (missing) {
-                    std::cerr << "Error: material '" << token << "' not found, exiting." << std::endl;
+                    std::cerr << "Error: Material '" << token << "' not found. Exiting." << std::endl;
                     exit(498);
                 }
             }
             else {
-                std::cerr << "Error: no materials, material '" << token << "' not found, exiting." << std::endl;
+                std::cerr << "Error: No materials, material '" << token << "' not found. Exiting." << std::endl;
                 exit(499);
             }
         }
@@ -1938,12 +1938,12 @@ auto APTracer::Entities::SceneContext_t::get_material_index_list(std::string str
                 ++index;
             }
             if (missing) {
-                std::cerr << "Error: material '" << string_material_list << "' not found, exiting." << std::endl;
+                std::cerr << "Error: Material '" << string_material_list << "' not found. Exiting." << std::endl;
                 exit(498);
             }
         }
         else {
-            std::cerr << "Error: no materials, material '" << string_material_list << "' not found, exiting." << std::endl;
+            std::cerr << "Error: No materials, material '" << string_material_list << "' not found. Exiting." << std::endl;
             exit(499);
         }
     }
@@ -1981,12 +1981,12 @@ auto APTracer::Entities::SceneContext_t::get_medium_index_list(std::string strin
                     ++index;
                 }
                 if (missing) {
-                    std::cerr << "Error: medium '" << token << "' not found, exiting." << std::endl;
+                    std::cerr << "Error: Medium '" << token << "' not found. Exiting." << std::endl;
                     exit(498);
                 }
             }
             else {
-                std::cerr << "Error: no mediums, medium '" << token << "' not found, exiting." << std::endl;
+                std::cerr << "Error: No mediums, medium '" << token << "' not found. Exiting." << std::endl;
                 exit(499);
             }
         }
@@ -2016,12 +2016,12 @@ auto APTracer::Entities::SceneContext_t::get_medium_index_list(std::string strin
                 ++index;
             }
             if (missing) {
-                std::cerr << "Error: medium '" << string_medium_list << "' not found, exiting." << std::endl;
+                std::cerr << "Error: Medium '" << string_medium_list << "' not found. Exiting." << std::endl;
                 exit(498);
             }
         }
         else {
-            std::cerr << "Error: no mediums, medium '" << string_medium_list << "' not found, exiting." << std::endl;
+            std::cerr << "Error: No mediums, medium '" << string_medium_list << "' not found. Exiting." << std::endl;
             exit(499);
         }
     }
@@ -2059,12 +2059,12 @@ auto APTracer::Entities::SceneContext_t::get_medium_list(std::string string_medi
                     ++index;
                 }
                 if (missing) {
-                    std::cerr << "Error: medium '" << token << "' not found, exiting." << std::endl;
+                    std::cerr << "Error: Medium '" << token << "' not found. Exiting." << std::endl;
                     exit(496);
                 }
             }
             else {
-                std::cerr << "Error: no mediums, medium '" << token << "' not found, exiting." << std::endl;
+                std::cerr << "Error: No mediums, medium '" << token << "' not found. Exiting." << std::endl;
                 exit(497);
             }
         }
@@ -2094,12 +2094,12 @@ auto APTracer::Entities::SceneContext_t::get_medium_list(std::string string_medi
                 ++index;
             }
             if (missing) {
-                std::cerr << "Error: medium '" << string_medium_list << "' not found, exiting." << std::endl;
+                std::cerr << "Error: Medium '" << string_medium_list << "' not found. Exiting." << std::endl;
                 exit(496);
             }
         }
         else {
-            std::cerr << "Error: no mediums, medium '" << string_medium_list << "' not found, exiting." << std::endl;
+            std::cerr << "Error: No mediums, medium '" << string_medium_list << "' not found. Exiting." << std::endl;
             exit(497);
         }
     }
@@ -2127,7 +2127,7 @@ auto APTracer::Entities::SceneContext_t::get_texture(std::string texture, const 
         }
     }
     
-    std::cerr << "Error, texture '" << texture << "' not found. Exiting." << std::endl;
+    std::cerr << "Error. Texture '" << texture << "' not found. Exiting." << std::endl;
     exit(21); 
 }
 
@@ -2156,12 +2156,12 @@ auto APTracer::Entities::SceneContext_t::get_material_mix(std::string material_r
                 ++index;
             }
             if (material_missing) {
-                std::cerr << "Error, material '" << material_refracted << "' not found. Exiting." << std::endl;
+                std::cerr << "Error: Material '" << material_refracted << "' not found. Exiting." << std::endl;
                 exit(41); 
             }
         }
         else {
-            std::cerr << "Error, no materials, '" << material_refracted << "' not found. Exiting." << std::endl;
+            std::cerr << "Error: No materials, '" << material_refracted << "' not found. Exiting." << std::endl;
             exit(47);
         }        
     }
@@ -2188,12 +2188,12 @@ auto APTracer::Entities::SceneContext_t::get_material_mix(std::string material_r
                 ++index;
             }
             if (material_missing) {
-                std::cerr << "Error, material '" << material_reflected << "' not found. Exiting." << std::endl;
+                std::cerr << "Error: Material '" << material_reflected << "' not found. Exiting." << std::endl;
                 exit(41); 
             }
         }
         else {
-            std::cerr << "Error, no materials, '" << material_reflected << "' not found. Exiting." << std::endl;
+            std::cerr << "Error: No materials, '" << material_reflected << "' not found. Exiting." << std::endl;
             exit(47);
         }        
     }
@@ -2222,7 +2222,7 @@ auto APTracer::Entities::SceneContext_t::get_medium(std::string medium, const ti
         }
     }
     
-    std::cerr << "Error, medium '" << medium << "' not found. Ignoring. This Causes a memory leak." << std::endl;
+    std::cerr << "Warning: Medium '" << medium << "' not found. Using 'nonabsorber'. This Causes a memory leak." << std::endl;
     return new APTracer::Materials::NonAbsorber_t(1.0, 0);
 }
 
@@ -2247,7 +2247,7 @@ auto APTracer::Entities::SceneContext_t::get_mesh_geometry(std::string mesh_geom
         }
     }
     
-    std::cerr << "Error, mesh geometry '" << mesh_geometry << "' not found. Exiting." << std::endl;
+    std::cerr << "Error: Mesh geometry '" << mesh_geometry << "' not found. Exiting." << std::endl;
     exit(51);
 }
 
@@ -2272,7 +2272,7 @@ auto APTracer::Entities::SceneContext_t::get_material_index(std::string material
         }
     }
 
-    std::cerr << "Error, material '" << material << "' not found. Exiting." << std::endl;
+    std::cerr << "Error: Material '" << material << "' not found. Exiting." << std::endl;
     exit(41);
 }
 
@@ -2297,7 +2297,7 @@ auto APTracer::Entities::SceneContext_t::get_material(std::string material, cons
         }
     }
     
-    std::cerr << "Error, material '" << material << "' not found. Exiting." << std::endl;
+    std::cerr << "Error: Material '" << material << "' not found. Exiting." << std::endl;
     exit(41);
 }
 
@@ -2332,11 +2332,11 @@ auto APTracer::Entities::SceneContext_t::get_lights(std::string lights_string, c
                     ++index;
                 }
                 if (missing) {
-                    std::cerr << "Error: light '" << token << "' not found, ignoring." << std::endl;
+                    std::cerr << "Warning: Light '" << token << "' not found. Ignoring." << std::endl;
                 }
             }
             else {
-                std::cerr << "Error: no directional lights, light '" << token << "' not found, ignoring." << std::endl;
+                std::cerr << "Warning: No directional lights, light '" << token << "' not found. Ignoring." << std::endl;
             }            
         }
         // CHECK this should check for errors.
@@ -2365,11 +2365,11 @@ auto APTracer::Entities::SceneContext_t::get_lights(std::string lights_string, c
                 ++index;
             }
             if (missing) {
-                std::cerr << "Error: light '" << lights_string << "' not found, ignoring." << std::endl;
+                std::cerr << "Warning: Light '" << lights_string << "' not found. Ignoring." << std::endl;
             }
         }
         else {
-            std::cerr << "Error: no directional lights, light '" << lights_string << "' not found, ignoring." << std::endl;
+            std::cerr << "Warning: No directional lights, light '" << lights_string << "' not found. Ignoring." << std::endl;
         }
     }
 
@@ -2405,7 +2405,7 @@ auto APTracer::Entities::SceneContext_t::get_imgbuffer(std::string imgbuffer, co
         }
     }
 
-    std::cerr << "Error, image buffer '" << imgbuffer << "' not found. Exiting." << std::endl;
+    std::cerr << "Error: Image buffer '" << imgbuffer << "' not found. Exiting." << std::endl;
     exit(91); 
 }
 
@@ -2430,7 +2430,7 @@ auto APTracer::Entities::SceneContext_t::get_skybox(std::string skybox, const ti
         }
     }
 
-    std::cerr << "Error, skybox '" << skybox << "' not found. Exiting." << std::endl;
+    std::cerr << "Error: Skybox '" << skybox << "' not found. Exiting." << std::endl;
     exit(81); 
 }
 
@@ -2467,11 +2467,11 @@ auto APTracer::Entities::SceneContext_t::get_objects(std::string objects_string,
                     ++index;
                 }
                 if (missing) {
-                    std::cerr << "Error: object '" << token << "' not found, ignoring." << std::endl;
+                    std::cerr << "Warning: Object '" << token << "' not found. Ignoring." << std::endl;
                 }
             }
             else {
-                std::cerr << "Error: no objects, object '" << token << "' not found, ignoring." << std::endl;
+                std::cerr << "Warning: No objects, object '" << token << "' not found. Ignoring." << std::endl;
             }
         }
         // CHECK this should check for errors.
@@ -2500,11 +2500,11 @@ auto APTracer::Entities::SceneContext_t::get_objects(std::string objects_string,
                 ++index;
             }
             if (missing) {
-                std::cerr << "Error: object '" << objects_string << "' not found, ignoring." << std::endl;
+                std::cerr << "Warning: Object '" << objects_string << "' not found. Ignoring." << std::endl;
             }
         }
         else {
-            std::cerr << "Error: no objects, object '" << objects_string << "' not found, ignoring." << std::endl;
+            std::cerr << "Warning: No objects, object '" << objects_string << "' not found. Ignoring." << std::endl;
         }
     }
 
@@ -2587,7 +2587,7 @@ auto APTracer::get_colour(std::string colour) -> Vec3f {
         return Vec3f(values[0]);
     }
     if (count != 3) {
-        std::cerr << "Error, colour should be 1 or 3 values seperated by spaces, or a string. Current number of values is " << count << ", colour is '" << colour << "'. Ignoring." << std::endl;
+        std::cerr << "Warning: Colour should be 1 or 3 values seperated by spaces, or a string. Current number of values is " << count << ", colour is '" << colour << "'. Using '0.5'." << std::endl;
         return Vec3f(0.5);
     }
 
@@ -2611,7 +2611,7 @@ auto APTracer::get_points(std::string points_string) -> std::vector<Vec3f> {
             ++count;
         }
         if (count != 9) {
-            std::cerr << "Error, triangle points should be 9 values seperated by spaces, or nan. Current number of values is " << count << ". Exiting." << std::endl;
+            std::cerr << "Error: Triangle points should be 9 values seperated by spaces, or nan. Current number of values is " << count << ", points are '" << points_string << "'. Exiting." << std::endl;
             exit(67);
         }
         else {
@@ -2647,7 +2647,7 @@ auto APTracer::get_texture_coordinates(std::string texture_coordinates_string) -
             ++count;
         }
         if (count != 6) {
-            std::cerr << "Error, triangle texture coordinates should be 6 values seperated by spaces, or nan. Current number of values is " << count << ". Exiting." << std::endl;
+            std::cerr << "Error: Triangle texture coordinates should be 6 values seperated by spaces, or nan. Current number of values is " << count << ", texture coordinates are '" << texture_coordinates_string << "'­. Exiting." << std::endl;
             exit(68);
         }
     }
@@ -2678,7 +2678,7 @@ auto APTracer::apply_transformation(TransformMatrix_t* transform_matrix, const t
     std::string type;
     const char* type_char = transform->Attribute("type");
     if (type_char == nullptr) {
-        std::cerr << "Error: XML transforms should have a 'type' attribute. Ignoring." << std::endl;
+        std::cerr << "Warning: XML transforms should have a 'type' attribute. Ignoring." << std::endl;
         return;
     }
 
@@ -2770,7 +2770,7 @@ auto APTracer::apply_transformation(TransformMatrix_t* transform_matrix, const t
         transform_matrix->neg();
     }
     else {
-        std::cerr << "Error, transform type '" << type << "' not implemented. Ignoring." << std::endl; 
+        std::cerr << "Warning: Transform type '" << type << "' not implemented. Ignoring." << std::endl; 
     }
 }
 
@@ -2786,13 +2786,14 @@ auto APTracer::require_attributes(const tinyxml2::XMLElement* element, const std
                 const char* type_type = element->Attribute("type");
                 std::string name = (name_char == nullptr) ? "" : name_char;
                 std::string type = (type_type == nullptr) ? "" : type_type;
-                std::cerr << "Error, " << element->Name() << " XML element with name '" << name << "' and type '" << type << "' has the following attributes missing:" << std::endl;
+                std::cerr << "Error: " << element->Name() << " XML element with name '" << name << "' and type '" << type << "' has the following attributes missing:" << std::endl;
             }
-            std::cout << '\t' << attribute << std::endl;
+            std::cerr << '\t' << attribute << std::endl;
         }        
     }
 
     if (missing) {
+        std::cerr << "Exiting." << std::endl;
         exit(2); 
     }
 }

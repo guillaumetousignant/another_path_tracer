@@ -468,14 +468,14 @@ namespace APTracer {
 
         for (unsigned int i = 0; i < 2; ++i) {
             if (ss.rdbuf()->in_avail() == 0) {
-                std::cerr << "Error, xy should be 2 values seperated by spaces. Current number of values is " << i << ", string is '" << string_value << "'. Exiting." << std::endl;
+                std::cerr << "Error: xy should be 2 values seperated by spaces. Current number of values is " << i << ", string is '" << string_value << "'. Exiting." << std::endl;
                 exit(3);
             }
             ss >> value[i];
         }
 
         if (ss.rdbuf()->in_avail() != 0) {
-            std::cerr << "Error, xy should be 2 values seperated by spaces. String not empty after two values, string is '" << string_value << "'. Ignoring." << std::endl;
+            std::cerr << "Warning: xy should be 2 values seperated by spaces. String not empty after two values, string is '" << string_value << "'. Ignoring." << std::endl;
         }
 
         return value;
