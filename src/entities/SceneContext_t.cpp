@@ -2788,7 +2788,7 @@ auto APTracer::require_attributes(const tinyxml2::XMLElement* element, const std
                 std::string type = (type_type == nullptr) ? "" : type_type;
                 std::cerr << "Error, " << element->Name() << " XML element with name '" << name << "' and type '" << type << "' has the following attributes missing:" << std::endl;
             }
-            std::cout << attribute << std::endl;
+            std::cout << '\t' << attribute << std::endl;
         }        
     }
 
