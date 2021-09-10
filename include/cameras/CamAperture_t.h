@@ -57,6 +57,7 @@ namespace APTracer { namespace Cameras {
              * @param gammaind Gamma of the saved picture. A value of 1 should be used for usual cases.
              */
             CamAperture_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, std::array<double, 2> fov, std::array<unsigned int, 2> subpix, ImgBuffer_t* image, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double focal_length, double aperture, double gammaind);
+            
             ImgBuffer_t* image_; /**< @brief Image buffer into which the image is stored.*/
             std::uniform_real_distribution<double> unif_; /**< @brief Uniform random distribution used for generating random numbers.*/
             double focal_length_; /**< @brief Distance of the focal plane to the camera origin. Objects away from that distance will be out of focus. The focal plane has the shape of a sphere with this radius.*/
@@ -115,7 +116,7 @@ namespace APTracer { namespace Cameras {
              * 
              * @param file_name Filename used to write the images.
              */
-            virtual auto  write(const std::string& file_name) -> void final;
+            virtual auto write(const std::string& file_name) -> void final;
 
             /**
              * @brief Writes the image buffer to disk with the camera's filename.

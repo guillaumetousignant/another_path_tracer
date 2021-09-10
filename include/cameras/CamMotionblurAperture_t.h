@@ -128,7 +128,7 @@ namespace APTracer { namespace Cameras {
              * 
              * @param file_name Filename used to write the images.
              */
-            virtual auto  write(const std::string& file_name) -> void final;
+            virtual auto write(const std::string& file_name) -> void final;
 
             /**
              * @brief Writes the image buffer to disk with the camera's filename.

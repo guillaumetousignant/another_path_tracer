@@ -1,5 +1,5 @@
-#ifndef APTRACER_RECCAMAPERTURE_T_H
-#define APTRACER_RECCAMAPERTURE_T_H
+#ifndef APTRACER_FISHCAMAPERTURE_T_H
+#define APTRACER_FISHCAMAPERTURE_T_H
 
 #include "entities/Camera_t.h"
 #include "entities/Vec3f.h"
@@ -26,22 +26,24 @@ using APTracer::Entities::ImgBuffer_t;
 namespace APTracer { namespace Cameras {
 
     /**
-     * @brief The rec cam aperture class describes a camera that uses a rectangular projection and has an aperture, for depth of field.
+     * @brief The fish cam aperture class describes a fisheye camera that uses an equidistant projection and has an aperture, for depth of field.
      * 
-     * It uses a rectangular projection, where rays are equally spaced on a 2D grid
-     * ahead of the camera. This is the traditional camera projection used for rasterisation.
-     * It introduces distorsion at higher fields of views, and caps at 180°.
+     * It uses an equidistant projection [theta, phi], where the distance from the center on the 
+     * image plane is directly proportional to the zenith angle, between the ray and the center 
+     * of the lens. This enables extreme field of views, at the cost of straight lines being
+     * distorted if they don't go through the center of the image. Angles are not distorted
+     * as with rectangular projections.
      * This camera creates rays on a disk to simulate the aperture of a real camera for depth of field.
      * It has a focal length, so all objects at that distance will be in the focal plane,
-     * and other objects will be out of focus. The shape of the focal plane is a plane
-     * at focal_length_ from the origin.
+     * and other objects will be out of focus. The shape of the focal plane is a sphere
+     * of focal_length_ radius centered on the origin.
      * This camera stores the result from its rays in a single image buffer, and has no
      * motion blur.
      */
-    class RecCamAperture_t  final: public Camera_t {
+    class FishCamAperture_t  final: public Camera_t {
         public:
             /**
-             * @brief Construct a new RecCamAperture_t object. Most arguments are passed to the Camera_t constructor.
+             * @brief Construct a new FishCamAperture_t object. Most arguments are passed to the Camera_t constructor.
              * 
              * @param transformation Transformation matrix used by the camera. Sets the camera's origin and direction when created and updated.
              * @param filename Filename used by the camera when saving an image.
@@ -56,11 +58,11 @@ namespace APTracer { namespace Cameras {
              * @param aperture Radius of the disk on which rays are created around the origin. Higher values will cause stronger depth of field, objects out of focus will be blurrier.
              * @param gammaind Gamma of the saved picture. A value of 1 should be used for usual cases.
              */
-            RecCamAperture_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, std::array<double, 2> fov, std::array<unsigned int, 2> subpix, ImgBuffer_t* image, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double focal_length, double aperture, double gammaind);
+            FishCamAperture_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, std::array<double, 2> fov, std::array<unsigned int, 2> subpix, ImgBuffer_t* image, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double focal_length, double aperture, double gammaind);
             
             ImgBuffer_t* image_; /**< @brief Image buffer into which the image is stored.*/
             std::uniform_real_distribution<double> unif_; /**< @brief Uniform random distribution used for generating random numbers.*/
-            double focal_length_; /**< @brief Distance of the focal plane to the camera origin. Objects away from that distance will be out of focus. The focal plane has the shape of a plane at this distance from the camera.*/
+            double focal_length_; /**< @brief Distance of the focal plane to the camera origin. Objects away from that distance will be out of focus. The focal plane has the shape of a sphere with this radius.*/
             double aperture_; /**< @brief Radius of the disk on which rays are created around the origin. Higher values will cause stronger depth of field, objects out of focus will be blurrier.*/
             double focal_length_buffer_; /**< @brief Focal length to be modified between updates. Its value is given to the real focal length on update.*/
 
@@ -76,7 +78,7 @@ namespace APTracer { namespace Cameras {
             /**
              * @brief Sends rays through the scene, to generate an image.
              * 
-             * The camera will generate rays according to a rectangular projection, and cast them through the provided scene. 
+             * The camera will generate rays according to an equidistant projection, and cast them through the provided scene. 
              * The resulting colour is written to the image buffer. This will generate one image. Rays are created
              * on a disk to simulate an aperture and depth of field.
              * 
@@ -89,7 +91,7 @@ namespace APTracer { namespace Cameras {
              * 
              * The focal length will be changed on next update along with other members.
              * All objects at that distance will be in the focal plane, and other objects will be out of focus.
-             * The focal plane has the shape of a plane at this distance from the camera.
+             * The focal plane has the shape of a sphere with this radius.
              * 
              * @param focus_distance New focal length of the camera.
              */

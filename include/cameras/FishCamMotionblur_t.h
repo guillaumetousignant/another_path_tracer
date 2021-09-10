@@ -1,5 +1,5 @@
-#ifndef APTRACER_ISOCAMMOTIONBLUR_T_H
-#define APTRACER_ISOCAMMOTIONBLUR_T_H
+#ifndef APTRACER_FISHCAMMOTIONBLUR_T_H
+#define APTRACER_FISHCAMMOTIONBLUR_T_H
 
 #include "entities/Camera_t.h"
 #include "entities/Vec3f.h"
@@ -26,11 +26,13 @@ using APTracer::Entities::ImgBuffer_t;
 namespace APTracer { namespace Cameras {
 
     /**
-     * @brief The iso cam motionblur class describes a camera that uses an isometric projection and a shutter, for motion blur.
+     * @brief The fish cam motionblur class describes a fisheye camera that uses an equidistant projection and a shutter, for motion blur.
      * 
-     * It uses an isometric projection, where rays have the same direction and are equally spaced 
-     * on a plane for their origin. This removes perspective from the image. As such, its field
-     * of view is not an angle, but a width and a height.
+     * It uses an equidistant projection [theta, phi], where the distance from the center on the 
+     * image plane is directly proportional to the zenith angle, between the ray and the center 
+     * of the lens. This enables extreme field of views, at the cost of straight lines being
+     * distorted if they don't go through the center of the image. Angles are not distorted
+     * as with rectangular projections.
      * This camera creates rays with a random time between the last state and current 
      * state of the scene. This enables motion blur, as objects can use this to interpolate
      * their state at the ray's time. The rays are also created with the interpolated 
@@ -38,15 +40,15 @@ namespace APTracer { namespace Cameras {
      * This camera stores the result from its rays in a single image buffer, and has no
      * aperture.
      */
-    class IsoCamMotionblur_t final : public Camera_t {
+    class FishCamMotionblur_t  final: public Camera_t {
         public:
             /**
-             * @brief Construct a new IsoCamMotionblur_t object. Most arguments are passed to the Camera_t constructor.
+             * @brief Construct a new FishCamMotionblur_t object. Most arguments are passed to the Camera_t constructor.
              * 
              * @param transformation Transformation matrix used by the camera. Sets the camera's origin and direction when created and updated.
              * @param filename Filename used by the camera when saving an image.
              * @param up Vector pointing up. Used to set the roll of the camera.
-             * @param fov Array containing field of view of camera in meters [vertical, horizontal].
+             * @param fov Array containing field of view of camera in radians [vertical, horizontal].
              * @param subpix Array containing the number of subpixels per pixel, [vertical, horizontal], for antialiasing purposes. Usually [1, 1].
              * @param image Image buffer into which the resulting image will be stored.
              * @param medium_list Initial list of materials in which the camera is placed. Should have at least two copies of an "outside" medium not assigned to any object (issue #25).
@@ -55,7 +57,7 @@ namespace APTracer { namespace Cameras {
              * @param time Opening and closing time of the shutter. [open, close], from 0 to 1, where 0 is last state and current state. Rays are created at a time in this interval. Enables motion blur.
              * @param gammaind Gamma of the saved picture. A value of 1 should be used for usual cases.
              */
-            IsoCamMotionblur_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, std::array<double, 2> fov, std::array<unsigned int, 2> subpix, ImgBuffer_t* image, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, std::array<double, 2> time, double gammaind);
+            FishCamMotionblur_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, std::array<double, 2> fov, std::array<unsigned int, 2> subpix, ImgBuffer_t* image, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, std::array<double, 2> time, double gammaind);
             
             ImgBuffer_t* image_; /**< @brief Image buffer into which the image is stored.*/
             std::uniform_real_distribution<double> unif_; /**< @brief Uniform random distribution used for generating random numbers.*/
@@ -76,7 +78,7 @@ namespace APTracer { namespace Cameras {
             /**
              * @brief Sends rays through the scene, to generate an image.
              * 
-             * The camera will generate rays according to an isometric projection, and cast them through the provided scene. 
+             * The camera will generate rays according to an equidistant projection, and cast them through the provided scene. 
              * The resulting colour is written to the image buffer. This will generate one image. Rays are created with a 
              * time inside the time_ interval, to simulate a shutter and enable motion blur.
              * 

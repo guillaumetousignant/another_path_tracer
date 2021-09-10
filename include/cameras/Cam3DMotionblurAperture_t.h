@@ -117,7 +117,7 @@ namespace APTracer { namespace Cameras {
              * 
              * @param file_name Filename used to write the 3D image and the left and right images will have _L and _R suffixes.
              */
-            virtual auto  write(const std::string& file_name) -> void final;
+            virtual auto write(const std::string& file_name) -> void final;
 
             /**
              * @brief Writes the image buffer and the left and right eye images to disk with the camera's filename.
