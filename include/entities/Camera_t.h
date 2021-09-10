@@ -125,7 +125,7 @@ namespace APTracer { namespace Entities {
             auto accumulateWrite(const Scene_t* scene) -> void;
 
             /**
-             * @brief Sets the focal length of the camera to a specific distance.
+             * @brief Sets the focus distance of the camera to a specific distance.
              * 
              * This is used to set the focal plane distance of the camera to a given value. Defaults to doing nothing, as cameras use the pinhole model by default, where everything is in focus.
              * The focal plane's shape will vary based on the projection used.
@@ -135,9 +135,9 @@ namespace APTracer { namespace Entities {
             virtual auto focus(double focus_distance) -> void {};
 
             /**
-             * @brief Sets the focal length of the camera to put an object in focus.
+             * @brief Sets the focus distance of the camera to put an object in focus.
              * 
-             * The scene will be intersected at a specific position of the frame, and the hit distance returned will be used to set the focal length. This effectively puts that object in focus.
+             * The scene will be intersected at a specific position of the frame, and the hit distance returned will be used to set the focus distance. This effectively puts that object in focus.
              * defaults to doing nothing, as cameras use the pinhole model by default, where everything is in focus. Will also intersect invisible objects, and won't propagate through mirrors and such.
              * The focal plane's shape will vary based on the projection used.
              * 

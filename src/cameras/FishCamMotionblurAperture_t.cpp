@@ -19,20 +19,20 @@ using APTracer::Entities::Medium_t;
 using APTracer::Entities::Skybox_t;
 using APTracer::Entities::Scene_t;
 
-FishCamMotionblurAperture_t::FishCamMotionblurAperture_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, std::array<double, 2> fov, std::array<unsigned int, 2> subpix, ImgBuffer_t* image, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double focal_length, double aperture, std::array<double, 2> time, double gammaind) 
+FishCamMotionblurAperture_t::FishCamMotionblurAperture_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, std::array<double, 2> fov, std::array<unsigned int, 2> subpix, ImgBuffer_t* image, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double focus_distance, double aperture, std::array<double, 2> time, double gammaind) 
     : Camera_t(transformation, filename, up, fov, subpix, std::move(medium_list), skybox, max_bounces, gammaind), 
     image_(image), unif_(0.0, 1.0), direction_last_(direction_), origin_last_(origin_), time_{time}, up_last_(up_),
-    focal_length_(focal_length), focal_length_last_(focal_length), aperture_(aperture), focal_length_buffer_(focal_length) {}
+    focus_distance_(focus_distance), focus_distance_last_(focus_distance), aperture_(aperture), focus_distance_buffer_(focus_distance) {}
 
 auto FishCamMotionblurAperture_t::update() -> void {
     origin_last_ = origin_;
     direction_last_ = direction_;
     up_last_ = up_;
-    focal_length_last_ = focal_length_;
+    focus_distance_last_ = focus_distance_;
 
     origin_ = transformation_->multVec(Vec3f());
     direction_ = transformation_->multDir(Vec3f(0.0, 1.0, 0.0));
-    focal_length_ = focal_length_buffer_;
+    focus_distance_ = focus_distance_buffer_;
     up_ = up_buffer_;
 }
 
@@ -73,7 +73,7 @@ auto FishCamMotionblurAperture_t::raytrace(const Scene_t* scene) -> void {
             const double jitter_y = unif_(APTracer::Entities::rng());
             const double jitter_x = unif_(APTracer::Entities::rng());
 
-            const double focal_length_int = focal_length_ * rand_time + focal_length_last_ * (1.0 - rand_time);
+            const double focus_distance_int = focus_distance_ * rand_time + focus_distance_last_ * (1.0 - rand_time);
             const Vec3f direction_int = direction_ * rand_time + direction_last_ * (1.0 - rand_time);
             const Vec3f horizontal_int = horizontal * rand_time + horizontal_last * (1.0 - rand_time);
             const Vec3f vertical_int = vertical * rand_time + vertical_last * (1.0 - rand_time);
@@ -86,7 +86,7 @@ auto FishCamMotionblurAperture_t::raytrace(const Scene_t* scene) -> void {
             Vec3f subpix_vec = std::cos(theta) * direction_int + std::sin(theta) * plane_vector;
             const Vec3f origin2 = origin_int + vertical_int * std::cos(rand_theta) * rand_r + horizontal_int * std::sin(rand_theta) * rand_r;
           
-            subpix_vec = (origin_int + subpix_vec * focal_length_int - origin2).normalize_inplace();
+            subpix_vec = (origin_int + subpix_vec * focus_distance_int - origin2).normalize_inplace();
 
             Ray_t ray = Ray_t(origin2, subpix_vec, Vec3f(), Vec3f(1.0), medium_list_, rand_time);
             ray.raycast(scene, max_bounces_, skybox_);
@@ -98,7 +98,7 @@ auto FishCamMotionblurAperture_t::raytrace(const Scene_t* scene) -> void {
 }
 
 auto FishCamMotionblurAperture_t::focus(double focus_distance) -> void {
-    focal_length_buffer_ = focus_distance;
+    focus_distance_buffer_ = focus_distance;
 }
 
 auto FishCamMotionblurAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> position) -> void {

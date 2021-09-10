@@ -42,7 +42,7 @@
       <imgbuffer name="buffer1" resx="600" resy="400" type="imgbuffer_opengl"/>
    </imgbuffers>
    <cameras>
-      <camera aperture="0.005" filename="NaN" focal_length="1" fov="0.93084 1.3963" gammaind="1" imgbuffer="1" max_bounces="8" medium_list="air, air" n_iter="Inf" name="camera1" rendermode="accumulation" skybox="day" subpix="1 1" transform_matrix="NaN" type="cam_aperture" up="0 0 1">
+      <camera aperture="0.005" filename="NaN" focus_distance="1" fov="0.93084 1.3963" gammaind="1" imgbuffer="1" max_bounces="8" medium_list="air, air" n_iter="Inf" name="camera1" rendermode="accumulation" skybox="day" subpix="1 1" transform_matrix="NaN" type="cam_aperture" up="0 0 1">
          <transformations_pre>
             <transformation_pre type="rotatex" value="-0.19635"/>
          </transformations_pre>

@@ -18,9 +18,9 @@ using APTracer::Entities::Medium_t;
 using APTracer::Entities::Skybox_t;
 using APTracer::Entities::Scene_t;
 
-Cam3D_t::Cam3D_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, std::array<double, 2> fov, std::array<unsigned int, 2> subpix, ImgBuffer_t* image, ImgBuffer_t* image_L, ImgBuffer_t* image_R, double eye_dist, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double focal_length, double gammaind) :
+Cam3D_t::Cam3D_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, std::array<double, 2> fov, std::array<unsigned int, 2> subpix, ImgBuffer_t* image, ImgBuffer_t* image_L, ImgBuffer_t* image_R, double eye_dist, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double focus_distance, double gammaind) :
     Camera_t(transformation, filename, up, fov, subpix, std::move(medium_list), skybox, max_bounces, gammaind), 
-    image_(image), unif_(0.0, 1.0), eye_dist_(eye_dist/2.0), focal_length_(focal_length), focal_length_buffer_(focal_length) {
+    image_(image), unif_(0.0, 1.0), eye_dist_(eye_dist/2.0), focus_distance_(focus_distance), focus_distance_buffer_(focus_distance) {
 
     std::string filename_L;
     std::string filename_R;
@@ -43,14 +43,14 @@ Cam3D_t::Cam3D_t(TransformMatrix_t* transformation, const std::string &filename,
 
     camera_L_->origin_ = horizontal * -eye_dist_ + origin_;
     camera_R_->origin_ = horizontal * eye_dist_ + origin_;
-    camera_L_->direction_ = (direction_ * focal_length_ + horizontal * eye_dist_).normalize_inplace();
-    camera_R_->direction_ = (direction_ * focal_length_ - horizontal * eye_dist_).normalize_inplace();
+    camera_L_->direction_ = (direction_ * focus_distance_ + horizontal * eye_dist_).normalize_inplace();
+    camera_R_->direction_ = (direction_ * focus_distance_ - horizontal * eye_dist_).normalize_inplace();
 }
 
 auto Cam3D_t::update() -> void {
     origin_ = transformation_->multVec(Vec3f());
     direction_ = transformation_->multDir(Vec3f(0.0, 1.0, 0.0));
-    focal_length_ = focal_length_buffer_;
+    focus_distance_ = focus_distance_buffer_;
     up_ = up_buffer_;
 
     camera_L_->up_ = up_;
@@ -59,8 +59,8 @@ auto Cam3D_t::update() -> void {
     const Vec3f horizontal = direction_.cross(up_);
     camera_L_->origin_ = horizontal * -eye_dist_ + origin_;
     camera_R_->origin_ = horizontal * eye_dist_ + origin_;
-    camera_L_->direction_ = (direction_ * focal_length_ + horizontal * eye_dist_).normalize_inplace();
-    camera_R_->direction_ = (direction_ * focal_length_ - horizontal * eye_dist_).normalize_inplace();
+    camera_L_->direction_ = (direction_ * focus_distance_ + horizontal * eye_dist_).normalize_inplace();
+    camera_R_->direction_ = (direction_ * focus_distance_ - horizontal * eye_dist_).normalize_inplace();
 }
 
 auto Cam3D_t::raytrace(const Scene_t* scene) -> void {
@@ -111,7 +111,7 @@ auto Cam3D_t::reset() -> void {
 }
 
 auto Cam3D_t::focus(double focus_distance) -> void {
-    focal_length_buffer_ = focus_distance;
+    focus_distance_buffer_ = focus_distance;
 }
 
 auto Cam3D_t::autoFocus(const Scene_t* scene, std::array<double, 2> position) -> void {

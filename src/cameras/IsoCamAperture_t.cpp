@@ -18,14 +18,14 @@ using APTracer::Entities::Medium_t;
 using APTracer::Entities::Skybox_t;
 using APTracer::Entities::Scene_t;
 
-IsoCamAperture_t::IsoCamAperture_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, std::array<double, 2> fov, std::array<unsigned int, 2> subpix, ImgBuffer_t* image, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double focal_length, double aperture, double gammaind) 
+IsoCamAperture_t::IsoCamAperture_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, std::array<double, 2> fov, std::array<unsigned int, 2> subpix, ImgBuffer_t* image, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double focus_distance, double aperture, double gammaind) 
     : Camera_t(transformation, filename, up, fov, subpix, std::move(medium_list), skybox, max_bounces, gammaind), 
-    image_(image), unif_(0.0, 1.0), focal_length_(focal_length), aperture_(aperture), focal_length_buffer_(focal_length)  {}
+    image_(image), unif_(0.0, 1.0), focus_distance_(focus_distance), aperture_(aperture), focus_distance_buffer_(focus_distance)  {}
 
 auto IsoCamAperture_t::update() -> void {
     origin_ = transformation_->multVec(Vec3f());
     direction_ = transformation_->multDir(Vec3f(0.0, 1.0, 0.0));
-    focal_length_ = focal_length_buffer_;
+    focus_distance_ = focus_distance_buffer_;
     up_ = up_buffer_;
 }
 
@@ -63,7 +63,7 @@ auto IsoCamAperture_t::raytrace(const Scene_t* scene) -> void {
 
             const Vec3f subpix_ray_origin = ray_origin - vertical * subpix_span_y * (static_cast<double>(k) - static_cast<double>(subpix_[0])/2.0 + jitter_y) + horizontal * subpix_span_x * (static_cast<double>(l) - static_cast<double>(subpix_[1])/2.0 + jitter_x);;
             const Vec3f ray_origin2 = subpix_ray_origin + vertical * std::cos(rand_theta) * rand_r + horizontal * std::sin(rand_theta) * rand_r;
-            const Vec3f direction2 = (subpix_ray_origin + direction_ * focal_length_ - ray_origin2).normalize_inplace();
+            const Vec3f direction2 = (subpix_ray_origin + direction_ * focus_distance_ - ray_origin2).normalize_inplace();
 
             Ray_t ray = Ray_t(ray_origin2, direction2, Vec3f(), Vec3f(1.0), medium_list_);
             ray.raycast(scene, max_bounces_, skybox_);
@@ -75,7 +75,7 @@ auto IsoCamAperture_t::raytrace(const Scene_t* scene) -> void {
 }
 
 auto IsoCamAperture_t::focus(double focus_distance) -> void {
-    focal_length_buffer_ = focus_distance;
+    focus_distance_buffer_ = focus_distance;
 }
 
 auto IsoCamAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> position) -> void {

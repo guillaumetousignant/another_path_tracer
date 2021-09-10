@@ -58,7 +58,7 @@
       <imgbuffer name="buffer" resx="1800" resy="1200" type="imgbuffer_opengl"/>
    </imgbuffers>
    <cameras>
-      <camera aperture="0.025" eye_dist="0.065" filename="NaN" focal_length="NaN" focus_position="0.5 0.5" fov="0.93084 1.3963" gammaind="1" imgbuffer="3" imgbuffer_R="1" imgbuffer_L="2" max_bounces="8" medium_list="air, air" n_iter="Inf" name="camera1" rendermode="accumulation" skybox="1" subpix="1 1" transform_matrix="NaN" type="cam_3d_aperture" up="0 0 1">
+      <camera aperture="0.025" eye_dist="0.065" filename="NaN" focus_distance="NaN" focus_position="0.5 0.5" fov="0.93084 1.3963" gammaind="1" imgbuffer="3" imgbuffer_R="1" imgbuffer_L="2" max_bounces="8" medium_list="air, air" n_iter="Inf" name="camera1" rendermode="accumulation" skybox="1" subpix="1 1" transform_matrix="NaN" type="cam_3d_aperture" up="0 0 1">
          <transformations_pre>
             <transformation_pre type="rotatezaxis" value="3.1416"/>
          </transformations_pre>

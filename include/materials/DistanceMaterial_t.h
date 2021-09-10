@@ -29,12 +29,12 @@ namespace APTracer { namespace Materials {
              * The colour of the material will be the inverse of the difference between the distance travelled 
              * by the ray and the target distance raised to an exponent. 
              * 
-             * @param focal_length Distance at which the colour of the material will be white.
+             * @param focus_distance Distance at which the colour of the material will be white.
              * @param exponent Exponent on the difference between the target distance and the distance traveled. Higher numbers make the colour darker until is is very close to the target distance.
              */
-            DistanceMaterial_t(double focal_length, double exponent);
+            DistanceMaterial_t(double focus_distance, double exponent);
 
-            double focal_length_; /**< @brief Distance at which the colour of the material will be white.*/
+            double focus_distance_; /**< @brief Distance at which the colour of the material will be white.*/
             double exponent_; /**< @brief Exponent on the difference between the target distance and the distance traveled. Higher numbers make the colour darker until is is very close to the target distance.*/
 
             /**

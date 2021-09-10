@@ -54,23 +54,23 @@ namespace APTracer { namespace Cameras {
              * @param medium_list Initial list of materials in which the camera is placed. Should have at least two copies of an "outside" medium not assigned to any object (issue #25).
              * @param skybox Skybox that will be intersected if no shape is hit by the rays.
              * @param max_bounces Maximum intersections with shapes and bounces on materials a ray can do before it is terminated. Actual number may be less.
-             * @param focal_length Distance of the focal plane to the camera origin. Distance at which both eye cameras converge.
+             * @param focus_distance Distance of the focal plane to the camera origin. Distance at which both eye cameras converge.
              * @param gammaind Gamma of the saved picture. A value of 1 should be used for usual cases.
              */
-            Cam3D_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, std::array<double, 2> fov, std::array<unsigned int, 2> subpix, ImgBuffer_t* image, ImgBuffer_t* image_L, ImgBuffer_t* image_R, double eye_dist, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double focal_length, double gammaind);
+            Cam3D_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, std::array<double, 2> fov, std::array<unsigned int, 2> subpix, ImgBuffer_t* image, ImgBuffer_t* image_L, ImgBuffer_t* image_R, double eye_dist, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double focus_distance, double gammaind);
 
             ImgBuffer_t* image_; /**< @brief Image buffer into which the resulting 3D anaglyph image is stored.*/
             std::uniform_real_distribution<double> unif_; /**< @brief Uniform random distribution used for generating random numbers.*/
             double eye_dist_; /**< @brief Distance between the left and right eye cameras. Higher values will make the 3D effect stronger.*/
-            double focal_length_; /**< @brief Distance of the focal plane to the camera origin. Distance at which both eye cameras converge.*/
-            double focal_length_buffer_; /**< @brief Focal length to be modified between updates. Its value is given to the real focal length on update.*/
+            double focus_distance_; /**< @brief Distance of the focal plane to the camera origin. Distance at which both eye cameras converge.*/
+            double focus_distance_buffer_; /**< @brief Focus distance to be modified between updates. Its value is given to the real focus distance on update.*/
             std::unique_ptr<Cam_t> camera_L_; /**< @brief Left eye camera. Managed by the 3D camera, do not update directly.*/
             std::unique_ptr<Cam_t> camera_R_; /**< @brief Right eye camera. Managed by the 3D camera, do not update directly.*/
 
             /**
              * @brief Updates the camera's members and the dependant cameras.
              * 
-             * This is used to set the new direction, origin, up vector, and focal length. Should be called once per frame, before rendering. 
+             * This is used to set the new direction, origin, up vector, and focus distance. Should be called once per frame, before rendering. 
              * This is how the changes to the transformation matrix and functions like setUp take effect.
              * The left and right eye cameras are also updated directly.
              */
@@ -121,19 +121,19 @@ namespace APTracer { namespace Cameras {
             virtual auto reset() -> void final;
 
             /**
-             * @brief Sets the focal length of the camera, the distance at which both eye cameras converge.
+             * @brief Sets the focus distance of the camera, the distance at which both eye cameras converge.
              * 
-             * The focal length will be changed on next update along with other members.
+             * The focus distance will be changed on next update along with other members.
              * Distance at which both eye cameras converge, objects away from that distance will be out of focus.
              * 
-             * @param focus_distance New focal length of the camera. Distance at which both eye cameras converge.
+             * @param focus_distance New focus distance of the camera. Distance at which both eye cameras converge.
              */
             virtual auto focus(double focus_distance) -> void final;
             
             /**
              * @brief Focusses the camera on a point in its field of view.
              * 
-             * This will send a ray at the specified coordinates in image space and set the focal length as
+             * This will send a ray at the specified coordinates in image space and set the focus distance as
              * the length to its first intersection. The coordinates are [horizontal, vertical] from 0 to 1,
              * from left to right and bottom to top. Since the ray's first hit is used, this may behave 
              * unexpectedly with reflective surfaces, transparent surfaces, invisible surfaces, portals etc.

@@ -19,24 +19,24 @@ using APTracer::Entities::Medium_t;
 using APTracer::Entities::Skybox_t;
 using APTracer::Entities::Scene_t;
 
-RecCamAperture_t::RecCamAperture_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, std::array<double, 2> fov, std::array<unsigned int, 2> subpix, ImgBuffer_t* image, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double focal_length, double aperture, double gammaind) 
+RecCamAperture_t::RecCamAperture_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, std::array<double, 2> fov, std::array<unsigned int, 2> subpix, ImgBuffer_t* image, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double focus_distance, double aperture, double gammaind) 
     : Camera_t(transformation, filename, up, fov, subpix, std::move(medium_list), skybox, max_bounces, gammaind),  
-    image_(image), unif_(0.0, 1.0), focal_length_(focal_length), aperture_(aperture), focal_length_buffer_(focal_length) {}
+    image_(image), unif_(0.0, 1.0), focus_distance_(focus_distance), aperture_(aperture), focus_distance_buffer_(focus_distance) {}
 
 auto RecCamAperture_t::update() -> void {
     origin_ = transformation_->multVec(Vec3f());
     direction_ = transformation_->multDir(Vec3f(0.0, 1.0, 0.0));
-    focal_length_ = focal_length_buffer_;
+    focus_distance_ = focus_distance_buffer_;
     up_ = up_buffer_;
 }
 
 auto RecCamAperture_t::raytrace(const Scene_t* scene) -> void {
     const Vec3f horizontal = direction_.cross(up_).normalize_inplace();
     const Vec3f vertical = horizontal.cross(direction_).normalize_inplace();
-    const Vec3f focus_point = origin_ + direction_ * focal_length_;
+    const Vec3f focus_point = origin_ + direction_ * focus_distance_;
     const double tot_subpix = subpix_[0]*subpix_[1];
-    const Vec3f pixel_span_y = vertical * focal_length_ * std::tan(fov_[0]/2.0) * 2.0/static_cast<double>(image_->size_y_);
-    const Vec3f pixel_span_x = horizontal * focal_length_ * std::tan(fov_[1]/2.0) * 2.0/static_cast<double>(image_->size_x_);
+    const Vec3f pixel_span_y = vertical * focus_distance_ * std::tan(fov_[0]/2.0) * 2.0/static_cast<double>(image_->size_y_);
+    const Vec3f pixel_span_x = horizontal * focus_distance_ * std::tan(fov_[1]/2.0) * 2.0/static_cast<double>(image_->size_x_);
     const Vec3f subpix_span_y = pixel_span_y/subpix_[0];
     const Vec3f subpix_span_x = pixel_span_x/subpix_[1];
 
@@ -77,7 +77,7 @@ auto RecCamAperture_t::raytrace(const Scene_t* scene) -> void {
 }
 
 auto RecCamAperture_t::focus(double focus_distance) -> void {
-    focal_length_buffer_ = focus_distance;
+    focus_distance_buffer_ = focus_distance;
 }
 
 auto RecCamAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> position) -> void {
@@ -86,9 +86,9 @@ auto RecCamAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> pos
 
     const Vec3f horizontal = direction_.cross(up_).normalize_inplace();
     const Vec3f vertical = horizontal.cross(direction_).normalize_inplace();
-    const Vec3f span_y = vertical * focal_length_ * std::tan(fov_[0]/2.0) * 2.0;
-    const Vec3f span_x = horizontal * focal_length_ * std::tan(fov_[1]/2.0) * 2.0;
-    const Vec3f ray_vec = (origin_ + direction_ * focal_length_
+    const Vec3f span_y = vertical * focus_distance_ * std::tan(fov_[0]/2.0) * 2.0;
+    const Vec3f span_x = horizontal * focus_distance_ * std::tan(fov_[1]/2.0) * 2.0;
+    const Vec3f ray_vec = (origin_ + direction_ * focus_distance_
                             - span_y * (position[1] - 0.5) + span_x * (position[0] - 0.5)
                             - origin_).normalize_inplace();
 

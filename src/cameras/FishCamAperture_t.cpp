@@ -20,14 +20,14 @@ using APTracer::Entities::Medium_t;
 using APTracer::Entities::Skybox_t;
 using APTracer::Entities::Scene_t;
 
-FishCamAperture_t::FishCamAperture_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, std::array<double, 2> fov, std::array<unsigned int, 2> subpix, ImgBuffer_t* image, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double focal_length, double aperture, double gammaind) 
+FishCamAperture_t::FishCamAperture_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, std::array<double, 2> fov, std::array<unsigned int, 2> subpix, ImgBuffer_t* image, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double focus_distance, double aperture, double gammaind) 
     : Camera_t(transformation, filename, up, fov, subpix, std::move(medium_list), skybox, max_bounces, gammaind),
-    image_(image), unif_(0.0, 1.0), focal_length_(focal_length), aperture_(aperture), focal_length_buffer_(focal_length) {}
+    image_(image), unif_(0.0, 1.0), focus_distance_(focus_distance), aperture_(aperture), focus_distance_buffer_(focus_distance) {}
 
 auto FishCamAperture_t::update() -> void {
     origin_ = transformation_->multVec(Vec3f());
     direction_ = transformation_->multDir(Vec3f(0.0, 1.0, 0.0));
-    focal_length_ = focal_length_buffer_;
+    focus_distance_ = focus_distance_buffer_;
     up_ = up_buffer_;
 }
 
@@ -71,7 +71,7 @@ auto FishCamAperture_t::raytrace(const Scene_t* scene) -> void {
             Vec3f subpix_vec = std::cos(theta) * direction_ + std::sin(theta) * plane_vector;
             const Vec3f origin2 = origin_ + vertical * std::cos(rand_theta) * rand_r + horizontal * std::sin(rand_theta) * rand_r;
             
-            subpix_vec = (origin_ + subpix_vec * focal_length_ - origin2).normalize_inplace();
+            subpix_vec = (origin_ + subpix_vec * focus_distance_ - origin2).normalize_inplace();
 
             Ray_t ray = Ray_t(origin2, subpix_vec, Vec3f(), Vec3f(1.0), medium_list_);
             ray.raycast(scene, max_bounces_, skybox_);
@@ -83,7 +83,7 @@ auto FishCamAperture_t::raytrace(const Scene_t* scene) -> void {
 }
 
 auto FishCamAperture_t::focus(double focus_distance) -> void {
-    focal_length_buffer_ = focus_distance;
+    focus_distance_buffer_ = focus_distance;
 }
 
 auto FishCamAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> position) -> void {

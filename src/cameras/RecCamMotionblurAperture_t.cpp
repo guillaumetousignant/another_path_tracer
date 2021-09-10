@@ -18,20 +18,20 @@ using APTracer::Entities::Medium_t;
 using APTracer::Entities::Skybox_t;
 using APTracer::Entities::Scene_t;
 
-RecCamMotionblurAperture_t::RecCamMotionblurAperture_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, std::array<double, 2> fov, std::array<unsigned int, 2> subpix, ImgBuffer_t* image, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double focal_length, double aperture, std::array<double, 2> time, double gammaind) 
+RecCamMotionblurAperture_t::RecCamMotionblurAperture_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, std::array<double, 2> fov, std::array<unsigned int, 2> subpix, ImgBuffer_t* image, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double focus_distance, double aperture, std::array<double, 2> time, double gammaind) 
     : Camera_t(transformation, filename, up, fov, subpix, std::move(medium_list), skybox, max_bounces, gammaind), 
     image_(image), unif_(0.0, 1.0), direction_last_(direction_), origin_last_(origin_), time_{time}, up_last_(up_),
-    focal_length_(focal_length), focal_length_last_(focal_length), aperture_(aperture), focal_length_buffer_(focal_length) {}
+    focus_distance_(focus_distance), focus_distance_last_(focus_distance), aperture_(aperture), focus_distance_buffer_(focus_distance) {}
 
 auto RecCamMotionblurAperture_t::update() -> void {
     origin_last_ = origin_;
     direction_last_ = direction_;
     up_last_ = up_;
-    focal_length_last_ = focal_length_;
+    focus_distance_last_ = focus_distance_;
 
     origin_ = transformation_->multVec(Vec3f());
     direction_ = transformation_->multDir(Vec3f(0.0, 1.0, 0.0));
-    focal_length_ = focal_length_buffer_;
+    focus_distance_ = focus_distance_buffer_;
     up_ = up_buffer_;
 }
 
@@ -40,13 +40,13 @@ auto RecCamMotionblurAperture_t::raytrace(const Scene_t* scene) -> void {
     const Vec3f vertical = horizontal.cross(direction_).normalize_inplace();
     const Vec3f horizontal_last = direction_last_.cross(up_last_).normalize_inplace();
     const Vec3f vertical_last = horizontal_last.cross(direction_last_).normalize_inplace();
-    const Vec3f focus_point = origin_ + direction_ * focal_length_;
-    const Vec3f focus_point_last = origin_last_ + direction_last_ * focal_length_last_;
+    const Vec3f focus_point = origin_ + direction_ * focus_distance_;
+    const Vec3f focus_point_last = origin_last_ + direction_last_ * focus_distance_last_;
     const double tot_subpix = subpix_[0]*subpix_[1];
-    const double pixel_span_y = focal_length_ * std::tan(fov_[0]/2.0) * 2.0/image_->size_y_;
-    const double pixel_span_x = focal_length_ * std::tan(fov_[1]/2.0) * 2.0/image_->size_x_;
-    const double pixel_span_y_last = focal_length_last_ * std::tan(fov_[0]/2.0) * 2.0/image_->size_y_;
-    const double pixel_span_x_last = focal_length_last_ * std::tan(fov_[1]/2.0) * 2.0/image_->size_x_;
+    const double pixel_span_y = focus_distance_ * std::tan(fov_[0]/2.0) * 2.0/image_->size_y_;
+    const double pixel_span_x = focus_distance_ * std::tan(fov_[1]/2.0) * 2.0/image_->size_x_;
+    const double pixel_span_y_last = focus_distance_last_ * std::tan(fov_[0]/2.0) * 2.0/image_->size_y_;
+    const double pixel_span_x_last = focus_distance_last_ * std::tan(fov_[1]/2.0) * 2.0/image_->size_x_;
     
     const double subpix_span_y = pixel_span_y/subpix_[0];
     const double subpix_span_x = pixel_span_x/subpix_[1];
@@ -103,7 +103,7 @@ auto RecCamMotionblurAperture_t::raytrace(const Scene_t* scene) -> void {
 }
 
 auto RecCamMotionblurAperture_t::focus(double focus_distance) -> void {
-    focal_length_buffer_ = focus_distance;
+    focus_distance_buffer_ = focus_distance;
 }
 
 auto RecCamMotionblurAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> position) -> void {
@@ -112,9 +112,9 @@ auto RecCamMotionblurAperture_t::autoFocus(const Scene_t* scene, std::array<doub
 
     const Vec3f horizontal = direction_.cross(up_).normalize_inplace();
     const Vec3f vertical = horizontal.cross(direction_).normalize_inplace();
-    const Vec3f focus_point = origin_ + direction_ * focal_length_;
-    const Vec3f span_x = horizontal * focal_length_ * std::tan(fov_[1]/2.0) * 2.0;
-    const Vec3f span_y = vertical * focal_length_ * std::tan(fov_[0]/2.0) * 2.0;
+    const Vec3f focus_point = origin_ + direction_ * focus_distance_;
+    const Vec3f span_x = horizontal * focus_distance_ * std::tan(fov_[1]/2.0) * 2.0;
+    const Vec3f span_y = vertical * focus_distance_ * std::tan(fov_[0]/2.0) * 2.0;
 
     const Vec3f ray_vec = (focus_point - span_y * (position[1] - 0.5) + span_x * (position[0] - 0.5) - origin_).normalize_inplace();
 

@@ -36,9 +36,9 @@ namespace APTracer { namespace Cameras {
      * their state at the ray's time. The rays are also created with the interpolated 
      * camera state.
      * This camera creates rays on a disk to simulate the aperture of a real camera for depth of field.
-     * It has a focal length, so all objects at that distance will be in the focal plane,
+     * It has a focus distance, so all objects at that distance will be in the focal plane,
      * and other objects will be out of focus. The shape of the focal plane is a sphere
-     * of focal_length_ radius centered on the origin.
+     * of focus_distance_ radius centered on the origin.
      * This camera stores the result from its rays in a single image buffer.
      */
     class CamMotionblurAperture_t final : public Camera_t {
@@ -55,12 +55,12 @@ namespace APTracer { namespace Cameras {
              * @param medium_list Initial list of materials in which the camera is placed. Should have at least two copies of an "outside" medium not assigned to any object (issue #25).
              * @param skybox Skybox that will be intersected if no shape is hit by the rays.
              * @param max_bounces Maximum intersections with shapes and bounces on materials a ray can do before it is terminated. Actual number may be less.
-             * @param focal_length Distance of the focal plane to the camera origin. Objects away from that distance will be out of focus.
+             * @param focus_distance Distance of the focal plane to the camera origin. Objects away from that distance will be out of focus.
              * @param aperture Radius of the disk on which rays are created around the origin. Higher values will cause stronger depth of field, objects out of focus will be blurrier.
              * @param time Opening and closing time of the shutter. [open, close], from 0 to 1, where 0 is last state and current state. Rays are created at a time in this interval. Enables motion blur.
              * @param gammaind Gamma of the saved picture. A value of 1 should be used for usual cases.
              */
-            CamMotionblurAperture_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, std::array<double, 2> fov, std::array<unsigned int, 2> subpix, ImgBuffer_t* image, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double focal_length, double aperture, std::array<double, 2> time, double gammaind);
+            CamMotionblurAperture_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, std::array<double, 2> fov, std::array<unsigned int, 2> subpix, ImgBuffer_t* image, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double focus_distance, double aperture, std::array<double, 2> time, double gammaind);
             
             ImgBuffer_t* image_; /**< @brief Image buffer into which the image is stored.*/
             std::uniform_real_distribution<double> unif_; /**< @brief Uniform random distribution used for generating random numbers.*/
@@ -68,17 +68,17 @@ namespace APTracer { namespace Cameras {
             Vec3f origin_last_; /**< @brief Position of the camera before last update. Used for motion blur.*/
             std::array<double, 2> time_; /**< @brief Opening and closing time of the shutter. [open, close], from 0 to 1, where 0 is last state and current state. Rays are created at a time in this interval. Enables motion blur.*/
             Vec3f up_last_; /**< @brief Vector pointing up before last update. Used for motion blur.*/
-            double focal_length_; /**< @brief Distance of the focal plane to the camera origin. Objects away from that distance will be out of focus. The focal plane has the shape of a sphere with this radius.*/
-            double focal_length_last_; /**< @brief Distance of the focal plane to the camera origin before last update. Used for motion blur.*/
+            double focus_distance_; /**< @brief Distance of the focal plane to the camera origin. Objects away from that distance will be out of focus. The focal plane has the shape of a sphere with this radius.*/
+            double focus_distance_last_; /**< @brief Distance of the focal plane to the camera origin before last update. Used for motion blur.*/
             double aperture_; /**< @brief Radius of the disk on which rays are created around the origin. Higher values will cause stronger depth of field, objects out of focus will be blurrier.*/
-            double focal_length_buffer_; /**< @brief Focal length to be modified between updates. Its value is given to the real focal length on update.*/
+            double focus_distance_buffer_; /**< @brief Focus distance to be modified between updates. Its value is given to the real focus distance on update.*/
 
             /**
              * @brief Updates the camera's members.
              * 
-             * This is used to set the new direction, origin, up vector, and focal length. Should be called once per frame, before rendering. 
-             * This is how the changes to the transformation matrix and functions like setUp take effect. It sets focal_length_ to focal_length_buffer_,
-             * so it is only modified once per frame. This is needed to correctly interpolate focal length for motion blur.
+             * This is used to set the new direction, origin, up vector, and focus distance. Should be called once per frame, before rendering. 
+             * This is how the changes to the transformation matrix and functions like setUp take effect. It sets focus_distance_ to focus_distance_buffer_,
+             * so it is only modified once per frame. This is needed to correctly interpolate focus distance for motion blur.
              * Stores the previous state in the _last variables, so that state can be interpolated according to time.
              */
             virtual auto update() -> void final;
@@ -96,20 +96,20 @@ namespace APTracer { namespace Cameras {
             virtual auto raytrace(const Scene_t* scene) -> void final;
 
             /**
-             * @brief Sets the focal length of the camera.
+             * @brief Sets the focus distance of the camera.
              * 
-             * The focal length will be changed on next update along with other members.
+             * The focus distance will be changed on next update along with other members.
              * All objects at that distance will be in the focal plane, and other objects will be out of focus.
              * The focal plane has the shape of a sphere with this radius.
              * 
-             * @param focus_distance New focal length of the camera.
+             * @param focus_distance New focus distance of the camera.
              */
             virtual auto focus(double focus_distance) -> void final;
 
             /**
              * @brief Focusses the camera on a point in its field of view.
              * 
-             * This will send a ray at the specified coordinates in image space and set the focal length as
+             * This will send a ray at the specified coordinates in image space and set the focus distance as
              * the length to its first intersection. The coordinates are [horizontal, vertical] from 0 to 1,
              * from left to right and bottom to top. Since the ray's first hit is used, this may behave 
              * unexpectedly with reflective surfaces, transparent surfaces, invisible surfaces, portals etc.
