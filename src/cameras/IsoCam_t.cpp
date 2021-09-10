@@ -23,6 +23,7 @@ auto IsoCam_t::update() -> void {
     origin_ = transformation_->multVec(Vec3f());
     direction_ = transformation_->multDir(Vec3f(0.0, 1.0, 0.0));
     up_ = up_buffer_;
+    fov_ = fov_buffer_;
 }
 
 auto IsoCam_t::raytrace(const Scene_t* scene) -> void {
@@ -64,6 +65,10 @@ auto IsoCam_t::raytrace(const Scene_t* scene) -> void {
         col = col/tot_subpix;
         image_->update(col, i, j);
     }
+}
+
+auto IsoCam_t::zoom(double factor) -> void {
+    fov_buffer_ = {fov_[0] * factor, fov_[1] * factor};
 }
 
 auto IsoCam_t::write(const std::string& file_name) -> void {

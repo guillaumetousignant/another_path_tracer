@@ -109,6 +109,15 @@ namespace APTracer { namespace Cameras {
             virtual auto autoFocus(const Scene_t* scene, std::array<double, 2> position) -> void final;
 
             /**
+             * @brief Zooms the camera's field of view by a factor.
+             * 
+             * This is used to change the camera's field of view by a factor.
+             * 
+             * @param factor Factor by which to zoom the camera.
+             */
+            virtual auto zoom(double factor) -> void final;
+
+            /**
              * @brief Writes the image buffer to disk with the provided name.
              * 
              * This will write the camera's image to disk. It uses the input name.

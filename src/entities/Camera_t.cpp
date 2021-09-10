@@ -11,7 +11,7 @@ using APTracer::Entities::Scene_t;
 using APTracer::Entities::Vec3f;
 
 Camera_t::Camera_t(TransformMatrix_t* transformation, std::string filename, Vec3f up, std::array<double, 2> fov, std::array<unsigned int, 2> subpix, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double gammaind) 
-            : transformation_(transformation), filename_(std::move(filename)), fov_{fov}, subpix_{subpix}, medium_list_(std::move(medium_list)), 
+            : transformation_(transformation), filename_(std::move(filename)), fov_{fov}, fov_buffer_{fov}, subpix_{subpix}, medium_list_(std::move(medium_list)), 
             skybox_(skybox), max_bounces_(max_bounces), gammaind_(gammaind), up_(up), up_buffer_(up) {
     origin_ = transformation_->multVec(Vec3f()); 
     direction_ = transformation_->multDir(Vec3f(0.0, 1.0, 0.0));
@@ -132,4 +132,8 @@ auto Camera_t::accumulateWrite(const Scene_t* scene) -> void {
 
 auto Camera_t::setUp(Vec3f &new_up) -> void {
     up_buffer_ = new_up;
+}
+
+auto Camera_t::zoom(std::array<double, 2> fov) -> void {
+    fov_buffer_ = fov;
 }

@@ -72,7 +72,8 @@ namespace APTracer { namespace Cameras {
             double focus_distance_last_; /**< @brief Distance of the focal plane to the camera origin before last update. Used for motion blur.*/
             double aperture_; /**< @brief Radius of the disk on which rays are created around the origin. Higher values will cause stronger depth of field, objects out of focus will be blurrier.*/
             double focus_distance_buffer_; /**< @brief Focus distance to be modified between updates. Its value is given to the real focus distance on update.*/
-
+            std::array<double, 2> fov_last_; /**< @brief Field of view before last update. Used for motion blur.*/
+            
             /**
              * @brief Updates the camera's members.
              * 
@@ -119,6 +120,15 @@ namespace APTracer { namespace Cameras {
              * @param position Image space coordinates on which to focus. [horizontal, vertical] from 0 to 1, from left to right and bottom to top.
              */
             virtual auto autoFocus(const Scene_t* scene, std::array<double, 2> position) -> void final;
+
+            /**
+             * @brief Zooms the camera's field of view by a factor.
+             * 
+             * This is used to change the camera's field of view by a factor.
+             * 
+             * @param factor Factor by which to zoom the camera.
+             */
+            virtual auto zoom(double factor) -> void final;
 
             /**
              * @brief Writes the image buffer to disk with the provided name.

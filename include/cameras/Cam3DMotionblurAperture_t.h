@@ -80,6 +80,7 @@ namespace APTracer { namespace Cameras {
             double focus_distance_last_; /**< @brief Distance of the focal plane to the camera origin before last update. Used for motion blur.*/
             std::array<double, 2> time_; /**< @brief Opening and closing time of the shutter. [open, close], from 0 to 1, where 0 is last state and current state. Rays are created at a time in this interval. Enables motion blur.*/
             Vec3f up_last_; /**< @brief Vector pointing up before last update. Used for motion blur.*/
+            std::array<double, 2> fov_last_; /**< @brief Field of view before last update. Used for motion blur.*/
 
             std::unique_ptr<CamMotionblurAperture_t> camera_L_; /**< @brief Left eye camera. Managed by the 3D camera, do not update directly.*/
             std::unique_ptr<CamMotionblurAperture_t> camera_R_; /**< @brief Right eye camera. Managed by the 3D camera, do not update directly.*/
@@ -107,6 +108,15 @@ namespace APTracer { namespace Cameras {
              * @param scene Scene that will be used to find what each ray hits.
              */
             virtual auto raytrace(const Scene_t* scene) -> void final;
+
+            /**
+             * @brief Zooms the camera's field of view by a factor.
+             * 
+             * This is used to change the camera's field of view by a factor.
+             * 
+             * @param factor Factor by which to zoom the camera.
+             */
+            virtual auto zoom(double factor) -> void final;
 
             /**
              * @brief Writes the image buffer and the left and right eye images to disk with the provided name.

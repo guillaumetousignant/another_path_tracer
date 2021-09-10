@@ -49,6 +49,7 @@ namespace APTracer { namespace Entities {
             TransformMatrix_t* transformation_; /**< @brief Transformation matrix used by the camera. Sets the camera's origin and direction when created and updated.*/
             std::string filename_; /**< @brief Filename used by the camera when saving an image. Not used by all cameras, and some might modify it or save multiple pictures with variations of the name.*/
             std::array<double, 2> fov_; /**< @brief Array containing field of view of camera [vertical, horizontal]. Will have different units depending on the projection used.*/
+            std::array<double, 2> fov_buffer_; /**< @brief Stores the field of view until the camera is updated.*/
             std::array<unsigned int, 2> subpix_; /**< @brief Array containing the number of subpixels per pixel, [vertical, horizontal], for antialiasing purposes. Not very useful because sample jittering when there are multiple samples per pixel removes aliasing. May be useful when there are few samples per pixel and location of the samples mush be controlled.*/
             std::list<Medium_t*> medium_list_; /**< @brief List of materials in which the camera is placed. Active medium is first element. Should have at least two copies of an "outside" medium not assigned to any object (issue #25).*/
             Skybox_t* skybox_; /**< @brief Skybox that will be intersected if no shape is hit by the rays.*/    
@@ -154,6 +155,24 @@ namespace APTracer { namespace Entities {
              * @param new_up New up vector for the camera.
              */
             auto setUp(Vec3f &new_up) -> void;
+
+            /**
+             * @brief Zooms the camera's field of view by a factor.
+             * 
+             * This is used to change the camera's field of view by a factor.
+             * 
+             * @param factor Factor by which to zoom the camera.
+             */
+            virtual auto zoom(double factor) -> void = 0;
+
+            /**
+             * @brief Sets the camera's field of view to a new value.
+             * 
+             * This is used to change the camera's field of view to a new value.
+             * 
+             * @param fov New field of view of the camera.
+             */
+            virtual auto zoom(std::array<double, 2> fov) -> void;
 
             /**
              * @brief Writes the image buffer to disk with the provided name.

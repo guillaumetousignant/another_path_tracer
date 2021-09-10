@@ -52,9 +52,13 @@ auto Cam3D_t::update() -> void {
     direction_ = transformation_->multDir(Vec3f(0.0, 1.0, 0.0));
     focus_distance_ = focus_distance_buffer_;
     up_ = up_buffer_;
+    fov_ = fov_buffer_;
 
     camera_L_->up_ = up_;
     camera_R_->up_ = up_;
+
+    camera_L_->fov_ = fov_;
+    camera_R_->fov_ = fov_;
 
     const Vec3f horizontal = direction_.cross(up_);
     camera_L_->origin_ = horizontal * -eye_dist_ + origin_;
@@ -73,6 +77,10 @@ auto Cam3D_t::raytrace(const Scene_t* scene) -> void {
             image_->set(Vec3f(camera_L_->image_->img_[j*camera_L_->image_->size_x_ + i][0], camera_R_->image_->img_[j*camera_L_->image_->size_x_ + i][1], camera_R_->image_->img_[j*camera_L_->image_->size_x_ + i][2]), i, j);
         }
     }
+}
+
+auto Cam3D_t::zoom(double factor) -> void {
+    fov_buffer_ = {fov_[0] * factor, fov_[1] * factor};
 }
 
 auto Cam3D_t::write(const std::string& file_name) -> void {

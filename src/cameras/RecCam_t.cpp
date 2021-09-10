@@ -23,6 +23,7 @@ auto RecCam_t::update() -> void {
     origin_ = transformation_->multVec(Vec3f());
     direction_ = transformation_->multDir(Vec3f(0.0, 1.0, 0.0));
     up_ = up_buffer_;
+    fov_ = fov_buffer_;
 }
 
 auto RecCam_t::raytrace(const Scene_t* scene) -> void {
@@ -65,6 +66,13 @@ auto RecCam_t::raytrace(const Scene_t* scene) -> void {
         col = col/tot_subpix;
         image_->update(col, i, j);
     }
+}
+
+auto RecCam_t::zoom(double factor) -> void {
+    const double span_x = std::tan(fov_[1]/2.0);
+    const double span_y = std::tan(fov_[0]/2.0);
+    
+    fov_buffer_ = {2 * std::atan(span_y * factor), 2 * std::atan(span_x * factor)};
 }
 
 auto RecCam_t::write(const std::string& file_name) -> void {

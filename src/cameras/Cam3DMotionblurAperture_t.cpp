@@ -21,7 +21,7 @@ using APTracer::Entities::Scene_t;
 Cam3DMotionblurAperture_t::Cam3DMotionblurAperture_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, std::array<double, 2> fov, std::array<unsigned int, 2> subpix, ImgBuffer_t* image, ImgBuffer_t* image_L, ImgBuffer_t* image_R, double eye_dist, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double focus_distance, double aperture, std::array<double, 2> time, double gammaind) :
     Camera_t(transformation, filename, up, fov, subpix, std::move(medium_list), skybox, max_bounces, gammaind), 
     image_(image), unif_(0.0, 1.0), eye_dist_(eye_dist/2.0), focus_distance_(focus_distance), focus_distance_buffer_(focus_distance), aperture_(aperture),
-    direction_last_(direction_), origin_last_(origin_), focus_distance_last_(focus_distance_), time_{time}, up_last_(up_) {
+    direction_last_(direction_), origin_last_(origin_), focus_distance_last_(focus_distance_), time_{time}, up_last_(up_), fov_last_{fov} {
 
     std::string filename_L;
     std::string filename_R;
@@ -61,11 +61,13 @@ auto Cam3DMotionblurAperture_t::update() -> void {
     direction_last_ = direction_;
     focus_distance_last_ = focus_distance_;
     up_last_ = up_;
+    fov_last_ = fov_;
 
     origin_ = transformation_->multVec(Vec3f());
     direction_ = transformation_->multDir(Vec3f(0.0, 1.0, 0.0));
     focus_distance_ = focus_distance_buffer_;
     up_ = up_buffer_;
+    fov_ = fov_buffer_;
 
     camera_L_->focus_distance_ = std::sqrt(focus_distance_*focus_distance_ + eye_dist_*eye_dist_);
     camera_R_->focus_distance_ = camera_L_->focus_distance_;
@@ -75,9 +77,13 @@ auto Cam3DMotionblurAperture_t::update() -> void {
     camera_R_->direction_last_ = camera_R_->direction_;
     camera_L_->up_last_ = camera_L_->up_;
     camera_R_->up_last_ = camera_R_->up_;
+    camera_L_->fov_last_ = camera_L_->fov_;
+    camera_R_->fov_last_ = camera_R_->fov_;
 
     camera_L_->up_ = up_;
     camera_R_->up_ = up_;
+    camera_L_->fov_ = fov_;
+    camera_R_->fov_ = fov_;
     const Vec3f horizontal = direction_.cross(up_);
     camera_L_->origin_ = horizontal * -eye_dist_ + origin_;
     camera_R_->origin_ = horizontal * eye_dist_ + origin_;
@@ -95,6 +101,10 @@ auto Cam3DMotionblurAperture_t::raytrace(const Scene_t* scene) -> void {
             image_->set(Vec3f(camera_L_->image_->img_[j*camera_L_->image_->size_x_ + i][0], camera_R_->image_->img_[j*camera_L_->image_->size_x_ + i][1], camera_R_->image_->img_[j*camera_L_->image_->size_x_ + i][2]), i, j);
         }
     }
+}
+
+auto Cam3DMotionblurAperture_t::zoom(double factor) -> void {
+    fov_buffer_ = {fov_[0] * factor, fov_[1] * factor};
 }
 
 auto Cam3DMotionblurAperture_t::write(const std::string& file_name) -> void {

@@ -28,6 +28,7 @@ auto RecCamAperture_t::update() -> void {
     direction_ = transformation_->multDir(Vec3f(0.0, 1.0, 0.0));
     focus_distance_ = focus_distance_buffer_;
     up_ = up_buffer_;
+    fov_ = fov_buffer_;
 }
 
 auto RecCamAperture_t::raytrace(const Scene_t* scene) -> void {
@@ -98,6 +99,13 @@ auto RecCamAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> pos
         t = 1000000.0;
     }
     focus(t);
+}
+
+auto RecCamAperture_t::zoom(double factor) -> void {
+    const double span_x = std::tan(fov_[1]/2.0);
+    const double span_y = std::tan(fov_[0]/2.0);
+    
+    fov_buffer_ = {2 * std::atan(span_y * factor), 2 * std::atan(span_x * factor)};
 }
 
 auto RecCamAperture_t::write(const std::string& file_name) -> void {

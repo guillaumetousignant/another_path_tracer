@@ -27,6 +27,7 @@ auto IsoCamAperture_t::update() -> void {
     direction_ = transformation_->multDir(Vec3f(0.0, 1.0, 0.0));
     focus_distance_ = focus_distance_buffer_;
     up_ = up_buffer_;
+    fov_ = fov_buffer_;
 }
 
 auto IsoCamAperture_t::raytrace(const Scene_t* scene) -> void {
@@ -93,6 +94,10 @@ auto IsoCamAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> pos
         t = 1000000.0;
     }
     focus(t);
+}
+
+auto IsoCamAperture_t::zoom(double factor) -> void {
+    fov_buffer_ = {fov_[0] * factor, fov_[1] * factor};
 }
 
 auto IsoCamAperture_t::write(const std::string& file_name) -> void {
