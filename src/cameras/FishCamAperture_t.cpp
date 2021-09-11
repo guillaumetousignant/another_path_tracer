@@ -97,7 +97,7 @@ auto FishCamAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> po
     const std::array<double, 2> pix_position = {(position[0] - 0.5) * fov_[1],
                                                 -(position[1] - 0.5) * fov_[0]};
     const double theta = std::sqrt(std::pow(pix_position[0], 2) + std::pow(pix_position[1], 2));
-    const Vec3f plane_vector = horizontal * pix_position[0]/theta + vertical * pix_position[1]/theta;
+    const Vec3f plane_vector = (theta > 0) ? horizontal * pix_position[0]/theta + vertical * pix_position[1]/theta : Vec3f();
     const Vec3f ray_direction = std::cos(theta) * direction_ + std::sin(theta) * plane_vector;
 
     const Ray_t focus_ray = Ray_t(origin_, ray_direction, Vec3f(), Vec3f(1.0), medium_list_);
