@@ -44,6 +44,8 @@ Cam3DMotionblurAperture_t::Cam3DMotionblurAperture_t(TransformMatrix_t* transfor
 
     camera_L_->focus_distance_ = std::sqrt(focus_distance_*focus_distance_ + eye_dist_*eye_dist_);
     camera_R_->focus_distance_ = camera_L_->focus_distance_;
+    camera_L_->focus_distance_ = camera_L_->focus_distance_;
+    camera_R_->focus_distance_ = camera_R_->focus_distance_;
 
     camera_L_->origin_ = horizontal * -eye_dist_ + origin_;
     camera_R_->origin_ = horizontal * eye_dist_ + origin_;
@@ -69,8 +71,8 @@ auto Cam3DMotionblurAperture_t::update() -> void {
     up_ = up_buffer_;
     fov_ = fov_buffer_;
 
-    camera_L_->focus_distance_ = std::sqrt(focus_distance_*focus_distance_ + eye_dist_*eye_dist_);
-    camera_R_->focus_distance_ = camera_L_->focus_distance_;
+    camera_L_->focus_distance_last_ = camera_L_->focus_distance_;
+    camera_R_->focus_distance_last_ = camera_R_->focus_distance_;
     camera_L_->origin_last_ = camera_L_->origin_;
     camera_R_->origin_last_ = camera_R_->origin_;
     camera_L_->direction_last_ = camera_L_->direction_;
@@ -80,6 +82,8 @@ auto Cam3DMotionblurAperture_t::update() -> void {
     camera_L_->fov_last_ = camera_L_->fov_;
     camera_R_->fov_last_ = camera_R_->fov_;
 
+    camera_L_->focus_distance_ = std::sqrt(std::pow(focus_distance_, 2) + std::pow(eye_dist_, 2));
+    camera_R_->focus_distance_ = camera_L_->focus_distance_;
     camera_L_->up_ = up_;
     camera_R_->up_ = up_;
     camera_L_->fov_ = fov_;
