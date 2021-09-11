@@ -669,21 +669,6 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
         }
         std::cout << "Shapes transformed post." << std::endl;
     }
-
-    // Cameras
-    if (xml_cameras != nullptr) {
-        size_t index = 0;
-        for (tinyxml2::XMLElement* xml_camera = xml_cameras->FirstChildElement("camera"); xml_camera; xml_camera = xml_camera->NextSiblingElement("camera")) {
-            tinyxml2::XMLElement* transformations_post = xml_camera->FirstChildElement("transformations_post");
-            if (transformations_post != nullptr) {
-                for (tinyxml2::XMLElement* transformation_post = transformations_post->FirstChildElement("transformation_post"); transformation_post; transformation_post = transformation_post->NextSiblingElement("transformation_post")) {
-                    apply_transformation(cameras_[index]->transformation_, transformation_post);
-                }
-            }
-            ++index;
-        }
-        std::cout << "Cameras transformed post." << std::endl;
-    }
     std::cout << std::endl;
 
     // Update
@@ -726,12 +711,29 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
                         focus_position = focus_position_char;
                     }
                     cameras_[index]->autoFocus(scene_.get(), get_xy<double>(focus_position));
+                    cameras_[index]->update();
                     std::cout << "Camera #" << index << " autofocus." << std::endl;
                 }
             }
             ++index;
         }
     }
+
+    // Cameras
+    if (xml_cameras != nullptr) {
+        size_t index = 0;
+        for (tinyxml2::XMLElement* xml_camera = xml_cameras->FirstChildElement("camera"); xml_camera; xml_camera = xml_camera->NextSiblingElement("camera")) {
+            tinyxml2::XMLElement* transformations_post = xml_camera->FirstChildElement("transformations_post");
+            if (transformations_post != nullptr) {
+                for (tinyxml2::XMLElement* transformation_post = transformations_post->FirstChildElement("transformation_post"); transformation_post; transformation_post = transformation_post->NextSiblingElement("transformation_post")) {
+                    apply_transformation(cameras_[index]->transformation_, transformation_post);
+                }
+            }
+            ++index;
+        }
+        std::cout << "Cameras transformed post." << std::endl;
+    }
+
     for (auto &camera : cameras_) {
         camera->update();
     }
