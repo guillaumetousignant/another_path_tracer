@@ -21,7 +21,7 @@ using APTracer::Entities::Scene_t;
 Cam3DMotionblur_t::Cam3DMotionblur_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, std::array<double, 2> fov, std::array<unsigned int, 2> subpix, ImgBuffer_t* image, ImgBuffer_t* image_L, ImgBuffer_t* image_R, double eye_dist, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double focus_distance, std::array<double, 2> time, double gammaind) :
     Camera_t(transformation, filename, up, fov, subpix, std::move(medium_list), skybox, max_bounces, gammaind), 
     image_(image), unif_(0.0, 1.0), eye_dist_(eye_dist/2.0), focus_distance_(focus_distance), focus_distance_buffer_(focus_distance),
-    direction_last_(direction_), origin_last_(origin_), focus_distance_last_(focus_distance_), time_{time}, up_last_(up_), fov_last_{fov}, focus_coordinates_{0.5, 0.5} {
+    direction_last_(direction_), origin_last_(origin_), focus_distance_last_(focus_distance_), time_{time}, up_last_(up_), fov_last_{fov} {
 
     std::string filename_L;
     std::string filename_R;
@@ -41,16 +41,14 @@ Cam3DMotionblur_t::Cam3DMotionblur_t(TransformMatrix_t* transformation, const st
     camera_R_ = std::unique_ptr<CamMotionblur_t>(new CamMotionblur_t(transformation, filename_R, up_, fov_, subpix_, image_R, medium_list_, skybox_, max_bounces_, time_, gammaind_));
 
     const Vec3f horizontal = direction_.cross(up).normalize_inplace();
-    const Vec3f vertical = horizontal.cross(direction_).normalize_inplace();
-    const Vec3f focus_direction = Vec3f(1.0, pi/2.0 + (focus_coordinates_[1]-0.5)*fov_[0], (focus_coordinates_[0]-0.5)*fov_[1]).to_xyz_offset(direction_, horizontal, vertical); // 0, y, x
 
     camera_L_->origin_ = horizontal * -eye_dist_ + origin_;
     camera_R_->origin_ = horizontal * eye_dist_ + origin_;
     camera_L_->origin_last_ = camera_L_->origin_;
     camera_R_->origin_last_ = camera_R_->origin_;
     
-    camera_L_->direction_ = (focus_direction * focus_distance_ + horizontal * eye_dist_).normalize_inplace();
-    camera_R_->direction_ = (focus_direction * focus_distance_ - horizontal * eye_dist_).normalize_inplace();
+    camera_L_->direction_ = (direction_ * focus_distance_ + horizontal * eye_dist_).normalize_inplace();
+    camera_R_->direction_ = (direction_ * focus_distance_ - horizontal * eye_dist_).normalize_inplace();
     camera_L_->direction_last_ = camera_L_->direction_;
     camera_R_->direction_last_ = camera_R_->direction_;
 }
@@ -83,13 +81,11 @@ auto Cam3DMotionblur_t::update() -> void {
     camera_R_->fov_ = fov_;
 
     const Vec3f horizontal = direction_.cross(up_);
-    const Vec3f vertical = horizontal.cross(direction_).normalize_inplace();
-    const Vec3f focus_direction = Vec3f(1.0, pi/2.0 + (focus_coordinates_[1]-0.5)*fov_[0], (focus_coordinates_[0]-0.5)*fov_[1]).to_xyz_offset(direction_, horizontal, vertical); // 0, y, x
 
     camera_L_->origin_ = horizontal * -eye_dist_ + origin_;
     camera_R_->origin_ = horizontal * eye_dist_ + origin_;
-    camera_L_->direction_ = (focus_direction * focus_distance_ + horizontal * eye_dist_).normalize_inplace();
-    camera_R_->direction_ = (focus_direction * focus_distance_ - horizontal * eye_dist_).normalize_inplace();
+    camera_L_->direction_ = (direction_ * focus_distance_ + horizontal * eye_dist_).normalize_inplace();
+    camera_R_->direction_ = (direction_ * focus_distance_ - horizontal * eye_dist_).normalize_inplace();
 }
 
 auto Cam3DMotionblur_t::raytrace(const Scene_t* scene) -> void {
@@ -150,7 +146,6 @@ auto Cam3DMotionblur_t::focus(double focus_distance) -> void {
 auto Cam3DMotionblur_t::autoFocus(const Scene_t* scene, std::array<double, 2> position) -> void {
     double t = std::numeric_limits<double>::infinity();
     std::array<double, 2> uv;
-    focus_coordinates_ = position;
 
     const Vec3f horizontal = direction_.cross(up_).normalize_inplace();
     const Vec3f vertical = horizontal.cross(direction_).normalize_inplace();

@@ -54,8 +54,8 @@ Cam3DMotionblurAperture_t::Cam3DMotionblurAperture_t(TransformMatrix_t* transfor
     camera_L_->origin_last_ = camera_L_->origin_;
     camera_R_->origin_last_ = camera_R_->origin_;
     
-    camera_L_->direction_ = (focus_direction * focus_distance_ + horizontal * eye_dist_).normalize_inplace();
-    camera_R_->direction_ = (focus_direction * focus_distance_ - horizontal * eye_dist_).normalize_inplace();
+    camera_L_->direction_ = (direction_ * focus_distance_ + horizontal * eye_dist_).normalize_inplace();
+    camera_R_->direction_ = (direction_ * focus_distance_ - horizontal * eye_dist_).normalize_inplace();
     camera_L_->direction_last_ = camera_L_->direction_;
     camera_R_->direction_last_ = camera_R_->direction_;
 }
@@ -97,8 +97,8 @@ auto Cam3DMotionblurAperture_t::update() -> void {
     camera_R_->focus_distance_ = (focus_direction * focus_distance_ - horizontal * eye_dist_).magnitude();
     camera_L_->origin_ = horizontal * -eye_dist_ + origin_;
     camera_R_->origin_ = horizontal * eye_dist_ + origin_;
-    camera_L_->direction_ = (focus_direction * focus_distance_ + horizontal * eye_dist_).normalize_inplace();
-    camera_R_->direction_ = (focus_direction * focus_distance_ - horizontal * eye_dist_).normalize_inplace();
+    camera_L_->direction_ = (direction_ * focus_distance_ + horizontal * eye_dist_).normalize_inplace();
+    camera_R_->direction_ = (direction_ * focus_distance_ - horizontal * eye_dist_).normalize_inplace();
 }
 
 auto Cam3DMotionblurAperture_t::raytrace(const Scene_t* scene) -> void {

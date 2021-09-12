@@ -49,8 +49,8 @@ Cam3DAperture_t::Cam3DAperture_t(TransformMatrix_t* transformation, const std::s
     camera_L_->origin_ = horizontal * -eye_dist_ + origin_;
     camera_R_->origin_ = horizontal * eye_dist_ + origin_;
     
-    camera_L_->direction_ = (focus_direction * focus_distance_ + horizontal * eye_dist_).normalize_inplace();
-    camera_R_->direction_ = (focus_direction * focus_distance_ - horizontal * eye_dist_).normalize_inplace();
+    camera_L_->direction_ = (direction_ * focus_distance_ + horizontal * eye_dist_).normalize_inplace();
+    camera_R_->direction_ = (direction_ * focus_distance_ - horizontal * eye_dist_).normalize_inplace();
 }
 
 auto Cam3DAperture_t::update() -> void {
@@ -73,8 +73,8 @@ auto Cam3DAperture_t::update() -> void {
     camera_R_->focus_distance_ = (focus_direction * focus_distance_ - horizontal * eye_dist_).magnitude();
     camera_L_->origin_ = horizontal * -eye_dist_ + origin_;
     camera_R_->origin_ = horizontal * eye_dist_ + origin_;
-    camera_L_->direction_ = (focus_direction * focus_distance_ + horizontal * eye_dist_).normalize_inplace();
-    camera_R_->direction_ = (focus_direction * focus_distance_ - horizontal * eye_dist_).normalize_inplace();
+    camera_L_->direction_ = (direction_ * focus_distance_ + horizontal * eye_dist_).normalize_inplace();
+    camera_R_->direction_ = (direction_ * focus_distance_ - horizontal * eye_dist_).normalize_inplace();
 }
 
 auto Cam3DAperture_t::raytrace(const Scene_t* scene) -> void {
