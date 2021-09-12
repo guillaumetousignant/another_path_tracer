@@ -72,6 +72,7 @@ namespace APTracer { namespace Cameras {
             double aperture_; /**< @brief Radius of the disk on which rays are created around the origin. Higher values will cause stronger depth of field, objects out of focus will be blurrier.*/
             std::unique_ptr<CamAperture_t> camera_L_; /**< @brief Left eye camera. Managed by the 3D camera, do not update directly.*/
             std::unique_ptr<CamAperture_t> camera_R_; /**< @brief Right eye camera. Managed by the 3D camera, do not update directly.*/
+            std::array<double, 2> focus_coordinates_; /**< @brief Image-space coordinates on which the camera is focussed. [horizontal, vertical] from 0 to 1, from left to right and bottom to top.*/
 
             /**
              * @brief Updates the camera's members and the dependant cameras.
