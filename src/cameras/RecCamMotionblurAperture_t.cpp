@@ -112,11 +112,11 @@ auto RecCamMotionblurAperture_t::autoFocus(const Scene_t* scene, std::array<doub
 
     const Vec3f horizontal = direction_.cross(up_).normalize_inplace();
     const Vec3f vertical = horizontal.cross(direction_).normalize_inplace();
-    const Vec3f focus_point = origin_ + direction_ * focus_distance_;
-    const Vec3f span_x = horizontal * focus_distance_ * std::tan(fov_[1]/2.0) * 2.0;
-    const Vec3f span_y = vertical * focus_distance_ * std::tan(fov_[0]/2.0) * 2.0;
-
-    const Vec3f ray_vec = (focus_point - span_y * (position[1] - 0.5) + span_x * (position[0] - 0.5) - origin_).normalize_inplace();
+    const double span_x = 2 * std::tan(fov_[1]/2.0);
+    const double span_y = 2 * std::tan(fov_[0]/2.0);
+    const Vec3f ray_vec = (direction_
+                           - span_y * vertical * (position[1] - 0.5) 
+                           + span_x * horizontal * (position[0] - 0.5)).normalize_inplace();
 
     const Ray_t focus_ray = Ray_t(origin_, ray_vec, Vec3f(), Vec3f(1.0), medium_list_);
 
