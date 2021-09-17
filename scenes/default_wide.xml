@@ -59,7 +59,7 @@
       <imgbuffer name="buffer1" resx="2000" resy="1000" type="imgbuffer_opengl"/>
    </imgbuffers>
    <cameras>
-      <camera filename="NaN" fov="1.570796 2.214" gammaind="1" imgbuffer="1" max_bounces="8" medium_list="air, air" n_iter="Inf" name="camera1" rendermode="accumulation_write" skybox="1" subpix="1 1" transform_matrix="NaN" type="reccam" up="0 0 1" write_interval="100">
+      <camera filename="NaN" fov="1.570796 2.214" gammaind="1" imgbuffer="1" max_bounces="8" medium_list="air, air" n_iter="Inf" name="camera1" rendermode="accumulation_write" skybox="1" subpix="1 1" transform_matrix="NaN" type="reccam_aperture" focus_distance="2" aperture="0.01" up="0 0 1" write_interval="100">
          <transformations_pre>
             <transformation_pre type="translate" value="0 0 0"/>
          </transformations_pre>
