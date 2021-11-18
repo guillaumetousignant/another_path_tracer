@@ -38,7 +38,14 @@ namespace APTracer { namespace Entities {
              * 
              * @param filename Path to a geometry file in .obj format.
              */
-            auto readObj(const std::string &filename) -> void;
+
+            /**
+             * @brief Fills the class' members form a .obj file.
+             * 
+             * @param filename Path to a geometry file in .obj format.
+             * @return std::vector<bool> Vector indicating which points have missing normals.
+             */
+            auto readObj(const std::string &filename) -> std::vector<bool>;
 
             /**
              * @brief Fills the class' members form a .su2 file.
@@ -46,15 +53,18 @@ namespace APTracer { namespace Entities {
              * The faces in the 'WALL' MARKER_TAG sections will be used.
              * 
              * @param filename Path to a geometry file in .su2 format.
+             * @return std::vector<bool> Vector indicating which points have missing normals.
              */
-            auto readSU2(const std::string &filename) -> void;
+            auto readSU2(const std::string &filename) -> std::vector<bool>;
 
             /**
              * @brief Constructs the face normals from the face points when none are supplied in the file.
              * 
              * This will give a facetted look, as the faces will have the same normal at all points.
+             * 
+             * @param normals_to_build Vector indicating which points have missing normals.
              */
-            auto deNan() -> void;
+            auto build_missing_normals(const std::vector<bool>& normals_to_build) -> void;
     };
 }}
 
