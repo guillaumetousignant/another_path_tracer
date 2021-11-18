@@ -91,7 +91,7 @@ auto IsoCamAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> pos
     const Ray_t focus_ray = Ray_t(ray_origin, direction_, Vec3f(), Vec3f(1.0), medium_list_);
 
     if (scene->intersect(focus_ray, t, uv) == nullptr) {
-        t = std::numeric_limits<double>::max();
+        t = 1000000;
     }
     focus(t);
 }

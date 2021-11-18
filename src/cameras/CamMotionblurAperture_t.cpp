@@ -118,7 +118,7 @@ auto CamMotionblurAperture_t::autoFocus(const Scene_t* scene, std::array<double,
     const Ray_t focus_ray = Ray_t(origin_, ray_direction_sph, Vec3f(), Vec3f(1.0), medium_list_);
 
     if (scene->intersect(focus_ray, t, uv) == nullptr) {
-        t = std::numeric_limits<double>::max();
+        t = 1000000;
     }
     focus(t);
 }
