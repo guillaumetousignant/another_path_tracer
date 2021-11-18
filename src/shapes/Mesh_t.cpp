@@ -3,7 +3,6 @@
 #include "entities/MaterialMap_t.h"
 #include "shapes/TriangleMesh_t.h"
 #include <iostream>
-#include <limits>
 
 APTracer::Shapes::Mesh_t::Mesh_t(APTracer::Entities::Material_t *material, APTracer::Entities::TransformMatrix_t *transform_matrix, APTracer::Entities::MeshGeometry_t* geom) 
         : MeshTop_t(material, transform_matrix, geom) {

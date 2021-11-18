@@ -1,5 +1,6 @@
 #include "entities/Vec3f.h"
 #include <algorithm>
+#include <limits>
 #include <cmath>
 
 using APTracer::Entities::Vec3f;
@@ -167,8 +168,7 @@ auto Vec3f::to_sph() -> const Vec3f& { // CHECK outputs nan
     // [r, theta, phi] (theta is polar angle)
     const double temp = std::atan2(v[1], v[0]);
     v[0] = magnitude();
-    v[1] = std::acos(v[2]/v[0]);
-    v[1] = std::isnan(v[1]) ? 0.0 : v[1];
+    v[1] = (std::abs(v[0]) >= std::numeric_limits<double>::min()) ? std::acos(v[2]/v[0]) : 0.0;
     v[2] = temp;
     return *this;
 }
@@ -189,8 +189,7 @@ auto Vec3f::to_xyz_offset(const Vec3f &ref1, const Vec3f &ref2, const Vec3f &ref
 }
 auto Vec3f::get_sph() const -> Vec3f {
     const double r = magnitude();
-    const double temp = std::acos(v[2]/r);
-    return {r, std::isnan(temp) ? 0.0 : temp, std::atan2(v[1], v[0])};
+    return {r, (std::abs(r) >= std::numeric_limits<double>::min()) ? std::acos(v[2]/r) : 0.0, std::atan2(v[1], v[0])};
 }
 auto Vec3f::get_xyz() const -> Vec3f {
     return {v[0]*std::sin(v[1])*std::cos(v[2]), v[0]*std::sin(v[1])*std::sin(v[2]), v[0]*std::cos(v[1])};

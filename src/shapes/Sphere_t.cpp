@@ -2,7 +2,6 @@
 #include "entities/TransformMatrix_t.h"
 #include "entities/Material_t.h"
 #include <cmath>
-#include <limits>
 
 constexpr double pi = 3.141592653589793238463;
 
@@ -31,8 +30,6 @@ auto APTracer::Shapes::Sphere_t::intersection(const APTracer::Entities::Ray_t &r
     const double discriminant = pow(b, 2) - c;
 
     if (discriminant < 0.0) {
-        t = std::numeric_limits<double>::max();
-        uv =  {NAN, NAN};
         return false;
     }
     t = b - sqrt(discriminant);
@@ -40,8 +37,6 @@ auto APTracer::Shapes::Sphere_t::intersection(const APTracer::Entities::Ray_t &r
     if (t < 0.0) {
         t = b + sqrt(discriminant);
         if (t < 0.0) {
-            t = std::numeric_limits<double>::max();
-            uv = {NAN, NAN};
             return false; 
         }
     }

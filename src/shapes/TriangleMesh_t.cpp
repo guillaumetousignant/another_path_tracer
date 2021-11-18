@@ -73,8 +73,6 @@ auto APTracer::Shapes::TriangleMesh_t::intersection(const APTracer::Entities::Ra
     const double det = v0v1_.dot(pvec);
 
     if (std::abs(det) < epsilon) {
-        t = std::numeric_limits<double>::max();
-        uv = {NAN, NAN};
         return false;
     }
 
@@ -84,8 +82,6 @@ auto APTracer::Shapes::TriangleMesh_t::intersection(const APTracer::Entities::Ra
     uv[0] = u;
 
     if ((u < 0.0) || (u > 1.0)) {
-        t = std::numeric_limits<double>::max();
-        uv[1] = NAN;
         return false;
     }
 
@@ -94,14 +90,12 @@ auto APTracer::Shapes::TriangleMesh_t::intersection(const APTracer::Entities::Ra
     uv[1] = v;
 
     if ((v < 0.0) || ((u+v) > 1.0)) {
-        t = std::numeric_limits<double>::max();
         return false;
     }
 
     t = v0v2_.dot(qvec) * invdet;
 
     if (t < 0.0) {
-        t = std::numeric_limits<double>::max();
         return false;
     }
 

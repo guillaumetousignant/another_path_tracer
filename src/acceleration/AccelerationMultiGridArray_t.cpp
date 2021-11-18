@@ -11,7 +11,7 @@ AccelerationMultiGridArray_t::AccelerationMultiGridArray_t(Shape_t** items, size
     n_obj_ = n_items;
 
     std::array<Vec3f, 2> coordinates{Vec3f(std::numeric_limits<double>::max()),
-                                     Vec3f(-std::numeric_limits<double>::max())};
+                                     Vec3f(std::numeric_limits<double>::lowest())};
     for (size_t i = 0; i < n_obj_; ++i) {
         coordinates[0].min(items[i]->mincoord());
         coordinates[1].max(items[i]->maxcoord());
@@ -34,7 +34,7 @@ AccelerationMultiGridArray_t::AccelerationMultiGridArray_t(Shape_t** items, size
 
     for (size_t i = 0; i < n_obj_; ++i) {
         Vec3f min1 = Vec3f(std::numeric_limits<double>::max());
-        Vec3f max1 = Vec3f(-std::numeric_limits<double>::max());
+        Vec3f max1 = Vec3f(std::numeric_limits<double>::lowest());
     
         min1.min(items[i]->mincoord());
         max1.max(items[i]->maxcoord());
@@ -66,7 +66,7 @@ AccelerationMultiGridArray_t::AccelerationMultiGridArray_t(Shape_t** items, size
 
     for (size_t i = 0; i < n_obj_; ++i) {
         Vec3f min1 = Vec3f(std::numeric_limits<double>::max());
-        Vec3f max1 = Vec3f(-std::numeric_limits<double>::max());
+        Vec3f max1 = Vec3f(std::numeric_limits<double>::lowest());
     
         min1.min(items[i]->mincoord());
         max1.max(items[i]->maxcoord());
@@ -131,7 +131,7 @@ AccelerationMultiGridArray_t::AccelerationMultiGridArray_t(Shape_t** items, size
 
     for (size_t i = 0; i < n_obj_; ++i) {
         Vec3f min1 = Vec3f(std::numeric_limits<double>::max());
-        Vec3f max1 = Vec3f(-std::numeric_limits<double>::max());
+        Vec3f max1 = Vec3f(std::numeric_limits<double>::lowest());
     
         min1.min(items[i]->mincoord());
         max1.max(items[i]->maxcoord());
@@ -163,7 +163,7 @@ AccelerationMultiGridArray_t::AccelerationMultiGridArray_t(Shape_t** items, size
 
     for (size_t i = 0; i < n_obj_; ++i) {
         Vec3f min1 = Vec3f(std::numeric_limits<double>::max());
-        Vec3f max1 = Vec3f(-std::numeric_limits<double>::max());
+        Vec3f max1 = Vec3f(std::numeric_limits<double>::lowest());
     
         min1.min(items[i]->mincoord());
         max1.max(items[i]->maxcoord());
@@ -271,7 +271,7 @@ auto AccelerationMultiGridArray_t::intersect(const Ray_t &ray, double &t, std::a
 
 auto AccelerationMultiGridArray_t::add(Shape_t* item) -> void {
     Vec3f min1 = Vec3f(std::numeric_limits<double>::max());
-    Vec3f max1 = Vec3f(-std::numeric_limits<double>::max());
+    Vec3f max1 = Vec3f(std::numeric_limits<double>::lowest());
 
     min1.min(item->mincoord());
     max1.max(item->maxcoord());
@@ -298,7 +298,7 @@ auto AccelerationMultiGridArray_t::add(Shape_t* item) -> void {
 
 auto AccelerationMultiGridArray_t::remove(const Shape_t* item) -> void {
     Vec3f min1 = Vec3f(std::numeric_limits<double>::max());
-    Vec3f max1 = Vec3f(-std::numeric_limits<double>::max());
+    Vec3f max1 = Vec3f(std::numeric_limits<double>::lowest());
 
     min1.min(item->mincoord());
     max1.max(item->maxcoord());

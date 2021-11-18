@@ -1,5 +1,4 @@
 #include "shapes/Box_t.h"
-#include <limits>
 #include <algorithm>
 #include <array>
 
@@ -21,7 +20,6 @@ auto APTracer::Shapes::Box_t::intersection(const APTracer::Entities::Ray_t &ray,
     const double tymax = (coordinates_[!sign[1]][1] - ray.origin_[1]) * invdir[1];
 
     if ((tmin > tymax) || (tymin > tmax)) {
-        t = std::numeric_limits<double>::max();
         return false;
     }
 
@@ -32,7 +30,6 @@ auto APTracer::Shapes::Box_t::intersection(const APTracer::Entities::Ray_t &ray,
     const double tzmax = (coordinates_[!sign[2]][2] - ray.origin_[2]) * invdir[2];
 
     if ((tmin > tzmax) || (tzmin > tmax)) {
-        t = std::numeric_limits<double>::max();
         return false;
     }
     

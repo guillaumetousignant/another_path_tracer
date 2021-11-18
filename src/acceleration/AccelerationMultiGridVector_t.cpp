@@ -13,7 +13,7 @@ AccelerationMultiGridVector_t::AccelerationMultiGridVector_t(Shape_t** items, si
     n_obj_ = n_items;
 
     std::array<Vec3f, 2> coordinates{Vec3f(std::numeric_limits<double>::max()),
-                                     Vec3f(-std::numeric_limits<double>::max())};
+                                     Vec3f(std::numeric_limits<double>::lowest())};
     for (size_t i = 0; i < n_obj_; ++i) {
         coordinates[0].min(items[i]->mincoord());
         coordinates[1].max(items[i]->maxcoord());
@@ -36,7 +36,7 @@ AccelerationMultiGridVector_t::AccelerationMultiGridVector_t(Shape_t** items, si
 
     for (size_t i = 0; i < n_obj_; ++i) {
         Vec3f min1 = Vec3f(std::numeric_limits<double>::max());
-        Vec3f max1 = Vec3f(-std::numeric_limits<double>::max());
+        Vec3f max1 = Vec3f(std::numeric_limits<double>::lowest());
     
         min1.min(items[i]->mincoord());
         max1.max(items[i]->maxcoord());
@@ -100,7 +100,7 @@ AccelerationMultiGridVector_t::AccelerationMultiGridVector_t(Shape_t** items, si
 
     for (size_t i = 0; i < n_obj_; ++i) {
         Vec3f min1 = Vec3f(std::numeric_limits<double>::max());
-        Vec3f max1 = Vec3f(-std::numeric_limits<double>::max());
+        Vec3f max1 = Vec3f(std::numeric_limits<double>::lowest());
     
         min1.min(items[i]->mincoord());
         max1.max(items[i]->maxcoord());
@@ -206,7 +206,7 @@ auto AccelerationMultiGridVector_t::intersect(const Ray_t &ray, double &t, std::
 
 auto AccelerationMultiGridVector_t::add(Shape_t* item) -> void {
     Vec3f min1 = Vec3f(std::numeric_limits<double>::max());                        
-    Vec3f max1 = Vec3f(-std::numeric_limits<double>::max());
+    Vec3f max1 = Vec3f(std::numeric_limits<double>::lowest());
 
     min1.min(item->mincoord());
     max1.min(item->mincoord());
@@ -233,7 +233,7 @@ auto AccelerationMultiGridVector_t::add(Shape_t* item) -> void {
 
 auto AccelerationMultiGridVector_t::remove(const Shape_t* item) -> void {
     Vec3f min1 = Vec3f(std::numeric_limits<double>::max());                        
-    Vec3f max1 = Vec3f(-std::numeric_limits<double>::max());
+    Vec3f max1 = Vec3f(std::numeric_limits<double>::lowest());
 
     min1.min(item->mincoord());
     max1.min(item->mincoord());

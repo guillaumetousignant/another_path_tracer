@@ -135,7 +135,7 @@ auto Cam3D_t::autoFocus(const Scene_t* scene, std::array<double, 2> position) ->
     const Ray_t focus_ray = Ray_t(origin_, ray_direction, Vec3f(), Vec3f(1.0), medium_list_);
 
     if (scene->intersect(focus_ray, t, uv) == nullptr) {
-        t = 1000000.0;
+        t = std::numeric_limits<double>::max();
     }
     focus(t);
 }
