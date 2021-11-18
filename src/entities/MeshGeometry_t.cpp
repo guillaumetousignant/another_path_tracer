@@ -36,7 +36,7 @@ auto MeshGeometry_t::readObj(const std::string &filename) -> std::vector<bool> {
     std::ifstream meshfile(filename);
     if (!meshfile.is_open()) {
         std::cerr << "Error: file '" << filename << "' could not be opened. Exiting." << std::endl;
-        return;
+        return std::vector<bool>();
     }
 
     // Getting number of elements
@@ -189,7 +189,7 @@ auto MeshGeometry_t::readSU2(const std::string &filename) -> std::vector<bool> {
     std::ifstream meshfile(filename);
     if (!meshfile.is_open()) {
         std::cerr << "Error: file '" << filename << "' could not be opened. Exiting." << std::endl;
-        return;
+        return std::vector<bool>();
     }
 
     // Getting number of elements
