@@ -157,7 +157,7 @@ auto Cam3DMotionblurAperture_t::focus(double focus_distance) -> void {
 }
 
 auto Cam3DMotionblurAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> position) -> void {
-    double t = std::numeric_limits<double>::infinity();
+    double t = std::numeric_limits<double>::max();
     std::array<double, 2> uv;
     focus_coordinates_ = position;
 

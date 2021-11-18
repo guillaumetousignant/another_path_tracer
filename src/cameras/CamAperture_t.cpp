@@ -81,7 +81,7 @@ auto CamAperture_t::focus(double focus_distance) -> void {
 }
 
 auto CamAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> position) -> void {
-    double t = std::numeric_limits<double>::infinity();
+    double t = std::numeric_limits<double>::max();
     std::array<double, 2> uv;
 
     const Vec3f horizontal = direction_.cross(up_).normalize_inplace();

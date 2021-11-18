@@ -30,8 +30,8 @@ APTracer::Shapes::TriangleMesh_t::TriangleMesh_t(APTracer::Entities::Material_t 
     const std::array<double, 2> tuv0v1 = {texture_coordinates_[2] - texture_coordinates_[0], texture_coordinates_[3] - texture_coordinates_[1]};
     const std::array<double, 2> tuv0v2 = {texture_coordinates_[4] - texture_coordinates_[0], texture_coordinates_[5] - texture_coordinates_[1]};    
 
-    const double invdet = 1.0/(tuv0v1[0] * tuv0v2[1] - tuv0v1[1] * tuv0v2[0]);
-    if (std::isfinite(invdet)) {
+    if (std::abs(tuv0v1[0] * tuv0v2[1] - tuv0v1[1] * tuv0v2[0]) >= std::numeric_limits<double>::min()) {
+        const double invdet = 1.0/(tuv0v1[0] * tuv0v2[1] - tuv0v1[1] * tuv0v2[0]);
         tuv_to_world_ = {invdet * -tuv0v2[0], invdet * tuv0v1[0]};
     }
     else {
@@ -58,8 +58,8 @@ auto APTracer::Shapes::TriangleMesh_t::update() -> void {
     const std::array<double, 2> tuv0v1 = {texture_coordinates_[2] - texture_coordinates_[0], texture_coordinates_[3] - texture_coordinates_[1]};
     const std::array<double, 2> tuv0v2 = {texture_coordinates_[4] - texture_coordinates_[0], texture_coordinates_[5] - texture_coordinates_[1]};    
 
-    const double invdet = 1.0/(tuv0v1[0] * tuv0v2[1] - tuv0v1[1] * tuv0v2[0]);
-    if (std::isfinite(invdet)) {
+    if (std::abs(tuv0v1[0] * tuv0v2[1] - tuv0v1[1] * tuv0v2[0]) >= std::numeric_limits<double>::min()) {
+        const double invdet = 1.0/(tuv0v1[0] * tuv0v2[1] - tuv0v1[1] * tuv0v2[0]);
         tuv_to_world_ = {invdet * -tuv0v2[0], invdet * tuv0v1[0]};
     }
     else {
@@ -73,7 +73,7 @@ auto APTracer::Shapes::TriangleMesh_t::intersection(const APTracer::Entities::Ra
     const double det = v0v1_.dot(pvec);
 
     if (std::abs(det) < epsilon) {
-        t = std::numeric_limits<double>::infinity();
+        t = std::numeric_limits<double>::max();
         uv = {NAN, NAN};
         return false;
     }
@@ -84,7 +84,7 @@ auto APTracer::Shapes::TriangleMesh_t::intersection(const APTracer::Entities::Ra
     uv[0] = u;
 
     if ((u < 0.0) || (u > 1.0)) {
-        t = std::numeric_limits<double>::infinity();
+        t = std::numeric_limits<double>::max();
         uv[1] = NAN;
         return false;
     }
@@ -94,14 +94,14 @@ auto APTracer::Shapes::TriangleMesh_t::intersection(const APTracer::Entities::Ra
     uv[1] = v;
 
     if ((v < 0.0) || ((u+v) > 1.0)) {
-        t = std::numeric_limits<double>::infinity();
+        t = std::numeric_limits<double>::max();
         return false;
     }
 
     t = v0v2_.dot(qvec) * invdet;
 
     if (t < 0.0) {
-        t = std::numeric_limits<double>::infinity();
+        t = std::numeric_limits<double>::max();
         return false;
     }
 

@@ -31,7 +31,7 @@ auto APTracer::Shapes::Sphere_t::intersection(const APTracer::Entities::Ray_t &r
     const double discriminant = pow(b, 2) - c;
 
     if (discriminant < 0.0) {
-        t = std::numeric_limits<double>::infinity();
+        t = std::numeric_limits<double>::max();
         uv =  {NAN, NAN};
         return false;
     }
@@ -40,7 +40,7 @@ auto APTracer::Shapes::Sphere_t::intersection(const APTracer::Entities::Ray_t &r
     if (t < 0.0) {
         t = b + sqrt(discriminant);
         if (t < 0.0) {
-            t = std::numeric_limits<double>::infinity();
+            t = std::numeric_limits<double>::max();
             uv = {NAN, NAN};
             return false; 
         }

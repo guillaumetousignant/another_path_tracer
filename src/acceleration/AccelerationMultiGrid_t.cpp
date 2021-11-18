@@ -10,8 +10,8 @@ AccelerationMultiGrid_t::AccelerationMultiGrid_t(Shape_t** items, size_t n_items
         level_(0), min_res_(min_res), max_res_(max_res), max_cell_content_(max_cell_content), max_grid_level_(max_grid_level) {
    n_obj_ = n_items;
 
-    std::array<Vec3f, 2> coordinates{Vec3f(std::numeric_limits<double>::infinity()),
-                                     Vec3f(-std::numeric_limits<double>::infinity())};
+    std::array<Vec3f, 2> coordinates{Vec3f(std::numeric_limits<double>::max()),
+                                     Vec3f(-std::numeric_limits<double>::max())};
     for (size_t i = 0; i < n_obj_; ++i) {
         coordinates[0].min(items[i]->mincoord());
         coordinates[1].max(items[i]->maxcoord());
@@ -33,8 +33,8 @@ AccelerationMultiGrid_t::AccelerationMultiGrid_t(Shape_t** items, size_t n_items
     std::vector<std::unique_ptr<GridCell_t>> temp_cells(cell_res_[0] *  cell_res_[1] * cell_res_[2]);
 
     for (size_t i = 0; i < n_obj_; ++i) {
-        Vec3f min1 = Vec3f(std::numeric_limits<double>::infinity());
-        Vec3f max1 = Vec3f(-std::numeric_limits<double>::infinity());
+        Vec3f min1 = Vec3f(std::numeric_limits<double>::max());
+        Vec3f max1 = Vec3f(-std::numeric_limits<double>::max());
     
         min1.min(items[i]->mincoord());
         max1.max(items[i]->maxcoord());
@@ -104,8 +104,8 @@ AccelerationMultiGrid_t::AccelerationMultiGrid_t(Shape_t** items, size_t n_items
     std::vector<std::unique_ptr<GridCell_t>> temp_cells(cell_res_[0] *  cell_res_[1] * cell_res_[2]);
 
     for (size_t i = 0; i < n_obj_; ++i) {
-        Vec3f min1 = Vec3f(std::numeric_limits<double>::infinity());
-        Vec3f max1 = Vec3f(-std::numeric_limits<double>::infinity());
+        Vec3f min1 = Vec3f(std::numeric_limits<double>::max());
+        Vec3f max1 = Vec3f(-std::numeric_limits<double>::max());
     
         min1.min(items[i]->mincoord());
         max1.max(items[i]->maxcoord());
@@ -161,7 +161,7 @@ auto AccelerationMultiGrid_t::intersect(const Ray_t &ray, double &t, std::array<
     std::array<int, 3> cellstep {0, 0, 0};
     const std::array<unsigned int, 8> map {2, 1, 2, 1, 2, 2, 0, 0};
 
-    t = std::numeric_limits<double>::infinity();
+    t = std::numeric_limits<double>::max();
     const Vec3f invdir = Vec3f(1.0)/ray.direction_;
 
     if (!bounding_box_.intersection(ray, tbbox)) {
@@ -217,8 +217,8 @@ auto AccelerationMultiGrid_t::intersect(const Ray_t &ray, double &t, std::array<
 }
 
 auto AccelerationMultiGrid_t::add(Shape_t* item) -> void {
-    Vec3f min1 = Vec3f(std::numeric_limits<double>::infinity());
-    Vec3f max1 = Vec3f(-std::numeric_limits<double>::infinity());
+    Vec3f min1 = Vec3f(std::numeric_limits<double>::max());
+    Vec3f max1 = Vec3f(-std::numeric_limits<double>::max());
 
     min1.min(item->mincoord());
     max1.max(item->maxcoord());
@@ -245,8 +245,8 @@ auto AccelerationMultiGrid_t::add(Shape_t* item) -> void {
 }
 
 auto AccelerationMultiGrid_t::remove(const Shape_t* item) -> void {
-    Vec3f min1 = Vec3f(std::numeric_limits<double>::infinity());
-    Vec3f max1 = Vec3f(-std::numeric_limits<double>::infinity());
+    Vec3f min1 = Vec3f(std::numeric_limits<double>::max());
+    Vec3f max1 = Vec3f(-std::numeric_limits<double>::max());
 
     min1.min(item->mincoord());
     max1.max(item->maxcoord());

@@ -104,7 +104,7 @@ auto Scene_t::intersect_brute(const Ray_t &ray, double &t, std::array<double, 2>
     double t_temp;
     std::array<double, 2> uv_temp;
     
-    t = std::numeric_limits<double>::infinity();
+    t = std::numeric_limits<double>::max();
     Shape_t* hit_obj = nullptr;
 
     for (auto* shape: geometry_) {

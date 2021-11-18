@@ -42,7 +42,7 @@ auto APTracer::Shapes::SphereMotionblur_t::intersection(const APTracer::Entities
     const double discriminant = pow(b, 2) - c;
 
     if (discriminant < 0.0) {
-        t = std::numeric_limits<double>::infinity();
+        t = std::numeric_limits<double>::max();
         uv = {NAN, NAN};
         return false;
     }
@@ -51,7 +51,7 @@ auto APTracer::Shapes::SphereMotionblur_t::intersection(const APTracer::Entities
     if (t < 0.0) {
         t = b + sqrt(discriminant);
         if (t < 0.0) {
-            t = std::numeric_limits<double>::infinity();
+            t = std::numeric_limits<double>::max();
             uv = {NAN, NAN};
             return false; 
         }
