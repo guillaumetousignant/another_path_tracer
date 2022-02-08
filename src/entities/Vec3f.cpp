@@ -233,7 +233,7 @@ auto Vec3f::clamp(double minimum, double maximum) -> Vec3f& {
     return *this;
 }
 auto operator<<(std::ostream &output, const Vec3f &v) -> std::ostream& {
-    std::cout << '[' << v[0] << ", " << v[1] << ", " << v[2] << ']';
+    output << '[' << v[0] << ", " << v[1] << ", " << v[2] << ']';
     return output;
 } 
 auto operator*(const double factor, const Vec3f &v) -> Vec3f {
