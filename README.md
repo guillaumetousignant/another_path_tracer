@@ -42,7 +42,6 @@ To build without TIFF, add `-DUSE_TIFF=OFF` to cmake call.
 To build tests, add `-DBUILD_TESTING=ON` to cmake call. Then:
 
 ```bash
-make unit_tests
 ctest
 ```
 
