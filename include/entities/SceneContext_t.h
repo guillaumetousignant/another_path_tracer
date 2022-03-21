@@ -39,6 +39,8 @@ namespace APTracer { namespace Materials {
     class FresnelMixNormal_t;
     class RandomMix_t;
     class RandomMixIn_t;
+    class TextureMix_t;
+    class TextureMixIn_t;
 }}
 
 using namespace APTracer::Shapes;
@@ -83,6 +85,10 @@ namespace APTracer { namespace Entities {
                 std::list<std::pair<APTracer::Materials::RandomMix_t*, std::array<size_t, 2>>> random_mix;
                 /** @brief List containing random mixes in and their materials.*/
                 std::list<std::pair<APTracer::Materials::RandomMixIn_t*, std::array<size_t, 2>>> random_mix_in;
+                /** @brief List containing texture mixes and their materials.*/
+                std::list<std::pair<APTracer::Materials::TextureMix_t*, std::array<size_t, 2>>> texture_mix;
+                /** @brief List containing texture mixes in and their materials.*/
+                std::list<std::pair<APTracer::Materials::TextureMixIn_t*, std::array<size_t, 2>>> texture_mix_in;
             };
 
             /**

@@ -33,6 +33,8 @@ target_sources(APTracer
         ScattererExp_t.cpp
         ScattererExpFull_t.cpp
         ScattererFull_t.cpp
+        TextureMix_t.cpp
+        TextureMixIn_t.cpp
         Toon_t.cpp
         Transparent_t.cpp
 )

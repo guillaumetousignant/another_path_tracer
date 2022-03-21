@@ -50,6 +50,8 @@ namespace APTracer {
 #include "ScattererExp_t.h"
 #include "ScattererExpFull_t.h"
 #include "ScattererFull_t.h"
+#include "TextureMix_t.h"
+#include "TextureMixIn_t.h"
 #include "Toon_t.h"
 #include "Transparent_t.h"
 

@@ -37,6 +37,8 @@
 #include "materials/RandomMixIn_t.h"
 #include "materials/BounceMaterial_t.h"
 #include "materials/DistanceMaterial_t.h"
+#include "materials/TextureMix_t.h"
+#include "materials/TextureMixIn_t.h"
 #include "materials/Toon_t.h"
 #include "entities/MaterialMap_t.h"
 
@@ -378,6 +380,16 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
         material_mix->second_material_ = materials_[fresnel_mix_list.second[1]].get();
     }
     for (const auto& fresnel_mix_list: material_mix_list.random_mix_in) {
+        auto* material_mix = fresnel_mix_list.first;
+        material_mix->first_material_ = materials_[fresnel_mix_list.second[0]].get();
+        material_mix->second_material_ = materials_[fresnel_mix_list.second[1]].get();
+    }
+    for (const auto& fresnel_mix_list: material_mix_list.texture_mix) {
+        auto* material_mix = fresnel_mix_list.first;
+        material_mix->first_material_ = materials_[fresnel_mix_list.second[0]].get();
+        material_mix->second_material_ = materials_[fresnel_mix_list.second[1]].get();
+    }
+    for (const auto& fresnel_mix_list: material_mix_list.texture_mix_in) {
         auto* material_mix = fresnel_mix_list.first;
         material_mix->first_material_ = materials_[fresnel_mix_list.second[0]].get();
         material_mix->second_material_ = materials_[fresnel_mix_list.second[1]].get();
@@ -1293,6 +1305,22 @@ auto APTracer::Entities::SceneContext_t::create_material(const tinyxml2::XMLElem
         require_attributes(xml_material, attributes);
         return std::unique_ptr<Material_t>(
                     new APTracer::Materials::DistanceMaterial_t(xml_material->DoubleAttribute("focus_distance"), xml_material->DoubleAttribute("exponent")));
+    }
+    if (type == "texturemix") {
+        const std::vector<const char*> attributes = {"first_material", "second_material", "texture"};
+        require_attributes(xml_material, attributes);
+        std::unique_ptr<APTracer::Materials::TextureMix_t> material(
+                    new APTracer::Materials::TextureMix_t(nullptr, nullptr, get_texture(xml_material->Attribute("texture"), xml_textures)));
+        material_mix_lists.texture_mix.emplace_back(material.get(), get_material_mix(xml_material->Attribute("first_material"), xml_material->Attribute("second_material"), xml_materials));
+        return material;
+    }
+    if (type == "texturemixin") {
+        const std::vector<const char*> attributes = {"first_material", "second_material", "texture"};
+        require_attributes(xml_material, attributes);
+        std::unique_ptr<APTracer::Materials::TextureMixIn_t> material(
+                    new APTracer::Materials::TextureMixIn_t(nullptr, nullptr, get_texture(xml_material->Attribute("texture"), xml_textures)));
+        material_mix_lists.texture_mix_in.emplace_back(material.get(), get_material_mix(xml_material->Attribute("first_material"), xml_material->Attribute("second_material"), xml_materials));
+        return material;
     }
     if (type == "toon") {
         const std::vector<const char*> attributes = {"colour"};
