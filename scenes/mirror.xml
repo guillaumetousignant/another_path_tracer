@@ -4,7 +4,7 @@
       <medium name="air" type="nonabsorber" ind="1.001" priority="0"/>
    </mediums>
    <materials>
-      <material materials_list="unknown, difwhite, mirror, metal, unknown, unknown, difyellow" materials_names="IKEAFBXASC032IkornnesFBXASC032FloorFBXASC032MirrorSG, IKEAFBXASC032IkornnesFBXASC032FloorFBXASC032MirrorSG4, IKEAFBXASC032IkornnesFBXASC032FloorFBXASC032MirrorSG, IKEAFBXASC032IkornnesFBXASC032FloorFBXASC032MirrorSG1, IKEAFBXASC032IkornnesFBXASC032FloorFBXASC032MirrorSG2, IKEAFBXASC032IkornnesFBXASC032FloorFBXASC032MirrorSG3, IKEAFBXASC032IkornnesFBXASC032FloorFBXASC032MirrorSG2" name="mirror_aggregate_mat" type="aggregate"/>
+      <material materials_list="unknown, difwhite, mirror, metal, unknown, difwhite, difyellow" materials_names="IKEAFBXASC032IkornnesFBXASC032FloorFBXASC032MirrorSG, IKEAFBXASC032IkornnesFBXASC032FloorFBXASC032MirrorSG4, IKEAFBXASC032IkornnesFBXASC032FloorFBXASC032MirrorSG, IKEAFBXASC032IkornnesFBXASC032FloorFBXASC032MirrorSG1, IKEAFBXASC032IkornnesFBXASC032FloorFBXASC032MirrorSG2, IKEAFBXASC032IkornnesFBXASC032FloorFBXASC032MirrorSG3, IKEAFBXASC032IkornnesFBXASC032FloorFBXASC032MirrorSG2" name="mirror_aggregate_mat" type="aggregate"/>
       <material texture="wood_texture" emission="black" name="wood_material" roughness="1" type="diffuse_tex"/>
       <material colour="black" emission="black" name="difblack" roughness="1" type="diffuse"/>
       <material colour="white" emission="black" name="reflective" type="reflective"/>
