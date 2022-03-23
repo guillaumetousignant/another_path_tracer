@@ -1,5 +1,6 @@
 #include "entities/Texture_t.h"
 #include <string>
+#include <cmath>
 #ifdef APTRACER_USE_JPEG
     #define cimg_use_jpeg
 #endif
@@ -56,15 +57,14 @@ Texture_t::Texture_t(const std::string &filename) {
 
     for (size_t j = 0; j < size_y_; ++j) {
         for (size_t i = 0; i < size_x_; ++i) {
-            //img_[j][i] = Vec3f(image(i, j, 0), image(i, j, 1), image(i, j, 2));
             img_[(size_y_ - j - 1)*size_x_ + i] = Vec3f(image(static_cast<unsigned int>(i), static_cast<unsigned int>(j), 0, 0, n, n), image(static_cast<unsigned int>(i), static_cast<unsigned int>(j), 0, 1, n, n), image(static_cast<unsigned int>(i), static_cast<unsigned int>(j), 0, 2, n, n));
         }
     }
 }
 
 auto Texture_t::get(std::array<double, 2> xy) const -> Vec3f {
-    const double x = (size_x_ - 1) * xy[0];
-    const double y = (size_y_ - 1) * xy[1];
+    const double x = (size_x_ - 1) * (xy[0] - std::floor(xy[0]));
+    const double y = (size_y_ - 1) * (xy[1] - std::floor(xy[1]));
 
     const double xd = x - std::floor(x);
     const double yd = y - std::floor(y);
@@ -77,9 +77,9 @@ auto Texture_t::get(std::array<double, 2> xy) const -> Vec3f {
     return  img_[ylo*size_x_ + xlo] * (1.0 - xd) * (1.0 - yd) +
             img_[ylo*size_x_ + xhi] * xd * (1.0 - yd) + 
             img_[yhi*size_x_ + xlo] * (1.0 - xd) * yd +
-            img_[ yhi*size_x_ + xhi] * xd * yd;
+            img_[yhi*size_x_ + xhi] * xd * yd;
 }
 
 auto Texture_t::get_nn(std::array<double, 2> xy) const -> Vec3f {
-    return img_[std::lround((size_x_ - 1) * xy[0])* size_x_ + std::lround((size_y_ - 1) * xy[1])];
+    return img_[std::lround((size_y_ - 1) * (xy[1] - std::floor(xy[1]))) * size_x_ +std::lround((size_x_ - 1) * (xy[0] - std::floor(xy[0])))];
 }
