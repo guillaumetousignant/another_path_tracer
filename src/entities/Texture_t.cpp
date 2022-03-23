@@ -69,10 +69,57 @@ auto Texture_t::get(std::array<double, 2> xy) const -> Vec3f {
     const double xd = x - std::floor(x);
     const double yd = y - std::floor(y);
 
-    const int xlo = static_cast<int>(x);       // floor
-    const int xhi = static_cast<int>(x + 1.0); // ceil
-    const int ylo = static_cast<int>(y);       // floor
-    const int yhi = static_cast<int>(y + 1.0); // ceil
+    const size_t x0 = static_cast<size_t>(std::max(x - 1.0, 0.0));       // floor
+    const size_t x1 = static_cast<size_t>(x);       // floor
+    const size_t x2 = static_cast<size_t>(x + 1.0); // ceil
+    const size_t x3 = std::min(static_cast<size_t>(x + 2.0), size_x_ - 1); // ceil
+    const size_t y0 = static_cast<size_t>(std::max(y - 1.0, 0.0));       // floor
+    const size_t y1 = static_cast<size_t>(y);       // floor
+    const size_t y2 = static_cast<size_t>(y + 1.0); // ceil
+    const size_t y3 = std::min(static_cast<size_t>(y + 2.0), size_y_ - 1); // ceil
+
+    const Vec3f cp0x = CubicHermite(img_[y0*size_x_ + x0], img_[y0*size_x_ + x1], img_[y0*size_x_ + x2], img_[y0*size_x_ + x3], xd);
+    const Vec3f cp1x = CubicHermite(img_[y1*size_x_ + x0], img_[y1*size_x_ + x1], img_[y1*size_x_ + x2], img_[y1*size_x_ + x3], xd);
+    const Vec3f cp2x = CubicHermite(img_[y2*size_x_ + x0], img_[y2*size_x_ + x1], img_[y2*size_x_ + x2], img_[y2*size_x_ + x3], xd);
+    const Vec3f cp3x = CubicHermite(img_[y3*size_x_ + x0], img_[y3*size_x_ + x1], img_[y3*size_x_ + x2], img_[y3*size_x_ + x3], xd);
+    return CubicHermite(cp0x, cp1x, cp2x, cp3x, yd);
+}
+
+// From demofox on Shadertoy, https://www.shadertoy.com/view/MllSzX
+auto Texture_t::get_cubic(std::array<double, 2> xy) const -> Vec3f {
+    const double x = (size_x_ - 1) * (xy[0] - std::floor(xy[0]));
+    const double y = (size_y_ - 1) * (xy[1] - std::floor(xy[1]));
+
+    const double xd = x - std::floor(x);
+    const double yd = y - std::floor(y);
+
+    const size_t x0 = static_cast<size_t>(std::max(x - 1.0, 0.0));       // floor
+    const size_t x1 = static_cast<size_t>(x);       // floor
+    const size_t x2 = static_cast<size_t>(x + 1.0); // ceil
+    const size_t x3 = std::min(static_cast<size_t>(x + 2.0), size_x_ - 1); // ceil
+    const size_t y0 = static_cast<size_t>(std::max(y - 1.0, 0.0));       // floor
+    const size_t y1 = static_cast<size_t>(y);       // floor
+    const size_t y2 = static_cast<size_t>(y + 1.0); // ceil
+    const size_t y3 = std::min(static_cast<size_t>(y + 2.0), size_y_ - 1); // ceil
+
+    const Vec3f cp0x = CubicHermite(img_[y0*size_x_ + x0], img_[y0*size_x_ + x1], img_[y0*size_x_ + x2], img_[y0*size_x_ + x3], xd);
+    const Vec3f cp1x = CubicHermite(img_[y1*size_x_ + x0], img_[y1*size_x_ + x1], img_[y1*size_x_ + x2], img_[y1*size_x_ + x3], xd);
+    const Vec3f cp2x = CubicHermite(img_[y2*size_x_ + x0], img_[y2*size_x_ + x1], img_[y2*size_x_ + x2], img_[y2*size_x_ + x3], xd);
+    const Vec3f cp3x = CubicHermite(img_[y3*size_x_ + x0], img_[y3*size_x_ + x1], img_[y3*size_x_ + x2], img_[y3*size_x_ + x3], xd);
+    return CubicHermite(cp0x, cp1x, cp2x, cp3x, yd);
+}
+
+auto Texture_t::get_linear(std::array<double, 2> xy) const -> Vec3f {
+    const double x = (size_x_ - 1) * (xy[0] - std::floor(xy[0]));
+    const double y = (size_y_ - 1) * (xy[1] - std::floor(xy[1]));
+
+    const double xd = x - std::floor(x);
+    const double yd = y - std::floor(y);
+
+    const size_t xlo = static_cast<size_t>(x);       // floor
+    const size_t xhi = static_cast<size_t>(x + 1.0); // ceil
+    const size_t ylo = static_cast<size_t>(y);       // floor
+    const size_t yhi = static_cast<size_t>(y + 1.0); // ceil
 
     return  img_[ylo*size_x_ + xlo] * (1.0 - xd) * (1.0 - yd) +
             img_[ylo*size_x_ + xhi] * xd * (1.0 - yd) + 
@@ -82,4 +129,15 @@ auto Texture_t::get(std::array<double, 2> xy) const -> Vec3f {
 
 auto Texture_t::get_nn(std::array<double, 2> xy) const -> Vec3f {
     return img_[std::lround((size_y_ - 1) * (xy[1] - std::floor(xy[1]))) * size_x_ +std::lround((size_x_ - 1) * (xy[0] - std::floor(xy[0])))];
+}
+
+// From demofox on Shadertoy, https://www.shadertoy.com/view/MllSzX
+auto Texture_t::CubicHermite(Vec3f A, Vec3f B, Vec3f C, Vec3f D, double t) -> Vec3f {
+	const double t2 = t*t;
+    const double t3 = t*t*t;
+    const Vec3f a = -A/2.0 + 3.0*B/2.0 - 3.0*C/2.0 + D/2.0;
+    const Vec3f b = A - 5.0*B/2.0 + 2.0*C - D/2.0;
+    const Vec3f c = -A/2.0 + C/2.0;
+    
+    return a*t3 + b*t2 + c*t + B;
 }
