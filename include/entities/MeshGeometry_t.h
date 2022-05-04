@@ -37,12 +37,6 @@ namespace APTracer { namespace Entities {
              * @brief Fills the class' members form a .obj file.
              * 
              * @param filename Path to a geometry file in .obj format.
-             */
-
-            /**
-             * @brief Fills the class' members form a .obj file.
-             * 
-             * @param filename Path to a geometry file in .obj format.
              * @return std::vector<bool> Vector indicating which points have missing normals.
              */
             auto readObj(const std::string &filename) -> std::vector<bool>;
