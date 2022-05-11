@@ -80,7 +80,7 @@ auto ImgBuffer_t::write(const std::string &filename) const -> void {
         }
     }
 
-    image.save_png(filename.c_str());
+    image.save(filename.c_str());
 }
 
 auto ImgBuffer_t::write(const std::string &filename, double gammaind) const -> void {
@@ -103,5 +103,5 @@ auto ImgBuffer_t::write(const std::string &filename, double gammaind) const -> v
         }
     }
 
-    image.save_png(filename.c_str());
+    image.save(filename.c_str());
 }
