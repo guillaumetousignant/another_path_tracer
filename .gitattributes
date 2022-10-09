@@ -6,6 +6,11 @@ include/functions/tinyexr.h linguist-vendored
 include/functions/tinyxml2.h linguist-vendored
 src/functions/tinyxml2.cpp linguist-vendored
 docs/pull_request_template.md linguist-vendored
+.github/workflows/macos-build-and-test.yml linguist-vendored
+.github/workflows/ubuntu-build-and-test.yml linguist-vendored
+.github/workflows/windows-build-and-test.yml linguist-vendored
+.github/issue_template.md linguist-vendored
+.github/pull_request_template.md linguist-vendored
 
 * text=auto eol=crlf
 *.{cmd,[cC][mM][dD]} text eol=crlf
