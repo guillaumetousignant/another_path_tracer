@@ -6,7 +6,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Installing dependencies (Windows)
-        run: vcpkg install --recurse --triplet x64-windows zlib:x64-windows libpng:x64-windows libjpeg-turbo:x64-windows tiff:x64-windows freeglut:x64-windows
+        run: vcpkg install --recurse --triplet x64-windows zlib libpng libjpeg-turbo tiff freeglut
       - name: Checkout
         uses: actions/checkout@v3
       - name: Creating build directory (Windows)
