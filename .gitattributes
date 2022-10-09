@@ -1,8 +1,11 @@
 .gitignore linguist-vendored
-.makeignore linguist-vendored
 LICENSE linguist-vendored
 README.md linguist-vendored
-catch.hpp linguist-vendored
+include/functions/CImg.h linguist-vendored
+include/functions/tinyexr.h linguist-vendored
+include/functions/tinyxml2.h linguist-vendored
+src/functions/tinyxml2.cpp linguist-vendored
+docs/pull_request_template.md linguist-vendored
 
 * text=auto eol=crlf
 *.{cmd,[cC][mM][dD]} text eol=crlf
