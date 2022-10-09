@@ -36,8 +36,8 @@ Cam3D_t::Cam3D_t(TransformMatrix_t* transformation, const std::string &filename,
         filename_R = filename + "_R.png";
     }
 
-    camera_L_ = std::unique_ptr<Cam_t>(new Cam_t(transformation, filename_L, up_, fov_, subpix_, image_L, medium_list_, skybox_, max_bounces_, gammaind_));
-    camera_R_ = std::unique_ptr<Cam_t>(new Cam_t(transformation, filename_R, up_, fov_, subpix_, image_R, medium_list_, skybox_, max_bounces_, gammaind_));
+    camera_L_ = std::make_unique<Cam_t>(transformation, filename_L, up_, fov_, subpix_, image_L, medium_list_, skybox_, max_bounces_, gammaind_);
+    camera_R_ = std::make_unique<Cam_t>(transformation, filename_R, up_, fov_, subpix_, image_R, medium_list_, skybox_, max_bounces_, gammaind_);
 
     const Vec3f horizontal = direction_.cross(up).normalize_inplace();
 

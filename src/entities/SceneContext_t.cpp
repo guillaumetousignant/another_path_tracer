@@ -430,7 +430,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
                 ++index;
             }
             
-            material_aggregates_[i] = std::unique_ptr<MaterialMap_t>(new MaterialMap_t(names.data(), materials.data(), n));
+            material_aggregates_[i] = std::make_unique<MaterialMap_t>(names.data(), materials.data(), n);
             //materials_[i] = std::unique_ptr<Material_t>(material_aggregates_[i]->getFirst()); // CHECK this is not intended, will delete stuff from material list
             materials_[i] = std::unique_ptr<Material_t>();
         }
@@ -580,7 +580,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
     std::cout << std::endl;
 
     // Scene building
-    scene_ = std::unique_ptr<Scene_t>(new Scene_t());
+    scene_ = std::make_unique<Scene_t>();
     const char* object_list = xml_top->Attribute("object_list");
     std::cout << "Scene created." << std::endl;
     
@@ -754,7 +754,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
     if (xml_cameras != nullptr) {
         if (use_gl_) {
             opengl_camera_ = cameras_[0].get(); // CHECK dunno how to fix this
-            opengl_renderer_ = std::unique_ptr<OpenGLRenderer_t>(new OpenGLRenderer_t(scene_.get(), opengl_camera_, opengl_imgbuffer_));
+            opengl_renderer_ = std::make_unique<OpenGLRenderer_t>(scene_.get(), opengl_camera_, opengl_imgbuffer_);
             opengl_renderer_->initialise();
             std::cout << "OpenGL initialised." << std::endl;
         }
@@ -960,7 +960,7 @@ auto APTracer::Entities::SceneContext_t::create_transform_matrix(const tinyxml2:
     std::transform(string_transform_matrix.begin(), string_transform_matrix.end(), string_transform_matrix.begin(), ::tolower);
 
     if (string_transform_matrix == "nan") {
-        return std::unique_ptr<TransformMatrix_t>(new TransformMatrix_t());
+        return std::make_unique<TransformMatrix_t>();
     }
 
     std::array<double, 16> values;
@@ -975,11 +975,10 @@ auto APTracer::Entities::SceneContext_t::create_transform_matrix(const tinyxml2:
     }
     if (count != 16) {
         std::cerr << "Warning: Transform matrix value should be 16 values seperated by spaces, or nan. Current number of values is " << count << ". Using identity." << std::endl;
-        return std::unique_ptr<TransformMatrix_t>(new TransformMatrix_t());
+        return std::make_unique<TransformMatrix_t>();
     }
     
-    return std::unique_ptr<TransformMatrix_t>(
-            new TransformMatrix_t(values));
+    return std::make_unique<TransformMatrix_t>(values);
 }
 
 auto APTracer::Entities::SceneContext_t::create_texture(const tinyxml2::XMLElement* xml_texture) -> std::unique_ptr<Texture_t>{
@@ -1010,7 +1009,7 @@ auto APTracer::Entities::SceneContext_t::create_texture(const tinyxml2::XMLEleme
             #endif
         }
         
-        return std::unique_ptr<Texture_t>(new Texture_t(filename));
+        return std::make_unique<Texture_t>(filename);
     }
 
     std::cerr << "Error: Texture type '" << type << "' not implemented. Only 'texture' exists for now. Exiting." << std::endl; 
@@ -1032,21 +1031,21 @@ auto APTracer::Entities::SceneContext_t::create_medium(const tinyxml2::XMLElemen
     if (type == "absorber") {
         const std::vector<const char*> attributes = {"emission", "colour", "emission_distance", "absorption_distance", "ind", "priority"};
         require_attributes(xml_medium, attributes);
-        return std::unique_ptr<Medium_t>(
-                    new APTracer::Materials::Absorber_t(APTracer::get_colour(xml_medium->Attribute("emission")), APTracer::get_colour(xml_medium->Attribute("colour")), 
+        return std::make_unique<APTracer::Materials::Absorber_t>(
+                                APTracer::get_colour(xml_medium->Attribute("emission")), APTracer::get_colour(xml_medium->Attribute("colour")), 
                                 xml_medium->DoubleAttribute("emission_distance"), xml_medium->DoubleAttribute("absorption_distance"),
-                                xml_medium->DoubleAttribute("ind"), xml_medium->UnsignedAttribute("priority")));
+                                xml_medium->DoubleAttribute("ind"), xml_medium->UnsignedAttribute("priority"));
     }
     if (type == "nonabsorber") {
         const std::vector<const char*> attributes = {"ind", "priority"};
         require_attributes(xml_medium, attributes);
-        return std::unique_ptr<Medium_t>(new APTracer::Materials::NonAbsorber_t(xml_medium->DoubleAttribute("ind"), xml_medium->UnsignedAttribute("priority")));
+        return std::make_unique<APTracer::Materials::NonAbsorber_t>(xml_medium->DoubleAttribute("ind"), xml_medium->UnsignedAttribute("priority"));
     }
     if (type == "portal_scatterer") {
         // CHECK add medium_list stuff
         const std::vector<const char*> attributes = {"medium_list", "transform_matrix", "scattering_distance", "ind", "priority"};
         require_attributes(xml_medium, attributes);
-        std::unique_ptr<APTracer::Materials::PortalScatterer_t> medium(new APTracer::Materials::PortalScatterer_t(get_transform_matrix(xml_medium->Attribute("transform_matrix"), xml_transform_matrices), std::list<Medium_t*>(), xml_medium->DoubleAttribute("scattering_distance"),
+        std::unique_ptr<APTracer::Materials::PortalScatterer_t> medium(std::make_unique<APTracer::Materials::PortalScatterer_t>(get_transform_matrix(xml_medium->Attribute("transform_matrix"), xml_transform_matrices), std::list<Medium_t*>(), xml_medium->DoubleAttribute("scattering_distance"),
                                 xml_medium->DoubleAttribute("ind"), xml_medium->UnsignedAttribute("priority")));
         mediums_medium_list.emplace_back(medium.get(), get_medium_index_list(xml_medium->Attribute("medium_list"), xml_mediums));
         const tinyxml2::XMLElement* transformations_pre = xml_medium->FirstChildElement("transformations_pre");
@@ -1062,46 +1061,46 @@ auto APTracer::Entities::SceneContext_t::create_medium(const tinyxml2::XMLElemen
     if (type == "scatterer_exp") {
         const std::vector<const char*> attributes = {"emission", "colour", "emission_distance", "absorption_distance", "scattering_distance", "order", "scattering_angle", "ind", "priority"};
         require_attributes(xml_medium, attributes);
-        return std::unique_ptr<Medium_t>(
-                    new APTracer::Materials::ScattererExp_t(APTracer::get_colour(xml_medium->Attribute("emission")), APTracer::get_colour(xml_medium->Attribute("colour")),
+        return std::make_unique<APTracer::Materials::ScattererExp_t>(
+                                APTracer::get_colour(xml_medium->Attribute("emission")), APTracer::get_colour(xml_medium->Attribute("colour")),
                                 xml_medium->DoubleAttribute("emission_distance"), xml_medium->DoubleAttribute("absorption_distance"),
                                 xml_medium->DoubleAttribute("scattering_distance"), xml_medium->DoubleAttribute("order"), 
                                 xml_medium->DoubleAttribute("scattering_angle"), xml_medium->DoubleAttribute("ind"), 
-                                xml_medium->UnsignedAttribute("priority")));
+                                xml_medium->UnsignedAttribute("priority"));
     }
     if (type == "scatterer_exp_full") {
         const std::vector<const char*> attributes = {"emission", "colour", "scattering_emission", "scattering_colour", "emission_distance", "absorption_distance", "scattering_distance", "order", "scattering_angle", "ind", "priority"};
         require_attributes(xml_medium, attributes);
-        return std::unique_ptr<Medium_t>(
-                    new APTracer::Materials::ScattererExpFull_t(APTracer::get_colour(xml_medium->Attribute("emission")), APTracer::get_colour(xml_medium->Attribute("colour")),
+        return std::make_unique<APTracer::Materials::ScattererExpFull_t>(
+                                APTracer::get_colour(xml_medium->Attribute("emission")), APTracer::get_colour(xml_medium->Attribute("colour")),
                                 APTracer::get_colour(xml_medium->Attribute("scattering_emission")), APTracer::get_colour(xml_medium->Attribute("scattering_colour")),
                                 xml_medium->DoubleAttribute("emission_distance"), xml_medium->DoubleAttribute("absorption_distance"),
                                 xml_medium->DoubleAttribute("scattering_distance"), xml_medium->DoubleAttribute("order"), 
                                 xml_medium->DoubleAttribute("scattering_angle"), xml_medium->DoubleAttribute("ind"), 
-                                xml_medium->UnsignedAttribute("priority")));
+                                xml_medium->UnsignedAttribute("priority"));
     }
     if (type == "scatterer") {
         const std::vector<const char*> attributes = {"emission", "colour", "emission_distance", "absorption_distance", "scattering_distance", "ind", "priority"};
         require_attributes(xml_medium, attributes);
-        return std::unique_ptr<Medium_t>(
-                    new APTracer::Materials::Scatterer_t(APTracer::get_colour(xml_medium->Attribute("emission")), APTracer::get_colour(xml_medium->Attribute("colour")),
+        return std::make_unique<APTracer::Materials::Scatterer_t>(
+                                APTracer::get_colour(xml_medium->Attribute("emission")), APTracer::get_colour(xml_medium->Attribute("colour")),
                                 xml_medium->DoubleAttribute("emission_distance"), xml_medium->DoubleAttribute("absorption_distance"),
                                 xml_medium->DoubleAttribute("scattering_distance"), xml_medium->DoubleAttribute("ind"), 
-                                xml_medium->UnsignedAttribute("priority")));
+                                xml_medium->UnsignedAttribute("priority"));
     }
     if (type == "scatterer_full") {
         const std::vector<const char*> attributes = {"emission", "colour", "scattering_emission", "scattering_colour", "emission_distance", "absorption_distance", "scattering_distance", "ind", "priority"};
         require_attributes(xml_medium, attributes);
-        return std::unique_ptr<Medium_t>(
-                    new APTracer::Materials::ScattererFull_t(APTracer::get_colour(xml_medium->Attribute("emission")), APTracer::get_colour(xml_medium->Attribute("colour")),
+        return std::make_unique<APTracer::Materials::ScattererFull_t>(
+                                APTracer::get_colour(xml_medium->Attribute("emission")), APTracer::get_colour(xml_medium->Attribute("colour")),
                                 APTracer::get_colour(xml_medium->Attribute("scattering_emission")), APTracer::get_colour(xml_medium->Attribute("scattering_colour")),
                                 xml_medium->DoubleAttribute("emission_distance"), xml_medium->DoubleAttribute("absorption_distance"),
                                 xml_medium->DoubleAttribute("scattering_distance"), xml_medium->DoubleAttribute("ind"), 
-                                xml_medium->UnsignedAttribute("priority")));
+                                xml_medium->UnsignedAttribute("priority"));
     }
 
     std::cerr << "Warning: Medium type '" << type << "' not implemented. Only 'absorber', 'nonabsorber', 'portal_scatterer', 'scatterer_exp', and 'scatterer' exists for now. Using 'nonabsorber'." << std::endl; 
-    return std::unique_ptr<Medium_t>(new APTracer::Materials::NonAbsorber_t(1.0, 0));
+    return std::make_unique<APTracer::Materials::NonAbsorber_t>(1.0, 0);
 }
 
 auto APTracer::Entities::SceneContext_t::create_material(const tinyxml2::XMLElement* xml_material, std::list<std::pair<APTracer::Materials::Portal_t*, std::list<size_t>>> &materials_medium_list, MaterialMixLists &material_mix_lists, std::unique_ptr<std::tuple<std::unique_ptr<std::list<size_t>>, std::unique_ptr<std::list<std::string>>>> &materials_aggregate_list, MaterialTransformations &material_transformations, const tinyxml2::XMLElement* xml_textures, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_materials, const tinyxml2::XMLElement* xml_mediums) -> std::unique_ptr<Material_t> {
@@ -1119,43 +1118,43 @@ auto APTracer::Entities::SceneContext_t::create_material(const tinyxml2::XMLElem
     if (type == "diffuse") {
         const std::vector<const char*> attributes = {"emission", "colour", "roughness"};
         require_attributes(xml_material, attributes);
-        return std::unique_ptr<Material_t>(
-                    new APTracer::Materials::Diffuse_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), 
-                                xml_material->DoubleAttribute("roughness")));
+        return std::make_unique<APTracer::Materials::Diffuse_t>(
+                                APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), 
+                                xml_material->DoubleAttribute("roughness"));
     }
     if (type == "diffuse_normal") {
         const std::vector<const char*> attributes = {"emission", "colour", "normal_map", "roughness"};
         require_attributes(xml_material, attributes);
-        return std::unique_ptr<Material_t>(
-                    new APTracer::Materials::DiffuseNormal_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), 
-                                get_texture(xml_material->Attribute("normal_map"), xml_textures), xml_material->DoubleAttribute("roughness")));
+        return std::make_unique<APTracer::Materials::DiffuseNormal_t>(
+                                APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), 
+                                get_texture(xml_material->Attribute("normal_map"), xml_textures), xml_material->DoubleAttribute("roughness"));
     }
     if (type == "diffuse_full") {
         const std::vector<const char*> attributes = {"emission_map", "texture", "roughness"};
         require_attributes(xml_material, attributes);
-        return std::unique_ptr<Material_t>(
-                    new APTracer::Materials::DiffuseFull_t(get_texture(xml_material->Attribute("emission_map"), xml_textures), get_texture(xml_material->Attribute("texture"), xml_textures), 
-                                xml_material->DoubleAttribute("roughness")));
+        return std::make_unique<APTracer::Materials::DiffuseFull_t>(
+                                get_texture(xml_material->Attribute("emission_map"), xml_textures), get_texture(xml_material->Attribute("texture"), xml_textures), 
+                                xml_material->DoubleAttribute("roughness"));
     }
     if (type == "diffuse_tex") {
         const std::vector<const char*> attributes = {"emission", "texture", "roughness"};
         require_attributes(xml_material, attributes);
-        return std::unique_ptr<Material_t>(
-                    new APTracer::Materials::DiffuseTex_t(APTracer::get_colour(xml_material->Attribute("emission")), get_texture(xml_material->Attribute("texture"), xml_textures), 
-                                xml_material->DoubleAttribute("roughness")));
+        return std::make_unique<APTracer::Materials::DiffuseTex_t>(
+                                APTracer::get_colour(xml_material->Attribute("emission")), get_texture(xml_material->Attribute("texture"), xml_textures), 
+                                xml_material->DoubleAttribute("roughness"));
     }
     if (type == "diffuse_tex_normal") {
         const std::vector<const char*> attributes = {"emission", "texture", "normal_map", "roughness"};
         require_attributes(xml_material, attributes);
-        return std::unique_ptr<Material_t>(
-                    new APTracer::Materials::DiffuseTexNormal_t(APTracer::get_colour(xml_material->Attribute("emission")), get_texture(xml_material->Attribute("texture"), xml_textures), 
-                                get_texture(xml_material->Attribute("normal_map"), xml_textures), xml_material->DoubleAttribute("roughness")));
+        return std::make_unique<APTracer::Materials::DiffuseTexNormal_t>(
+                                APTracer::get_colour(xml_material->Attribute("emission")), get_texture(xml_material->Attribute("texture"), xml_textures), 
+                                get_texture(xml_material->Attribute("normal_map"), xml_textures), xml_material->DoubleAttribute("roughness"));
     }
     if (type == "fresnelmix") {
         const std::vector<const char*> attributes = {"material_refracted", "material_reflected", "ind"};
         require_attributes(xml_material, attributes);
         std::unique_ptr<APTracer::Materials::FresnelMix_t> material(
-                    new APTracer::Materials::FresnelMix_t(nullptr, nullptr, xml_material->DoubleAttribute("ind")));
+                    std::make_unique<APTracer::Materials::FresnelMix_t>(nullptr, nullptr, xml_material->DoubleAttribute("ind")));
         material_mix_lists.fresnel_mix.emplace_back(material.get(), get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials));
         return material;
     }
@@ -1163,7 +1162,7 @@ auto APTracer::Entities::SceneContext_t::create_material(const tinyxml2::XMLElem
         const std::vector<const char*> attributes = {"material_refracted", "material_reflected", "ind", "normal_map"};
         require_attributes(xml_material, attributes);
         std::unique_ptr<APTracer::Materials::FresnelMixNormal_t> material(
-                    new APTracer::Materials::FresnelMixNormal_t(nullptr, nullptr, xml_material->DoubleAttribute("ind"), get_texture(xml_material->Attribute("normal_map"), xml_textures)));
+                    std::make_unique<APTracer::Materials::FresnelMixNormal_t>(nullptr, nullptr, xml_material->DoubleAttribute("ind"), get_texture(xml_material->Attribute("normal_map"), xml_textures)));
         material_mix_lists.fresnel_mix_normal.emplace_back(material.get(), get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials));
         return material;
     }
@@ -1171,23 +1170,23 @@ auto APTracer::Entities::SceneContext_t::create_material(const tinyxml2::XMLElem
         const std::vector<const char*> attributes = {"material_refracted", "material_reflected", "ind"};
         require_attributes(xml_material, attributes);
         std::unique_ptr<APTracer::Materials::FresnelMixIn_t> material(
-                    new APTracer::Materials::FresnelMixIn_t(nullptr, nullptr, xml_material->DoubleAttribute("ind")));
+                    std::make_unique<APTracer::Materials::FresnelMixIn_t>(nullptr, nullptr, xml_material->DoubleAttribute("ind")));
         material_mix_lists.fresnel_mix_in.emplace_back(material.get(), get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials));
         return material;
     }
     if (type == "normal_material") {
-        return std::unique_ptr<Material_t>(new APTracer::Materials::NormalMaterial_t());
+        return std::make_unique<APTracer::Materials::NormalMaterial_t>();
     }
     if (type == "normal_diffuse_material") {
         const std::vector<const char*> attributes = {"roughness"};
         require_attributes(xml_material, attributes);
-        return std::unique_ptr<Material_t>(new APTracer::Materials::NormalDiffuseMaterial_t(xml_material->DoubleAttribute("roughness")));
+        return std::make_unique<APTracer::Materials::NormalDiffuseMaterial_t>(xml_material->DoubleAttribute("roughness"));
     }
     if (type == "portal") {
         const std::vector<const char*> attributes = {"medium_list", "transform_matrix"};
         require_attributes(xml_material, attributes);
         std::unique_ptr<APTracer::Materials::Portal_t> material(
-                    new APTracer::Materials::Portal_t(get_transform_matrix(xml_material->Attribute("transform_matrix"), xml_transform_matrices), std::list<Medium_t*>()));
+                    std::make_unique<APTracer::Materials::Portal_t>(get_transform_matrix(xml_material->Attribute("transform_matrix"), xml_transform_matrices), std::list<Medium_t*>()));
         materials_medium_list.emplace_back(material.get(), get_medium_index_list(xml_material->Attribute("medium_list"), xml_mediums));
         const tinyxml2::XMLElement* transformations_pre = xml_material->FirstChildElement("transformations_pre");
         if (transformations_pre != nullptr) {
@@ -1200,14 +1199,14 @@ auto APTracer::Entities::SceneContext_t::create_material(const tinyxml2::XMLElem
         return material;
     }
     if (type == "portal_refractive") {
-        std::cerr << "Warning: refractive portal not implemented yet. Ussing 'diffuse'." << std::endl; 
-        return std::unique_ptr<Material_t>(new APTracer::Materials::Diffuse_t(Vec3f(), Vec3f(0.5), 1.0));
+        std::cerr << "Warning: refractive portal not implemented yet. Using 'diffuse'." << std::endl; 
+        return std::make_unique<APTracer::Materials::Diffuse_t>(Vec3f(), Vec3f(0.5), 1.0);
     }
     if (type == "randommix") {
         const std::vector<const char*> attributes = {"first_material", "second_material", "ratio"};
         require_attributes(xml_material, attributes);
         std::unique_ptr<APTracer::Materials::RandomMix_t> material(
-                    new APTracer::Materials::RandomMix_t(nullptr, nullptr, xml_material->DoubleAttribute("ratio")));
+                    std::make_unique<APTracer::Materials::RandomMix_t>(nullptr, nullptr, xml_material->DoubleAttribute("ratio")));
         material_mix_lists.random_mix.emplace_back(material.get(), get_material_mix(xml_material->Attribute("first_material"), xml_material->Attribute("second_material"), xml_materials));
         return material;
     }
@@ -1215,102 +1214,102 @@ auto APTracer::Entities::SceneContext_t::create_material(const tinyxml2::XMLElem
         const std::vector<const char*> attributes = {"first_material", "second_material", "ratio"};
         require_attributes(xml_material, attributes);
         std::unique_ptr<APTracer::Materials::RandomMixIn_t> material(
-                    new APTracer::Materials::RandomMixIn_t(nullptr, nullptr, xml_material->DoubleAttribute("ratio")));
+                    std::make_unique<APTracer::Materials::RandomMixIn_t>(nullptr, nullptr, xml_material->DoubleAttribute("ratio")));
         material_mix_lists.random_mix_in.emplace_back(material.get(), get_material_mix(xml_material->Attribute("first_material"), xml_material->Attribute("second_material"), xml_materials));
         return material;
     }
     if (type == "reflective") {
         const std::vector<const char*> attributes = {"emission", "colour"};
         require_attributes(xml_material, attributes);
-        return std::unique_ptr<Material_t>(
-                    new APTracer::Materials::Reflective_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour"))));
+        return std::make_unique<APTracer::Materials::Reflective_t>(
+                    APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")));
     }
     if (type == "reflective_normal") {
         const std::vector<const char*> attributes = {"emission", "colour", "normal_map"};
         require_attributes(xml_material, attributes);
-        return std::unique_ptr<Material_t>(
-                    new APTracer::Materials::ReflectiveNormal_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), get_texture(xml_material->Attribute("normal_map"), xml_textures)));
+        return std::make_unique<APTracer::Materials::ReflectiveNormal_t>(
+                    APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), get_texture(xml_material->Attribute("normal_map"), xml_textures));
     }
     if (type == "reflective_fuzz") {
         const std::vector<const char*> attributes = {"emission", "colour", "order", "diffusivity"};
         require_attributes(xml_material, attributes);
-        return std::unique_ptr<Material_t>(
-                    new APTracer::Materials::ReflectiveFuzz_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity")));
+        return std::make_unique<APTracer::Materials::ReflectiveFuzz_t>(
+                    APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity"));
     }
     if (type == "reflective_fuzz_normal") {
         const std::vector<const char*> attributes = {"emission", "colour", "normal_map", "order", "diffusivity"};
         require_attributes(xml_material, attributes);
-        return std::unique_ptr<Material_t>(
-                    new APTracer::Materials::ReflectiveFuzzNormal_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), 
-                    get_texture(xml_material->Attribute("normal_map"), xml_textures), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity")));
+        return std::make_unique<APTracer::Materials::ReflectiveFuzzNormal_t>(
+                    APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), 
+                    get_texture(xml_material->Attribute("normal_map"), xml_textures), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity"));
     }
     if (type == "reflective_fuzz_tex") {
         const std::vector<const char*> attributes = {"emission", "texture", "order", "diffusivity"};
         require_attributes(xml_material, attributes);
-        return std::unique_ptr<Material_t>(
-                    new APTracer::Materials::ReflectiveFuzzTex_t(APTracer::get_colour(xml_material->Attribute("emission")), get_texture(xml_material->Attribute("texture"), xml_textures), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity")));
+        return std::make_unique<APTracer::Materials::ReflectiveFuzzTex_t>(
+                    APTracer::get_colour(xml_material->Attribute("emission")), get_texture(xml_material->Attribute("texture"), xml_textures), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity"));
     }
     if (type == "reflective_fuzz_tex_normal") {
         const std::vector<const char*> attributes = {"emission", "texture", "normal_map", "order", "diffusivity"};
         require_attributes(xml_material, attributes);
-        return std::unique_ptr<Material_t>(
-                    new APTracer::Materials::ReflectiveFuzzTexNormal_t(APTracer::get_colour(xml_material->Attribute("emission")), get_texture(xml_material->Attribute("texture"), xml_textures), 
-                    get_texture(xml_material->Attribute("normal_map"), xml_textures), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity")));
+        return std::make_unique<APTracer::Materials::ReflectiveFuzzTexNormal_t>(
+                    APTracer::get_colour(xml_material->Attribute("emission")), get_texture(xml_material->Attribute("texture"), xml_textures), 
+                    get_texture(xml_material->Attribute("normal_map"), xml_textures), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity"));
     }
     if (type == "reflective_refractive") {
         const std::vector<const char*> attributes = {"emission", "colour", "medium"};
         require_attributes(xml_material, attributes);
-        return std::unique_ptr<Material_t>(
-                    new APTracer::Materials::ReflectiveRefractive_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), get_medium(xml_material->Attribute("medium"), xml_mediums)));
+        return std::make_unique<APTracer::Materials::ReflectiveRefractive_t>(
+                    APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), get_medium(xml_material->Attribute("medium"), xml_mediums));
     }
     if (type == "reflective_refractive_normal") {
         const std::vector<const char*> attributes = {"emission", "colour", "normal_map", "medium"};
         require_attributes(xml_material, attributes);
-        return std::unique_ptr<Material_t>(
-                    new APTracer::Materials::ReflectiveRefractiveNormal_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), get_texture(xml_material->Attribute("normal_map"), xml_textures),
-                    get_medium(xml_material->Attribute("medium"), xml_mediums)));
+        return std::make_unique<APTracer::Materials::ReflectiveRefractiveNormal_t>(
+                    APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), get_texture(xml_material->Attribute("normal_map"), xml_textures),
+                    get_medium(xml_material->Attribute("medium"), xml_mediums));
     }
     if (type == "reflective_refractive_fuzz") {
         const std::vector<const char*> attributes = {"emission", "colour", "medium", "order", "diffusivity"};
         require_attributes(xml_material, attributes);
-        return std::unique_ptr<Material_t>(
-                    new APTracer::Materials::ReflectiveRefractiveFuzz_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity"), get_medium(xml_material->Attribute("medium"), xml_mediums)));
+        return std::make_unique<APTracer::Materials::ReflectiveRefractiveFuzz_t>(
+                    APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity"), get_medium(xml_material->Attribute("medium"), xml_mediums));
     }
     if (type == "refractive") {
         const std::vector<const char*> attributes = {"emission", "colour", "medium"};
         require_attributes(xml_material, attributes);
-        return std::unique_ptr<Material_t>(
-                    new APTracer::Materials::Refractive_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), get_medium(xml_material->Attribute("medium"), xml_mediums)));
+        return std::make_unique<APTracer::Materials::Refractive_t>(
+                    APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), get_medium(xml_material->Attribute("medium"), xml_mediums));
     }
     if (type == "refractive_fuzz") {
         const std::vector<const char*> attributes = {"emission", "colour", "medium", "order", "diffusivity"};
         require_attributes(xml_material, attributes);
-        return std::unique_ptr<Material_t>(
-                    new APTracer::Materials::RefractiveFuzz_t(APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity"), get_medium(xml_material->Attribute("medium"), xml_mediums)));
+        return std::make_unique<APTracer::Materials::RefractiveFuzz_t>(
+                    APTracer::get_colour(xml_material->Attribute("emission")), APTracer::get_colour(xml_material->Attribute("colour")), xml_material->DoubleAttribute("order"), xml_material->DoubleAttribute("diffusivity"), get_medium(xml_material->Attribute("medium"), xml_mediums));
     }
     if (type == "transparent") {
         const std::vector<const char*> attributes = {"medium"};
         require_attributes(xml_material, attributes);
-        return std::unique_ptr<Material_t>(
-                    new APTracer::Materials::Transparent_t(get_medium(xml_material->Attribute("medium"), xml_mediums)));
+        return std::make_unique<APTracer::Materials::Transparent_t>(
+                    get_medium(xml_material->Attribute("medium"), xml_mediums));
     }
     if (type == "bounce_material") {
         const std::vector<const char*> attributes = {"max_bounces"};
         require_attributes(xml_material, attributes);
-        return std::unique_ptr<Material_t>(
-                    new APTracer::Materials::BounceMaterial_t(xml_material->UnsignedAttribute("max_bounces")));
+        return std::make_unique<APTracer::Materials::BounceMaterial_t>(
+                    xml_material->UnsignedAttribute("max_bounces"));
     }
     if (type == "distance_material") {
         const std::vector<const char*> attributes = {"focus_distance", "exponent"};
         require_attributes(xml_material, attributes);
-        return std::unique_ptr<Material_t>(
-                    new APTracer::Materials::DistanceMaterial_t(xml_material->DoubleAttribute("focus_distance"), xml_material->DoubleAttribute("exponent")));
+        return std::make_unique<APTracer::Materials::DistanceMaterial_t>(
+                    xml_material->DoubleAttribute("focus_distance"), xml_material->DoubleAttribute("exponent"));
     }
     if (type == "texturemix") {
         const std::vector<const char*> attributes = {"first_material", "second_material", "texture"};
         require_attributes(xml_material, attributes);
         std::unique_ptr<APTracer::Materials::TextureMix_t> material(
-                    new APTracer::Materials::TextureMix_t(nullptr, nullptr, get_texture(xml_material->Attribute("texture"), xml_textures)));
+                    std::make_unique<APTracer::Materials::TextureMix_t>(nullptr, nullptr, get_texture(xml_material->Attribute("texture"), xml_textures)));
         material_mix_lists.texture_mix.emplace_back(material.get(), get_material_mix(xml_material->Attribute("first_material"), xml_material->Attribute("second_material"), xml_materials));
         return material;
     }
@@ -1318,27 +1317,27 @@ auto APTracer::Entities::SceneContext_t::create_material(const tinyxml2::XMLElem
         const std::vector<const char*> attributes = {"first_material", "second_material", "texture"};
         require_attributes(xml_material, attributes);
         std::unique_ptr<APTracer::Materials::TextureMixIn_t> material(
-                    new APTracer::Materials::TextureMixIn_t(nullptr, nullptr, get_texture(xml_material->Attribute("texture"), xml_textures)));
+                    std::make_unique<APTracer::Materials::TextureMixIn_t>(nullptr, nullptr, get_texture(xml_material->Attribute("texture"), xml_textures)));
         material_mix_lists.texture_mix_in.emplace_back(material.get(), get_material_mix(xml_material->Attribute("first_material"), xml_material->Attribute("second_material"), xml_materials));
         return material;
     }
     if (type == "toon") {
         const std::vector<const char*> attributes = {"colour"};
         require_attributes(xml_material, attributes);
-        return std::unique_ptr<Material_t>(
-                    new APTracer::Materials::Toon_t(APTracer::get_colour(xml_material->Attribute("colour"))));
+        return std::make_unique<APTracer::Materials::Toon_t>(
+                    APTracer::get_colour(xml_material->Attribute("colour")));
     }
     if (type == "aggregate") {
         const std::vector<const char*> attributes = {"materials_list", "materials_names"};
         require_attributes(xml_material, attributes);
-        materials_aggregate_list = std::unique_ptr<std::tuple<std::unique_ptr<std::list<size_t>>, std::unique_ptr<std::list<std::string>>>>(
-                    new std::tuple<std::unique_ptr<std::list<size_t>>, std::unique_ptr<std::list<std::string>>>(get_material_index_list(xml_material->Attribute("materials_list"), xml_materials), get_medium_names(xml_material->Attribute("materials_names")))); // wtf
+        materials_aggregate_list = std::make_unique<std::tuple<std::unique_ptr<std::list<size_t>>, std::unique_ptr<std::list<std::string>>>>(
+                    get_material_index_list(xml_material->Attribute("materials_list"), xml_materials), get_medium_names(xml_material->Attribute("materials_names"))); // wtf
         return std::unique_ptr<Material_t>();
         // CHECK add aggregates
     }
 
     std::cerr << "Warning: Material type '" << type << "' not implemented. Using 'normal_material'." << std::endl; 
-    return std::unique_ptr<Material_t>(new APTracer::Materials::NormalMaterial_t());
+    return std::make_unique<APTracer::Materials::NormalMaterial_t>();
 }
 
 auto APTracer::Entities::SceneContext_t::create_mesh_geometry(const tinyxml2::XMLElement* xml_mesh_geometry) -> std::unique_ptr<MeshGeometry_t> {
@@ -1369,7 +1368,7 @@ auto APTracer::Entities::SceneContext_t::create_mesh_geometry(const tinyxml2::XM
             #endif
         } 
 
-        return std::unique_ptr<MeshGeometry_t>(new MeshGeometry_t(filename));
+        return std::make_unique<MeshGeometry_t>(filename);
     }
 
     std::cerr << "Error: Mesh geometry type '" << type << "' not implemented. Only 'mesh_geometry' exists for now. Exiting." << std::endl; 
@@ -1393,13 +1392,13 @@ auto APTracer::Entities::SceneContext_t::create_object(const tinyxml2::XMLElemen
         require_attributes(xml_object, attributes);
         size_t material_index = get_material_index(xml_object->Attribute("material"), xml_materials);
         if (material_aggregates_[material_index]) {
-            mesh = std::unique_ptr<MeshTop_t>(
-                        new Mesh_t(material_aggregates_[material_index].get(), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries)));
+            mesh = std::make_unique<Mesh_t>(
+                        material_aggregates_[material_index].get(), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries));
             return nullptr;
         }
         
-        mesh = std::unique_ptr<MeshTop_t>(
-                    new Mesh_t(materials_[material_index].get(), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries)));
+        mesh = std::make_unique<Mesh_t>(
+                    materials_[material_index].get(), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries));
         return nullptr;
     }
     if (type == "mesh_motionblur") {
@@ -1407,26 +1406,26 @@ auto APTracer::Entities::SceneContext_t::create_object(const tinyxml2::XMLElemen
         require_attributes(xml_object, attributes);
         size_t material_index = get_material_index(xml_object->Attribute("material"), xml_materials);
         if (material_aggregates_[material_index]) {
-            mesh = std::unique_ptr<MeshTop_t>(
-                        new MeshMotionblur_t(material_aggregates_[material_index].get(), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries)));
+            mesh = std::make_unique<MeshMotionblur_t>(
+                        material_aggregates_[material_index].get(), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries));
             return nullptr;
         }
         
-        mesh = std::unique_ptr<MeshTop_t>(
-                    new MeshMotionblur_t(materials_[material_index].get(), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries)));
+        mesh = std::make_unique<MeshMotionblur_t>(
+                    materials_[material_index].get(), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries));
         return nullptr;
     }
     if (type == "sphere") {
         const std::vector<const char*> attributes = {"material", "transform_matrix"};
         require_attributes(xml_object, attributes);
-        return std::unique_ptr<Shape_t>(
-                    new Sphere_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices)));
+        return std::make_unique<Sphere_t>(
+                    get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices));
     }
     if (type == "sphere_motionblur") {
         const std::vector<const char*> attributes = {"material", "transform_matrix"};
         require_attributes(xml_object, attributes);
-        return std::unique_ptr<Shape_t>(
-                    new SphereMotionblur_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices)));
+        return std::make_unique<SphereMotionblur_t>(
+                    get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices));
     }
     if (type == "triangle") {
         const std::vector<const char*> attributes = {"material", "transform_matrix", "points", "normals", "texture_coordinates"};
@@ -1448,8 +1447,8 @@ auto APTracer::Entities::SceneContext_t::create_object(const tinyxml2::XMLElemen
         const Vec3f* normals_ptr = normals.empty() ? nullptr : normals.data();
         const double* texture_coordinates_ptr = texture_coordinates.empty() ? nullptr : texture_coordinates.data();
 
-        return std::unique_ptr<Shape_t>(
-                    new Triangle_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), points, normals_ptr, texture_coordinates_ptr));
+        return std::make_unique<Triangle_t>(
+                    get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), points, normals_ptr, texture_coordinates_ptr);
     }
     if (type == "triangle_motionblur") {
         const std::vector<const char*> attributes = {"material", "transform_matrix", "points", "normals", "texture_coordinates"};
@@ -1471,20 +1470,20 @@ auto APTracer::Entities::SceneContext_t::create_object(const tinyxml2::XMLElemen
         const Vec3f* normals_ptr = normals.empty() ? nullptr : normals.data();
         const double* texture_coordinates_ptr = texture_coordinates.empty() ? nullptr : texture_coordinates.data();
 
-        return std::unique_ptr<Shape_t>(
-                    new TriangleMotionblur_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), points, normals_ptr, texture_coordinates_ptr));
+        return std::make_unique<TriangleMotionblur_t>(
+                    get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), points, normals_ptr, texture_coordinates_ptr);
     }
     if (type == "triangle_mesh") {
         const std::vector<const char*> attributes = {"material", "transform_matrix", "mesh_geometry", "index"};
         require_attributes(xml_object, attributes);
-        return std::unique_ptr<Shape_t>(
-                    new TriangleMesh_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries), xml_object->UnsignedAttribute("index")));
+        return std::make_unique<TriangleMesh_t>(
+                    get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries), xml_object->UnsignedAttribute("index"));
     }
     if (type == "triangle_mesh_motionblur") {
         const std::vector<const char*> attributes = {"material", "transform_matrix", "mesh_geometry", "index"};
         require_attributes(xml_object, attributes);
-        return std::unique_ptr<Shape_t>(
-                    new TriangleMeshMotionblur_t(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries), xml_object->UnsignedAttribute("index")));
+        return std::make_unique<TriangleMeshMotionblur_t>(
+                    get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices), get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries), xml_object->UnsignedAttribute("index"));
     }
     
     std::cerr << "Error: Object type '" << type << "' not implemented. Exiting." << std::endl; 
@@ -1506,8 +1505,8 @@ auto APTracer::Entities::SceneContext_t::create_directional_light(const tinyxml2
     if (type == "directional_light") {
         const std::vector<const char*> attributes = {"colour", "transform_matrix"};
         require_attributes(xml_directional_light, attributes);
-        return std::unique_ptr<DirectionalLight_t>(
-                    new DirectionalLight_t(APTracer::get_colour(xml_directional_light->Attribute("colour")), get_transform_matrix(xml_directional_light->Attribute("transform_matrix"), xml_transform_matrices)));
+        return std::make_unique<DirectionalLight_t>(
+                    APTracer::get_colour(xml_directional_light->Attribute("colour")), get_transform_matrix(xml_directional_light->Attribute("transform_matrix"), xml_transform_matrices));
     }
 
     std::cerr << "Error: Directional light type '" << type << "' not implemented. Only 'directional_light' exists for now. Exiting." << std::endl; 
@@ -1529,8 +1528,8 @@ auto APTracer::Entities::SceneContext_t::create_skybox(const tinyxml2::XMLElemen
     if (type == "skybox_flat") {
         const std::vector<const char*> attributes = {"colour"};
         require_attributes(xml_skybox, attributes);
-        return std::unique_ptr<Skybox_t>(
-                    new APTracer::Skyboxes::SkyboxFlat_t(APTracer::get_colour(xml_skybox->Attribute("colour"))));
+        return std::make_unique<APTracer::Skyboxes::SkyboxFlat_t>(
+                    APTracer::get_colour(xml_skybox->Attribute("colour")));
     }
     if (type == "skybox_flat_sun") {
         const std::vector<const char*> attributes = {"colour", "lights"};
@@ -1540,36 +1539,36 @@ auto APTracer::Entities::SceneContext_t::create_skybox(const tinyxml2::XMLElemen
 
         DirectionalLight_t** lights_ptr = lights.empty() ? nullptr : lights.data();
                
-        return std::unique_ptr<Skybox_t>(
-                    new APTracer::Skyboxes::SkyboxFlatSun_t(APTracer::get_colour(xml_skybox->Attribute("colour")), lights_ptr, lights.size()));
+        return std::make_unique<APTracer::Skyboxes::SkyboxFlatSun_t>(
+                    APTracer::get_colour(xml_skybox->Attribute("colour")), lights_ptr, lights.size());
     }
     if (type == "skybox_texture") {
         const std::vector<const char*> attributes = {"texture"};
         require_attributes(xml_skybox, attributes);
-        return std::unique_ptr<Skybox_t>(
-                    new APTracer::Skyboxes::SkyboxTexture_t(get_texture(xml_skybox->Attribute("texture"), xml_textures)));
+        return std::make_unique<APTracer::Skyboxes::SkyboxTexture_t>(
+                    get_texture(xml_skybox->Attribute("texture"), xml_textures));
     }
     if (type == "skybox_texture_sun") {
         const std::vector<const char*> attributes = {"texture", "light_position", "light_colour", "light_radius"};
         require_attributes(xml_skybox, attributes);
-        return std::unique_ptr<Skybox_t>(
-                    new APTracer::Skyboxes::SkyboxTextureSun_t(get_texture(xml_skybox->Attribute("texture"), xml_textures), get_xy<double>(xml_skybox->Attribute("light_position")), APTracer::get_colour(xml_skybox->Attribute("light_colour")), xml_skybox->DoubleAttribute("light_radius")));
+        return std::make_unique<APTracer::Skyboxes::SkyboxTextureSun_t>(
+                    get_texture(xml_skybox->Attribute("texture"), xml_textures), get_xy<double>(xml_skybox->Attribute("light_position")), APTracer::get_colour(xml_skybox->Attribute("light_colour")), xml_skybox->DoubleAttribute("light_radius"));
     }
     if (type == "skybox_texture_transformation") {
         const std::vector<const char*> attributes = {"texture", "transform_matrix"};
         require_attributes(xml_skybox, attributes);
-        return std::unique_ptr<Skybox_t>(
-                    new APTracer::Skyboxes::SkyboxTextureTransformation_t(get_texture(xml_skybox->Attribute("texture"), xml_textures), get_transform_matrix(xml_skybox->Attribute("transform_matrix"), xml_transform_matrices)));
+        return std::make_unique<APTracer::Skyboxes::SkyboxTextureTransformation_t>(
+                    get_texture(xml_skybox->Attribute("texture"), xml_textures), get_transform_matrix(xml_skybox->Attribute("transform_matrix"), xml_transform_matrices));
     }
     if (type == "skybox_texture_transformation_sun") {
         const std::vector<const char*> attributes = {"texture", "light_position", "light_colour", "light_radius", "transform_matrix"};
         require_attributes(xml_skybox, attributes);
-        return std::unique_ptr<Skybox_t>(
-                    new APTracer::Skyboxes::SkyboxTextureTransformationSun_t(get_texture(xml_skybox->Attribute("texture"), xml_textures), get_transform_matrix(xml_skybox->Attribute("transform_matrix"), xml_transform_matrices), get_xy<double>(xml_skybox->Attribute("light_position")), APTracer::get_colour(xml_skybox->Attribute("light_colour")), xml_skybox->DoubleAttribute("light_radius")));
+        return std::make_unique<APTracer::Skyboxes::SkyboxTextureTransformationSun_t>(
+                    get_texture(xml_skybox->Attribute("texture"), xml_textures), get_transform_matrix(xml_skybox->Attribute("transform_matrix"), xml_transform_matrices), get_xy<double>(xml_skybox->Attribute("light_position")), APTracer::get_colour(xml_skybox->Attribute("light_colour")), xml_skybox->DoubleAttribute("light_radius"));
     }
 
     std::cerr << "Warning: Skybox type '" << type << "' not implemented. Using 'skybox_flat'." << std::endl; 
-    return std::unique_ptr<Skybox_t>(new APTracer::Skyboxes::SkyboxFlat_t(Vec3f(0.5)));
+    return std::make_unique<APTracer::Skyboxes::SkyboxFlat_t>(Vec3f(0.5));
 }
 
 auto APTracer::Entities::SceneContext_t::create_imgbuffer(const tinyxml2::XMLElement* xml_imgbuffer) -> std::unique_ptr<ImgBuffer_t> {
@@ -1587,19 +1586,20 @@ auto APTracer::Entities::SceneContext_t::create_imgbuffer(const tinyxml2::XMLEle
     if (type == "imgbuffer") {
         const std::vector<const char*> attributes = {"resx", "resy"};
         require_attributes(xml_imgbuffer, attributes);
-        return std::unique_ptr<ImgBuffer_t>(
-                    new ImgBuffer_t(xml_imgbuffer->UnsignedAttribute("resx"), xml_imgbuffer->UnsignedAttribute("resy")));
+        return std::make_unique<ImgBuffer_t>(
+                    xml_imgbuffer->UnsignedAttribute("resx"), xml_imgbuffer->UnsignedAttribute("resy"));
     }
     if (type == "imgbuffer_opengl") {
         const std::vector<const char*> attributes = {"resx", "resy"};
         require_attributes(xml_imgbuffer, attributes);
         use_gl_ = true; 
-        opengl_imgbuffer_ = new ImgBufferOpenGL_t(xml_imgbuffer->UnsignedAttribute("resx"), xml_imgbuffer->UnsignedAttribute("resy"));
-        return std::unique_ptr<ImgBuffer_t>(opengl_imgbuffer_);
+        std::unique_ptr<ImgBufferOpenGL_t> opengl_imgbuffer = std::make_unique<ImgBufferOpenGL_t>(xml_imgbuffer->UnsignedAttribute("resx"), xml_imgbuffer->UnsignedAttribute("resy"));
+        opengl_imgbuffer_ = opengl_imgbuffer.get();
+        return opengl_imgbuffer;
     }
 
     std::cerr << "Warning: Imgbuffer type '" << type << "' not implemented. Only 'imgbuffer', and 'imgbuffer_opengl' exist for now. Using 'imgbuffer'." << std::endl; 
-    return std::unique_ptr<ImgBuffer_t>(new ImgBuffer_t(300, 200));
+    return std::make_unique<ImgBuffer_t>(300, 200);
 }
 
 auto APTracer::Entities::SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera, const std::string &next_filename, const tinyxml2::XMLElement* xml_transform_matrices, const tinyxml2::XMLElement* xml_mediums, const tinyxml2::XMLElement* xml_imgbuffers, const tinyxml2::XMLElement* xml_skyboxes) -> std::unique_ptr<Camera_t> {
@@ -1643,180 +1643,180 @@ auto APTracer::Entities::SceneContext_t::create_camera(const tinyxml2::XMLElemen
     if (type == "cam") {
         const std::vector<const char*> attributes = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind"};
         require_attributes(xml_camera, attributes);
-        return std::unique_ptr<Camera_t>(
-                    new APTracer::Cameras::Cam_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
+        return std::make_unique<APTracer::Cameras::Cam_t>(
+                    get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
                             get_xy<double>(xml_camera->Attribute("fov")), get_xy<unsigned int>(xml_camera->Attribute("subpix")), get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
-                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("gammaind")));
+                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("gammaind"));
     }
     if (type == "cam_aperture") {
         const std::vector<const char*> attributes = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "focus_distance", "aperture"};
         require_attributes(xml_camera, attributes);
-        return std::unique_ptr<Camera_t>(
-                    new APTracer::Cameras::CamAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
+        return std::make_unique<APTracer::Cameras::CamAperture_t>(
+                    get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
                             get_xy<double>(xml_camera->Attribute("fov")), get_xy<unsigned int>(xml_camera->Attribute("subpix")), get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
                             get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focus_distance"),
-                            xml_camera->DoubleAttribute("aperture"), xml_camera->DoubleAttribute("gammaind")));
+                            xml_camera->DoubleAttribute("aperture"), xml_camera->DoubleAttribute("gammaind"));
     }
     if (type == "cam_motionblur") {
         const std::vector<const char*> attributes = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "time"};
         require_attributes(xml_camera, attributes);       
-        return std::unique_ptr<Camera_t>(
-                    new APTracer::Cameras::CamMotionblur_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
+        return std::make_unique<APTracer::Cameras::CamMotionblur_t>(
+                    get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
                             get_xy<double>(xml_camera->Attribute("fov")), get_xy<unsigned int>(xml_camera->Attribute("subpix")), get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
-                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), get_xy<double>(xml_camera->Attribute("time")), xml_camera->DoubleAttribute("gammaind")));
+                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), get_xy<double>(xml_camera->Attribute("time")), xml_camera->DoubleAttribute("gammaind"));
     }
     if (type == "cam_motionblur_aperture") {
         const std::vector<const char*> attributes = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "focus_distance", "aperture", "time"};
         require_attributes(xml_camera, attributes);
-        return std::unique_ptr<Camera_t>(
-                    new APTracer::Cameras::CamMotionblurAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
+        return std::make_unique<APTracer::Cameras::CamMotionblurAperture_t>(
+                    get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
                             get_xy<double>(xml_camera->Attribute("fov")), get_xy<unsigned int>(xml_camera->Attribute("subpix")), get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
                             get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focus_distance"),
-                            xml_camera->DoubleAttribute("aperture"), get_xy<double>(xml_camera->Attribute("time")), xml_camera->DoubleAttribute("gammaind")));
+                            xml_camera->DoubleAttribute("aperture"), get_xy<double>(xml_camera->Attribute("time")), xml_camera->DoubleAttribute("gammaind"));
     }
     if (type == "fishcam") {
         const std::vector<const char*> attributes = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind"};
         require_attributes(xml_camera, attributes);
-        return std::unique_ptr<Camera_t>(
-                    new APTracer::Cameras::FishCam_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
+        return std::make_unique<APTracer::Cameras::FishCam_t>(
+                    get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
                             get_xy<double>(xml_camera->Attribute("fov")), get_xy<unsigned int>(xml_camera->Attribute("subpix")), get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
-                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("gammaind")));
+                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("gammaind"));
     }
     if (type == "fishcam_aperture") {
         const std::vector<const char*> attributes = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "focus_distance", "aperture"};
         require_attributes(xml_camera, attributes);
-        return std::unique_ptr<Camera_t>(
-                    new APTracer::Cameras::FishCamAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
+        return std::make_unique<APTracer::Cameras::FishCamAperture_t>(
+                    get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
                             get_xy<double>(xml_camera->Attribute("fov")), get_xy<unsigned int>(xml_camera->Attribute("subpix")), get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
                             get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focus_distance"),
-                            xml_camera->DoubleAttribute("aperture"), xml_camera->DoubleAttribute("gammaind")));
+                            xml_camera->DoubleAttribute("aperture"), xml_camera->DoubleAttribute("gammaind"));
     }
     if (type == "fishcam_motionblur") {
         const std::vector<const char*> attributes = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "time"};
         require_attributes(xml_camera, attributes);
-        return std::unique_ptr<Camera_t>(
-                    new APTracer::Cameras::FishCamMotionblur_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
+        return std::make_unique<APTracer::Cameras::FishCamMotionblur_t>(
+                    get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
                             get_xy<double>(xml_camera->Attribute("fov")), get_xy<unsigned int>(xml_camera->Attribute("subpix")), get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
-                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), get_xy<double>(xml_camera->Attribute("time")), xml_camera->DoubleAttribute("gammaind")));
+                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), get_xy<double>(xml_camera->Attribute("time")), xml_camera->DoubleAttribute("gammaind"));
     }
     if (type == "fishcam_motionblur_aperture") {
         const std::vector<const char*> attributes = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "focus_distance", "aperture", "time"};
         require_attributes(xml_camera, attributes);
-        return std::unique_ptr<Camera_t>(
-                    new APTracer::Cameras::FishCamMotionblurAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
+        return std::make_unique<APTracer::Cameras::FishCamMotionblurAperture_t>(
+                    get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
                             get_xy<double>(xml_camera->Attribute("fov")), get_xy<unsigned int>(xml_camera->Attribute("subpix")), get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
                             get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focus_distance"),
-                            xml_camera->DoubleAttribute("aperture"), get_xy<double>(xml_camera->Attribute("time")), xml_camera->DoubleAttribute("gammaind")));
+                            xml_camera->DoubleAttribute("aperture"), get_xy<double>(xml_camera->Attribute("time")), xml_camera->DoubleAttribute("gammaind"));
     }
     if (type == "isocam") {
         const std::vector<const char*> attributes = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind"};
         require_attributes(xml_camera, attributes);
-        return std::unique_ptr<Camera_t>(
-                    new APTracer::Cameras::IsoCam_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
+        return std::make_unique<APTracer::Cameras::IsoCam_t>(
+                    get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
                             get_xy<double>(xml_camera->Attribute("fov")), get_xy<unsigned int>(xml_camera->Attribute("subpix")), get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
-                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("gammaind")));
+                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("gammaind"));
     }
     if (type == "isocam_aperture") {
         const std::vector<const char*> attributes = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "focus_distance", "aperture"};
         require_attributes(xml_camera, attributes);
-        return std::unique_ptr<Camera_t>(
-                    new APTracer::Cameras::IsoCamAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
+        return std::make_unique<APTracer::Cameras::IsoCamAperture_t>(
+                    get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
                             get_xy<double>(xml_camera->Attribute("fov")), get_xy<unsigned int>(xml_camera->Attribute("subpix")), get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
                             get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focus_distance"),
-                            xml_camera->DoubleAttribute("aperture"), xml_camera->DoubleAttribute("gammaind")));
+                            xml_camera->DoubleAttribute("aperture"), xml_camera->DoubleAttribute("gammaind"));
     }
     if (type == "isocam_motionblur") {
         const std::vector<const char*> attributes = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "time"};
         require_attributes(xml_camera, attributes);
-        return std::unique_ptr<Camera_t>(
-                    new APTracer::Cameras::IsoCamMotionblur_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
+        return std::make_unique<APTracer::Cameras::IsoCamMotionblur_t>(
+                    get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
                             get_xy<double>(xml_camera->Attribute("fov")), get_xy<unsigned int>(xml_camera->Attribute("subpix")), get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
-                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), get_xy<double>(xml_camera->Attribute("time")), xml_camera->DoubleAttribute("gammaind")));
+                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), get_xy<double>(xml_camera->Attribute("time")), xml_camera->DoubleAttribute("gammaind"));
     }
     if (type == "isocam_motionblur_aperture") {
         const std::vector<const char*> attributes = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "focus_distance", "aperture", "time"};
         require_attributes(xml_camera, attributes);
-        return std::unique_ptr<Camera_t>(
-                    new APTracer::Cameras::IsoCamMotionblurAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
+        return std::make_unique<APTracer::Cameras::IsoCamMotionblurAperture_t>(
+                    get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
                             get_xy<double>(xml_camera->Attribute("fov")), get_xy<unsigned int>(xml_camera->Attribute("subpix")), get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
                             get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focus_distance"),
-                            xml_camera->DoubleAttribute("aperture"), get_xy<double>(xml_camera->Attribute("time")), xml_camera->DoubleAttribute("gammaind")));
+                            xml_camera->DoubleAttribute("aperture"), get_xy<double>(xml_camera->Attribute("time")), xml_camera->DoubleAttribute("gammaind"));
     }
     if (type == "reccam") {
         const std::vector<const char*> attributes = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind"};
         require_attributes(xml_camera, attributes);
-        return std::unique_ptr<Camera_t>(
-                    new APTracer::Cameras::RecCam_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
+        return std::make_unique<APTracer::Cameras::RecCam_t>(
+                    get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
                             get_xy<double>(xml_camera->Attribute("fov")), get_xy<unsigned int>(xml_camera->Attribute("subpix")), get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
-                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("gammaind")));
+                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("gammaind"));
     }
     if (type == "reccam_aperture") {
         const std::vector<const char*> attributes = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "focus_distance", "aperture"};
         require_attributes(xml_camera, attributes);
-        return std::unique_ptr<Camera_t>(
-                    new APTracer::Cameras::RecCamAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
+        return std::make_unique<APTracer::Cameras::RecCamAperture_t>(
+                    get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
                             get_xy<double>(xml_camera->Attribute("fov")), get_xy<unsigned int>(xml_camera->Attribute("subpix")), get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
                             get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focus_distance"),
-                            xml_camera->DoubleAttribute("aperture"), xml_camera->DoubleAttribute("gammaind")));
+                            xml_camera->DoubleAttribute("aperture"), xml_camera->DoubleAttribute("gammaind"));
     }
     if (type == "reccam_motionblur") {
         const std::vector<const char*> attributes = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "time"};
         require_attributes(xml_camera, attributes);
-        return std::unique_ptr<Camera_t>(
-                    new APTracer::Cameras::RecCamMotionblur_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
+        return std::make_unique<APTracer::Cameras::RecCamMotionblur_t>(
+                    get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
                             get_xy<double>(xml_camera->Attribute("fov")), get_xy<unsigned int>(xml_camera->Attribute("subpix")), get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
-                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), get_xy<double>(xml_camera->Attribute("time")), xml_camera->DoubleAttribute("gammaind")));
+                            get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), get_xy<double>(xml_camera->Attribute("time")), xml_camera->DoubleAttribute("gammaind"));
     }
     if (type == "reccam_motionblur_aperture") {
         const std::vector<const char*> attributes = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "medium_list", "skybox", "max_bounces", "gammaind", "focus_distance", "aperture", "time"};
         require_attributes(xml_camera, attributes);
-        return std::unique_ptr<Camera_t>(
-                    new APTracer::Cameras::RecCamMotionblurAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
+        return std::make_unique<APTracer::Cameras::RecCamMotionblurAperture_t>(
+                    get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), 
                             get_xy<double>(xml_camera->Attribute("fov")), get_xy<unsigned int>(xml_camera->Attribute("subpix")), get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), 
                             get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focus_distance"),
-                            xml_camera->DoubleAttribute("aperture"), get_xy<double>(xml_camera->Attribute("time")), xml_camera->DoubleAttribute("gammaind")));
+                            xml_camera->DoubleAttribute("aperture"), get_xy<double>(xml_camera->Attribute("time")), xml_camera->DoubleAttribute("gammaind"));
     }
     if (type == "cam_3d") {
         const std::vector<const char*> attributes = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "imgbuffer_L", "imgbuffer_R", "eye_dist", "medium_list", "skybox", "max_bounces", "gammaind"};
         require_attributes(xml_camera, attributes);
-        return std::unique_ptr<Camera_t>(
-                    new APTracer::Cameras::Cam3D_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), get_xy<double>(xml_camera->Attribute("fov")), get_xy<unsigned int>(xml_camera->Attribute("subpix")), 
+        return std::make_unique<APTracer::Cameras::Cam3D_t>(
+                    get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), get_xy<double>(xml_camera->Attribute("fov")), get_xy<unsigned int>(xml_camera->Attribute("subpix")), 
                             get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_imgbuffer(xml_camera->Attribute("imgbuffer_L"), xml_imgbuffers), 
                             get_imgbuffer(xml_camera->Attribute("imgbuffer_R"), xml_imgbuffers), xml_camera->DoubleAttribute("eye_dist"), 
                             get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), 
-                            xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focus_distance"), xml_camera->DoubleAttribute("gammaind")));
+                            xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focus_distance"), xml_camera->DoubleAttribute("gammaind"));
     }
     if (type == "cam_3d_aperture") {
         const std::vector<const char*> attributes = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "imgbuffer_L", "imgbuffer_R", "eye_dist", "medium_list", "skybox", "max_bounces", "gammaind", "focus_distance", "aperture"};
         require_attributes(xml_camera, attributes);
-        return std::unique_ptr<Camera_t>(
-                    new APTracer::Cameras::Cam3DAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), get_xy<double>(xml_camera->Attribute("fov")), get_xy<unsigned int>(xml_camera->Attribute("subpix")), 
+        return std::make_unique<APTracer::Cameras::Cam3DAperture_t>(
+                    get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), get_xy<double>(xml_camera->Attribute("fov")), get_xy<unsigned int>(xml_camera->Attribute("subpix")), 
                             get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_imgbuffer(xml_camera->Attribute("imgbuffer_L"), xml_imgbuffers), 
                             get_imgbuffer(xml_camera->Attribute("imgbuffer_R"), xml_imgbuffers), xml_camera->DoubleAttribute("eye_dist"), 
                             get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), 
                             xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focus_distance"), xml_camera->DoubleAttribute("aperture"), 
-                            xml_camera->DoubleAttribute("gammaind")));
+                            xml_camera->DoubleAttribute("gammaind"));
     }
     if (type == "cam_3d_motionblur") {
         const std::vector<const char*> attributes = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "imgbuffer_L", "imgbuffer_R", "eye_dist", "medium_list", "skybox", "max_bounces", "gammaind", "time"};
         require_attributes(xml_camera, attributes);
-        return std::unique_ptr<Camera_t>(
-                    new APTracer::Cameras::Cam3DMotionblur_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), get_xy<double>(xml_camera->Attribute("fov")), get_xy<unsigned int>(xml_camera->Attribute("subpix")), 
+        return std::make_unique<APTracer::Cameras::Cam3DMotionblur_t>(
+                    get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), get_xy<double>(xml_camera->Attribute("fov")), get_xy<unsigned int>(xml_camera->Attribute("subpix")), 
                             get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_imgbuffer(xml_camera->Attribute("imgbuffer_L"), xml_imgbuffers), 
                             get_imgbuffer(xml_camera->Attribute("imgbuffer_R"), xml_imgbuffers), xml_camera->DoubleAttribute("eye_dist"), 
                             get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), 
-                            xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focus_distance"), get_xy<double>(xml_camera->Attribute("time")), xml_camera->DoubleAttribute("gammaind")));
+                            xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focus_distance"), get_xy<double>(xml_camera->Attribute("time")), xml_camera->DoubleAttribute("gammaind"));
     }
     if (type == "cam_3d_motionblur_aperture") {
         const std::vector<const char*> attributes = {"fov", "subpix", "transform_matrix", "up", "imgbuffer", "imgbuffer_L", "imgbuffer_R", "eye_dist", "medium_list", "skybox", "max_bounces", "gammaind", "focus_distance", "aperture", "time"};
         require_attributes(xml_camera, attributes);
-        return std::unique_ptr<Camera_t>(
-                    new APTracer::Cameras::Cam3DMotionblurAperture_t(get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), get_xy<double>(xml_camera->Attribute("fov")), get_xy<unsigned int>(xml_camera->Attribute("subpix")), 
+        return std::make_unique<APTracer::Cameras::Cam3DMotionblurAperture_t>(
+                    get_transform_matrix(xml_camera->Attribute("transform_matrix"), xml_transform_matrices), filename, APTracer::get_colour(xml_camera->Attribute("up")), get_xy<double>(xml_camera->Attribute("fov")), get_xy<unsigned int>(xml_camera->Attribute("subpix")), 
                             get_imgbuffer(xml_camera->Attribute("imgbuffer"), xml_imgbuffers), get_imgbuffer(xml_camera->Attribute("imgbuffer_L"), xml_imgbuffers), 
                             get_imgbuffer(xml_camera->Attribute("imgbuffer_R"), xml_imgbuffers), xml_camera->DoubleAttribute("eye_dist"), 
                             get_medium_list(xml_camera->Attribute("medium_list"), xml_mediums), get_skybox(xml_camera->Attribute("skybox"), xml_skyboxes), 
                             xml_camera->UnsignedAttribute("max_bounces"), xml_camera->DoubleAttribute("focus_distance"), xml_camera->DoubleAttribute("aperture"), 
-                            get_xy<double>(xml_camera->Attribute("time")), xml_camera->DoubleAttribute("gammaind")));
+                            get_xy<double>(xml_camera->Attribute("time")), xml_camera->DoubleAttribute("gammaind"));
     }
 
     std::cerr << "Error: Camera type '" << type << "' not implemented. Exiting." << std::endl; 
@@ -1825,8 +1825,8 @@ auto APTracer::Entities::SceneContext_t::create_camera(const tinyxml2::XMLElemen
 
 auto APTracer::Entities::SceneContext_t::create_acceleration_structure(const tinyxml2::XMLElement* xml_acceleration_structure) -> void {
     if (xml_acceleration_structure == nullptr) {
-        scene_->acc_ = std::unique_ptr<APTracer::Entities::AccelerationStructure_t>(
-                            new APTracer::Acceleration::AccelerationMultiGridVector_t(scene_->geometry_.data(), scene_->geometry_.size(), 1, 128, 32, 1));
+        scene_->acc_ = std::make_unique<APTracer::Acceleration::AccelerationMultiGridVector_t>(
+                            scene_->geometry_.data(), scene_->geometry_.size(), 1, 128, 32, 1);
         return;
     }
 
@@ -1842,40 +1842,40 @@ auto APTracer::Entities::SceneContext_t::create_acceleration_structure(const tin
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
     if (type == "grid") {
-        scene_->acc_ = std::unique_ptr<APTracer::Entities::AccelerationStructure_t>(
-                        new APTracer::Acceleration::AccelerationGrid_t(scene_->geometry_.data(), scene_->geometry_.size(), xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128)));
+        scene_->acc_ = std::make_unique<APTracer::Acceleration::AccelerationGrid_t>(
+                        scene_->geometry_.data(), scene_->geometry_.size(), xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128));
     }
     else if (type == "grid_array") {
-        scene_->acc_ = std::unique_ptr<APTracer::Entities::AccelerationStructure_t>(
-                        new APTracer::Acceleration::AccelerationGridArray_t(scene_->geometry_.data(), scene_->geometry_.size(), xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128)));
+        scene_->acc_ = std::make_unique<APTracer::Acceleration::AccelerationGridArray_t>(
+                        scene_->geometry_.data(), scene_->geometry_.size(), xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128));
     }
     else if (type == "grid_vector") {
-        scene_->acc_ = std::unique_ptr<APTracer::Entities::AccelerationStructure_t>(
-                        new APTracer::Acceleration::AccelerationGridVector_t(scene_->geometry_.data(), scene_->geometry_.size(), xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128)));
+        scene_->acc_ = std::make_unique<APTracer::Acceleration::AccelerationGridVector_t>(
+                        scene_->geometry_.data(), scene_->geometry_.size(), xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128));
     }
     else if (type == "multi_grid") {
-        scene_->acc_ = std::unique_ptr<APTracer::Entities::AccelerationStructure_t>(
-                        new APTracer::Acceleration::AccelerationMultiGrid_t(scene_->geometry_.data(), scene_->geometry_.size(), xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128), xml_acceleration_structure->UnsignedAttribute("max_cell_content", 32), xml_acceleration_structure->UnsignedAttribute("max_grid_level", 1)));
+        scene_->acc_ = std::make_unique<APTracer::Acceleration::AccelerationMultiGrid_t>(
+                        scene_->geometry_.data(), scene_->geometry_.size(), xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128), xml_acceleration_structure->UnsignedAttribute("max_cell_content", 32), xml_acceleration_structure->UnsignedAttribute("max_grid_level", 1));
     }
     else if (type == "multi_grid_array") {
-        scene_->acc_ = std::unique_ptr<APTracer::Entities::AccelerationStructure_t>(
-                        new APTracer::Acceleration::AccelerationMultiGridArray_t(scene_->geometry_.data(), scene_->geometry_.size(), xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128), xml_acceleration_structure->UnsignedAttribute("max_cell_content", 32), xml_acceleration_structure->UnsignedAttribute("max_grid_level", 1)));
+        scene_->acc_ = std::make_unique<APTracer::Acceleration::AccelerationMultiGridArray_t>(
+                        scene_->geometry_.data(), scene_->geometry_.size(), xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128), xml_acceleration_structure->UnsignedAttribute("max_cell_content", 32), xml_acceleration_structure->UnsignedAttribute("max_grid_level", 1));
     }
     else if (type == "multi_grid_vector") {
-        scene_->acc_ = std::unique_ptr<APTracer::Entities::AccelerationStructure_t>(
-                        new APTracer::Acceleration::AccelerationMultiGridVector_t(scene_->geometry_.data(), scene_->geometry_.size(), xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128), xml_acceleration_structure->UnsignedAttribute("max_cell_content", 32), xml_acceleration_structure->UnsignedAttribute("max_grid_level", 1)));
+        scene_->acc_ = std::make_unique<APTracer::Acceleration::AccelerationMultiGridVector_t>(
+                        scene_->geometry_.data(), scene_->geometry_.size(), xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128), xml_acceleration_structure->UnsignedAttribute("max_cell_content", 32), xml_acceleration_structure->UnsignedAttribute("max_grid_level", 1));
     }
     else {
         std::cerr << "Warning: Acceleration structure type '" << type << "' not implemented. Using 'multi_grid_vector'." << std::endl; 
-        scene_->acc_ = std::unique_ptr<APTracer::Entities::AccelerationStructure_t>(
-                        new APTracer::Acceleration::AccelerationMultiGridVector_t(scene_->geometry_.data(), scene_->geometry_.size(), 1, 128, 32, 1));
+        scene_->acc_ = std::make_unique<APTracer::Acceleration::AccelerationMultiGridVector_t>(
+                        scene_->geometry_.data(), scene_->geometry_.size(), 1, 128, 32, 1);
     }
 }
 
 auto APTracer::Entities::SceneContext_t::get_transform_matrix(std::string transform_matrix, const tinyxml2::XMLElement* xml_transform_matrices) -> TransformMatrix_t* {
     std::transform(transform_matrix.begin(), transform_matrix.end(), transform_matrix.begin(), ::tolower);
     if (transform_matrix == "nan") {
-        transform_matrices_[index_transform_matrices_] = std::unique_ptr<TransformMatrix_t>(new TransformMatrix_t());
+        transform_matrices_[index_transform_matrices_] = std::make_unique<TransformMatrix_t>();
         ++index_transform_matrices_;
         return transform_matrices_[index_transform_matrices_ - 1].get();
     }
@@ -1903,7 +1903,7 @@ auto APTracer::Entities::SceneContext_t::get_transform_matrix(std::string transf
 }
 
 auto APTracer::Entities::SceneContext_t::get_material_index_list(std::string string_material_list, const tinyxml2::XMLElement* xml_materials) -> std::unique_ptr<std::list<size_t>> {
-    std::unique_ptr<std::list<size_t>> material_list = std::unique_ptr<std::list<size_t>>(new std::list<size_t>());
+    std::unique_ptr<std::list<size_t>> material_list = std::make_unique<std::list<size_t>>();
     std::string delimiter = ", ";
     size_t pos = 0;
     std::string token;
@@ -2686,7 +2686,7 @@ auto APTracer::get_texture_coordinates(std::string texture_coordinates_string) -
 }
 
 auto APTracer::get_medium_names(std::string string_medium_names) -> std::unique_ptr<std::list<std::string>> {
-    std::unique_ptr<std::list<std::string>> medium_names = std::unique_ptr<std::list<std::string>>(new std::list<std::string>());
+    std::unique_ptr<std::list<std::string>> medium_names = std::make_unique<std::list<std::string>>();
     std::string delimiter = ", ";
     size_t pos = 0;
 

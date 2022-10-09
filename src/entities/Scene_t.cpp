@@ -97,7 +97,7 @@ auto Scene_t::update() -> void {
 }
 
 auto Scene_t::build_acc() -> void {
-    acc_ = std::unique_ptr<AccelerationStructure_t>(new AccelerationMultiGridVector_t(geometry_.data(), geometry_.size(), 1, 128, 32, 1));
+    acc_ = std::make_unique<AccelerationMultiGridVector_t>(geometry_.data(), geometry_.size(), 1, 128, 32, 1);
 }
 
 auto Scene_t::intersect_brute(const Ray_t &ray, double &t, std::array<double, 2> &uv) const -> Shape_t* {

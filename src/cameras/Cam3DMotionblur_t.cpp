@@ -37,8 +37,8 @@ Cam3DMotionblur_t::Cam3DMotionblur_t(TransformMatrix_t* transformation, const st
         filename_R = filename + "_R.png";
     }
 
-    camera_L_ = std::unique_ptr<CamMotionblur_t>(new CamMotionblur_t(transformation, filename_L, up_, fov_, subpix_, image_L, medium_list_, skybox_, max_bounces_, time_, gammaind_));
-    camera_R_ = std::unique_ptr<CamMotionblur_t>(new CamMotionblur_t(transformation, filename_R, up_, fov_, subpix_, image_R, medium_list_, skybox_, max_bounces_, time_, gammaind_));
+    camera_L_ = std::make_unique<CamMotionblur_t>(transformation, filename_L, up_, fov_, subpix_, image_L, medium_list_, skybox_, max_bounces_, time_, gammaind_);
+    camera_R_ = std::make_unique<CamMotionblur_t>(transformation, filename_R, up_, fov_, subpix_, image_R, medium_list_, skybox_, max_bounces_, time_, gammaind_);
 
     const Vec3f horizontal = direction_.cross(up).normalize_inplace();
 

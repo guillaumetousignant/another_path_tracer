@@ -36,8 +36,8 @@ Cam3DAperture_t::Cam3DAperture_t(TransformMatrix_t* transformation, const std::s
         filename_R = filename + "_R.png";
     }
 
-    camera_L_ = std::unique_ptr<CamAperture_t>(new CamAperture_t(transformation, filename_L, up_, fov_, subpix_, image_L, medium_list_, skybox_, max_bounces_, focus_distance_, aperture_, gammaind_));
-    camera_R_ = std::unique_ptr<CamAperture_t>(new CamAperture_t(transformation, filename_R, up_, fov_, subpix_, image_R, medium_list_, skybox_, max_bounces_, focus_distance_, aperture_, gammaind_));
+    camera_L_ = std::make_unique<CamAperture_t>(transformation, filename_L, up_, fov_, subpix_, image_L, medium_list_, skybox_, max_bounces_, focus_distance_, aperture_, gammaind_);
+    camera_R_ = std::make_unique<CamAperture_t>(transformation, filename_R, up_, fov_, subpix_, image_R, medium_list_, skybox_, max_bounces_, focus_distance_, aperture_, gammaind_);
 
     const Vec3f horizontal = direction_.cross(up).normalize_inplace();
     const Vec3f vertical = horizontal.cross(direction_).normalize_inplace();

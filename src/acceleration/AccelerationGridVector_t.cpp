@@ -49,7 +49,7 @@ AccelerationGridVector_t::AccelerationGridVector_t(Shape_t** items, size_t n_ite
             for (auto y = static_cast<size_t>(min1[1]); y <= static_cast<size_t>(max1[1]); ++y) {
                 for (auto x = static_cast<size_t>(min1[0]); x <= static_cast<size_t>(max1[0]); ++x) {
                     if (!cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]]) {
-                        cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] = std::unique_ptr<GridCellVector_t>(new GridCellVector_t);
+                        cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] = std::make_unique<GridCellVector_t>();
                     }
                     cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]]->add(items[i]);
                 }
@@ -94,7 +94,7 @@ AccelerationGridVector_t::AccelerationGridVector_t(Shape_t** items, size_t n_ite
             for (auto y = static_cast<size_t>(min1[1]); y <= static_cast<size_t>(max1[1]); ++y) {
                 for (auto x = static_cast<size_t>(min1[0]); x <= static_cast<size_t>(max1[0]); ++x) {
                     if (!cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]]) {
-                        cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] = std::unique_ptr<GridCellVector_t>(new GridCellVector_t);
+                        cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] = std::make_unique<GridCellVector_t>();
                     }
                     cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]]->add(items[i]);
                 }
@@ -183,7 +183,7 @@ auto AccelerationGridVector_t::add(Shape_t* item) -> void {
         for (auto y = static_cast<size_t>(min1[1]); y <= static_cast<size_t>(max1[1]); ++y) {
             for (auto x = static_cast<size_t>(min1[0]); x <= static_cast<size_t>(max1[0]); ++x) {
                 if (!cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]]) {
-                    cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] = std::unique_ptr<GridCellVector_t>(new GridCellVector_t);
+                    cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] = std::make_unique<GridCellVector_t>();
                 }
                 cells_[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]]->add(item);
             }
