@@ -3,7 +3,7 @@ on: [push]
 jobs:
   macOS:
     name: build-macos
-    runs-on: macos-latest
+    runs-on: macos-10.15
     steps:
       - name: Installing dependencies (macOS)
         run: brew install libomp freeglut
