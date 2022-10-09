@@ -5,17 +5,10 @@ jobs:
     name: build-windows
     runs-on: windows-latest
     steps:
+      - name: Installing dependencies (Windows)
+        run: vcpkg install --recurse --x-install-root "${{ runner.workspace }}/another_path_tracer/vcpkg/" --triplet x64-windows zlib:x64-windows libpng:x64-windows libjpeg-turbo:x64-windows tiff:x64-windows freeglut:x64-windows
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Prepare vcpkg (Windows)
-        uses: lukka/run-vcpkg@v10
-        id: runvcpkg
-        with:
-          vcpkgDirectory: ${{ runner.workspace }}/another_path_tracer/vcpkg/
-          vcpkgGitCommitId: 6ca56aeb457f033d344a7106cb3f9f1abf8f4e98
-          vcpkgTriplet: x64-windows
-          runVcpkgInstall: true
-          runVcpkgFormatString: '[`install`, `--recurse`, `--clean-after-build`, `--x-install-root`, `${{ runner.workspace }}/another_path_tracer/vcpkg/`, `--triplet`, `x64-windows`, `zlib:x64-windows`, `libpng:x64-windows`, `libjpeg-turbo:x64-windows`, `tiff:x64-windows`, `freeglut:x64-windows`]'
       - name: Creating build directory (Windows)
         run: mkdir build
       - name: Running CMake (Windows)
