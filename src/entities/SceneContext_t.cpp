@@ -144,8 +144,8 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) ->
     }
     new_filename = next_filename(folder + scene_name_ + ".png");
 
-    std::cout << "Scene name: '" << scene_name_ << "'." << std::endl; // REMOVE
-    std::cout << "Next filename: '" << new_filename << "'." << std::endl; // REMOVE
+    std::cout << "Scene name: '" << scene_name_ << "'." << std::endl;
+    std::cout << "Next filename: '" << new_filename << "'." << std::endl;
 
     // Fields
     tinyxml2::XMLElement* xml_transform_matrices = xml_top->FirstChildElement("transform_matrices");
