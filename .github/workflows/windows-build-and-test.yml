@@ -6,9 +6,9 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Prepare vcpkg (Windows)
-        uses: lukka/run-vcpkg@v6
+        uses: lukka/run-vcpkg@v10
         id: runvcpkg
         with:
           vcpkgArguments: zlib:x64-windows libpng:x64-windows libjpeg-turbo:x64-windows tiff:x64-windows freeglut:x64-windows

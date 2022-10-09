@@ -8,7 +8,7 @@ jobs:
       - name: Installing dependencies (macOS)
         run: brew install libomp freeglut
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Creating build directory (macOS)
         run: mkdir build
       - name: Running CMake (macOS)

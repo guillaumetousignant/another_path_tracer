@@ -8,7 +8,7 @@ jobs:
       - name: Installing dependencies (Ubuntu)
         run: sudo apt install freeglut3-dev
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Creating build directory (Ubuntu)
         run: mkdir build
       - name: Running CMake (Ubuntu)
