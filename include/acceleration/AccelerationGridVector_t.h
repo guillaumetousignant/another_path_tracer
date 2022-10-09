@@ -5,6 +5,7 @@
 #include "entities/AccelerationStructure_t.h"
 #include "entities/Vec3f.h"
 #include "shapes/Box_t.h"
+#include "acceleration/GridCellVector_t.h"
 #include <vector>
 #include <memory>
 
@@ -19,7 +20,6 @@ using APTracer::Entities::AccelerationStructure_t;
 using APTracer::Shapes::Box_t;
 
 namespace APTracer { namespace Acceleration {
-    class GridCellVector_t;
 
     /**
      * @brief The acceleration grid vector class describes a grid acceleration structure, splitting the space into uniform cells. Cells use vectors of shapes, for fast iteraring and low memory use.

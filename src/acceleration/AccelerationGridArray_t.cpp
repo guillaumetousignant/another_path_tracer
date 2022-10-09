@@ -1,6 +1,5 @@
 #include "acceleration/AccelerationGridArray_t.h"
 #include "entities/Shape_t.h"
-#include "acceleration/GridCellArray_t.h"
 #include <limits>
 #include <cmath>
 

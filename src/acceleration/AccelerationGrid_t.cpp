@@ -1,6 +1,5 @@
 #include "acceleration/AccelerationGrid_t.h"
 #include "entities/Shape_t.h"
-#include "acceleration/GridCell_t.h"
 #include <limits>
 #include <cmath>
 

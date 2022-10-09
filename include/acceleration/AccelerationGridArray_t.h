@@ -5,6 +5,7 @@
 #include "entities/AccelerationStructure_t.h"
 #include "entities/Vec3f.h"
 #include "shapes/Box_t.h"
+#include "acceleration/GridCellArray_t.h"
 #include <vector>
 #include <memory>
 
@@ -19,7 +20,6 @@ using APTracer::Entities::AccelerationStructure_t;
 using APTracer::Shapes::Box_t;
 
 namespace APTracer { namespace Acceleration {
-    class GridCellArray_t;
 
     /**
      * @brief The acceleration grid array class describes a grid acceleration structure, splitting the space into uniform cells. Cells use arrays of shapes, for fast iteraring and lowest memory use.
