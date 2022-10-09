@@ -12,7 +12,7 @@ jobs:
       - name: Creating build directory (Windows)
         run: mkdir build
       - name: Running CMake (Windows)
-        run: cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON -DCMAKE_TOOLCHAIN_FILE=$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake
+        run: cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON -DCMAKE_TOOLCHAIN_FILE=${{ env.VCPKG_INSTALLATION_ROOT }}/scripts/buildsystems/vcpkg.cmake
         working-directory: ${{ github.workspace }}/build
       - name: Build (Windows)
         run: cmake --build .
