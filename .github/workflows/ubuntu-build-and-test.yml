@@ -12,7 +12,7 @@ jobs:
       - name: Creating build directory (Ubuntu)
         run: mkdir build
       - name: Running CMake (Ubuntu)
-        run: cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON
+        run: cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON
         working-directory: ${{ github.workspace }}/build
       - name: Build (Ubuntu)
         run: cmake --build .
