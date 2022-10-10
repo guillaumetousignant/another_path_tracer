@@ -13,13 +13,28 @@ using APTracer::Acceleration::AccelerationMultiGridVector_t;
 
 Scene_t::Scene_t(Shape_t* shape) : geometry_(1, shape) {}
 
-Scene_t::Scene_t(Shape_t** shapes, size_t n_shapes) : geometry_(shapes, shapes + n_shapes) {}
+Scene_t::Scene_t(const std::vector<Shape_t*>& shapes) : geometry_(shapes) {}
 
-Scene_t::Scene_t(MeshTop_t* mesh) : geometry_(mesh->triangles_) {}
+Scene_t::Scene_t(MeshTop_t* mesh) : geometry_(mesh->triangles_.size()) {
+    for (size_t i = 0; i < mesh->triangles_.size(); ++i) {
+        geometry_[i] = mesh->triangles_[i].get();
+    }
+}
 
-Scene_t::Scene_t(MeshTop_t** meshes, size_t n_meshes) {
-    for (size_t i = 0; i < n_meshes; i++) {
-        geometry_.insert(geometry_.end(), meshes[i]->triangles_.begin(), meshes[i]->triangles_.end());
+Scene_t::Scene_t(const std::vector<MeshTop_t*>& meshes) {
+    size_t additional_size = 0;
+    for (const auto& mesh: meshes) {
+        additional_size += mesh->triangles_.size();
+    }
+
+    geometry_ = std::vector<Shape_t*>(additional_size);
+    
+    size_t index = 0;
+    for (const auto& mesh: meshes) {
+        for (size_t i = 0; i < mesh->triangles_.size(); ++i) {
+            geometry_[index + i] = mesh->triangles_[i].get();
+        }
+        index += mesh->triangles_.size();
     }
 }
 
@@ -27,22 +42,34 @@ auto Scene_t::add(Shape_t* shape) -> void {
     geometry_.push_back(shape);
 }
 
-auto Scene_t::add(Shape_t** shapes, size_t n_shapes) -> void {
-    geometry_.insert(geometry_.end(), shapes, shapes + n_shapes);
+auto Scene_t::add(const std::vector<Shape_t*>& shapes) -> void {
+    geometry_.insert(geometry_.end(), shapes.begin(), shapes.end());
 }
 
 auto Scene_t::add(MeshTop_t* mesh) -> void {
-    geometry_.insert(geometry_.end(), mesh->triangles_.begin(), mesh->triangles_.end());
+
+    const size_t index = geometry_.size();
+    geometry_.resize(geometry_.size() + mesh->triangles_.size());
+
+    for (size_t i = 0; i < mesh->triangles_.size(); ++i) {
+        geometry_[index + i] = mesh->triangles_[i].get();
+    }
 }
 
-auto Scene_t::add(MeshTop_t** meshes, size_t n_meshes) -> void {
-    size_t new_size = geometry_.size();
-    for (size_t i = 0; i < n_meshes; i++) {
-        new_size += meshes[i]->triangles_.size();
+auto Scene_t::add(const std::vector<MeshTop_t*>& meshes) -> void {
+    size_t additional_size = 0;
+    for (const auto& mesh: meshes) {
+        additional_size += mesh->triangles_.size();
     }
-    geometry_.reserve(new_size);
-    for (size_t i = 0; i < n_meshes; i++) {
-        geometry_.insert(geometry_.end(), meshes[i]->triangles_.begin(), meshes[i]->triangles_.end());
+
+    size_t index = geometry_.size();
+    geometry_.resize(geometry_.size() + additional_size);
+    
+    for (const auto& mesh: meshes) {
+        for (size_t i = 0; i < mesh->triangles_.size(); ++i) {
+            geometry_[index + i] = mesh->triangles_[i].get();
+        }
+        index += mesh->triangles_.size();
     }
 }
 
@@ -55,10 +82,10 @@ auto Scene_t::remove(Shape_t* shape) -> void {
     }
 }
 
-auto Scene_t::remove(Shape_t** shapes, size_t n_shapes) -> void {
-    for (size_t j = 0; j < n_shapes; ++j) {
+auto Scene_t::remove(const std::vector<Shape_t*>& shapes) -> void {
+    for (const auto& shape: shapes) {
         for (size_t i = 0; i < geometry_.size(); ++i) {
-            if (geometry_[i] == shapes[j]) {
+            if (geometry_[i] == shape) {
                 geometry_.erase(geometry_.begin() + i);
                 break;
             }
@@ -67,22 +94,22 @@ auto Scene_t::remove(Shape_t** shapes, size_t n_shapes) -> void {
 }
 
 auto Scene_t::remove(MeshTop_t* mesh) -> void {
-    if (mesh->n_tris_ > 0) {
+    if (!mesh->triangles_.empty()) {
         for (size_t i = 0; i < geometry_.size(); ++i) {
-            if (geometry_[i] == mesh->triangles_[0]) {
-                geometry_.erase(geometry_.begin() + i, geometry_.begin() + std::max(i + mesh->n_tris_, geometry_.size()));
+            if (geometry_[i] == mesh->triangles_[0].get()) {
+                geometry_.erase(geometry_.begin() + i, geometry_.begin() + std::max(i + mesh->triangles_.size(), geometry_.size()));
                 break;
             }
         }
     }
 }
 
-auto Scene_t::remove(MeshTop_t** meshes, size_t n_meshes) -> void {
-    for (size_t k = 0; k < n_meshes; ++k) {
-        if (meshes[k]->n_tris_ > 0) {
+auto Scene_t::remove(const std::vector<MeshTop_t*>& meshes) -> void {
+    for (const auto& mesh: meshes) {
+        if (!mesh->triangles_.empty()) {
             for (size_t i = 0; i < geometry_.size(); ++i) {
-                if (geometry_[i] == meshes[k]->triangles_[0]) {
-                    geometry_.erase(geometry_.begin() + i, geometry_.begin() + std::max(i + meshes[k]->n_tris_, geometry_.size()));
+                if (geometry_[i] == mesh->triangles_[0].get()) {
+                    geometry_.erase(geometry_.begin() + i, geometry_.begin() + std::max(i + mesh->triangles_.size(), geometry_.size()));
                     break;
                 }
             }
@@ -97,7 +124,7 @@ auto Scene_t::update() -> void {
 }
 
 auto Scene_t::build_acc() -> void {
-    acc_ = std::make_unique<AccelerationMultiGridVector_t>(geometry_.data(), geometry_.size(), 1, 128, 32, 1);
+    acc_ = std::make_unique<AccelerationMultiGridVector_t>(geometry_, 1, 128, 32, 1);
 }
 
 auto Scene_t::intersect_brute(const Ray_t &ray, double &t, std::array<double, 2> &uv) const -> Shape_t* {

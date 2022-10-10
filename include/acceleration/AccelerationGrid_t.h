@@ -35,23 +35,21 @@ namespace APTracer { namespace Acceleration {
              * @brief Construct a new top-level AccelerationGrid_t object from an array of shapes.
              * 
              * @param items Array of shapes to be added to the acceleration structure.
-             * @param n_items Number of shapes to be added to the acceleration structure.
              * @param min_res Minimum number of cells for all directions.
              * @param max_res Maximum number of cells for all directions.
              */
-            AccelerationGrid_t(Shape_t** items, size_t n_items, size_t min_res, size_t max_res);
+            AccelerationGrid_t(const std::vector<Shape_t*>& items, size_t min_res, size_t max_res);
 
             /**
              * @brief Construct a new AccelerationGrid_t object from an array of shapes.
              * 
              * @param items Array of shapes to be added to the acceleration structure.
-             * @param n_items Number of shapes to be added to the acceleration structure.
              * @param coordinates Array of minimum and maximum coordinates covered by the acceleration structure. Set to restrict span, for example to use as a cell within another grid.
              * @param level Recursion level of the grid. 0 is a top-level grid, 1 is a grid which is a cell of a grid, 2 is a grid within a grid within a grid, etc.
              * @param min_res Minimum number of cells for all directions.
              * @param max_res Maximum number of cells for all directions.
              */
-            AccelerationGrid_t(Shape_t** items, size_t n_items, std::array<Vec3f, 2> coordinates, unsigned int level, size_t min_res, size_t max_res);
+            AccelerationGrid_t(const std::vector<Shape_t*>& items, std::array<Vec3f, 2> coordinates, unsigned int level, size_t min_res, size_t max_res);
 
             std::vector<std::unique_ptr<GridCell_t>> cells_; /**< @brief Array of all the cells contained in the acceleration structure. Cells use lists of shapes, for constant time adding and removal of shapes.*/ 
             std::array<size_t, 3> cell_res_; /**< @brief Number of cells in the x, y, and z direction.*/ 

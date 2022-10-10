@@ -42,9 +42,8 @@ namespace APTracer { namespace Entities {
              * @brief Construct a new Scene_t object from multiple shapes.
              * 
              * @param shapes Shapes to be added to the scene.
-             * @param n_shapes Number of shapes to be added.
              */
-            Scene_t(Shape_t** shapes, size_t n_shapes);
+            Scene_t(const std::vector<Shape_t*>& shapes);
 
             /**
              * @brief Construct a new Scene_t object containing a single mesh.
@@ -57,9 +56,8 @@ namespace APTracer { namespace Entities {
              * @brief Construct a new Scene_t object from multiple meshes.
              * 
              * @param meshes Meshes to be added to the scene.
-             * @param n_meshes Number of meshes to be added.
              */
-            Scene_t(MeshTop_t** meshes, size_t n_meshes);
+            Scene_t(const std::vector<MeshTop_t*>& meshes);
 
             std::vector<Shape_t*> geometry_; /**< @brief Vector of shapes to be drawn.*/
             std::unique_ptr<AccelerationStructure_t> acc_; /**< @brief Acceleration structure containing the shapes, used to accelerate intersection.*/
@@ -75,9 +73,8 @@ namespace APTracer { namespace Entities {
              * @brief Adds several shapes to the scene.
              * 
              * @param shapes Array of shapes to be added to the scene.
-             * @param n_shapes Number of shapes to be added.
              */
-            auto add(Shape_t** shapes, size_t n_shapes) -> void;
+            auto add(const std::vector<Shape_t*>& shapes) -> void;
 
             /**
              * @brief Adds a single mesh to the scene.
@@ -90,9 +87,8 @@ namespace APTracer { namespace Entities {
              * @brief Adds multiple meshes to the scene.
              * 
              * @param meshes Array of meshes to be added to the scene.
-             * @param n_meshes Number of meshes.
              */
-            auto add(MeshTop_t** meshes, size_t n_meshes) -> void;
+            auto add(const std::vector<MeshTop_t*>& meshes) -> void;
 
             /**
              * @brief Removes a single shape from the scene.
@@ -105,9 +101,8 @@ namespace APTracer { namespace Entities {
              * @brief Removes multiple shapes from a scene.
              * 
              * @param shapes Array of shapes to be removed from the scene.
-             * @param n_shapes Number of shapes.
              */
-            auto remove(Shape_t** shapes, size_t n_shapes) -> void;
+            auto remove(const std::vector<Shape_t*>& shapes) -> void;
 
             /**
              * @brief Removes a mesh from the scene.
@@ -128,9 +123,8 @@ namespace APTracer { namespace Entities {
              * out of order.
              * 
              * @param meshes Array of meshes to be removed from the scene.
-             * @param n_meshes Number of meshes to be removed from the scene.
              */
-            auto remove(MeshTop_t** meshes, size_t n_meshes) -> void;
+            auto remove(const std::vector<MeshTop_t*>& meshes) -> void;
 
             /**
              * @brief Updates all the shapes in the scene.

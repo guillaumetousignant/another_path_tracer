@@ -30,7 +30,7 @@ namespace APTracer { namespace Entities {
 
             /**
              * @brief Intersects a ray with the acceleration structure to find the closest hit
-             * and its caracteristics.
+             * and its characteristics.
              * 
              * Main function of the acceleration structure. Virtual function, it should return 
              * the information of the closest intersection, or nullptr if no intersection. t 
