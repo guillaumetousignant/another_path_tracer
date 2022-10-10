@@ -26,8 +26,6 @@ namespace APTracer { namespace Entities {
              */
             virtual ~AccelerationStructure_t() = default;
 
-            size_t n_obj_; /**< @brief Number of shapes currently held in the acceleration structure.*/
-
             /**
              * @brief Intersects a ray with the acceleration structure to find the closest hit
              * and its characteristics.
@@ -81,6 +79,13 @@ namespace APTracer { namespace Entities {
              * @param item Shape to be removed from the acceleration structure.
              */
             virtual auto move(Shape_t* item) -> void = 0;
+
+            /**
+             * @brief Number of shapes currently held in the acceleration structure.
+             * 
+             * @return size_t Number of shapes currently held in the acceleration structure.
+             */
+            virtual auto size() const -> size_t = 0;
     };
 }}
 

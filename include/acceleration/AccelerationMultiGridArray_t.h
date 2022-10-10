@@ -70,6 +70,10 @@ namespace APTracer { namespace Acceleration {
             virtual auto add(Shape_t* item) -> void final;
             virtual auto remove(const Shape_t* item) -> void final;
             virtual auto move(Shape_t* item) -> void final;
+            virtual auto size() const -> size_t final;
+
+        private:
+            size_t size_; /**< @brief Number of shapes currently held in the acceleration structure.*/ 
     };
 }}
 #endif

@@ -7,20 +7,19 @@
 using APTracer::Acceleration::AccelerationMultiGrid_t;
 
 AccelerationMultiGrid_t::AccelerationMultiGrid_t(const std::vector<Shape_t*>& items, size_t min_res, size_t max_res, size_t max_cell_content, unsigned int max_grid_level) : 
-        level_(0), min_res_(min_res), max_res_(max_res), max_cell_content_(max_cell_content), max_grid_level_(max_grid_level) {
-   n_obj_ = items.size();
+        level_(0), min_res_(min_res), max_res_(max_res), max_cell_content_(max_cell_content), max_grid_level_(max_grid_level), size_(items.size()) {
 
     std::array<Vec3f, 2> coordinates{Vec3f(std::numeric_limits<double>::max()),
                                      Vec3f(std::numeric_limits<double>::lowest())};
-    for (size_t i = 0; i < n_obj_; ++i) {
-        coordinates[0].min(items[i]->mincoord());
-        coordinates[1].max(items[i]->maxcoord());
+    for (const auto& item: items) {
+        coordinates[0].min(item->mincoord());
+        coordinates[1].max(item->maxcoord());
     }
 
     const Vec3f grid_size = coordinates[1] - coordinates[0];
     bounding_box_ = Box_t(coordinates);
 
-    const Vec3f cell_res = (grid_size * std::pow(n_obj_/(grid_size[0]*grid_size[1]*grid_size[2]), 1.0/3.0)).floor()
+    const Vec3f cell_res = (grid_size * std::pow(items.size()/(grid_size[0]*grid_size[1]*grid_size[2]), 1.0/3.0)).floor()
                             .max(static_cast<double>(min_res_))
                             .min(static_cast<double>(max_res_)) - 1.0;
 
@@ -32,12 +31,12 @@ AccelerationMultiGrid_t::AccelerationMultiGrid_t(const std::vector<Shape_t*>& it
     cells_ = std::vector<std::unique_ptr<AccelerationStructure_t>>(cell_res_[0] *  cell_res_[1] * cell_res_[2]);
     std::vector<std::unique_ptr<GridCell_t>> temp_cells(cell_res_[0] *  cell_res_[1] * cell_res_[2]);
 
-    for (size_t i = 0; i < n_obj_; ++i) {
+    for (const auto& item: items) {
         Vec3f min1 = Vec3f(std::numeric_limits<double>::max());
         Vec3f max1 = Vec3f(std::numeric_limits<double>::lowest());
     
-        min1.min(items[i]->mincoord());
-        max1.max(items[i]->maxcoord());
+        min1.min(item->mincoord());
+        max1.max(item->maxcoord());
         min1 = ((min1 - bounding_box_.coordinates_[0])/cell_size_).floor();
         max1 = ((max1 - bounding_box_.coordinates_[0])/cell_size_).floor();
 
@@ -52,7 +51,7 @@ AccelerationMultiGrid_t::AccelerationMultiGrid_t(const std::vector<Shape_t*>& it
                     if (!temp_cells[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]]) {
                         temp_cells[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] = std::make_unique<GridCell_t>();
                     }
-                    temp_cells[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]]->add(items[i]);
+                    temp_cells[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]]->add(item);
                 }
             }
         }
@@ -60,13 +59,10 @@ AccelerationMultiGrid_t::AccelerationMultiGrid_t(const std::vector<Shape_t*>& it
 
     for (size_t i = 0; i < (cell_res_[0]*cell_res_[1]*cell_res_[2]); ++i) {
         if (temp_cells[i]) {
-            if ((temp_cells[i]->n_obj_ > max_cell_content_) && (level_ < max_grid_level_)) {
-                std::vector<Shape_t*> temp_elements(temp_cells[i]->n_obj_);
-                size_t element_index = 0;
-                for (auto & shape : temp_cells[i]->items_) {
-                    temp_elements[element_index] = shape;
-                    element_index++;
-                }
+            if ((temp_cells[i]->size() > max_cell_content_) && (level_ < max_grid_level_)) {
+                std::vector<Shape_t*> temp_elements;
+                temp_elements.reserve(temp_cells[i]->items_.size());
+                std::copy(std::begin(temp_cells[i]->items_), std::end(temp_cells[i]->items_), std::back_inserter(temp_elements));
 
                 const size_t z = i/(cell_res_[0]*cell_res_[1]);
                 const size_t y = (i - z * cell_res_[0]*cell_res_[1])/cell_res_[0];
@@ -85,13 +81,12 @@ AccelerationMultiGrid_t::AccelerationMultiGrid_t(const std::vector<Shape_t*>& it
 }
 
 AccelerationMultiGrid_t::AccelerationMultiGrid_t(const std::vector<Shape_t*>& items, std::array<Vec3f, 2> coordinates, unsigned int level, size_t min_res, size_t max_res, size_t max_cell_content, unsigned int max_grid_level) : 
-        level_(level), min_res_(min_res), max_res_(max_res), max_cell_content_(max_cell_content), max_grid_level_(max_grid_level) {
-    n_obj_ = items.size();
+        level_(level), min_res_(min_res), max_res_(max_res), max_cell_content_(max_cell_content), max_grid_level_(max_grid_level), size_(items.size()) {
 
     const Vec3f grid_size = coordinates[1] - coordinates[0];
     bounding_box_ = Box_t(coordinates);
 
-    const Vec3f cell_res = (grid_size * std::pow(n_obj_/(grid_size[0]*grid_size[1]*grid_size[2]), 1.0/3.0)).floor()
+    const Vec3f cell_res = (grid_size * std::pow(items.size()/(grid_size[0]*grid_size[1]*grid_size[2]), 1.0/3.0)).floor()
                             .max(static_cast<double>(min_res_))
                             .min(static_cast<double>(max_res_)) - 1.0;
 
@@ -103,12 +98,12 @@ AccelerationMultiGrid_t::AccelerationMultiGrid_t(const std::vector<Shape_t*>& it
     cells_ = std::vector<std::unique_ptr<AccelerationStructure_t>>(cell_res_[0] *  cell_res_[1] * cell_res_[2]);
     std::vector<std::unique_ptr<GridCell_t>> temp_cells(cell_res_[0] *  cell_res_[1] * cell_res_[2]);
 
-    for (size_t i = 0; i < n_obj_; ++i) {
+    for (const auto& item: items) {
         Vec3f min1 = Vec3f(std::numeric_limits<double>::max());
         Vec3f max1 = Vec3f(std::numeric_limits<double>::lowest());
     
-        min1.min(items[i]->mincoord());
-        max1.max(items[i]->maxcoord());
+        min1.min(item->mincoord());
+        max1.max(item->maxcoord());
         min1 = ((min1 - bounding_box_.coordinates_[0])/cell_size_).floor();
         max1 = ((max1 - bounding_box_.coordinates_[0])/cell_size_).floor();
 
@@ -123,7 +118,7 @@ AccelerationMultiGrid_t::AccelerationMultiGrid_t(const std::vector<Shape_t*>& it
                     if (!temp_cells[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]]) {
                         temp_cells[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]] = std::make_unique<GridCell_t>();
                     }
-                    temp_cells[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]]->add(items[i]);
+                    temp_cells[x + y*cell_res_[0] + z*cell_res_[0]*cell_res_[1]]->add(item);
                 }
             }
         }
@@ -131,13 +126,10 @@ AccelerationMultiGrid_t::AccelerationMultiGrid_t(const std::vector<Shape_t*>& it
 
     for (size_t i = 0; i < (cell_res_[0]*cell_res_[1]*cell_res_[2]); ++i) {
         if (temp_cells[i]) {
-            if ((temp_cells[i]->n_obj_ > max_cell_content_) && (level_ < max_grid_level_)) {
-                std::vector<Shape_t*> temp_elements(temp_cells[i]->n_obj_);
-                size_t element_index = 0;
-                for (auto& shape : temp_cells[i]->items_) {
-                    temp_elements[element_index] = shape;
-                    element_index++;
-                }
+            if ((temp_cells[i]->size() > max_cell_content_) && (level_ < max_grid_level_)) {
+                std::vector<Shape_t*> temp_elements;
+                temp_elements.reserve(temp_cells[i]->items_.size());
+                std::copy(std::begin(temp_cells[i]->items_), std::end(temp_cells[i]->items_), std::back_inserter(temp_elements));
 
                 const size_t z = i/(cell_res_[0]*cell_res_[1]);
                 const size_t y = (i - z * cell_res_[0]*cell_res_[1])/cell_res_[0];
@@ -242,6 +234,7 @@ auto AccelerationMultiGrid_t::add(Shape_t* item) -> void {
             }
         }
     }
+    ++size_;
 }
 
 auto AccelerationMultiGrid_t::remove(const Shape_t* item) -> void {
@@ -269,8 +262,13 @@ auto AccelerationMultiGrid_t::remove(const Shape_t* item) -> void {
             }
         }
     }
+    --size_;
 }
 
 auto AccelerationMultiGrid_t::move(Shape_t* item) -> void {
 
+}
+
+auto AccelerationMultiGrid_t::size() const -> size_t {
+    return size_;
 }

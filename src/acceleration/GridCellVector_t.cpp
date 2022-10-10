@@ -5,12 +5,9 @@
 
 using APTracer::Acceleration::GridCellVector_t;
 
-GridCellVector_t::GridCellVector_t() : items_(std::vector<Shape_t*>()), size_(0) {
-    n_obj_ = 0;
-}
+GridCellVector_t::GridCellVector_t() : size_(0) {}
 
-GridCellVector_t::GridCellVector_t(size_t size) : items_(std::vector<Shape_t*>()), size_(size) {
-    n_obj_ = 0;
+GridCellVector_t::GridCellVector_t(size_t size) : size_(size) {
     items_.reserve(size_);
 }
 
@@ -33,14 +30,12 @@ auto GridCellVector_t::intersect(const Ray_t &ray, double &t, std::array<double,
 
 auto GridCellVector_t::add(Shape_t* item) -> void {
     items_.push_back(item);
-    ++n_obj_;
 }
 
 auto GridCellVector_t::remove(const Shape_t* item) -> void {
     for (size_t i = 0; i < items_.size(); i++) {
         if (items_[i] == item) {
             items_.erase(items_.begin() + i);
-            --n_obj_;
             break;
         }
     }
@@ -57,4 +52,8 @@ auto GridCellVector_t::reserve() -> void {
 auto GridCellVector_t::operator++() -> GridCellVector_t& {
     ++size_;
     return *this;
+}
+
+auto GridCellVector_t::size() const -> size_t {
+    return items_.size();
 }

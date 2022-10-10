@@ -41,6 +41,7 @@ namespace APTracer { namespace Acceleration {
             virtual auto add(Shape_t* item) -> void final;
             virtual auto remove(const Shape_t* item) -> void final;
             virtual auto move(Shape_t* item) -> void final;
+            virtual auto size() const -> size_t final;
 
             /**
              * @brief Reserves 'size_' in the shape vector.

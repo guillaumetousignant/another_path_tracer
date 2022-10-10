@@ -42,6 +42,7 @@ namespace APTracer { namespace Acceleration {
             virtual auto add(Shape_t* item) -> void final;
             virtual auto remove(const Shape_t* item) -> void final;
             virtual auto move(Shape_t* item) -> void final;
+            virtual auto size() const -> size_t final;
 
             /**
              * @brief Increases 'size_' to 'increment_size_', allocating the array with a new size and transfering existing shapes.
