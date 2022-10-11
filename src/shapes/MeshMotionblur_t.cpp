@@ -15,14 +15,14 @@ APTracer::Shapes::MeshMotionblur_t::MeshMotionblur_t(APTracer::Entities::Materia
 }      
 
 auto APTracer::Shapes::MeshMotionblur_t::createTriangles() -> void {
-    triangles_ = std::vector<std::unique_ptr<APTracer::Entities::Shape_t>>(geom_->n_tris_);
+    triangles_ = std::vector<std::unique_ptr<APTracer::Entities::Shape_t>>(geom_->v_.size());
     for (size_t i = 0; i < triangles_.size(); i++) {
         triangles_[i] = std::make_unique<APTracer::Shapes::TriangleMeshMotionblur_t>(material_, transformation_, geom_, i);
     }
 }
 
 auto APTracer::Shapes::MeshMotionblur_t::createTriangles(MaterialMap_t *materialmap) -> void {
-    triangles_ = std::vector<std::unique_ptr<APTracer::Entities::Shape_t>>(geom_->n_tris_);
+    triangles_ = std::vector<std::unique_ptr<APTracer::Entities::Shape_t>>(geom_->v_.size());
     for (size_t i = 0; i < triangles_.size(); i++) {
         triangles_[i] = std::make_unique<APTracer::Shapes::TriangleMeshMotionblur_t>(materialmap->getMaterial(geom_->mat_[i]), transformation_, geom_, i);
     }

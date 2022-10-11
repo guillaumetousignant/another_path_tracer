@@ -14,21 +14,21 @@ MeshGeometry_t::MeshGeometry_t(const std::string &filename) {
     std::string ext = filename.substr(filename.find_last_of('.') + 1);
     std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
     if(ext == "obj") {
-        const std::vector<bool> missing_normals = readObj(filename);
+        const std::vector<std::array<bool, 3>> missing_normals = readObj(filename);
         build_missing_normals(missing_normals);
     } 
     else if(ext == "su2") {
-        const std::vector<bool> missing_normals = readSU2(filename);
+        const std::vector<std::array<bool, 3>> missing_normals = readSU2(filename);
         build_missing_normals(missing_normals);
     }
 }
 
-auto MeshGeometry_t::readObj(const std::string &filename) -> std::vector<bool> {
+auto MeshGeometry_t::readObj(const std::string &filename) -> std::vector<std::array<bool, 3>> {
     size_t nv = 0;
     size_t nvt = 0;
     size_t nvn = 0;
     size_t nf = 0;
-    unsigned int nsides;
+    unsigned int nsides = 0;
     std::string line;
     std::string token;
     std::string dummy;
@@ -36,7 +36,7 @@ auto MeshGeometry_t::readObj(const std::string &filename) -> std::vector<bool> {
     std::ifstream meshfile(filename);
     if (!meshfile.is_open()) {
         std::cerr << "Error: file '" << filename << "' could not be opened. Exiting." << std::endl;
-        return std::vector<bool>();
+        return {};
     }
 
     // Getting number of elements
@@ -66,12 +66,12 @@ auto MeshGeometry_t::readObj(const std::string &filename) -> std::vector<bool> {
     size_t v_counter = 0;
     size_t vt_counter = 0;
     size_t vn_counter = 0;
-    double val0;
-    double val1;
-    double val2;
+    double val0 = 0.0;
+    double val1 = 0.0;
+    double val2 = 0.0;
 
     std::vector<Vec3f> v(nv);
-    std::vector<double> vt(2 * nvt);
+    std::vector<std::array<double, 2>> vt(nvt);
     std::vector<Vec3f> vn(nvn);
 
     meshfile.clear();
@@ -88,8 +88,7 @@ auto MeshGeometry_t::readObj(const std::string &filename) -> std::vector<bool> {
         }
         else if (token == "vt") {
             liness >> val0 >> val1;
-            vt[2 * vt_counter] = val0;
-            vt[2 * vt_counter + 1] = val1;
+            vt[vt_counter] = {val0, val1};
             ++vt_counter;
         }
         else if (token == "vn") {
@@ -104,14 +103,13 @@ auto MeshGeometry_t::readObj(const std::string &filename) -> std::vector<bool> {
     std::string material;
     std::array<std::string, 3> tokens;
     std::string value;
-    size_t pos;
+    size_t pos = 0;
 
-    n_tris_ = nf;
-    mat_ = std::vector<std::string>(n_tris_);
-    v_ = std::vector<Vec3f>(3*n_tris_);
-    vt_ = std::vector<double>(6*n_tris_);
-    vn_ = std::vector<Vec3f>(3*n_tris_);
-    std::vector<bool> missing_normals(3*n_tris_);
+    mat_ = std::vector<std::string>(nf);
+    v_ = std::vector<std::array<Vec3f, 3>>(mat_.size());
+    vt_ = std::vector<std::array<std::array<double, 2>, 3>>(mat_.size());
+    vn_ = std::vector<std::array<Vec3f, 3>>(mat_.size());
+    std::vector<std::array<bool, 3>> missing_normals(mat_.size());
 
     meshfile.clear();
     meshfile.seekg(0, std::ios::beg);
@@ -127,35 +125,31 @@ auto MeshGeometry_t::readObj(const std::string &filename) -> std::vector<bool> {
                     mat_[f_counter] = material;
                     pos = value.find('/');
                     if (pos == std::string::npos) {
-                        v_[f_counter*3 + i] = v[std::stoi(value, nullptr)-1];
-                        vt_[f_counter*6 + 2*i] = 0.0;
-                        vt_[f_counter*6 + 2*i + 1] = 0.0;
-                        vn_[f_counter*3 + i] = Vec3f(0.0);
-                        missing_normals[f_counter*3 + i] = true;
+                        v_[f_counter][i] = v[std::stoi(value, nullptr)-1];
+                        vt_[f_counter][i] = {0.0, 0.0};
+                        vn_[f_counter][i] = Vec3f(0.0);
+                        missing_normals[f_counter][i] = true;
                     }
                     else {
-                        v_[f_counter*3 + i] = v[std::stoi(value.substr(0, pos), nullptr)-1];
+                        v_[f_counter][i] = v[std::stoi(value.substr(0, pos), nullptr)-1];
                         value.erase(0, pos + 1);
 
                         pos = value.find('/');
                         if (pos == std::string::npos) {
-                            vt_[f_counter*6 + 2*i] = vt[2 * std::stoi(value, nullptr) - 2];
-                            vt_[f_counter*6 + 2*i + 1] = vt[2 * std::stoi(value, nullptr) - 1];
-                            vn_[f_counter*3 + i] = Vec3f(0.0);
-                            missing_normals[f_counter*3 + i] = true;
+                            vt_[f_counter][i] = vt[std::stoi(value, nullptr) - 1];
+                            vn_[f_counter][i] = Vec3f(0.0);
+                            missing_normals[f_counter][i] = true;
                         }
                         else {
                             if (pos == 0) {
-                                vt_[f_counter*6 + 2*i] = 0;
-                                vt_[f_counter*6 + 2*i + 1] = 0; 
+                                vt_[f_counter][i] = {0.0, 0.0};
                             }
                             else {
-                                vt_[f_counter*6 + 2*i] = vt[2 * std::stoi(value.substr(0, pos), nullptr) - 2];
-                                vt_[f_counter*6 + 2*i + 1] = vt[2 * std::stoi(value.substr(0, pos), nullptr) - 1];
+                                vt_[f_counter][i] = vt[std::stoi(value.substr(0, pos), nullptr) - 1];
                             }
                             value.erase(0, pos + 1);
-                            vn_[f_counter*3 + i] = vn[std::stoi(value, nullptr)-1];
-                            missing_normals[f_counter*3 + i] = false;
+                            vn_[f_counter][i] = vn[std::stoi(value, nullptr)-1];
+                            missing_normals[f_counter][i] = false;
                         }
                     }
                 }
@@ -178,18 +172,18 @@ auto MeshGeometry_t::readObj(const std::string &filename) -> std::vector<bool> {
     return missing_normals;
 }
 
-auto MeshGeometry_t::readSU2(const std::string &filename) -> std::vector<bool> {
+auto MeshGeometry_t::readSU2(const std::string &filename) -> std::vector<std::array<bool, 3>> {
     size_t nv = 0;
     size_t nf = 0;
     std::string line;
     std::string token;
-    unsigned int value;
+    unsigned int value = 0;
     bool wall_started = false;
 
     std::ifstream meshfile(filename);
     if (!meshfile.is_open()) {
         std::cerr << "Error: file '" << filename << "' could not be opened. Exiting." << std::endl;
-        return std::vector<bool>();
+        return {};
     }
 
     // Getting number of elements
@@ -229,9 +223,9 @@ auto MeshGeometry_t::readSU2(const std::string &filename) -> std::vector<bool> {
     
     // Getting normals, vertex coordinates and texture coordinates
     size_t v_counter = 0;
-    double val0;
-    double val1;
-    double val2;
+    double val0 = 0.0;
+    double val1 = 0.0;
+    double val2 = 0.0;
     bool points_started = false;
 
     std::vector<Vec3f> v(nv);
@@ -271,12 +265,11 @@ auto MeshGeometry_t::readSU2(const std::string &filename) -> std::vector<bool> {
     wall_started = false;
     std::string marker_token;
 
-    n_tris_ = nf;
-    mat_ = std::vector<std::string>(n_tris_);
-    v_ = std::vector<Vec3f>(3*n_tris_);
-    vt_ = std::vector<double>(6*n_tris_);
-    vn_ = std::vector<Vec3f>(3*n_tris_);
-    std::vector<bool> missing_normals(3*n_tris_, true);
+    mat_ = std::vector<std::string>(nf);
+    v_ = std::vector<std::array<Vec3f, 3>>(mat_.size());
+    vt_ = std::vector<std::array<std::array<double, 2>, 3>>(mat_.size());
+    vn_ = std::vector<std::array<Vec3f, 3>>(mat_.size());
+    std::vector<std::array<bool, 3>> missing_normals(mat_.size(), {true, true, true});
 
     meshfile.clear();
     meshfile.seekg(0, std::ios::beg);
@@ -304,32 +297,29 @@ auto MeshGeometry_t::readSU2(const std::string &filename) -> std::vector<bool> {
             if (token == "5") {
                 for (unsigned int i = 0; i < 3; ++i) {
                     liness >> tokens[i];
-                    v_[3*f_counter + i] = v[tokens[i]];
+                    v_[f_counter][i] = v[tokens[i]];
                     mat_[f_counter] = material;
-                    vt_[6*f_counter + 2*i] = 0.0;
-                    vt_[6*f_counter + 2*i + 1] = 0.0;
-                    vn_[3*f_counter + i] = Vec3f(0.0);
+                    vt_[f_counter][i] = {0.0, 0.0};
+                    vn_[f_counter][i] = Vec3f(0.0);
                 }
                 ++f_counter;
             }
             else if (token == "9") {
                 for (unsigned int i = 0; i < 3; ++i) {
                     liness >> tokens[i];
-                    v_[3*f_counter + i] = v[tokens[i]];
+                    v_[f_counter][i] = v[tokens[i]];
                     mat_[f_counter] = material;
-                    vt_[6*f_counter + 2*i] = 0.0;
-                    vt_[6*f_counter + 2*i + 1] = 0.0;
-                    vn_[3*f_counter + i] = Vec3f(0.0);
+                    vt_[f_counter][i] = {0.0, 0.0};
+                    vn_[f_counter][i] = Vec3f(0.0);
                 }
                 ++f_counter;
                 tokens[1] = tokens[2];
                 liness >> tokens[2];
                 for (unsigned int i = 0; i < 3; ++i) {
-                    v_[3*f_counter + i] = v[tokens[i]];
+                    v_[f_counter][i] = v[tokens[i]];
                     mat_[f_counter] = material;
-                    vt_[6*f_counter + 2*i] = 0.0;
-                    vt_[6*f_counter + 2*i + 1] = 0.0;
-                    vn_[3*f_counter + i] = Vec3f(0.0);
+                    vt_[f_counter][i] = {0.0, 0.0};
+                    vn_[f_counter][i] = Vec3f(0.0);
                 }
                 ++f_counter;
             }
@@ -347,11 +337,11 @@ auto MeshGeometry_t::readSU2(const std::string &filename) -> std::vector<bool> {
     return missing_normals;
 }
 
-auto MeshGeometry_t::build_missing_normals(const std::vector<bool>& normals_to_build) -> void {
-    for (size_t i = 0; i < n_tris_; ++i) {
+auto MeshGeometry_t::build_missing_normals(const std::vector<std::array<bool, 3>>& normals_to_build) -> void {
+    for (size_t i = 0; i < v_.size(); ++i) {
         for (unsigned int j = 0; j < 3; ++j) {
-            if (normals_to_build[3*i + j]) {
-                vn_[3*i + j] = (v_[3*i + 1] - v_[3*i]).cross(v_[3*i + 2] - v_[3*i]).normalize_inplace();
+            if (normals_to_build[i][j]) {
+                vn_[i][j] = (v_[i][1] - v_[i][0]).cross(v_[i][2] - v_[i][0]).normalize_inplace();
             }
         }
     }

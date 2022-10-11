@@ -13,19 +13,19 @@ using APTracer::Entities::Vec3f;
 APTracer::Shapes::TriangleMesh_t::TriangleMesh_t(APTracer::Entities::Material_t *material, APTracer::Entities::TransformMatrix_t *transform_matrix, APTracer::Entities::MeshGeometry_t* geom, size_t index) 
     : Shape_t(material, transform_matrix), geom_(geom), index_(index) {
 
-    points_ = {transformation_->multVec(geom_->v_[3 * index_]),
-               transformation_->multVec(geom_->v_[3 * index_ + 1]),
-               transformation_->multVec(geom_->v_[3 * index_ + 2])};
-    normals_ = {transformation_->multDir(geom_->vn_[3 * index_]),
-                transformation_->multDir(geom_->vn_[3 * index_ + 1]),
-                transformation_->multDir(geom_->vn_[3 * index_ + 2])};
+    points_ = {transformation_->multVec(geom_->v_[index_][0]),
+               transformation_->multVec(geom_->v_[index_][1]),
+               transformation_->multVec(geom_->v_[index_][2])};
+    normals_ = {transformation_->multDir(geom_->vn_[index_][0]),
+                transformation_->multDir(geom_->vn_[index_][1]),
+                transformation_->multDir(geom_->vn_[index_ + 2][1])};
 
     v0v1_ = points_[1] - points_[0];
     v0v2_ = points_[2] - points_[0];
 
-    texture_coordinates_ = {geom_->vt_[6 * index_], geom_->vt_[6 * index_ + 1],
-                            geom_->vt_[6 * index_ + 2], geom_->vt_[6 * index_ + 3],
-                            geom_->vt_[6 * index_ + 4], geom_->vt_[6 * index_ + 5]};
+    texture_coordinates_ = {geom_->vt_[index_][0][0], geom_->vt_[index_][0][1],
+                            geom_->vt_[index_][1][0], geom_->vt_[index_][1][1],
+                            geom_->vt_[index_][2][0], geom_->vt_[index_][2][1]};
 
     const std::array<double, 2> tuv0v1 = {texture_coordinates_[2] - texture_coordinates_[0], texture_coordinates_[3] - texture_coordinates_[1]};
     const std::array<double, 2> tuv0v2 = {texture_coordinates_[4] - texture_coordinates_[0], texture_coordinates_[5] - texture_coordinates_[1]};    
@@ -41,19 +41,19 @@ APTracer::Shapes::TriangleMesh_t::TriangleMesh_t(APTracer::Entities::Material_t 
 }
 
 auto APTracer::Shapes::TriangleMesh_t::update() -> void {
-    points_ = {transformation_->multVec(geom_->v_[3 * index_]),
-               transformation_->multVec(geom_->v_[3 * index_ + 1]),
-               transformation_->multVec(geom_->v_[3 * index_ + 2])};
-    normals_ = {transformation_->multDir(geom_->vn_[3 * index_]),
-                transformation_->multDir(geom_->vn_[3 * index_ + 1]),
-                transformation_->multDir(geom_->vn_[3 * index_ + 2])};
+    points_ = {transformation_->multVec(geom_->v_[index_][0]),
+               transformation_->multVec(geom_->v_[index_][1]),
+               transformation_->multVec(geom_->v_[index_][2])};
+    normals_ = {transformation_->multDir(geom_->vn_[index_][0]),
+                transformation_->multDir(geom_->vn_[index_][1]),
+                transformation_->multDir(geom_->vn_[index_ + 2][1])};
 
     v0v1_ = points_[1] - points_[0];
     v0v2_ = points_[2] - points_[0];
 
-    texture_coordinates_ = {geom_->vt_[6 * index_], geom_->vt_[6 * index_ + 1],
-                            geom_->vt_[6 * index_ + 2], geom_->vt_[6 * index_ + 3],
-                            geom_->vt_[6 * index_ + 4], geom_->vt_[6 * index_ + 5]};
+    texture_coordinates_ = {geom_->vt_[index_][0][0], geom_->vt_[index_][0][1],
+                            geom_->vt_[index_][1][0], geom_->vt_[index_][1][1],
+                            geom_->vt_[index_][2][0], geom_->vt_[index_][2][1]};
 
     const std::array<double, 2> tuv0v1 = {texture_coordinates_[2] - texture_coordinates_[0], texture_coordinates_[3] - texture_coordinates_[1]};
     const std::array<double, 2> tuv0v2 = {texture_coordinates_[4] - texture_coordinates_[0], texture_coordinates_[5] - texture_coordinates_[1]};    
