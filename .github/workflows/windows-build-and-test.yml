@@ -4,9 +4,6 @@ jobs:
   Windows:
     name: build-windows
     runs-on: windows-latest
-    config:
-      cc: "cl"
-      cxx: "cl"
     steps:
       - name: Installing dependencies (Windows)
         run: vcpkg install --recurse --triplet x64-windows zlib libpng libjpeg-turbo tiff freeglut
@@ -15,7 +12,7 @@ jobs:
       - name: Creating build directory (Windows)
         run: mkdir build
       - name: Running CMake (Windows)
-        run: cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake
+        run: cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl
         working-directory: ${{ github.workspace }}/build
       - name: Build (Windows)
         run: cmake --build .
