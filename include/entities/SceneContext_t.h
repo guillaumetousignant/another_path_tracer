@@ -118,7 +118,7 @@ namespace APTracer { namespace Entities {
             bool use_gl_; /**< @brief True if the scenes will be shown on the screen with OpenGL.*/
             std::string scene_name_; /**< @brief Name of the scene. Default image filename.*/
             std::unique_ptr<OpenGLRenderer_t> opengl_renderer_; /**< @brief OpenGL renderer object that will render the scene, if enabled.*/
-            ImgBufferOpenGL_t* opengl_imgbuffer_; /**< @brief Pointer to the imagebuffer to be used by OpenGL. Does not own the object.*/ // weak ptr
+            ImgBufferOpenGL_t* opengl_imgbuffer_; /**< @brief Pointer to the image buffer to be used by OpenGL. Does not own the object.*/ // weak ptr
             Camera_t* opengl_camera_; /**< @brief Pointer to the camera to be used by OpenGL. Does not own the object.*/ // weak ptr
             std::unique_ptr<Scene_t> scene_; /**< @brief Scene to be rendered.*/
 
@@ -149,6 +149,9 @@ namespace APTracer { namespace Entities {
             std::vector<std::unique_ptr<Camera_t>> cameras_; /**< @brief Vector containing the cameras.*/
             std::vector<std::unique_ptr<MaterialMap_t>> material_aggregates_; /**< @brief Vector containing the material aggregates. Elements are nullptr for regular materials.*/
             std::vector<std::unique_ptr<MeshTop_t>> meshes_; /**< @brief Vector containing the meshes.*/
+
+            std::unique_ptr<TransformMatrix_t> invalid_transform_matrix_; /**< @brief Transformation matrix used when a reference is not found.*/
+            std::unique_ptr<Medium_t> invalid_medium_; /**< @brief Medium used when a reference is not found.*/
 
             /**
              * @brief Reads a scene xml file, initialising the scene context from it.
@@ -278,7 +281,7 @@ namespace APTracer { namespace Entities {
             /**
              * @brief Create a acceleration structure object from an xml entry and bind it to the scene.
              * 
-             * @param xml_acceleration_structure XML entry containing the acceleration structurecod information.
+             * @param xml_acceleration_structure XML entry containing the acceleration structure information.
              */
             auto create_acceleration_structure(const tinyxml2::XMLElement* xml_acceleration_structure) -> void;
 
@@ -344,7 +347,7 @@ namespace APTracer { namespace Entities {
              * @param xml_mediums XML entries of all the mediums.
              * @return Medium_t* Pointer to the requested medium.
              */
-            auto get_medium(std::string medium, const tinyxml2::XMLElement* xml_mediums) const -> Medium_t*;
+            auto get_medium(std::string medium, const tinyxml2::XMLElement* xml_mediums) -> Medium_t*;
 
             /**
              * @brief Get a mesh geometry from its name or index.
@@ -474,14 +477,14 @@ namespace APTracer {
 
         for (unsigned int i = 0; i < 2; ++i) {
             if (ss.rdbuf()->in_avail() == 0) {
-                std::cerr << "Error: xy should be 2 values seperated by spaces. Current number of values is " << i << ", string is '" << string_value << "'. Exiting." << std::endl;
+                std::cerr << "Error: xy should be 2 values separated by spaces. Current number of values is " << i << ", string is '" << string_value << "'. Exiting." << std::endl;
                 exit(3);
             }
             ss >> value[i];
         }
 
         if (ss.rdbuf()->in_avail() != 0) {
-            std::cerr << "Warning: xy should be 2 values seperated by spaces. String not empty after two values, string is '" << string_value << "'. Ignoring." << std::endl;
+            std::cerr << "Warning: xy should be 2 values separated by spaces. String not empty after two values, string is '" << string_value << "'. Ignoring." << std::endl;
         }
 
         return value;
@@ -490,7 +493,7 @@ namespace APTracer {
     /**
      * @brief Returns true if the string represents an integer.
      * 
-     * @param s String containint or not an integer.
+     * @param s String containing or not an integer.
      * @return true The string represents an integer.
      * @return false The string doesn't represent an integer.
      */

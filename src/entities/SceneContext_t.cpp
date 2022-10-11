@@ -974,7 +974,7 @@ auto APTracer::Entities::SceneContext_t::create_transform_matrix(const tinyxml2:
         ++count;
     }
     if (count != 16) {
-        std::cerr << "Warning: Transform matrix value should be 16 values seperated by spaces, or nan. Current number of values is " << count << ". Using identity." << std::endl;
+        std::cerr << "Warning: Transform matrix value should be 16 values separated by spaces, or nan. Current number of values is " << count << ". Using identity." << std::endl;
         return std::make_unique<TransformMatrix_t>();
     }
     
@@ -1313,7 +1313,7 @@ auto APTracer::Entities::SceneContext_t::create_material(const tinyxml2::XMLElem
         material_mix_lists.texture_mix.emplace_back(material.get(), get_material_mix(xml_material->Attribute("first_material"), xml_material->Attribute("second_material"), xml_materials));
         return material;
     }
-    if (type == "texturemixin") {
+    if (type == "texturemix_in") {
         const std::vector<const char*> attributes = {"first_material", "second_material", "texture"};
         require_attributes(xml_material, attributes);
         std::unique_ptr<APTracer::Materials::TextureMixIn_t> material(
@@ -1898,8 +1898,11 @@ auto APTracer::Entities::SceneContext_t::get_transform_matrix(std::string transf
         }
     }
 
-    std::cerr << "Warning: Transformation matrix '" << transform_matrix << "' not found. Using identity. This causes a memory leak." << std::endl;
-    return new TransformMatrix_t();
+    std::cerr << "Warning: Transformation matrix '" << transform_matrix << "' not found. Using identity." << std::endl;
+    if (!invalid_transform_matrix_) {
+        invalid_transform_matrix_ = std::make_unique<TransformMatrix_t>();
+    }
+    return invalid_transform_matrix_.get();
 }
 
 auto APTracer::Entities::SceneContext_t::get_material_index_list(std::string string_material_list, const tinyxml2::XMLElement* xml_materials) -> std::unique_ptr<std::list<size_t>> {
@@ -2231,7 +2234,7 @@ auto APTracer::Entities::SceneContext_t::get_material_mix(std::string material_r
     return output_materials;
 }
 
-auto APTracer::Entities::SceneContext_t::get_medium(std::string medium, const tinyxml2::XMLElement* xml_mediums) const -> Medium_t* {
+auto APTracer::Entities::SceneContext_t::get_medium(std::string medium, const tinyxml2::XMLElement* xml_mediums) -> Medium_t* {
     if (is_number(medium)) {
         return mediums_[std::stoi(medium) - 1].get();
     }
@@ -2252,8 +2255,11 @@ auto APTracer::Entities::SceneContext_t::get_medium(std::string medium, const ti
         }
     }
     
-    std::cerr << "Warning: Medium '" << medium << "' not found. Using 'nonabsorber'. This Causes a memory leak." << std::endl;
-    return new APTracer::Materials::NonAbsorber_t(1.0, 0);
+    std::cerr << "Warning: Medium '" << medium << "' not found. Using 'nonabsorber'." << std::endl;
+    if (!invalid_medium_) {
+        invalid_medium_ = std::make_unique<APTracer::Materials::NonAbsorber_t>(1.0, 0);
+    }
+    return invalid_medium_.get();
 }
 
 auto APTracer::Entities::SceneContext_t::get_mesh_geometry(std::string mesh_geometry, const tinyxml2::XMLElement* xml_mesh_geometries) const -> MeshGeometry_t* {
@@ -2617,7 +2623,7 @@ auto APTracer::get_colour(std::string colour) -> Vec3f {
         return Vec3f(values[0]);
     }
     if (count != 3) {
-        std::cerr << "Warning: Colour should be 1 or 3 values seperated by spaces, or a string. Current number of values is " << count << ", colour is '" << colour << "'. Using '0.5'." << std::endl;
+        std::cerr << "Warning: Colour should be 1 or 3 values separated by spaces, or a string. Current number of values is " << count << ", colour is '" << colour << "'. Using '0.5'." << std::endl;
         return Vec3f(0.5);
     }
 
@@ -2641,7 +2647,7 @@ auto APTracer::get_points(std::string points_string) -> std::vector<Vec3f> {
             ++count;
         }
         if (count != 9) {
-            std::cerr << "Error: Triangle points should be 9 values seperated by spaces, or nan. Current number of values is " << count << ", points are '" << points_string << "'. Exiting." << std::endl;
+            std::cerr << "Error: Triangle points should be 9 values separated by spaces, or nan. Current number of values is " << count << ", points are '" << points_string << "'. Exiting." << std::endl;
             exit(67);
         }
         else {
@@ -2677,7 +2683,7 @@ auto APTracer::get_texture_coordinates(std::string texture_coordinates_string) -
             ++count;
         }
         if (count != 6) {
-            std::cerr << "Error: Triangle texture coordinates should be 6 values seperated by spaces, or nan. Current number of values is " << count << ", texture coordinates are '" << texture_coordinates_string << "'­. Exiting." << std::endl;
+            std::cerr << "Error: Triangle texture coordinates should be 6 values separated by spaces, or nan. Current number of values is " << count << ", texture coordinates are '" << texture_coordinates_string << "'­. Exiting." << std::endl;
             exit(68);
         }
     }
