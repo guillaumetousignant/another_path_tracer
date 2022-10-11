@@ -5,6 +5,7 @@ jobs:
     name: build-windows
     runs-on: windows-latest
     steps:
+      - uses: ilammy/msvc-dev-cmd@v1
       - name: Installing dependencies (Windows)
         run: vcpkg install --recurse --triplet x64-windows zlib libpng libjpeg-turbo tiff freeglut
       - name: Checkout
@@ -12,7 +13,7 @@ jobs:
       - name: Creating build directory (Windows)
         run: mkdir build
       - name: Running CMake (Windows)
-        run: cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl
+        run: cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake
         working-directory: ${{ github.workspace }}/build
       - name: Build (Windows)
         run: cmake --build .
