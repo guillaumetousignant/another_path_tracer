@@ -63,11 +63,6 @@ namespace APTracer { namespace Entities {
             SceneContext_t();
 
             /**
-             * @brief Destroy the SceneContext_t object. Calls the reset function.
-             */
-            ~SceneContext_t();
-
-            /**
              * @brief Stores the lists of materials mixes and the indexes of their materials.
              * 
              * This is needed because two passes have to be made for those materials, as the 

@@ -110,10 +110,6 @@ APTracer::Entities::SceneContext_t::SceneContext_t() :
     index_directional_lights_(0), index_skyboxes_(0), index_imgbuffers_(0), index_cameras_(0)
     {}
 
-APTracer::Entities::SceneContext_t::~SceneContext_t() {
-    reset();
-}
-
 auto APTracer::Entities::SceneContext_t::readXML(const std::string &filename) -> void {
     reset();
 

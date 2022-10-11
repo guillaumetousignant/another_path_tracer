@@ -52,13 +52,6 @@ namespace APTracer { namespace Entities {
              */
             TransformMatrix_t(std::array<double, 16> values);
 
-            /**
-             * @brief Construct a new TransformMatrix_t object from another transformation matrix, copying it.
-             * 
-             * @param other Transformation matrix to be copied into the new transformation matrix.
-             */
-            TransformMatrix_t(const TransformMatrix_t &other) = default;
-
             std::array<double, 16> matrix_; /**< @brief Array of the 16 values in the 4x4 matrix.*/
             std::array<double, 16> matrix_inverse_; /**< @brief Transposed inverted matrix, used to transform directions.*/
 

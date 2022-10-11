@@ -41,11 +41,6 @@ namespace APTracer { namespace Entities {
              */
             Camera_t(TransformMatrix_t* transformation, std::string filename, Vec3f up, std::array<double, 2> fov, std::array<unsigned int, 2> subpix, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double gammaind);
 
-            /**
-             * @brief Destroy the Camera_t object. Does nothing.
-             */
-            virtual ~Camera_t() = default;
-
             TransformMatrix_t* transformation_; /**< @brief Transformation matrix used by the camera. Sets the camera's origin and direction when created and updated.*/
             std::string filename_; /**< @brief Filename used by the camera when saving an image. Not used by all cameras, and some might modify it or save multiple pictures with variations of the name.*/
             std::array<double, 2> fov_; /**< @brief Array containing field of view of camera [vertical, horizontal]. Will have different units depending on the projection used.*/

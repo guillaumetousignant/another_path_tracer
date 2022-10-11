@@ -17,16 +17,6 @@ namespace APTracer { namespace Entities {
     class AccelerationStructure_t {
         public:
             /**
-             * @brief Construct a new AccelerationStructure_t object. Does nothing.
-             */
-            AccelerationStructure_t() = default;
-
-            /**
-             * @brief Destroy the AccelerationStructure_t object. Does nothing.
-             */
-            virtual ~AccelerationStructure_t() = default;
-
-            /**
              * @brief Intersects a ray with the acceleration structure to find the closest hit
              * and its characteristics.
              * 
