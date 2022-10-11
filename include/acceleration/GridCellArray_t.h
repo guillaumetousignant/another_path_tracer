@@ -15,7 +15,7 @@ using APTracer::Entities::AccelerationStructure_t;
 
 namespace APTracer { namespace Acceleration {
     /**
-     * @brief The grid cell array class describes a cell from a grid, the fundamental object containing shapes. Shapes are stored in an array, for fast iteraring and lowest memory use.
+     * @brief The grid cell array class describes a cell from a grid, the fundamental object containing shapes. Shapes are stored in an array, for fast iterating and lowest memory use.
      * 
      * This structure with its array representation is more geared toward static scenes, as the cost to remove, add or move shapes from one cell to another is highest. With arrays, iteration on
      * shapes is slightly faster, and the memory used is lowest. Slightly longer to build, needs two passes.
@@ -45,7 +45,7 @@ namespace APTracer { namespace Acceleration {
             virtual auto size() const -> size_t final;
 
             /**
-             * @brief Increases 'size_' to 'increment_size_', allocating the array with a new size and transfering existing shapes.
+             * @brief Increases 'size_' to 'increment_size_', allocating the array with a new size and transferring existing shapes.
              */
             auto reserve() -> void;
 

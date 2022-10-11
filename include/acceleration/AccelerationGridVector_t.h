@@ -22,7 +22,7 @@ using APTracer::Shapes::Box_t;
 namespace APTracer { namespace Acceleration {
 
     /**
-     * @brief The acceleration grid vector class describes a grid acceleration structure, splitting the space into uniform cells. Cells use vectors of shapes, for fast iteraring and low memory use.
+     * @brief The acceleration grid vector class describes a grid acceleration structure, splitting the space into uniform cells. Cells use vectors of shapes, for fast iterating and low memory use.
      * 
      * Grid acceleration structures split the space they span into uniform cells, according to a 3D resolution. Rays are intersected with the cells before being intersected with the shapes they
      * contain. This makes them fast to build and update, but makes them vulnerable to the "teapot in a stadium" problem, where a single cell can contain a disproportionate amount of geometry.
@@ -52,7 +52,7 @@ namespace APTracer { namespace Acceleration {
              */
             AccelerationGridVector_t(const std::vector<Shape_t*>& items, std::array<Vec3f, 2> coordinates, unsigned int level, size_t min_res, size_t max_res);
 
-            std::vector<std::unique_ptr<GridCellVector_t>> cells_; /**< @brief Array of all the cells contained in the acceleration structure. Cells use vectors of shapes, for fast iteraring and low memory use.*/
+            std::vector<std::unique_ptr<GridCellVector_t>> cells_; /**< @brief Array of all the cells contained in the acceleration structure. Cells use vectors of shapes, for fast iterating and low memory use.*/
             std::array<size_t, 3> cell_res_; /**< @brief Number of cells in the x, y, and z direction.*/
             Vec3f cell_size_; /**< @brief Span of the cells in the x, y, and z direction.*/
             Box_t bounding_box_; /**< @brief Box representing the space encompassed by the grid.*/

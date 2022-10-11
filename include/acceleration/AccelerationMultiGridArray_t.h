@@ -21,7 +21,7 @@ using APTracer::Shapes::Box_t;
 namespace APTracer { namespace Acceleration {
 
     /**
-     * @brief The acceleration multi grid array class describes a multi-level grid acceleration structure, splitting the space into uniform cells or grids, depending on the number of shapes in a cell. Cells use arrays of shapes, for fast iteraring and lowest memory use.
+     * @brief The acceleration multi grid array class describes a multi-level grid acceleration structure, splitting the space into uniform cells or grids, depending on the number of shapes in a cell. Cells use arrays of shapes, for fast iterating and lowest memory use.
      * 
      * Grid acceleration structures split the space they span into uniform cells, according to a 3D resolution. Rays are intersected with the cells before being intersected with the shapes they
      * contain. This makes them fast to build and update. Multi level grids enable cells containing several shapes to be changed to grids. This can help alleviate the "Teapot in a stadium problem".
@@ -56,7 +56,7 @@ namespace APTracer { namespace Acceleration {
              */
             AccelerationMultiGridArray_t(const std::vector<Shape_t*>& items, std::array<Vec3f, 2> coordinates, unsigned int level, size_t min_res, size_t max_res, size_t max_cell_content, unsigned int max_grid_level);
 
-            std::vector<std::unique_ptr<AccelerationStructure_t>> cells_; /**< @brief Array of all the cells and grids contained in the acceleration structure. Cells use arrays of shapes, for fast iteraring and lowest memory use.*/
+            std::vector<std::unique_ptr<AccelerationStructure_t>> cells_; /**< @brief Array of all the cells and grids contained in the acceleration structure. Cells use arrays of shapes, for fast iterating and lowest memory use.*/
             std::array<size_t, 3> cell_res_; /**< @brief Number of cells in the x, y, and z direction.*/ 
             Vec3f cell_size_; /**< @brief Span of the cells in the x, y, and z direction.*/ 
             Box_t bounding_box_; /**< @brief Box representing the space encompassed by the grid.*/ 

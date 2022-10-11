@@ -15,7 +15,7 @@ using APTracer::Entities::AccelerationStructure_t;
 
 namespace APTracer { namespace Acceleration {
     /**
-     * @brief The grid cell vector class describes a cell from a grid, the fundamental object containing shapes. Shapes are stored in a vector, for fast iteraring and low memory use.
+     * @brief The grid cell vector class describes a cell from a grid, the fundamental object containing shapes. Shapes are stored in a vector, for fast iterating and low memory use.
      * 
      * This structure with its vector representation is more geared toward static scenes, as the cost to remove, add or move shapes from one cell to another is higher. With vectors, iteration on
      * shapes is slightly faster, and the memory used is low.

@@ -9,7 +9,7 @@ namespace APTracer { namespace Entities {
     /**
      * @brief The DirectionalLight_t class represents an infinitely angular light, with a direction, intensity and radius.
      * 
-     * These can be used to check intersection agains a ray and colour it if hit.
+     * These can be used to check intersection against a ray and colour it if hit.
      */
     class DirectionalLight_t {
         public:
@@ -29,7 +29,7 @@ namespace APTracer { namespace Entities {
             /**
              * @brief Updates the camera's members.
              * 
-             * This changes the light's direction and radius as per the transformation matrix. The radius is changed by the transformation matrix's scale. This is how changes to the transformation matrix tak eeffect.
+             * This changes the light's direction and radius as per the transformation matrix. The radius is changed by the transformation matrix's scale. This is how changes to the transformation matrix take effect.
              */
             auto update() -> void;
     };
