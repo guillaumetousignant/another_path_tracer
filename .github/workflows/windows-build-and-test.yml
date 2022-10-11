@@ -4,6 +4,8 @@ jobs:
   Windows:
     name: build-windows
     runs-on: windows-latest
+    cc: "cl"
+    cxx: "cl"
     steps:
       - name: Installing dependencies (Windows)
         run: vcpkg install --recurse --triplet x64-windows zlib libpng libjpeg-turbo tiff freeglut
