@@ -1,4 +1,6 @@
 .gitignore linguist-vendored
+.clang-format linguist-vendored
+.clang-tidy linguist-vendored
 LICENSE linguist-vendored
 README.md linguist-vendored
 include/functions/CImg.h linguist-vendored
