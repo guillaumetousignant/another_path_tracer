@@ -73,7 +73,7 @@ BraceWrapping:
 BreakAfterJavaFieldAnnotations: false
 BreakArrays:     true
 BreakBeforeBinaryOperators: NonAssignment
-BreakBeforeBraces: Attach
+BreakBeforeBraces: Stroustrup
 BreakBeforeConceptDeclarations: Always
 BreakBeforeInheritanceComma: false
 BreakBeforeTernaryOperators: true

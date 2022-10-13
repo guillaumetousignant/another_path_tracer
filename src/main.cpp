@@ -1,8 +1,9 @@
+#include "another_path_tracer.h"
 #include <iostream>
 #include <string>
-#include "another_path_tracer.h"
 
-auto main(int argc, char **argv) -> int {
+auto main(int argc, char** argv) -> int
+{
     std::string filename;
     if (argc < 2) {
         std::cout << "Enter scene path:" << std::endl;
@@ -21,6 +22,6 @@ auto main(int argc, char **argv) -> int {
 
     scene_context.readXML(filename);
     scene_context.render();
-    
+
     return 0;
 }
