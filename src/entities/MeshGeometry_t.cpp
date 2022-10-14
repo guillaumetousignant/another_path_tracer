@@ -1,33 +1,33 @@
 #include "entities/MeshGeometry_t.h"
-#include <string>
+#include <algorithm>
+#include <array>
+#include <cmath>
 #include <fstream>
 #include <iostream>
 #include <sstream>
-#include <cmath>
-#include <algorithm>
-#include <array>
+#include <string>
 
 using APTracer::Entities::MeshGeometry_t;
 using APTracer::Entities::Vec3f;
 
-MeshGeometry_t::MeshGeometry_t(const std::string &filename) {
+MeshGeometry_t::MeshGeometry_t(const std::string& filename) {
     std::string ext = filename.substr(filename.find_last_of('.') + 1);
     std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
-    if(ext == "obj") {
+    if (ext == "obj") {
         const std::vector<std::array<bool, 3>> missing_normals = readObj(filename);
         build_missing_normals(missing_normals);
-    } 
-    else if(ext == "su2") {
+    }
+    else if (ext == "su2") {
         const std::vector<std::array<bool, 3>> missing_normals = readSU2(filename);
         build_missing_normals(missing_normals);
     }
 }
 
-auto MeshGeometry_t::readObj(const std::string &filename) -> std::vector<std::array<bool, 3>> {
-    size_t nv = 0;
-    size_t nvt = 0;
-    size_t nvn = 0;
-    size_t nf = 0;
+auto MeshGeometry_t::readObj(const std::string& filename) -> std::vector<std::array<bool, 3>> {
+    size_t nv           = 0;
+    size_t nvt          = 0;
+    size_t nvn          = 0;
+    size_t nf           = 0;
     unsigned int nsides = 0;
     std::string line;
     std::string token;
@@ -63,12 +63,12 @@ auto MeshGeometry_t::readObj(const std::string &filename) -> std::vector<std::ar
     }
 
     // Getting normals, vertex coordinates and texture coordinates
-    size_t v_counter = 0;
+    size_t v_counter  = 0;
     size_t vt_counter = 0;
     size_t vn_counter = 0;
-    double val0 = 0.0;
-    double val1 = 0.0;
-    double val2 = 0.0;
+    double val0       = 0.0;
+    double val1       = 0.0;
+    double val2       = 0.0;
 
     std::vector<Vec3f> v(nv);
     std::vector<std::array<double, 2>> vt(nvt);
@@ -96,7 +96,7 @@ auto MeshGeometry_t::readObj(const std::string &filename) -> std::vector<std::ar
             vn[vn_counter] = Vec3f(val0, val1, val2);
             ++vn_counter;
         }
-    }   
+    }
 
     // Filling faces
     size_t f_counter = 0;
@@ -106,9 +106,9 @@ auto MeshGeometry_t::readObj(const std::string &filename) -> std::vector<std::ar
     size_t pos = 0;
 
     mat_ = std::vector<std::string>(nf);
-    v_ = std::vector<std::array<Vec3f, 3>>(mat_.size());
-    vt_ = std::vector<std::array<std::array<double, 2>, 3>>(mat_.size());
-    vn_ = std::vector<std::array<Vec3f, 3>>(mat_.size());
+    v_   = std::vector<std::array<Vec3f, 3>>(mat_.size());
+    vt_  = std::vector<std::array<std::array<double, 2>, 3>>(mat_.size());
+    vn_  = std::vector<std::array<Vec3f, 3>>(mat_.size());
     std::vector<std::array<bool, 3>> missing_normals(mat_.size());
 
     meshfile.clear();
@@ -121,23 +121,23 @@ auto MeshGeometry_t::readObj(const std::string &filename) -> std::vector<std::ar
             liness >> tokens[0] >> tokens[1];
             while (liness >> tokens[2]) {
                 for (unsigned int i = 0; i < 3; ++i) {
-                    value = tokens[i];
+                    value           = tokens[i];
                     mat_[f_counter] = material;
-                    pos = value.find('/');
+                    pos             = value.find('/');
                     if (pos == std::string::npos) {
-                        v_[f_counter][i] = v[std::stoi(value, nullptr)-1];
-                        vt_[f_counter][i] = {0.0, 0.0};
-                        vn_[f_counter][i] = Vec3f(0.0);
+                        v_[f_counter][i]              = v[std::stoi(value, nullptr) - 1];
+                        vt_[f_counter][i]             = {0.0, 0.0};
+                        vn_[f_counter][i]             = Vec3f(0.0);
                         missing_normals[f_counter][i] = true;
                     }
                     else {
-                        v_[f_counter][i] = v[std::stoi(value.substr(0, pos), nullptr)-1];
+                        v_[f_counter][i] = v[std::stoi(value.substr(0, pos), nullptr) - 1];
                         value.erase(0, pos + 1);
 
                         pos = value.find('/');
                         if (pos == std::string::npos) {
-                            vt_[f_counter][i] = vt[std::stoi(value, nullptr) - 1];
-                            vn_[f_counter][i] = Vec3f(0.0);
+                            vt_[f_counter][i]             = vt[std::stoi(value, nullptr) - 1];
+                            vn_[f_counter][i]             = Vec3f(0.0);
                             missing_normals[f_counter][i] = true;
                         }
                         else {
@@ -148,7 +148,7 @@ auto MeshGeometry_t::readObj(const std::string &filename) -> std::vector<std::ar
                                 vt_[f_counter][i] = vt[std::stoi(value.substr(0, pos), nullptr) - 1];
                             }
                             value.erase(0, pos + 1);
-                            vn_[f_counter][i] = vn[std::stoi(value, nullptr)-1];
+                            vn_[f_counter][i]             = vn[std::stoi(value, nullptr) - 1];
                             missing_normals[f_counter][i] = false;
                         }
                     }
@@ -156,7 +156,6 @@ auto MeshGeometry_t::readObj(const std::string &filename) -> std::vector<std::ar
                 ++f_counter;
                 tokens[1] = tokens[2];
             }
-            
         }
         else if (token == "usemtl") { // check if there is :
             liness >> tokens[0];
@@ -166,19 +165,19 @@ auto MeshGeometry_t::readObj(const std::string &filename) -> std::vector<std::ar
             }
             material = tokens[0];
         }
-    }    
+    }
 
     meshfile.close();
     return missing_normals;
 }
 
-auto MeshGeometry_t::readSU2(const std::string &filename) -> std::vector<std::array<bool, 3>> {
+auto MeshGeometry_t::readSU2(const std::string& filename) -> std::vector<std::array<bool, 3>> {
     size_t nv = 0;
     size_t nf = 0;
     std::string line;
     std::string token;
     unsigned int value = 0;
-    bool wall_started = false;
+    bool wall_started  = false;
 
     std::ifstream meshfile(filename);
     if (!meshfile.is_open()) {
@@ -220,12 +219,12 @@ auto MeshGeometry_t::readSU2(const std::string &filename) -> std::vector<std::ar
             }
         }
     }
-    
+
     // Getting normals, vertex coordinates and texture coordinates
-    size_t v_counter = 0;
-    double val0 = 0.0;
-    double val1 = 0.0;
-    double val2 = 0.0;
+    size_t v_counter    = 0;
+    double val0         = 0.0;
+    double val1         = 0.0;
+    double val2         = 0.0;
     bool points_started = false;
 
     std::vector<Vec3f> v(nv);
@@ -256,7 +255,7 @@ auto MeshGeometry_t::readSU2(const std::string &filename) -> std::vector<std::ar
             v[v_counter] = Vec3f(val0, val1, val2);
             ++v_counter;
         }
-    } 
+    }
 
     // Filling faces
     size_t f_counter = 0;
@@ -266,9 +265,9 @@ auto MeshGeometry_t::readSU2(const std::string &filename) -> std::vector<std::ar
     std::string marker_token;
 
     mat_ = std::vector<std::string>(nf);
-    v_ = std::vector<std::array<Vec3f, 3>>(mat_.size());
-    vt_ = std::vector<std::array<std::array<double, 2>, 3>>(mat_.size());
-    vn_ = std::vector<std::array<Vec3f, 3>>(mat_.size());
+    v_   = std::vector<std::array<Vec3f, 3>>(mat_.size());
+    vt_  = std::vector<std::array<std::array<double, 2>, 3>>(mat_.size());
+    vn_  = std::vector<std::array<Vec3f, 3>>(mat_.size());
     std::vector<std::array<bool, 3>> missing_normals(mat_.size(), {true, true, true});
 
     meshfile.clear();
@@ -288,7 +287,7 @@ auto MeshGeometry_t::readSU2(const std::string &filename) -> std::vector<std::ar
             if (marker_token != "WALL") {
                 wall_started = false;
             }
-        } 
+        }
         else if (token.empty() || token == "NMARK=" || token == "NELEM=" || token == "MARKER_ELEMS=") {
             wall_started = false;
         }
@@ -297,8 +296,8 @@ auto MeshGeometry_t::readSU2(const std::string &filename) -> std::vector<std::ar
             if (token == "5") {
                 for (unsigned int i = 0; i < 3; ++i) {
                     liness >> tokens[i];
-                    v_[f_counter][i] = v[tokens[i]];
-                    mat_[f_counter] = material;
+                    v_[f_counter][i]  = v[tokens[i]];
+                    mat_[f_counter]   = material;
                     vt_[f_counter][i] = {0.0, 0.0};
                     vn_[f_counter][i] = Vec3f(0.0);
                 }
@@ -307,8 +306,8 @@ auto MeshGeometry_t::readSU2(const std::string &filename) -> std::vector<std::ar
             else if (token == "9") {
                 for (unsigned int i = 0; i < 3; ++i) {
                     liness >> tokens[i];
-                    v_[f_counter][i] = v[tokens[i]];
-                    mat_[f_counter] = material;
+                    v_[f_counter][i]  = v[tokens[i]];
+                    mat_[f_counter]   = material;
                     vt_[f_counter][i] = {0.0, 0.0};
                     vn_[f_counter][i] = Vec3f(0.0);
                 }
@@ -316,22 +315,22 @@ auto MeshGeometry_t::readSU2(const std::string &filename) -> std::vector<std::ar
                 tokens[1] = tokens[2];
                 liness >> tokens[2];
                 for (unsigned int i = 0; i < 3; ++i) {
-                    v_[f_counter][i] = v[tokens[i]];
-                    mat_[f_counter] = material;
+                    v_[f_counter][i]  = v[tokens[i]];
+                    mat_[f_counter]   = material;
                     vt_[f_counter][i] = {0.0, 0.0};
                     vn_[f_counter][i] = Vec3f(0.0);
                 }
                 ++f_counter;
             }
-        }   
+        }
 
         if (token == "MARKER_TAG=") {
             if (marker_token == "WALL") {
                 wall_started = true;
                 std::getline(meshfile, line);
             }
-        }     
-    } 
+        }
+    }
 
     meshfile.close();
     return missing_normals;

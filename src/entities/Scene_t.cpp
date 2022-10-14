@@ -1,15 +1,15 @@
 #include "entities/Scene_t.h"
-#include "entities/Shape_t.h"
-#include "entities/AccelerationStructure_t.h"
-#include "shapes/MeshTop_t.h"
-#include <limits>
-#include <algorithm>
 #include "acceleration/AccelerationMultiGridVector_t.h"
+#include "entities/AccelerationStructure_t.h"
+#include "entities/Shape_t.h"
+#include "shapes/MeshTop_t.h"
+#include <algorithm>
+#include <limits>
 
+using APTracer::Acceleration::AccelerationMultiGridVector_t;
 using APTracer::Entities::Scene_t;
 using APTracer::Entities::Shape_t;
 using APTracer::Shapes::MeshTop_t;
-using APTracer::Acceleration::AccelerationMultiGridVector_t;
 
 Scene_t::Scene_t(Shape_t* shape) : geometry_(1, shape) {}
 
@@ -28,7 +28,7 @@ Scene_t::Scene_t(const std::vector<MeshTop_t*>& meshes) {
     }
 
     geometry_ = std::vector<Shape_t*>(additional_size);
-    
+
     size_t index = 0;
     for (const auto& mesh: meshes) {
         for (size_t i = 0; i < mesh->triangles_.size(); ++i) {
@@ -64,7 +64,7 @@ auto Scene_t::add(const std::vector<MeshTop_t*>& meshes) -> void {
 
     size_t index = geometry_.size();
     geometry_.resize(geometry_.size() + additional_size);
-    
+
     for (const auto& mesh: meshes) {
         for (size_t i = 0; i < mesh->triangles_.size(); ++i) {
             geometry_[index + i] = mesh->triangles_[i].get();
@@ -127,23 +127,23 @@ auto Scene_t::build_acc() -> void {
     acc_ = std::make_unique<AccelerationMultiGridVector_t>(geometry_, 1, 128, 32, 1);
 }
 
-auto Scene_t::intersect_brute(const Ray_t &ray, double &t, std::array<double, 2> &uv) const -> Shape_t* {
+auto Scene_t::intersect_brute(const Ray_t& ray, double& t, std::array<double, 2>& uv) const -> Shape_t* {
     double t_temp;
     std::array<double, 2> uv_temp;
-    
-    t = std::numeric_limits<double>::max();
+
+    t                = std::numeric_limits<double>::max();
     Shape_t* hit_obj = nullptr;
 
     for (auto* shape: geometry_) {
         if (shape->intersection(ray, t_temp, uv_temp) && (t_temp < t)) {
             hit_obj = shape;
-            uv = uv_temp;
-            t = t_temp;
+            uv      = uv_temp;
+            t       = t_temp;
         }
     }
     return hit_obj;
 }
 
-auto Scene_t::intersect(const Ray_t &ray, double &t, std::array<double, 2> &uv) const -> Shape_t* {
+auto Scene_t::intersect(const Ray_t& ray, double& t, std::array<double, 2>& uv) const -> Shape_t* {
     return acc_->intersect(ray, t, uv);
 }

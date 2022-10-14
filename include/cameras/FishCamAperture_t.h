@@ -3,9 +3,9 @@
 
 #include "entities/Camera_t.h"
 #include "entities/Vec3f.h"
-#include <string>
 #include <list>
 #include <random>
+#include <string>
 
 namespace APTracer { namespace Entities {
     class TransformMatrix_t;
@@ -16,20 +16,20 @@ namespace APTracer { namespace Entities {
 }}
 
 using APTracer::Entities::Camera_t;
-using APTracer::Entities::Vec3f;
-using APTracer::Entities::TransformMatrix_t;
-using APTracer::Entities::Skybox_t;
-using APTracer::Entities::Scene_t;
-using APTracer::Entities::Medium_t;
 using APTracer::Entities::ImgBuffer_t;
+using APTracer::Entities::Medium_t;
+using APTracer::Entities::Scene_t;
+using APTracer::Entities::Skybox_t;
+using APTracer::Entities::TransformMatrix_t;
+using APTracer::Entities::Vec3f;
 
 namespace APTracer { namespace Cameras {
 
     /**
      * @brief The fish cam aperture class describes a fisheye camera that uses an equidistant projection and has an aperture, for depth of field.
-     * 
-     * It uses an equidistant projection [theta, phi], where the distance from the center on the 
-     * image plane is directly proportional to the zenith angle, between the ray and the center 
+     *
+     * It uses an equidistant projection [theta, phi], where the distance from the center on the
+     * image plane is directly proportional to the zenith angle, between the ray and the center
      * of the lens. This enables extreme field of views, at the cost of straight lines being
      * distorted if they don't go through the center of the image. Angles are not distorted
      * as with rectangular projections.
@@ -40,11 +40,11 @@ namespace APTracer { namespace Cameras {
      * This camera stores the result from its rays in a single image buffer, and has no
      * motion blur.
      */
-    class FishCamAperture_t  final: public Camera_t {
+    class FishCamAperture_t final : public Camera_t {
         public:
             /**
              * @brief Construct a new FishCamAperture_t object. Most arguments are passed to the Camera_t constructor.
-             * 
+             *
              * @param transformation Transformation matrix used by the camera. Sets the camera's origin and direction when created and updated.
              * @param filename Filename used by the camera when saving an image.
              * @param up Vector pointing up. Used to set the roll of the camera.
@@ -58,18 +58,30 @@ namespace APTracer { namespace Cameras {
              * @param aperture Radius of the disk on which rays are created around the origin. Higher values will cause stronger depth of field, objects out of focus will be blurrier.
              * @param gammaind Gamma of the saved picture. A value of 1 should be used for usual cases.
              */
-            FishCamAperture_t(TransformMatrix_t* transformation, const std::string &filename, Vec3f up, std::array<double, 2> fov, std::array<unsigned int, 2> subpix, ImgBuffer_t* image, std::list<Medium_t*> medium_list, Skybox_t* skybox, unsigned int max_bounces, double focus_distance, double aperture, double gammaind);
-            
+            FishCamAperture_t(TransformMatrix_t* transformation,
+                              const std::string& filename,
+                              Vec3f up,
+                              std::array<double, 2> fov,
+                              std::array<unsigned int, 2> subpix,
+                              ImgBuffer_t* image,
+                              std::list<Medium_t*> medium_list,
+                              Skybox_t* skybox,
+                              unsigned int max_bounces,
+                              double focus_distance,
+                              double aperture,
+                              double gammaind);
+
             ImgBuffer_t* image_; /**< @brief Image buffer into which the image is stored.*/
             std::uniform_real_distribution<double> unif_; /**< @brief Uniform random distribution used for generating random numbers.*/
-            double focus_distance_; /**< @brief Distance of the focal plane to the camera origin. Objects away from that distance will be out of focus. The focal plane has the shape of a sphere with this radius.*/
+            double focus_distance_; /**< @brief Distance of the focal plane to the camera origin. Objects away from that distance will be out of focus. The focal plane has the shape of a sphere with
+                                       this radius.*/
             double aperture_; /**< @brief Radius of the disk on which rays are created around the origin. Higher values will cause stronger depth of field, objects out of focus will be blurrier.*/
             double focus_distance_buffer_; /**< @brief Focus distance to be modified between updates. Its value is given to the real focus distance on update.*/
 
             /**
              * @brief Updates the camera's members.
-             * 
-             * This is used to set the new direction, origin, up vector, and focus distance. Should be called once per frame, before rendering. 
+             *
+             * This is used to set the new direction, origin, up vector, and focus distance. Should be called once per frame, before rendering.
              * This is how the changes to the transformation matrix and functions like setUp take effect. It sets focus_distance_ to focus_distance_buffer_,
              * so it is only modified once per frame. This is needed for some features to work, like motion blur.
              */
@@ -77,34 +89,34 @@ namespace APTracer { namespace Cameras {
 
             /**
              * @brief Sends rays through the scene, to generate an image.
-             * 
-             * The camera will generate rays according to an equidistant projection, and cast them through the provided scene. 
+             *
+             * The camera will generate rays according to an equidistant projection, and cast them through the provided scene.
              * The resulting colour is written to the image buffer. This will generate one image. Rays are created
              * on a disk to simulate an aperture and depth of field.
-             * 
+             *
              * @param scene Scene that will be used to find what each ray hits.
              */
             virtual auto raytrace(const Scene_t* scene) -> void final;
 
             /**
              * @brief Sets the focus distance of the camera.
-             * 
+             *
              * The focus distance will be changed on next update along with other members.
              * All objects at that distance will be in the focal plane, and other objects will be out of focus.
              * The focal plane has the shape of a sphere with this radius.
-             * 
+             *
              * @param focus_distance New focus distance of the camera.
              */
             virtual auto focus(double focus_distance) -> void final;
 
             /**
              * @brief Focusses the camera on a point in its field of view.
-             * 
+             *
              * This will send a ray at the specified coordinates in image space and set the focus distance as
              * the length to its first intersection. The coordinates are [horizontal, vertical] from 0 to 1,
-             * from left to right and bottom to top. Since the ray's first hit is used, this may behave 
+             * from left to right and bottom to top. Since the ray's first hit is used, this may behave
              * unexpectedly with reflective surfaces, transparent surfaces, invisible surfaces, portals etc.
-             * 
+             *
              * @param scene Scene to use to find the object to focus on.
              * @param position Image space coordinates on which to focus. [horizontal, vertical] from 0 to 1, from left to right and bottom to top.
              */
@@ -112,26 +124,26 @@ namespace APTracer { namespace Cameras {
 
             /**
              * @brief Zooms the camera's field of view by a factor.
-             * 
+             *
              * This is used to change the camera's field of view by a factor.
-             * 
+             *
              * @param factor Factor by which to zoom the camera.
              */
             virtual auto zoom(double factor) -> void final;
 
             /**
              * @brief Writes the image buffer to disk with the provided name.
-             * 
+             *
              * This will write the camera's image to disk. It uses the input name.
              * This calls the image buffer's write function. Directory must exist.
-             * 
+             *
              * @param file_name Filename used to write the images.
              */
             virtual auto write(const std::string& file_name) -> void final;
 
             /**
              * @brief Writes the image buffer to disk with the camera's filename.
-             * 
+             *
              * This will write the camera's image to disk. It uses the camera's filename_.
              * This calls the image buffer's write function. Directory must exist.
              */
@@ -144,7 +156,7 @@ namespace APTracer { namespace Cameras {
 
             /**
              * @brief Resets the camera's image buffer, for when the scene or camera has changed.
-             * 
+             *
              * This will discard all accumulated samples and start accumulation from scratch. Calls the image buffer's
              * reset function.
              */

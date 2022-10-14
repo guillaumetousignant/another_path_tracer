@@ -9,16 +9,16 @@ namespace APTracer { namespace Entities {
 
     /**
      * @brief Initialises the array of random generators, one for each thread.
-     * 
-     * This is called sometimes before main, when rng_vec is initialised in the global namespace. 
-     * 
-     * @return std::vector<std::mt19937> 
+     *
+     * This is called sometimes before main, when rng_vec is initialised in the global namespace.
+     *
+     * @return std::vector<std::mt19937>
      */
     auto build_rng_vec() -> std::vector<std::mt19937>;
 
     /**
      * @brief Returns the thread's random generator within rng_vec.
-     * 
+     *
      * @return std::mt19937& Reference to this thread's random generator.
      */
     auto rng() -> std::mt19937&;

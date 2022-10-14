@@ -1,6 +1,6 @@
 #include "entities/Texture_t.h"
-#include <string>
 #include <cmath>
+#include <string>
 #ifdef APTRACER_USE_JPEG
     #define cimg_use_jpeg
 #endif
@@ -22,42 +22,48 @@
 using APTracer::Entities::Texture_t;
 using APTracer::Entities::Vec3f;
 
-Texture_t::Texture_t(const std::string &filename) {
+Texture_t::Texture_t(const std::string& filename) {
     cimg_library::CImg<double> image;
     std::string extension = filename.substr(filename.find_last_of('.') + 1);
     std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
 
-    if (extension == "jpeg" || extension == "jpg") { 
+    if (extension == "jpeg" || extension == "jpg") {
         image.load_jpeg(filename.c_str());
         constexpr unsigned int bit_depth = 8;
-        image/=(std::pow(2.0, bit_depth) - 1.0); // Normalizing by bit depth
-    } else if (extension == "png") {
+        image /= (std::pow(2.0, bit_depth) - 1.0); // Normalizing by bit depth
+    }
+    else if (extension == "png") {
         unsigned int bit_depth;
         image.load_png(filename.c_str(), &bit_depth);
-        image/=(std::pow(2.0, bit_depth) - 1.0); // Normalizing by bit depth
-    } else if (extension == "exr") {
+        image /= (std::pow(2.0, bit_depth) - 1.0); // Normalizing by bit depth
+    }
+    else if (extension == "exr") {
         image.load_exr(filename.c_str());
-        image.pow(1.0/2.2); // Gamma correcting
-    } else if (extension == "hdr") {
+        image.pow(1.0 / 2.2); // Gamma correcting
+    }
+    else if (extension == "hdr") {
         image.load(filename.c_str());
-        constexpr unsigned int bit_depth = 16; 
-        image/=(std::pow(2.0, bit_depth) - 1.0); // Normalizing by bit depth
-    } else {
+        constexpr unsigned int bit_depth = 16;
+        image /= (std::pow(2.0, bit_depth) - 1.0); // Normalizing by bit depth
+    }
+    else {
         image.load(filename.c_str());
-        constexpr unsigned int bit_depth = 8; 
-        image/=(std::pow(2.0, bit_depth) - 1.0); // Normalizing by bit depth
+        constexpr unsigned int bit_depth = 8;
+        image /= (std::pow(2.0, bit_depth) - 1.0); // Normalizing by bit depth
     }
 
     size_x_ = image.width();
     size_y_ = image.height();
 
-    img_ = std::vector<Vec3f>(size_y_*size_x_);
+    img_ = std::vector<Vec3f>(size_y_ * size_x_);
 
     const auto n = static_cast<unsigned int>(size_x_ * size_y_);
 
     for (size_t j = 0; j < size_y_; ++j) {
         for (size_t i = 0; i < size_x_; ++i) {
-            img_[(size_y_ - j - 1)*size_x_ + i] = Vec3f(image(static_cast<unsigned int>(i), static_cast<unsigned int>(j), 0, 0, n, n), image(static_cast<unsigned int>(i), static_cast<unsigned int>(j), 0, 1, n, n), image(static_cast<unsigned int>(i), static_cast<unsigned int>(j), 0, 2, n, n));
+            img_[(size_y_ - j - 1) * size_x_ + i] = Vec3f(image(static_cast<unsigned int>(i), static_cast<unsigned int>(j), 0, 0, n, n),
+                                                          image(static_cast<unsigned int>(i), static_cast<unsigned int>(j), 0, 1, n, n),
+                                                          image(static_cast<unsigned int>(i), static_cast<unsigned int>(j), 0, 2, n, n));
         }
     }
 }
@@ -69,19 +75,19 @@ auto Texture_t::get(std::array<double, 2> xy) const -> Vec3f {
     const double xd = x - std::floor(x);
     const double yd = y - std::floor(y);
 
-    const size_t x0 = static_cast<size_t>(std::max(x - 1.0, 0.0));       // floor
-    const size_t x1 = static_cast<size_t>(x);       // floor
+    const size_t x0 = static_cast<size_t>(std::max(x - 1.0, 0.0)); // floor
+    const size_t x1 = static_cast<size_t>(x); // floor
     const size_t x2 = static_cast<size_t>(x + 1.0); // ceil
     const size_t x3 = std::min(static_cast<size_t>(x + 2.0), size_x_ - 1); // ceil
-    const size_t y0 = static_cast<size_t>(std::max(y - 1.0, 0.0));       // floor
-    const size_t y1 = static_cast<size_t>(y);       // floor
+    const size_t y0 = static_cast<size_t>(std::max(y - 1.0, 0.0)); // floor
+    const size_t y1 = static_cast<size_t>(y); // floor
     const size_t y2 = static_cast<size_t>(y + 1.0); // ceil
     const size_t y3 = std::min(static_cast<size_t>(y + 2.0), size_y_ - 1); // ceil
 
-    const Vec3f cp0x = CubicHermite(img_[y0*size_x_ + x0], img_[y0*size_x_ + x1], img_[y0*size_x_ + x2], img_[y0*size_x_ + x3], xd);
-    const Vec3f cp1x = CubicHermite(img_[y1*size_x_ + x0], img_[y1*size_x_ + x1], img_[y1*size_x_ + x2], img_[y1*size_x_ + x3], xd);
-    const Vec3f cp2x = CubicHermite(img_[y2*size_x_ + x0], img_[y2*size_x_ + x1], img_[y2*size_x_ + x2], img_[y2*size_x_ + x3], xd);
-    const Vec3f cp3x = CubicHermite(img_[y3*size_x_ + x0], img_[y3*size_x_ + x1], img_[y3*size_x_ + x2], img_[y3*size_x_ + x3], xd);
+    const Vec3f cp0x = CubicHermite(img_[y0 * size_x_ + x0], img_[y0 * size_x_ + x1], img_[y0 * size_x_ + x2], img_[y0 * size_x_ + x3], xd);
+    const Vec3f cp1x = CubicHermite(img_[y1 * size_x_ + x0], img_[y1 * size_x_ + x1], img_[y1 * size_x_ + x2], img_[y1 * size_x_ + x3], xd);
+    const Vec3f cp2x = CubicHermite(img_[y2 * size_x_ + x0], img_[y2 * size_x_ + x1], img_[y2 * size_x_ + x2], img_[y2 * size_x_ + x3], xd);
+    const Vec3f cp3x = CubicHermite(img_[y3 * size_x_ + x0], img_[y3 * size_x_ + x1], img_[y3 * size_x_ + x2], img_[y3 * size_x_ + x3], xd);
     return CubicHermite(cp0x, cp1x, cp2x, cp3x, yd);
 }
 
@@ -93,19 +99,19 @@ auto Texture_t::get_cubic(std::array<double, 2> xy) const -> Vec3f {
     const double xd = x - std::floor(x);
     const double yd = y - std::floor(y);
 
-    const size_t x0 = static_cast<size_t>(std::max(x - 1.0, 0.0));       // floor
-    const size_t x1 = static_cast<size_t>(x);       // floor
+    const size_t x0 = static_cast<size_t>(std::max(x - 1.0, 0.0)); // floor
+    const size_t x1 = static_cast<size_t>(x); // floor
     const size_t x2 = static_cast<size_t>(x + 1.0); // ceil
     const size_t x3 = std::min(static_cast<size_t>(x + 2.0), size_x_ - 1); // ceil
-    const size_t y0 = static_cast<size_t>(std::max(y - 1.0, 0.0));       // floor
-    const size_t y1 = static_cast<size_t>(y);       // floor
+    const size_t y0 = static_cast<size_t>(std::max(y - 1.0, 0.0)); // floor
+    const size_t y1 = static_cast<size_t>(y); // floor
     const size_t y2 = static_cast<size_t>(y + 1.0); // ceil
     const size_t y3 = std::min(static_cast<size_t>(y + 2.0), size_y_ - 1); // ceil
 
-    const Vec3f cp0x = CubicHermite(img_[y0*size_x_ + x0], img_[y0*size_x_ + x1], img_[y0*size_x_ + x2], img_[y0*size_x_ + x3], xd);
-    const Vec3f cp1x = CubicHermite(img_[y1*size_x_ + x0], img_[y1*size_x_ + x1], img_[y1*size_x_ + x2], img_[y1*size_x_ + x3], xd);
-    const Vec3f cp2x = CubicHermite(img_[y2*size_x_ + x0], img_[y2*size_x_ + x1], img_[y2*size_x_ + x2], img_[y2*size_x_ + x3], xd);
-    const Vec3f cp3x = CubicHermite(img_[y3*size_x_ + x0], img_[y3*size_x_ + x1], img_[y3*size_x_ + x2], img_[y3*size_x_ + x3], xd);
+    const Vec3f cp0x = CubicHermite(img_[y0 * size_x_ + x0], img_[y0 * size_x_ + x1], img_[y0 * size_x_ + x2], img_[y0 * size_x_ + x3], xd);
+    const Vec3f cp1x = CubicHermite(img_[y1 * size_x_ + x0], img_[y1 * size_x_ + x1], img_[y1 * size_x_ + x2], img_[y1 * size_x_ + x3], xd);
+    const Vec3f cp2x = CubicHermite(img_[y2 * size_x_ + x0], img_[y2 * size_x_ + x1], img_[y2 * size_x_ + x2], img_[y2 * size_x_ + x3], xd);
+    const Vec3f cp3x = CubicHermite(img_[y3 * size_x_ + x0], img_[y3 * size_x_ + x1], img_[y3 * size_x_ + x2], img_[y3 * size_x_ + x3], xd);
     return CubicHermite(cp0x, cp1x, cp2x, cp3x, yd);
 }
 
@@ -116,28 +122,25 @@ auto Texture_t::get_linear(std::array<double, 2> xy) const -> Vec3f {
     const double xd = x - std::floor(x);
     const double yd = y - std::floor(y);
 
-    const size_t xlo = static_cast<size_t>(x);       // floor
+    const size_t xlo = static_cast<size_t>(x); // floor
     const size_t xhi = static_cast<size_t>(x + 1.0); // ceil
-    const size_t ylo = static_cast<size_t>(y);       // floor
+    const size_t ylo = static_cast<size_t>(y); // floor
     const size_t yhi = static_cast<size_t>(y + 1.0); // ceil
 
-    return  img_[ylo*size_x_ + xlo] * (1.0 - xd) * (1.0 - yd) +
-            img_[ylo*size_x_ + xhi] * xd * (1.0 - yd) + 
-            img_[yhi*size_x_ + xlo] * (1.0 - xd) * yd +
-            img_[yhi*size_x_ + xhi] * xd * yd;
+    return img_[ylo * size_x_ + xlo] * (1.0 - xd) * (1.0 - yd) + img_[ylo * size_x_ + xhi] * xd * (1.0 - yd) + img_[yhi * size_x_ + xlo] * (1.0 - xd) * yd + img_[yhi * size_x_ + xhi] * xd * yd;
 }
 
 auto Texture_t::get_nn(std::array<double, 2> xy) const -> Vec3f {
-    return img_[std::lround((size_y_ - 1) * (xy[1] - std::floor(xy[1]))) * size_x_ +std::lround((size_x_ - 1) * (xy[0] - std::floor(xy[0])))];
+    return img_[std::lround((size_y_ - 1) * (xy[1] - std::floor(xy[1]))) * size_x_ + std::lround((size_x_ - 1) * (xy[0] - std::floor(xy[0])))];
 }
 
 // From demofox on Shadertoy, https://www.shadertoy.com/view/MllSzX
 auto Texture_t::CubicHermite(Vec3f A, Vec3f B, Vec3f C, Vec3f D, double t) -> Vec3f {
-	const double t2 = t*t;
-    const double t3 = t*t*t;
-    const Vec3f a = -A/2.0 + 3.0*B/2.0 - 3.0*C/2.0 + D/2.0;
-    const Vec3f b = A - 5.0*B/2.0 + 2.0*C - D/2.0;
-    const Vec3f c = -A/2.0 + C/2.0;
-    
-    return a*t3 + b*t2 + c*t + B;
+    const double t2 = t * t;
+    const double t3 = t * t * t;
+    const Vec3f a   = -A / 2.0 + 3.0 * B / 2.0 - 3.0 * C / 2.0 + D / 2.0;
+    const Vec3f b   = A - 5.0 * B / 2.0 + 2.0 * C - D / 2.0;
+    const Vec3f c   = -A / 2.0 + C / 2.0;
+
+    return a * t3 + b * t2 + c * t + B;
 }

@@ -2,8 +2,7 @@
 #include <iostream>
 #include <string>
 
-auto main(int argc, char** argv) -> int
-{
+auto main(int argc, char** argv) -> int {
     std::string filename;
     if (argc < 2) {
         std::cout << "Enter scene path:" << std::endl;

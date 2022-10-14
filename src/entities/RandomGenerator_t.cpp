@@ -1,17 +1,17 @@
 #include "entities/RandomGenerator_t.h"
 #ifdef APTRACER_USE_OPENMP
-#include <omp.h>
+    #include <omp.h>
 #endif
 
 auto APTracer::Entities::build_rng_vec() -> std::vector<std::mt19937> {
     std::vector<std::mt19937> generators;
     std::random_device rd;
 
-    #ifdef APTRACER_USE_OPENMP
+#ifdef APTRACER_USE_OPENMP
     const int N = omp_get_max_threads();
-    #else
+#else
     const int N = 1;
-    #endif
+#endif
 
     generators.reserve(N);
 
@@ -24,9 +24,9 @@ auto APTracer::Entities::build_rng_vec() -> std::vector<std::mt19937> {
 std::vector<std::mt19937> APTracer::Entities::rng_vec = APTracer::Entities::build_rng_vec();
 
 auto APTracer::Entities::rng() -> std::mt19937& {
-    #ifdef APTRACER_USE_OPENMP
+#ifdef APTRACER_USE_OPENMP
     return rng_vec[omp_get_thread_num()];
-    #else
+#else
     return rng_vec[0];
-    #endif
+#endif
 }
