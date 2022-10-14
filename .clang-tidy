@@ -1,5 +1,5 @@
 ---
-Checks: "clang-diagnostic-*,clang-analyzer-*,*,-llvmlibc-restrict-system-libc-headers,-fuchsia-trailing-return,-llvmlibc-implementation-in-namespace,-llvmlibc-callee-namespace,-altera-unroll-loops"
+Checks: "clang-diagnostic-*,clang-analyzer-*,*,-llvmlibc-restrict-system-libc-headers,-fuchsia-trailing-return,-llvmlibc-implementation-in-namespace,-llvmlibc-callee-namespace,-altera-unroll-loops,-altera-id-dependent-backward-branch"
 WarningsAsErrors: ""
 HeaderFilterRegex: ""
 AnalyzeTemporaryDtors: false
@@ -311,7 +311,7 @@ CheckOptions:
   - key: cert-dcl37-c.AggressiveDependentMemberLookup
     value: "false"
   - key: readability-identifier-length.MinimumLoopCounterNameLength
-    value: "2"
+    value: "1"
   - key: abseil-string-find-str-contains.AbseilStringsMatchHeader
     value: "absl/strings/match.h"
   - key: modernize-use-emplace.SmartPointers
