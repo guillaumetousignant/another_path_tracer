@@ -16,8 +16,11 @@ AccelerationGridArray_t::AccelerationGridArray_t(const std::vector<Shape_t*>& it
     const Vec3f grid_size = coordinates[1] - coordinates[0];
     bounding_box_         = Box_t(coordinates);
 
-    const Vec3f cell_res =
-        (grid_size * std::pow(items.size() / (grid_size[0] * grid_size[1] * grid_size[2]), 1.0 / 3.0)).floor().max(static_cast<double>(min_res_)).min(static_cast<double>(max_res_)) - 1.0;
+    const Vec3f cell_res = (grid_size * std::pow(static_cast<double>(items.size()) / (grid_size[0] * grid_size[1] * grid_size[2]), 1.0 / 3.0))
+                               .floor()
+                               .max(static_cast<double>(min_res_))
+                               .min(static_cast<double>(max_res_))
+                         - 1.0;
 
     cell_res_ = {static_cast<size_t>(cell_res[0] + 1.0), static_cast<size_t>(cell_res[1] + 1.0), static_cast<size_t>(cell_res[2] + 1.0)};
 
@@ -89,8 +92,11 @@ AccelerationGridArray_t::AccelerationGridArray_t(const std::vector<Shape_t*>& it
     const Vec3f grid_size = coordinates[1] - coordinates[0];
     bounding_box_         = Box_t(coordinates);
 
-    const Vec3f cell_res =
-        (grid_size * std::pow(items.size() / (grid_size[0] * grid_size[1] * grid_size[2]), 1.0 / 3.0)).floor().max(static_cast<double>(min_res_)).min(static_cast<double>(max_res_)) - 1.0;
+    const Vec3f cell_res = (grid_size * std::pow(static_cast<double>(items.size()) / (grid_size[0] * grid_size[1] * grid_size[2]), 1.0 / 3.0))
+                               .floor()
+                               .max(static_cast<double>(min_res_))
+                               .min(static_cast<double>(max_res_))
+                         - 1.0;
 
     cell_res_ = {static_cast<size_t>(cell_res[0] + 1.0), static_cast<size_t>(cell_res[1] + 1.0), static_cast<size_t>(cell_res[2] + 1.0)};
 
