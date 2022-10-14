@@ -23,9 +23,7 @@ AccelerationGrid_t::AccelerationGrid_t(const std::vector<Shape_t*>& items, size_
     const Vec3f cell_res =
         (grid_size * std::pow(items.size() / (grid_size[0] * grid_size[1] * grid_size[2]), 1.0 / 3.0)).floor().max(static_cast<double>(min_res_)).min(static_cast<double>(max_res_)) - 1.0;
 
-    for (unsigned int i = 0; i < 3; ++i) {
-        cell_res_[i] = static_cast<size_t>(cell_res[i] + 1.0);
-    }
+    cell_res_ = {static_cast<size_t>(cell_res[0] + 1.0), static_cast<size_t>(cell_res[1] + 1.0), static_cast<size_t>(cell_res[2] + 1.0)};
 
     cell_size_ = grid_size / (cell_res + 1.0);
     cells_     = std::vector<std::unique_ptr<GridCell_t>>(cell_res_[0] * cell_res_[1] * cell_res_[2]);
