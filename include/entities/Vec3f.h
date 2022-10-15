@@ -626,7 +626,9 @@ namespace APTracer { namespace Entities {
              *
              * @return size_t Size of vectors, always 3.
              */
-            static constexpr auto size() -> size_t;
+            static constexpr auto size() -> size_t {
+                return n_dims;
+            }
     };
 }}
 

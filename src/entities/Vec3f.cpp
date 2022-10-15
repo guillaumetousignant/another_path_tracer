@@ -269,6 +269,3 @@ auto Vec3f::g() -> double& {
 auto Vec3f::b() -> double& {
     return v[2];
 }
-constexpr auto Vec3f::size() -> size_t {
-    return n_dims;
-}
