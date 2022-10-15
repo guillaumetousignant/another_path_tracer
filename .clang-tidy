@@ -1,5 +1,5 @@
 ---
-Checks: "clang-diagnostic-*,clang-analyzer-*,*,-llvmlibc-restrict-system-libc-headers,-fuchsia-trailing-return,-llvmlibc-implementation-in-namespace,-llvmlibc-callee-namespace,-altera-unroll-loops,-altera-id-dependent-backward-branch,-fuchsia-default-arguments-calls,-bugprone-easily-swappable-parameters"
+Checks: "clang-diagnostic-*,clang-analyzer-*,*,-llvmlibc-restrict-system-libc-headers,-fuchsia-trailing-return,-llvmlibc-implementation-in-namespace,-llvmlibc-callee-namespace,-altera-unroll-loops,-altera-id-dependent-backward-branch,-fuchsia-default-arguments-calls,-bugprone-easily-swappable-parameters,-google-runtime-int"
 WarningsAsErrors: ""
 HeaderFilterRegex: ""
 AnalyzeTemporaryDtors: false
