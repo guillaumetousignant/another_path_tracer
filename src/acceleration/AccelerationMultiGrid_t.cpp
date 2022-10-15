@@ -7,7 +7,7 @@
 using APTracer::Acceleration::AccelerationMultiGrid_t;
 
 AccelerationMultiGrid_t::AccelerationMultiGrid_t(const std::vector<Shape_t*>& items, size_t min_res, size_t max_res, size_t max_cell_content, unsigned int max_grid_level) :
-        level_(0), min_res_(min_res), max_res_(max_res), max_cell_content_(max_cell_content), max_grid_level_(max_grid_level), size_(items.size()) {
+        cell_res_(), level_(0), min_res_(min_res), max_res_(max_res), max_cell_content_(max_cell_content), max_grid_level_(max_grid_level), size_(items.size()) {
 
     std::array<Vec3f, 2> coordinates{Vec3f(std::numeric_limits<double>::max()), Vec3f(std::numeric_limits<double>::lowest())};
     for (const auto& item: items) {
@@ -81,7 +81,7 @@ AccelerationMultiGrid_t::AccelerationMultiGrid_t(const std::vector<Shape_t*>& it
 
 AccelerationMultiGrid_t::AccelerationMultiGrid_t(
     const std::vector<Shape_t*>& items, std::array<Vec3f, 2> coordinates, unsigned int level, size_t min_res, size_t max_res, size_t max_cell_content, unsigned int max_grid_level) :
-        level_(level), min_res_(min_res), max_res_(max_res), max_cell_content_(max_cell_content), max_grid_level_(max_grid_level), size_(items.size()) {
+        cell_res_(), level_(level), min_res_(min_res), max_res_(max_res), max_cell_content_(max_cell_content), max_grid_level_(max_grid_level), size_(items.size()) {
 
     const Vec3f grid_size = coordinates[1] - coordinates[0];
     bounding_box_         = Box_t(coordinates);
