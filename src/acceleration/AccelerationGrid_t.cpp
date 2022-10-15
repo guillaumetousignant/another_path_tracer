@@ -144,7 +144,7 @@ auto AccelerationGrid_t::intersect(const Ray_t& ray, double& t, std::array<doubl
             hit_obj = cells_[cellcoordint[0] + cellcoordint[1] * cell_res_[0] + cellcoordint[2] * cell_res_[0] * cell_res_[1]]->intersect(ray, t, uv);
         }
 
-        const int k                 = (tnext[0] < tnext[1]) * 4 + (tnext[0] < tnext[2]) * 2 + (tnext[1] < tnext[2]);
+        const int k                 = static_cast<int>(tnext[0] < tnext[1]) * 4 + static_cast<int>(tnext[0] < tnext[2]) * 2 + static_cast<int>(tnext[1] < tnext[2]);
         const unsigned int nextaxis = map[k];
 
         if (t < tnext[nextaxis]) {
