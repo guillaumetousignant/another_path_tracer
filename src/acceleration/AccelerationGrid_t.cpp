@@ -103,7 +103,7 @@ AccelerationGrid_t::AccelerationGrid_t(const std::vector<Shape_t*>& items, std::
 }
 
 auto AccelerationGrid_t::intersect(const Ray_t& ray, double& t, std::array<double, 2>& uv) const -> Shape_t* {
-    double tbbox;
+    double tbbox = 0.0;
     std::array<long long, 3> cellexit{0, 0, 0};
     std::array<int, 3> cellstep{0, 0, 0};
     const std::array<unsigned int, 8> map{2, 1, 2, 1, 2, 2, 0, 0};
