@@ -13,9 +13,12 @@ namespace APTracer { namespace Entities {
      * Several arithmetical operations are defined for those vectors.
      */
     class Vec3f {
+        private:
+            static constexpr size_t n_dims = 3; /**< @brief Number of dimensions in the vector.*/
+
         public:
-            std::array<double, 3> v; /**< @brief Array of the 3 values in the vector.*/
-        public:
+            std::array<double, n_dims> v; /**< @brief Array of the 3 values in the vector.*/
+
             /**
              * @brief Construct a new Vec3f object with (0, 0, 0).
              */
@@ -35,7 +38,7 @@ namespace APTracer { namespace Entities {
              *
              * @param values Array containing the three values of the vector.
              */
-            Vec3f(std::array<double, 3> values);
+            Vec3f(std::array<double, n_dims> values);
 
             /**
              * @brief Construct a new Vec3f object from one value.
@@ -617,6 +620,13 @@ namespace APTracer { namespace Entities {
              * @return double Reference to the blue component of the vector.
              */
             auto b() -> double&;
+
+            /**
+             * @brief Returns the size of vectors
+             *
+             * @return size_t Size of vectors, always 3.
+             */
+            static constexpr auto size() -> size_t;
     };
 }}
 
