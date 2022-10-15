@@ -237,7 +237,7 @@ CheckOptions:
   - key: cppcoreguidelines-pro-bounds-constant-array-index.IncludeStyle
     value: llvm
   - key: readability-identifier-length.IgnoredVariableNames
-    value: ""
+    value: "^[tkn]$"
   - key: readability-magic-numbers.IgnoreAllFloatingPointValues
     value: "false"
   - key: hicpp-use-auto.RemoveStars
@@ -281,7 +281,7 @@ CheckOptions:
   - key: readability-implicit-bool-conversion.AllowIntegerConditions
     value: "false"
   - key: readability-identifier-length.IgnoredParameterNames
-    value: "^[n]$"
+    value: "^[tkn]$"
   - key: readability-function-size.StatementThreshold
     value: "800"
   - key: hicpp-use-noexcept.ReplacementString
@@ -395,7 +395,7 @@ CheckOptions:
   - key: cert-err61-cpp.WarnOnLargeObjects
     value: "false"
   - key: readability-identifier-length.MinimumParameterNameLength
-    value: "3"
+    value: "2"
   - key: modernize-use-emplace.TupleTypes
     value: "::std::pair;::std::tuple"
   - key: hicpp-use-emplace.IgnoreImplicitConstructors
