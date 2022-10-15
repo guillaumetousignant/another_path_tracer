@@ -137,21 +137,21 @@ namespace APTracer { namespace Entities {
             auto operator+(double factor) const -> Vec3f;
 
             /**
-             * @brief Substracts a vector from this vector.
+             * @brief Subtracts a vector from this vector.
              *
              * Returns (x1-x2, y1-y2, z1-z2).
              *
-             * @param other Vector to substract from this vector.
+             * @param other Vector to subtract from this vector.
              * @return Vec3f Resulting vector, (x1-x2, y1-y2, z1-z2).
              */
             auto operator-(const Vec3f& other) const -> Vec3f;
 
             /**
-             * @brief Substracts a factor from all components of the vector.
+             * @brief Subtracts a factor from all components of the vector.
              *
              * Returns (x1-a, y1-a, z1-a).
              *
-             * @param factor Factor substracted from all components of the vector.
+             * @param factor Factor subtracted from all components of the vector.
              * @return Vec3f Resulting vector, (x1-a, y1-a, z1-a).
              */
             auto operator-(double factor) const -> Vec3f;
@@ -235,21 +235,21 @@ namespace APTracer { namespace Entities {
             auto operator+=(double factor) -> const Vec3f&;
 
             /**
-             * @brief In-place substracts a vector from this vector.
+             * @brief In-place subtracts a vector from this vector.
              *
              * Becomes (x1-x2, y1-y2, z1-z2).
              *
-             * @param other Vector to substract from this vector.
+             * @param other Vector to subtract from this vector.
              * @return const Vec3f& Reference to the vector, used to chain operations.
              */
             auto operator-=(const Vec3f& other) -> const Vec3f&;
 
             /**
-             * @brief In-place substracts a factor from all components of the vector.
+             * @brief In-place subtracts a factor from all components of the vector.
              *
              * Becomes (x1-a, y1-a, z1-a).
              *
-             * @param factor Factor substracted from all components of the vector.
+             * @param factor Factor subtracted from all components of the vector.
              * @return const Vec3f& Reference to the vector, used to chain operations.
              */
             auto operator-=(double factor) -> const Vec3f&;
