@@ -18,6 +18,11 @@ namespace APTracer { namespace Entities {
     class Material_t {
         public:
             /**
+             * @brief Destroy the Material_t object.
+             */
+            virtual ~Material_t() = default;
+
+            /**
              * @brief Bounces a ray of light on the material.
              *
              * This is the main function to resolve intersection between a ray and a shape.

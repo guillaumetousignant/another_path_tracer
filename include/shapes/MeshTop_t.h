@@ -43,6 +43,11 @@ namespace APTracer { namespace Shapes {
              */
             MeshTop_t(Material_t* material, TransformMatrix_t* transform_matrix, MeshGeometry_t* geom);
 
+            /**
+             * @brief Destroy the MeshTop_t object.
+             */
+            virtual ~MeshTop_t() = default;
+
             Material_t* material_; /**< @brief Dummy material, in case it is used as a shape. Defaults to the first material of a material map if present.*/
             TransformMatrix_t* transformation_; /**< @brief Transformation matrix used for the mesh and all triangles inside it.*/
             MeshGeometry_t* geom_; /**< @brief Mesh geometry used by the mesh and its triangles, which index into it.*/

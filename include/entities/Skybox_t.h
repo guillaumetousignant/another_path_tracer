@@ -14,6 +14,11 @@ namespace APTracer { namespace Entities {
     class Skybox_t {
         public:
             /**
+             * @brief Destroy the Skybox_t object.
+             */
+            virtual ~Skybox_t() = default;
+
+            /**
              * @brief Returns the colour of the skybox for a given direction.
              *
              * @param xyz Direction in cartesian coordinates for which we want the colour.

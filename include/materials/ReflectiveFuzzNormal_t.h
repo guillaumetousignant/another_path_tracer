@@ -30,7 +30,7 @@ namespace APTracer { namespace Materials {
      * The normal has a random disruption applied to it to move it within its hemisphere.
      * This models glossy reflection, which reflect light in a cone around its normal.
      * This material represents textured imperfect shiny surfaces, such as patterned brushed metals,
-     * sculpted frosted mirors, and rough shiny shaped plastic.
+     * sculpted frosted mirrors, and rough shiny shaped plastic.
      */
     class ReflectiveFuzzNormal_t final : public Material_t {
         public:
