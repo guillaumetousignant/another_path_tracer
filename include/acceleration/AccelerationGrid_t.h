@@ -51,6 +51,41 @@ namespace APTracer { namespace Acceleration {
              */
             AccelerationGrid_t(const std::vector<Shape_t*>& items, std::array<Vec3f, 2> coordinates, unsigned int level, size_t min_res, size_t max_res);
 
+            /**
+             * @brief Destroy the AccelerationGrid_t object.
+             */
+            ~AccelerationGrid_t() = default;
+
+            /**
+             * @brief Copy construct a new AccelerationGrid_t object.
+             *
+             * @param other Object to copy.
+             */
+            AccelerationGrid_t(const AccelerationGrid_t& other);
+
+            /**
+             * @brief Move construct a new AccelerationGrid_t object.
+             *
+             * @param other Object to move.
+             */
+            AccelerationGrid_t(AccelerationGrid_t&& other) noexcept = default;
+
+            /**
+             * @brief Copy assignment.
+             *
+             * @param other Object to copy.
+             * @return AccelerationGrid_t& Reference to this object.
+             */
+            auto operator=(const AccelerationGrid_t& other) -> AccelerationGrid_t&;
+
+            /**
+             * @brief Move assignment.
+             *
+             * @param other Object to move.
+             * @return AccelerationGrid_t& Reference to this object.
+             */
+            auto operator=(AccelerationGrid_t&& other) noexcept -> AccelerationGrid_t& = default;
+
             std::vector<std::unique_ptr<GridCell_t>>
                 cells_; /**< @brief Array of all the cells contained in the acceleration structure. Cells use lists of shapes, for constant time adding and removal of shapes.*/
             std::array<size_t, 3> cell_res_; /**< @brief Number of cells in the x, y, and z direction.*/

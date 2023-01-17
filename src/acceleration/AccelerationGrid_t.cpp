@@ -102,6 +102,29 @@ AccelerationGrid_t::AccelerationGrid_t(const std::vector<Shape_t*>& items, std::
     }
 }
 
+AccelerationGrid_t::AccelerationGrid_t(const AccelerationGrid_t& other) :
+        cell_res_(other.cell_res_), cell_size_(other.cell_size_), bounding_box_(other.bounding_box_), level_(other.level_), min_res_(other.min_res_), max_res_(other.max_res_) {
+    cells_.reserve(other.cells_.size());
+    for (const auto& cell: other.cells_) {
+        cells_.push_back(std::make_unique<GridCell_t>(*cell));
+    }
+}
+
+auto AccelerationGrid_t::operator=(const AccelerationGrid_t& other) -> AccelerationGrid_t& {
+    cells_ = std::vector<std::unique_ptr<GridCell_t>>();
+    cells_.reserve(other.cells_.size());
+    for (const auto& cell: other.cells_) {
+        cells_.push_back(std::make_unique<GridCell_t>(*cell));
+    }
+
+    cell_res_     = other.cell_res_;
+    cell_size_    = other.cell_size_;
+    bounding_box_ = other.bounding_box_;
+    level_        = other.level_;
+    min_res_      = other.min_res_;
+    max_res_      = other.max_res_;
+}
+
 auto AccelerationGrid_t::intersect(const Ray_t& ray, double& t, std::array<double, 2>& uv) const -> Shape_t* {
     double tbbox = 0.0;
     std::array<long long, 3> cellexit{0, 0, 0};
