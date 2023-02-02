@@ -111,18 +111,10 @@ AccelerationGrid_t::AccelerationGrid_t(const AccelerationGrid_t& other) :
 }
 
 auto AccelerationGrid_t::operator=(const AccelerationGrid_t& other) -> AccelerationGrid_t& {
-    cells_ = std::vector<std::unique_ptr<GridCell_t>>();
-    cells_.reserve(other.cells_.size());
-    for (const auto& cell: other.cells_) {
-        cells_.push_back(std::make_unique<GridCell_t>(*cell));
+    if (this != &other) {
+        *this = AccelerationGrid_t(other);
     }
-
-    cell_res_     = other.cell_res_;
-    cell_size_    = other.cell_size_;
-    bounding_box_ = other.bounding_box_;
-    level_        = other.level_;
-    min_res_      = other.min_res_;
-    max_res_      = other.max_res_;
+    return *this;
 }
 
 auto AccelerationGrid_t::intersect(const Ray_t& ray, double& t, std::array<double, 2>& uv) const -> Shape_t* {
