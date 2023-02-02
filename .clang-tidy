@@ -1,5 +1,5 @@
 ---
-Checks: "clang-diagnostic-*,clang-analyzer-*,*,-llvmlibc-restrict-system-libc-headers,-fuchsia-trailing-return,-llvmlibc-implementation-in-namespace,-llvmlibc-callee-namespace,-altera-unroll-loops,-altera-id-dependent-backward-branch,-fuchsia-default-arguments-calls,-bugprone-easily-swappable-parameters,-google-runtime-int,-cppcoreguidelines-pro-bounds-constant-array-index,-misc-no-recursion"
+Checks: "clang-diagnostic-*,clang-analyzer-*,*,-llvmlibc-restrict-system-libc-headers,-fuchsia-trailing-return,-llvmlibc-implementation-in-namespace,-llvmlibc-callee-namespace,-altera-unroll-loops,-altera-id-dependent-backward-branch,-fuchsia-default-arguments-calls,-bugprone-easily-swappable-parameters,-google-runtime-int,-cppcoreguidelines-pro-bounds-constant-array-index,-misc-no-recursion,-google-readability-namespace-comments,-llvm-namespace-comment,-fuchsia-overloaded-operator"
 WarningsAsErrors: ""
 HeaderFilterRegex: ""
 AnalyzeTemporaryDtors: false
@@ -223,7 +223,7 @@ CheckOptions:
   - key: readability-else-after-return.WarnOnUnfixable
     value: "true"
   - key: cppcoreguidelines-avoid-magic-numbers.IgnoredFloatingPointValues
-    value: "1.0;100.0;"
+    value: "1.0;100.0;0.5;2.0;"
   - key: modernize-use-emplace.IgnoreImplicitConstructors
     value: "false"
   - key: cppcoreguidelines-macro-usage.IgnoreCommandLineMacros
@@ -237,7 +237,7 @@ CheckOptions:
   - key: cppcoreguidelines-pro-bounds-constant-array-index.IncludeStyle
     value: llvm
   - key: readability-identifier-length.IgnoredVariableNames
-    value: "^[tknxyz]$"
+    value: "^([tuvijklnxyz]|uv|xy|pi)$"
   - key: readability-magic-numbers.IgnoreAllFloatingPointValues
     value: "false"
   - key: hicpp-use-auto.RemoveStars
@@ -265,7 +265,7 @@ CheckOptions:
   - key: cert-err61-cpp.CheckThrowTemporaries
     value: "true"
   - key: cppcoreguidelines-avoid-magic-numbers.IgnoredIntegerValues
-    value: "1;2;3;4;"
+    value: "1;2;3;4;5;10;"
   - key: cppcoreguidelines-no-malloc.Allocations
     value: "::malloc;::calloc"
   - key: cppcoreguidelines-avoid-magic-numbers.IgnorePowersOf2IntegerValues
@@ -281,7 +281,7 @@ CheckOptions:
   - key: readability-implicit-bool-conversion.AllowIntegerConditions
     value: "false"
   - key: readability-identifier-length.IgnoredParameterNames
-    value: "^[tknxyz]$"
+    value: "^([tuvijklnxyz]|uv|xy|pi)$"
   - key: readability-function-size.StatementThreshold
     value: "800"
   - key: hicpp-use-noexcept.ReplacementString
@@ -545,7 +545,7 @@ CheckOptions:
   - key: performance-inefficient-string-concatenation.StrictMode
     value: "false"
   - key: readability-magic-numbers.IgnoredFloatingPointValues
-    value: "1.0;100.0;"
+    value: "1.0;100.0;0.5;2.0;"
   - key: bugprone-easily-swappable-parameters.IgnoredParameterTypeSuffixes
     value: "bool;Bool;_Bool;it;It;iterator;Iterator;inputit;InputIt;forwardit;ForwardIt;bidirit;BidirIt;constiterator;const_iterator;Const_Iterator;Constiterator;ConstIterator;RandomIt;randomit;random_iterator;ReverseIt;reverse_iterator;reverse_const_iterator;ConstReverseIterator;Const_Reverse_Iterator;const_reverse_iterator;Constreverseiterator;constreverseiterator"
   - key: modernize-make-unique.MakeSmartPtrFunction
@@ -663,6 +663,6 @@ CheckOptions:
   - key: llvm-else-after-return.WarnOnUnfixable
     value: "false"
   - key: readability-magic-numbers.IgnoredIntegerValues
-    value: "1;2;3;4;"
+    value: "1;2;3;4;5;10;"
 ---
 
