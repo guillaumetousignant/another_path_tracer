@@ -10,7 +10,7 @@ constexpr double epsilon = 0.00000001;
 using APTracer::Entities::Vec3f;
 
 APTracer::Shapes::TriangleMotionblur_t::TriangleMotionblur_t(APTracer::Entities::Material_t *material, APTracer::Entities::TransformMatrix_t *transform_matrix, std::array<Vec3f, 3> points, const Vec3f* normals, const double* texcoord) 
-    : Shape_t(material, transform_matrix), points_orig_{points} {
+    : Shape_t(material, transform_matrix), points_orig_(points) {
 
     if (normals == nullptr) {
         const Vec3f nor = (points_orig_[1] - points_orig_[0]).cross(points_orig_[2] - points_orig_[0]).normalize_inplace(); 

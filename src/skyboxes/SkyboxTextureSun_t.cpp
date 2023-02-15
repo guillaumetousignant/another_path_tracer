@@ -8,7 +8,7 @@ constexpr double pi = 3.141592653589793238463;
 using APTracer::Entities::Vec3f;
 
 APTracer::Skyboxes::SkyboxTextureSun_t::SkyboxTextureSun_t(APTracer::Entities::Texture_t* texture, std::array<double, 2> sun_pos, Vec3f sun_col, double sun_rad) 
-    : texture_(texture), sun_pos_{sun_pos}, sun_col_(sun_col), sun_rad_(sun_rad) {}
+    : texture_(texture), sun_pos_(sun_pos), sun_col_(sun_col), sun_rad_(sun_rad) {}
 
 auto APTracer::Skyboxes::SkyboxTextureSun_t::get(const Vec3f &xyz) const -> Vec3f {
     const Vec3f sph = xyz.get_sph();
