@@ -7,7 +7,7 @@ using APTracer::Entities::Vec3f;
 
 Vec3f::Vec3f() : v{0, 0, 0} {}
 Vec3f::Vec3f(double x, double y, double z) : v{x, y, z} {}
-Vec3f::Vec3f(std::array<double, n_dims> values) : v{values} {}
+Vec3f::Vec3f(std::array<double, n_dims> values) : v(values) {}
 Vec3f::Vec3f(double x) : v{x, x, x} {}
 auto Vec3f::operator[](int index) -> double& {
     return v[index];

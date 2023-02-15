@@ -37,13 +37,13 @@ FishCamMotionblurAperture_t::FishCamMotionblurAperture_t(TransformMatrix_t* tran
         unif_(0.0, 1.0),
         direction_last_(direction_),
         origin_last_(origin_),
-        time_{time},
+        time_(time),
         up_last_(up_),
         focus_distance_(focus_distance),
         focus_distance_last_(focus_distance),
         aperture_(aperture),
         focus_distance_buffer_(focus_distance),
-        fov_last_{fov} {}
+        fov_last_(fov) {}
 
 auto FishCamMotionblurAperture_t::update() -> void {
     origin_last_         = origin_;

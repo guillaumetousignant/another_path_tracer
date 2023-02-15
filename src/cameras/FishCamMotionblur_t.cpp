@@ -35,9 +35,9 @@ FishCamMotionblur_t::FishCamMotionblur_t(TransformMatrix_t* transformation,
         unif_(0.0, 1.0),
         direction_last_(direction_),
         origin_last_(origin_),
-        time_{time},
+        time_(time),
         up_last_(up_),
-        fov_last_{fov} {}
+        fov_last_(fov) {}
 
 auto FishCamMotionblur_t::update() -> void {
     origin_last_    = origin_;

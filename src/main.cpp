@@ -18,6 +18,9 @@ auto main(int argc, char** argv) -> int {
             filename = argv[1];
         }
 
+        APTracer::Acceleration::AccelerationGrid_t a(std::vector<APTracer::Entities::Shape_t*>(), 10, 100);
+        APTracer::Acceleration::AccelerationGrid_t b = a;
+
         APTracer::Entities::SceneContext_t scene_context;
 
         scene_context.readXML(filename);

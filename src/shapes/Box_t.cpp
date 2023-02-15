@@ -6,7 +6,7 @@ using APTracer::Entities::Vec3f;
 
 APTracer::Shapes::Box_t::Box_t() : coordinates_{Vec3f(), Vec3f()} {}
 
-APTracer::Shapes::Box_t::Box_t(std::array<Vec3f, 2> coord) : coordinates_{coord} {}
+APTracer::Shapes::Box_t::Box_t(std::array<Vec3f, 2> coord) : coordinates_(coord) {}
 
 auto APTracer::Shapes::Box_t::intersection(const APTracer::Entities::Ray_t& ray, double& t) const -> bool {
     const Vec3f invdir = Vec3f(1.0) / ray.direction_;

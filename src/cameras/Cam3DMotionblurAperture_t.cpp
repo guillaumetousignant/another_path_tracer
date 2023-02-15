@@ -44,9 +44,9 @@ Cam3DMotionblurAperture_t::Cam3DMotionblurAperture_t(TransformMatrix_t* transfor
         direction_last_(direction_),
         origin_last_(origin_),
         focus_distance_last_(focus_distance_),
-        time_{time},
+        time_(time),
         up_last_(up_),
-        fov_last_{fov},
+        fov_last_(fov),
         focus_coordinates_{0.5, 0.5} {
 
     std::string filename_L;

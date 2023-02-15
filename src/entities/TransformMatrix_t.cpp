@@ -14,13 +14,13 @@ TransformMatrix_t::TransformMatrix_t(
     buildInverse();
 }
 
-TransformMatrix_t::TransformMatrix_t(std::array<double, 16> values) : matrix_{values} {
+TransformMatrix_t::TransformMatrix_t(std::array<double, 16> values) : matrix_(values) {
     buildInverse();
 }
 
 auto TransformMatrix_t::rotateXAxis(double angle) -> TransformMatrix_t& {
     const std::array<double, 16> other{1, 0, 0, 0, 0, cos(angle), sin(angle), 0, 0, -sin(angle), cos(angle), 0, 0, 0, 0, 1};
-    const std::array<double, 16> matrix{matrix_};
+    const std::array<double, 16> matrix(matrix_);
 
     for (unsigned int j = 0; j < 4; j++) {
         for (unsigned int i = 0; i < 4; ++i) {
@@ -34,7 +34,7 @@ auto TransformMatrix_t::rotateXAxis(double angle) -> TransformMatrix_t& {
 
 auto TransformMatrix_t::rotateYAxis(double angle) -> TransformMatrix_t& {
     const std::array<double, 16> other{cos(angle), 0, -sin(angle), 0, 0, 1, 0, 0, sin(angle), 0, cos(angle), 0, 0, 0, 0, 1};
-    const std::array<double, 16> matrix{matrix_};
+    const std::array<double, 16> matrix(matrix_);
 
     for (unsigned int j = 0; j < 4; j++) {
         for (unsigned int i = 0; i < 4; ++i) {
@@ -48,7 +48,7 @@ auto TransformMatrix_t::rotateYAxis(double angle) -> TransformMatrix_t& {
 
 auto TransformMatrix_t::rotateZAxis(double angle) -> TransformMatrix_t& {
     const std::array<double, 16> other{cos(angle), sin(angle), 0, 0, -sin(angle), cos(angle), 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
-    const std::array<double, 16> matrix{matrix_};
+    const std::array<double, 16> matrix(matrix_);
 
     for (unsigned int j = 0; j < 4; j++) {
         for (unsigned int i = 0; i < 4; ++i) {
@@ -77,7 +77,7 @@ auto TransformMatrix_t::rotateX(double angle) -> TransformMatrix_t& {
                                        matrix_[13] - matrix_[13] * cos(angle) + matrix_[14] * sin(angle),
                                        matrix_[14] - matrix_[14] * cos(angle) - matrix_[13] * sin(angle),
                                        1};
-    const std::array<double, 16> matrix{matrix_};
+    const std::array<double, 16> matrix(matrix_);
 
     for (unsigned int j = 0; j < 4; j++) {
         for (unsigned int i = 0; i < 4; ++i) {
@@ -106,7 +106,7 @@ auto TransformMatrix_t::rotateY(double angle) -> TransformMatrix_t& {
                                        0,
                                        matrix_[14] - matrix_[14] * cos(angle) + matrix_[12] * sin(angle),
                                        1};
-    const std::array<double, 16> matrix{matrix_};
+    const std::array<double, 16> matrix(matrix_);
 
     for (unsigned int j = 0; j < 4; j++) {
         for (unsigned int i = 0; i < 4; ++i) {
@@ -135,7 +135,7 @@ auto TransformMatrix_t::rotateZ(double angle) -> TransformMatrix_t& {
                                        matrix_[13] - matrix_[13] * cos(angle) - matrix_[12] * sin(angle),
                                        0,
                                        1};
-    const std::array<double, 16> matrix{matrix_};
+    const std::array<double, 16> matrix(matrix_);
 
     for (unsigned int j = 0; j < 4; j++) {
         for (unsigned int i = 0; i < 4; ++i) {
@@ -165,7 +165,7 @@ auto TransformMatrix_t::rotateAxis(const Vec3f& vec, double angle) -> TransformM
                                        0,
                                        0,
                                        1};
-    const std::array<double, 16> matrix{matrix_};
+    const std::array<double, 16> matrix(matrix_);
 
     for (unsigned int j = 0; j < 4; j++) {
         for (unsigned int i = 0; i < 4; ++i) {
@@ -199,7 +199,7 @@ auto TransformMatrix_t::rotate(const Vec3f& vec, double angle) -> TransformMatri
                                            + matrix_[13] * (vec2[0] * sin(angle) + vec2[1] * vec2[2] * (cos(angle) - 1)) - matrix_[14] * ((1 - cos(angle)) * vec2[2] * vec2[2] + cos(angle)),
                                        1};
     // Wow just wow, such a line to write. I assume this is super slow
-    const std::array<double, 16> matrix{matrix_};
+    const std::array<double, 16> matrix(matrix_);
 
     for (unsigned int j = 0; j < 4; j++) {
         for (unsigned int i = 0; i < 4; ++i) {
@@ -213,7 +213,7 @@ auto TransformMatrix_t::rotate(const Vec3f& vec, double angle) -> TransformMatri
 
 auto TransformMatrix_t::translate(const Vec3f& vec) -> TransformMatrix_t& {
     const std::array<double, 16> other{1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, vec[0], vec[1], vec[2], 1};
-    const std::array<double, 16> matrix{matrix_};
+    const std::array<double, 16> matrix(matrix_);
 
     for (unsigned int j = 0; j < 4; j++) {
         for (unsigned int i = 0; i < 4; ++i) {
@@ -227,7 +227,7 @@ auto TransformMatrix_t::translate(const Vec3f& vec) -> TransformMatrix_t& {
 
 auto TransformMatrix_t::scaleAxis(const Vec3f& vec) -> TransformMatrix_t& {
     const std::array<double, 16> other{vec[0], 0, 0, 0, 0, vec[1], 0, 0, 0, 0, vec[2], 0, 0, 0, 0, 1};
-    const std::array<double, 16> matrix{matrix_};
+    const std::array<double, 16> matrix(matrix_);
 
     for (unsigned int j = 0; j < 4; j++) { // This can be optimised
         for (unsigned int i = 0; i < 4; ++i) {
@@ -241,7 +241,7 @@ auto TransformMatrix_t::scaleAxis(const Vec3f& vec) -> TransformMatrix_t& {
 
 auto TransformMatrix_t::scaleAxis(double fac) -> TransformMatrix_t& {
     const std::array<double, 16> other{fac, 0, 0, 0, 0, fac, 0, 0, 0, 0, fac, 0, 0, 0, 0, 1};
-    const std::array<double, 16> matrix{matrix_};
+    const std::array<double, 16> matrix(matrix_);
 
     for (unsigned int j = 0; j < 4; j++) { // This can be optimised
         for (unsigned int i = 0; i < 4; ++i) {
@@ -256,7 +256,7 @@ auto TransformMatrix_t::scaleAxis(double fac) -> TransformMatrix_t& {
 auto TransformMatrix_t::scale(const Vec3f& vec) -> TransformMatrix_t& {
     const std::array<double, 16> other{
         vec[0], 0, 0, 0, 0, vec[1], 0, 0, 0, 0, vec[2], 0, matrix_[12] - vec[0] * matrix_[12], matrix_[13] - vec[1] * matrix_[13], matrix_[14] - vec[2] * matrix_[14], 1};
-    const std::array<double, 16> matrix{matrix_};
+    const std::array<double, 16> matrix(matrix_);
 
     for (unsigned int j = 0; j < 4; j++) { // This can be optimised
         for (unsigned int i = 0; i < 4; ++i) {
@@ -270,7 +270,7 @@ auto TransformMatrix_t::scale(const Vec3f& vec) -> TransformMatrix_t& {
 
 auto TransformMatrix_t::scale(double fac) -> TransformMatrix_t& {
     const std::array<double, 16> other{fac, 0, 0, 0, 0, fac, 0, 0, 0, 0, fac, 0, matrix_[12] - fac * matrix_[12], matrix_[13] - fac * matrix_[13], matrix_[14] - fac * matrix_[14], 1};
-    const std::array<double, 16> matrix{matrix_};
+    const std::array<double, 16> matrix(matrix_);
 
     for (unsigned int j = 0; j < 4; j++) { // This can be optimised
         for (unsigned int i = 0; i < 4; ++i) {

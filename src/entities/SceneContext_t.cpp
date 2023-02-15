@@ -1090,7 +1090,7 @@ auto APTracer::Entities::SceneContext_t::create_medium(const tinyxml2::XMLElemen
         if (transformations_post != nullptr) {
             medium_transformations.transformations_post.emplace_back(medium.get(), transformations_post);
         }
-        return medium;
+        return std::move(medium);
     }
     if (type == "scatterer_exp") {
         const std::vector<const char*> attributes = {"emission", "colour", "emission_distance", "absorption_distance", "scattering_distance", "order", "scattering_angle", "ind", "priority"};
@@ -1211,7 +1211,7 @@ auto APTracer::Entities::SceneContext_t::create_material(const tinyxml2::XMLElem
         require_attributes(xml_material, attributes);
         std::unique_ptr<APTracer::Materials::FresnelMix_t> material(std::make_unique<APTracer::Materials::FresnelMix_t>(nullptr, nullptr, xml_material->DoubleAttribute("ind")));
         material_mix_lists.fresnel_mix.emplace_back(material.get(), get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials));
-        return material;
+        return std::move(material);
     }
     if (type == "fresnelmix_normal") {
         const std::vector<const char*> attributes = {"material_refracted", "material_reflected", "ind", "normal_map"};
@@ -1220,14 +1220,14 @@ auto APTracer::Entities::SceneContext_t::create_material(const tinyxml2::XMLElem
             std::make_unique<APTracer::Materials::FresnelMixNormal_t>(nullptr, nullptr, xml_material->DoubleAttribute("ind"), get_texture(xml_material->Attribute("normal_map"), xml_textures)));
         material_mix_lists.fresnel_mix_normal.emplace_back(material.get(),
                                                            get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials));
-        return material;
+        return std::move(material);
     }
     if (type == "fresnelmix_in") {
         const std::vector<const char*> attributes = {"material_refracted", "material_reflected", "ind"};
         require_attributes(xml_material, attributes);
         std::unique_ptr<APTracer::Materials::FresnelMixIn_t> material(std::make_unique<APTracer::Materials::FresnelMixIn_t>(nullptr, nullptr, xml_material->DoubleAttribute("ind")));
         material_mix_lists.fresnel_mix_in.emplace_back(material.get(), get_material_mix(xml_material->Attribute("material_refracted"), xml_material->Attribute("material_reflected"), xml_materials));
-        return material;
+        return std::move(material);
     }
     if (type == "normal_material") {
         return std::make_unique<APTracer::Materials::NormalMaterial_t>();
@@ -1251,7 +1251,7 @@ auto APTracer::Entities::SceneContext_t::create_material(const tinyxml2::XMLElem
         if (transformations_post != nullptr) {
             material_transformations.transformations_post.emplace_back(material.get(), transformations_post);
         }
-        return material;
+        return std::move(material);
     }
     if (type == "portal_refractive") {
         std::cerr << "Warning: refractive portal not implemented yet. Using 'diffuse'." << std::endl;
@@ -1262,14 +1262,14 @@ auto APTracer::Entities::SceneContext_t::create_material(const tinyxml2::XMLElem
         require_attributes(xml_material, attributes);
         std::unique_ptr<APTracer::Materials::RandomMix_t> material(std::make_unique<APTracer::Materials::RandomMix_t>(nullptr, nullptr, xml_material->DoubleAttribute("ratio")));
         material_mix_lists.random_mix.emplace_back(material.get(), get_material_mix(xml_material->Attribute("first_material"), xml_material->Attribute("second_material"), xml_materials));
-        return material;
+        return std::move(material);
     }
     if (type == "randommix_in") {
         const std::vector<const char*> attributes = {"first_material", "second_material", "ratio"};
         require_attributes(xml_material, attributes);
         std::unique_ptr<APTracer::Materials::RandomMixIn_t> material(std::make_unique<APTracer::Materials::RandomMixIn_t>(nullptr, nullptr, xml_material->DoubleAttribute("ratio")));
         material_mix_lists.random_mix_in.emplace_back(material.get(), get_material_mix(xml_material->Attribute("first_material"), xml_material->Attribute("second_material"), xml_materials));
-        return material;
+        return std::move(material);
     }
     if (type == "reflective") {
         const std::vector<const char*> attributes = {"emission", "colour"};

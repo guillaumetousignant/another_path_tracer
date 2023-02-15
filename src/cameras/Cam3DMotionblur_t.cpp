@@ -42,9 +42,9 @@ Cam3DMotionblur_t::Cam3DMotionblur_t(TransformMatrix_t* transformation,
         direction_last_(direction_),
         origin_last_(origin_),
         focus_distance_last_(focus_distance_),
-        time_{time},
+        time_(time),
         up_last_(up_),
-        fov_last_{fov} {
+        fov_last_(fov) {
 
     std::string filename_L;
     std::string filename_R;
