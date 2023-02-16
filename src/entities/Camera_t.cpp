@@ -4,11 +4,6 @@
 #include <iostream>
 
 using APTracer::Entities::Camera_t;
-using APTracer::Entities::Medium_t;
-using APTracer::Entities::Scene_t;
-using APTracer::Entities::Skybox_t;
-using APTracer::Entities::TransformMatrix_t;
-using APTracer::Entities::Vec3f;
 
 Camera_t::Camera_t(TransformMatrix_t* transformation,
                    std::string filename,
@@ -43,7 +38,7 @@ auto Camera_t::accumulate(const Scene_t* scene, unsigned int n_iter) -> void {
         raytrace(scene);
         auto t_end = std::chrono::high_resolution_clock::now();
 
-        std::cout << "Iteration " << n << " done in " << std::chrono::duration<double, std::milli>(t_end - t_start).count() / 1000.0 << "s." << std::endl;
+        std::cout << "Iteration " << n << " done in " << std::chrono::duration<double>(t_end - t_start).count() << "s." << std::endl;
     }
 }
 
@@ -56,7 +51,7 @@ auto Camera_t::accumulate(const Scene_t* scene) -> void {
         raytrace(scene);
         auto t_end = std::chrono::high_resolution_clock::now();
 
-        std::cout << "Iteration " << n << " done in " << std::chrono::duration<double, std::milli>(t_end - t_start).count() / 1000.0 << "s." << std::endl;
+        std::cout << "Iteration " << n << " done in " << std::chrono::duration<double>(t_end - t_start).count() << "s." << std::endl;
     }
 }
 
@@ -70,7 +65,7 @@ auto Camera_t::accumulateWrite(const Scene_t* scene, unsigned int n_iter, unsign
         raytrace(scene);
         auto t_end = std::chrono::high_resolution_clock::now();
 
-        std::cout << "Iteration " << n << " done in " << std::chrono::duration<double, std::milli>(t_end - t_start).count() / 1000.0 << "s." << std::endl;
+        std::cout << "Iteration " << n << " done in " << std::chrono::duration<double>(t_end - t_start).count() << "s." << std::endl;
 
         show();
         if (n % interval == 0) {
@@ -79,7 +74,7 @@ auto Camera_t::accumulateWrite(const Scene_t* scene, unsigned int n_iter, unsign
             write();
             auto t_end2 = std::chrono::high_resolution_clock::now();
 
-            std::cout << "Writing done in " << std::chrono::duration<double, std::milli>(t_end2 - t_start2).count() / 1000.0 << "s." << std::endl;
+            std::cout << "Writing done in " << std::chrono::duration<double>(t_end2 - t_start2).count() << "s." << std::endl;
         }
     }
 }
@@ -94,7 +89,7 @@ auto Camera_t::accumulateWrite(const Scene_t* scene, unsigned int interval) -> v
         raytrace(scene);
         auto t_end = std::chrono::high_resolution_clock::now();
 
-        std::cout << "Iteration " << n << " done in " << std::chrono::duration<double, std::milli>(t_end - t_start).count() / 1000.0 << "s." << std::endl;
+        std::cout << "Iteration " << n << " done in " << std::chrono::duration<double>(t_end - t_start).count() << "s." << std::endl;
 
         show();
         if (n % interval == 0) {
@@ -103,7 +98,7 @@ auto Camera_t::accumulateWrite(const Scene_t* scene, unsigned int interval) -> v
             write();
             auto t_end2 = std::chrono::high_resolution_clock::now();
 
-            std::cout << "Writing done in " << std::chrono::duration<double, std::milli>(t_end2 - t_start2).count() / 1000.0 << "s." << std::endl;
+            std::cout << "Writing done in " << std::chrono::duration<double>(t_end2 - t_start2).count() << "s." << std::endl;
         }
     }
 }
@@ -118,7 +113,7 @@ auto Camera_t::accumulateWrite(const Scene_t* scene) -> void {
         raytrace(scene);
         auto t_end = std::chrono::high_resolution_clock::now();
 
-        std::cout << "Iteration " << n << " done in " << std::chrono::duration<double, std::milli>(t_end - t_start).count() / 1000.0 << "s." << std::endl;
+        std::cout << "Iteration " << n << " done in " << std::chrono::duration<double>(t_end - t_start).count() << "s." << std::endl;
 
         show();
 
@@ -127,7 +122,7 @@ auto Camera_t::accumulateWrite(const Scene_t* scene) -> void {
         write();
         auto t_end2 = std::chrono::high_resolution_clock::now();
 
-        std::cout << "Writing done in " << std::chrono::duration<double, std::milli>(t_end2 - t_start2).count() / 1000.0 << "s." << std::endl;
+        std::cout << "Writing done in " << std::chrono::duration<double>(t_end2 - t_start2).count() << "s." << std::endl;
     }
 }
 

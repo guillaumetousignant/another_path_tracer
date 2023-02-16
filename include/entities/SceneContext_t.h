@@ -302,7 +302,7 @@ namespace APTracer { namespace Entities {
              *
              * @param xml_acceleration_structure XML entry containing the acceleration structure information.
              */
-            auto create_acceleration_structure(const tinyxml2::XMLElement* xml_acceleration_structure) -> void;
+            auto create_acceleration_structure(const tinyxml2::XMLElement* xml_acceleration_structure) const -> void;
 
             /**
              * @brief Get a transform matrix object from its name or index.

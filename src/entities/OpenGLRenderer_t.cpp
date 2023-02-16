@@ -50,7 +50,6 @@ OpenGLRenderer_t::OpenGLRenderer_t() :
         right_clicked_(false),
         left_clicked_(false),
         middle_clicked_(false),
-        focus_point_(Vec3f()),
         camera_dist_(0),
         updated_(false),
         write_interval_(1),
@@ -75,7 +74,6 @@ OpenGLRenderer_t::OpenGLRenderer_t(Scene_t* scene, Camera_t* camera, ImgBufferOp
         right_clicked_(false),
         left_clicked_(false),
         middle_clicked_(false),
-        focus_point_(Vec3f()),
         camera_dist_((focus_point_ - camera_->origin_).magnitude()),
         updated_(false),
         write_interval_(1),
@@ -84,9 +82,10 @@ OpenGLRenderer_t::OpenGLRenderer_t(Scene_t* scene, Camera_t* camera, ImgBufferOp
     std::cerr << "Error: OpenGL renderer created, but the library wasn't compiled with 'APTRACER_USE_OPENGL' defined. It will not work correctly." << std::endl;
 #endif
 
-    renderer_ = std::unique_ptr<OpenGLRenderer_t>(this);
-    if (camera_dist_ < 0.1) {
-        camera_dist_ = 0.1;
+    renderer_                            = std::unique_ptr<OpenGLRenderer_t>(this);
+    constexpr double min_camera_distance = 0.1;
+    if (camera_dist_ < min_camera_distance) {
+        camera_dist_ = min_camera_distance;
     }
 }
 
@@ -104,7 +103,7 @@ auto OpenGLRenderer_t::accumulate() -> void {
     // auto t_end = std::chrono::high_resolution_clock::now();
 
     /*std::cout << "Iteration " << imgbuffer_->updates_ << " done in "
-        << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0
+        << std::chrono::duration<double>(t_end-t_start).count()
         << "s." << std::endl;*/
 
 #ifdef APTRACER_USE_OPENGL
@@ -131,11 +130,11 @@ auto OpenGLRenderer_t::accumulate_write() -> void {
         camera_->write();
         auto t_end = std::chrono::high_resolution_clock::now();
 
-        std::cout << "Writing done in " << std::chrono::duration<double, std::milli>(t_end - t_start).count() / 1000.0 << "s." << std::endl;
+        std::cout << "Writing done in " << std::chrono::duration<double>(t_end - t_start).count() << "s." << std::endl;
     }
 
     /*std::cout << "Iteration " << imgbuffer_->updates_ << " done in "
-        << std::chrono::duration<double, std::milli>(t_end-t_start).count()/1000.0
+        << std::chrono::duration<double>(t_end-t_start).count(1000.0
         << "s." << std::endl;*/
 
 #ifdef APTRACER_USE_OPENGL
@@ -259,7 +258,7 @@ auto OpenGLRenderer_t::keyboardPaused(unsigned char key, int x, int y) -> void {
             camera_->write();
             t_end_write = std::chrono::high_resolution_clock::now();
 
-            std::cout << "Writing done in " << std::chrono::duration<double, std::milli>(t_end_write - t_start_write).count() / 1000.0 << "s." << std::endl;
+            std::cout << "Writing done in " << std::chrono::duration<double>(t_end_write - t_start_write).count() << "s." << std::endl;
             break;
 
         case 'q':
@@ -293,7 +292,7 @@ auto OpenGLRenderer_t::keyboard(unsigned char key, int x, int y) -> void {
             camera_->write();
             t_end_write = std::chrono::high_resolution_clock::now();
 
-            std::cout << "Writing done in " << std::chrono::duration<double, std::milli>(t_end_write - t_start_write).count() / 1000.0 << "s." << std::endl;
+            std::cout << "Writing done in " << std::chrono::duration<double>(t_end_write - t_start_write).count() << "s." << std::endl;
             break;
 
         case 'f':

@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <chrono>
 #include <iostream>
+#include <limits>
 #include <sstream>
 #include <string>
 
@@ -105,10 +106,8 @@
 
 APTracer::Entities::SceneContext_t::SceneContext_t() :
         use_gl_(false),
-        opengl_renderer_(),
         opengl_imgbuffer_(nullptr),
         opengl_camera_(nullptr),
-        scene_(),
         index_transform_matrices_(0),
         index_textures_(0),
         index_mediums_(0),
@@ -123,13 +122,10 @@ APTracer::Entities::SceneContext_t::SceneContext_t() :
 auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) -> void {
     reset();
 
-    std::string new_filename;
-    std::string folder;
-
 #ifdef _WIN32
-    folder = "images\\";
+    const std::string folder = "images\\";
 #else
-    folder = "images/";
+    const std::string folder = "images/";
 #endif
 
     tinyxml2::XMLDocument xml_scene;
@@ -148,7 +144,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
     else {
         scene_name_ = temp_name;
     }
-    new_filename = next_filename(folder + scene_name_ + ".png");
+    const std::string new_filename = next_filename(folder + scene_name_ + ".png");
 
     std::cout << "Scene name: '" << scene_name_ << "'." << std::endl;
     std::cout << "Next filename: '" << new_filename << "'." << std::endl;
@@ -179,20 +175,20 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
 
     // Counts
     if (xml_transform_matrices != nullptr) {
-        for (tinyxml2::XMLElement* xml_transform_matrix = xml_transform_matrices->FirstChildElement("transform_matrix"); xml_transform_matrix;
+        for (tinyxml2::XMLElement* xml_transform_matrix = xml_transform_matrices->FirstChildElement("transform_matrix"); xml_transform_matrix != nullptr;
              xml_transform_matrix                       = xml_transform_matrix->NextSiblingElement("transform_matrix")) {
             ++n_transform_matrices;
         }
     }
 
     if (xml_textures != nullptr) {
-        for (tinyxml2::XMLElement* xml_texture = xml_textures->FirstChildElement("texture"); xml_texture; xml_texture = xml_texture->NextSiblingElement("texture")) {
+        for (tinyxml2::XMLElement* xml_texture = xml_textures->FirstChildElement("texture"); xml_texture != nullptr; xml_texture = xml_texture->NextSiblingElement("texture")) {
             ++n_textures;
         }
     }
 
     if (xml_mediums != nullptr) {
-        for (tinyxml2::XMLElement* xml_medium = xml_mediums->FirstChildElement("medium"); xml_medium; xml_medium = xml_medium->NextSiblingElement("medium")) {
+        for (tinyxml2::XMLElement* xml_medium = xml_mediums->FirstChildElement("medium"); xml_medium != nullptr; xml_medium = xml_medium->NextSiblingElement("medium")) {
             ++n_mediums;
             const char* char_transform_matrix = xml_medium->Attribute("transform_matrix");
             if (char_transform_matrix != nullptr) {
@@ -206,7 +202,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
     }
 
     if (xml_materials != nullptr) {
-        for (tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")) {
+        for (tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material != nullptr; xml_material = xml_material->NextSiblingElement("material")) {
             ++n_materials;
             const char* char_transform_matrix = xml_material->Attribute("transform_matrix");
             if (char_transform_matrix != nullptr) {
@@ -220,14 +216,14 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
     }
 
     if (xml_mesh_geometries != nullptr) {
-        for (tinyxml2::XMLElement* xml_mesh_geometry = xml_mesh_geometries->FirstChildElement("mesh_geometry"); xml_mesh_geometry;
+        for (tinyxml2::XMLElement* xml_mesh_geometry = xml_mesh_geometries->FirstChildElement("mesh_geometry"); xml_mesh_geometry != nullptr;
              xml_mesh_geometry                       = xml_mesh_geometry->NextSiblingElement("mesh_geometry")) {
             ++n_mesh_geometries;
         }
     }
 
     if (xml_objects != nullptr) {
-        for (tinyxml2::XMLElement* xml_object = xml_objects->FirstChildElement("object"); xml_object; xml_object = xml_object->NextSiblingElement("object")) {
+        for (tinyxml2::XMLElement* xml_object = xml_objects->FirstChildElement("object"); xml_object != nullptr; xml_object = xml_object->NextSiblingElement("object")) {
             ++n_objects;
             const char* char_transform_matrix = xml_object->Attribute("transform_matrix");
             if (char_transform_matrix != nullptr) {
@@ -241,7 +237,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
     }
 
     if (xml_directional_lights != nullptr) {
-        for (tinyxml2::XMLElement* xml_directional_light = xml_directional_lights->FirstChildElement("directional_light"); xml_directional_light;
+        for (tinyxml2::XMLElement* xml_directional_light = xml_directional_lights->FirstChildElement("directional_light"); xml_directional_light != nullptr;
              xml_directional_light                       = xml_directional_light->NextSiblingElement("directional_light")) {
             ++n_directional_lights;
             const char* char_transform_matrix = xml_directional_light->Attribute("transform_matrix");
@@ -256,7 +252,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
     }
 
     if (xml_skyboxes != nullptr) {
-        for (tinyxml2::XMLElement* xml_skybox = xml_skyboxes->FirstChildElement("skybox"); xml_skybox; xml_skybox = xml_skybox->NextSiblingElement("skybox")) {
+        for (tinyxml2::XMLElement* xml_skybox = xml_skyboxes->FirstChildElement("skybox"); xml_skybox != nullptr; xml_skybox = xml_skybox->NextSiblingElement("skybox")) {
             ++n_skyboxes;
             const char* char_transform_matrix = xml_skybox->Attribute("transform_matrix");
             if (char_transform_matrix != nullptr) {
@@ -270,13 +266,13 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
     }
 
     if (xml_imgbuffers != nullptr) {
-        for (tinyxml2::XMLElement* xml_imgbuffer = xml_imgbuffers->FirstChildElement("imgbuffer"); xml_imgbuffer; xml_imgbuffer = xml_imgbuffer->NextSiblingElement("imgbuffer")) {
+        for (tinyxml2::XMLElement* xml_imgbuffer = xml_imgbuffers->FirstChildElement("imgbuffer"); xml_imgbuffer != nullptr; xml_imgbuffer = xml_imgbuffer->NextSiblingElement("imgbuffer")) {
             ++n_imgbuffers;
         }
     }
 
     if (xml_cameras != nullptr) {
-        for (tinyxml2::XMLElement* xml_camera = xml_cameras->FirstChildElement("camera"); xml_camera; xml_camera = xml_camera->NextSiblingElement("camera")) {
+        for (tinyxml2::XMLElement* xml_camera = xml_cameras->FirstChildElement("camera"); xml_camera != nullptr; xml_camera = xml_camera->NextSiblingElement("camera")) {
             ++n_cameras;
             const char* char_transform_matrix = xml_camera->Attribute("transform_matrix");
             if (char_transform_matrix != nullptr) {
@@ -327,7 +323,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
     // Filling buffers
     // Transform matrices (1)
     if (xml_transform_matrices != nullptr) {
-        for (tinyxml2::XMLElement* xml_transform_matrix = xml_transform_matrices->FirstChildElement("transform_matrix"); xml_transform_matrix;
+        for (tinyxml2::XMLElement* xml_transform_matrix = xml_transform_matrices->FirstChildElement("transform_matrix"); xml_transform_matrix != nullptr;
              xml_transform_matrix                       = xml_transform_matrix->NextSiblingElement("transform_matrix")) {
             transform_matrices_[index_transform_matrices_] = create_transform_matrix(xml_transform_matrix);
             ++index_transform_matrices_;
@@ -337,7 +333,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
 
     // Textures (2)
     if (xml_textures != nullptr) {
-        for (tinyxml2::XMLElement* xml_texture = xml_textures->FirstChildElement("texture"); xml_texture; xml_texture = xml_texture->NextSiblingElement("texture")) {
+        for (tinyxml2::XMLElement* xml_texture = xml_textures->FirstChildElement("texture"); xml_texture != nullptr; xml_texture = xml_texture->NextSiblingElement("texture")) {
             textures_[index_textures_] = create_texture(xml_texture);
             ++index_textures_;
         }
@@ -346,7 +342,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
 
     // Mediums (3)
     if (xml_mediums != nullptr) {
-        for (tinyxml2::XMLElement* xml_medium = xml_mediums->FirstChildElement("medium"); xml_medium; xml_medium = xml_medium->NextSiblingElement("medium")) {
+        for (tinyxml2::XMLElement* xml_medium = xml_mediums->FirstChildElement("medium"); xml_medium != nullptr; xml_medium = xml_medium->NextSiblingElement("medium")) {
             mediums_[index_mediums_] = create_medium(xml_medium, mediums_medium_list, medium_transformations, xml_transform_matrices, xml_mediums);
             ++index_mediums_;
         }
@@ -355,7 +351,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
 
     // Materials (4)
     if (xml_materials != nullptr) {
-        for (tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")) {
+        for (tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material != nullptr; xml_material = xml_material->NextSiblingElement("material")) {
             materials_[index_materials_] = create_material(xml_material,
                                                            materials_medium_list,
                                                            material_mix_list,
@@ -427,7 +423,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
     // Material aggregates fix
     for (size_t i = 0; i < materials_.size(); i++) {
         if (materials_aggregate_list[i]) {
-            size_t n = std::get<0>(*materials_aggregate_list[i])->size();
+            const size_t n = std::get<0>(*materials_aggregate_list[i])->size();
             std::vector<std::string> names(n);
             std::vector<Material_t*> materials(n);
 
@@ -454,7 +450,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
     // Filling buffers again
     // Mesh geometries (5)
     if (xml_mesh_geometries != nullptr) {
-        for (tinyxml2::XMLElement* xml_mesh_geometry = xml_mesh_geometries->FirstChildElement("mesh_geometry"); xml_mesh_geometry;
+        for (tinyxml2::XMLElement* xml_mesh_geometry = xml_mesh_geometries->FirstChildElement("mesh_geometry"); xml_mesh_geometry != nullptr;
              xml_mesh_geometry                       = xml_mesh_geometry->NextSiblingElement("mesh_geometry")) {
             mesh_geometries_[index_mesh_geometries_] = create_mesh_geometry(xml_mesh_geometry);
             ++index_mesh_geometries_;
@@ -464,7 +460,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
 
     // Objects (6)
     if (xml_objects != nullptr) {
-        for (tinyxml2::XMLElement* xml_object = xml_objects->FirstChildElement("object"); xml_object; xml_object = xml_object->NextSiblingElement("object")) {
+        for (tinyxml2::XMLElement* xml_object = xml_objects->FirstChildElement("object"); xml_object != nullptr; xml_object = xml_object->NextSiblingElement("object")) {
             objects_[index_objects_] = create_object(xml_object, meshes_[index_objects_], xml_transform_matrices, xml_materials, xml_mesh_geometries);
             ++index_objects_;
         }
@@ -473,7 +469,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
 
     // Directional lights (7)
     if (xml_directional_lights != nullptr) {
-        for (tinyxml2::XMLElement* xml_directional_light = xml_directional_lights->FirstChildElement("directional_light"); xml_directional_light;
+        for (tinyxml2::XMLElement* xml_directional_light = xml_directional_lights->FirstChildElement("directional_light"); xml_directional_light != nullptr;
              xml_directional_light                       = xml_directional_light->NextSiblingElement("directional_light")) {
             directional_lights_[index_directional_lights_] = create_directional_light(xml_directional_light, xml_transform_matrices);
             ++index_directional_lights_;
@@ -483,7 +479,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
 
     // Skyboxes (8)
     if (xml_skyboxes != nullptr) {
-        for (tinyxml2::XMLElement* xml_skybox = xml_skyboxes->FirstChildElement("skybox"); xml_skybox; xml_skybox = xml_skybox->NextSiblingElement("skybox")) {
+        for (tinyxml2::XMLElement* xml_skybox = xml_skyboxes->FirstChildElement("skybox"); xml_skybox != nullptr; xml_skybox = xml_skybox->NextSiblingElement("skybox")) {
             skyboxes_[index_skyboxes_] = create_skybox(xml_skybox, xml_textures, xml_transform_matrices, xml_directional_lights);
             ++index_skyboxes_;
         }
@@ -492,7 +488,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
 
     // Image buffers (9)
     if (xml_imgbuffers != nullptr) {
-        for (tinyxml2::XMLElement* xml_imgbuffer = xml_imgbuffers->FirstChildElement("imgbuffer"); xml_imgbuffer; xml_imgbuffer = xml_imgbuffer->NextSiblingElement("imgbuffer")) {
+        for (tinyxml2::XMLElement* xml_imgbuffer = xml_imgbuffers->FirstChildElement("imgbuffer"); xml_imgbuffer != nullptr; xml_imgbuffer = xml_imgbuffer->NextSiblingElement("imgbuffer")) {
             imgbuffers_[index_imgbuffers_] = create_imgbuffer(xml_imgbuffer);
             ++index_imgbuffers_;
         }
@@ -501,7 +497,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
 
     // Cameras (10)
     if (xml_cameras != nullptr) {
-        for (tinyxml2::XMLElement* xml_camera = xml_cameras->FirstChildElement("camera"); xml_camera; xml_camera = xml_camera->NextSiblingElement("camera")) {
+        for (tinyxml2::XMLElement* xml_camera = xml_cameras->FirstChildElement("camera"); xml_camera != nullptr; xml_camera = xml_camera->NextSiblingElement("camera")) {
             cameras_[index_cameras_] = create_camera(xml_camera, new_filename, xml_transform_matrices, xml_mediums, xml_imgbuffers, xml_skyboxes);
             ++index_cameras_;
         }
@@ -513,11 +509,11 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
     // Transform matrices
     if (xml_transform_matrices != nullptr) {
         size_t index = 0;
-        for (tinyxml2::XMLElement* xml_transform_matrix = xml_transform_matrices->FirstChildElement("transform_matrix"); xml_transform_matrix;
+        for (tinyxml2::XMLElement* xml_transform_matrix = xml_transform_matrices->FirstChildElement("transform_matrix"); xml_transform_matrix != nullptr;
              xml_transform_matrix                       = xml_transform_matrix->NextSiblingElement("transform_matrix")) {
             tinyxml2::XMLElement* transformations_pre = xml_transform_matrix->FirstChildElement("transformations_pre");
             if (transformations_pre != nullptr) {
-                for (tinyxml2::XMLElement* transformation_pre = transformations_pre->FirstChildElement("transformation_pre"); transformation_pre;
+                for (tinyxml2::XMLElement* transformation_pre = transformations_pre->FirstChildElement("transformation_pre"); transformation_pre != nullptr;
                      transformation_pre                       = transformation_pre->NextSiblingElement("transformation_pre")) {
                     apply_transformation(transform_matrices_[index].get(), transformation_pre);
                 }
@@ -531,7 +527,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
     if (!material_transformations.transformations_pre.empty()) {
         for (const auto& transformations_pre: material_transformations.transformations_pre) {
             auto* portal = transformations_pre.first;
-            for (const tinyxml2::XMLElement* transformation_pre = transformations_pre.second->FirstChildElement("transformation_pre"); transformation_pre;
+            for (const tinyxml2::XMLElement* transformation_pre = transformations_pre.second->FirstChildElement("transformation_pre"); transformation_pre != nullptr;
                  transformation_pre                             = transformation_pre->NextSiblingElement("transformation_pre")) {
                 apply_transformation(portal->transformation_, transformation_pre);
             }
@@ -543,7 +539,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
     if (!medium_transformations.transformations_pre.empty()) {
         for (const auto& transformations_pre: medium_transformations.transformations_pre) {
             auto* portal_scatterer = transformations_pre.first;
-            for (const tinyxml2::XMLElement* transformation_pre = transformations_pre.second->FirstChildElement("transformation_pre"); transformation_pre;
+            for (const tinyxml2::XMLElement* transformation_pre = transformations_pre.second->FirstChildElement("transformation_pre"); transformation_pre != nullptr;
                  transformation_pre                             = transformation_pre->NextSiblingElement("transformation_pre")) {
                 apply_transformation(portal_scatterer->transformation_, transformation_pre);
             }
@@ -554,11 +550,11 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
     // Directional lights
     if (xml_directional_lights != nullptr) {
         size_t index = 0;
-        for (tinyxml2::XMLElement* xml_directional_light = xml_directional_lights->FirstChildElement("directional_light"); xml_directional_light;
+        for (tinyxml2::XMLElement* xml_directional_light = xml_directional_lights->FirstChildElement("directional_light"); xml_directional_light != nullptr;
              xml_directional_light                       = xml_directional_light->NextSiblingElement("directional_light")) {
             tinyxml2::XMLElement* transformations_pre = xml_directional_light->FirstChildElement("transformations_pre");
             if (transformations_pre != nullptr) {
-                for (tinyxml2::XMLElement* transformation_pre = transformations_pre->FirstChildElement("transformation_pre"); transformation_pre;
+                for (tinyxml2::XMLElement* transformation_pre = transformations_pre->FirstChildElement("transformation_pre"); transformation_pre != nullptr;
                      transformation_pre                       = transformation_pre->NextSiblingElement("transformation_pre")) {
                     apply_transformation(directional_lights_[index]->transformation_, transformation_pre);
                 }
@@ -571,11 +567,11 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
     // Objects
     if (xml_objects != nullptr) {
         size_t index = 0;
-        for (tinyxml2::XMLElement* xml_object = xml_objects->FirstChildElement("object"); xml_object; xml_object = xml_object->NextSiblingElement("object")) {
+        for (tinyxml2::XMLElement* xml_object = xml_objects->FirstChildElement("object"); xml_object != nullptr; xml_object = xml_object->NextSiblingElement("object")) {
             tinyxml2::XMLElement* transformations_pre = xml_object->FirstChildElement("transformations_pre");
             if (transformations_pre != nullptr) {
                 TransformMatrix_t* transform_matrix = (objects_[index] != nullptr) ? objects_[index]->transformation_ : meshes_[index]->transformation_;
-                for (tinyxml2::XMLElement* transformation_pre = transformations_pre->FirstChildElement("transformation_pre"); transformation_pre;
+                for (tinyxml2::XMLElement* transformation_pre = transformations_pre->FirstChildElement("transformation_pre"); transformation_pre != nullptr;
                      transformation_pre                       = transformation_pre->NextSiblingElement("transformation_pre")) {
                     apply_transformation(transform_matrix, transformation_pre);
                 }
@@ -588,10 +584,10 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
     // Cameras
     if (xml_cameras != nullptr) {
         size_t index = 0;
-        for (tinyxml2::XMLElement* xml_camera = xml_cameras->FirstChildElement("camera"); xml_camera; xml_camera = xml_camera->NextSiblingElement("camera")) {
+        for (tinyxml2::XMLElement* xml_camera = xml_cameras->FirstChildElement("camera"); xml_camera != nullptr; xml_camera = xml_camera->NextSiblingElement("camera")) {
             tinyxml2::XMLElement* transformations_pre = xml_camera->FirstChildElement("transformations_pre");
             if (transformations_pre != nullptr) {
-                for (tinyxml2::XMLElement* transformation_pre = transformations_pre->FirstChildElement("transformation_pre"); transformation_pre;
+                for (tinyxml2::XMLElement* transformation_pre = transformations_pre->FirstChildElement("transformation_pre"); transformation_pre != nullptr;
                      transformation_pre                       = transformation_pre->NextSiblingElement("transformation_pre")) {
                     apply_transformation(cameras_[index]->transformation_, transformation_pre);
                 }
@@ -632,17 +628,17 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
         camera->update();
     }
     auto t_end = std::chrono::high_resolution_clock::now();
-    std::cout << "Scene updated in " << std::chrono::duration<double, std::milli>(t_end - t_start).count() / 1000.0 << "s." << std::endl << std::endl;
+    std::cout << "Scene updated in " << std::chrono::duration<double>(t_end - t_start).count() << "s." << std::endl << std::endl;
 
     // Updating post
     // Transform matrices
     if (xml_transform_matrices != nullptr) {
         size_t index = 0;
-        for (tinyxml2::XMLElement* xml_transform_matrix = xml_transform_matrices->FirstChildElement("transform_matrix"); xml_transform_matrix;
+        for (tinyxml2::XMLElement* xml_transform_matrix = xml_transform_matrices->FirstChildElement("transform_matrix"); xml_transform_matrix != nullptr;
              xml_transform_matrix                       = xml_transform_matrix->NextSiblingElement("transform_matrix")) {
             tinyxml2::XMLElement* transformations_post = xml_transform_matrix->FirstChildElement("transformations_post");
             if (transformations_post != nullptr) {
-                for (tinyxml2::XMLElement* transformation_post = transformations_post->FirstChildElement("transformation_post"); transformation_post;
+                for (tinyxml2::XMLElement* transformation_post = transformations_post->FirstChildElement("transformation_post"); transformation_post != nullptr;
                      transformation_post                       = transformation_post->NextSiblingElement("transformation_post")) {
                     apply_transformation(transform_matrices_[index].get(), transformation_post);
                 }
@@ -656,7 +652,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
     if (!material_transformations.transformations_post.empty()) {
         for (const auto& transformations_post: material_transformations.transformations_post) {
             auto* portal = transformations_post.first;
-            for (const tinyxml2::XMLElement* transformation_post = transformations_post.second->FirstChildElement("transformation_post"); transformation_post;
+            for (const tinyxml2::XMLElement* transformation_post = transformations_post.second->FirstChildElement("transformation_post"); transformation_post != nullptr;
                  transformation_post                             = transformation_post->NextSiblingElement("transformation_post")) {
                 apply_transformation(portal->transformation_, transformation_post);
             }
@@ -668,7 +664,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
     if (!medium_transformations.transformations_post.empty()) {
         for (const auto& transformations_post: medium_transformations.transformations_post) {
             auto* portal_scatterer = transformations_post.first;
-            for (const tinyxml2::XMLElement* transformation_post = transformations_post.second->FirstChildElement("transformation_post"); transformation_post;
+            for (const tinyxml2::XMLElement* transformation_post = transformations_post.second->FirstChildElement("transformation_post"); transformation_post != nullptr;
                  transformation_post                             = transformation_post->NextSiblingElement("transformation_post")) {
                 apply_transformation(portal_scatterer->transformation_, transformation_post);
             }
@@ -679,11 +675,11 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
     // Directional lights
     if (xml_directional_lights != nullptr) {
         size_t index = 0;
-        for (tinyxml2::XMLElement* xml_directional_light = xml_directional_lights->FirstChildElement("directional_light"); xml_directional_light;
+        for (tinyxml2::XMLElement* xml_directional_light = xml_directional_lights->FirstChildElement("directional_light"); xml_directional_light != nullptr;
              xml_directional_light                       = xml_directional_light->NextSiblingElement("directional_light")) {
             tinyxml2::XMLElement* transformations_post = xml_directional_light->FirstChildElement("transformations_post");
             if (transformations_post != nullptr) {
-                for (tinyxml2::XMLElement* transformation_post = transformations_post->FirstChildElement("transformation_post"); transformation_post;
+                for (tinyxml2::XMLElement* transformation_post = transformations_post->FirstChildElement("transformation_post"); transformation_post != nullptr;
                      transformation_post                       = transformation_post->NextSiblingElement("transformation_post")) {
                     apply_transformation(directional_lights_[index]->transformation_, transformation_post);
                 }
@@ -696,11 +692,11 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
     // Objects
     if (xml_objects != nullptr) {
         size_t index = 0;
-        for (tinyxml2::XMLElement* xml_object = xml_objects->FirstChildElement("object"); xml_object; xml_object = xml_object->NextSiblingElement("object")) {
+        for (tinyxml2::XMLElement* xml_object = xml_objects->FirstChildElement("object"); xml_object != nullptr; xml_object = xml_object->NextSiblingElement("object")) {
             tinyxml2::XMLElement* transformations_post = xml_object->FirstChildElement("transformations_post");
             if (transformations_post != nullptr) {
                 TransformMatrix_t* transform_matrix = (objects_[index] != nullptr) ? objects_[index]->transformation_ : meshes_[index]->transformation_;
-                for (tinyxml2::XMLElement* transformation_post = transformations_post->FirstChildElement("transformation_post"); transformation_post;
+                for (tinyxml2::XMLElement* transformation_post = transformations_post->FirstChildElement("transformation_post"); transformation_post != nullptr;
                      transformation_post                       = transformation_post->NextSiblingElement("transformation_post")) {
                     apply_transformation(transform_matrix, transformation_post);
                 }
@@ -716,7 +712,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
     t_start = std::chrono::high_resolution_clock::now();
     scene_->update();
     t_end = std::chrono::high_resolution_clock::now();
-    std::cout << "Scene updated in " << std::chrono::duration<double, std::milli>(t_end - t_start).count() / 1000.0 << "s." << std::endl << std::endl;
+    std::cout << "Scene updated in " << std::chrono::duration<double>(t_end - t_start).count() << "s." << std::endl << std::endl;
 
     // Acceleration structure build
     std::cout << "Building acceleration structure..." << std::endl;
@@ -726,12 +722,12 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
     create_acceleration_structure(xml_acceleration_structure);
     t_end = std::chrono::high_resolution_clock::now();
 
-    std::cout << "Acceleration structure built in " << std::chrono::duration<double, std::milli>(t_end - t_start).count() / 1000.0 << "s." << std::endl << std::endl;
+    std::cout << "Acceleration structure built in " << std::chrono::duration<double>(t_end - t_start).count() << "s." << std::endl << std::endl;
 
     // Autofocus
     if (xml_cameras != nullptr) {
         size_t index = 0;
-        for (tinyxml2::XMLElement* xml_camera = xml_cameras->FirstChildElement("camera"); xml_camera; xml_camera = xml_camera->NextSiblingElement("camera")) {
+        for (tinyxml2::XMLElement* xml_camera = xml_cameras->FirstChildElement("camera"); xml_camera != nullptr; xml_camera = xml_camera->NextSiblingElement("camera")) {
             const char* focus_distance_char = xml_camera->Attribute("focus_distance");
             if (focus_distance_char != nullptr) {
                 std::string focus_distance = focus_distance_char;
@@ -758,10 +754,10 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
     // Cameras
     if (xml_cameras != nullptr) {
         size_t index = 0;
-        for (tinyxml2::XMLElement* xml_camera = xml_cameras->FirstChildElement("camera"); xml_camera; xml_camera = xml_camera->NextSiblingElement("camera")) {
+        for (tinyxml2::XMLElement* xml_camera = xml_cameras->FirstChildElement("camera"); xml_camera != nullptr; xml_camera = xml_camera->NextSiblingElement("camera")) {
             tinyxml2::XMLElement* transformations_post = xml_camera->FirstChildElement("transformations_post");
             if (transformations_post != nullptr) {
-                for (tinyxml2::XMLElement* transformation_post = transformations_post->FirstChildElement("transformation_post"); transformation_post;
+                for (tinyxml2::XMLElement* transformation_post = transformations_post->FirstChildElement("transformation_post"); transformation_post != nullptr;
                      transformation_post                       = transformation_post->NextSiblingElement("transformation_post")) {
                     apply_transformation(cameras_[index]->transformation_, transformation_post);
                 }
@@ -789,7 +785,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
         camera_write_interval_ = std::vector<unsigned int>(cameras_.size(), 0);
 
         size_t index = 0;
-        for (tinyxml2::XMLElement* xml_camera = xml_cameras->FirstChildElement("camera"); xml_camera; xml_camera = xml_camera->NextSiblingElement("camera")) {
+        for (tinyxml2::XMLElement* xml_camera = xml_cameras->FirstChildElement("camera"); xml_camera != nullptr; xml_camera = xml_camera->NextSiblingElement("camera")) {
             std::string render_mode;
             const char* render_mode_char = xml_camera->Attribute("rendermode");
             if (render_mode_char == nullptr) {
@@ -816,7 +812,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
 
                 std::transform(n_iter.begin(), n_iter.end(), n_iter.begin(), ::tolower);
                 if (n_iter == "inf") {
-                    camera_n_iter_[index] = 1000000000;
+                    camera_n_iter_[index] = std::numeric_limits<decltype(camera_n_iter_[index])>::max();
                 }
                 else {
                     camera_n_iter_[index] = std::stoi(n_iter);
@@ -987,7 +983,7 @@ auto APTracer::Entities::SceneContext_t::create_transform_matrix(const tinyxml2:
         return std::make_unique<TransformMatrix_t>();
     }
 
-    std::array<double, 16> values;
+    std::array<double, 16> values{};
     unsigned int count = 0;
     std::stringstream ss(string_transform_matrix);
 
@@ -1395,7 +1391,7 @@ auto APTracer::Entities::SceneContext_t::create_material(const tinyxml2::XMLElem
         require_attributes(xml_material, attributes);
         materials_aggregate_list = std::make_unique<std::tuple<std::unique_ptr<std::list<size_t>>, std::unique_ptr<std::list<std::string>>>>(
             get_material_index_list(xml_material->Attribute("materials_list"), xml_materials), get_medium_names(xml_material->Attribute("materials_names"))); // wtf
-        return std::unique_ptr<Material_t>();
+        return {};
         // CHECK add aggregates
     }
 
@@ -1457,7 +1453,7 @@ auto APTracer::Entities::SceneContext_t::create_object(const tinyxml2::XMLElemen
     if (type == "mesh") {
         const std::vector<const char*> attributes = {"material", "transform_matrix", "mesh_geometry"};
         require_attributes(xml_object, attributes);
-        size_t material_index = get_material_index(xml_object->Attribute("material"), xml_materials);
+        const size_t material_index = get_material_index(xml_object->Attribute("material"), xml_materials);
         if (material_aggregates_[material_index]) {
             mesh = std::make_unique<Mesh_t>(material_aggregates_[material_index].get(),
                                             get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices),
@@ -1473,7 +1469,7 @@ auto APTracer::Entities::SceneContext_t::create_object(const tinyxml2::XMLElemen
     if (type == "mesh_motionblur") {
         const std::vector<const char*> attributes = {"material", "transform_matrix", "mesh_geometry"};
         require_attributes(xml_object, attributes);
-        size_t material_index = get_material_index(xml_object->Attribute("material"), xml_materials);
+        const size_t material_index = get_material_index(xml_object->Attribute("material"), xml_materials);
         if (material_aggregates_[material_index]) {
             mesh = std::make_unique<MeshMotionblur_t>(material_aggregates_[material_index].get(),
                                                       get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices),
@@ -2063,7 +2059,7 @@ auto APTracer::Entities::SceneContext_t::create_camera(const tinyxml2::XMLElemen
     exit(100);
 }
 
-auto APTracer::Entities::SceneContext_t::create_acceleration_structure(const tinyxml2::XMLElement* xml_acceleration_structure) -> void {
+auto APTracer::Entities::SceneContext_t::create_acceleration_structure(const tinyxml2::XMLElement* xml_acceleration_structure) const -> void {
     if (xml_acceleration_structure == nullptr) {
         scene_->acc_ = std::make_unique<APTracer::Acceleration::AccelerationMultiGridVector_t>(scene_->geometry_, 1, 128, 32, 1);
         return;
@@ -2132,7 +2128,7 @@ auto APTracer::Entities::SceneContext_t::get_transform_matrix(std::string transf
 
     if (xml_transform_matrices != nullptr) {
         size_t index = 0;
-        for (const tinyxml2::XMLElement* xml_transform_matrix = xml_transform_matrices->FirstChildElement("transform_matrix"); xml_transform_matrix;
+        for (const tinyxml2::XMLElement* xml_transform_matrix = xml_transform_matrices->FirstChildElement("transform_matrix"); xml_transform_matrix != nullptr;
              xml_transform_matrix                             = xml_transform_matrix->NextSiblingElement("transform_matrix")) {
             const char* transform_matrix_char = xml_transform_matrix->Attribute("name");
             if (transform_matrix_char != nullptr) {
@@ -2155,7 +2151,7 @@ auto APTracer::Entities::SceneContext_t::get_transform_matrix(std::string transf
 
 auto APTracer::Entities::SceneContext_t::get_material_index_list(std::string string_material_list, const tinyxml2::XMLElement* xml_materials) -> std::unique_ptr<std::list<size_t>> {
     std::unique_ptr<std::list<size_t>> material_list = std::make_unique<std::list<size_t>>();
-    std::string delimiter                            = ", ";
+    const std::string delimiter                      = ", ";
     size_t pos                                       = 0;
     std::string token;
 
@@ -2170,7 +2166,7 @@ auto APTracer::Entities::SceneContext_t::get_material_index_list(std::string str
                 bool missing = true;
                 std::transform(token.begin(), token.end(), token.begin(), ::tolower);
                 size_t index = 0;
-                for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")) {
+                for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material != nullptr; xml_material = xml_material->NextSiblingElement("material")) {
                     const char* material_char = xml_material->Attribute("name");
                     if (material_char != nullptr) {
                         std::string name_material = material_char;
@@ -2205,7 +2201,7 @@ auto APTracer::Entities::SceneContext_t::get_material_index_list(std::string str
             bool missing = true;
             std::transform(string_material_list.begin(), string_material_list.end(), string_material_list.begin(), ::tolower);
             size_t index = 0;
-            for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")) {
+            for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material != nullptr; xml_material = xml_material->NextSiblingElement("material")) {
                 const char* material_char = xml_material->Attribute("name");
                 if (material_char != nullptr) {
                     std::string name_material = material_char;
@@ -2233,8 +2229,8 @@ auto APTracer::Entities::SceneContext_t::get_material_index_list(std::string str
 
 auto APTracer::Entities::SceneContext_t::get_medium_index_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_mediums) -> std::list<size_t> {
     std::list<size_t> medium_list;
-    std::string delimiter = ", ";
-    size_t pos            = 0;
+    const std::string delimiter = ", ";
+    size_t pos                  = 0;
     std::string token;
 
     while ((pos = string_medium_list.find(delimiter)) != std::string::npos) {
@@ -2248,7 +2244,7 @@ auto APTracer::Entities::SceneContext_t::get_medium_index_list(std::string strin
                 bool missing = true;
                 std::transform(token.begin(), token.end(), token.begin(), ::tolower);
                 size_t index = 0;
-                for (const tinyxml2::XMLElement* xml_medium = xml_mediums->FirstChildElement("medium"); xml_medium; xml_medium = xml_medium->NextSiblingElement("medium")) {
+                for (const tinyxml2::XMLElement* xml_medium = xml_mediums->FirstChildElement("medium"); xml_medium != nullptr; xml_medium = xml_medium->NextSiblingElement("medium")) {
                     const char* medium_char = xml_medium->Attribute("name");
                     if (medium_char != nullptr) {
                         std::string name_medium = medium_char;
@@ -2283,7 +2279,7 @@ auto APTracer::Entities::SceneContext_t::get_medium_index_list(std::string strin
             bool missing = true;
             std::transform(string_medium_list.begin(), string_medium_list.end(), string_medium_list.begin(), ::tolower);
             size_t index = 0;
-            for (const tinyxml2::XMLElement* xml_medium = xml_mediums->FirstChildElement("medium"); xml_medium; xml_medium = xml_medium->NextSiblingElement("medium")) {
+            for (const tinyxml2::XMLElement* xml_medium = xml_mediums->FirstChildElement("medium"); xml_medium != nullptr; xml_medium = xml_medium->NextSiblingElement("medium")) {
                 const char* medium_char = xml_medium->Attribute("name");
                 if (medium_char != nullptr) {
                     std::string name_medium = medium_char;
@@ -2311,7 +2307,7 @@ auto APTracer::Entities::SceneContext_t::get_medium_index_list(std::string strin
 
 auto APTracer::Entities::SceneContext_t::get_medium_list(std::string string_medium_list, const tinyxml2::XMLElement* xml_mediums) const -> std::list<Medium_t*> {
     std::list<Medium_t*> medium_list = std::list<Medium_t*>(); // CHECK full of dynamic casts with no checks... should maybe check for errors
-    std::string delimiter            = ", ";
+    const std::string delimiter      = ", ";
     size_t pos                       = 0;
     std::string token;
 
@@ -2326,7 +2322,7 @@ auto APTracer::Entities::SceneContext_t::get_medium_list(std::string string_medi
                 bool missing = true;
                 std::transform(token.begin(), token.end(), token.begin(), ::tolower);
                 size_t index = 0;
-                for (const tinyxml2::XMLElement* xml_medium = xml_mediums->FirstChildElement("medium"); xml_medium; xml_medium = xml_medium->NextSiblingElement("medium")) {
+                for (const tinyxml2::XMLElement* xml_medium = xml_mediums->FirstChildElement("medium"); xml_medium != nullptr; xml_medium = xml_medium->NextSiblingElement("medium")) {
                     const char* medium_char = xml_medium->Attribute("name");
                     if (medium_char != nullptr) {
                         std::string name_medium = medium_char;
@@ -2361,7 +2357,7 @@ auto APTracer::Entities::SceneContext_t::get_medium_list(std::string string_medi
             bool missing = true;
             std::transform(string_medium_list.begin(), string_medium_list.end(), string_medium_list.begin(), ::tolower);
             size_t index = 0;
-            for (const tinyxml2::XMLElement* xml_medium = xml_mediums->FirstChildElement("medium"); xml_medium; xml_medium = xml_medium->NextSiblingElement("medium")) {
+            for (const tinyxml2::XMLElement* xml_medium = xml_mediums->FirstChildElement("medium"); xml_medium != nullptr; xml_medium = xml_medium->NextSiblingElement("medium")) {
                 const char* medium_char = xml_medium->Attribute("name");
                 if (medium_char != nullptr) {
                     std::string name_medium = medium_char;
@@ -2395,7 +2391,7 @@ auto APTracer::Entities::SceneContext_t::get_texture(std::string texture, const 
     if (xml_textures != nullptr) {
         std::transform(texture.begin(), texture.end(), texture.begin(), ::tolower);
         size_t index = 0;
-        for (const tinyxml2::XMLElement* xml_texture = xml_textures->FirstChildElement("texture"); xml_texture; xml_texture = xml_texture->NextSiblingElement("texture")) {
+        for (const tinyxml2::XMLElement* xml_texture = xml_textures->FirstChildElement("texture"); xml_texture != nullptr; xml_texture = xml_texture->NextSiblingElement("texture")) {
             const char* name_char = xml_texture->Attribute("name");
             if (name_char != nullptr) {
                 std::string name_texture = name_char;
@@ -2413,7 +2409,7 @@ auto APTracer::Entities::SceneContext_t::get_texture(std::string texture, const 
 }
 
 auto APTracer::Entities::SceneContext_t::get_material_mix(std::string material_refracted, std::string material_reflected, const tinyxml2::XMLElement* xml_materials) -> std::array<size_t, 2> {
-    std::array<size_t, 2> output_materials;
+    std::array<size_t, 2> output_materials{};
 
     if (is_number(material_refracted)) {
         output_materials[0] = std::stoi(material_refracted) - 1;
@@ -2423,7 +2419,7 @@ auto APTracer::Entities::SceneContext_t::get_material_mix(std::string material_r
             std::transform(material_refracted.begin(), material_refracted.end(), material_refracted.begin(), ::tolower);
             bool material_missing = true;
             size_t index          = 0;
-            for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")) {
+            for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material != nullptr; xml_material = xml_material->NextSiblingElement("material")) {
                 const char* name_char = xml_material->Attribute("name");
                 if (name_char != nullptr) {
                     std::string name_material = name_char;
@@ -2455,7 +2451,7 @@ auto APTracer::Entities::SceneContext_t::get_material_mix(std::string material_r
             std::transform(material_reflected.begin(), material_reflected.end(), material_reflected.begin(), ::tolower);
             bool material_missing = true;
             size_t index          = 0;
-            for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")) {
+            for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material != nullptr; xml_material = xml_material->NextSiblingElement("material")) {
                 const char* name_char = xml_material->Attribute("name");
                 if (name_char != nullptr) {
                     std::string name_material = name_char;
@@ -2490,7 +2486,7 @@ auto APTracer::Entities::SceneContext_t::get_medium(std::string medium, const ti
     if (xml_mediums != nullptr) {
         std::transform(medium.begin(), medium.end(), medium.begin(), ::tolower);
         size_t index = 0;
-        for (const tinyxml2::XMLElement* xml_medium = xml_mediums->FirstChildElement("medium"); xml_medium; xml_medium = xml_medium->NextSiblingElement("medium")) {
+        for (const tinyxml2::XMLElement* xml_medium = xml_mediums->FirstChildElement("medium"); xml_medium != nullptr; xml_medium = xml_medium->NextSiblingElement("medium")) {
             const char* name_char = xml_medium->Attribute("name");
             if (name_char != nullptr) {
                 std::string name_medium = name_char;
@@ -2518,7 +2514,7 @@ auto APTracer::Entities::SceneContext_t::get_mesh_geometry(std::string mesh_geom
     if (xml_mesh_geometries != nullptr) {
         std::transform(mesh_geometry.begin(), mesh_geometry.end(), mesh_geometry.begin(), ::tolower);
         size_t index = 0;
-        for (const tinyxml2::XMLElement* xml_mesh_geometry = xml_mesh_geometries->FirstChildElement("mesh_geometry"); xml_mesh_geometry;
+        for (const tinyxml2::XMLElement* xml_mesh_geometry = xml_mesh_geometries->FirstChildElement("mesh_geometry"); xml_mesh_geometry != nullptr;
              xml_mesh_geometry                             = xml_mesh_geometry->NextSiblingElement("mesh_geometry")) {
             const char* name_char = xml_mesh_geometry->Attribute("name");
             if (name_char != nullptr) {
@@ -2544,7 +2540,7 @@ auto APTracer::Entities::SceneContext_t::get_material_index(std::string material
     if (xml_materials != nullptr) {
         std::transform(material.begin(), material.end(), material.begin(), ::tolower);
         size_t index = 0;
-        for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")) {
+        for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material != nullptr; xml_material = xml_material->NextSiblingElement("material")) {
             const char* name_char = xml_material->Attribute("name");
             if (name_char != nullptr) {
                 std::string name_material = name_char;
@@ -2569,7 +2565,7 @@ auto APTracer::Entities::SceneContext_t::get_material(std::string material, cons
     if (xml_materials != nullptr) {
         std::transform(material.begin(), material.end(), material.begin(), ::tolower);
         size_t index = 0;
-        for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material; xml_material = xml_material->NextSiblingElement("material")) {
+        for (const tinyxml2::XMLElement* xml_material = xml_materials->FirstChildElement("material"); xml_material != nullptr; xml_material = xml_material->NextSiblingElement("material")) {
             const char* name_char = xml_material->Attribute("name");
             if (name_char != nullptr) {
                 std::string name_material = name_char;
@@ -2588,7 +2584,7 @@ auto APTracer::Entities::SceneContext_t::get_material(std::string material, cons
 
 auto APTracer::Entities::SceneContext_t::get_lights(std::string lights_string, const tinyxml2::XMLElement* xml_directional_lights) const -> std::vector<DirectionalLight_t*> {
     std::list<DirectionalLight_t*> lights_list = std::list<DirectionalLight_t*>();
-    std::string delimiter                      = ", ";
+    const std::string delimiter                = ", ";
     size_t pos                                 = 0;
     std::string token;
 
@@ -2603,7 +2599,7 @@ auto APTracer::Entities::SceneContext_t::get_lights(std::string lights_string, c
                 bool missing = true;
                 std::transform(token.begin(), token.end(), token.begin(), ::tolower);
                 size_t index = 0;
-                for (const tinyxml2::XMLElement* xml_directional_light = xml_directional_lights->FirstChildElement("directional_light"); xml_directional_light;
+                for (const tinyxml2::XMLElement* xml_directional_light = xml_directional_lights->FirstChildElement("directional_light"); xml_directional_light != nullptr;
                      xml_directional_light                             = xml_directional_light->NextSiblingElement("directional_light")) {
                     const char* name_char = xml_directional_light->Attribute("name");
                     if (name_char != nullptr) {
@@ -2637,7 +2633,7 @@ auto APTracer::Entities::SceneContext_t::get_lights(std::string lights_string, c
             bool missing = true;
             std::transform(lights_string.begin(), lights_string.end(), lights_string.begin(), ::tolower);
             size_t index = 0;
-            for (const tinyxml2::XMLElement* xml_directional_light = xml_directional_lights->FirstChildElement("directional_light"); xml_directional_light;
+            for (const tinyxml2::XMLElement* xml_directional_light = xml_directional_lights->FirstChildElement("directional_light"); xml_directional_light != nullptr;
                  xml_directional_light                             = xml_directional_light->NextSiblingElement("directional_light")) {
                 const char* name_char = xml_directional_light->Attribute("name");
                 if (name_char != nullptr) {
@@ -2679,7 +2675,7 @@ auto APTracer::Entities::SceneContext_t::get_imgbuffer(std::string imgbuffer, co
     if (xml_imgbuffers != nullptr) {
         std::transform(imgbuffer.begin(), imgbuffer.end(), imgbuffer.begin(), ::tolower);
         size_t index = 0;
-        for (const tinyxml2::XMLElement* xml_imgbuffer = xml_imgbuffers->FirstChildElement("imgbuffer"); xml_imgbuffer; xml_imgbuffer = xml_imgbuffer->NextSiblingElement("imgbuffer")) {
+        for (const tinyxml2::XMLElement* xml_imgbuffer = xml_imgbuffers->FirstChildElement("imgbuffer"); xml_imgbuffer != nullptr; xml_imgbuffer = xml_imgbuffer->NextSiblingElement("imgbuffer")) {
             const char* name_char = xml_imgbuffer->Attribute("name");
             if (name_char != nullptr) {
                 std::string name_imgbuffer = name_char;
@@ -2704,7 +2700,7 @@ auto APTracer::Entities::SceneContext_t::get_skybox(std::string skybox, const ti
     if (xml_skyboxes != nullptr) {
         std::transform(skybox.begin(), skybox.end(), skybox.begin(), ::tolower);
         size_t index = 0;
-        for (const tinyxml2::XMLElement* xml_skybox = xml_skyboxes->FirstChildElement("skybox"); xml_skybox; xml_skybox = xml_skybox->NextSiblingElement("skybox")) {
+        for (const tinyxml2::XMLElement* xml_skybox = xml_skyboxes->FirstChildElement("skybox"); xml_skybox != nullptr; xml_skybox = xml_skybox->NextSiblingElement("skybox")) {
             const char* name_char = xml_skybox->Attribute("name");
             if (name_char != nullptr) {
                 std::string name_skybox = name_char;
@@ -2724,7 +2720,7 @@ auto APTracer::Entities::SceneContext_t::get_skybox(std::string skybox, const ti
 auto APTracer::Entities::SceneContext_t::get_objects(std::string objects_string, std::vector<Shape_t*>& shapes, std::vector<MeshTop_t*>& meshes, const tinyxml2::XMLElement* xml_objects) const
     -> void {
     std::list<size_t> objects_list = std::list<size_t>();
-    std::string delimiter          = ", ";
+    const std::string delimiter    = ", ";
     size_t pos                     = 0;
     std::string token;
     size_t n_shapes = 0;
@@ -2741,7 +2737,7 @@ auto APTracer::Entities::SceneContext_t::get_objects(std::string objects_string,
                 bool missing = true;
                 std::transform(token.begin(), token.end(), token.begin(), ::tolower);
                 size_t index = 0;
-                for (const tinyxml2::XMLElement* xml_object = xml_objects->FirstChildElement("object"); xml_object; xml_object = xml_object->NextSiblingElement("object")) {
+                for (const tinyxml2::XMLElement* xml_object = xml_objects->FirstChildElement("object"); xml_object != nullptr; xml_object = xml_object->NextSiblingElement("object")) {
                     const char* name_char = xml_object->Attribute("name");
                     if (name_char != nullptr) {
                         std::string name_object = name_char;
@@ -2774,7 +2770,7 @@ auto APTracer::Entities::SceneContext_t::get_objects(std::string objects_string,
             bool missing = true;
             std::transform(objects_string.begin(), objects_string.end(), objects_string.begin(), ::tolower);
             size_t index = 0;
-            for (const tinyxml2::XMLElement* xml_object = xml_objects->FirstChildElement("object"); xml_object; xml_object = xml_object->NextSiblingElement("object")) {
+            for (const tinyxml2::XMLElement* xml_object = xml_objects->FirstChildElement("object"); xml_object != nullptr; xml_object = xml_object->NextSiblingElement("object")) {
                 const char* name_char = xml_object->Attribute("name");
                 if (name_char != nullptr) {
                     std::string name_object = name_char;
@@ -2860,7 +2856,7 @@ auto APTracer::get_colour(std::string colour) -> Vec3f {
         return it->second;
     }
 
-    std::array<double, 3> values;
+    std::array<double, 3> values{};
     unsigned int count = 0;
     std::stringstream ss(colour);
 
@@ -2888,7 +2884,7 @@ auto APTracer::get_points(std::string points_string) -> std::vector<Vec3f> {
 
     if (points_string != "nan") {
         points = std::vector<Vec3f>(3);
-        std::array<double, 9> values;
+        std::array<double, 9> values{};
         unsigned int count = 0;
         std::stringstream ss(points_string);
 
@@ -2947,7 +2943,7 @@ auto APTracer::get_texture_coordinates(std::string texture_coordinates_string) -
 
 auto APTracer::get_medium_names(std::string string_medium_names) -> std::unique_ptr<std::list<std::string>> {
     std::unique_ptr<std::list<std::string>> medium_names = std::make_unique<std::list<std::string>>();
-    std::string delimiter                                = ", ";
+    const std::string delimiter                          = ", ";
     size_t pos                                           = 0;
 
     while ((pos = string_medium_names.find(delimiter)) != std::string::npos) {
@@ -2960,7 +2956,7 @@ auto APTracer::get_medium_names(std::string string_medium_names) -> std::unique_
 }
 
 auto APTracer::is_number(const std::string& s) -> bool {
-    return !s.empty() && std::find_if(s.begin(), s.end(), [](char c) { return !std::isdigit(c); }) == s.end();
+    return !s.empty() && std::find_if(s.begin(), s.end(), [](char c) { return std::isdigit(c) == 0; }) == s.end();
 }
 
 auto APTracer::apply_transformation(TransformMatrix_t* transform_matrix, const tinyxml2::XMLElement* transform) -> void {
@@ -3070,11 +3066,11 @@ auto APTracer::require_attributes(const tinyxml2::XMLElement* element, const std
         const char* value = element->Attribute(attribute);
         if (value == nullptr) {
             if (!missing) {
-                missing               = true;
-                const char* name_char = element->Attribute("name");
-                const char* type_type = element->Attribute("type");
-                std::string name      = (name_char == nullptr) ? "" : name_char;
-                std::string type      = (type_type == nullptr) ? "" : type_type;
+                missing                = true;
+                const char* name_char  = element->Attribute("name");
+                const char* type_type  = element->Attribute("type");
+                const std::string name = (name_char == nullptr) ? "" : name_char;
+                const std::string type = (type_type == nullptr) ? "" : type_type;
                 std::cerr << "Error: " << element->Name() << " XML element with name '" << name << "' and type '" << type << "' has the following attributes missing:" << std::endl;
             }
             std::cerr << '\t' << attribute << std::endl;
