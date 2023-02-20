@@ -29,11 +29,12 @@ Texture_t::Texture_t(const std::string& filename) {
 
     if (extension == "jpeg" || extension == "jpg") {
         image.load_jpeg(filename.c_str());
-        constexpr unsigned int bit_depth = 8;
-        image /= (std::pow(2.0, bit_depth) - 1.0); // Normalizing by bit depth
+        // 1/(std::pow(2.0, bit_depth) - 1.0)
+        constexpr double bit_multiplier = 1/255.0; // 8 bits, with msvc std::pow is not constexpr :(
+        image *= bit_multiplier; // Normalizing by bit depth
     }
     else if (extension == "png") {
-        unsigned int bit_depth;
+        unsigned int bit_depth = 8;
         image.load_png(filename.c_str(), &bit_depth);
         image /= (std::pow(2.0, bit_depth) - 1.0); // Normalizing by bit depth
     }
@@ -43,13 +44,15 @@ Texture_t::Texture_t(const std::string& filename) {
     }
     else if (extension == "hdr") {
         image.load(filename.c_str());
-        constexpr unsigned int bit_depth = 16;
-        image /= (std::pow(2.0, bit_depth) - 1.0); // Normalizing by bit depth
+        // 1/(std::pow(2.0, bit_depth) - 1.0)
+        constexpr double bit_multiplier = 1/65535.0; // 16 bits, with msvc std::pow is not constexpr :(
+        image *= bit_multiplier; // Normalizing by bit depth
     }
     else {
         image.load(filename.c_str());
-        constexpr unsigned int bit_depth = 8;
-        image /= (std::pow(2.0, bit_depth) - 1.0); // Normalizing by bit depth
+        // 1/(std::pow(2.0, bit_depth) - 1.0)
+        constexpr double bit_multiplier = 1/255.0; // 8 bits, with msvc std::pow is not constexpr :(
+        image *= bit_multiplier; // Normalizing by bit depth
     }
 
     size_x_ = image.width();

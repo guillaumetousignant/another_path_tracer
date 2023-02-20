@@ -812,7 +812,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
 
                 std::transform(n_iter.begin(), n_iter.end(), n_iter.begin(), ::tolower);
                 if (n_iter == "inf") {
-                    camera_n_iter_[index] = std::numeric_limits<decltype(camera_n_iter_[index])>::max();
+                    camera_n_iter_[index] = std::numeric_limits<std::remove_reference<decltype(camera_n_iter_[index])>::type>::max();
                 }
                 else {
                     camera_n_iter_[index] = std::stoi(n_iter);
@@ -983,18 +983,19 @@ auto APTracer::Entities::SceneContext_t::create_transform_matrix(const tinyxml2:
         return std::make_unique<TransformMatrix_t>();
     }
 
-    std::array<double, 16> values{};
+    std::array<double, TransformMatrix_t::size_> values{};
     unsigned int count = 0;
     std::stringstream ss(string_transform_matrix);
 
     for (std::string s; ss >> s;) {
-        if (count < 16) {
+        if (count < values.size()) {
             values[count] = std::stod(s);
         }
         ++count;
     }
-    if (count != 16) {
-        std::cerr << "Warning: Transform matrix value should be 16 values separated by spaces, or nan. Current number of values is " << count << ". Using identity." << std::endl;
+    if (count != values.size()) {
+        std::cerr << "Warning: Transform matrix value should be " << TransformMatrix_t::size_ << " values separated by spaces, or nan. Current number of values is " << count << ". Using identity."
+                  << std::endl;
         return std::make_unique<TransformMatrix_t>();
     }
 
@@ -1680,7 +1681,8 @@ auto APTracer::Entities::SceneContext_t::create_imgbuffer(const tinyxml2::XMLEle
     }
 
     std::cerr << "Warning: Imgbuffer type '" << type << "' not implemented. Only 'imgbuffer', and 'imgbuffer_opengl' exist for now. Using 'imgbuffer'." << std::endl;
-    return std::make_unique<ImgBuffer_t>(300, 200);
+    constexpr std::array<size_t, 2> default_imgbuffer_size{300, 200};
+    return std::make_unique<ImgBuffer_t>(default_imgbuffer_size[0], default_imgbuffer_size[1]);
 }
 
 auto APTracer::Entities::SceneContext_t::create_camera(const tinyxml2::XMLElement* xml_camera,
@@ -2061,7 +2063,9 @@ auto APTracer::Entities::SceneContext_t::create_camera(const tinyxml2::XMLElemen
 
 auto APTracer::Entities::SceneContext_t::create_acceleration_structure(const tinyxml2::XMLElement* xml_acceleration_structure) const -> void {
     if (xml_acceleration_structure == nullptr) {
-        scene_->acc_ = std::make_unique<APTracer::Acceleration::AccelerationMultiGridVector_t>(scene_->geometry_, 1, 128, 32, 1);
+        constexpr size_t grid_max_res          = 128;
+        constexpr size_t grid_max_cell_content = 32;
+        scene_->acc_                           = std::make_unique<APTracer::Acceleration::AccelerationMultiGridVector_t>(scene_->geometry_, 1, grid_max_res, grid_max_cell_content, 1);
         return;
     }
 
@@ -2076,42 +2080,45 @@ auto APTracer::Entities::SceneContext_t::create_acceleration_structure(const tin
     }
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 
+    constexpr size_t default_max_resolution   = 128;
+    constexpr size_t default_max_cell_content = 32;
+
     if (type == "grid") {
         scene_->acc_ = std::make_unique<APTracer::Acceleration::AccelerationGrid_t>(
-            scene_->geometry_, xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128));
+            scene_->geometry_, xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", default_max_resolution));
     }
     else if (type == "grid_array") {
         scene_->acc_ = std::make_unique<APTracer::Acceleration::AccelerationGridArray_t>(
-            scene_->geometry_, xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128));
+            scene_->geometry_, xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", default_max_resolution));
     }
     else if (type == "grid_vector") {
         scene_->acc_ = std::make_unique<APTracer::Acceleration::AccelerationGridVector_t>(
-            scene_->geometry_, xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", 128));
+            scene_->geometry_, xml_acceleration_structure->UnsignedAttribute("min_resolution", 1), xml_acceleration_structure->UnsignedAttribute("max_resolution", default_max_resolution));
     }
     else if (type == "multi_grid") {
         scene_->acc_ = std::make_unique<APTracer::Acceleration::AccelerationMultiGrid_t>(scene_->geometry_,
                                                                                          xml_acceleration_structure->UnsignedAttribute("min_resolution", 1),
-                                                                                         xml_acceleration_structure->UnsignedAttribute("max_resolution", 128),
-                                                                                         xml_acceleration_structure->UnsignedAttribute("max_cell_content", 32),
+                                                                                         xml_acceleration_structure->UnsignedAttribute("max_resolution", default_max_resolution),
+                                                                                         xml_acceleration_structure->UnsignedAttribute("max_cell_content", default_max_cell_content),
                                                                                          xml_acceleration_structure->UnsignedAttribute("max_grid_level", 1));
     }
     else if (type == "multi_grid_array") {
         scene_->acc_ = std::make_unique<APTracer::Acceleration::AccelerationMultiGridArray_t>(scene_->geometry_,
                                                                                               xml_acceleration_structure->UnsignedAttribute("min_resolution", 1),
-                                                                                              xml_acceleration_structure->UnsignedAttribute("max_resolution", 128),
-                                                                                              xml_acceleration_structure->UnsignedAttribute("max_cell_content", 32),
+                                                                                              xml_acceleration_structure->UnsignedAttribute("max_resolution", default_max_resolution),
+                                                                                              xml_acceleration_structure->UnsignedAttribute("max_cell_content", default_max_cell_content),
                                                                                               xml_acceleration_structure->UnsignedAttribute("max_grid_level", 1));
     }
     else if (type == "multi_grid_vector") {
         scene_->acc_ = std::make_unique<APTracer::Acceleration::AccelerationMultiGridVector_t>(scene_->geometry_,
                                                                                                xml_acceleration_structure->UnsignedAttribute("min_resolution", 1),
-                                                                                               xml_acceleration_structure->UnsignedAttribute("max_resolution", 128),
-                                                                                               xml_acceleration_structure->UnsignedAttribute("max_cell_content", 32),
+                                                                                               xml_acceleration_structure->UnsignedAttribute("max_resolution", default_max_resolution),
+                                                                                               xml_acceleration_structure->UnsignedAttribute("max_cell_content", default_max_cell_content),
                                                                                                xml_acceleration_structure->UnsignedAttribute("max_grid_level", 1));
     }
     else {
         std::cerr << "Warning: Acceleration structure type '" << type << "' not implemented. Using 'multi_grid_vector'." << std::endl;
-        scene_->acc_ = std::make_unique<APTracer::Acceleration::AccelerationMultiGridVector_t>(scene_->geometry_, 1, 128, 32, 1);
+        scene_->acc_ = std::make_unique<APTracer::Acceleration::AccelerationMultiGridVector_t>(scene_->geometry_, 1, default_max_resolution, default_max_cell_content, 1);
     }
 }
 
@@ -2851,9 +2858,9 @@ auto APTracer::Entities::SceneContext_t::get_objects(std::vector<Shape_t*>& shap
 auto APTracer::get_colour(std::string colour) -> Vec3f {
     std::transform(colour.begin(), colour.end(), colour.begin(), ::tolower);
 
-    auto it = APTracer::Colours::colours.find(colour);
-    if (it != APTracer::Colours::colours.end()) {
-        return it->second;
+    auto colour_iterator = APTracer::Colours::colours.find(colour);
+    if (colour_iterator != APTracer::Colours::colours.end()) {
+        return colour_iterator->second;
     }
 
     std::array<double, 3> values{};
@@ -2889,14 +2896,14 @@ auto APTracer::get_points(std::string points_string) -> std::vector<Vec3f> {
         std::stringstream ss(points_string);
 
         for (std::string s; ss >> s;) {
-            if (count < 9) {
+            if (count < values.size()) {
                 values[count] = std::stod(s);
             }
             ++count;
         }
-        if (count != 9) {
-            std::cerr << "Error: Triangle points should be 9 values separated by spaces, or nan. Current number of values is " << count << ", points are '" << points_string << "'. Exiting."
-                      << std::endl;
+        if (count != values.size()) {
+            std::cerr << "Error: Triangle points should be " << values.size() << " values separated by spaces, or nan. Current number of values is " << count << ", points are '" << points_string
+                      << "'. Exiting." << std::endl;
             exit(67);
         }
         else {
@@ -2926,14 +2933,14 @@ auto APTracer::get_texture_coordinates(std::string texture_coordinates_string) -
         std::stringstream ss(texture_coordinates_string);
 
         for (std::string s; ss >> s;) {
-            if (count < 6) {
+            if (count < texture_coordinates.size()) {
                 texture_coordinates[count] = std::stod(s);
             }
             ++count;
         }
-        if (count != 6) {
-            std::cerr << "Error: Triangle texture coordinates should be 6 values separated by spaces, or nan. Current number of values is " << count << ", texture coordinates are '"
-                      << texture_coordinates_string << "'­. Exiting." << std::endl;
+        if (count != texture_coordinates.size()) {
+            std::cerr << "Error: Triangle texture coordinates should be " << texture_coordinates.size() << " values separated by spaces, or nan. Current number of values is " << count
+                      << ", texture coordinates are '" << texture_coordinates_string << "'. Exiting." << std::endl;
             exit(68);
         }
     }
@@ -2955,8 +2962,8 @@ auto APTracer::get_medium_names(std::string string_medium_names) -> std::unique_
     return medium_names;
 }
 
-auto APTracer::is_number(const std::string& s) -> bool {
-    return !s.empty() && std::find_if(s.begin(), s.end(), [](char c) { return std::isdigit(c) == 0; }) == s.end();
+auto APTracer::is_number(const std::string& str) -> bool {
+    return !str.empty() && std::find_if(str.begin(), str.end(), [](char character) { return std::isdigit(character) == 0; }) == str.end();
 }
 
 auto APTracer::apply_transformation(TransformMatrix_t* transform_matrix, const tinyxml2::XMLElement* transform) -> void {

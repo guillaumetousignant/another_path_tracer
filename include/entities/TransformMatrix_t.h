@@ -16,6 +16,8 @@ namespace APTracer { namespace Entities {
      */
     class TransformMatrix_t {
         public:
+            static constexpr std::array<double, 16>::size_type size_ = 16;
+
             /**
              * @brief Construct a new TransformMatrix_t object as the identity transformation matrix, which does not modify objects.
              */
@@ -51,10 +53,10 @@ namespace APTracer { namespace Entities {
              *
              * @param values Array containing the elements of the matrix, ordered by rows.
              */
-            TransformMatrix_t(std::array<double, 16> values);
+            TransformMatrix_t(std::array<double, size_> values);
 
-            std::array<double, 16> matrix_; /**< @brief Array of the 16 values in the 4x4 matrix.*/
-            std::array<double, 16> matrix_inverse_; /**< @brief Transposed inverted matrix, used to transform directions.*/
+            std::array<double, size_> matrix_; /**< @brief Array of the 16 values in the 4x4 matrix.*/
+            std::array<double, size_> matrix_inverse_; /**< @brief Transposed inverted matrix, used to transform directions.*/
 
             /**
              * @brief Rotates the matrix around the x axis by a specified angle in radians.
