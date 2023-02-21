@@ -1,4 +1,4 @@
-#include "entities/OpenGLRenderer_t.h"
+#include "entities/OpenGLRenderer_t.hpp"
 
 #ifdef APTRACER_USE_OPENGL
     #ifdef _WIN32
@@ -21,10 +21,10 @@
     #define GLUT_UP 0x0001
 #endif
 
-#include "entities/Camera_t.h"
-#include "entities/ImgBufferOpenGL_t.h"
-#include "entities/Scene_t.h"
-#include "entities/TransformMatrix_t.h"
+#include "entities/Camera_t.hpp"
+#include "entities/ImgBufferOpenGL_t.hpp"
+#include "entities/Scene_t.hpp"
+#include "entities/TransformMatrix_t.hpp"
 #include <algorithm>
 #include <chrono>
 

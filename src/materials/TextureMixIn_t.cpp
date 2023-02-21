@@ -1,8 +1,8 @@
-#include "materials/TextureMixIn_t.h"
-#include "entities/RandomGenerator_t.h"
-#include "entities/Shape_t.h"
-#include "entities/Texture_t.h"
-#include "entities/Vec3f.h"
+#include "materials/TextureMixIn_t.hpp"
+#include "entities/RandomGenerator_t.hpp"
+#include "entities/Shape_t.hpp"
+#include "entities/Texture_t.hpp"
+#include "entities/Vec3f.hpp"
 
 using APTracer::Entities::Vec3f;
 

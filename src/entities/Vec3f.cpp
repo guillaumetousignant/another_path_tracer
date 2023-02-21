@@ -1,4 +1,4 @@
-#include "entities/Vec3f.h"
+#include "entities/Vec3f.hpp"
 #include <algorithm>
 #include <cmath>
 #include <limits>

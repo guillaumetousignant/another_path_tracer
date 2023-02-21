@@ -1,6 +1,6 @@
-#include "shapes/Triangle_t.h"
-#include "entities/Material_t.h"
-#include "entities/TransformMatrix_t.h"
+#include "shapes/Triangle_t.hpp"
+#include "entities/Material_t.hpp"
+#include "entities/TransformMatrix_t.hpp"
 #include <algorithm>
 #include <cmath>
 #include <limits>
@@ -10,24 +10,8 @@ constexpr double epsilon = 0.00000001;
 using APTracer::Entities::Vec3f;
 
 APTracer::Shapes::Triangle_t::Triangle_t(
-    APTracer::Entities::Material_t* material, APTracer::Entities::TransformMatrix_t* transform_matrix, std::array<Vec3f, 3> points, const Vec3f* normals, const double* texcoord) :
-        Shape_t(material, transform_matrix), points_orig_(points) {
-
-    if (normals == nullptr) {
-        const Vec3f nor = (points_orig_[1] - points_orig_[0]).cross(points_orig_[2] - points_orig_[0]).normalize_inplace();
-
-        normals_orig_ = {nor, nor, nor};
-    }
-    else {
-        normals_orig_ = {normals[0], normals[1], normals[2]};
-    }
-
-    if (texcoord == nullptr) {
-        texture_coordinates_ = {0, 1, 0, 0, 1, 0};
-    }
-    else {
-        texture_coordinates_ = {texcoord[0], texcoord[1], texcoord[2], texcoord[3], texcoord[4], texcoord[5]};
-    }
+    APTracer::Entities::Material_t* material, APTracer::Entities::TransformMatrix_t* transform_matrix, std::array<Vec3f, 3> points, std::array<Vec3f, 3> normals, std::array<double, 6> texcoord) :
+        Shape_t(material, transform_matrix), points_orig_(points), normals_orig_(normals), texture_coordinates_(texcoord) {
 
     points_ = {transformation_->multVec(points_orig_[0]), transformation_->multVec(points_orig_[1]), transformation_->multVec(points_orig_[2])};
 

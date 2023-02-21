@@ -1,5 +1,5 @@
-#include "acceleration/GridCellVector_t.h"
-#include "entities/Shape_t.h"
+#include "acceleration/GridCellVector_t.hpp"
+#include "entities/Shape_t.hpp"
 #include <limits>
 #include <vector>
 

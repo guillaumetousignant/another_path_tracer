@@ -7,15 +7,16 @@ add_subdirectory(materials)
 add_subdirectory(shapes)
 add_subdirectory(skyboxes)
 
-target_include_directories(APTracer PUBLIC 
-    $<INSTALL_INTERFACE:include/another_path_tracer/>    
+target_include_directories(APTracer PUBLIC
+    $<INSTALL_INTERFACE:include/another_path_tracer/>
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/>)
 
 option(USE_PNG "Use the PNG library to be able to read/write PNG images." ON)
-if (USE_PNG)
+
+if(USE_PNG)
     find_package(ZLIB REQUIRED)
     find_package(PNG REQUIRED)
-    target_link_libraries(APTracer PUBLIC 
+    target_link_libraries(APTracer PUBLIC
         PNG::PNG)
     target_compile_definitions(APTracer PUBLIC APTRACER_USE_PNG)
     set(ZLIB_DEPENDENCY "find_dependency(ZLIB REQUIRED)")
@@ -23,32 +24,35 @@ if (USE_PNG)
 endif()
 
 option(USE_JPEG "Use the jpeg library to be able to read/write jpeg images." ON)
-if (USE_JPEG)
+
+if(USE_JPEG)
     find_package(JPEG REQUIRED)
-    target_link_libraries(APTracer PUBLIC 
+    target_link_libraries(APTracer PUBLIC
         JPEG::JPEG)
     target_compile_definitions(APTracer PUBLIC APTRACER_USE_JPEG)
     set(JPEG_DEPENDENCY "find_dependency(JPEG REQUIRED)")
 endif()
 
 option(USE_TIFF "Use the tiff library to be able to read/write tiff images." ON)
-if (USE_TIFF)
+
+if(USE_TIFF)
     find_package(TIFF REQUIRED)
-    target_link_libraries(APTracer PUBLIC 
+    target_link_libraries(APTracer PUBLIC
         TIFF::TIFF)
     target_compile_definitions(APTracer PUBLIC APTRACER_USE_TIFF)
     set(TIFF_DEPENDENCY "find_dependency(TIFF REQUIRED)")
 endif()
 
 option(USE_OPENGL "Use OpenGL to display images." ON)
-if (USE_OPENGL)
-    list(INSERT CMAKE_FRAMEWORK_PATH 0 /System/Library/Frameworks) # Because CMake doesn't find the correct GLUT on macOS 
+
+if(USE_OPENGL)
+    list(INSERT CMAKE_FRAMEWORK_PATH 0 /System/Library/Frameworks) # Because CMake doesn't find the correct GLUT on macOS
     find_package(GLUT REQUIRED)
-    find_package(OpenGL REQUIRED COMPONENTS OpenGL) 
+    find_package(OpenGL REQUIRED COMPONENTS OpenGL)
 
     add_dependencies(APTracer OpenGL::GL) # Should use OpenGL::OpenGL on newer linux hosts, but doesn't work on windows and android
 
-    target_link_libraries(APTracer PUBLIC 
+    target_link_libraries(APTracer PUBLIC
         OpenGL::GL
         GLUT::GLUT) # Should use OpenGL::OpenGL on newer linux hosts, but doesn't work on windows and android
     target_compile_definitions(APTracer PUBLIC APTRACER_USE_OPENGL)
@@ -57,7 +61,8 @@ if (USE_OPENGL)
 endif()
 
 option(USE_OPENMP "Parallelise using OpenMP." ON)
-if (USE_OPENMP)
+
+if(USE_OPENMP)
     find_package(OpenMP REQUIRED)
     target_link_libraries(APTracer PUBLIC OpenMP::OpenMP_CXX)
     target_compile_definitions(APTracer PUBLIC APTRACER_USE_OPENMP)
@@ -65,9 +70,11 @@ if (USE_OPENMP)
 endif()
 
 option(OPTIMIZE_FOR_NATIVE "Build with -march=native." OFF)
-if (OPTIMIZE_FOR_NATIVE)
+
+if(OPTIMIZE_FOR_NATIVE)
     include(CheckCXXCompilerFlag)
     CHECK_CXX_COMPILER_FLAG("-march=native" COMPILER_SUPPORTS_MARCH_NATIVE)
+
     if(COMPILER_SUPPORTS_MARCH_NATIVE)
         target_compile_options(APTracer PUBLIC -march=native)
     endif()
@@ -78,18 +85,21 @@ if(NOT WIN32)
 endif()
 
 target_compile_features(APTracer PRIVATE cxx_std_14)
-if(NOT ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug"))
+
+if(NOT("${CMAKE_BUILD_TYPE}" STREQUAL "Debug"))
     set_property(TARGET APTracer PROPERTY INTERPROCEDURAL_OPTIMIZATION True)
 endif()
 
-install(TARGETS APTracer 
+install(TARGETS APTracer
     EXPORT aptracer-targets
     DESTINATION lib)
 
 if(NOT CMAKE_SOURCE_DIR STREQUAL CMAKE_INSTALL_PREFIX)
-    install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ 
+    install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/
         DESTINATION include/another_path_tracer
-        FILES_MATCHING PATTERN "*.h")
+        FILES_MATCHING
+        PATTERN "*.h"
+        PATTERN "*.hpp")
 endif()
 
 if(WIN32)
@@ -99,15 +109,15 @@ if(WIN32)
 endif()
 
 install(EXPORT aptracer-targets
-  FILE
+    FILE
     APTracerTargets.cmake
-  NAMESPACE
+    NAMESPACE
     APTracer::
-  DESTINATION
+    DESTINATION
     lib/cmake/APTracer
 )
 
-#Create a ConfigVersion.cmake file
+# Create a ConfigVersion.cmake file
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
     ${CMAKE_CURRENT_BINARY_DIR}/APTracerConfigVersion.cmake
@@ -120,7 +130,7 @@ configure_package_config_file(${PROJECT_SOURCE_DIR}/cmake/APTracerConfig.cmake.i
     INSTALL_DESTINATION lib/cmake/APTracer
 )
 
-#Install the config, configversion and custom find modules
+# Install the config, configversion and custom find modules
 install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/APTracerConfig.cmake
     ${CMAKE_CURRENT_BINARY_DIR}/APTracerConfigVersion.cmake
@@ -131,17 +141,19 @@ export(EXPORT aptracer-targets
     FILE ${CMAKE_CURRENT_BINARY_DIR}/APTracerTargets.cmake
     NAMESPACE APTracer::)
 
-#Register package in user's package registry
+# Register package in user's package registry
 export(PACKAGE APTracer)
 
 add_executable(another_path_tracer main.cpp)
 
 target_link_libraries(another_path_tracer PRIVATE APTracer)
 target_compile_features(another_path_tracer PRIVATE cxx_std_14)
-if(NOT ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug"))
+
+if(NOT("${CMAKE_BUILD_TYPE}" STREQUAL "Debug"))
     set_property(TARGET another_path_tracer PROPERTY INTERPROCEDURAL_OPTIMIZATION True)
 endif()
-if (OPTIMIZE_FOR_NATIVE)
+
+if(OPTIMIZE_FOR_NATIVE)
     if(COMPILER_SUPPORTS_MARCH_NATIVE)
         target_compile_options(another_path_tracer PUBLIC -march=native)
     endif()

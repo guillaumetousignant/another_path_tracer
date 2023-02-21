@@ -1,4 +1,4 @@
-#include "entities/RandomGenerator_t.h"
+#include "entities/RandomGenerator_t.hpp"
 #ifdef APTRACER_USE_OPENMP
     #include <omp.h>
 #endif

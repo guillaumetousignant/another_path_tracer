@@ -1,7 +1,7 @@
-#include "shapes/SphereMotionblur_t.h"
-#include "entities/Material_t.h"
-#include "entities/TransformMatrix_t.h"
-#include "functions/Slerp.h"
+#include "shapes/SphereMotionblur_t.hpp"
+#include "entities/Material_t.hpp"
+#include "entities/TransformMatrix_t.hpp"
+#include "functions/Slerp.hpp"
 #include <cmath>
 
 constexpr double pi = 3.141592653589793238463;

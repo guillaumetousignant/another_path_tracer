@@ -1,6 +1,6 @@
-#include "materials/DistanceMaterial_t.h"
-#include "entities/Shape_t.h"
-#include "entities/Vec3f.h"
+#include "materials/DistanceMaterial_t.hpp"
+#include "entities/Shape_t.hpp"
+#include "entities/Vec3f.hpp"
 #include <cmath>
 
 using APTracer::Entities::Vec3f;

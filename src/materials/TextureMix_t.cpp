@@ -1,7 +1,7 @@
-#include "materials/TextureMix_t.h"
-#include "entities/RandomGenerator_t.h"
-#include "entities/Shape_t.h"
-#include "entities/Texture_t.h"
+#include "materials/TextureMix_t.hpp"
+#include "entities/RandomGenerator_t.hpp"
+#include "entities/Shape_t.hpp"
+#include "entities/Texture_t.hpp"
 
 APTracer::Materials::TextureMix_t::TextureMix_t(Material_t* first_material, Material_t* second_material, const Texture_t* texture) :
         first_material_(first_material), second_material_(second_material), texture_(texture), unif_(std::uniform_real_distribution<double>(0, 1)) {}

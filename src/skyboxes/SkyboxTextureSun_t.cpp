@@ -1,5 +1,5 @@
-#include "skyboxes/SkyboxTextureSun_t.h"
-#include "entities/Texture_t.h"
+#include "skyboxes/SkyboxTextureSun_t.hpp"
+#include "entities/Texture_t.hpp"
 #include <array>
 #include <cmath>
 
@@ -17,7 +17,5 @@ auto APTracer::Skyboxes::SkyboxTextureSun_t::get(const Vec3f& xyz) const -> Vec3
     if ((std::pow(xy[0] - sun_pos_[0], 2) + std::pow(xy[1] - sun_pos_[1], 2)) < std::pow(sun_rad_, 2)) {
         return sun_col_;
     }
-    else {
-        return texture_->get(xy);
-    }
+    return texture_->get(xy);
 }

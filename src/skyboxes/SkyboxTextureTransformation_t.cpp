@@ -1,6 +1,6 @@
-#include "skyboxes/SkyboxTextureTransformation_t.h"
-#include "entities/Texture_t.h"
-#include "entities/TransformMatrix_t.h"
+#include "skyboxes/SkyboxTextureTransformation_t.hpp"
+#include "entities/Texture_t.hpp"
+#include "entities/TransformMatrix_t.hpp"
 #include <array>
 
 constexpr double pi = 3.141592653589793238463;

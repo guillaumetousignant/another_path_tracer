@@ -1,4 +1,4 @@
-#include "functions/Colours.h"
+#include "functions/Colours.hpp"
 
 namespace APTracer { namespace Colours {
     const std::unordered_map<std::string, Vec3f> colours{

@@ -1,10 +1,10 @@
-#include "cameras/IsoCamAperture_t.h"
-#include "entities/ImgBuffer_t.h"
-#include "entities/Medium_t.h"
-#include "entities/RandomGenerator_t.h"
-#include "entities/Scene_t.h"
-#include "entities/Skybox_t.h"
-#include "entities/TransformMatrix_t.h"
+#include "cameras/IsoCamAperture_t.hpp"
+#include "entities/ImgBuffer_t.hpp"
+#include "entities/Medium_t.hpp"
+#include "entities/RandomGenerator_t.hpp"
+#include "entities/Scene_t.hpp"
+#include "entities/Skybox_t.hpp"
+#include "entities/TransformMatrix_t.hpp"
 #include <cmath>
 
 constexpr double pi = 3.141592653589793238463;

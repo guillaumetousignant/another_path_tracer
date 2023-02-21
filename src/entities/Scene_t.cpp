@@ -1,8 +1,8 @@
-#include "entities/Scene_t.h"
-#include "acceleration/AccelerationMultiGridVector_t.h"
-#include "entities/AccelerationStructure_t.h"
-#include "entities/Shape_t.h"
-#include "shapes/MeshTop_t.h"
+#include "entities/Scene_t.hpp"
+#include "acceleration/AccelerationMultiGridVector_t.hpp"
+#include "entities/AccelerationStructure_t.hpp"
+#include "entities/Shape_t.hpp"
+#include "shapes/MeshTop_t.hpp"
 #include <algorithm>
 #include <limits>
 

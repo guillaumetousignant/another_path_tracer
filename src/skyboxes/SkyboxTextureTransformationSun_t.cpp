@@ -1,6 +1,6 @@
-#include "skyboxes/SkyboxTextureTransformationSun_t.h"
-#include "entities/Texture_t.h"
-#include "entities/TransformMatrix_t.h"
+#include "skyboxes/SkyboxTextureTransformationSun_t.hpp"
+#include "entities/Texture_t.hpp"
+#include "entities/TransformMatrix_t.hpp"
 #include <array>
 
 constexpr double pi = 3.141592653589793238463;
@@ -18,7 +18,5 @@ auto APTracer::Skyboxes::SkyboxTextureTransformationSun_t::get(const Vec3f& xyz)
     if ((std::pow(xy[0] - sun_pos_[0], 2) + std::pow(xy[1] - sun_pos_[1], 2)) < (std::pow(sun_rad_, 2))) {
         return sun_col_;
     }
-    else {
-        return texture_->get(xy);
-    }
+    return texture_->get(xy);
 }

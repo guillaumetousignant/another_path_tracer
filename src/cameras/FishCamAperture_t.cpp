@@ -1,10 +1,10 @@
-#include "cameras/FishCamAperture_t.h"
-#include "entities/ImgBuffer_t.h"
-#include "entities/Medium_t.h"
-#include "entities/RandomGenerator_t.h"
-#include "entities/Scene_t.h"
-#include "entities/Skybox_t.h"
-#include "entities/TransformMatrix_t.h"
+#include "cameras/FishCamAperture_t.hpp"
+#include "entities/ImgBuffer_t.hpp"
+#include "entities/Medium_t.hpp"
+#include "entities/RandomGenerator_t.hpp"
+#include "entities/Scene_t.hpp"
+#include "entities/Skybox_t.hpp"
+#include "entities/TransformMatrix_t.hpp"
 #include <array>
 #include <cmath>
 #include <limits>

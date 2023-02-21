@@ -1,6 +1,6 @@
-#include "acceleration/AccelerationMultiGridArray_t.h"
-#include "acceleration/GridCellArray_t.h"
-#include "entities/Shape_t.h"
+#include "acceleration/AccelerationMultiGridArray_t.hpp"
+#include "acceleration/GridCellArray_t.hpp"
+#include "entities/Shape_t.hpp"
 #include <cmath>
 #include <limits>
 

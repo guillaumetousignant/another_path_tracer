@@ -1,5 +1,5 @@
-#include "entities/Camera_t.h"
-#include "entities/TransformMatrix_t.h"
+#include "entities/Camera_t.hpp"
+#include "entities/TransformMatrix_t.hpp"
 #include <chrono>
 #include <iostream>
 

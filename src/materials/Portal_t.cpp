@@ -1,8 +1,8 @@
-#include "materials/Portal_t.h"
-#include "entities/Medium_t.h"
-#include "entities/Shape_t.h"
-#include "entities/TransformMatrix_t.h"
-#include "entities/Vec3f.h"
+#include "materials/Portal_t.hpp"
+#include "entities/Medium_t.hpp"
+#include "entities/Shape_t.hpp"
+#include "entities/TransformMatrix_t.hpp"
+#include "entities/Vec3f.hpp"
 
 constexpr double epsilon = 0.00000001;
 

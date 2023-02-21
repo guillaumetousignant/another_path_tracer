@@ -1,5 +1,5 @@
-#include "materials/Reflective_t.h"
-#include "entities/Shape_t.h"
+#include "materials/Reflective_t.hpp"
+#include "entities/Shape_t.hpp"
 
 constexpr double epsilon = 0.00000001;
 

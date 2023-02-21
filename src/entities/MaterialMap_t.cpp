@@ -1,5 +1,5 @@
-#include "entities/MaterialMap_t.h"
-#include "entities/Material_t.h"
+#include "entities/MaterialMap_t.hpp"
+#include "entities/Material_t.hpp"
 
 using APTracer::Entities::Material_t;
 using APTracer::Entities::MaterialMap_t;

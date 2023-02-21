@@ -1,6 +1,6 @@
-#include "acceleration/AccelerationMultiGrid_t.h"
-#include "acceleration/GridCell_t.h"
-#include "entities/Shape_t.h"
+#include "acceleration/AccelerationMultiGrid_t.hpp"
+#include "acceleration/GridCell_t.hpp"
+#include "entities/Shape_t.hpp"
 #include <cmath>
 #include <limits>
 

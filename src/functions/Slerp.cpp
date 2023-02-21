@@ -1,4 +1,4 @@
-#include "functions/Slerp.h"
+#include "functions/Slerp.hpp"
 
 constexpr double pi = 3.141592653589793238463;
 

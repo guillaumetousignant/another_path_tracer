@@ -1,6 +1,6 @@
-#include "materials/Transparent_t.h"
-#include "entities/Medium_t.h"
-#include "entities/Shape_t.h"
+#include "materials/Transparent_t.hpp"
+#include "entities/Medium_t.hpp"
+#include "entities/Shape_t.hpp"
 
 constexpr double epsilon = 0.00000001;
 

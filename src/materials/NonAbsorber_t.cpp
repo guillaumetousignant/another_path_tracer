@@ -1,4 +1,4 @@
-#include "materials/NonAbsorber_t.h"
+#include "materials/NonAbsorber_t.hpp"
 
 APTracer::Materials::NonAbsorber_t::NonAbsorber_t(double ind, unsigned int priority) : Medium_t(ind, priority) {}
 

@@ -1,7 +1,7 @@
-#include "materials/NormalDiffuseMaterial_t.h"
-#include "entities/RandomGenerator_t.h"
-#include "entities/Shape_t.h"
-#include "entities/Vec3f.h"
+#include "materials/NormalDiffuseMaterial_t.hpp"
+#include "entities/RandomGenerator_t.hpp"
+#include "entities/Shape_t.hpp"
+#include "entities/Vec3f.hpp"
 #include <cmath>
 
 constexpr double epsilon = 0.00001; // was 0.00001, 0.01 works ok when *t

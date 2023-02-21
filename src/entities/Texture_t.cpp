@@ -1,4 +1,4 @@
-#include "entities/Texture_t.h"
+#include "entities/Texture_t.hpp"
 #include <cmath>
 #include <string>
 #ifdef APTRACER_USE_JPEG
@@ -30,7 +30,7 @@ Texture_t::Texture_t(const std::string& filename) {
     if (extension == "jpeg" || extension == "jpg") {
         image.load_jpeg(filename.c_str());
         // 1/(std::pow(2.0, bit_depth) - 1.0)
-        constexpr double bit_multiplier = 1/255.0; // 8 bits, with msvc std::pow is not constexpr :(
+        constexpr double bit_multiplier = 1 / 255.0; // 8 bits, with msvc std::pow is not constexpr :(
         image *= bit_multiplier; // Normalizing by bit depth
     }
     else if (extension == "png") {
@@ -45,13 +45,13 @@ Texture_t::Texture_t(const std::string& filename) {
     else if (extension == "hdr") {
         image.load(filename.c_str());
         // 1/(std::pow(2.0, bit_depth) - 1.0)
-        constexpr double bit_multiplier = 1/65535.0; // 16 bits, with msvc std::pow is not constexpr :(
+        constexpr double bit_multiplier = 1 / 65535.0; // 16 bits, with msvc std::pow is not constexpr :(
         image *= bit_multiplier; // Normalizing by bit depth
     }
     else {
         image.load(filename.c_str());
         // 1/(std::pow(2.0, bit_depth) - 1.0)
-        constexpr double bit_multiplier = 1/255.0; // 8 bits, with msvc std::pow is not constexpr :(
+        constexpr double bit_multiplier = 1 / 255.0; // 8 bits, with msvc std::pow is not constexpr :(
         image *= bit_multiplier; // Normalizing by bit depth
     }
 

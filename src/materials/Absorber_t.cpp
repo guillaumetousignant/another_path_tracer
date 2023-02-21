@@ -1,4 +1,4 @@
-#include "materials/Absorber_t.h"
+#include "materials/Absorber_t.hpp"
 #include <cmath>
 
 using APTracer::Entities::Vec3f;

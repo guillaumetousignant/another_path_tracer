@@ -1,7 +1,7 @@
-#include "materials/RefractiveFuzz_t.h"
-#include "entities/Medium_t.h"
-#include "entities/RandomGenerator_t.h"
-#include "entities/Shape_t.h"
+#include "materials/RefractiveFuzz_t.hpp"
+#include "entities/Medium_t.hpp"
+#include "entities/RandomGenerator_t.hpp"
+#include "entities/Shape_t.hpp"
 #include <cmath>
 
 constexpr double epsilon = 0.00000001;

@@ -1,4 +1,4 @@
-#include "entities/ImgBuffer_t.h"
+#include "entities/ImgBuffer_t.hpp"
 #ifdef APTRACER_USE_JPEG
     #define cimg_use_jpeg
 #endif

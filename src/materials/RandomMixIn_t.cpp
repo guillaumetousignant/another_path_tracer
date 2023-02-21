@@ -1,6 +1,6 @@
-#include "materials/RandomMixIn_t.h"
-#include "entities/RandomGenerator_t.h"
-#include "entities/Shape_t.h"
+#include "materials/RandomMixIn_t.hpp"
+#include "entities/RandomGenerator_t.hpp"
+#include "entities/Shape_t.hpp"
 
 APTracer::Materials::RandomMixIn_t::RandomMixIn_t(APTracer::Entities::Material_t* first_material, APTracer::Entities::Material_t* second_material, double ratio) :
         first_material_(first_material), second_material_(second_material), ratio_(ratio), unif_(std::uniform_real_distribution<double>(0, 1)) {}

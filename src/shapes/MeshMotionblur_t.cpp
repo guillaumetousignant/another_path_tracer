@@ -1,7 +1,7 @@
-#include "shapes/MeshMotionblur_t.h"
-#include "entities/MaterialMap_t.h"
-#include "entities/MeshGeometry_t.h"
-#include "shapes/TriangleMeshMotionblur_t.h"
+#include "shapes/MeshMotionblur_t.hpp"
+#include "entities/MaterialMap_t.hpp"
+#include "entities/MeshGeometry_t.hpp"
+#include "shapes/TriangleMeshMotionblur_t.hpp"
 #include <iostream>
 
 APTracer::Shapes::MeshMotionblur_t::MeshMotionblur_t(APTracer::Entities::Material_t* material, APTracer::Entities::TransformMatrix_t* transform_matrix, APTracer::Entities::MeshGeometry_t* geom) :

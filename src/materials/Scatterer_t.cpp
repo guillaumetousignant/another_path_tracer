@@ -1,5 +1,5 @@
-#include "materials/Scatterer_t.h"
-#include "entities/RandomGenerator_t.h"
+#include "materials/Scatterer_t.hpp"
+#include "entities/RandomGenerator_t.hpp"
 #include <cmath>
 
 constexpr double pi = 3.141592653589793238463;

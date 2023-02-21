@@ -1,9 +1,9 @@
-#include "entities/Ray_t.h"
-#include "entities/Material_t.h"
-#include "entities/Medium_t.h"
-#include "entities/Scene_t.h"
-#include "entities/Shape_t.h"
-#include "entities/Skybox_t.h"
+#include "entities/Ray_t.hpp"
+#include "entities/Material_t.hpp"
+#include "entities/Medium_t.hpp"
+#include "entities/Scene_t.hpp"
+#include "entities/Shape_t.hpp"
+#include "entities/Skybox_t.hpp"
 
 using APTracer::Entities::Medium_t;
 using APTracer::Entities::Ray_t;

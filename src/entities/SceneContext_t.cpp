@@ -1,4 +1,4 @@
-#include "entities/SceneContext_t.h"
+#include "entities/SceneContext_t.hpp"
 
 #include <algorithm>
 #include <chrono>
@@ -7,102 +7,102 @@
 #include <sstream>
 #include <string>
 
-#include "entities/OpenGLRenderer_t.h"
-#include "functions/Colours.h"
-#include "functions/NextFilename.h"
+#include "entities/OpenGLRenderer_t.hpp"
+#include "functions/Colours.hpp"
+#include "functions/NextFilename.hpp"
 
-#include "entities/MaterialMap_t.h"
-#include "materials/BounceMaterial_t.h"
-#include "materials/Diffuse_t.h"
-#include "materials/DiffuseFull_t.h"
-#include "materials/DiffuseNormal_t.h"
-#include "materials/DiffuseTex_t.h"
-#include "materials/DiffuseTexNormal_t.h"
-#include "materials/DistanceMaterial_t.h"
-#include "materials/FresnelMix_t.h"
-#include "materials/FresnelMixIn_t.h"
-#include "materials/FresnelMixNormal_t.h"
-#include "materials/NormalDiffuseMaterial_t.h"
-#include "materials/NormalMaterial_t.h"
-#include "materials/Portal_t.h"
-#include "materials/RandomMix_t.h"
-#include "materials/RandomMixIn_t.h"
-#include "materials/Reflective_t.h"
-#include "materials/ReflectiveFuzz_t.h"
-#include "materials/ReflectiveFuzzNormal_t.h"
-#include "materials/ReflectiveFuzzTex_t.h"
-#include "materials/ReflectiveFuzzTexNormal_t.h"
-#include "materials/ReflectiveNormal_t.h"
-#include "materials/ReflectiveRefractive_t.h"
-#include "materials/ReflectiveRefractiveFuzz_t.h"
-#include "materials/ReflectiveRefractiveNormal_t.h"
-#include "materials/Refractive_t.h"
-#include "materials/RefractiveFuzz_t.h"
-#include "materials/TextureMix_t.h"
-#include "materials/TextureMixIn_t.h"
-#include "materials/Toon_t.h"
-#include "materials/Transparent_t.h"
+#include "entities/MaterialMap_t.hpp"
+#include "materials/BounceMaterial_t.hpp"
+#include "materials/Diffuse_t.hpp"
+#include "materials/DiffuseFull_t.hpp"
+#include "materials/DiffuseNormal_t.hpp"
+#include "materials/DiffuseTex_t.hpp"
+#include "materials/DiffuseTexNormal_t.hpp"
+#include "materials/DistanceMaterial_t.hpp"
+#include "materials/FresnelMix_t.hpp"
+#include "materials/FresnelMixIn_t.hpp"
+#include "materials/FresnelMixNormal_t.hpp"
+#include "materials/NormalDiffuseMaterial_t.hpp"
+#include "materials/NormalMaterial_t.hpp"
+#include "materials/Portal_t.hpp"
+#include "materials/RandomMix_t.hpp"
+#include "materials/RandomMixIn_t.hpp"
+#include "materials/Reflective_t.hpp"
+#include "materials/ReflectiveFuzz_t.hpp"
+#include "materials/ReflectiveFuzzNormal_t.hpp"
+#include "materials/ReflectiveFuzzTex_t.hpp"
+#include "materials/ReflectiveFuzzTexNormal_t.hpp"
+#include "materials/ReflectiveNormal_t.hpp"
+#include "materials/ReflectiveRefractive_t.hpp"
+#include "materials/ReflectiveRefractiveFuzz_t.hpp"
+#include "materials/ReflectiveRefractiveNormal_t.hpp"
+#include "materials/Refractive_t.hpp"
+#include "materials/RefractiveFuzz_t.hpp"
+#include "materials/TextureMix_t.hpp"
+#include "materials/TextureMixIn_t.hpp"
+#include "materials/Toon_t.hpp"
+#include "materials/Transparent_t.hpp"
 
-#include "materials/Absorber_t.h"
-#include "materials/NonAbsorber_t.h"
-#include "materials/PortalScatterer_t.h"
-#include "materials/Scatterer_t.h"
-#include "materials/ScattererExp_t.h"
-#include "materials/ScattererExpFull_t.h"
-#include "materials/ScattererFull_t.h"
+#include "materials/Absorber_t.hpp"
+#include "materials/NonAbsorber_t.hpp"
+#include "materials/PortalScatterer_t.hpp"
+#include "materials/Scatterer_t.hpp"
+#include "materials/ScattererExp_t.hpp"
+#include "materials/ScattererExpFull_t.hpp"
+#include "materials/ScattererFull_t.hpp"
 
-#include "entities/DirectionalLight_t.h"
-#include "entities/ImgBuffer_t.h"
-#include "entities/ImgBufferOpenGL_t.h"
-#include "entities/MeshGeometry_t.h"
-#include "entities/Scene_t.h"
-#include "entities/Texture_t.h"
-#include "entities/TransformMatrix_t.h"
+#include "entities/DirectionalLight_t.hpp"
+#include "entities/ImgBuffer_t.hpp"
+#include "entities/ImgBufferOpenGL_t.hpp"
+#include "entities/MeshGeometry_t.hpp"
+#include "entities/Scene_t.hpp"
+#include "entities/Texture_t.hpp"
+#include "entities/TransformMatrix_t.hpp"
 
-#include "shapes/Mesh_t.h"
-#include "shapes/MeshMotionblur_t.h"
-#include "shapes/Sphere_t.h"
-#include "shapes/SphereMotionblur_t.h"
-#include "shapes/Triangle_t.h"
-#include "shapes/TriangleMesh_t.h"
-#include "shapes/TriangleMeshMotionblur_t.h"
-#include "shapes/TriangleMotionblur_t.h"
+#include "shapes/Mesh_t.hpp"
+#include "shapes/MeshMotionblur_t.hpp"
+#include "shapes/Sphere_t.hpp"
+#include "shapes/SphereMotionblur_t.hpp"
+#include "shapes/Triangle_t.hpp"
+#include "shapes/TriangleMesh_t.hpp"
+#include "shapes/TriangleMeshMotionblur_t.hpp"
+#include "shapes/TriangleMotionblur_t.hpp"
 
-#include "cameras/Cam3D_t.h"
-#include "cameras/Cam3DAperture_t.h"
-#include "cameras/Cam3DMotionblur_t.h"
-#include "cameras/Cam3DMotionblurAperture_t.h"
-#include "cameras/Cam_t.h"
-#include "cameras/CamAperture_t.h"
-#include "cameras/CamMotionblur_t.h"
-#include "cameras/CamMotionblurAperture_t.h"
-#include "cameras/FishCam_t.h"
-#include "cameras/FishCamAperture_t.h"
-#include "cameras/FishCamMotionblur_t.h"
-#include "cameras/FishCamMotionblurAperture_t.h"
-#include "cameras/IsoCam_t.h"
-#include "cameras/IsoCamAperture_t.h"
-#include "cameras/IsoCamMotionblur_t.h"
-#include "cameras/IsoCamMotionblurAperture_t.h"
-#include "cameras/RecCam_t.h"
-#include "cameras/RecCamAperture_t.h"
-#include "cameras/RecCamMotionblur_t.h"
-#include "cameras/RecCamMotionblurAperture_t.h"
-#include "entities/Camera_t.h"
+#include "cameras/Cam3D_t.hpp"
+#include "cameras/Cam3DAperture_t.hpp"
+#include "cameras/Cam3DMotionblur_t.hpp"
+#include "cameras/Cam3DMotionblurAperture_t.hpp"
+#include "cameras/Cam_t.hpp"
+#include "cameras/CamAperture_t.hpp"
+#include "cameras/CamMotionblur_t.hpp"
+#include "cameras/CamMotionblurAperture_t.hpp"
+#include "cameras/FishCam_t.hpp"
+#include "cameras/FishCamAperture_t.hpp"
+#include "cameras/FishCamMotionblur_t.hpp"
+#include "cameras/FishCamMotionblurAperture_t.hpp"
+#include "cameras/IsoCam_t.hpp"
+#include "cameras/IsoCamAperture_t.hpp"
+#include "cameras/IsoCamMotionblur_t.hpp"
+#include "cameras/IsoCamMotionblurAperture_t.hpp"
+#include "cameras/RecCam_t.hpp"
+#include "cameras/RecCamAperture_t.hpp"
+#include "cameras/RecCamMotionblur_t.hpp"
+#include "cameras/RecCamMotionblurAperture_t.hpp"
+#include "entities/Camera_t.hpp"
 
-#include "skyboxes/SkyboxFlat_t.h"
-#include "skyboxes/SkyboxFlatSun_t.h"
-#include "skyboxes/SkyboxTexture_t.h"
-#include "skyboxes/SkyboxTextureSun_t.h"
-#include "skyboxes/SkyboxTextureTransformation_t.h"
-#include "skyboxes/SkyboxTextureTransformationSun_t.h"
+#include "skyboxes/SkyboxFlat_t.hpp"
+#include "skyboxes/SkyboxFlatSun_t.hpp"
+#include "skyboxes/SkyboxTexture_t.hpp"
+#include "skyboxes/SkyboxTextureSun_t.hpp"
+#include "skyboxes/SkyboxTextureTransformation_t.hpp"
+#include "skyboxes/SkyboxTextureTransformationSun_t.hpp"
 
-#include "acceleration/AccelerationGrid_t.h"
-#include "acceleration/AccelerationGridArray_t.h"
-#include "acceleration/AccelerationGridVector_t.h"
-#include "acceleration/AccelerationMultiGrid_t.h"
-#include "acceleration/AccelerationMultiGridArray_t.h"
-#include "acceleration/AccelerationMultiGridVector_t.h"
+#include "acceleration/AccelerationGrid_t.hpp"
+#include "acceleration/AccelerationGridArray_t.hpp"
+#include "acceleration/AccelerationGridVector_t.hpp"
+#include "acceleration/AccelerationMultiGrid_t.hpp"
+#include "acceleration/AccelerationMultiGridArray_t.hpp"
+#include "acceleration/AccelerationMultiGridVector_t.hpp"
 
 APTracer::Entities::SceneContext_t::SceneContext_t() :
         use_gl_(false),
@@ -1497,54 +1497,28 @@ auto APTracer::Entities::SceneContext_t::create_object(const tinyxml2::XMLElemen
     if (type == "triangle") {
         const std::vector<const char*> attributes = {"material", "transform_matrix", "points", "normals", "texture_coordinates"};
         require_attributes(xml_object, attributes);
-        std::vector<Vec3f> points_vec           = get_points(xml_object->Attribute("points"));
-        std::vector<Vec3f> normals              = get_points(xml_object->Attribute("normals"));
-        std::vector<double> texture_coordinates = get_texture_coordinates(xml_object->Attribute("texture_coordinates"));
-        std::array<Vec3f, 3> points;
-
-        if (points_vec.empty()) {
-            std::cerr << "Error: Triangle points should not be empty. Exiting." << std::endl;
-            exit(69);
-        }
-
-        for (size_t i = 0; i < points.size(); ++i) {
-            points[i] = points_vec[i];
-        }
-
-        const Vec3f* normals_ptr              = normals.empty() ? nullptr : normals.data();
-        const double* texture_coordinates_ptr = texture_coordinates.empty() ? nullptr : texture_coordinates.data();
+        const std::array<Vec3f, 3> points               = get_points(xml_object->Attribute("points"));
+        const std::array<Vec3f, 3> normals              = get_normals(xml_object->Attribute("normals"), points);
+        const std::array<double, 6> texture_coordinates = get_texture_coordinates(xml_object->Attribute("texture_coordinates"));
 
         return std::make_unique<Triangle_t>(get_material(xml_object->Attribute("material"), xml_materials),
                                             get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices),
                                             points,
-                                            normals_ptr,
-                                            texture_coordinates_ptr);
+                                            normals,
+                                            texture_coordinates);
     }
     if (type == "triangle_motionblur") {
         const std::vector<const char*> attributes = {"material", "transform_matrix", "points", "normals", "texture_coordinates"};
         require_attributes(xml_object, attributes);
-        std::vector<Vec3f> points_vec           = get_points(xml_object->Attribute("points"));
-        std::vector<Vec3f> normals              = get_points(xml_object->Attribute("normals"));
-        std::vector<double> texture_coordinates = get_texture_coordinates(xml_object->Attribute("texture_coordinates"));
-        std::array<Vec3f, 3> points;
-
-        if (points_vec.empty()) {
-            std::cerr << "Error: Triangle points should not be empty. Exiting." << std::endl;
-            exit(69);
-        }
-
-        for (size_t i = 0; i < points.size(); ++i) {
-            points[i] = points_vec[i];
-        }
-
-        const Vec3f* normals_ptr              = normals.empty() ? nullptr : normals.data();
-        const double* texture_coordinates_ptr = texture_coordinates.empty() ? nullptr : texture_coordinates.data();
+        const std::array<Vec3f, 3> points               = get_points(xml_object->Attribute("points"));
+        const std::array<Vec3f, 3> normals              = get_normals(xml_object->Attribute("normals"), points);
+        const std::array<double, 6> texture_coordinates = get_texture_coordinates(xml_object->Attribute("texture_coordinates"));
 
         return std::make_unique<TriangleMotionblur_t>(get_material(xml_object->Attribute("material"), xml_materials),
                                                       get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices),
                                                       points,
-                                                      normals_ptr,
-                                                      texture_coordinates_ptr);
+                                                      normals,
+                                                      texture_coordinates);
     }
     if (type == "triangle_mesh") {
         const std::vector<const char*> attributes = {"material", "transform_matrix", "mesh_geometry", "index"};
@@ -1615,11 +1589,7 @@ auto APTracer::Entities::SceneContext_t::create_skybox(const tinyxml2::XMLElemen
         const std::vector<const char*> attributes = {"colour", "lights"};
         require_attributes(xml_skybox, attributes);
 
-        std::vector<DirectionalLight_t*> lights = get_lights(xml_skybox->Attribute("lights"), xml_directional_lights);
-
-        DirectionalLight_t** lights_ptr = lights.empty() ? nullptr : lights.data();
-
-        return std::make_unique<APTracer::Skyboxes::SkyboxFlatSun_t>(APTracer::get_colour(xml_skybox->Attribute("colour")), lights_ptr, lights.size());
+        return std::make_unique<APTracer::Skyboxes::SkyboxFlatSun_t>(APTracer::get_colour(xml_skybox->Attribute("colour")), get_lights(xml_skybox->Attribute("lights"), xml_directional_lights));
     }
     if (type == "skybox_texture") {
         const std::vector<const char*> attributes = {"texture"};
@@ -2885,64 +2855,82 @@ auto APTracer::get_colour(std::string colour) -> Vec3f {
     return {values};
 }
 
-auto APTracer::get_points(std::string points_string) -> std::vector<Vec3f> {
-    std::vector<Vec3f> points;
+auto APTracer::get_points(std::string points_string) -> std::array<Vec3f, 3> {
     std::transform(points_string.begin(), points_string.end(), points_string.begin(), ::tolower);
 
-    if (points_string != "nan") {
-        points = std::vector<Vec3f>(3);
-        std::array<double, 9> values{};
-        unsigned int count = 0;
-        std::stringstream ss(points_string);
+    if (points_string == "nan") {
+        std::cerr << "Error: Triangle points should not be empty. Exiting." << std::endl;
+        exit(69);
+    }
 
-        for (std::string s; ss >> s;) {
-            if (count < values.size()) {
-                values[count] = std::stod(s);
-            }
-            ++count;
+    std::array<Vec3f, 3> points{};
+    int count = 0;
+    std::stringstream ss(points_string);
+
+    for (std::string s; ss >> s;) {
+        if (count < points.size() * 3) {
+            const std::div_t result         = std::div(count, 3);
+            points[result.quot][result.rem] = std::stod(s);
         }
-        if (count != values.size()) {
-            std::cerr << "Error: Triangle points should be " << values.size() << " values separated by spaces, or nan. Current number of values is " << count << ", points are '" << points_string
-                      << "'. Exiting." << std::endl;
-            exit(67);
-        }
-        else {
-            points[0][0] = values[0];
-            points[0][1] = values[1];
-            points[0][2] = values[2];
-            points[1][0] = values[3];
-            points[1][1] = values[4];
-            points[1][2] = values[5];
-            points[2][0] = values[6];
-            points[2][1] = values[7];
-            points[2][2] = values[8];
-        }
+        ++count;
+    }
+    if (count != points.size() * 3) {
+        std::cerr << "Error: Triangle points should be " << points.size() * 3 << " values separated by spaces. Current number of values is " << count << ", points are '" << points_string
+                  << "'. Exiting." << std::endl;
+        exit(67);
     }
 
     return points;
 }
 
-auto APTracer::get_texture_coordinates(std::string texture_coordinates_string) -> std::vector<double> {
-    std::vector<double> texture_coordinates;
+auto APTracer::get_normals(std::string normals_string, const std::array<Vec3f, 3>& points) -> std::array<Vec3f, 3> {
+    std::transform(normals_string.begin(), normals_string.end(), normals_string.begin(), ::tolower);
 
+    if (normals_string == "nan") {
+        const Vec3f nor = (points[1] - points[0]).cross(points[2] - points[0]).normalize_inplace();
+        return {nor, nor, nor};
+    }
+
+    std::array<Vec3f, 3> normals{};
+    int count = 0;
+    std::stringstream ss(normals_string);
+
+    for (std::string s; ss >> s;) {
+        if (count < normals.size() * 3) {
+            const std::div_t result          = std::div(count, 3);
+            normals[result.quot][result.rem] = std::stod(s);
+        }
+        ++count;
+    }
+    if (count != normals.size() * 3) {
+        std::cerr << "Error: Triangle normals should be " << normals.size() * 3 << " values separated by spaces, or nan. Current number of values is " << count << ", normals are '" << normals_string
+                  << "'. Exiting." << std::endl;
+        exit(71);
+    }
+
+    return normals;
+}
+
+auto APTracer::get_texture_coordinates(std::string texture_coordinates_string) -> std::array<double, 6> {
     std::transform(texture_coordinates_string.begin(), texture_coordinates_string.end(), texture_coordinates_string.begin(), ::tolower);
 
-    if (texture_coordinates_string != "nan") {
-        texture_coordinates = std::vector<double>(6);
-        unsigned int count  = 0;
-        std::stringstream ss(texture_coordinates_string);
+    if (texture_coordinates_string == "nan") {
+        return {0, 1, 0, 0, 1, 0};
+    }
+    std::array<double, 6> texture_coordinates{};
+    unsigned int count = 0;
+    std::stringstream ss(texture_coordinates_string);
 
-        for (std::string s; ss >> s;) {
-            if (count < texture_coordinates.size()) {
-                texture_coordinates[count] = std::stod(s);
-            }
-            ++count;
+    for (std::string s; ss >> s;) {
+        if (count < texture_coordinates.size()) {
+            texture_coordinates[count] = std::stod(s);
         }
-        if (count != texture_coordinates.size()) {
-            std::cerr << "Error: Triangle texture coordinates should be " << texture_coordinates.size() << " values separated by spaces, or nan. Current number of values is " << count
-                      << ", texture coordinates are '" << texture_coordinates_string << "'. Exiting." << std::endl;
-            exit(68);
-        }
+        ++count;
+    }
+    if (count != texture_coordinates.size()) {
+        std::cerr << "Error: Triangle texture coordinates should be " << texture_coordinates.size() << " values separated by spaces, or nan. Current number of values is " << count
+                  << ", texture coordinates are '" << texture_coordinates_string << "'. Exiting." << std::endl;
+        exit(68);
     }
 
     return texture_coordinates;

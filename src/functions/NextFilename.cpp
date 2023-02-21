@@ -1,4 +1,4 @@
-#include "functions/NextFilename.h"
+#include "functions/NextFilename.hpp"
 #include <fstream>
 #include <iomanip>
 #include <sstream>

@@ -1,7 +1,7 @@
-#include "shapes/TriangleMesh_t.h"
-#include "entities/Material_t.h"
-#include "entities/MeshGeometry_t.h"
-#include "entities/TransformMatrix_t.h"
+#include "shapes/TriangleMesh_t.hpp"
+#include "entities/Material_t.hpp"
+#include "entities/MeshGeometry_t.hpp"
+#include "entities/TransformMatrix_t.hpp"
 #include <algorithm>
 #include <cmath>
 #include <limits>

@@ -1,5 +1,5 @@
-#include "skyboxes/SkyboxTexture_t.h"
-#include "entities/Texture_t.h"
+#include "skyboxes/SkyboxTexture_t.hpp"
+#include "entities/Texture_t.hpp"
 #include <array>
 
 constexpr double pi = 3.141592653589793238463;

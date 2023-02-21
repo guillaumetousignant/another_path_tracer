@@ -1,6 +1,6 @@
-#include "materials/PortalScatterer_t.h"
-#include "entities/RandomGenerator_t.h"
-#include "entities/TransformMatrix_t.h"
+#include "materials/PortalScatterer_t.hpp"
+#include "entities/RandomGenerator_t.hpp"
+#include "entities/TransformMatrix_t.hpp"
 
 APTracer::Materials::PortalScatterer_t::PortalScatterer_t(
     APTracer::Entities::TransformMatrix_t* transformation, std::list<APTracer::Entities::Medium_t*> medium_list, double scattering_distance, double ind, unsigned int priority) :

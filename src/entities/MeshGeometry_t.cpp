@@ -1,4 +1,4 @@
-#include "entities/MeshGeometry_t.h"
+#include "entities/MeshGeometry_t.hpp"
 #include <algorithm>
 #include <array>
 #include <cmath>

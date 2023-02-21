@@ -1,6 +1,6 @@
-#include "materials/Diffuse_t.h"
-#include "entities/RandomGenerator_t.h"
-#include "entities/Shape_t.h"
+#include "materials/Diffuse_t.hpp"
+#include "entities/RandomGenerator_t.hpp"
+#include "entities/Shape_t.hpp"
 #include <cmath>
 
 constexpr double epsilon = 0.00001; // was 0.00001, 0.01 works ok when *t

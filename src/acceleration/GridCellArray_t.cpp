@@ -1,5 +1,5 @@
-#include "acceleration/GridCellArray_t.h"
-#include "entities/Shape_t.h"
+#include "acceleration/GridCellArray_t.hpp"
+#include "entities/Shape_t.hpp"
 #include <limits>
 
 using APTracer::Acceleration::GridCellArray_t;

@@ -1,5 +1,5 @@
-#include "acceleration/AccelerationGrid_t.h"
-#include "entities/Shape_t.h"
+#include "acceleration/AccelerationGrid_t.hpp"
+#include "entities/Shape_t.hpp"
 #include <cmath>
 #include <limits>
 
