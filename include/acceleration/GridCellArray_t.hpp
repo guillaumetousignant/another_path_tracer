@@ -2,16 +2,7 @@
 #define APTRACER_GRIDCELLARRAY_T_HPP
 
 #include "entities/AccelerationStructure_t.hpp"
-#include "entities/Ray_t.hpp"
 #include <vector>
-
-namespace APTracer { namespace Entities {
-    class Shape_t;
-}}
-
-using APTracer::Entities::AccelerationStructure_t;
-using APTracer::Entities::Ray_t;
-using APTracer::Entities::Shape_t;
 
 namespace APTracer { namespace Acceleration {
     /**
@@ -20,7 +11,7 @@ namespace APTracer { namespace Acceleration {
      * This structure with its array representation is more geared toward static scenes, as the cost to remove, add or move shapes from one cell to another is highest. With arrays, iteration on
      * shapes is slightly faster, and the memory used is lowest. Slightly longer to build, needs two passes.
      */
-    class GridCellArray_t final : public AccelerationStructure_t {
+    class GridCellArray_t final : public Entities::AccelerationStructure_t {
         public:
             /**
              * @brief Construct a new GridCellArray_t object with no shapes.
@@ -32,17 +23,18 @@ namespace APTracer { namespace Acceleration {
              *
              * @param size Initial reserved size of the shape array.
              */
-            GridCellArray_t(size_t size);
+            explicit GridCellArray_t(size_t size);
 
             size_t size_; /**< @brief Size of the array. Number of shapes that can be held by the cell without reallocating.*/
-            std::vector<Shape_t*> items_; /**< @brief Array of shapes contained in the cell. This allows fast iterating and lowest memory use.*/
+            std::vector<Entities::Shape_t*> items_; /**< @brief Array of shapes contained in the cell. This allows fast iterating and lowest memory use.*/
             size_t increment_size_; /**< @brief Size that will be allocated next time 'reserve()' is called. Increased with 'operator++'.*/
 
-            virtual auto intersect(const Ray_t& ray, double& t, std::array<double, 2>& uv) const -> Shape_t* final;
-            virtual auto add(Shape_t* item) -> void final;
-            virtual auto remove(const Shape_t* item) -> void final;
-            virtual auto move(Shape_t* item) -> void final;
-            virtual auto size() const -> size_t final;
+            auto intersect(const Entities::Ray_t& ray, double& t, std::array<double, 2>& uv) const -> Entities::Shape_t* final;
+            auto add(Entities::Shape_t* item) -> void final;
+            auto remove(Entities::Shape_t* item) -> void final;
+            auto move(Entities::Shape_t* item) -> void final;
+            auto size() const -> size_t final;
+            auto clone() const -> std::unique_ptr<AccelerationStructure_t> final;
 
             /**
              * @brief Increases 'size_' to 'increment_size_', allocating the array with a new size and transferring existing shapes.

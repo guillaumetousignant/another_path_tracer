@@ -3,19 +3,13 @@
 
 #include "entities/Material_t.hpp"
 #include "entities/Ray_t.hpp"
+#include "entities/Texture_t.hpp"
 #include "entities/Vec3f.hpp"
 #include <random>
 
 namespace APTracer { namespace Entities {
-    class Texture_t;
     class Shape_t;
 }}
-
-using APTracer::Entities::Material_t;
-using APTracer::Entities::Ray_t;
-using APTracer::Entities::Shape_t;
-using APTracer::Entities::Texture_t;
-using APTracer::Entities::Vec3f;
 
 namespace APTracer { namespace Materials {
 
@@ -30,7 +24,7 @@ namespace APTracer { namespace Materials {
      * This material represents uniformly and finely rough surfaces that are not flat,
      * such as brick, textured clay, and wood.
      */
-    class DiffuseNormal_t final : public Material_t {
+    class DiffuseNormal_t final : public Entities::Material_t {
         public:
             /**
              * @brief Construct a new DiffuseNormal_t object with an emissive and reflective colour, a roughness and a normal map.
@@ -41,11 +35,11 @@ namespace APTracer { namespace Materials {
              * @param roughness Attenuation of the colour as the angle between the incident ray and the surface normal increase. 0 to 1, 0 being very rough (no attenuation) and 1 being an ideal
              * diffusely reflective surface, obeying Lambert's cosine law.
              */
-            DiffuseNormal_t(const Vec3f& emission, const Vec3f& colour, const Texture_t* normal_map, double roughness);
+            DiffuseNormal_t(const Entities::Vec3f& emission, const Entities::Vec3f& colour, const Entities::Texture_t* normal_map, double roughness);
 
-            Vec3f emission_; /**< @brief Colour emitted by the material at each bounce.*/
-            Vec3f colour_; /**< @brief Colour reflected by the material at each bounce.*/
-            const Texture_t* normal_map_; /**< @brief Texture containing the surface normal of the material in object coordinates, mapped by object space coordinates.*/
+            Entities::Vec3f emission_; /**< @brief Colour emitted by the material at each bounce.*/
+            Entities::Vec3f colour_; /**< @brief Colour reflected by the material at each bounce.*/
+            const Entities::Texture_t* normal_map_; /**< @brief Texture containing the surface normal of the material in object coordinates, mapped by object space coordinates.*/
             double roughness_; /**< @brief Attenuation of the colour as the angle between the incident ray and the surface normal increase. 0 to 1, 0 being very rough (no attenuation) and 1 being an
                                   ideal diffusely reflective surface, obeying Lambert's cosine law.*/
             std::uniform_real_distribution<double> unif_; /**< @brief Uniform random distribution used for generating random numbers.*/
@@ -64,7 +58,7 @@ namespace APTracer { namespace Materials {
              * @param hit_obj Pointer to the shape that was hit by the ray.
              * @param ray Ray that has intersected the shape.
              */
-            virtual auto bounce(std::array<double, 2> uv, const Shape_t* hit_obj, Ray_t& ray) -> void final;
+            auto bounce(std::array<double, 2> uv, const Entities::Shape_t* hit_obj, Entities::Ray_t& ray) -> void final;
     };
 }}
 #endif

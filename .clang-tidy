@@ -1,5 +1,5 @@
 ---
-Checks: "clang-diagnostic-*,clang-analyzer-*,*,-llvmlibc-restrict-system-libc-headers,-fuchsia-trailing-return,-llvmlibc-implementation-in-namespace,-llvmlibc-callee-namespace,-altera-unroll-loops,-altera-id-dependent-backward-branch,-fuchsia-default-arguments-calls,-bugprone-easily-swappable-parameters,-google-runtime-int,-cppcoreguidelines-pro-bounds-constant-array-index,-misc-no-recursion,-google-readability-namespace-comments,-llvm-namespace-comment,-fuchsia-overloaded-operator,-llvm-include-order,-llvm-header-guard"
+Checks: "clang-diagnostic-*,clang-analyzer-*,*,-llvmlibc-restrict-system-libc-headers,-fuchsia-trailing-return,-llvmlibc-implementation-in-namespace,-llvmlibc-callee-namespace,-altera-unroll-loops,-altera-id-dependent-backward-branch,-fuchsia-default-arguments-calls,-bugprone-easily-swappable-parameters,-google-runtime-int,-cppcoreguidelines-pro-bounds-constant-array-index,-misc-no-recursion,-google-readability-namespace-comments,-llvm-namespace-comment,-fuchsia-overloaded-operator,-llvm-include-order,-llvm-header-guard,-misc-non-private-member-variables-in-classes,-cppcoreguidelines-non-private-member-variables-in-classes,-altera-struct-pack-align"
 WarningsAsErrors: ""
 HeaderFilterRegex: ""
 AnalyzeTemporaryDtors: false
@@ -237,7 +237,7 @@ CheckOptions:
   - key: cppcoreguidelines-pro-bounds-constant-array-index.IncludeStyle
     value: llvm
   - key: readability-identifier-length.IgnoredVariableNames
-    value: "^([tuvijklnxyz]|uv|xy|pi|ss)$"
+    value: "^([rtuvijklnxyz]|uv|xy|pi|ss|kr|Rs|Rp)$"
   - key: readability-magic-numbers.IgnoreAllFloatingPointValues
     value: "false"
   - key: hicpp-use-auto.RemoveStars
@@ -663,6 +663,6 @@ CheckOptions:
   - key: llvm-else-after-return.WarnOnUnfixable
     value: "false"
   - key: readability-magic-numbers.IgnoredIntegerValues
-    value: "1;2;3;4;5;10;"
+    value: "1;2;3;4;5;10;16;"
 ---
 

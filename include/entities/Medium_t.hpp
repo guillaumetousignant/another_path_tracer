@@ -31,6 +31,36 @@ namespace APTracer { namespace Entities {
              */
             virtual ~Medium_t() = default;
 
+            /**
+             * @brief Copy construct a new Medium_t object.
+             *
+             * @param other Object to copy.
+             */
+            Medium_t(const Medium_t& other) = default;
+
+            /**
+             * @brief Move construct a new Medium_t object.
+             *
+             * @param other Object to move.
+             */
+            Medium_t(Medium_t&& other) noexcept = default;
+
+            /**
+             * @brief Copy assignment.
+             *
+             * @param other Object to copy.
+             * @return Medium_t& Reference to this object.
+             */
+            auto operator=(const Medium_t& other) -> Medium_t& = default;
+
+            /**
+             * @brief Move assignment.
+             *
+             * @param other Object to move.
+             * @return Medium_t& Reference to this object.
+             */
+            auto operator=(Medium_t&& other) noexcept -> Medium_t& = default;
+
             double ind_; /**< @brief Refractive index of the medium. Used to calculate a ray's change of direction when going from a medium to another, and reflection ratio of refractive surfaces.*/
             unsigned int priority_; /**< @brief Priority of the medium over other mediums. A ray's current medium is the one with the highest priority, and intersections with lower priority mediums
                                        are ignored when there is an overlap.*/

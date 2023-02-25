@@ -1,6 +1,4 @@
 #include "shapes/Sphere_t.hpp"
-#include "entities/Material_t.hpp"
-#include "entities/TransformMatrix_t.hpp"
 #include <cmath>
 
 constexpr double pi = 3.141592653589793238463;

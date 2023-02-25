@@ -1,5 +1,4 @@
 #include "materials/Transparent_t.hpp"
-#include "entities/Medium_t.hpp"
 #include "entities/Shape_t.hpp"
 
 constexpr double epsilon = 0.00000001;

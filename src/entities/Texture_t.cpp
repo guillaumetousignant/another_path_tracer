@@ -138,12 +138,12 @@ auto Texture_t::get_nn(std::array<double, 2> xy) const -> Vec3f {
 }
 
 // From demofox on Shadertoy, https://www.shadertoy.com/view/MllSzX
-auto Texture_t::CubicHermite(Vec3f A, Vec3f B, Vec3f C, Vec3f D, double t) -> Vec3f {
+auto Texture_t::CubicHermite(Vec3f first, Vec3f second, Vec3f third, Vec3f fourth, double t) -> Vec3f {
     const double t2 = t * t;
     const double t3 = t * t * t;
-    const Vec3f a   = -A / 2.0 + 3.0 * B / 2.0 - 3.0 * C / 2.0 + D / 2.0;
-    const Vec3f b   = A - 5.0 * B / 2.0 + 2.0 * C - D / 2.0;
-    const Vec3f c   = -A / 2.0 + C / 2.0;
+    const Vec3f a   = -first / 2.0 + 3.0 * second / 2.0 - 3.0 * third / 2.0 + fourth / 2.0;
+    const Vec3f b   = first - 5.0 * second / 2.0 + 2.0 * third - fourth / 2.0;
+    const Vec3f c   = -first / 2.0 + third / 2.0;
 
-    return a * t3 + b * t2 + c * t + B;
+    return a * t3 + b * t2 + c * t + second;
 }

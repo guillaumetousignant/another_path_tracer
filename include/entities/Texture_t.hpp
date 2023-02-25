@@ -21,7 +21,7 @@ namespace APTracer { namespace Entities {
              *
              * @param filename Path to the image to be stored in the texture.
              */
-            Texture_t(const std::string& filename);
+            explicit Texture_t(const std::string& filename);
 
             size_t size_x_; /**< @brief Horizontal number of pixels in the texture*/
             size_t size_y_; /**< @brief Vertical number of pixels in the texture*/
@@ -78,14 +78,14 @@ namespace APTracer { namespace Entities {
              * This is the Catmull-Rom spline.
              * From demofox on Shadertoy, https://www.shadertoy.com/view/MllSzX
              *
-             * @param A First pixel.
-             * @param B Second pixel.
-             * @param C Third pixel.
-             * @param D Fourth pixel.
+             * @param first First pixel.
+             * @param second Second pixel.
+             * @param third Third pixel.
+             * @param fourth Fourth pixel.
              * @param t Distance from the center.
              * @return Vec3f Resulting pixel.
              */
-            static auto CubicHermite(Vec3f A, Vec3f B, Vec3f C, Vec3f D, double t) -> Vec3f;
+            static auto CubicHermite(Vec3f first, Vec3f second, Vec3f third, Vec3f fourth, double t) -> Vec3f;
     };
 }}
 

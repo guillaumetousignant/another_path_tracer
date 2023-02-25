@@ -5,9 +5,6 @@
 #include "entities/Vec3f.hpp"
 #include <array>
 
-using APTracer::Entities::Ray_t;
-using APTracer::Entities::Vec3f;
-
 namespace APTracer { namespace Shapes {
     /**
      * @brief The box class describes an axis-aligned bounding bounding box.
@@ -27,9 +24,9 @@ namespace APTracer { namespace Shapes {
              *
              * @param coord Array of [minimum, maximum] coordinates in the three axis for the bounding box.
              */
-            Box_t(std::array<Vec3f, 2> coord);
+            explicit Box_t(std::array<Entities::Vec3f, 2> coord);
 
-            std::array<Vec3f, 2> coordinates_; /**< @brief Array of [minimum, maximum] coordinates in the three axis for the bounding box.*/
+            std::array<Entities::Vec3f, 2> coordinates_; /**< @brief Array of [minimum, maximum] coordinates in the three axis for the bounding box.*/
 
             /**
              * @brief Tests a ray for intersection with the bounding box, setting the intersection distance.
@@ -39,7 +36,7 @@ namespace APTracer { namespace Shapes {
              * @return true The ray intersects the bounding box. t is set to the intersection distance.
              * @return false The ray doesn't intersect the bounding box. t is undefined.
              */
-            auto intersection(const Ray_t& ray, double& t) const -> bool;
+            auto intersection(const Entities::Ray_t& ray, double& t) const -> bool;
     };
 }}
 #endif

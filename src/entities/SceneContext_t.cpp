@@ -7,11 +7,9 @@
 #include <sstream>
 #include <string>
 
-#include "entities/OpenGLRenderer_t.hpp"
 #include "functions/Colours.hpp"
 #include "functions/NextFilename.hpp"
 
-#include "entities/MaterialMap_t.hpp"
 #include "materials/BounceMaterial_t.hpp"
 #include "materials/Diffuse_t.hpp"
 #include "materials/DiffuseFull_t.hpp"
@@ -19,14 +17,8 @@
 #include "materials/DiffuseTex_t.hpp"
 #include "materials/DiffuseTexNormal_t.hpp"
 #include "materials/DistanceMaterial_t.hpp"
-#include "materials/FresnelMix_t.hpp"
-#include "materials/FresnelMixIn_t.hpp"
-#include "materials/FresnelMixNormal_t.hpp"
 #include "materials/NormalDiffuseMaterial_t.hpp"
 #include "materials/NormalMaterial_t.hpp"
-#include "materials/Portal_t.hpp"
-#include "materials/RandomMix_t.hpp"
-#include "materials/RandomMixIn_t.hpp"
 #include "materials/Reflective_t.hpp"
 #include "materials/ReflectiveFuzz_t.hpp"
 #include "materials/ReflectiveFuzzNormal_t.hpp"
@@ -38,26 +30,15 @@
 #include "materials/ReflectiveRefractiveNormal_t.hpp"
 #include "materials/Refractive_t.hpp"
 #include "materials/RefractiveFuzz_t.hpp"
-#include "materials/TextureMix_t.hpp"
-#include "materials/TextureMixIn_t.hpp"
 #include "materials/Toon_t.hpp"
 #include "materials/Transparent_t.hpp"
 
 #include "materials/Absorber_t.hpp"
 #include "materials/NonAbsorber_t.hpp"
-#include "materials/PortalScatterer_t.hpp"
 #include "materials/Scatterer_t.hpp"
 #include "materials/ScattererExp_t.hpp"
 #include "materials/ScattererExpFull_t.hpp"
 #include "materials/ScattererFull_t.hpp"
-
-#include "entities/DirectionalLight_t.hpp"
-#include "entities/ImgBuffer_t.hpp"
-#include "entities/ImgBufferOpenGL_t.hpp"
-#include "entities/MeshGeometry_t.hpp"
-#include "entities/Scene_t.hpp"
-#include "entities/Texture_t.hpp"
-#include "entities/TransformMatrix_t.hpp"
 
 #include "shapes/Mesh_t.hpp"
 #include "shapes/MeshMotionblur_t.hpp"
@@ -88,7 +69,6 @@
 #include "cameras/RecCamAperture_t.hpp"
 #include "cameras/RecCamMotionblur_t.hpp"
 #include "cameras/RecCamMotionblurAperture_t.hpp"
-#include "entities/Camera_t.hpp"
 
 #include "skyboxes/SkyboxFlat_t.hpp"
 #include "skyboxes/SkyboxFlatSun_t.hpp"
@@ -103,6 +83,9 @@
 #include "acceleration/AccelerationMultiGrid_t.hpp"
 #include "acceleration/AccelerationMultiGridArray_t.hpp"
 #include "acceleration/AccelerationMultiGridVector_t.hpp"
+
+using APTracer::Entities::TransformMatrix_t;
+using APTracer::Entities::Vec3f;
 
 APTracer::Entities::SceneContext_t::SceneContext_t() :
         use_gl_(false),
@@ -305,7 +288,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
     material_aggregates_ = std::vector<std::unique_ptr<MaterialMap_t>>(n_materials);
     mesh_geometries_     = std::vector<std::unique_ptr<MeshGeometry_t>>(n_mesh_geometries);
     objects_             = std::vector<std::unique_ptr<Shape_t>>(n_objects);
-    meshes_              = std::vector<std::unique_ptr<MeshTop_t>>(n_objects);
+    meshes_              = std::vector<std::unique_ptr<Shapes::MeshTop_t>>(n_objects);
     directional_lights_  = std::vector<std::unique_ptr<DirectionalLight_t>>(n_directional_lights);
     skyboxes_            = std::vector<std::unique_ptr<Skybox_t>>(n_skyboxes);
     imgbuffers_          = std::vector<std::unique_ptr<ImgBuffer_t>>(n_imgbuffers);
@@ -439,7 +422,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
                 ++index;
             }
 
-            material_aggregates_[i] = std::make_unique<MaterialMap_t>(names.data(), materials.data(), n);
+            material_aggregates_[i] = std::make_unique<MaterialMap_t>(names, materials);
             // materials_[i] = std::unique_ptr<Material_t>(material_aggregates_[i]->getFirst()); // CHECK this is not intended, will delete stuff from material list
             materials_[i] = std::unique_ptr<Material_t>();
         }
@@ -605,7 +588,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
 
     if (!objects_.empty()) {
         std::vector<Shape_t*> shapes;
-        std::vector<MeshTop_t*> meshes;
+        std::vector<Shapes::MeshTop_t*> meshes;
 
         if (object_list != nullptr) {
             get_objects(object_list, shapes, meshes, xml_objects);
@@ -1436,7 +1419,7 @@ auto APTracer::Entities::SceneContext_t::create_mesh_geometry(const tinyxml2::XM
 }
 
 auto APTracer::Entities::SceneContext_t::create_object(const tinyxml2::XMLElement* xml_object,
-                                                       std::unique_ptr<MeshTop_t>& mesh,
+                                                       std::unique_ptr<Shapes::MeshTop_t>& mesh,
                                                        const tinyxml2::XMLElement* xml_transform_matrices,
                                                        const tinyxml2::XMLElement* xml_materials,
                                                        const tinyxml2::XMLElement* xml_mesh_geometries) -> std::unique_ptr<Shape_t> {
@@ -1456,15 +1439,15 @@ auto APTracer::Entities::SceneContext_t::create_object(const tinyxml2::XMLElemen
         require_attributes(xml_object, attributes);
         const size_t material_index = get_material_index(xml_object->Attribute("material"), xml_materials);
         if (material_aggregates_[material_index]) {
-            mesh = std::make_unique<Mesh_t>(material_aggregates_[material_index].get(),
-                                            get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices),
-                                            get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries));
+            mesh = std::make_unique<Shapes::Mesh_t>(material_aggregates_[material_index].get(),
+                                                    get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices),
+                                                    get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries));
             return nullptr;
         }
 
-        mesh = std::make_unique<Mesh_t>(materials_[material_index].get(),
-                                        get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices),
-                                        get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries));
+        mesh = std::make_unique<Shapes::Mesh_t>(materials_[material_index].get(),
+                                                get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices),
+                                                get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries));
         return nullptr;
     }
     if (type == "mesh_motionblur") {
@@ -1472,27 +1455,28 @@ auto APTracer::Entities::SceneContext_t::create_object(const tinyxml2::XMLElemen
         require_attributes(xml_object, attributes);
         const size_t material_index = get_material_index(xml_object->Attribute("material"), xml_materials);
         if (material_aggregates_[material_index]) {
-            mesh = std::make_unique<MeshMotionblur_t>(material_aggregates_[material_index].get(),
-                                                      get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices),
-                                                      get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries));
+            mesh = std::make_unique<Shapes::MeshMotionblur_t>(material_aggregates_[material_index].get(),
+                                                              get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices),
+                                                              get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries));
             return nullptr;
         }
 
-        mesh = std::make_unique<MeshMotionblur_t>(materials_[material_index].get(),
-                                                  get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices),
-                                                  get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries));
+        mesh = std::make_unique<Shapes::MeshMotionblur_t>(materials_[material_index].get(),
+                                                          get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices),
+                                                          get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries));
         return nullptr;
     }
     if (type == "sphere") {
         const std::vector<const char*> attributes = {"material", "transform_matrix"};
         require_attributes(xml_object, attributes);
-        return std::make_unique<Sphere_t>(get_material(xml_object->Attribute("material"), xml_materials), get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices));
+        return std::make_unique<Shapes::Sphere_t>(get_material(xml_object->Attribute("material"), xml_materials),
+                                                  get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices));
     }
     if (type == "sphere_motionblur") {
         const std::vector<const char*> attributes = {"material", "transform_matrix"};
         require_attributes(xml_object, attributes);
-        return std::make_unique<SphereMotionblur_t>(get_material(xml_object->Attribute("material"), xml_materials),
-                                                    get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices));
+        return std::make_unique<Shapes::SphereMotionblur_t>(get_material(xml_object->Attribute("material"), xml_materials),
+                                                            get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices));
     }
     if (type == "triangle") {
         const std::vector<const char*> attributes = {"material", "transform_matrix", "points", "normals", "texture_coordinates"};
@@ -1501,11 +1485,11 @@ auto APTracer::Entities::SceneContext_t::create_object(const tinyxml2::XMLElemen
         const std::array<Vec3f, 3> normals              = get_normals(xml_object->Attribute("normals"), points);
         const std::array<double, 6> texture_coordinates = get_texture_coordinates(xml_object->Attribute("texture_coordinates"));
 
-        return std::make_unique<Triangle_t>(get_material(xml_object->Attribute("material"), xml_materials),
-                                            get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices),
-                                            points,
-                                            normals,
-                                            texture_coordinates);
+        return std::make_unique<Shapes::Triangle_t>(get_material(xml_object->Attribute("material"), xml_materials),
+                                                    get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices),
+                                                    points,
+                                                    normals,
+                                                    texture_coordinates);
     }
     if (type == "triangle_motionblur") {
         const std::vector<const char*> attributes = {"material", "transform_matrix", "points", "normals", "texture_coordinates"};
@@ -1514,27 +1498,27 @@ auto APTracer::Entities::SceneContext_t::create_object(const tinyxml2::XMLElemen
         const std::array<Vec3f, 3> normals              = get_normals(xml_object->Attribute("normals"), points);
         const std::array<double, 6> texture_coordinates = get_texture_coordinates(xml_object->Attribute("texture_coordinates"));
 
-        return std::make_unique<TriangleMotionblur_t>(get_material(xml_object->Attribute("material"), xml_materials),
-                                                      get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices),
-                                                      points,
-                                                      normals,
-                                                      texture_coordinates);
+        return std::make_unique<Shapes::TriangleMotionblur_t>(get_material(xml_object->Attribute("material"), xml_materials),
+                                                              get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices),
+                                                              points,
+                                                              normals,
+                                                              texture_coordinates);
     }
     if (type == "triangle_mesh") {
         const std::vector<const char*> attributes = {"material", "transform_matrix", "mesh_geometry", "index"};
         require_attributes(xml_object, attributes);
-        return std::make_unique<TriangleMesh_t>(get_material(xml_object->Attribute("material"), xml_materials),
-                                                get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices),
-                                                get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries),
-                                                xml_object->UnsignedAttribute("index"));
+        return std::make_unique<Shapes::TriangleMesh_t>(get_material(xml_object->Attribute("material"), xml_materials),
+                                                        get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices),
+                                                        get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries),
+                                                        xml_object->UnsignedAttribute("index"));
     }
     if (type == "triangle_mesh_motionblur") {
         const std::vector<const char*> attributes = {"material", "transform_matrix", "mesh_geometry", "index"};
         require_attributes(xml_object, attributes);
-        return std::make_unique<TriangleMeshMotionblur_t>(get_material(xml_object->Attribute("material"), xml_materials),
-                                                          get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices),
-                                                          get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries),
-                                                          xml_object->UnsignedAttribute("index"));
+        return std::make_unique<Shapes::TriangleMeshMotionblur_t>(get_material(xml_object->Attribute("material"), xml_materials),
+                                                                  get_transform_matrix(xml_object->Attribute("transform_matrix"), xml_transform_matrices),
+                                                                  get_mesh_geometry(xml_object->Attribute("mesh_geometry"), xml_mesh_geometries),
+                                                                  xml_object->UnsignedAttribute("index"));
     }
 
     std::cerr << "Error: Object type '" << type << "' not implemented. Exiting." << std::endl;
@@ -2694,7 +2678,7 @@ auto APTracer::Entities::SceneContext_t::get_skybox(std::string skybox, const ti
     exit(81);
 }
 
-auto APTracer::Entities::SceneContext_t::get_objects(std::string objects_string, std::vector<Shape_t*>& shapes, std::vector<MeshTop_t*>& meshes, const tinyxml2::XMLElement* xml_objects) const
+auto APTracer::Entities::SceneContext_t::get_objects(std::string objects_string, std::vector<Shape_t*>& shapes, std::vector<Shapes::MeshTop_t*>& meshes, const tinyxml2::XMLElement* xml_objects) const
     -> void {
     std::list<size_t> objects_list = std::list<size_t>();
     const std::string delimiter    = ", ";
@@ -2779,7 +2763,7 @@ auto APTracer::Entities::SceneContext_t::get_objects(std::string objects_string,
     }
 
     shapes              = std::vector<Shape_t*>(n_shapes);
-    meshes              = std::vector<MeshTop_t*>(n_meshes);
+    meshes              = std::vector<Shapes::MeshTop_t*>(n_meshes);
     size_t index_shapes = 0;
     size_t index_meshes = 0;
 
@@ -2795,7 +2779,7 @@ auto APTracer::Entities::SceneContext_t::get_objects(std::string objects_string,
     }
 }
 
-auto APTracer::Entities::SceneContext_t::get_objects(std::vector<Shape_t*>& shapes, std::vector<MeshTop_t*>& meshes) const -> void {
+auto APTracer::Entities::SceneContext_t::get_objects(std::vector<Shape_t*>& shapes, std::vector<Shapes::MeshTop_t*>& meshes) const -> void {
     size_t n_shapes = 0;
     size_t n_meshes = 0;
 
@@ -2809,7 +2793,7 @@ auto APTracer::Entities::SceneContext_t::get_objects(std::vector<Shape_t*>& shap
     }
 
     shapes              = std::vector<Shape_t*>(n_shapes);
-    meshes              = std::vector<MeshTop_t*>(n_meshes);
+    meshes              = std::vector<Shapes::MeshTop_t*>(n_meshes);
     size_t index_shapes = 0;
     size_t index_meshes = 0;
 
@@ -2852,7 +2836,7 @@ auto APTracer::get_colour(std::string colour) -> Vec3f {
         return Vec3f(0.5);
     }
 
-    return {values};
+    return Vec3f(values);
 }
 
 auto APTracer::get_points(std::string points_string) -> std::array<Vec3f, 3> {

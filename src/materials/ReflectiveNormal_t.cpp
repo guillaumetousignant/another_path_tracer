@@ -1,17 +1,16 @@
 #include "materials/ReflectiveNormal_t.hpp"
 #include "entities/Shape_t.hpp"
-#include "entities/Texture_t.hpp"
 
 constexpr double epsilon = 0.00000001;
 
 using APTracer::Entities::Vec3f;
 
-APTracer::Materials::ReflectiveNormal_t::ReflectiveNormal_t(const Vec3f& emission, const Vec3f& colour, const APTracer::Entities::Texture_t* normal_map) :
+APTracer::Materials::ReflectiveNormal_t::ReflectiveNormal_t(const Entities::Vec3f& emission, const Entities::Vec3f& colour, const APTracer::Entities::Texture_t* normal_map) :
         emission_(emission), colour_(colour), normal_map_(normal_map) {}
 
 auto APTracer::Materials::ReflectiveNormal_t::bounce(std::array<double, 2> uv, const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t& ray) -> void {
     Vec3f tangent;
-    std::array<double, 2> tuv;
+    std::array<double, 2> tuv{};
     Vec3f normal = hit_obj->normal_uv_tangent(ray.time_, uv, tuv, tangent);
 
     const Vec3f bitangent       = normal.cross(tangent);

@@ -5,18 +5,18 @@
 
 auto APTracer::Entities::build_rng_vec() -> std::vector<std::mt19937> {
     std::vector<std::mt19937> generators;
-    std::random_device rd;
+    std::random_device rdev;
 
 #ifdef APTRACER_USE_OPENMP
-    const int N = omp_get_max_threads();
+    const int n_threads = omp_get_max_threads();
 #else
-    const int N = 1;
+    const int n_threads = 1;
 #endif
 
-    generators.reserve(N);
+    generators.reserve(n_threads);
 
-    for (int i = 0; i < N; ++i) {
-        generators.emplace_back(rd());
+    for (int i = 0; i < n_threads; ++i) {
+        generators.emplace_back(rdev());
     }
     return generators;
 }

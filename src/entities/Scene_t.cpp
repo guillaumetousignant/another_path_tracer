@@ -1,19 +1,15 @@
 #include "entities/Scene_t.hpp"
 #include "acceleration/AccelerationMultiGridVector_t.hpp"
-#include "entities/AccelerationStructure_t.hpp"
-#include "entities/Shape_t.hpp"
-#include "shapes/MeshTop_t.hpp"
 #include <algorithm>
 #include <limits>
 
 using APTracer::Acceleration::AccelerationMultiGridVector_t;
 using APTracer::Entities::Scene_t;
-using APTracer::Entities::Shape_t;
 using APTracer::Shapes::MeshTop_t;
 
 Scene_t::Scene_t(Shape_t* shape) : geometry_(1, shape) {}
 
-Scene_t::Scene_t(const std::vector<Shape_t*>& shapes) : geometry_(shapes) {}
+Scene_t::Scene_t(std::vector<Shape_t*> shapes) : geometry_(std::move(shapes)) {}
 
 Scene_t::Scene_t(MeshTop_t* mesh) : geometry_(mesh->triangles_.size()) {
     for (size_t i = 0; i < mesh->triangles_.size(); ++i) {
@@ -74,32 +70,18 @@ auto Scene_t::add(const std::vector<MeshTop_t*>& meshes) -> void {
 }
 
 auto Scene_t::remove(Shape_t* shape) -> void {
-    for (size_t i = 0; i < geometry_.size(); ++i) {
-        if (geometry_[i] == shape) {
-            geometry_.erase(geometry_.begin() + i);
-            break;
-        }
-    }
+    geometry_.erase(std::remove(geometry_.begin(), geometry_.end(), shape), geometry_.end());
 }
 
 auto Scene_t::remove(const std::vector<Shape_t*>& shapes) -> void {
-    for (const auto& shape: shapes) {
-        for (size_t i = 0; i < geometry_.size(); ++i) {
-            if (geometry_[i] == shape) {
-                geometry_.erase(geometry_.begin() + i);
-                break;
-            }
-        }
-    }
+    geometry_.erase(std::remove_if(geometry_.begin(), geometry_.end(), [&shapes](Shape_t* shape) { return std::find(shapes.begin(), shapes.end(), shape) != shapes.end(); }), geometry_.end());
 }
 
 auto Scene_t::remove(MeshTop_t* mesh) -> void {
     if (!mesh->triangles_.empty()) {
-        for (size_t i = 0; i < geometry_.size(); ++i) {
-            if (geometry_[i] == mesh->triangles_[0].get()) {
-                geometry_.erase(geometry_.begin() + i, geometry_.begin() + std::max(i + mesh->triangles_.size(), geometry_.size()));
-                break;
-            }
+        const auto triangle = std::find(geometry_.begin(), geometry_.end(), mesh->triangles_[0].get());
+        if (triangle != geometry_.end()) {
+            geometry_.erase(triangle, triangle + static_cast<long long>(mesh->triangles_.size()));
         }
     }
 }
@@ -107,11 +89,9 @@ auto Scene_t::remove(MeshTop_t* mesh) -> void {
 auto Scene_t::remove(const std::vector<MeshTop_t*>& meshes) -> void {
     for (const auto& mesh: meshes) {
         if (!mesh->triangles_.empty()) {
-            for (size_t i = 0; i < geometry_.size(); ++i) {
-                if (geometry_[i] == mesh->triangles_[0].get()) {
-                    geometry_.erase(geometry_.begin() + i, geometry_.begin() + std::max(i + mesh->triangles_.size(), geometry_.size()));
-                    break;
-                }
+            const auto triangle = std::find(geometry_.begin(), geometry_.end(), mesh->triangles_[0].get());
+            if (triangle != geometry_.end()) {
+                geometry_.erase(triangle, triangle + static_cast<long long>(mesh->triangles_.size()));
             }
         }
     }
@@ -124,12 +104,14 @@ auto Scene_t::update() -> void {
 }
 
 auto Scene_t::build_acc() -> void {
-    acc_ = std::make_unique<AccelerationMultiGridVector_t>(geometry_, 1, 128, 32, 1);
+    constexpr size_t grid_max_res          = 128;
+    constexpr size_t grid_max_cell_content = 32;
+    acc_                                   = std::make_unique<AccelerationMultiGridVector_t>(geometry_, 1, grid_max_res, grid_max_cell_content, 1);
 }
 
 auto Scene_t::intersect_brute(const Ray_t& ray, double& t, std::array<double, 2>& uv) const -> Shape_t* {
-    double t_temp;
-    std::array<double, 2> uv_temp;
+    double t_temp = std::numeric_limits<double>::max();
+    std::array<double, 2> uv_temp{};
 
     t                = std::numeric_limits<double>::max();
     Shape_t* hit_obj = nullptr;

@@ -1,10 +1,5 @@
 #include "cameras/RecCamMotionblurAperture_t.hpp"
-#include "entities/ImgBuffer_t.hpp"
-#include "entities/Medium_t.hpp"
 #include "entities/RandomGenerator_t.hpp"
-#include "entities/Scene_t.hpp"
-#include "entities/Skybox_t.hpp"
-#include "entities/TransformMatrix_t.hpp"
 #include <cmath>
 
 constexpr double pi = 3.141592653589793238463;
@@ -66,10 +61,10 @@ auto RecCamMotionblurAperture_t::raytrace(const Scene_t* scene) -> void {
     const Vec3f focus_point         = origin_ + direction_ * focus_distance_;
     const Vec3f focus_point_last    = origin_last_ + direction_last_ * focus_distance_last_;
     const double tot_subpix         = subpix_[0] * subpix_[1];
-    const double pixel_span_y_last  = focus_distance_last_ * std::tan(fov_last_[0] / 2.0) * 2.0 / image_->size_y_;
-    const double pixel_span_x_last  = focus_distance_last_ * std::tan(fov_last_[1] / 2.0) * 2.0 / image_->size_x_;
-    const double pixel_span_y       = focus_distance_ * std::tan(fov_[0] / 2.0) * 2.0 / image_->size_y_;
-    const double pixel_span_x       = focus_distance_ * std::tan(fov_[1] / 2.0) * 2.0 / image_->size_x_;
+    const double pixel_span_y_last  = focus_distance_last_ * std::tan(fov_last_[0] / 2.0) * 2.0 / static_cast<double>(image_->size_y_);
+    const double pixel_span_x_last  = focus_distance_last_ * std::tan(fov_last_[1] / 2.0) * 2.0 / static_cast<double>(image_->size_x_);
+    const double pixel_span_y       = focus_distance_ * std::tan(fov_[0] / 2.0) * 2.0 / static_cast<double>(image_->size_y_);
+    const double pixel_span_x       = focus_distance_ * std::tan(fov_[1] / 2.0) * 2.0 / static_cast<double>(image_->size_x_);
     const double subpix_span_y_last = pixel_span_y_last / subpix_[0];
     const double subpix_span_x_last = pixel_span_x_last / subpix_[1];
     const double subpix_span_y      = pixel_span_y / subpix_[0];
@@ -133,7 +128,7 @@ auto RecCamMotionblurAperture_t::focus(double focus_distance) -> void {
 
 auto RecCamMotionblurAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> position) -> void {
     double t = std::numeric_limits<double>::max();
-    std::array<double, 2> uv;
+    std::array<double, 2> uv{};
 
     const Vec3f horizontal = direction_.cross(up_).normalize_inplace();
     const Vec3f vertical   = horizontal.cross(direction_).normalize_inplace();
@@ -144,7 +139,8 @@ auto RecCamMotionblurAperture_t::autoFocus(const Scene_t* scene, std::array<doub
     const Ray_t focus_ray = Ray_t(origin_, ray_vec, Vec3f(), Vec3f(1.0), medium_list_);
 
     if (scene->intersect(focus_ray, t, uv) == nullptr) {
-        t = 1000000;
+        constexpr double infinity_focus = 1000000;
+        t                               = infinity_focus;
     }
     else {
         t = direction_.dot(t * ray_vec);

@@ -3,18 +3,12 @@
 
 #include "entities/Material_t.hpp"
 #include "entities/Ray_t.hpp"
+#include "entities/Texture_t.hpp"
 #include "entities/Vec3f.hpp"
 
 namespace APTracer { namespace Entities {
-    class Texture_t;
     class Shape_t;
 }}
-
-using APTracer::Entities::Material_t;
-using APTracer::Entities::Ray_t;
-using APTracer::Entities::Shape_t;
-using APTracer::Entities::Texture_t;
-using APTracer::Entities::Vec3f;
 
 namespace APTracer { namespace Materials {
 
@@ -29,7 +23,7 @@ namespace APTracer { namespace Materials {
      * This material represents textured shiny surfaces, such as sculpted mirrors,
      * very polished patterned metals, and shiny shaped plastic.
      */
-    class ReflectiveNormal_t final : public Material_t {
+    class ReflectiveNormal_t final : public Entities::Material_t {
         public:
             /**
              * @brief Construct a new ReflectiveNormal_t object with an emissive and reflective colour, and a normal map.
@@ -38,11 +32,11 @@ namespace APTracer { namespace Materials {
              * @param colour Colour reflected by the material when a ray bounces on it.
              * @param normal_map Texture containing the surface normal in object coordinates.
              */
-            ReflectiveNormal_t(const Vec3f& emission, const Vec3f& colour, const Texture_t* normal_map);
+            ReflectiveNormal_t(const Entities::Vec3f& emission, const Entities::Vec3f& colour, const Entities::Texture_t* normal_map);
 
-            Vec3f emission_; /**< @brief Colour emitted by the material at each bounce.*/
-            Vec3f colour_; /**< @brief Colour reflected by the material at each bounce.*/
-            const Texture_t* normal_map_; /**< @brief Texture containing the surface normal of the material in object coordinates, mapped by object space coordinates.*/
+            Entities::Vec3f emission_; /**< @brief Colour emitted by the material at each bounce.*/
+            Entities::Vec3f colour_; /**< @brief Colour reflected by the material at each bounce.*/
+            const Entities::Texture_t* normal_map_; /**< @brief Texture containing the surface normal of the material in object coordinates, mapped by object space coordinates.*/
 
             /**
              * @brief Bounces a ray of light on the material.
@@ -59,7 +53,7 @@ namespace APTracer { namespace Materials {
              * @param hit_obj Pointer to the shape that was hit by the ray.
              * @param ray Ray that has intersected the shape.
              */
-            virtual auto bounce(std::array<double, 2> uv, const Shape_t* hit_obj, Ray_t& ray) -> void final;
+            auto bounce(std::array<double, 2> uv, const Entities::Shape_t* hit_obj, Entities::Ray_t& ray) -> void final;
     };
 }}
 #endif

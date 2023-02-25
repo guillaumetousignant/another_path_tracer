@@ -1,5 +1,4 @@
 #include "materials/Refractive_t.hpp"
-#include "entities/Medium_t.hpp"
 #include "entities/Shape_t.hpp"
 #include <cmath>
 
@@ -7,7 +6,8 @@ constexpr double epsilon = 0.00000001;
 
 using APTracer::Entities::Vec3f;
 
-APTracer::Materials::Refractive_t::Refractive_t(const Vec3f& emission, const Vec3f& colour, APTracer::Entities::Medium_t* medium) : emission_(emission), colour_(colour), medium_(medium) {}
+APTracer::Materials::Refractive_t::Refractive_t(const Entities::Vec3f& emission, const Entities::Vec3f& colour, APTracer::Entities::Medium_t* medium) :
+        emission_(emission), colour_(colour), medium_(medium) {}
 
 auto APTracer::Materials::Refractive_t::bounce(std::array<double, 2> uv, const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t& ray) -> void {
     const Vec3f normal = hit_obj->normal(ray.time_, uv);
@@ -17,8 +17,8 @@ auto APTracer::Materials::Refractive_t::bounce(std::array<double, 2> uv, const A
 
     if (medium_->priority_ >= ray.medium_list_.front()->priority_) { // CHECK also discard if priority is equal, but watch for going out case
         Vec3f n;
-        double etai;
-        double etat;
+        double etai{};
+        double etat{};
 
         if (cosi < 0) { // Coming in
             etai = ray.medium_list_.front()->ind_;

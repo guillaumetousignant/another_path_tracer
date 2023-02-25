@@ -1,14 +1,14 @@
 #ifndef APTRACER_ENTITIES_OPENGLRENDERER_T_HPP
 #define APTRACER_ENTITIES_OPENGLRENDERER_T_HPP
 
+#include "entities/Camera_t.hpp"
+#include "entities/ImgBufferOpenGL_t.hpp"
+#include "entities/Scene_t.hpp"
 #include "entities/Vec3f.hpp"
 #include <memory>
 #include <string>
 
 namespace APTracer { namespace Entities {
-    class Camera_t;
-    class Scene_t;
-    class ImgBufferOpenGL_t;
 
     /**
      * @brief The OpenGL renderer class displays an image on the screen and handles user input.
@@ -82,7 +82,7 @@ namespace APTracer { namespace Entities {
             /**
              * @brief Resets the camera and its image buffer, and starts accumulating samples from scratch.
              */
-            auto resetDisplay(void) -> void;
+            auto resetDisplay() const -> void;
 
             /**
              * @brief Function called by OpenGL on mouse movement. Moves the camera.
@@ -176,7 +176,7 @@ namespace APTracer { namespace Entities {
              *
              * This calls the accumulate_write function on the singleton OpenGLRenderer_t object.
              */
-            static auto openGL_resetDisplay(void) -> void;
+            static auto openGL_resetDisplay() -> void;
 
             /**
              * @brief Wrapper function called by OpenGL on mouse movement. Moves the camera.

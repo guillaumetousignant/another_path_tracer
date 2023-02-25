@@ -10,11 +10,6 @@ namespace APTracer { namespace Entities {
     class Shape_t;
 }}
 
-using APTracer::Entities::Material_t;
-using APTracer::Entities::Ray_t;
-using APTracer::Entities::Shape_t;
-using APTracer::Entities::Vec3f;
-
 namespace APTracer { namespace Materials {
 
     /**
@@ -27,7 +22,7 @@ namespace APTracer { namespace Materials {
      * plastic, etc. Reflective and refractive surfaces like glass and water should use the dedicated
      * ReflectiveRefractive materials as they are faster.
      */
-    class FresnelMix_t final : public Material_t {
+    class FresnelMix_t final : public Entities::Material_t {
         public:
             /**
              * @brief Construct a new FresnelMix_t object from a refracted and reflected material, and a refractive index.
@@ -55,7 +50,7 @@ namespace APTracer { namespace Materials {
              * @param hit_obj Pointer to the shape that was hit by the ray.
              * @param ray Ray that has intersected the shape.
              */
-            virtual auto bounce(std::array<double, 2> uv, const Shape_t* hit_obj, Ray_t& ray) -> void final;
+            auto bounce(std::array<double, 2> uv, const Entities::Shape_t* hit_obj, Entities::Ray_t& ray) -> void final;
     };
 }}
 #endif

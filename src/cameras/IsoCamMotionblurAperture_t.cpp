@@ -1,10 +1,5 @@
 #include "cameras/IsoCamMotionblurAperture_t.hpp"
-#include "entities/ImgBuffer_t.hpp"
-#include "entities/Medium_t.hpp"
 #include "entities/RandomGenerator_t.hpp"
-#include "entities/Scene_t.hpp"
-#include "entities/Skybox_t.hpp"
-#include "entities/TransformMatrix_t.hpp"
 #include <cmath>
 
 constexpr double pi = 3.141592653589793238463;
@@ -64,10 +59,10 @@ auto IsoCamMotionblurAperture_t::raytrace(const Scene_t* scene) -> void {
     const Vec3f horizontal_last     = direction_last_.cross(up_last_).normalize_inplace();
     const Vec3f vertical_last       = horizontal_last.cross(direction_last_).normalize_inplace();
     const double tot_subpix         = subpix_[0] * subpix_[1];
-    const double pixel_span_y_last  = fov_last_[0] / image_->size_y_;
-    const double pixel_span_x_last  = fov_last_[1] / image_->size_x_;
-    const double pixel_span_y       = fov_[0] / image_->size_y_;
-    const double pixel_span_x       = fov_[1] / image_->size_x_;
+    const double pixel_span_y_last  = fov_last_[0] / static_cast<double>(image_->size_y_);
+    const double pixel_span_x_last  = fov_last_[1] / static_cast<double>(image_->size_x_);
+    const double pixel_span_y       = fov_[0] / static_cast<double>(image_->size_y_);
+    const double pixel_span_x       = fov_[1] / static_cast<double>(image_->size_x_);
     const double subpix_span_y_last = pixel_span_y_last / subpix_[0];
     const double subpix_span_x_last = pixel_span_x_last / subpix_[1];
     const double subpix_span_y      = pixel_span_y / subpix_[0];
@@ -131,7 +126,7 @@ auto IsoCamMotionblurAperture_t::focus(double focus_distance) -> void {
 
 auto IsoCamMotionblurAperture_t::autoFocus(const Scene_t* scene, std::array<double, 2> position) -> void {
     double t = std::numeric_limits<double>::max();
-    std::array<double, 2> uv;
+    std::array<double, 2> uv{};
 
     const Vec3f horizontal = direction_.cross(up_).normalize_inplace();
     const Vec3f vertical   = horizontal.cross(direction_).normalize_inplace();
@@ -141,7 +136,8 @@ auto IsoCamMotionblurAperture_t::autoFocus(const Scene_t* scene, std::array<doub
     const Ray_t focus_ray = Ray_t(pix_origin, direction_, Vec3f(), Vec3f(1.0), medium_list_);
 
     if (scene->intersect(focus_ray, t, uv) == nullptr) {
-        t = 1000000;
+        constexpr double infinity_focus = 1000000;
+        t                               = infinity_focus;
     }
     focus(t);
 }

@@ -6,10 +6,6 @@
 #include "entities/Vec3f.hpp"
 #include <random>
 
-using APTracer::Entities::Medium_t;
-using APTracer::Entities::Ray_t;
-using APTracer::Entities::Vec3f;
-
 namespace APTracer { namespace Materials {
 
     /**
@@ -24,14 +20,14 @@ namespace APTracer { namespace Materials {
      * This medium can be used to represent interacting media containing particles, dusty atmospheric scattering,
      * sandy water, and very small particles in a liquid or solid.
      */
-    class ScattererFull_t final : public Medium_t {
+    class ScattererFull_t final : public Entities::Medium_t {
         public:
             /**
              * @brief Construct a new ScattererFull_t object with a volumetric colour and emissive colour, a scattering colour and emissive colour, the volumetric absorption/emission distance, and a
              * scattering distance.
              *
              * The first two distances are the distances traveled by a ray in the medium to produce the input emissive and absorptive colour, respectively.
-             * The scattering distance is the average distance at which a ray will be scatterred.
+             * The scattering distance is the average distance at which a ray will be scattered.
              *
              * @param emi_vol Colour emitted by the medium when a ray traverses abs_dist_emi within it.
              * @param col_vol Colour of the medium when a ray traverses abs_dist_col within it.
@@ -43,12 +39,20 @@ namespace APTracer { namespace Materials {
              * @param ind Refractive index of the medium.
              * @param priority Priority of the medium over other mediums, used to determine which is the current medium when overlapping. Higher value means higher priority.
              */
-            ScattererFull_t(Vec3f emi_vol, Vec3f col_vol, Vec3f emi_scat, Vec3f col_scat, double abs_dist_emi, double abs_dist_col, double scat_dist, double ind, unsigned int priority);
+            ScattererFull_t(Entities::Vec3f emi_vol,
+                            Entities::Vec3f col_vol,
+                            Entities::Vec3f emi_scat,
+                            Entities::Vec3f col_scat,
+                            double abs_dist_emi,
+                            double abs_dist_col,
+                            double scat_dist,
+                            double ind,
+                            unsigned int priority);
 
-            Vec3f emission_vol_; /**< @brief Volumetric colour emitted by the medium in exponential form.*/
-            Vec3f colour_vol_; /**< @brief Volumetric colour absorbed by the medium in exponential form.*/
-            Vec3f emission_scat_; /**< @brief Colour emitted by the medium when a ray is scattered.*/
-            Vec3f colour_scat_; /**< @brief Colour reflected by the medium when a ray is scattered.*/
+            Entities::Vec3f emission_vol_; /**< @brief Volumetric colour emitted by the medium in exponential form.*/
+            Entities::Vec3f colour_vol_; /**< @brief Volumetric colour absorbed by the medium in exponential form.*/
+            Entities::Vec3f emission_scat_; /**< @brief Colour emitted by the medium when a ray is scattered.*/
+            Entities::Vec3f colour_scat_; /**< @brief Colour reflected by the medium when a ray is scattered.*/
             double scattering_coefficient_; /**< @brief Scattering probability in exponential form.*/
             std::uniform_real_distribution<double> unif_; /**< @brief Uniform random distribution used for generating random numbers.*/
 
@@ -64,7 +68,7 @@ namespace APTracer { namespace Materials {
              * @return true Returns true if the ray has been scattered, meaning that its origin and/or direction has changed and the material bounce should not be performed.
              * @return false Returns false when the ray's path has not been changed, and it should bounce on the intersected material as planned.
              */
-            virtual auto scatter(Ray_t& ray) -> bool final;
+            auto scatter(Entities::Ray_t& ray) -> bool final;
     };
 }}
 #endif

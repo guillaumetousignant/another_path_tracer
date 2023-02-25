@@ -1,14 +1,7 @@
 #include "cameras/FishCam_t.hpp"
-#include "entities/ImgBuffer_t.hpp"
-#include "entities/Medium_t.hpp"
 #include "entities/RandomGenerator_t.hpp"
-#include "entities/Scene_t.hpp"
-#include "entities/Skybox_t.hpp"
-#include "entities/TransformMatrix_t.hpp"
 #include <array>
 #include <cmath>
-
-constexpr double pi = 3.141592653589793238463;
 
 using APTracer::Cameras::FishCam_t;
 using APTracer::Entities::ImgBuffer_t;
@@ -40,8 +33,8 @@ auto FishCam_t::update() -> void {
 
 auto FishCam_t::raytrace(const Scene_t* scene) -> void {
     const double tot_subpix    = subpix_[0] * subpix_[1];
-    const double pixel_span_y  = fov_[0] / image_->size_y_;
-    const double pixel_span_x  = fov_[1] / image_->size_x_;
+    const double pixel_span_y  = fov_[0] / static_cast<double>(image_->size_y_);
+    const double pixel_span_x  = fov_[1] / static_cast<double>(image_->size_x_);
     const double subpix_span_y = pixel_span_y / subpix_[0];
     const double subpix_span_x = pixel_span_x / subpix_[1];
     const Vec3f horizontal     = direction_.cross(up_).normalize_inplace();

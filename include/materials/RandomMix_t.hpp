@@ -9,10 +9,6 @@ namespace APTracer { namespace Entities {
     class Shape_t;
 }}
 
-using APTracer::Entities::Material_t;
-using APTracer::Entities::Ray_t;
-using APTracer::Entities::Shape_t;
-
 namespace APTracer { namespace Materials {
 
     /**
@@ -23,7 +19,7 @@ namespace APTracer { namespace Materials {
      * This material models surfaces that are a mix of two materials, like dusty surfaces or surfaces
      * that partly emit light.
      */
-    class RandomMix_t final : public Material_t {
+    class RandomMix_t final : public Entities::Material_t {
         public:
             /**
              * @brief Construct a new RandomMix_t object from two materials and a ratio.
@@ -49,7 +45,7 @@ namespace APTracer { namespace Materials {
              * @param hit_obj Pointer to the shape that was hit by the ray.
              * @param ray Ray that has intersected the shape.
              */
-            virtual auto bounce(std::array<double, 2> uv, const Shape_t* hit_obj, Ray_t& ray) -> void final;
+            auto bounce(std::array<double, 2> uv, const Entities::Shape_t* hit_obj, Entities::Ray_t& ray) -> void final;
     };
 }}
 #endif

@@ -27,6 +27,36 @@ namespace APTracer { namespace Entities {
              */
             virtual ~ImgBuffer_t() = default;
 
+            /**
+             * @brief Copy construct a new ImgBuffer_t object.
+             *
+             * @param other Object to copy.
+             */
+            ImgBuffer_t(const ImgBuffer_t& other) = default;
+
+            /**
+             * @brief Move construct a new ImgBuffer_t object.
+             *
+             * @param other Object to move.
+             */
+            ImgBuffer_t(ImgBuffer_t&& other) noexcept = default;
+
+            /**
+             * @brief Copy assignment.
+             *
+             * @param other Object to copy.
+             * @return ImgBuffer_t& Reference to this object.
+             */
+            auto operator=(const ImgBuffer_t& other) -> ImgBuffer_t& = default;
+
+            /**
+             * @brief Move assignment.
+             *
+             * @param other Object to move.
+             * @return ImgBuffer_t& Reference to this object.
+             */
+            auto operator=(ImgBuffer_t&& other) noexcept -> ImgBuffer_t& = default;
+
             size_t size_x_; /**< @brief Horizontal number of pixels in the image. Main axis of the layout.*/
             size_t size_y_; /**< @brief Vertical number of pixels in the image. Secondary axis of the layout.*/
             unsigned int updates_; /**< @brief Number of times the whole image was updated. Number of samples that each pixel holds.*/
@@ -44,11 +74,9 @@ namespace APTracer { namespace Entities {
              *
              * This will increase the number of updates of the image by 1.
              *
-             * @param img Array of colour pixels to be added to the image.
-             * @param size_x Horizontal size of the image to be added.
-             * @param size_y Vertical size of the image to be added.
+             * @param img Vector of colour pixels to be added to the image.
              */
-            virtual auto update(const Vec3f* img, size_t size_x, size_t size_y) -> void;
+            virtual auto update(const std::vector<Vec3f>& img) -> void;
 
             /**
              * @brief Increments the number of updates of the image by 1.
@@ -74,11 +102,9 @@ namespace APTracer { namespace Entities {
              *
              * This sets the number of updates to 1.
              *
-             * @param img Array of colour pixels to be given to the image.
-             * @param size_x Horizontal size of the image to be set.
-             * @param size_y Vertical size of the image to be set.
+             * @param img Vector of colour pixels to be given to the image.
              */
-            virtual auto set(const Vec3f* img, size_t size_x, size_t size_y) -> void;
+            virtual auto set(const std::vector<Vec3f>& img) -> void;
 
             /**
              * @brief Sets the value of a single pixel of the image to the value of the input.

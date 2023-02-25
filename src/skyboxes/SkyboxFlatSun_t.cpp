@@ -1,5 +1,4 @@
 #include "skyboxes/SkyboxFlatSun_t.hpp"
-#include "entities/DirectionalLight_t.hpp"
 
 using APTracer::Entities::Vec3f;
 

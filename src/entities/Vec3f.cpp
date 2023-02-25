@@ -142,14 +142,14 @@ auto Vec3f::magnitudeSquared() const -> double {
     return v[0] * v[0] + v[1] * v[1] + v[2] * v[2];
 }
 auto Vec3f::normalize() const -> Vec3f {
-    const double m = magnitude();
-    return {v[0] / m, v[1] / m, v[2] / m};
+    const double r = magnitude();
+    return {v[0] / r, v[1] / r, v[2] / r};
 }
 auto Vec3f::normalize_inplace() -> const Vec3f& {
-    const double m = magnitude();
-    v[0] /= m;
-    v[1] /= m;
-    v[2] /= m;
+    const double r = magnitude();
+    v[0] /= r;
+    v[1] /= r;
+    v[2] /= r;
     return *this;
 }
 auto Vec3f::dot(const Vec3f& other) const -> double {
@@ -230,7 +230,7 @@ auto operator<<(std::ostream& output, const Vec3f& v) -> std::ostream& {
     output << '[' << v[0] << ", " << v[1] << ", " << v[2] << ']';
     return output;
 }
-auto operator*(const double factor, const Vec3f& v) -> Vec3f {
+auto operator*(double factor, const Vec3f& v) -> Vec3f {
     return {v[0] * factor, v[1] * factor, v[2] * factor};
 }
 auto Vec3f::x() const -> double {

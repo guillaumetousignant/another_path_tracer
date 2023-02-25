@@ -10,11 +10,6 @@ namespace APTracer { namespace Entities {
     class Shape_t;
 }}
 
-using APTracer::Entities::Material_t;
-using APTracer::Entities::Ray_t;
-using APTracer::Entities::Shape_t;
-using APTracer::Entities::Vec3f;
-
 namespace APTracer { namespace Materials {
 
     /**
@@ -26,7 +21,7 @@ namespace APTracer { namespace Materials {
      * This material is more useful for debugging than for display purposes, as it works best when all objects of the scene are
      * made of this material.
      */
-    class BounceMaterial_t final : public Material_t {
+    class BounceMaterial_t final : public Entities::Material_t {
         public:
             /**
              * @brief Construct a new BounceMaterial_t object with a maximum number of bounces.
@@ -37,9 +32,9 @@ namespace APTracer { namespace Materials {
              *
              * @param max_bounces Number of bounces at which the colour a ray would be white.
              */
-            BounceMaterial_t(unsigned int max_bounces);
+            explicit BounceMaterial_t(unsigned int max_bounces);
 
-            Vec3f emission_; /**< @brief Colour emitted by the material at each bounce.*/
+            Entities::Vec3f emission_; /**< @brief Colour emitted by the material at each bounce.*/
             std::uniform_real_distribution<double> unif_; /**< @brief Uniform random distribution used for generating random numbers.*/
 
             /**
@@ -47,14 +42,14 @@ namespace APTracer { namespace Materials {
              *
              * The ray is coloured proportionally to the number of bounces a ray has achieved when bouncing on it, and resets the
              * ray's mask to 1 in order to continue this process on subsequent bounces.
-             * The ray's origin and direction are modified like a diffuse material would, to the hitpoint and randomly in the
+             * The ray's origin and direction are modified like a diffuse material would, to the hit point and randomly in the
              * hemisphere above the hit point, respectively.
              *
              * @param uv Object space coordinates of the hit point. Used to query the shape for values at coordinates on it. Two components, u, and v, that can change meaning depending on the shape.
              * @param hit_obj Pointer to the shape that was hit by the ray.
              * @param ray Ray that has intersected the shape.
              */
-            virtual auto bounce(std::array<double, 2> uv, const Shape_t* hit_obj, Ray_t& ray) -> void final;
+            auto bounce(std::array<double, 2> uv, const Entities::Shape_t* hit_obj, Entities::Ray_t& ray) -> void final;
     };
 }}
 #endif

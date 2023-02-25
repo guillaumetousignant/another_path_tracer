@@ -1,6 +1,4 @@
 #include "shapes/TriangleMotionblur_t.hpp"
-#include "entities/Material_t.hpp"
-#include "entities/TransformMatrix_t.hpp"
 #include <algorithm>
 #include <cmath>
 #include <limits>
@@ -11,17 +9,19 @@ using APTracer::Entities::Vec3f;
 
 APTracer::Shapes::TriangleMotionblur_t::TriangleMotionblur_t(
     APTracer::Entities::Material_t* material, APTracer::Entities::TransformMatrix_t* transform_matrix, std::array<Vec3f, 3> points, std::array<Vec3f, 3> normals, std::array<double, 6> texcoord) :
-        Shape_t(material, transform_matrix), points_orig_(points), normals_orig_(normals), texture_coordinates_(texcoord) {
-
-    points_       = {transformation_->multVec(points_orig_[0]), transformation_->multVec(points_orig_[1]), transformation_->multVec(points_orig_[2])};
-    normals_      = {transformation_->multDir(normals_orig_[0]), transformation_->multDir(normals_orig_[1]), transformation_->multDir(normals_orig_[2])};
-    points_last_  = points_;
-    normals_last_ = normals_;
-
-    v0v1_      = points_[1] - points_[0];
-    v0v1_last_ = v0v1_;
-    v0v2_      = points_[2] - points_[0];
-    v0v2_last_ = v0v2_;
+        Shape_t(material, transform_matrix),
+        points_orig_(points),
+        normals_orig_(normals),
+        texture_coordinates_(texcoord),
+        points_{transformation_->multVec(points_orig_[0]), transformation_->multVec(points_orig_[1]), transformation_->multVec(points_orig_[2])},
+        normals_{transformation_->multDir(normals_orig_[0]), transformation_->multDir(normals_orig_[1]), transformation_->multDir(normals_orig_[2])},
+        v0v1_(points_[1] - points_[0]),
+        v0v2_(points_[2] - points_[0]),
+        tuv_to_world_{},
+        points_last_(points_),
+        normals_last_(normals_),
+        v0v1_last_(v0v1_),
+        v0v2_last_(v0v2_) {
 
     const std::array<double, 2> tuv0v1{texture_coordinates_[2] - texture_coordinates_[0], texture_coordinates_[3] - texture_coordinates_[1]};
     const std::array<double, 2> tuv0v2{texture_coordinates_[4] - texture_coordinates_[0], texture_coordinates_[5] - texture_coordinates_[1]};

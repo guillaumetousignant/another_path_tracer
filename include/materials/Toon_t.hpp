@@ -9,11 +9,6 @@ namespace APTracer { namespace Entities {
     class Shape_t;
 }}
 
-using APTracer::Entities::Material_t;
-using APTracer::Entities::Ray_t;
-using APTracer::Entities::Shape_t;
-using APTracer::Entities::Vec3f;
-
 namespace APTracer { namespace Materials {
 
     /**
@@ -24,16 +19,16 @@ namespace APTracer { namespace Materials {
      * This material is more useful for debugging, to force a specific colour,
      * to create impossible lighting and for toon-like shading.
      */
-    class Toon_t final : public Material_t {
+    class Toon_t final : public Entities::Material_t {
         public:
             /**
              * @brief Construct a new Toon_t object with a colour.
              *
              * @param colour Colour of the material, regardless of shading.
              */
-            Toon_t(const Vec3f& colour);
+            explicit Toon_t(const Entities::Vec3f& colour);
 
-            Vec3f colour_; /**< @brief Colour of the material, regardless of shading.*/
+            Entities::Vec3f colour_; /**< @brief Colour of the material, regardless of shading.*/
 
             /**
              * @brief Bounces a ray of light on the material.
@@ -44,7 +39,7 @@ namespace APTracer { namespace Materials {
              * @param hit_obj Pointer to the shape that was hit by the ray.
              * @param ray Ray that has intersected the shape.
              */
-            virtual auto bounce(std::array<double, 2> uv, const Shape_t* hit_obj, Ray_t& ray) -> void final;
+            auto bounce(std::array<double, 2> uv, const Entities::Shape_t* hit_obj, Entities::Ray_t& ray) -> void final;
     };
 }}
 #endif

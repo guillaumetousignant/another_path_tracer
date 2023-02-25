@@ -2,10 +2,11 @@
 #define APTRACER_ENTITIES_ACCELERATIONSTRUCTURE_T_HPP
 
 #include "entities/Ray_t.hpp"
+#include "entities/Shape_t.hpp"
 #include <array>
+#include <memory>
 
 namespace APTracer { namespace Entities {
-    class Shape_t;
 
     /**
      * @brief The acceleration structure class holds shapes and can be intersected.
@@ -20,6 +21,41 @@ namespace APTracer { namespace Entities {
              * @brief Destroy the AccelerationStructure_t object.
              */
             virtual ~AccelerationStructure_t() = default;
+
+            /**
+             * @brief Construct a new AccelerationStructure_t object.
+             */
+            AccelerationStructure_t() = default;
+
+            /**
+             * @brief Copy construct a new AccelerationStructure_t object.
+             *
+             * @param other Object to copy.
+             */
+            AccelerationStructure_t(const AccelerationStructure_t& other) = default;
+
+            /**
+             * @brief Move construct a new AccelerationStructure_t object.
+             *
+             * @param other Object to move.
+             */
+            AccelerationStructure_t(AccelerationStructure_t&& other) noexcept = default;
+
+            /**
+             * @brief Copy assignment.
+             *
+             * @param other Object to copy.
+             * @return AccelerationStructure_t& Reference to this object.
+             */
+            auto operator=(const AccelerationStructure_t& other) -> AccelerationStructure_t& = default;
+
+            /**
+             * @brief Move assignment.
+             *
+             * @param other Object to move.
+             * @return AccelerationStructure_t& Reference to this object.
+             */
+            auto operator=(AccelerationStructure_t&& other) noexcept -> AccelerationStructure_t& = default;
 
             /**
              * @brief Intersects a ray with the acceleration structure to find the closest hit
@@ -60,7 +96,7 @@ namespace APTracer { namespace Entities {
              *
              * @param item Shape to be removed from the acceleration structure.
              */
-            virtual auto remove(const Shape_t* item) -> void = 0;
+            virtual auto remove(Shape_t* item) -> void = 0;
 
             /**
              * @brief Moves a shape in the acceleration structure.
@@ -81,6 +117,16 @@ namespace APTracer { namespace Entities {
              * @return size_t Number of shapes currently held in the acceleration structure.
              */
             virtual auto size() const -> size_t = 0;
+
+            /**
+             * @brief Returns a copy of the acceleration structure.
+             *
+             * Virtual function to clone an acceleration structure,containing the same shapes.
+             * This is useful for recursively copying an acceleration structure when copying them.
+             *
+             * @return std::unique_ptr<AccelerationStructure_t>
+             */
+            virtual auto clone() const -> std::unique_ptr<AccelerationStructure_t> = 0;
     };
 }}
 

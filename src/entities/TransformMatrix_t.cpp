@@ -3,6 +3,8 @@
 
 using APTracer::Entities::TransformMatrix_t;
 
+// NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers, readability-magic-numbers)
+
 TransformMatrix_t::TransformMatrix_t() : matrix_{1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1} {
     buildInverse();
 }
@@ -281,7 +283,7 @@ auto TransformMatrix_t::scale(double fac) -> TransformMatrix_t& {
     return *this;
 }
 
-auto TransformMatrix_t::reflect(const Vec3f& vec) -> TransformMatrix_t& { // Needs a 4 component vec, or a distance factor. not used for now
+auto TransformMatrix_t::reflect(const Vec3f& /*vec*/) -> TransformMatrix_t& { // Needs a 4 component vec, or a distance factor. not used for now
     /*std::array<double, size_> other {1 - 2 * vec[0] * vec[0], -2 * vec[0] * vec[1], -2 * vec[0] * vec[2], -2 * vec[0] * vec[3],
                                     -2 * vec[0] * vec[1], 1 - 2 * vec[1] * vec[1], -2 * vec[1] * vec[2], -2 * vec[1] * vec[3],
                                     -2 * vec[0] * vec[2], -2 * vec[1] * vec[2], 1 - 2 * vec[2] * vec[2], -2 * vec[2] * vec[3],
@@ -300,7 +302,7 @@ auto TransformMatrix_t::reflect(const Vec3f& vec) -> TransformMatrix_t& { // Nee
     return *this;
 }
 
-auto TransformMatrix_t::shear(const Vec3f& vec) -> TransformMatrix_t& { // who the hell uses this
+auto TransformMatrix_t::shear(const Vec3f& /*vec*/) -> TransformMatrix_t& { // who the hell uses this
     buildInverse();
     return *this;
 }
@@ -431,7 +433,7 @@ auto TransformMatrix_t::neg() -> TransformMatrix_t& {
 }
 
 auto TransformMatrix_t::multVec(const Vec3f& vec) const -> Vec3f {
-    std::array<double, 4> vec2;
+    std::array<double, 4> vec2{};
     for (unsigned int i = 0; i < 4; ++i) {
         vec2[i] = vec[0] * matrix_[i] + vec[1] * matrix_[i + 4] + vec[2] * matrix_[i + 8] + matrix_[i + 12];
     }
@@ -440,7 +442,7 @@ auto TransformMatrix_t::multVec(const Vec3f& vec) const -> Vec3f {
 
 auto TransformMatrix_t::multDir(const Vec3f& vec) const -> Vec3f { // Different than matlab, check.
     // https://graphics.stanford.edu/~mdfisher/Code/Engine/Matrix4.cpp.html checks for negative afterwards also
-    std::array<double, 4> vec2;
+    std::array<double, 4> vec2{};
     for (unsigned int i = 0; i < 4; ++i) {
         vec2[i] = vec[0] * matrix_inverse_[i] + vec[1] * matrix_inverse_[i + 4] + vec[2] * matrix_inverse_[i + 8];
     }
@@ -528,3 +530,5 @@ auto TransformMatrix_t::buildInverse() -> void {
         element *= det;
     }
 }
+
+// NOLINTEND(cppcoreguidelines-avoid-magic-numbers, readability-magic-numbers)

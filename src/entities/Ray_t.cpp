@@ -3,14 +3,8 @@
 #include "entities/Medium_t.hpp"
 #include "entities/Scene_t.hpp"
 #include "entities/Shape_t.hpp"
-#include "entities/Skybox_t.hpp"
 
-using APTracer::Entities::Medium_t;
 using APTracer::Entities::Ray_t;
-using APTracer::Entities::Scene_t;
-using APTracer::Entities::Shape_t;
-using APTracer::Entities::Skybox_t;
-using APTracer::Entities::Vec3f;
 
 Ray_t::Ray_t(const Vec3f& origin, const Vec3f& direction, const Vec3f& colour, const Vec3f& mask, std::list<Medium_t*> medium_list) :
         origin_(origin), direction_(direction), colour_(colour), mask_(mask), dist_(0.0), medium_list_(std::move(medium_list)), time_(1.0) {}
@@ -21,9 +15,10 @@ Ray_t::Ray_t(const Vec3f& origin, const Vec3f& direction, const Vec3f& colour, c
 auto Ray_t::raycast(const Scene_t* scene, unsigned int max_bounces, const Skybox_t* skybox) -> void {
     unsigned int bounces = 0;
 
-    while ((bounces < max_bounces) && (mask_.magnitudeSquared() > 0.01)) { // Should maybe make magnitudesquared min value lower
-        double t;
-        std::array<double, 2> uv;
+    constexpr double minimum_mask = 0.01;
+    while ((bounces < max_bounces) && (mask_.magnitudeSquared() > minimum_mask)) { // Should maybe make magnitudeSquared min value lower
+        double t{};
+        std::array<double, 2> uv{};
 
         const Shape_t* hit_obj = scene->intersect(*this, t, uv);
 

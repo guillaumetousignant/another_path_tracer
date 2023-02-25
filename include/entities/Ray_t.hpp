@@ -1,13 +1,13 @@
 #ifndef APTRACER_ENTITIES_RAY_T_HPP
 #define APTRACER_ENTITIES_RAY_T_HPP
 
+#include "entities/Skybox_t.hpp"
 #include "entities/Vec3f.hpp"
 #include <list>
 
 namespace APTracer { namespace Entities {
     class Medium_t;
     class Scene_t;
-    class Skybox_t;
 
     /**
      * @brief The ray class contains colour data and can be intersected with geometry.
@@ -70,7 +70,7 @@ namespace APTracer { namespace Entities {
             auto raycast(const Scene_t* scene, unsigned int max_bounces, const Skybox_t* skybox) -> void;
 
             /**
-             * @brief Adds a medium to a ray's list of mediums, accordint to the medium's priority.
+             * @brief Adds a medium to a ray's list of mediums, according to the medium's priority.
              *
              * Adds a medium to a ray's list of mediums. The input medium will be added before the first
              * medium from the list which has a priority equal or superior to the input medium's

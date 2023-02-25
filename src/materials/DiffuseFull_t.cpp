@@ -1,7 +1,6 @@
 #include "materials/DiffuseFull_t.hpp"
 #include "entities/RandomGenerator_t.hpp"
 #include "entities/Shape_t.hpp"
-#include "entities/Texture_t.hpp"
 #include <cmath>
 
 constexpr double epsilon = 0.00000001;
@@ -13,7 +12,7 @@ APTracer::Materials::DiffuseFull_t::DiffuseFull_t(const APTracer::Entities::Text
         emission_map_(emission_map), texture_(texture), roughness_(roughness), unif_(std::uniform_real_distribution<double>(0, 1)) {}
 
 auto APTracer::Materials::DiffuseFull_t::bounce(std::array<double, 2> uv, const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t& ray) -> void {
-    std::array<double, 2> tuv;
+    std::array<double, 2> tuv{};
     Vec3f normal = hit_obj->normaluv(ray.time_, uv, tuv);
 
     const double rand1  = unif_(APTracer::Entities::rng()) * 2.0 * pi;

@@ -1,30 +1,17 @@
 #ifndef APTRACER_SHAPES_SPHEREMOTIONBLUR_T_HPP
 #define APTRACER_SHAPES_SPHEREMOTIONBLUR_T_HPP
 
-#include "entities/Ray_t.hpp"
 #include "entities/Shape_t.hpp"
-#include "entities/Vec3f.hpp"
-
-namespace APTracer { namespace Entities {
-    class TransformMatrix_t;
-    class Material_t;
-}}
-
-using APTracer::Entities::Material_t;
-using APTracer::Entities::Ray_t;
-using APTracer::Entities::Shape_t;
-using APTracer::Entities::TransformMatrix_t;
-using APTracer::Entities::Vec3f;
 
 namespace APTracer { namespace Shapes {
     /**
      * @brief The sphere motionblur class defines a sphere shape that can be intersected by rays, with motion blur enabled.
      *
-     * A sphere is defined by an origin and a radius. Its transformation matrix is used to modify those caracteristics.
+     * A sphere is defined by an origin and a radius. Its transformation matrix is used to modify those characteristics.
      * This shape remembers its last state to enable motion blur. The state is interpolated between current and previous
      * states according to a ray's time.
      */
-    class SphereMotionblur_t final : public Shape_t {
+    class SphereMotionblur_t final : public Entities::Shape_t {
         public:
             /**
              * @brief Construct a new SphereMotionblur_t object with a transformation matrix and material.
@@ -32,14 +19,14 @@ namespace APTracer { namespace Shapes {
              * @param material Material of the sphere. Material that will be bounced on at intersection.
              * @param transform_matrix Transformation used by the sphere to modify its size and position.
              */
-            SphereMotionblur_t(Material_t* material, TransformMatrix_t* transform_matrix);
+            SphereMotionblur_t(Entities::Material_t* material, Entities::TransformMatrix_t* transform_matrix);
 
             double radius_; /**< @brief Radius of the sphere. Determined by the maximum scale of its transformation matrix.*/
-            Vec3f origin_; /**< @brief Origin of the sphere. Position of its center.*/
-            Vec3f direction_sph_; /**< @brief Rotation of the sphere, in spherical coordinates. Used for uv mapping.*/
+            Entities::Vec3f origin_; /**< @brief Origin of the sphere. Position of its center.*/
+            Entities::Vec3f direction_sph_; /**< @brief Rotation of the sphere, in spherical coordinates. Used for uv mapping.*/
             double radius_last_; /**< @brief Radius of the sphere before last update. Used for motion blur.*/
-            Vec3f origin_last_; /**< @brief Origin of the sphere before last update. Used for motion blur.*/
-            Vec3f direction_sph_last_; /**< @brief Rotation of the sphere before last update. Used for motion blur.*/
+            Entities::Vec3f origin_last_; /**< @brief Origin of the sphere before last update. Used for motion blur.*/
+            Entities::Vec3f direction_sph_last_; /**< @brief Rotation of the sphere before last update. Used for motion blur.*/
 
             /**
              * @brief Updates the sphere's radius, origin and direction from its transformation matrix.
@@ -47,7 +34,7 @@ namespace APTracer { namespace Shapes {
              * Stores the previous state in the _last variables, so that state can be interpolated according to time.
              * The scale is determined by the maximum scale of its transformation matrix.
              */
-            virtual auto update() -> void final;
+            auto update() -> void final;
 
             /**
              * @brief Intersects a ray with the sphere at a specific time, and stores information about the intersection.
@@ -63,7 +50,7 @@ namespace APTracer { namespace Shapes {
              * @return true The ray intersected the sphere, t and uv are defined.
              * @return false The ray doesn't intersect the sphere, t and uv are undefined.
              */
-            virtual auto intersection(const Ray_t& ray, double& t, std::array<double, 2>& uv) const -> bool final;
+            auto intersection(const Entities::Ray_t& ray, double& t, std::array<double, 2>& uv) const -> bool final;
 
             /**
              * @brief Returns the surface normal and texture coordinates at a point in object coordinates and a specific time.
@@ -71,27 +58,27 @@ namespace APTracer { namespace Shapes {
              * This is used to find the surface normal on ray bounce. Used by materials to determine ray colour.
              * The texture coordinates is also returned, used by materials to fetch a colour in a texture.
              * The time parameter is used to interpolate between previous and current states, 0 and 1 respectively.
-             * The object coordinates are in spherical cordinates (minus r) [theta, phi].
+             * The object coordinates are in spherical coordinates (minus r) [theta, phi].
              *
              * @param[in] time Time at which we want the normal and texture coordinates, from 0 to 1 for previous and current states.
              * @param[in] uv Object coordinates at which we want to find the normal and texture coordinates. The coordinates are in spherical coordinates, minus r [theta, phi].
              * @param[out] tuv Texture coordinates at the specified coordinates and time.
              * @return Vec3f Normal vector at the specified coordinates and time.
              */
-            virtual auto normaluv(double time, std::array<double, 2> uv, std::array<double, 2>& tuv) const -> Vec3f final;
+            auto normaluv(double time, std::array<double, 2> uv, std::array<double, 2>& tuv) const -> Entities::Vec3f final;
 
             /**
              * @brief Returns the surface normal at a point in object coordinates and a specific time.
              *
              * This is used to find the surface normal on ray bounce. Used by materials to determine ray colour.
              * The time parameter is used to interpolate between previous and current states, 0 and 1 respectively.
-             * The object coordinates are in spherical cordinates (minus r) [theta, phi].
+             * The object coordinates are in spherical coordinates (minus r) [theta, phi].
              *
              * @param[in] time Time at which we want the normal, from 0 to 1 for previous and current states.
              * @param[in] uv Object coordinates at which we want to find the normal. The coordinates are in spherical coordinates, minus r [theta, phi].
              * @return Vec3f Normal vector at the specified coordinates and time.
              */
-            virtual auto normal(double time, std::array<double, 2> uv) const -> Vec3f final;
+            auto normal(double time, std::array<double, 2> uv) const -> Entities::Vec3f final;
 
             /**
              * @brief Returns the surface normal, texture coordinates and tangent vector at a point in object coordinates and a specific time.
@@ -100,7 +87,7 @@ namespace APTracer { namespace Shapes {
              * The texture coordinates is also returned, used by materials to fetch a colour in a texture. The tangent
              * vector is used by materials for normal mapping, as the normals returned by those textures are in object
              * coordinates. The time parameter is used to interpolate between previous and current states, 0 and 1 respectively.
-             * The object coordinates are in spherical cordinates (minus r) [theta, phi].
+             * The object coordinates are in spherical coordinates (minus r) [theta, phi].
              *
              * @param[in] time Time at which we want the normal, tangent and texture coordinates, from 0 to 1 for previous and current states.
              * @param[in] uv Object coordinates at which we want to find the normal, texture coordinates and tangent vector. The coordinates are in spherical coordinates, minus r [theta, phi].
@@ -108,7 +95,7 @@ namespace APTracer { namespace Shapes {
              * @param[out] tangentvec Tangent vector at the specified coordinates and time.
              * @return Vec3f Normal vector at the specified coordinates and time.
              */
-            virtual auto normal_uv_tangent(double time, std::array<double, 2> uv, std::array<double, 2>& tuv, Vec3f& tangentvec) const -> Vec3f final;
+            auto normal_uv_tangent(double time, std::array<double, 2> uv, std::array<double, 2>& tuv, Entities::Vec3f& tangentvec) const -> Entities::Vec3f final;
 
             /**
              * @brief Minimum coordinates of an axis-aligned bounding box around the sphere.
@@ -119,7 +106,7 @@ namespace APTracer { namespace Shapes {
              *
              * @return Vec3f Minimum coordinates of an axis-aligned bounding box around the sphere.
              */
-            virtual auto mincoord() const -> Vec3f final;
+            auto mincoord() const -> Entities::Vec3f final;
 
             /**
              * @brief Maximum coordinates of an axis-aligned bounding box around the sphere.
@@ -130,7 +117,7 @@ namespace APTracer { namespace Shapes {
              *
              * @return Vec3f Maximum coordinates of an axis-aligned bounding box around the sphere.
              */
-            virtual auto maxcoord() const -> Vec3f final;
+            auto maxcoord() const -> Entities::Vec3f final;
     };
 }}
 #endif

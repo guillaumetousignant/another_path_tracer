@@ -1,11 +1,9 @@
 #include "entities/MaterialMap_t.hpp"
-#include "entities/Material_t.hpp"
 
-using APTracer::Entities::Material_t;
 using APTracer::Entities::MaterialMap_t;
 
-MaterialMap_t::MaterialMap_t(std::string* names, Material_t** materials, size_t n) {
-    for (size_t i = 0; i < n; i++) {
+MaterialMap_t::MaterialMap_t(std::vector<std::string> names, std::vector<Material_t*> materials) {
+    for (size_t i = 0; i < names.size(); i++) {
         materials_[names[i]] = materials[i];
     }
 }

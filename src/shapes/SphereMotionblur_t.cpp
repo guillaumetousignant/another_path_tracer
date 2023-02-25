@@ -1,6 +1,4 @@
 #include "shapes/SphereMotionblur_t.hpp"
-#include "entities/Material_t.hpp"
-#include "entities/TransformMatrix_t.hpp"
 #include "functions/Slerp.hpp"
 #include <cmath>
 

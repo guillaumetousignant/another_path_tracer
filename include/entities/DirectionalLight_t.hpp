@@ -1,10 +1,10 @@
 #ifndef APTRACER_ENTITIES_DIRECTIONALLIGHT_T_HPP
 #define APTRACER_ENTITIES_DIRECTIONALLIGHT_T_HPP
 
+#include "entities/TransformMatrix_t.hpp"
 #include "entities/Vec3f.hpp"
 
 namespace APTracer { namespace Entities {
-    class TransformMatrix_t;
 
     /**
      * @brief The DirectionalLight_t class represents an infinitely angular light, with a direction, intensity and radius.

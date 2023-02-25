@@ -9,21 +9,17 @@ namespace APTracer { namespace Entities {
     class Shape_t;
 }}
 
-using APTracer::Entities::Material_t;
-using APTracer::Entities::Ray_t;
-using APTracer::Entities::Shape_t;
-
 namespace APTracer { namespace Materials {
 
     /**
-     * @brief The normal diffuse material class describes a meterial whose colour is relative to the surface normal at the hit point.
+     * @brief The normal diffuse material class describes a material whose colour is relative to the surface normal at the hit point.
      *
      * This material's reflective colour is proportional to the surface normal in world coordinates, x y and z being red green and blue, respectively.
      * The rays are reflected in a random direction in the hemisphere over the hit point.
      * This models diffuse reflection, which reflect light in all directions.
      * This material is more useful for debugging than for display purposes.
      */
-    class NormalDiffuseMaterial_t final : public Material_t {
+    class NormalDiffuseMaterial_t final : public Entities::Material_t {
         public:
             /**
              * @brief Construct a new NormalDiffuseMaterial_t object with a roughness.
@@ -31,7 +27,7 @@ namespace APTracer { namespace Materials {
              * @param roughness Attenuation of the colour as the angle between the incident ray and the surface normal increase. 0 to 1, 0 being very rough (no attenuation) and 1 being an ideal
              * diffusely reflective surface, obeying Lambert's cosine law.
              */
-            NormalDiffuseMaterial_t(double roughness);
+            explicit NormalDiffuseMaterial_t(double roughness);
 
             double roughness_; /**< @brief Attenuation of the colour as the angle between the incident ray and the surface normal increase. 0 to 1, 0 being very rough (no attenuation) and 1 being an
                                   ideal diffusely reflective surface, obeying Lambert's cosine law.*/
@@ -49,7 +45,7 @@ namespace APTracer { namespace Materials {
              * @param hit_obj Pointer to the shape that was hit by the ray.
              * @param ray Ray that has intersected the shape.
              */
-            virtual auto bounce(std::array<double, 2> uv, const Shape_t* hit_obj, Ray_t& ray) -> void final;
+            auto bounce(std::array<double, 2> uv, const Entities::Shape_t* hit_obj, Entities::Ray_t& ray) -> void final;
     };
 }}
 #endif

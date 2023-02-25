@@ -1,13 +1,13 @@
 #ifndef APTRACER_ENTITIES_SHAPE_T_HPP
 #define APTRACER_ENTITIES_SHAPE_T_HPP
 
+#include "entities/Material_t.hpp"
 #include "entities/Ray_t.hpp"
+#include "entities/TransformMatrix_t.hpp"
 #include "entities/Vec3f.hpp"
 #include <array>
 
 namespace APTracer { namespace Entities {
-    class Material_t;
-    class TransformMatrix_t;
 
     /**
      * @brief The shape interface class describes surfaces which can be intersected by a ray.
@@ -31,6 +31,36 @@ namespace APTracer { namespace Entities {
              * @brief Destroy the Shape_t object.
              */
             virtual ~Shape_t() = default;
+
+            /**
+             * @brief Copy construct a new Shape_t object.
+             *
+             * @param other Object to copy.
+             */
+            Shape_t(const Shape_t& other) = default;
+
+            /**
+             * @brief Move construct a new Shape_t object.
+             *
+             * @param other Object to move.
+             */
+            Shape_t(Shape_t&& other) noexcept = default;
+
+            /**
+             * @brief Copy assignment.
+             *
+             * @param other Object to copy.
+             * @return Camera_t& Reference to this object.
+             */
+            auto operator=(const Shape_t& other) -> Shape_t& = default;
+
+            /**
+             * @brief Move assignment.
+             *
+             * @param other Object to move.
+             * @return Camera_t& Reference to this object.
+             */
+            auto operator=(Shape_t&& other) noexcept -> Shape_t& = default;
 
             Material_t* material_; /**< @brief Material of which the shape is made of.*/
             TransformMatrix_t* transformation_; /**< @brief Transformation matrix used to modify the position and other transformations of the shape.*/

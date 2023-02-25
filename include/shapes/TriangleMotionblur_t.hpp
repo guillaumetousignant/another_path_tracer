@@ -1,21 +1,8 @@
 #ifndef APTRACER_SHAPES_TRIANGLEMOTIONBLUR_T_HPP
 #define APTRACER_SHAPES_TRIANGLEMOTIONBLUR_T_HPP
 
-#include "entities/Ray_t.hpp"
 #include "entities/Shape_t.hpp"
-#include "entities/Vec3f.hpp"
 #include <array>
-
-namespace APTracer { namespace Entities {
-    class TransformMatrix_t;
-    class Material_t;
-}}
-
-using APTracer::Entities::Material_t;
-using APTracer::Entities::Ray_t;
-using APTracer::Entities::Shape_t;
-using APTracer::Entities::TransformMatrix_t;
-using APTracer::Entities::Vec3f;
 
 namespace APTracer { namespace Shapes {
     /**
@@ -25,7 +12,7 @@ namespace APTracer { namespace Shapes {
      * to modify those points. This shape remembers its last state to enable motion blur. The state is interpolated between current and previous
      * states according to a ray's time.
      */
-    class TriangleMotionblur_t final : public Shape_t {
+    class TriangleMotionblur_t final : public Entities::Shape_t {
         public:
             /**
              * @brief Construct a new TriangleMotionblur_t object with a transformation matrix and material from three points.
@@ -36,25 +23,29 @@ namespace APTracer { namespace Shapes {
              * @param normals Array of three normals, in counter-clockwise order, at the three points of the triangle.
              * @param texcoord Array of three texture coordinates with two components, in counter-clockwise order, at the three points of the triangle. [x0, y0, x1, y1, x2, y2]
              */
-            TriangleMotionblur_t(Material_t* material, TransformMatrix_t* transform_matrix, std::array<Vec3f, 3> points, std::array<Vec3f, 3> normals, std::array<double, 6> texcoord);
+            TriangleMotionblur_t(Entities::Material_t* material,
+                                 Entities::TransformMatrix_t* transform_matrix,
+                                 std::array<Entities::Vec3f, 3> points,
+                                 std::array<Entities::Vec3f, 3> normals,
+                                 std::array<double, 6> texcoord);
 
-            std::array<Vec3f, 3>
+            std::array<Entities::Vec3f, 3>
                 points_orig_; /**< @brief Array of the three un-transformed points of the triangle, in counter-clockwise order. Transformed by the transform matrix on update to give points.*/
-            std::array<Vec3f, 3>
+            std::array<Entities::Vec3f, 3>
                 normals_orig_; /**< @brief Array of the three un-transformed normals of the triangle, in counter-clockwise order. Transformed by the transform matrix on update to give normals.*/
             std::array<double, 6> texture_coordinates_; /**< @brief Array of the three texture coordinates with two components of the triangle, in counter-clockwise order. Transformed by the transform
                                                            matrix on update to give texture coordinates. [x0, y0, x1, y1, x2, y2]*/
-            std::array<Vec3f, 3> points_; /**< @brief Array of the three points of the triangle, in counter-clockwise order.*/
-            std::array<Vec3f, 3> normals_; /**< @brief Array of the three  normals of the triangle, in counter-clockwise order.*/
-            Vec3f v0v1_; /**< @brief Cached vector from point 0 to point 1. Used for intersection.*/
-            Vec3f v0v2_; /**< @brief Cached vector from point 0 to point 2. Used for intersection.*/
+            std::array<Entities::Vec3f, 3> points_; /**< @brief Array of the three points of the triangle, in counter-clockwise order.*/
+            std::array<Entities::Vec3f, 3> normals_; /**< @brief Array of the three  normals of the triangle, in counter-clockwise order.*/
+            Entities::Vec3f v0v1_; /**< @brief Cached vector from point 0 to point 1. Used for intersection.*/
+            Entities::Vec3f v0v2_; /**< @brief Cached vector from point 0 to point 2. Used for intersection.*/
             std::array<double, 2> tuv_to_world_; /**< @brief Matrix to change referential from texture coordinate space to world space. Used to compute tangent vector.*/
-            Vec3f tangent_vec_; /**< @brief Tangent vector of the triangle in world space. Points to positive u in texture coordinates. Used for normal mapping.*/
-            std::array<Vec3f, 3> points_last_; /**< @brief Array of the three points of the triangle before last update. Used for motion blur.*/
-            std::array<Vec3f, 3> normals_last_; /**< @brief Array of the three  normals of the triangle before last update. Used for motion blur.*/
-            Vec3f v0v1_last_; /**< @brief Cached vector from point 0 to point 1 before last update. Used for motion blur.*/
-            Vec3f v0v2_last_; /**< @brief Cached vector from point 0 to point 2 before last update. Used for motion blur.*/
-            Vec3f tangent_vec_last_; /**< @brief Tangent vector of the triangle in world space before last update. Used for motion blur.*/
+            Entities::Vec3f tangent_vec_; /**< @brief Tangent vector of the triangle in world space. Points to positive u in texture coordinates. Used for normal mapping.*/
+            std::array<Entities::Vec3f, 3> points_last_; /**< @brief Array of the three points of the triangle before last update. Used for motion blur.*/
+            std::array<Entities::Vec3f, 3> normals_last_; /**< @brief Array of the three  normals of the triangle before last update. Used for motion blur.*/
+            Entities::Vec3f v0v1_last_; /**< @brief Cached vector from point 0 to point 1 before last update. Used for motion blur.*/
+            Entities::Vec3f v0v2_last_; /**< @brief Cached vector from point 0 to point 2 before last update. Used for motion blur.*/
+            Entities::Vec3f tangent_vec_last_; /**< @brief Tangent vector of the triangle in world space before last update. Used for motion blur.*/
 
             /**
              * @brief Updates the triangle's points from its transformation matrix.
@@ -62,7 +53,7 @@ namespace APTracer { namespace Shapes {
              * Stores the previous state in the _last variables, so that state can be interpolated according to time.
              * The points are created from the transformation matrix and the original points, stored in normals_orig_.
              */
-            virtual auto update() -> void final;
+            auto update() -> void final;
 
             /**
              * @brief Intersects a ray with the triangle at a specific time, and stores information about the intersection.
@@ -78,34 +69,34 @@ namespace APTracer { namespace Shapes {
              * @return true The ray intersected the triangle, t and uv are defined.
              * @return false The ray doesn't intersect the triangle, t and uv are undefined.
              */
-            virtual auto intersection(const Ray_t& ray, double& t, std::array<double, 2>& uv) const -> bool final;
+            auto intersection(const Entities::Ray_t& ray, double& t, std::array<double, 2>& uv) const -> bool final;
 
             /**
              * @brief Returns the surface normal and texture coordinates at a point in object coordinates and a specific time.
              *
              * This is used to find the surface normal on ray bounce. Used by materials to determine ray colour.
              * The time parameter is used to interpolate between previous and current states, 0 and 1 respectively.
-             * The object coordinates are in barycentric cordinates (minus w) [u, v].
+             * The object coordinates are in barycentric coordinates (minus w) [u, v].
              *
              * @param[in] time Time at which we want the normal and texture coordinates, from 0 to 1 for previous and current states.
              * @param[in] uv Object coordinates at which we want to find the normal and texture coordinates. The coordinates are in barycentric coordinates, minus w [u, v].
              * @param[out] tuv Texture coordinates at the specified coordinates and time.
              * @return Vec3f Normal vector at the specified coordinates and time.
              */
-            virtual auto normaluv(double time, std::array<double, 2> uv, std::array<double, 2>& tuv) const -> Vec3f final;
+            auto normaluv(double time, std::array<double, 2> uv, std::array<double, 2>& tuv) const -> Entities::Vec3f final;
 
             /**
              * @brief Returns the surface normal at a point in object coordinates and a specific time.
              *
              * This is used to find the surface normal on ray bounce. Used by materials to determine ray colour.
              * The time parameter is used to interpolate between previous and current states, 0 and 1 respectively.
-             * The object coordinates are in barycentric cordinates (minus w) [u, v].
+             * The object coordinates are in barycentric coordinates (minus w) [u, v].
              *
              * @param[in] time Time at which we want the normal, from 0 to 1 for previous and current states.
              * @param[in] uv Object coordinates at which we want to find the normal. The coordinates are in barycentric coordinates, minus w [u, v].
              * @return Vec3f Normal vector at the specified coordinates and time.
              */
-            virtual auto normal(double time, std::array<double, 2> uv) const -> Vec3f final;
+            auto normal(double time, std::array<double, 2> uv) const -> Entities::Vec3f final;
 
             /**
              * @brief Returns the surface normal, texture coordinates and tangent vector at a point in object coordinates and a specific time.
@@ -114,7 +105,7 @@ namespace APTracer { namespace Shapes {
              * The texture coordinates is also returned, used by materials to fetch a colour in a texture. The tangent
              * vector is used by materials for normal mapping, as the normals returned by those textures are in object
              * coordinates. The time parameter is used to interpolate between previous and current states, 0 and 1 respectively.
-             * The object coordinates are in barycentric cordinates (minus w) [u, v].
+             * The object coordinates are in barycentric coordinates (minus w) [u, v].
              *
              * @param[in] time Time at which we want the normal and texture coordinates, from 0 to 1 for previous and current states.
              * @param[in] uv Object coordinates at which we want to find the normal, texture coordinates and tangent vector. The coordinates are in barycentric coordinates, minus w [u, v].
@@ -122,7 +113,7 @@ namespace APTracer { namespace Shapes {
              * @param[out] tangentvec Tangent vector at the specified coordinates and time.
              * @return Vec3f Normal vector at the specified coordinates and time.
              */
-            virtual auto normal_uv_tangent(double time, std::array<double, 2> uv, std::array<double, 2>& tuv, Vec3f& tangentvec) const -> Vec3f final;
+            auto normal_uv_tangent(double time, std::array<double, 2> uv, std::array<double, 2>& tuv, Entities::Vec3f& tangentvec) const -> Entities::Vec3f final;
 
             /**
              * @brief Returns the geometric surface normal of the triangle at a specific time, not the interpolated one from vertex normals.
@@ -132,7 +123,7 @@ namespace APTracer { namespace Shapes {
              * @param time Time at which we want the normal, from 0 to 1 for previous and current states.
              * @return Vec3f Normal vector of the triangle at the specified time.
              */
-            virtual auto normal_face(double time) const -> Vec3f final;
+            auto normal_face(double time) const -> Entities::Vec3f;
 
             /**
              * @brief Minimum coordinates of an axis-aligned bounding box around the triangle.
@@ -143,7 +134,7 @@ namespace APTracer { namespace Shapes {
              *
              * @return Vec3f Minimum coordinates of an axis-aligned bounding box around the triangle.
              */
-            virtual auto mincoord() const -> Vec3f final;
+            auto mincoord() const -> Entities::Vec3f final;
 
             /**
              * @brief Maximum coordinates of an axis-aligned bounding box around the triangle.
@@ -154,7 +145,7 @@ namespace APTracer { namespace Shapes {
              *
              * @return Vec3f Maximum coordinates of an axis-aligned bounding box around the triangle.
              */
-            virtual auto maxcoord() const -> Vec3f final;
+            auto maxcoord() const -> Entities::Vec3f final;
     };
 }}
 #endif

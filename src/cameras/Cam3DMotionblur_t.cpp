@@ -1,11 +1,5 @@
 #include "cameras/Cam3DMotionblur_t.hpp"
-#include "cameras/CamMotionblur_t.hpp"
-#include "entities/ImgBuffer_t.hpp"
-#include "entities/Medium_t.hpp"
 #include "entities/RandomGenerator_t.hpp"
-#include "entities/Scene_t.hpp"
-#include "entities/Skybox_t.hpp"
-#include "entities/TransformMatrix_t.hpp"
 
 constexpr double pi = 3.141592653589793238463;
 
@@ -172,7 +166,7 @@ auto Cam3DMotionblur_t::focus(double focus_distance) -> void {
 
 auto Cam3DMotionblur_t::autoFocus(const Scene_t* scene, std::array<double, 2> position) -> void {
     double t = std::numeric_limits<double>::max();
-    std::array<double, 2> uv;
+    std::array<double, 2> uv{};
 
     const Vec3f horizontal = direction_.cross(up_).normalize_inplace();
     const Vec3f vertical   = horizontal.cross(direction_).normalize_inplace();
@@ -182,7 +176,8 @@ auto Cam3DMotionblur_t::autoFocus(const Scene_t* scene, std::array<double, 2> po
     const Ray_t focus_ray = Ray_t(origin_, ray_direction, Vec3f(), Vec3f(1.0), medium_list_);
 
     if (scene->intersect(focus_ray, t, uv) == nullptr) {
-        t = 1000000;
+        constexpr double infinity_focus = 1000000;
+        t                               = infinity_focus;
     }
     focus(t);
 }

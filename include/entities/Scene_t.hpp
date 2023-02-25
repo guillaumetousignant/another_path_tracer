@@ -1,20 +1,15 @@
 #ifndef APTRACER_ENTITIES_SCENE_T_HPP
 #define APTRACER_ENTITIES_SCENE_T_HPP
 
+#include "entities/AccelerationStructure_t.hpp"
 #include "entities/Ray_t.hpp"
+#include "entities/Shape_t.hpp"
+#include "shapes/MeshTop_t.hpp"
 #include <array>
 #include <memory>
 #include <vector>
 
-namespace APTracer { namespace Shapes {
-    class MeshTop_t;
-}}
-
-using APTracer::Shapes::MeshTop_t;
-
 namespace APTracer { namespace Entities {
-    class Shape_t;
-    class AccelerationStructure_t;
 
     /**
      * @brief The scene class holds the shapes representing a scene to be rendered, and creates an acceleration structure containing them.
@@ -36,28 +31,28 @@ namespace APTracer { namespace Entities {
              *
              * @param shape Shape to add to the scene.
              */
-            Scene_t(Shape_t* shape);
+            explicit Scene_t(Shape_t* shape);
 
             /**
              * @brief Construct a new Scene_t object from multiple shapes.
              *
              * @param shapes Shapes to be added to the scene.
              */
-            Scene_t(const std::vector<Shape_t*>& shapes);
+            explicit Scene_t(std::vector<Shape_t*> shapes);
 
             /**
              * @brief Construct a new Scene_t object containing a single mesh.
              *
              * @param mesh Mesh to add to the scene.
              */
-            Scene_t(MeshTop_t* mesh);
+            explicit Scene_t(Shapes::MeshTop_t* mesh);
 
             /**
              * @brief Construct a new Scene_t object from multiple meshes.
              *
              * @param meshes Meshes to be added to the scene.
              */
-            Scene_t(const std::vector<MeshTop_t*>& meshes);
+            explicit Scene_t(const std::vector<Shapes::MeshTop_t*>& meshes);
 
             std::vector<Shape_t*> geometry_; /**< @brief Vector of shapes to be drawn.*/
             std::unique_ptr<AccelerationStructure_t> acc_; /**< @brief Acceleration structure containing the shapes, used to accelerate intersection.*/
@@ -81,14 +76,14 @@ namespace APTracer { namespace Entities {
              *
              * @param mesh Mesh to be added to the scene.
              */
-            auto add(MeshTop_t* mesh) -> void;
+            auto add(Shapes::MeshTop_t* mesh) -> void;
 
             /**
              * @brief Adds multiple meshes to the scene.
              *
              * @param meshes Array of meshes to be added to the scene.
              */
-            auto add(const std::vector<MeshTop_t*>& meshes) -> void;
+            auto add(const std::vector<Shapes::MeshTop_t*>& meshes) -> void;
 
             /**
              * @brief Removes a single shape from the scene.
@@ -113,7 +108,7 @@ namespace APTracer { namespace Entities {
              *
              * @param mesh Mesh to be removed from the scene.
              */
-            auto remove(MeshTop_t* mesh) -> void;
+            auto remove(Shapes::MeshTop_t* mesh) -> void;
 
             /**
              * @brief Removes multiple meshes from the scene.
@@ -124,7 +119,7 @@ namespace APTracer { namespace Entities {
              *
              * @param meshes Array of meshes to be removed from the scene.
              */
-            auto remove(const std::vector<MeshTop_t*>& meshes) -> void;
+            auto remove(const std::vector<Shapes::MeshTop_t*>& meshes) -> void;
 
             /**
              * @brief Updates all the shapes in the scene.

@@ -1,5 +1,4 @@
 #include "materials/ReflectiveRefractive_t.hpp"
-#include "entities/Medium_t.hpp"
 #include "entities/RandomGenerator_t.hpp"
 #include "entities/Shape_t.hpp"
 #include <cmath>
@@ -8,7 +7,7 @@ constexpr double epsilon = 0.00000001;
 
 using APTracer::Entities::Vec3f;
 
-APTracer::Materials::ReflectiveRefractive_t::ReflectiveRefractive_t(const Vec3f& emission, const Vec3f& colour, APTracer::Entities::Medium_t* medium) :
+APTracer::Materials::ReflectiveRefractive_t::ReflectiveRefractive_t(const Entities::Vec3f& emission, const Entities::Vec3f& colour, APTracer::Entities::Medium_t* medium) :
         emission_(emission), colour_(colour), medium_(medium) {}
 
 auto APTracer::Materials::ReflectiveRefractive_t::bounce(std::array<double, 2> uv, const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t& ray) -> void {
@@ -19,9 +18,9 @@ auto APTracer::Materials::ReflectiveRefractive_t::bounce(std::array<double, 2> u
 
     if (medium_->priority_ >= ray.medium_list_.front()->priority_) { // CHECK also discard if priority is equal, but watch for going out case
         Vec3f n;
-        double etai;
-        double etat;
-        double kr;
+        double etai{};
+        double etat{};
+        double kr{};
 
         if (cosi < 0) { // Coming in
             etai = ray.medium_list_.front()->ind_;

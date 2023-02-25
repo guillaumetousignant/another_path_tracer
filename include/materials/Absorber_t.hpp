@@ -5,10 +5,6 @@
 #include "entities/Ray_t.hpp"
 #include "entities/Vec3f.hpp"
 
-using APTracer::Entities::Medium_t;
-using APTracer::Entities::Ray_t;
-using APTracer::Entities::Vec3f;
-
 namespace APTracer { namespace Materials {
 
     /**
@@ -20,7 +16,7 @@ namespace APTracer { namespace Materials {
      * This medium can be used to represent light interacting media like light fog, atmospheric scattering, or
      * clear water.
      */
-    class Absorber_t final : public Medium_t {
+    class Absorber_t final : public Entities::Medium_t {
         public:
             /**
              * @brief Construct a new Absorber_t object with a colour, emissive colour, and their respective absorption/emission distance.
@@ -34,10 +30,10 @@ namespace APTracer { namespace Materials {
              * @param ind Refractive index of the medium.
              * @param priority Priority of the medium over other mediums, used to determine which is the current medium when overlapping. Higher value means higher priority.
              */
-            Absorber_t(Vec3f emi_vol, Vec3f col_vol, double abs_dist_emi, double abs_dist_col, double ind, unsigned int priority);
+            Absorber_t(Entities::Vec3f emi_vol, Entities::Vec3f col_vol, double abs_dist_emi, double abs_dist_col, double ind, unsigned int priority);
 
-            Vec3f emission_vol_; /**< @brief Volumetric colour emitted by the medium in exponential form.*/
-            Vec3f colour_vol_; /**< @brief Volumetric colour absorbed by the medium in exponential form.*/
+            Entities::Vec3f emission_vol_; /**< @brief Volumetric colour emitted by the medium in exponential form.*/
+            Entities::Vec3f colour_vol_; /**< @brief Volumetric colour absorbed by the medium in exponential form.*/
 
             /**
              * @brief Defines the interaction between a ray and the medium.
@@ -49,7 +45,7 @@ namespace APTracer { namespace Materials {
              * absorber.
              * @return false Returns false when the ray's path has not been changed, and it should bounce on the intersected material as planned. Always the case for an absorber.
              */
-            virtual auto scatter(Ray_t& ray) -> bool final;
+            auto scatter(Entities::Ray_t& ray) -> bool final;
     };
 }}
 #endif

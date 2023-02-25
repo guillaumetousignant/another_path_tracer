@@ -1,10 +1,5 @@
 #include "cameras/RecCam_t.hpp"
-#include "entities/ImgBuffer_t.hpp"
-#include "entities/Medium_t.hpp"
 #include "entities/RandomGenerator_t.hpp"
-#include "entities/Scene_t.hpp"
-#include "entities/Skybox_t.hpp"
-#include "entities/TransformMatrix_t.hpp"
 #include <cmath>
 
 using APTracer::Cameras::RecCam_t;

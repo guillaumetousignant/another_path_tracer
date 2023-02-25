@@ -3,16 +3,9 @@
 
 #include "entities/Medium_t.hpp"
 #include "entities/Ray_t.hpp"
+#include "entities/TransformMatrix_t.hpp"
 #include <list>
 #include <random>
-
-namespace APTracer { namespace Entities {
-    class TransformMatrix_t;
-}}
-
-using APTracer::Entities::Medium_t;
-using APTracer::Entities::Ray_t;
-using APTracer::Entities::TransformMatrix_t;
 
 namespace APTracer { namespace Materials {
 
@@ -25,7 +18,7 @@ namespace APTracer { namespace Materials {
      * This medium can represent volumetric portals, impossible geometry, or overlaid images.
      * It is one-way, as there is no linked object at the outlet of the portal to be intersected.
      */
-    class PortalScatterer_t final : public Medium_t {
+    class PortalScatterer_t final : public Entities::Medium_t {
         public:
             /**
              * @brief Construct a new PortalScatterer_t object with a transformation matrix, a medium list, and a scattering distance.
@@ -36,9 +29,9 @@ namespace APTracer { namespace Materials {
              * @param ind Refractive index of the medium.
              * @param priority Priority of the medium over other mediums, used to determine which is the current medium when overlapping. Higher value means higher priority.
              */
-            PortalScatterer_t(TransformMatrix_t* transformation, std::list<Medium_t*> medium_list, double scattering_distance, double ind, unsigned int priority);
+            PortalScatterer_t(Entities::TransformMatrix_t* transformation, std::list<Medium_t*> medium_list, double scattering_distance, double ind, unsigned int priority);
 
-            TransformMatrix_t* transformation_; /**< @brief Transformation matrix which transforms the rays when scattered, potentially moving them to another location.*/
+            Entities::TransformMatrix_t* transformation_; /**< @brief Transformation matrix which transforms the rays when scattered, potentially moving them to another location.*/
             std::list<Medium_t*>
                 medium_list_; /**< @brief List of materials in which the portal end is placed. Should have at least two copies of an "outside" medium not assigned to any object (issue #25).*/
             double scattering_coefficient_; /**< @brief Scattering coefficient, inverse of the average scattering distance. A higher coefficient will Have more chance to scatter rays.*/
@@ -58,7 +51,7 @@ namespace APTracer { namespace Materials {
              * @return Returns true if the ray has been scattered, meaning that its origin and/or direction has changed and the material bounce should not be performed.
              * @return false Returns false when the ray's path has not been changed, and it should bounce on the intersected material as planned.
              */
-            virtual auto scatter(Ray_t& ray) -> bool final;
+            auto scatter(Entities::Ray_t& ray) -> bool final;
     };
 }}
 #endif

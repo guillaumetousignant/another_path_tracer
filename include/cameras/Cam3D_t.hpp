@@ -1,31 +1,15 @@
 #ifndef APTRACER_CAMERAS_CAM3D_T_HPP
 #define APTRACER_CAMERAS_CAM3D_T_HPP
 
+#include "cameras/Cam_t.hpp"
 #include "entities/Camera_t.hpp"
-#include "entities/Vec3f.hpp"
+#include "entities/ImgBuffer_t.hpp"
 #include <list>
 #include <memory>
 #include <random>
 #include <string>
 
-namespace APTracer { namespace Entities {
-    class TransformMatrix_t;
-    class Skybox_t;
-    class Scene_t;
-    class Medium_t;
-    class ImgBuffer_t;
-}}
-
-using APTracer::Entities::Camera_t;
-using APTracer::Entities::ImgBuffer_t;
-using APTracer::Entities::Medium_t;
-using APTracer::Entities::Scene_t;
-using APTracer::Entities::Skybox_t;
-using APTracer::Entities::TransformMatrix_t;
-using APTracer::Entities::Vec3f;
-
 namespace APTracer { namespace Cameras {
-    class Cam_t;
 
     /**
      * @brief The cam 3D class describes a camera that uses a spherical projection and generates 3D images.
@@ -37,7 +21,7 @@ namespace APTracer { namespace Cameras {
      * This camera generates two images from offset positions and combines them to
      * create a 3D anaglyph image.
      */
-    class Cam3D_t final : public Camera_t {
+    class Cam3D_t final : public Entities::Camera_t {
         public:
             /**
              * @brief Construct a new Cam3D_t object. Creates two dependant cameras, one for each eye. Most arguments are passed to them.
@@ -57,22 +41,22 @@ namespace APTracer { namespace Cameras {
              * @param focus_distance Distance of the focal plane to the camera origin. Distance at which both eye cameras converge.
              * @param gammaind Gamma of the saved picture. A value of 1 should be used for usual cases.
              */
-            Cam3D_t(TransformMatrix_t* transformation,
+            Cam3D_t(Entities::TransformMatrix_t* transformation,
                     const std::string& filename,
-                    Vec3f up,
+                    Entities::Vec3f up,
                     std::array<double, 2> fov,
                     std::array<unsigned int, 2> subpix,
-                    ImgBuffer_t* image,
-                    ImgBuffer_t* image_L,
-                    ImgBuffer_t* image_R,
+                    Entities::ImgBuffer_t* image,
+                    Entities::ImgBuffer_t* image_L,
+                    Entities::ImgBuffer_t* image_R,
                     double eye_dist,
-                    std::list<Medium_t*> medium_list,
-                    Skybox_t* skybox,
+                    std::list<Entities::Medium_t*> medium_list,
+                    Entities::Skybox_t* skybox,
                     unsigned int max_bounces,
                     double focus_distance,
                     double gammaind);
 
-            ImgBuffer_t* image_; /**< @brief Image buffer into which the resulting 3D anaglyph image is stored.*/
+            Entities::ImgBuffer_t* image_; /**< @brief Image buffer into which the resulting 3D anaglyph image is stored.*/
             std::uniform_real_distribution<double> unif_; /**< @brief Uniform random distribution used for generating random numbers.*/
             double eye_dist_; /**< @brief Distance between the left and right eye cameras. Higher values will make the 3D effect stronger.*/
             double focus_distance_; /**< @brief Distance of the focal plane to the camera origin. Distance at which both eye cameras converge.*/
@@ -87,7 +71,7 @@ namespace APTracer { namespace Cameras {
              * This is how the changes to the transformation matrix and functions like setUp take effect.
              * The left and right eye cameras are also updated directly.
              */
-            virtual auto update() -> void final;
+            auto update() -> void final;
 
             /**
              * @brief Sends rays through the scene, to generate an image.
@@ -98,7 +82,7 @@ namespace APTracer { namespace Cameras {
              *
              * @param scene Scene that will be used to find what each ray hits.
              */
-            virtual auto raytrace(const Scene_t* scene) -> void final;
+            auto raytrace(const Entities::Scene_t* scene) -> void final;
 
             /**
              * @brief Zooms the camera's field of view by a factor.
@@ -107,7 +91,7 @@ namespace APTracer { namespace Cameras {
              *
              * @param factor Factor by which to zoom the camera.
              */
-            virtual auto zoom(double factor) -> void final;
+            auto zoom(double factor) -> void final;
 
             /**
              * @brief Writes the image buffer and the left and right eye images to disk with the provided name.
@@ -118,7 +102,7 @@ namespace APTracer { namespace Cameras {
              *
              * @param file_name Filename used to write the 3D image and the left and right images will have _L and _R suffixes.
              */
-            virtual auto write(const std::string& file_name) -> void final;
+            auto write(const std::string& file_name) -> void final;
 
             /**
              * @brief Writes the image buffer and the left and right eye images to disk with the camera's filename.
@@ -127,12 +111,12 @@ namespace APTracer { namespace Cameras {
              * This calls the image buffer's write function. Directory must exist.
              * The 3D image will use the file name, and the left and right images will have _L and _R suffixes, respectively.
              */
-            virtual auto write() -> void final;
+            auto write() -> void final;
 
             /**
              * @brief Shows the image on screen. Currently not implemented. Use ImgBufferOpenGL_t instead.
              */
-            virtual auto show() const -> void final;
+            auto show() const -> void final;
 
             /**
              * @brief Resets the camera's and left and right cameras' image buffers, for when the scene or camera has changed.
@@ -140,7 +124,7 @@ namespace APTracer { namespace Cameras {
              * This will discard all accumulated samples and start accumulation from scratch. Calls the image buffers'
              * reset functions.
              */
-            virtual auto reset() -> void final;
+            auto reset() -> void final;
 
             /**
              * @brief Sets the focus distance of the camera, the distance at which both eye cameras converge.
@@ -150,7 +134,7 @@ namespace APTracer { namespace Cameras {
              *
              * @param focus_distance New focus distance of the camera. Distance at which both eye cameras converge.
              */
-            virtual auto focus(double focus_distance) -> void final;
+            auto focus(double focus_distance) -> void final;
 
             /**
              * @brief Focusses the camera on a point in its field of view.
@@ -164,7 +148,7 @@ namespace APTracer { namespace Cameras {
              * @param scene Scene to use to find the object to focus on.
              * @param position Image space coordinates on which to focus. [horizontal, vertical] from 0 to 1, from left to right and bottom to top.
              */
-            virtual auto autoFocus(const Scene_t* scene, std::array<double, 2> position) -> void final;
+            auto autoFocus(const Entities::Scene_t* scene, std::array<double, 2> position) -> void final;
     };
 }}
 #endif

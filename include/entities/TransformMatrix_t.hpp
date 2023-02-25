@@ -16,7 +16,7 @@ namespace APTracer { namespace Entities {
      */
     class TransformMatrix_t {
         public:
-            static constexpr std::array<double, 16>::size_type size_ = 16;
+            static constexpr std::array<double, 16>::size_type size_ = 16; /**< @brief Number of values in the matrix.*/
 
             /**
              * @brief Construct a new TransformMatrix_t object as the identity transformation matrix, which does not modify objects.

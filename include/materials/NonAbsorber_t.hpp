@@ -4,9 +4,6 @@
 #include "entities/Medium_t.hpp"
 #include "entities/Ray_t.hpp"
 
-using APTracer::Entities::Medium_t;
-using APTracer::Entities::Ray_t;
-
 namespace APTracer { namespace Materials {
 
     /**
@@ -15,7 +12,7 @@ namespace APTracer { namespace Materials {
      * This medium does nothing by itself, it is the identity medium.
      * This medium can be used to represent non interacting media like clear air or emptiness.
      */
-    class NonAbsorber_t final : public Medium_t {
+    class NonAbsorber_t final : public Entities::Medium_t {
         public:
             /**
              * @brief Construct a new NonAbsorber_t object.
@@ -35,7 +32,7 @@ namespace APTracer { namespace Materials {
              * absorber.
              * @return false Returns false when the ray's path has not been changed, and it should bounce on the intersected material as planned. Always the case for a non absorber.
              */
-            virtual auto scatter(Ray_t& ray) -> bool final;
+            auto scatter(Entities::Ray_t& ray) -> bool final;
     };
 }}
 #endif

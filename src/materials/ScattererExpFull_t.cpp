@@ -17,11 +17,15 @@ APTracer::Materials::ScattererExpFull_t::ScattererExpFull_t(Vec3f emi_vol,
                                                             double scattering_angle,
                                                             double ind,
                                                             unsigned int priority) :
-        Medium_t(ind, priority), emission_scat_(emi_scat), colour_scat_(col_scat), order_(order), scattering_angle_(scattering_angle), unif_(0.0, 1.0) {
-    colour_vol_             = -col_vol.ln() / abs_dist_col;
-    emission_vol_           = emi_vol * emi_vol / abs_dist_emi; // CHECK probably not right.
-    scattering_coefficient_ = 1.0 / scat_dist;
-}
+        Medium_t(ind, priority),
+        emission_vol_(emi_vol * emi_vol / abs_dist_emi /*CHECK probably not right.*/),
+        colour_vol_(-col_vol.ln() / abs_dist_col),
+        emission_scat_(emi_scat),
+        colour_scat_(col_scat),
+        scattering_coefficient_(1.0 / scat_dist),
+        order_(order),
+        scattering_angle_(scattering_angle),
+        unif_(0.0, 1.0) {}
 
 auto APTracer::Materials::ScattererExpFull_t::scatter(APTracer::Entities::Ray_t& ray) -> bool {
     const double distance = -std::log(unif_(APTracer::Entities::rng())) / scattering_coefficient_;

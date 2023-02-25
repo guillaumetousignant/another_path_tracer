@@ -2,21 +2,10 @@
 #define APTRACER_ACCELERATIONMULTIGRIDARRAY_T_HPP
 
 #include "entities/AccelerationStructure_t.hpp"
-#include "entities/Ray_t.hpp"
 #include "entities/Vec3f.hpp"
 #include "shapes/Box_t.hpp"
 #include <memory>
 #include <vector>
-
-namespace APTracer { namespace Entities {
-    class Shape_t;
-}}
-
-using APTracer::Entities::AccelerationStructure_t;
-using APTracer::Entities::Ray_t;
-using APTracer::Entities::Shape_t;
-using APTracer::Entities::Vec3f;
-using APTracer::Shapes::Box_t;
 
 namespace APTracer { namespace Acceleration {
 
@@ -30,7 +19,7 @@ namespace APTracer { namespace Acceleration {
      * maximum grid recursion level. This structure with its array representation is more geared toward static scenes, as the cost to remove, add or move shapes from one cell to another is highest.
      * With arrays, iteration on shapes is slightly faster, and the memory used is lowest. Slightly longer to build, needs two passes.
      */
-    class AccelerationMultiGridArray_t final : public AccelerationStructure_t {
+    class AccelerationMultiGridArray_t final : public Entities::AccelerationStructure_t {
         public:
             /**
              * @brief Construct a new top-level AccelerationMultiGridArray_t object from an array of shapes.
@@ -41,7 +30,7 @@ namespace APTracer { namespace Acceleration {
              * @param max_cell_content Maximum number of shapes in a cell before it is changed to a subgrid.
              * @param max_grid_level Maximum recursion level of the grid. 0 is no subgrids, 1 means cells from the top-level grid can be single level grids, etc.
              */
-            AccelerationMultiGridArray_t(const std::vector<Shape_t*>& items, size_t min_res, size_t max_res, size_t max_cell_content, unsigned int max_grid_level);
+            AccelerationMultiGridArray_t(const std::vector<Entities::Shape_t*>& items, size_t min_res, size_t max_res, size_t max_cell_content, unsigned int max_grid_level);
 
             /**
              * @brief Construct a new AccelerationMultiGridArray_t object from an array of shapes.
@@ -54,25 +43,66 @@ namespace APTracer { namespace Acceleration {
              * @param max_cell_content Maximum number of shapes in a cell before it is changed to a subgrid.
              * @param max_grid_level Maximum recursion level of the grid. 0 is no subgrids, 1 means cells from the top-level grid can be single level grids, etc.
              */
-            AccelerationMultiGridArray_t(
-                const std::vector<Shape_t*>& items, std::array<Vec3f, 2> coordinates, unsigned int level, size_t min_res, size_t max_res, size_t max_cell_content, unsigned int max_grid_level);
+            AccelerationMultiGridArray_t(const std::vector<Entities::Shape_t*>& items,
+                                         std::array<Entities::Vec3f, 2> coordinates,
+                                         unsigned int level,
+                                         size_t min_res,
+                                         size_t max_res,
+                                         size_t max_cell_content,
+                                         unsigned int max_grid_level);
+
+            /**
+             * @brief Destroy the AccelerationMultiGridArray_t object.
+             */
+            ~AccelerationMultiGridArray_t() final = default;
+
+            /**
+             * @brief Copy construct a new AccelerationMultiGridArray_t object.
+             *
+             * @param other Object to copy.
+             */
+            AccelerationMultiGridArray_t(const AccelerationMultiGridArray_t& other);
+
+            /**
+             * @brief Move construct a new AccelerationMultiGridArray_t object.
+             *
+             * @param other Object to move.
+             */
+            AccelerationMultiGridArray_t(AccelerationMultiGridArray_t&& other) noexcept = default;
+
+            /**
+             * @brief Copy assignment.
+             *
+             * @param other Object to copy.
+             * @return AccelerationMultiGridArray_t& Reference to this object.
+             */
+            auto operator=(const AccelerationMultiGridArray_t& other) -> AccelerationMultiGridArray_t&;
+
+            /**
+             * @brief Move assignment.
+             *
+             * @param other Object to move.
+             * @return AccelerationMultiGridArray_t& Reference to this object.
+             */
+            auto operator=(AccelerationMultiGridArray_t&& other) noexcept -> AccelerationMultiGridArray_t& = default;
 
             std::vector<std::unique_ptr<AccelerationStructure_t>>
                 cells_; /**< @brief Array of all the cells and grids contained in the acceleration structure. Cells use arrays of shapes, for fast iterating and lowest memory use.*/
             std::array<size_t, 3> cell_res_; /**< @brief Number of cells in the x, y, and z direction.*/
-            Vec3f cell_size_; /**< @brief Span of the cells in the x, y, and z direction.*/
-            Box_t bounding_box_; /**< @brief Box representing the space encompassed by the grid.*/
+            Entities::Vec3f cell_size_; /**< @brief Span of the cells in the x, y, and z direction.*/
+            Shapes::Box_t bounding_box_; /**< @brief Box representing the space encompassed by the grid.*/
             unsigned int level_; /**< @brief Recursion level of the grid. 0 is a top-level grid, 1 is a grid which is a cell of a grid, 2 is a grid within a grid within a grid, etc.*/
             size_t min_res_; /**< @brief Minimum number of cells for all directions.*/
             size_t max_res_; /**< @brief Maximum number of cells for all directions.*/
             size_t max_cell_content_; /**< @brief Maximum number of shapes in a cell before it is changed to a subgrid.*/
             unsigned int max_grid_level_; /**< @brief Maximum recursion level of the grid. 0 is no subgrids, 1 means cells from the top-level grid can be single level grids, etc.*/
 
-            virtual auto intersect(const Ray_t& ray, double& t, std::array<double, 2>& uv) const -> Shape_t* final;
-            virtual auto add(Shape_t* item) -> void final;
-            virtual auto remove(const Shape_t* item) -> void final;
-            virtual auto move(Shape_t* item) -> void final;
-            virtual auto size() const -> size_t final;
+            auto intersect(const Entities::Ray_t& ray, double& t, std::array<double, 2>& uv) const -> Entities::Shape_t* final;
+            auto add(Entities::Shape_t* item) -> void final;
+            auto remove(Entities::Shape_t* item) -> void final;
+            auto move(Entities::Shape_t* item) -> void final;
+            auto size() const -> size_t final;
+            auto clone() const -> std::unique_ptr<AccelerationStructure_t> final;
 
         private:
             size_t size_; /**< @brief Number of shapes currently held in the acceleration structure.*/

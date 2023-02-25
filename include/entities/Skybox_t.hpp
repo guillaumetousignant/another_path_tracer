@@ -19,6 +19,41 @@ namespace APTracer { namespace Entities {
             virtual ~Skybox_t() = default;
 
             /**
+             * @brief Construct a new Skybox_t object.
+             */
+            Skybox_t() = default;
+
+            /**
+             * @brief Copy construct a new Skybox_t object.
+             *
+             * @param other Object to copy.
+             */
+            Skybox_t(const Skybox_t& other) = default;
+
+            /**
+             * @brief Move construct a new Skybox_t object.
+             *
+             * @param other Object to move.
+             */
+            Skybox_t(Skybox_t&& other) noexcept = default;
+
+            /**
+             * @brief Copy assignment.
+             *
+             * @param other Object to copy.
+             * @return Skybox_t& Reference to this object.
+             */
+            auto operator=(const Skybox_t& other) -> Skybox_t& = default;
+
+            /**
+             * @brief Move assignment.
+             *
+             * @param other Object to move.
+             * @return Skybox_t& Reference to this object.
+             */
+            auto operator=(Skybox_t&& other) noexcept -> Skybox_t& = default;
+
+            /**
              * @brief Returns the colour of the skybox for a given direction.
              *
              * @param xyz Direction in cartesian coordinates for which we want the colour.

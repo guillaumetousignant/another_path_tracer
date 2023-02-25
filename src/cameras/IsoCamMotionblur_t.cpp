@@ -1,10 +1,5 @@
 #include "cameras/IsoCamMotionblur_t.hpp"
-#include "entities/ImgBuffer_t.hpp"
-#include "entities/Medium_t.hpp"
 #include "entities/RandomGenerator_t.hpp"
-#include "entities/Scene_t.hpp"
-#include "entities/Skybox_t.hpp"
-#include "entities/TransformMatrix_t.hpp"
 #include <cmath>
 
 using APTracer::Cameras::IsoCamMotionblur_t;
@@ -54,10 +49,10 @@ auto IsoCamMotionblur_t::raytrace(const Scene_t* scene) -> void {
     const Vec3f horizontal_last     = direction_last_.cross(up_last_).normalize_inplace();
     const Vec3f vertical_last       = horizontal_last.cross(direction_last_).normalize_inplace();
     const double tot_subpix         = subpix_[0] * subpix_[1];
-    const double pixel_span_y_last  = fov_last_[0] / image_->size_y_;
-    const double pixel_span_x_last  = fov_last_[1] / image_->size_x_;
-    const double pixel_span_y       = fov_[0] / image_->size_y_;
-    const double pixel_span_x       = fov_[1] / image_->size_x_;
+    const double pixel_span_y_last  = fov_last_[0] / static_cast<double>(image_->size_y_);
+    const double pixel_span_x_last  = fov_last_[1] / static_cast<double>(image_->size_x_);
+    const double pixel_span_y       = fov_[0] / static_cast<double>(image_->size_y_);
+    const double pixel_span_x       = fov_[1] / static_cast<double>(image_->size_x_);
     const double subpix_span_y_last = pixel_span_y_last / subpix_[0];
     const double subpix_span_x_last = pixel_span_x_last / subpix_[1];
     const double subpix_span_y      = pixel_span_y / subpix_[0];

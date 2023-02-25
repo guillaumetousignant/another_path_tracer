@@ -1,9 +1,12 @@
 #include "acceleration/AccelerationGridVector_t.hpp"
-#include "entities/Shape_t.hpp"
 #include <cmath>
 #include <limits>
 
 using APTracer::Acceleration::AccelerationGridVector_t;
+using APTracer::Entities::Ray_t;
+using APTracer::Entities::Shape_t;
+using APTracer::Entities::Vec3f;
+using APTracer::Shapes::Box_t;
 
 AccelerationGridVector_t::AccelerationGridVector_t(const std::vector<Shape_t*>& items, size_t min_res, size_t max_res) :
         cell_res_(), level_(0), min_res_(min_res), max_res_(max_res), size_(items.size()) {
@@ -99,6 +102,21 @@ AccelerationGridVector_t::AccelerationGridVector_t(const std::vector<Shape_t*>& 
     }
 }
 
+AccelerationGridVector_t::AccelerationGridVector_t(const AccelerationGridVector_t& other) :
+        cell_res_(other.cell_res_), cell_size_(other.cell_size_), bounding_box_(other.bounding_box_), level_(other.level_), min_res_(other.min_res_), max_res_(other.max_res_), size_(other.size_) {
+    cells_.reserve(other.cells_.size());
+    for (const auto& cell: other.cells_) {
+        cells_.push_back(std::make_unique<GridCellVector_t>(*cell));
+    }
+}
+
+auto AccelerationGridVector_t::operator=(const AccelerationGridVector_t& other) -> AccelerationGridVector_t& {
+    if (this != &other) {
+        *this = AccelerationGridVector_t(other);
+    }
+    return *this;
+}
+
 auto AccelerationGridVector_t::intersect(const Ray_t& ray, double& t, std::array<double, 2>& uv) const -> Shape_t* {
     double tbbox = 0.0;
     std::array<long long, 3> cellexit{0, 0, 0};
@@ -186,7 +204,7 @@ auto AccelerationGridVector_t::add(Shape_t* item) -> void {
     ++size_;
 }
 
-auto AccelerationGridVector_t::remove(const Shape_t* item) -> void {
+auto AccelerationGridVector_t::remove(Shape_t* const item) -> void {
     Vec3f min1 = Vec3f(std::numeric_limits<double>::max());
     Vec3f max1 = Vec3f(std::numeric_limits<double>::lowest());
 
@@ -217,4 +235,8 @@ auto AccelerationGridVector_t::move(Shape_t* item) -> void {}
 
 auto AccelerationGridVector_t::size() const -> size_t {
     return size_;
+}
+
+auto AccelerationGridVector_t::clone() const -> std::unique_ptr<AccelerationStructure_t> {
+    return std::make_unique<AccelerationGridVector_t>(*this);
 }

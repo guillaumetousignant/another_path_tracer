@@ -1,8 +1,32 @@
 #ifndef APTRACER_ENTITIES_SCENECONTEXT_T_HPP
 #define APTRACER_ENTITIES_SCENECONTEXT_T_HPP
 
+#include "entities/Camera_t.hpp"
+#include "entities/DirectionalLight_t.hpp"
+#include "entities/ImgBuffer_t.hpp"
+#include "entities/ImgBufferOpenGL_t.hpp"
+#include "entities/Material_t.hpp"
+#include "entities/MaterialMap_t.hpp"
+#include "entities/Medium_t.hpp"
+#include "entities/MeshGeometry_t.hpp"
+#include "entities/OpenGLRenderer_t.hpp"
+#include "entities/Scene_t.hpp"
+#include "entities/Shape_t.hpp"
+#include "entities/Skybox_t.hpp"
+#include "entities/Texture_t.hpp"
+#include "entities/TransformMatrix_t.hpp"
 #include "entities/Vec3f.hpp"
 #include "functions/tinyxml2.h"
+#include "materials/FresnelMix_t.hpp"
+#include "materials/FresnelMixIn_t.hpp"
+#include "materials/FresnelMixNormal_t.hpp"
+#include "materials/Portal_t.hpp"
+#include "materials/PortalScatterer_t.hpp"
+#include "materials/RandomMix_t.hpp"
+#include "materials/RandomMixIn_t.hpp"
+#include "materials/TextureMix_t.hpp"
+#include "materials/TextureMixIn_t.hpp"
+#include "shapes/MeshTop_t.hpp"
 #include <array>
 #include <iostream>
 #include <list>
@@ -11,40 +35,6 @@
 #include <string>
 #include <utility>
 #include <vector>
-
-namespace APTracer { namespace Shapes {
-    class MeshTop_t;
-}}
-namespace APTracer { namespace Entities {
-    class TransformMatrix_t;
-    class Texture_t;
-    class Material_t;
-    class Medium_t;
-    class MeshGeometry_t;
-    class Shape_t;
-    class DirectionalLight_t;
-    class Skybox_t;
-    class ImgBuffer_t;
-    class Camera_t;
-    class MaterialMap_t;
-    class ImgBufferOpenGL_t;
-    class Scene_t;
-    class OpenGLRenderer_t;
-}}
-namespace APTracer { namespace Materials {
-    class Portal_t;
-    class PortalScatterer_t;
-    class FresnelMix_t;
-    class FresnelMixIn_t;
-    class FresnelMixNormal_t;
-    class RandomMix_t;
-    class RandomMixIn_t;
-    class TextureMix_t;
-    class TextureMixIn_t;
-}}
-
-using namespace APTracer::Shapes;
-using namespace APTracer::Entities;
 
 namespace APTracer { namespace Entities {
 
@@ -143,7 +133,7 @@ namespace APTracer { namespace Entities {
             std::vector<std::unique_ptr<ImgBuffer_t>> imgbuffers_; /**< @brief Vector containing the image buffers.*/
             std::vector<std::unique_ptr<Camera_t>> cameras_; /**< @brief Vector containing the cameras.*/
             std::vector<std::unique_ptr<MaterialMap_t>> material_aggregates_; /**< @brief Vector containing the material aggregates. Elements are nullptr for regular materials.*/
-            std::vector<std::unique_ptr<MeshTop_t>> meshes_; /**< @brief Vector containing the meshes.*/
+            std::vector<std::unique_ptr<Shapes::MeshTop_t>> meshes_; /**< @brief Vector containing the meshes.*/
 
             std::unique_ptr<TransformMatrix_t> invalid_transform_matrix_; /**< @brief Transformation matrix used when a reference is not found.*/
             std::unique_ptr<Medium_t> invalid_medium_; /**< @brief Medium used when a reference is not found.*/
@@ -243,7 +233,7 @@ namespace APTracer { namespace Entities {
              * @return std::unique_ptr<Shape_t> Unique pointer to the created shape. Nullptr if the shape is a mesh.
              */
             auto create_object(const tinyxml2::XMLElement* xml_object,
-                               std::unique_ptr<MeshTop_t>& mesh,
+                               std::unique_ptr<Shapes::MeshTop_t>& mesh,
                                const tinyxml2::XMLElement* xml_transform_matrices,
                                const tinyxml2::XMLElement* xml_materials,
                                const tinyxml2::XMLElement* xml_mesh_geometries) -> std::unique_ptr<Shape_t>;
@@ -432,7 +422,7 @@ namespace APTracer { namespace Entities {
              * @param[out] meshes Vector containing the meshes making up the scene.
              * @param xml_objects XML entries of all the shapes and/or meshes.
              */
-            auto get_objects(std::string objects_string, std::vector<Shape_t*>& shapes, std::vector<MeshTop_t*>& meshes, const tinyxml2::XMLElement* xml_objects) const -> void;
+            auto get_objects(std::string objects_string, std::vector<Shape_t*>& shapes, std::vector<Shapes::MeshTop_t*>& meshes, const tinyxml2::XMLElement* xml_objects) const -> void;
 
             /**
              * @brief Get the shapes and meshes making up the scene from all the created shapes and meshes.
@@ -442,7 +432,7 @@ namespace APTracer { namespace Entities {
              * @param[out] shapes Vector containing the shapes making up the scene.
              * @param[out] meshes Vector containing the meshes making up the scene.
              */
-            auto get_objects(std::vector<Shape_t*>& shapes, std::vector<MeshTop_t*>& meshes) const -> void;
+            auto get_objects(std::vector<Shape_t*>& shapes, std::vector<Shapes::MeshTop_t*>& meshes) const -> void;
     };
 }}
 
@@ -457,7 +447,7 @@ namespace APTracer {
  * @param colour String containing a colour value(s) or name.
  * @return Vec3f Three component colour.
  */
-auto get_colour(std::string colour) -> Vec3f; // copies string :(
+auto get_colour(std::string colour) -> Entities::Vec3f; // copies string :(
 
 /**
  * @brief Get a vector of three points from a string of numerical values.
@@ -465,7 +455,7 @@ auto get_colour(std::string colour) -> Vec3f; // copies string :(
  * @param points_string String containing the three components of the three points.
  * @return std::array<Vec3f, 3> Array containing the components of three points.
  */
-auto get_points(std::string points_string) -> std::array<Vec3f, 3>;
+auto get_points(std::string points_string) -> std::array<Entities::Vec3f, 3>;
 
 /**
  * @brief Get a vector of three normals from a string of numerical values, or nan to generate them.
@@ -474,7 +464,7 @@ auto get_points(std::string points_string) -> std::array<Vec3f, 3>;
  * @param points Coordinates of the three points making up the triangle, to generate normals.
  * @return std::array<Vec3f, 3> Array containing the components of three normals.
  */
-auto get_normals(std::string normals_string, const std::array<Vec3f, 3>& points) -> std::array<Vec3f, 3>;
+auto get_normals(std::string normals_string, const std::array<Entities::Vec3f, 3>& points) -> std::array<Entities::Vec3f, 3>;
 
 /**
  * @brief Get a vector of three 2D coordinates from a string of numerical values, or nan to generate them.
@@ -521,11 +511,11 @@ auto get_xy(const std::string& string_value) -> std::array<T, 2> {
 /**
  * @brief Returns true if the string represents an integer.
  *
- * @param s String containing or not an integer.
+ * @param str String containing or not an integer.
  * @return true The string represents an integer.
  * @return false The string doesn't represent an integer.
  */
-auto is_number(const std::string& s) -> bool;
+auto is_number(const std::string& str) -> bool;
 
 /**
  * @brief Applies a transformation represented by an XML element to a transformation matrix.
@@ -533,7 +523,7 @@ auto is_number(const std::string& s) -> bool;
  * @param[in, out] transform_matrix Transformation matrix to which we apply the transformation.
  * @param transform XML element representing the transformation.
  */
-auto apply_transformation(TransformMatrix_t* transform_matrix, const tinyxml2::XMLElement* transform) -> void;
+auto apply_transformation(Entities::TransformMatrix_t* transform_matrix, const tinyxml2::XMLElement* transform) -> void;
 
 /**
  * @brief This function defines the parameters that have to be present in an XML element and throws an error if a parameter is missing.

@@ -2,16 +2,7 @@
 #define APTRACER_GRIDCELL_T_HPP
 
 #include "entities/AccelerationStructure_t.hpp"
-#include "entities/Ray_t.hpp"
 #include <list>
-
-namespace APTracer { namespace Entities {
-    class Shape_t;
-}}
-
-using APTracer::Entities::AccelerationStructure_t;
-using APTracer::Entities::Ray_t;
-using APTracer::Entities::Shape_t;
 
 namespace APTracer { namespace Acceleration {
     /**
@@ -19,20 +10,21 @@ namespace APTracer { namespace Acceleration {
      *
      * This structure with its list representation is more geared toward moving scenes, as the cost to remove, add or move shapes from one cell to another is lower.
      */
-    class GridCell_t final : public AccelerationStructure_t {
+    class GridCell_t final : public Entities::AccelerationStructure_t {
         public:
             /**
              * @brief Construct a new GridCell_t object containing no shapes.
              */
-            GridCell_t();
+            GridCell_t() = default;
 
-            std::list<Shape_t*> items_; /**< @brief List of shapes contained in the cell. This allows constant time adding and removal of shapes.*/
+            std::list<Entities::Shape_t*> items_; /**< @brief List of shapes contained in the cell. This allows constant time adding and removal of shapes.*/
 
-            virtual auto intersect(const Ray_t& ray, double& t, std::array<double, 2>& uv) const -> Shape_t* final;
-            virtual auto add(Shape_t* item) -> void final;
-            virtual auto remove(const Shape_t* item) -> void final;
-            virtual auto move(Shape_t* item) -> void final;
-            virtual auto size() const -> size_t final;
+            auto intersect(const Entities::Ray_t& ray, double& t, std::array<double, 2>& uv) const -> Entities::Shape_t* final;
+            auto add(Entities::Shape_t* item) -> void final;
+            auto remove(Entities::Shape_t* item) -> void final;
+            auto move(Entities::Shape_t* item) -> void final;
+            auto size() const -> size_t final;
+            auto clone() const -> std::unique_ptr<AccelerationStructure_t> final;
     };
 }}
 #endif

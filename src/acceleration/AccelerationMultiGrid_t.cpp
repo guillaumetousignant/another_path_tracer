@@ -1,10 +1,13 @@
 #include "acceleration/AccelerationMultiGrid_t.hpp"
 #include "acceleration/GridCell_t.hpp"
-#include "entities/Shape_t.hpp"
 #include <cmath>
 #include <limits>
 
 using APTracer::Acceleration::AccelerationMultiGrid_t;
+using APTracer::Entities::Ray_t;
+using APTracer::Entities::Shape_t;
+using APTracer::Entities::Vec3f;
+using APTracer::Shapes::Box_t;
 
 AccelerationMultiGrid_t::AccelerationMultiGrid_t(const std::vector<Shape_t*>& items, size_t min_res, size_t max_res, size_t max_cell_content, unsigned int max_grid_level) :
         cell_res_(), level_(0), min_res_(min_res), max_res_(max_res), max_cell_content_(max_cell_content), max_grid_level_(max_grid_level), size_(items.size()) {
@@ -147,6 +150,29 @@ AccelerationMultiGrid_t::AccelerationMultiGrid_t(
     }
 }
 
+AccelerationMultiGrid_t::AccelerationMultiGrid_t(const AccelerationMultiGrid_t& other) :
+        cell_res_(other.cell_res_),
+        cell_size_(other.cell_size_),
+        bounding_box_(other.bounding_box_),
+        level_(other.level_),
+        min_res_(other.min_res_),
+        max_res_(other.max_res_),
+        max_cell_content_(other.max_cell_content_),
+        max_grid_level_(other.max_grid_level_),
+        size_(other.size_) {
+    cells_.reserve(other.cells_.size());
+    for (const auto& cell: other.cells_) {
+        cells_.push_back(cell->clone());
+    }
+}
+
+auto AccelerationMultiGrid_t::operator=(const AccelerationMultiGrid_t& other) -> AccelerationMultiGrid_t& {
+    if (this != &other) {
+        *this = AccelerationMultiGrid_t(other);
+    }
+    return *this;
+}
+
 auto AccelerationMultiGrid_t::intersect(const Ray_t& ray, double& t, std::array<double, 2>& uv) const -> Shape_t* {
     double tbbox = 0.0;
     std::array<long long, 3> cellexit{0, 0, 0};
@@ -234,7 +260,7 @@ auto AccelerationMultiGrid_t::add(Shape_t* item) -> void {
     ++size_;
 }
 
-auto AccelerationMultiGrid_t::remove(const Shape_t* item) -> void {
+auto AccelerationMultiGrid_t::remove(Shape_t* const item) -> void {
     Vec3f min1 = Vec3f(std::numeric_limits<double>::max());
     Vec3f max1 = Vec3f(std::numeric_limits<double>::lowest());
 
@@ -265,4 +291,8 @@ auto AccelerationMultiGrid_t::move(Shape_t* item) -> void {}
 
 auto AccelerationMultiGrid_t::size() const -> size_t {
     return size_;
+}
+
+auto AccelerationMultiGrid_t::clone() const -> std::unique_ptr<AccelerationStructure_t> {
+    return std::make_unique<AccelerationMultiGrid_t>(*this);
 }

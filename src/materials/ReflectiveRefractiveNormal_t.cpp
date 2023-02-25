@@ -1,15 +1,13 @@
 #include "materials/ReflectiveRefractiveNormal_t.hpp"
-#include "entities/Medium_t.hpp"
 #include "entities/RandomGenerator_t.hpp"
 #include "entities/Shape_t.hpp"
-#include "entities/Texture_t.hpp"
 #include <cmath>
 
 constexpr double epsilon = 0.00000001;
 
 using APTracer::Entities::Vec3f;
 
-APTracer::Materials::ReflectiveRefractiveNormal_t::ReflectiveRefractiveNormal_t(const Vec3f& emission,
+APTracer::Materials::ReflectiveRefractiveNormal_t::ReflectiveRefractiveNormal_t(const Entities::Vec3f& emission,
                                                                                 const Vec3f& colour,
                                                                                 const APTracer::Entities::Texture_t* normal_map,
                                                                                 APTracer::Entities::Medium_t* medium) :
@@ -17,7 +15,7 @@ APTracer::Materials::ReflectiveRefractiveNormal_t::ReflectiveRefractiveNormal_t(
 
 auto APTracer::Materials::ReflectiveRefractiveNormal_t::bounce(std::array<double, 2> uv, const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t& ray) -> void {
     Vec3f tangent;
-    std::array<double, 2> tuv;
+    std::array<double, 2> tuv{};
     Vec3f newdir;
     // bool coming_out;
 
@@ -30,9 +28,9 @@ auto APTracer::Materials::ReflectiveRefractiveNormal_t::bounce(std::array<double
 
     if (medium_->priority_ >= ray.medium_list_.front()->priority_) { // CHECK also discard if priority is equal, but watch for going out case
         Vec3f n;
-        double etai;
-        double etat;
-        double kr;
+        double etai{};
+        double etat{};
+        double kr{};
 
         if (cosi < 0.0) { // Coming in
             etai = ray.medium_list_.front()->ind_;

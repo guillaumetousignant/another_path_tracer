@@ -9,11 +9,6 @@ namespace APTracer { namespace Entities {
     class Shape_t;
 }}
 
-using APTracer::Entities::Material_t;
-using APTracer::Entities::Ray_t;
-using APTracer::Entities::Shape_t;
-using APTracer::Entities::Vec3f;
-
 namespace APTracer { namespace Materials {
 
     /**
@@ -26,7 +21,7 @@ namespace APTracer { namespace Materials {
      * This material represents flat shiny surfaces, such as mirrors,
      * very polished metals, and shiny plastic.
      */
-    class Reflective_t final : public Material_t {
+    class Reflective_t final : public Entities::Material_t {
         public:
             /**
              * @brief Construct a new Reflective_t object with an emissive and reflective colour.
@@ -34,10 +29,10 @@ namespace APTracer { namespace Materials {
              * @param emission Colour emitted by the material when a ray bounces on it.
              * @param colour Colour reflected by the material when a ray bounces on it.
              */
-            Reflective_t(const Vec3f& emission, const Vec3f& colour);
+            Reflective_t(const Entities::Vec3f& emission, const Entities::Vec3f& colour);
 
-            Vec3f emission_; /**< @brief Colour emitted by the material at each bounce.*/
-            Vec3f colour_; /**< @brief Colour reflected by the material at each bounce.*/
+            Entities::Vec3f emission_; /**< @brief Colour emitted by the material at each bounce.*/
+            Entities::Vec3f colour_; /**< @brief Colour reflected by the material at each bounce.*/
 
             /**
              * @brief Bounces a ray of light on the material.
@@ -53,7 +48,7 @@ namespace APTracer { namespace Materials {
              * @param hit_obj Pointer to the shape that was hit by the ray.
              * @param ray Ray that has intersected the shape.
              */
-            virtual auto bounce(std::array<double, 2> uv, const Shape_t* hit_obj, Ray_t& ray) -> void final;
+            auto bounce(std::array<double, 2> uv, const Entities::Shape_t* hit_obj, Entities::Ray_t& ray) -> void final;
     };
 }}
 #endif

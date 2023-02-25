@@ -26,18 +26,13 @@ ImgBuffer_t::ImgBuffer_t(size_t size_x, size_t size_y) : size_x_(size_x), size_y
 
 auto ImgBuffer_t::reset() -> void {
     updates_ = 0;
-    for (auto& pixel: img_) {
-        pixel = Vec3f();
-    }
+    std::fill(img_.begin(), img_.end(), Vec3f());
 }
 
-auto ImgBuffer_t::update(const Vec3f* img, size_t size_x, size_t size_y) -> void {
+auto ImgBuffer_t::update(const std::vector<Vec3f>& img) -> void {
     updates_++;
 
-    for (size_t j = 0; j < size_y * size_x; ++j) {
-        // img_[j][i] = img_[j][i] * (1.0 - 1.0/static_cast<double>(updates_)) + img[j][i]/static_cast<double>(updates_);
-        img_[j] += img[j];
-    }
+    std::transform(img_.begin(), img_.end(), img.begin(), img_.begin(), std::plus<>());
 }
 
 auto ImgBuffer_t::update() -> void {
@@ -49,11 +44,9 @@ auto ImgBuffer_t::update(const Vec3f& colour, size_t pos_x, size_t pos_y) -> voi
     img_[pos_y * size_x_ + pos_x] += colour;
 }
 
-auto ImgBuffer_t::set(const Vec3f* img, size_t size_x, size_t size_y) -> void {
+auto ImgBuffer_t::set(const std::vector<Vec3f>& img) -> void {
     updates_ = 1;
-    for (size_t j = 0; j < size_y * size_x; ++j) {
-        img_[j] = img[j];
-    }
+    img_     = img;
 }
 
 auto ImgBuffer_t::set(const Vec3f& colour, size_t pos_x, size_t pos_y) -> void {

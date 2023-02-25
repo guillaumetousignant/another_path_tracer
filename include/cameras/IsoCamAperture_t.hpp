@@ -2,26 +2,10 @@
 #define APTRACER_CAMERAS_ISOCAMAPERTURE_T_HPP
 
 #include "entities/Camera_t.hpp"
-#include "entities/Vec3f.hpp"
+#include "entities/ImgBuffer_t.hpp"
 #include <list>
 #include <random>
 #include <string>
-
-namespace APTracer { namespace Entities {
-    class TransformMatrix_t;
-    class Skybox_t;
-    class Scene_t;
-    class Medium_t;
-    class ImgBuffer_t;
-}}
-
-using APTracer::Entities::Camera_t;
-using APTracer::Entities::ImgBuffer_t;
-using APTracer::Entities::Medium_t;
-using APTracer::Entities::Scene_t;
-using APTracer::Entities::Skybox_t;
-using APTracer::Entities::TransformMatrix_t;
-using APTracer::Entities::Vec3f;
 
 namespace APTracer { namespace Cameras {
 
@@ -38,7 +22,7 @@ namespace APTracer { namespace Cameras {
      * This camera stores the result from its rays in a single image buffer, and has no
      * motion blur.
      */
-    class IsoCamAperture_t final : public Camera_t {
+    class IsoCamAperture_t final : public Entities::Camera_t {
         public:
             /**
              * @brief Construct a new IsoCamAperture_t object. Most arguments are passed to the Camera_t constructor.
@@ -56,20 +40,20 @@ namespace APTracer { namespace Cameras {
              * @param aperture Radius of the disk on which rays are created around the origin. Higher values will cause stronger depth of field, objects out of focus will be blurrier.
              * @param gammaind Gamma of the saved picture. A value of 1 should be used for usual cases.
              */
-            IsoCamAperture_t(TransformMatrix_t* transformation,
+            IsoCamAperture_t(Entities::TransformMatrix_t* transformation,
                              const std::string& filename,
-                             APTracer::Entities::Vec3f up,
+                             Entities::Vec3f up,
                              std::array<double, 2> fov,
                              std::array<unsigned int, 2> subpix,
-                             ImgBuffer_t* image,
-                             std::list<Medium_t*> medium_list,
-                             Skybox_t* skybox,
+                             Entities::ImgBuffer_t* image,
+                             std::list<Entities::Medium_t*> medium_list,
+                             Entities::Skybox_t* skybox,
                              unsigned int max_bounces,
                              double focus_distance,
                              double aperture,
                              double gammaind);
 
-            ImgBuffer_t* image_; /**< @brief Image buffer into which the image is stored.*/
+            Entities::ImgBuffer_t* image_; /**< @brief Image buffer into which the image is stored.*/
             std::uniform_real_distribution<double> unif_; /**< @brief Uniform random distribution used for generating random numbers.*/
             double focus_distance_; /**< @brief Distance of the focal plane to the camera origin. Objects away from that distance will be out of focus. The focal plane has the shape of a plane at this
                                        distance from the camera.*/
@@ -83,7 +67,7 @@ namespace APTracer { namespace Cameras {
              * This is how the changes to the transformation matrix and functions like setUp take effect. It sets focus_distance_ to focus_distance_buffer_,
              * so it is only modified once per frame. This is needed for some features to work, like motion blur.
              */
-            virtual auto update() -> void final;
+            auto update() -> void final;
 
             /**
              * @brief Sends rays through the scene, to generate an image.
@@ -94,7 +78,7 @@ namespace APTracer { namespace Cameras {
              *
              * @param scene
              */
-            virtual auto raytrace(const Scene_t* scene) -> void final;
+            auto raytrace(const Entities::Scene_t* scene) -> void final;
 
             /**
              * @brief Sets the focus distance of the camera.
@@ -105,7 +89,7 @@ namespace APTracer { namespace Cameras {
              *
              * @param focus_distance New focus distance of the camera.
              */
-            virtual auto focus(double focus_distance) -> void final;
+            auto focus(double focus_distance) -> void final;
 
             /**
              * @brief Focusses the camera on a point in its field of view.
@@ -118,7 +102,7 @@ namespace APTracer { namespace Cameras {
              * @param scene Scene to use to find the object to focus on.
              * @param position Image space coordinates on which to focus. [horizontal, vertical] from 0 to 1, from left to right and bottom to top.
              */
-            virtual auto autoFocus(const Scene_t* scene, std::array<double, 2> position) -> void final;
+            auto autoFocus(const Entities::Scene_t* scene, std::array<double, 2> position) -> void final;
 
             /**
              * @brief Zooms the camera's field of view by a factor.
@@ -127,7 +111,7 @@ namespace APTracer { namespace Cameras {
              *
              * @param factor Factor by which to zoom the camera.
              */
-            virtual auto zoom(double factor) -> void final;
+            auto zoom(double factor) -> void final;
 
             /**
              * @brief Writes the image buffer to disk with the provided name.
@@ -137,7 +121,7 @@ namespace APTracer { namespace Cameras {
              *
              * @param file_name Filename used to write the images.
              */
-            virtual auto write(const std::string& file_name) -> void final;
+            auto write(const std::string& file_name) -> void final;
 
             /**
              * @brief Writes the image buffer to disk with the camera's filename.
@@ -145,12 +129,12 @@ namespace APTracer { namespace Cameras {
              * This will write the camera's image to disk. It uses the camera's filename_.
              * This calls the image buffer's write function. Directory must exist.
              */
-            virtual auto write() -> void final;
+            auto write() -> void final;
 
             /**
              * @brief Shows the image on screen. Currently not implemented. Use ImgBufferOpenGL_t instead.
              */
-            virtual auto show() const -> void final;
+            auto show() const -> void final;
 
             /**
              * @brief Resets the camera's image buffer, for when the scene or camera has changed.
@@ -158,7 +142,7 @@ namespace APTracer { namespace Cameras {
              * This will discard all accumulated samples and start accumulation from scratch. Calls the image buffer's
              * reset function.
              */
-            virtual auto reset() -> void final;
+            auto reset() -> void final;
     };
 }}
 #endif

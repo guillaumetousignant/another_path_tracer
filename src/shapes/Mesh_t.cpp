@@ -1,6 +1,4 @@
 #include "shapes/Mesh_t.hpp"
-#include "entities/MaterialMap_t.hpp"
-#include "entities/MeshGeometry_t.hpp"
 #include "shapes/TriangleMesh_t.hpp"
 #include <iostream>
 

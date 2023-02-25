@@ -1,10 +1,5 @@
 #include "cameras/RecCamMotionblur_t.hpp"
-#include "entities/ImgBuffer_t.hpp"
-#include "entities/Medium_t.hpp"
 #include "entities/RandomGenerator_t.hpp"
-#include "entities/Scene_t.hpp"
-#include "entities/Skybox_t.hpp"
-#include "entities/TransformMatrix_t.hpp"
 #include <cmath>
 
 using APTracer::Cameras::RecCamMotionblur_t;
@@ -56,10 +51,10 @@ auto RecCamMotionblur_t::raytrace(const Scene_t* scene) -> void {
     const Vec3f focus_point         = origin_ + direction_;
     const Vec3f focus_point_last    = origin_last_ + direction_last_;
     const double tot_subpix         = subpix_[0] * subpix_[1];
-    const double pixel_span_y_last  = std::tan(fov_last_[0] / 2.0) * 2.0 / image_->size_y_;
-    const double pixel_span_x_last  = std::tan(fov_last_[1] / 2.0) * 2.0 / image_->size_x_;
-    const double pixel_span_y       = std::tan(fov_[0] / 2.0) * 2.0 / image_->size_y_;
-    const double pixel_span_x       = std::tan(fov_[1] / 2.0) * 2.0 / image_->size_x_;
+    const double pixel_span_y_last  = std::tan(fov_last_[0] / 2.0) * 2.0 / static_cast<double>(image_->size_y_);
+    const double pixel_span_x_last  = std::tan(fov_last_[1] / 2.0) * 2.0 / static_cast<double>(image_->size_x_);
+    const double pixel_span_y       = std::tan(fov_[0] / 2.0) * 2.0 / static_cast<double>(image_->size_y_);
+    const double pixel_span_x       = std::tan(fov_[1] / 2.0) * 2.0 / static_cast<double>(image_->size_x_);
     const double subpix_span_y_last = pixel_span_y_last / subpix_[0];
     const double subpix_span_x_last = pixel_span_x_last / subpix_[1];
     const double subpix_span_y      = pixel_span_y / subpix_[0];

@@ -1,7 +1,4 @@
 #include "shapes/TriangleMeshMotionblur_t.hpp"
-#include "entities/Material_t.hpp"
-#include "entities/MeshGeometry_t.hpp"
-#include "entities/TransformMatrix_t.hpp"
 #include <algorithm>
 #include <cmath>
 #include <limits>
@@ -14,20 +11,20 @@ APTracer::Shapes::TriangleMeshMotionblur_t::TriangleMeshMotionblur_t(APTracer::E
                                                                      APTracer::Entities::TransformMatrix_t* transform_matrix,
                                                                      APTracer::Entities::MeshGeometry_t* geom,
                                                                      size_t index) :
-        Shape_t(material, transform_matrix), geom_(geom), index_(index) {
-
-    points_       = {transformation_->multVec(geom_->v_[index_][0]), transformation_->multVec(geom_->v_[index_][1]), transformation_->multVec(geom_->v_[index_][2])};
-    normals_      = {transformation_->multDir(geom_->vn_[index_][0]), transformation_->multDir(geom_->vn_[index_][1]), transformation_->multDir(geom_->vn_[index_ + 2][1])};
-    points_last_  = points_;
-    normals_last_ = normals_;
-
-    v0v1_      = points_[1] - points_[0];
-    v0v1_last_ = v0v1_;
-    v0v2_      = points_[2] - points_[0];
-    v0v2_last_ = v0v2_;
-
-    texture_coordinates_      = {geom_->vt_[index_][0][0], geom_->vt_[index_][0][1], geom_->vt_[index_][1][0], geom_->vt_[index_][1][1], geom_->vt_[index_][2][0], geom_->vt_[index_][2][1]};
-    texture_coordinates_last_ = texture_coordinates_;
+        Shape_t(material, transform_matrix),
+        geom_(geom),
+        index_(index),
+        texture_coordinates_{geom_->vt_[index_][0][0], geom_->vt_[index_][0][1], geom_->vt_[index_][1][0], geom_->vt_[index_][1][1], geom_->vt_[index_][2][0], geom_->vt_[index_][2][1]},
+        points_{transformation_->multVec(geom_->v_[index_][0]), transformation_->multVec(geom_->v_[index_][1]), transformation_->multVec(geom_->v_[index_][2])},
+        normals_{transformation_->multDir(geom_->vn_[index_][0]), transformation_->multDir(geom_->vn_[index_][1]), transformation_->multDir(geom_->vn_[index_ + 2][1])},
+        v0v1_(points_[1] - points_[0]),
+        v0v2_(points_[2] - points_[0]),
+        tuv_to_world_{},
+        texture_coordinates_last_(texture_coordinates_),
+        points_last_(points_),
+        normals_last_(normals_),
+        v0v1_last_(v0v1_),
+        v0v2_last_(v0v2_) {
 
     const std::array<double, 2> tuv0v1{texture_coordinates_[2] - texture_coordinates_[0], texture_coordinates_[3] - texture_coordinates_[1]};
     const std::array<double, 2> tuv0v2{texture_coordinates_[4] - texture_coordinates_[0], texture_coordinates_[5] - texture_coordinates_[1]};
@@ -104,11 +101,7 @@ auto APTracer::Shapes::TriangleMeshMotionblur_t::intersection(const APTracer::En
 
     t = v0v2_int.dot(qvec) * invdet;
 
-    if (t < 0.0) {
-        return false;
-    }
-
-    return true;
+    return t >= 0.0;
 }
 
 auto APTracer::Shapes::TriangleMeshMotionblur_t::normaluv(double time, std::array<double, 2> uv, std::array<double, 2>& tuv) const -> Vec3f {

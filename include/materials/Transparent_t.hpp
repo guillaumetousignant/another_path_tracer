@@ -2,19 +2,13 @@
 #define APTRACER_MATERIALS_TRANSPARENT_T_HPP
 
 #include "entities/Material_t.hpp"
+#include "entities/Medium_t.hpp"
 #include "entities/Ray_t.hpp"
 #include "entities/Vec3f.hpp"
 
 namespace APTracer { namespace Entities {
-    class Medium_t;
     class Shape_t;
 }}
-
-using APTracer::Entities::Material_t;
-using APTracer::Entities::Medium_t;
-using APTracer::Entities::Ray_t;
-using APTracer::Entities::Shape_t;
-using APTracer::Entities::Vec3f;
 
 namespace APTracer { namespace Materials {
 
@@ -26,16 +20,16 @@ namespace APTracer { namespace Materials {
      * This material can be used to represent volumetric materials, where the
      * medium is important and there is no surface interaction at its boundary.
      */
-    class Transparent_t final : public Material_t {
+    class Transparent_t final : public Entities::Material_t {
         public:
             /**
              * @brief Construct a new Transparent_t object with a medium.
              *
              * @param medium Medium on the inside of the material.
              */
-            Transparent_t(Medium_t* medium);
+            explicit Transparent_t(Entities::Medium_t* medium);
 
-            Medium_t* medium_; /**< @brief Medium on the inside of the material. It is added to a ray's medium list when entering the material and removed when exiting it.*/
+            Entities::Medium_t* medium_; /**< @brief Medium on the inside of the material. It is added to a ray's medium list when entering the material and removed when exiting it.*/
 
             /**
              * @brief Bounces a ray of light on the material.
@@ -49,7 +43,7 @@ namespace APTracer { namespace Materials {
              * @param hit_obj Pointer to the shape that was hit by the ray.
              * @param ray Ray that has intersected the shape.
              */
-            virtual auto bounce(std::array<double, 2> uv, const Shape_t* hit_obj, Ray_t& ray) -> void final;
+            auto bounce(std::array<double, 2> uv, const Entities::Shape_t* hit_obj, Entities::Ray_t& ray) -> void final;
     };
 }}
 #endif

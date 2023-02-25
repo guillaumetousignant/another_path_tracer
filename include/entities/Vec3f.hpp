@@ -38,7 +38,7 @@ namespace APTracer { namespace Entities {
              *
              * @param values Array containing the three values of the vector.
              */
-            Vec3f(std::array<double, n_dims> values);
+            explicit Vec3f(std::array<double, n_dims> values);
 
             /**
              * @brief Construct a new Vec3f object from one value.
@@ -650,6 +650,6 @@ auto operator<<(std::ostream& output, const APTracer::Entities::Vec3f& v) -> std
  * @param v Vector to be multiplied.
  * @return APTracer::Entities::Vec3f Resulting Vector, (a*x, a*y, a*z).
  */
-auto operator*(const double factor, const APTracer::Entities::Vec3f& v) -> APTracer::Entities::Vec3f;
+auto operator*(double factor, const APTracer::Entities::Vec3f& v) -> APTracer::Entities::Vec3f;
 
 #endif

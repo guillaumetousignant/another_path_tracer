@@ -25,7 +25,7 @@ namespace APTracer { namespace Entities {
              *
              * @param filename Path to a geometry file of either .obj or .su2 format.
              */
-            MeshGeometry_t(const std::string& filename);
+            explicit MeshGeometry_t(const std::string& filename);
 
             std::vector<std::string> mat_; /**< @brief Array of strings representing each face's material's name.*/
             std::vector<std::array<Vec3f, 3>> v_; /**< @brief Array of the three points representing each triangular face.*/

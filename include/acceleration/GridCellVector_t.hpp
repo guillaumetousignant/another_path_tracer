@@ -2,16 +2,7 @@
 #define APTRACER_GRIDCELLVECTOR_T_HPP
 
 #include "entities/AccelerationStructure_t.hpp"
-#include "entities/Ray_t.hpp"
 #include <vector>
-
-namespace APTracer { namespace Entities {
-    class Shape_t;
-}}
-
-using APTracer::Entities::AccelerationStructure_t;
-using APTracer::Entities::Ray_t;
-using APTracer::Entities::Shape_t;
 
 namespace APTracer { namespace Acceleration {
     /**
@@ -20,7 +11,7 @@ namespace APTracer { namespace Acceleration {
      * This structure with its vector representation is more geared toward static scenes, as the cost to remove, add or move shapes from one cell to another is higher. With vectors, iteration on
      * shapes is slightly faster, and the memory used is low.
      */
-    class GridCellVector_t final : public AccelerationStructure_t {
+    class GridCellVector_t final : public Entities::AccelerationStructure_t {
         public:
             /**
              * @brief Construct a new GridCellVector_t object with no shapes.
@@ -32,16 +23,17 @@ namespace APTracer { namespace Acceleration {
              *
              * @param size Initial reserved size of the shape vector.
              */
-            GridCellVector_t(size_t size);
+            explicit GridCellVector_t(size_t size);
 
-            std::vector<Shape_t*> items_; /**< @brief Vector of shapes contained in the cell. This allows fast iterating and low memory use.*/
+            std::vector<Entities::Shape_t*> items_; /**< @brief Vector of shapes contained in the cell. This allows fast iterating and low memory use.*/
             size_t size_; /**< @brief Size that will be allocated next time 'reserve()' is called. Increased with 'operator++'.*/
 
-            virtual auto intersect(const Ray_t& ray, double& t, std::array<double, 2>& uv) const -> Shape_t* final;
-            virtual auto add(Shape_t* item) -> void final;
-            virtual auto remove(const Shape_t* item) -> void final;
-            virtual auto move(Shape_t* item) -> void final;
-            virtual auto size() const -> size_t final;
+            auto intersect(const Entities::Ray_t& ray, double& t, std::array<double, 2>& uv) const -> Entities::Shape_t* final;
+            auto add(Entities::Shape_t* item) -> void final;
+            auto remove(Entities::Shape_t* item) -> void final;
+            auto move(Entities::Shape_t* item) -> void final;
+            auto size() const -> size_t final;
+            auto clone() const -> std::unique_ptr<AccelerationStructure_t> final;
 
             /**
              * @brief Reserves 'size_' in the shape vector.

@@ -3,17 +3,12 @@
 
 #include "entities/Material_t.hpp"
 #include "entities/Ray_t.hpp"
+#include "entities/Texture_t.hpp"
 #include <random>
 
 namespace APTracer { namespace Entities {
-    class Texture_t;
     class Shape_t;
 }}
-
-using APTracer::Entities::Material_t;
-using APTracer::Entities::Ray_t;
-using APTracer::Entities::Shape_t;
-using APTracer::Entities::Texture_t;
 
 namespace APTracer { namespace Materials {
 
@@ -25,7 +20,7 @@ namespace APTracer { namespace Materials {
      * This material models surfaces that are a mix of two materials, like dusty surfaces or surfaces
      * that partly emit light.
      */
-    class TextureMix_t final : public Material_t {
+    class TextureMix_t final : public Entities::Material_t {
         public:
             /**
              * @brief Construct a new TextureMix_t object from two materials and a ratio texture.
@@ -34,11 +29,11 @@ namespace APTracer { namespace Materials {
              * @param second_material Second material, that will be randomly bounced according to the (1 - ratio).
              * @param texture Texture containing the proportion of the light bounced by the first material, from 0 to 1 in the first channel.
              */
-            TextureMix_t(Material_t* first_material, Material_t* second_material, const Texture_t* texture);
+            TextureMix_t(Entities::Material_t* first_material, Entities::Material_t* second_material, const Entities::Texture_t* texture);
 
-            Material_t* first_material_; /**< @brief Material that will be bounced in proportion to the ratio.*/
-            Material_t* second_material_; /**< @brief Material that will be bounced in proportion to (1 - ratio).*/
-            const Texture_t* texture_; /**< @brief Texture containing the proportion of the first material, 0 to 1 in the first channel.*/
+            Entities::Material_t* first_material_; /**< @brief Material that will be bounced in proportion to the ratio.*/
+            Entities::Material_t* second_material_; /**< @brief Material that will be bounced in proportion to (1 - ratio).*/
+            const Entities::Texture_t* texture_; /**< @brief Texture containing the proportion of the first material, 0 to 1 in the first channel.*/
             std::uniform_real_distribution<double> unif_; /**< @brief Uniform random distribution used for generating random numbers.*/
 
             /**
@@ -51,7 +46,7 @@ namespace APTracer { namespace Materials {
              * @param hit_obj Pointer to the shape that was hit by the ray.
              * @param ray Ray that has intersected the shape.
              */
-            virtual auto bounce(std::array<double, 2> uv, const Shape_t* hit_obj, Ray_t& ray) -> void final;
+            auto bounce(std::array<double, 2> uv, const Entities::Shape_t* hit_obj, Entities::Ray_t& ray) -> void final;
     };
 }}
 #endif

@@ -1,7 +1,6 @@
 #include "materials/ReflectiveFuzzTex_t.hpp"
 #include "entities/RandomGenerator_t.hpp"
 #include "entities/Shape_t.hpp"
-#include "entities/Texture_t.hpp"
 #include <cmath>
 
 constexpr double epsilon = 0.00000001;
@@ -9,11 +8,11 @@ constexpr double pi      = 3.141592653589793238463;
 
 using APTracer::Entities::Vec3f;
 
-APTracer::Materials::ReflectiveFuzzTex_t::ReflectiveFuzzTex_t(const Vec3f& emission, APTracer::Entities::Texture_t* texture, double order, double diffusivity) :
+APTracer::Materials::ReflectiveFuzzTex_t::ReflectiveFuzzTex_t(const Entities::Vec3f& emission, APTracer::Entities::Texture_t* texture, double order, double diffusivity) :
         texture_(texture), emission_(emission), order_(order), diffusivity_(diffusivity), unif_(0, 1) {}
 
 auto APTracer::Materials::ReflectiveFuzzTex_t::bounce(std::array<double, 2> uv, const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t& ray) -> void {
-    std::array<double, 2> tuv;
+    std::array<double, 2> tuv{};
     Vec3f normal = hit_obj->normaluv(ray.time_, uv, tuv);
 
     if (normal.dot(ray.direction_) > 0.0) {

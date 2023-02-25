@@ -3,19 +3,13 @@
 
 #include "entities/Material_t.hpp"
 #include "entities/Ray_t.hpp"
+#include "entities/Texture_t.hpp"
 #include "entities/Vec3f.hpp"
 #include <random>
 
 namespace APTracer { namespace Entities {
-    class Texture_t;
     class Shape_t;
 }}
-
-using APTracer::Entities::Material_t;
-using APTracer::Entities::Ray_t;
-using APTracer::Entities::Shape_t;
-using APTracer::Entities::Texture_t;
-using APTracer::Entities::Vec3f;
 
 namespace APTracer { namespace Materials {
 
@@ -30,7 +24,7 @@ namespace APTracer { namespace Materials {
      * This material represents uniformly and finely rough surfaces, such as matte paint,
      * chalk, and non-shiny plastic.
      */
-    class DiffuseTex_t final : public Material_t {
+    class DiffuseTex_t final : public Entities::Material_t {
         public:
             /**
              * @brief Construct a new DiffuseTex_t object with an emissive colour, a reflective texture, and a roughness.
@@ -40,10 +34,10 @@ namespace APTracer { namespace Materials {
              * @param roughness Attenuation of the colour as the angle between the incident ray and the surface normal increase. 0 to 1, 0 being very rough (no attenuation) and 1 being an ideal
              * diffusely reflective surface, obeying Lambert's cosine law.
              */
-            DiffuseTex_t(const Vec3f& emission, const Texture_t* texture, double roughness);
+            DiffuseTex_t(const Entities::Vec3f& emission, const Entities::Texture_t* texture, double roughness);
 
-            Vec3f emission_; /**< @brief Colour emitted by the material at each bounce.*/
-            const Texture_t* texture_; /**< @brief Texture containing the colour reflected by the material, mapped by object space coordinates.*/
+            Entities::Vec3f emission_; /**< @brief Colour emitted by the material at each bounce.*/
+            const Entities::Texture_t* texture_; /**< @brief Texture containing the colour reflected by the material, mapped by object space coordinates.*/
             double roughness_; /**< @brief Attenuation of the colour as the angle between the incident ray and the surface normal increase. 0 to 1, 0 being very rough (no attenuation) and 1 being an
                                   ideal diffusely reflective surface, obeying Lambert's cosine law.*/
             std::uniform_real_distribution<double> unif_; /**< @brief Uniform random distribution used for generating random numbers.*/
@@ -63,7 +57,7 @@ namespace APTracer { namespace Materials {
              * @param hit_obj Pointer to the shape that was hit by the ray.
              * @param ray Ray that has intersected the shape.
              */
-            virtual auto bounce(std::array<double, 2> uv, const Shape_t* hit_obj, Ray_t& ray) -> void final;
+            auto bounce(std::array<double, 2> uv, const Entities::Shape_t* hit_obj, Entities::Ray_t& ray) -> void final;
     };
 }}
 #endif

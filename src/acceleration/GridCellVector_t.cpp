@@ -1,9 +1,10 @@
 #include "acceleration/GridCellVector_t.hpp"
-#include "entities/Shape_t.hpp"
 #include <limits>
 #include <vector>
 
 using APTracer::Acceleration::GridCellVector_t;
+using APTracer::Entities::Ray_t;
+using APTracer::Entities::Shape_t;
 
 GridCellVector_t::GridCellVector_t() : size_(0) {}
 
@@ -12,8 +13,8 @@ GridCellVector_t::GridCellVector_t(size_t size) : size_(size) {
 }
 
 auto GridCellVector_t::intersect(const Ray_t& ray, double& t, std::array<double, 2>& uv) const -> Shape_t* {
-    double t_temp;
-    std::array<double, 2> uv_temp;
+    double t_temp = std::numeric_limits<double>::max();
+    std::array<double, 2> uv_temp{};
 
     Shape_t* hit_obj = nullptr; // dunno if this is needed
     t                = std::numeric_limits<double>::max();
@@ -32,13 +33,8 @@ auto GridCellVector_t::add(Shape_t* item) -> void {
     items_.push_back(item);
 }
 
-auto GridCellVector_t::remove(const Shape_t* item) -> void {
-    for (size_t i = 0; i < items_.size(); i++) {
-        if (items_[i] == item) {
-            items_.erase(items_.begin() + i);
-            break;
-        }
-    }
+auto GridCellVector_t::remove(Shape_t* const item) -> void {
+    items_.erase(std::remove(items_.begin(), items_.end(), item), items_.end());
 }
 
 auto GridCellVector_t::move(Shape_t* item) -> void {}
@@ -54,4 +50,8 @@ auto GridCellVector_t::operator++() -> GridCellVector_t& {
 
 auto GridCellVector_t::size() const -> size_t {
     return items_.size();
+}
+
+auto GridCellVector_t::clone() const -> std::unique_ptr<AccelerationStructure_t> {
+    return std::make_unique<GridCellVector_t>(*this);
 }

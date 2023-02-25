@@ -1,5 +1,7 @@
 #include "functions/Colours.hpp"
 
+using APTracer::Entities::Vec3f;
+
 namespace APTracer { namespace Colours {
     const std::unordered_map<std::string, Vec3f> colours{
         {"yellow", Vec3f(0.98, 1.0, 0.9)},

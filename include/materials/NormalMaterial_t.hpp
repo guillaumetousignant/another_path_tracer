@@ -8,10 +8,6 @@ namespace APTracer { namespace Entities {
     class Shape_t;
 }}
 
-using APTracer::Entities::Material_t;
-using APTracer::Entities::Ray_t;
-using APTracer::Entities::Shape_t;
-
 namespace APTracer { namespace Materials {
 
     /**
@@ -21,7 +17,7 @@ namespace APTracer { namespace Materials {
      * It then resets the ray's mask to 0 in order to stop it from being cast again.
      * This material is more useful for debugging than for display purposes.
      */
-    class NormalMaterial_t final : public Material_t {
+    class NormalMaterial_t final : public Entities::Material_t {
         public:
             /**
              * @brief Construct a new NormalMaterial_t object.
@@ -38,7 +34,7 @@ namespace APTracer { namespace Materials {
              * @param hit_obj Pointer to the shape that was hit by the ray.
              * @param ray Ray that has intersected the shape.
              */
-            virtual auto bounce(std::array<double, 2> uv, const Shape_t* hit_obj, Ray_t& ray) -> void final;
+            auto bounce(std::array<double, 2> uv, const Entities::Shape_t* hit_obj, Entities::Ray_t& ray) -> void final;
     };
 }}
 #endif

@@ -1,16 +1,16 @@
 #ifndef APTRACER_ENTITIES_CAMERA_T_HPP
 #define APTRACER_ENTITIES_CAMERA_T_HPP
 
+#include "entities/Medium_t.hpp"
+#include "entities/Scene_t.hpp"
+#include "entities/Skybox_t.hpp"
+#include "entities/TransformMatrix_t.hpp"
 #include "entities/Vec3f.hpp"
 #include <array>
 #include <list>
 #include <string>
 
 namespace APTracer { namespace Entities {
-    class TransformMatrix_t;
-    class Skybox_t;
-    class Scene_t;
-    class Medium_t;
 
     /**
      * @brief The camera class creates rays and casts them into the scene and stores the result in an image buffer.
@@ -53,6 +53,36 @@ namespace APTracer { namespace Entities {
              * @brief Destroy the Camera_t object.
              */
             virtual ~Camera_t() = default;
+
+            /**
+             * @brief Copy construct a new Camera_t object.
+             *
+             * @param other Object to copy.
+             */
+            Camera_t(const Camera_t& other) = default;
+
+            /**
+             * @brief Move construct a new Camera_t object.
+             *
+             * @param other Object to move.
+             */
+            Camera_t(Camera_t&& other) noexcept = default;
+
+            /**
+             * @brief Copy assignment.
+             *
+             * @param other Object to copy.
+             * @return Camera_t& Reference to this object.
+             */
+            auto operator=(const Camera_t& other) -> Camera_t& = default;
+
+            /**
+             * @brief Move assignment.
+             *
+             * @param other Object to move.
+             * @return Camera_t& Reference to this object.
+             */
+            auto operator=(Camera_t&& other) noexcept -> Camera_t& = default;
 
             TransformMatrix_t* transformation_; /**< @brief Transformation matrix used by the camera. Sets the camera's origin and direction when created and updated.*/
             std::string

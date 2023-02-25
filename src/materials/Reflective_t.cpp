@@ -5,7 +5,7 @@ constexpr double epsilon = 0.00000001;
 
 using APTracer::Entities::Vec3f;
 
-APTracer::Materials::Reflective_t::Reflective_t(const Vec3f& emission, const Vec3f& colour) : emission_(emission), colour_(colour) {}
+APTracer::Materials::Reflective_t::Reflective_t(const Entities::Vec3f& emission, const Entities::Vec3f& colour) : emission_(emission), colour_(colour) {}
 
 auto APTracer::Materials::Reflective_t::bounce(std::array<double, 2> uv, const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t& ray) -> void {
     Vec3f normal = hit_obj->normal(ray.time_, uv);

@@ -2,22 +2,15 @@
 #define APTRACER_MATERIALS_REFLECTIVEREFRACTIVENORMAL_T_HPP
 
 #include "entities/Material_t.hpp"
+#include "entities/Medium_t.hpp"
 #include "entities/Ray_t.hpp"
+#include "entities/Texture_t.hpp"
 #include "entities/Vec3f.hpp"
 #include <random>
 
 namespace APTracer { namespace Entities {
-    class Medium_t;
-    class Texture_t;
     class Shape_t;
 }}
-
-using APTracer::Entities::Material_t;
-using APTracer::Entities::Medium_t;
-using APTracer::Entities::Ray_t;
-using APTracer::Entities::Shape_t;
-using APTracer::Entities::Texture_t;
-using APTracer::Entities::Vec3f;
 
 namespace APTracer { namespace Materials {
 
@@ -33,7 +26,7 @@ namespace APTracer { namespace Materials {
      * This models real refractive surfaces refraction, only a portion of the light entering the surface.
      * This material represents transparents patterned surfaces, such as non-still water, shaped glass, and sculpted ice.
      */
-    class ReflectiveRefractiveNormal_t final : public Material_t {
+    class ReflectiveRefractiveNormal_t final : public Entities::Material_t {
         public:
             /**
              * @brief Construct a new ReflectiveRefractiveNormal_t object with an emissive and reflective colour, a medium, and a normal map.
@@ -43,13 +36,13 @@ namespace APTracer { namespace Materials {
              * @param normal_map Texture containing the surface normal in object coordinates.
              * @param medium Medium representing the inside of the material.
              */
-            ReflectiveRefractiveNormal_t(const Vec3f& emission, const Vec3f& colour, const Texture_t* normal_map, Medium_t* medium);
+            ReflectiveRefractiveNormal_t(const Entities::Vec3f& emission, const Entities::Vec3f& colour, const Entities::Texture_t* normal_map, Entities::Medium_t* medium);
 
-            Vec3f emission_; /**< @brief Colour emitted by the material at each bounce.*/
-            Vec3f colour_; /**< @brief Colour reflected by the material at each bounce.*/
-            const Texture_t* normal_map_; /**< @brief Texture containing the surface normal of the material in object coordinates, mapped by object space coordinates.*/
+            Entities::Vec3f emission_; /**< @brief Colour emitted by the material at each bounce.*/
+            Entities::Vec3f colour_; /**< @brief Colour reflected by the material at each bounce.*/
+            const Entities::Texture_t* normal_map_; /**< @brief Texture containing the surface normal of the material in object coordinates, mapped by object space coordinates.*/
             std::uniform_real_distribution<double> unif_; /**< @brief Uniform random distribution used for generating random numbers.*/
-            Medium_t* medium_; /**< @brief Medium representing the inside of the material. It is added to rays' medium list when entering the material, and removed when exiting it.*/
+            Entities::Medium_t* medium_; /**< @brief Medium representing the inside of the material. It is added to rays' medium list when entering the material, and removed when exiting it.*/
 
             /**
              * @brief Bounces a ray of light on the material.
@@ -72,7 +65,7 @@ namespace APTracer { namespace Materials {
              * @param hit_obj Pointer to the shape that was hit by the ray.
              * @param ray Ray that has intersected the shape.
              */
-            virtual auto bounce(std::array<double, 2> uv, const Shape_t* hit_obj, Ray_t& ray) -> void final;
+            auto bounce(std::array<double, 2> uv, const Entities::Shape_t* hit_obj, Entities::Ray_t& ray) -> void final;
     };
 }}
 #endif

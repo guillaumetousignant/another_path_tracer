@@ -1,9 +1,7 @@
 #include "materials/Absorber_t.hpp"
 #include <cmath>
 
-using APTracer::Entities::Vec3f;
-
-APTracer::Materials::Absorber_t::Absorber_t(Vec3f emi_vol, Vec3f col_vol, double abs_dist_emi, double abs_dist_col, double ind, unsigned int priority) : Medium_t(ind, priority) {
+APTracer::Materials::Absorber_t::Absorber_t(Entities::Vec3f emi_vol, Entities::Vec3f col_vol, double abs_dist_emi, double abs_dist_col, double ind, unsigned int priority) : Medium_t(ind, priority) {
     colour_vol_   = -col_vol.ln() / abs_dist_col;
     emission_vol_ = emi_vol * emi_vol / abs_dist_emi; // CHECK probably not right.
 }

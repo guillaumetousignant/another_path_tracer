@@ -1,5 +1,4 @@
 #include "skyboxes/SkyboxTextureSun_t.hpp"
-#include "entities/Texture_t.hpp"
 #include <array>
 #include <cmath>
 

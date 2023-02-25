@@ -2,20 +2,14 @@
 #define APTRACER_MATERIALS_PORTAL_T_HPP
 
 #include "entities/Material_t.hpp"
+#include "entities/Medium_t.hpp"
 #include "entities/Ray_t.hpp"
+#include "entities/TransformMatrix_t.hpp"
 #include <list>
 
 namespace APTracer { namespace Entities {
     class Shape_t;
-    class TransformMatrix_t;
-    class Medium_t;
 }}
-
-using APTracer::Entities::Material_t;
-using APTracer::Entities::Medium_t;
-using APTracer::Entities::Ray_t;
-using APTracer::Entities::Shape_t;
-using APTracer::Entities::TransformMatrix_t;
 
 namespace APTracer { namespace Materials {
 
@@ -27,7 +21,7 @@ namespace APTracer { namespace Materials {
      * This material can represent portals, screens showing another area, or impossible geometry.
      * It is one-way, as there is no linked object at the outlet of the portal to be intersected.
      */
-    class Portal_t final : public Material_t {
+    class Portal_t final : public Entities::Material_t {
         public:
             /**
              * @brief Construct a new Portal_t object with a transformation matrix and a medium list.
@@ -35,10 +29,10 @@ namespace APTracer { namespace Materials {
              * @param transformation Transformation matrix which transforms the rays on hit, potentially moving them to another location.
              * @param medium_list  List of materials in which the portal end is placed. Should have at least two copies of an "outside" medium not assigned to any object (issue #25).
              */
-            Portal_t(TransformMatrix_t* transformation, std::list<Medium_t*> medium_list);
+            Portal_t(Entities::TransformMatrix_t* transformation, std::list<Entities::Medium_t*> medium_list);
 
-            TransformMatrix_t* transformation_; /**< @brief Transformation matrix which transforms the rays on hit, potentially moving them to another location.*/
-            std::list<Medium_t*>
+            Entities::TransformMatrix_t* transformation_; /**< @brief Transformation matrix which transforms the rays on hit, potentially moving them to another location.*/
+            std::list<Entities::Medium_t*>
                 medium_list_; /**< @brief List of materials in which the portal end is placed. Should have at least two copies of an "outside" medium not assigned to any object (issue #25).*/
 
             /**
@@ -51,7 +45,7 @@ namespace APTracer { namespace Materials {
              * @param hit_obj Pointer to the shape that was hit by the ray.
              * @param ray Ray that has intersected the shape.
              */
-            virtual auto bounce(std::array<double, 2> uv, const Shape_t* hit_obj, Ray_t& ray) -> void final;
+            auto bounce(std::array<double, 2> uv, const Entities::Shape_t* hit_obj, Entities::Ray_t& ray) -> void final;
     };
 }}
 #endif

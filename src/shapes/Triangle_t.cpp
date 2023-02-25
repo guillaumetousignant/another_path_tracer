@@ -1,6 +1,4 @@
 #include "shapes/Triangle_t.hpp"
-#include "entities/Material_t.hpp"
-#include "entities/TransformMatrix_t.hpp"
 #include <algorithm>
 #include <cmath>
 #include <limits>
@@ -11,14 +9,15 @@ using APTracer::Entities::Vec3f;
 
 APTracer::Shapes::Triangle_t::Triangle_t(
     APTracer::Entities::Material_t* material, APTracer::Entities::TransformMatrix_t* transform_matrix, std::array<Vec3f, 3> points, std::array<Vec3f, 3> normals, std::array<double, 6> texcoord) :
-        Shape_t(material, transform_matrix), points_orig_(points), normals_orig_(normals), texture_coordinates_(texcoord) {
-
-    points_ = {transformation_->multVec(points_orig_[0]), transformation_->multVec(points_orig_[1]), transformation_->multVec(points_orig_[2])};
-
-    normals_ = {transformation_->multDir(normals_orig_[0]), transformation_->multDir(normals_orig_[1]), transformation_->multDir(normals_orig_[2])}; // was transformation_ before
-
-    v0v1_ = points_[1] - points_[0];
-    v0v2_ = points_[2] - points_[0];
+        Shape_t(material, transform_matrix),
+        points_orig_(points),
+        normals_orig_(normals),
+        texture_coordinates_(texcoord),
+        points_{transformation_->multVec(points_orig_[0]), transformation_->multVec(points_orig_[1]), transformation_->multVec(points_orig_[2])},
+        normals_{transformation_->multDir(normals_orig_[0]), transformation_->multDir(normals_orig_[1]), transformation_->multDir(normals_orig_[2])},
+        v0v1_(points_[1] - points_[0]),
+        v0v2_(points_[2] - points_[0]),
+        tuv_to_world_{} {
 
     const std::array<double, 2> tuv0v1 = {texture_coordinates_[2] - texture_coordinates_[0], texture_coordinates_[3] - texture_coordinates_[1]};
     const std::array<double, 2> tuv0v2 = {texture_coordinates_[4] - texture_coordinates_[0], texture_coordinates_[5] - texture_coordinates_[1]};
@@ -71,14 +70,10 @@ auto APTracer::Shapes::Triangle_t::intersection(const APTracer::Entities::Ray_t&
 
     t = v0v2_.dot(qvec) * invdet;
 
-    if (t < 0.0) {
-        return false;
-    }
-
-    return true;
+    return t >= 0.0;
 }
 
-auto APTracer::Shapes::Triangle_t::normaluv(double time, std::array<double, 2> uv, std::array<double, 2>& tuv) const -> Vec3f {
+auto APTracer::Shapes::Triangle_t::normaluv(double /*time*/, std::array<double, 2> uv, std::array<double, 2>& tuv) const -> Vec3f {
     const Vec3f distance = Vec3f(1.0 - uv[0] - uv[1], uv[0], uv[1]);
     // Matrix multiplication, optimise.
     tuv = {distance[0] * texture_coordinates_[0] + distance[1] * texture_coordinates_[2] + distance[2] * texture_coordinates_[4],
@@ -88,7 +83,7 @@ auto APTracer::Shapes::Triangle_t::normaluv(double time, std::array<double, 2> u
             distance[0] * normals_[0][2] + distance[1] * normals_[1][2] + distance[2] * normals_[2][2]};
 }
 
-auto APTracer::Shapes::Triangle_t::normal(double time, std::array<double, 2> uv) const -> Vec3f {
+auto APTracer::Shapes::Triangle_t::normal(double /*time*/, std::array<double, 2> uv) const -> Vec3f {
     const Vec3f distance = Vec3f(1.0 - uv[0] - uv[1], uv[0], uv[1]);
     return {distance[0] * normals_[0][0] + distance[1] * normals_[1][0] + distance[2] * normals_[2][0],
             distance[0] * normals_[0][1] + distance[1] * normals_[1][1] + distance[2] * normals_[2][1],
@@ -96,7 +91,7 @@ auto APTracer::Shapes::Triangle_t::normal(double time, std::array<double, 2> uv)
     // Matrix multiplication, optimise.
 }
 
-auto APTracer::Shapes::Triangle_t::normal_uv_tangent(double time, std::array<double, 2> uv, std::array<double, 2>& tuv, Vec3f& tangentvec) const -> Vec3f {
+auto APTracer::Shapes::Triangle_t::normal_uv_tangent(double /*time*/, std::array<double, 2> uv, std::array<double, 2>& tuv, Vec3f& tangentvec) const -> Vec3f {
     const Vec3f distance = Vec3f(1.0 - uv[0] - uv[1], uv[0], uv[1]);
     // Matrix multiplication, optimise.
     tuv = {distance[0] * texture_coordinates_[0] + distance[1] * texture_coordinates_[2] + distance[2] * texture_coordinates_[4],
@@ -110,7 +105,7 @@ auto APTracer::Shapes::Triangle_t::normal_uv_tangent(double time, std::array<dou
     return normalvec;
 }
 
-auto APTracer::Shapes::Triangle_t::normal_face(double time) const -> Vec3f {
+auto APTracer::Shapes::Triangle_t::normal_face(double /*time*/) const -> Vec3f {
     return v0v1_.cross(v0v2_).normalize_inplace();
 }
 

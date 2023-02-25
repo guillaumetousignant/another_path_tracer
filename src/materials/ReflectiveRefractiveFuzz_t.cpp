@@ -1,5 +1,4 @@
 #include "materials/ReflectiveRefractiveFuzz_t.hpp"
-#include "entities/Medium_t.hpp"
 #include "entities/RandomGenerator_t.hpp"
 #include "entities/Shape_t.hpp"
 #include <cmath>
@@ -9,7 +8,8 @@ constexpr double pi      = 3.141592653589793238463;
 
 using APTracer::Entities::Vec3f;
 
-APTracer::Materials::ReflectiveRefractiveFuzz_t::ReflectiveRefractiveFuzz_t(const Vec3f& emission, const Vec3f& colour, double order, double diffusivity, Medium_t* medium) :
+APTracer::Materials::ReflectiveRefractiveFuzz_t::ReflectiveRefractiveFuzz_t(
+    const Entities::Vec3f& emission, const Entities::Vec3f& colour, double order, double diffusivity, Entities::Medium_t* medium) :
         emission_(emission), colour_(colour), order_(order), diffusivity_(diffusivity), medium_(medium) {}
 
 auto APTracer::Materials::ReflectiveRefractiveFuzz_t::bounce(std::array<double, 2> uv, const APTracer::Entities::Shape_t* hit_obj, APTracer::Entities::Ray_t& ray) -> void {
@@ -18,9 +18,9 @@ auto APTracer::Materials::ReflectiveRefractiveFuzz_t::bounce(std::array<double, 
 
     if (medium_->priority_ >= ray.medium_list_.front()->priority_) { // CHECK also discard if priority is equal, but watch for going out case
         Vec3f newdir;
-        double etai;
-        double etat;
-        double kr;
+        double etai{};
+        double etat{};
+        double kr{};
 
         const double rand1  = unif_(APTracer::Entities::rng()) * 2.0 * pi;
         const double rand2  = std::pow(unif_(APTracer::Entities::rng()), order_) * diffusivity_;

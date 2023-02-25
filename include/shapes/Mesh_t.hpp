@@ -1,22 +1,7 @@
 #ifndef APTRACER_SHAPES_MESH_T_HPP
 #define APTRACER_SHAPES_MESH_T_HPP
 
-#include "entities/Ray_t.hpp"
-#include "entities/Vec3f.hpp"
 #include "shapes/MeshTop_t.hpp"
-
-namespace APTracer { namespace Entities {
-    class Material_t;
-    class TransformMatrix_t;
-    class MeshGeometry_t;
-    class MaterialMap_t;
-}}
-
-using APTracer::Entities::Material_t;
-using APTracer::Entities::MaterialMap_t;
-using APTracer::Entities::MeshGeometry_t;
-using APTracer::Entities::TransformMatrix_t;
-using APTracer::Shapes::MeshTop_t;
 
 namespace APTracer { namespace Shapes {
     /**
@@ -35,7 +20,7 @@ namespace APTracer { namespace Shapes {
              * @param transform_matrix Transformation matrix used for the mesh and all triangles inside it.
              * @param geom Mesh geometry used by the mesh and its triangles, which index into it.
              */
-            Mesh_t(Material_t* material, TransformMatrix_t* transform_matrix, MeshGeometry_t* geom);
+            Mesh_t(Entities::Material_t* material, Entities::TransformMatrix_t* transform_matrix, Entities::MeshGeometry_t* geom);
 
             /**
              * @brief Construct a new Mesh_t object with a material map.
@@ -44,14 +29,14 @@ namespace APTracer { namespace Shapes {
              * @param transform_matrix Transformation matrix used for the mesh and all triangles inside it.
              * @param geom Mesh geometry used by the mesh and its triangles, which index into it.
              */
-            Mesh_t(MaterialMap_t* materialmap, TransformMatrix_t* transform_matrix, MeshGeometry_t* geom);
+            Mesh_t(Entities::MaterialMap_t* materialmap, Entities::TransformMatrix_t* transform_matrix, Entities::MeshGeometry_t* geom);
 
             /**
              * @brief Creates the triangles of the mesh, with a reference to the mesh geometry and their index into it.
              *
              * This creates regular triangles, and assigns them the mesh's material.
              */
-            virtual auto createTriangles() -> void final;
+            auto createTriangles() -> void final;
 
             /**
              * @brief Creates the triangles of the mesh, with a reference to the mesh geometry and their index into it, using a material map.
@@ -61,7 +46,7 @@ namespace APTracer { namespace Shapes {
              *
              * @param materialmap Material map used to assign materials to the triangles according to their material name in the mesh geometry.
              */
-            virtual auto createTriangles(MaterialMap_t* materialmap) -> void final;
+            auto createTriangles(Entities::MaterialMap_t* materialmap) -> void final;
     };
 }}
 #endif

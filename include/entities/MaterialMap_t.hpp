@@ -1,14 +1,15 @@
 #ifndef APTRACER_ENTITIES_MATERIALMAP_T_HPP
 #define APTRACER_ENTITIES_MATERIALMAP_T_HPP
 
+#include "entities/Material_t.hpp"
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 namespace APTracer { namespace Entities {
-    class Material_t;
 
     /**
-     * @brief The material map class holds materials and their names, to find referenced materials in, forr example, obj files.
+     * @brief The material map class holds materials and their names, to find referenced materials in, for example, obj files.
      *
      * This is the class used to initialise mesh geometries with multiple materials.
      */
@@ -17,11 +18,10 @@ namespace APTracer { namespace Entities {
             /**
              * @brief Construct a new MaterialMap_t object
              *
-             * @param names Array of strings representing the names of the materials, in order. Size: n.
-             * @param materials Array of pointers to the materials represented by the names, in order. Size: n.
-             * @param n Size of both input arrays.
+             * @param names Vector of strings representing the names of the materials, in order. Size: n.
+             * @param materials Vector of pointers to the materials represented by the names, in order. Size: n.
              */
-            MaterialMap_t(std::string* names, Material_t** materials, size_t n);
+            MaterialMap_t(std::vector<std::string> names, std::vector<Material_t*> materials);
 
             std::unordered_map<std::string, Material_t*> materials_; /**< @brief Map of material pointers using string as keys. The keys represent the materials' names.*/
 

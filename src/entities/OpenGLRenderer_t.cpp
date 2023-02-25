@@ -1,8 +1,11 @@
 #include "entities/OpenGLRenderer_t.hpp"
+#include <algorithm>
+#include <chrono>
 
 #ifdef APTRACER_USE_OPENGL
     #ifdef _WIN32
         #include "GL/freeglut.h"
+constexpr GLint GL_CLAMP_TO_EDGE = 0x812F;
     #else
         #ifndef __APPLE__
             #include "GL/glut.h"
@@ -14,29 +17,14 @@
         #include "GL/gl.h"
     #endif
 #else
-    #define GLUT_LEFT_BUTTON 0x0000
-    #define GLUT_MIDDLE_BUTTON 0x0001
-    #define GLUT_RIGHT_BUTTON 0x0002
-    #define GLUT_DOWN 0x0000
-    #define GLUT_UP 0x0001
+constexpr int GLUT_LEFT_BUTTON   = 0x0001;
+constexpr int GLUT_MIDDLE_BUTTON = 0x0000;
+constexpr int GLUT_RIGHT_BUTTON  = 0x0002;
+constexpr int GLUT_DOWN          = 0x0000;
+constexpr int GLUT_UP            = 0x0001;
 #endif
 
-#include "entities/Camera_t.hpp"
-#include "entities/ImgBufferOpenGL_t.hpp"
-#include "entities/Scene_t.hpp"
-#include "entities/TransformMatrix_t.hpp"
-#include <algorithm>
-#include <chrono>
-
-#ifdef _WIN32
-    #define GL_CLAMP_TO_EDGE 0x812F
-#endif
-
-using APTracer::Entities::Camera_t;
-using APTracer::Entities::ImgBufferOpenGL_t;
 using APTracer::Entities::OpenGLRenderer_t;
-using APTracer::Entities::Scene_t;
-using APTracer::Entities::Vec3f;
 
 std::unique_ptr<OpenGLRenderer_t> OpenGLRenderer_t::renderer_;
 
@@ -142,7 +130,7 @@ auto OpenGLRenderer_t::accumulate_write() -> void {
 #endif
 }
 
-auto OpenGLRenderer_t::resetDisplay(void) -> void {
+auto OpenGLRenderer_t::resetDisplay() const -> void {
     camera_->reset();
 }
 
@@ -150,8 +138,8 @@ auto OpenGLRenderer_t::mouseMovement(int x, int y) -> void {
     // Vec3f newdir = camera_->direction_;
     if (middle_clicked_) {
 #ifdef APTRACER_USE_OPENGL
-        const double differential_x = double(x - middle_x_pos_) / double(glutGet(GLUT_WINDOW_WIDTH)); // maybe change those to glut width/height?
-        const double differential_y = double(y - middle_y_pos_) / double(glutGet(GLUT_WINDOW_HEIGHT)); // maybe change those to glut width/height?
+        const double differential_x = static_cast<double>(x - middle_x_pos_) / static_cast<double>(glutGet(GLUT_WINDOW_WIDTH)); // maybe change those to glut width/height?
+        const double differential_y = static_cast<double>(y - middle_y_pos_) / static_cast<double>(glutGet(GLUT_WINDOW_HEIGHT)); // maybe change those to glut width/height?
         middle_x_pos_               = x;
         middle_y_pos_               = y;
 
@@ -165,7 +153,7 @@ auto OpenGLRenderer_t::mouseMovement(int x, int y) -> void {
     if (left_clicked_) {
 #ifdef APTRACER_USE_OPENGL
         // double differential_x = double(x - left_x_pos_)/double(glutGet(GLUT_WINDOW_WIDTH));
-        const double differential_y = double(y - left_y_pos_) / double(glutGet(GLUT_WINDOW_HEIGHT)); // maybe change those to glut width/height?
+        const double differential_y = static_cast<double>(y - left_y_pos_) / static_cast<double>(glutGet(GLUT_WINDOW_HEIGHT)); // maybe change those to glut width/height?
         left_x_pos_                 = x;
         left_y_pos_                 = y;
 
@@ -175,8 +163,8 @@ auto OpenGLRenderer_t::mouseMovement(int x, int y) -> void {
     }
     if (right_clicked_) {
 #ifdef APTRACER_USE_OPENGL
-        const double differential_x = double(x - right_x_pos_) / double(glutGet(GLUT_WINDOW_WIDTH)); // maybe change those to glut width/height?
-        const double differential_y = double(y - right_y_pos_) / double(glutGet(GLUT_WINDOW_HEIGHT)); // maybe change those to glut width/height?
+        const double differential_x = static_cast<double>(x - right_x_pos_) / static_cast<double>(glutGet(GLUT_WINDOW_WIDTH)); // maybe change those to glut width/height?
+        const double differential_y = static_cast<double>(y - right_y_pos_) / static_cast<double>(glutGet(GLUT_WINDOW_HEIGHT)); // maybe change those to glut width/height?
         right_x_pos_                = x;
         right_y_pos_                = y;
 
@@ -197,6 +185,7 @@ auto OpenGLRenderer_t::mouseMovement(int x, int y) -> void {
 }
 
 auto OpenGLRenderer_t::mouseClick(int button, int state, int x, int y) -> void {
+    constexpr double zoom_factor = 1.1;
     switch (button) {
         case GLUT_LEFT_BUTTON:
             if (state == GLUT_DOWN) {
@@ -233,21 +222,23 @@ auto OpenGLRenderer_t::mouseClick(int button, int state, int x, int y) -> void {
 
         case 3:
             if (state == GLUT_DOWN) {
-                camera_->zoom(1 / 1.1);
+                camera_->zoom(1 / zoom_factor);
                 updated_ = true;
             }
             break;
 
         case 4:
             if (state == GLUT_DOWN) {
-                camera_->zoom(1.1);
+                camera_->zoom(zoom_factor);
                 updated_ = true;
             }
+            break;
+        default:
             break;
     }
 }
 
-auto OpenGLRenderer_t::keyboardPaused(unsigned char key, int x, int y) -> void {
+auto OpenGLRenderer_t::keyboardPaused(unsigned char key, int /*x*/, int /*y*/) -> void {
     auto t_start_write = std::chrono::high_resolution_clock::now(); // why is this needed?
     auto t_end_write   = t_start_write;
 
@@ -278,6 +269,8 @@ auto OpenGLRenderer_t::keyboardPaused(unsigned char key, int x, int y) -> void {
             glutPostRedisplay();
 #endif
             break;
+        default:
+            break;
     }
 }
 
@@ -297,7 +290,9 @@ auto OpenGLRenderer_t::keyboard(unsigned char key, int x, int y) -> void {
 
         case 'f':
 #ifdef APTRACER_USE_OPENGL
-            camera_->autoFocus(scene_, {std::min(std::max(double(x) / double(glutGet(GLUT_WINDOW_WIDTH)), 0.0), 1.0), std::min(std::max(double(y) / double(glutGet(GLUT_WINDOW_HEIGHT)), 0.0), 1.0)});
+            camera_->autoFocus(scene_,
+                               {std::min(std::max(static_cast<double>(x) / static_cast<double>(glutGet(GLUT_WINDOW_WIDTH)), 0.0), 1.0),
+                                std::min(std::max(static_cast<double>(y) / static_cast<double>(glutGet(GLUT_WINDOW_HEIGHT)), 0.0), 1.0)});
 #endif
             updated_ = true;
             break;
@@ -317,6 +312,8 @@ auto OpenGLRenderer_t::keyboard(unsigned char key, int x, int y) -> void {
             glutMotionFunc(nullptr);
             glutKeyboardFunc(openGL_keyboardPaused);
 #endif
+            break;
+        default:
             break;
     }
 }
@@ -343,7 +340,7 @@ auto OpenGLRenderer_t::initialise() -> void {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    glTexImage2D(GL_TEXTURE_2D, 0, 3, static_cast<GLsizei>(imgbuffer_->size_x_), static_cast<GLsizei>(imgbuffer_->size_y_), 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, static_cast<GLsizei>(imgbuffer_->size_x_), static_cast<GLsizei>(imgbuffer_->size_y_), 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
 #endif
 }
 
@@ -383,7 +380,7 @@ auto OpenGLRenderer_t::openGL_accumulate_write() -> void {
     renderer_->accumulate_write();
 }
 
-auto OpenGLRenderer_t::openGL_resetDisplay(void) -> void {
+auto OpenGLRenderer_t::openGL_resetDisplay() -> void {
     renderer_->resetDisplay();
 }
 

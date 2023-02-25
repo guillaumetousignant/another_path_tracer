@@ -23,6 +23,41 @@ namespace APTracer { namespace Entities {
             virtual ~Material_t() = default;
 
             /**
+             * @brief Construct a new Material_t object.
+             */
+            Material_t() = default;
+
+            /**
+             * @brief Copy construct a new Material_t object.
+             *
+             * @param other Object to copy.
+             */
+            Material_t(const Material_t& other) = default;
+
+            /**
+             * @brief Move construct a new Material_t object.
+             *
+             * @param other Object to move.
+             */
+            Material_t(Material_t&& other) noexcept = default;
+
+            /**
+             * @brief Copy assignment.
+             *
+             * @param other Object to copy.
+             * @return Material_t& Reference to this object.
+             */
+            auto operator=(const Material_t& other) -> Material_t& = default;
+
+            /**
+             * @brief Move assignment.
+             *
+             * @param other Object to move.
+             * @return Material_t& Reference to this object.
+             */
+            auto operator=(Material_t&& other) noexcept -> Material_t& = default;
+
+            /**
              * @brief Bounces a ray of light on the material.
              *
              * This is the main function to resolve intersection between a ray and a shape.

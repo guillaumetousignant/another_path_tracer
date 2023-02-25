@@ -7,12 +7,14 @@ constexpr double pi = 3.141592653589793238463;
 using APTracer::Entities::Vec3f;
 
 APTracer::Materials::ScattererFull_t::ScattererFull_t(
-    Vec3f emi_vol, Vec3f col_vol, Vec3f emi_scat, Vec3f col_scat, double abs_dist_emi, double abs_dist_col, double scat_dist, double ind, unsigned int priority) :
-        Medium_t(ind, priority), emission_scat_(emi_scat), colour_scat_(col_scat), unif_(0.0, 1.0) {
-    colour_vol_             = -col_vol.ln() / abs_dist_col;
-    emission_vol_           = emi_vol * emi_vol / abs_dist_emi; // CHECK probably not right.
-    scattering_coefficient_ = 1.0 / scat_dist;
-}
+    Entities::Vec3f emi_vol, Entities::Vec3f col_vol, Vec3f emi_scat, Vec3f col_scat, double abs_dist_emi, double abs_dist_col, double scat_dist, double ind, unsigned int priority) :
+        Medium_t(ind, priority),
+        emission_vol_(emi_vol * emi_vol / abs_dist_emi /*CHECK probably not right.*/),
+        colour_vol_(-col_vol.ln() / abs_dist_col),
+        emission_scat_(emi_scat),
+        colour_scat_(col_scat),
+        scattering_coefficient_(1.0 / scat_dist),
+        unif_(0.0, 1.0) {}
 
 auto APTracer::Materials::ScattererFull_t::scatter(APTracer::Entities::Ray_t& ray) -> bool {
     const double distance = -std::log(unif_(APTracer::Entities::rng())) / scattering_coefficient_;

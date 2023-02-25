@@ -1,5 +1,4 @@
 #include "entities/DirectionalLight_t.hpp"
-#include "entities/TransformMatrix_t.hpp"
 
 using APTracer::Entities::DirectionalLight_t;
 using APTracer::Entities::TransformMatrix_t;
