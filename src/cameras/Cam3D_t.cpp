@@ -58,6 +58,19 @@ Cam3D_t::Cam3D_t(TransformMatrix_t* transformation,
     camera_R_->direction_ = (direction_ * focus_distance_ - horizontal * eye_dist_).normalize_inplace();
 }
 
+Cam3D_t::Cam3D_t(const Cam3D_t& other) :
+        Camera_t(other), image_(other.image_), unif_(other.unif_), eye_dist_(other.eye_dist_), focus_distance_(other.focus_distance_), focus_distance_buffer_(other.focus_distance_buffer_) {
+    camera_L_ = std::make_unique<Cam_t>(*other.camera_L_);
+    camera_R_ = std::make_unique<Cam_t>(*other.camera_R_);
+}
+
+auto Cam3D_t::operator=(const Cam3D_t& other) -> Cam3D_t& {
+    if (this != &other) {
+        *this = Cam3D_t(other);
+    }
+    return *this;
+}
+
 auto Cam3D_t::update() -> void {
     origin_         = transformation_->multVec(Vec3f());
     direction_      = transformation_->multDir(Vec3f(0.0, 1.0, 0.0));

@@ -63,6 +63,41 @@ namespace APTracer { namespace Cameras {
                               std::array<double, 2> time,
                               double gammaind);
 
+            /**
+             * @brief Destroy the Cam3DMotionblur_t object.
+             */
+            ~Cam3DMotionblur_t() final = default;
+
+            /**
+             * @brief Copy construct a new Cam3DMotionblur_t object.
+             *
+             * @param other Object to copy.
+             */
+            Cam3DMotionblur_t(const Cam3DMotionblur_t& other);
+
+            /**
+             * @brief Move construct a new Cam3DMotionblur_t object.
+             *
+             * @param other Object to move.
+             */
+            Cam3DMotionblur_t(Cam3DMotionblur_t&& other) noexcept = default;
+
+            /**
+             * @brief Copy assignment.
+             *
+             * @param other Object to copy.
+             * @return Cam3DMotionblur_t& Reference to this object.
+             */
+            auto operator=(const Cam3DMotionblur_t& other) -> Cam3DMotionblur_t&;
+
+            /**
+             * @brief Move assignment.
+             *
+             * @param other Object to move.
+             * @return Cam3DMotionblur_t& Reference to this object.
+             */
+            auto operator=(Cam3DMotionblur_t&& other) noexcept -> Cam3DMotionblur_t& = default;
+
             Entities::ImgBuffer_t* image_; /**< @brief Image buffer into which the resulting 3D anaglyph image is stored.*/
             std::uniform_real_distribution<double> unif_; /**< @brief Uniform random distribution used for generating random numbers.*/
             double eye_dist_; /**< @brief Distance between the left and right eye cameras. Higher values will make the 3D effect stronger.*/

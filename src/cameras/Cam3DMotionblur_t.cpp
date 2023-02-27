@@ -70,6 +70,30 @@ Cam3DMotionblur_t::Cam3DMotionblur_t(TransformMatrix_t* transformation,
     camera_R_->direction_last_ = camera_R_->direction_;
 }
 
+Cam3DMotionblur_t::Cam3DMotionblur_t(const Cam3DMotionblur_t& other) :
+        Camera_t(other),
+        image_(other.image_),
+        unif_(other.unif_),
+        eye_dist_(other.eye_dist_),
+        focus_distance_(other.focus_distance_),
+        focus_distance_buffer_(other.focus_distance_buffer_),
+        direction_last_(other.direction_last_),
+        origin_last_(other.origin_last_),
+        focus_distance_last_(other.focus_distance_last_),
+        time_(other.time_),
+        up_last_(other.up_last_),
+        fov_last_(other.fov_last_) {
+    camera_L_ = std::make_unique<CamMotionblur_t>(*other.camera_L_);
+    camera_R_ = std::make_unique<CamMotionblur_t>(*other.camera_R_);
+}
+
+auto Cam3DMotionblur_t::operator=(const Cam3DMotionblur_t& other) -> Cam3DMotionblur_t& {
+    if (this != &other) {
+        *this = Cam3DMotionblur_t(other);
+    }
+    return *this;
+}
+
 auto Cam3DMotionblur_t::update() -> void {
     origin_last_         = origin_;
     direction_last_      = direction_;

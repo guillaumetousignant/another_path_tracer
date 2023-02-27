@@ -67,6 +67,26 @@ Cam3DAperture_t::Cam3DAperture_t(TransformMatrix_t* transformation,
     camera_R_->direction_ = (direction_ * focus_distance_ - horizontal * eye_dist_).normalize_inplace();
 }
 
+Cam3DAperture_t::Cam3DAperture_t(const Cam3DAperture_t& other) :
+        Camera_t(other),
+        image_(other.image_),
+        unif_(other.unif_),
+        eye_dist_(other.eye_dist_),
+        focus_distance_(other.focus_distance_),
+        focus_distance_buffer_(other.focus_distance_buffer_),
+        aperture_(other.aperture_),
+        focus_coordinates_(other.focus_coordinates_) {
+    camera_L_ = std::make_unique<CamAperture_t>(*other.camera_L_);
+    camera_R_ = std::make_unique<CamAperture_t>(*other.camera_R_);
+}
+
+auto Cam3DAperture_t::operator=(const Cam3DAperture_t& other) -> Cam3DAperture_t& {
+    if (this != &other) {
+        *this = Cam3DAperture_t(other);
+    }
+    return *this;
+}
+
 auto Cam3DAperture_t::update() -> void {
     origin_         = transformation_->multVec(Vec3f());
     direction_      = transformation_->multDir(Vec3f(0.0, 1.0, 0.0));

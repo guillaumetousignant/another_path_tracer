@@ -80,6 +80,32 @@ Cam3DMotionblurAperture_t::Cam3DMotionblurAperture_t(TransformMatrix_t* transfor
     camera_R_->direction_last_ = camera_R_->direction_;
 }
 
+Cam3DMotionblurAperture_t::Cam3DMotionblurAperture_t(const Cam3DMotionblurAperture_t& other) :
+        Camera_t(other.transformation_, other.filename_, other.up_, other.fov_, other.subpix_, other.medium_list_, other.skybox_, other.max_bounces_, other.gammaind_),
+        image_(other.image_),
+        unif_(other.unif_),
+        eye_dist_(other.eye_dist_),
+        focus_distance_(other.focus_distance_),
+        focus_distance_buffer_(other.focus_distance_buffer_),
+        aperture_(other.aperture_),
+        direction_last_(other.direction_last_),
+        origin_last_(other.origin_last_),
+        focus_distance_last_(other.focus_distance_last_),
+        time_(other.time_),
+        up_last_(other.up_last_),
+        fov_last_(other.fov_last_),
+        focus_coordinates_(other.focus_coordinates_) {
+    camera_L_ = std::make_unique<CamMotionblurAperture_t>(*other.camera_L_);
+    camera_R_ = std::make_unique<CamMotionblurAperture_t>(*other.camera_R_);
+}
+
+auto Cam3DMotionblurAperture_t::operator=(const Cam3DMotionblurAperture_t& other) -> Cam3DMotionblurAperture_t& {
+    if (this != &other) {
+        *this = Cam3DMotionblurAperture_t(other);
+    }
+    return *this;
+}
+
 auto Cam3DMotionblurAperture_t::update() -> void {
     origin_last_         = origin_;
     direction_last_      = direction_;
