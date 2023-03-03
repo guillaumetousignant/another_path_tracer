@@ -54,6 +54,41 @@ namespace APTracer { namespace Entities {
              */
             explicit Scene_t(const std::vector<Shapes::MeshTop_t*>& meshes);
 
+            /**
+             * @brief Destroy the Scene_t object.
+             */
+            ~Scene_t() = default;
+
+            /**
+             * @brief Copy construct a new Scene_t object.
+             *
+             * @param other Object to copy.
+             */
+            Scene_t(const Scene_t& other);
+
+            /**
+             * @brief Move construct a new Scene_t object.
+             *
+             * @param other Object to move.
+             */
+            Scene_t(Scene_t&& other) noexcept = default;
+
+            /**
+             * @brief Copy assignment.
+             *
+             * @param other Object to copy.
+             * @return Scene_t& Reference to this object.
+             */
+            auto operator=(const Scene_t& other) -> Scene_t&;
+
+            /**
+             * @brief Move assignment.
+             *
+             * @param other Object to move.
+             * @return Scene_t& Reference to this object.
+             */
+            auto operator=(Scene_t&& other) noexcept -> Scene_t& = default;
+
             std::vector<Shape_t*> geometry_; /**< @brief Vector of shapes to be drawn.*/
             std::unique_ptr<AccelerationStructure_t> acc_; /**< @brief Acceleration structure containing the shapes, used to accelerate intersection.*/
 

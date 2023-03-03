@@ -34,6 +34,17 @@ Scene_t::Scene_t(const std::vector<MeshTop_t*>& meshes) {
     }
 }
 
+Scene_t::Scene_t(const Scene_t& other) : geometry_(other.geometry_) {
+    acc_ = other.acc_->clone();
+}
+
+auto Scene_t::operator=(const Scene_t& other) -> Scene_t& {
+    if (this != &other) {
+        *this = Scene_t(other);
+    }
+    return *this;
+}
+
 auto Scene_t::add(Shape_t* shape) -> void {
     geometry_.push_back(shape);
 }
