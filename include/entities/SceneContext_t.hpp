@@ -35,6 +35,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <stdexcept>
 
 namespace APTracer { namespace Entities {
 
@@ -495,8 +496,9 @@ auto get_xy(const std::string& string_value) -> std::array<T, 2> {
 
     for (unsigned int i = 0; i < 2; ++i) {
         if (ss.rdbuf()->in_avail() == 0) {
-            std::cerr << "Error: xy should be 2 values separated by spaces. Current number of values is " << i << ", string is '" << string_value << "'. Exiting." << std::endl;
-            exit(3);
+            std::stringstream error_ss;
+            error_ss << "Error: xy should be 2 values separated by spaces. Current number of values is " << i << ", string is '" << string_value << "'. Exiting.";
+            throw std::runtime_error(error_ss.str());
         }
         ss >> value[i];
     }

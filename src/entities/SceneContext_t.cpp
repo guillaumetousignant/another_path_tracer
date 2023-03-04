@@ -1016,8 +1016,9 @@ auto APTracer::Entities::SceneContext_t::create_texture(const tinyxml2::XMLEleme
         return std::make_unique<Texture_t>(filename);
     }
 
-    std::cerr << "Error: Texture type '" << type << "' not implemented. Only 'texture' exists for now. Exiting." << std::endl;
-    exit(20);
+    std::stringstream error_ss;
+    error_ss << "Error: Texture type '" << type << "' not implemented. Only 'texture' exists for now. Exiting.";
+    throw std::runtime_error(error_ss.str());
 }
 
 auto APTracer::Entities::SceneContext_t::create_medium(const tinyxml2::XMLElement* xml_medium,
@@ -1414,8 +1415,9 @@ auto APTracer::Entities::SceneContext_t::create_mesh_geometry(const tinyxml2::XM
         return std::make_unique<MeshGeometry_t>(filename);
     }
 
-    std::cerr << "Error: Mesh geometry type '" << type << "' not implemented. Only 'mesh_geometry' exists for now. Exiting." << std::endl;
-    exit(50);
+    std::stringstream error_ss;
+    error_ss << "Error: Mesh geometry type '" << type << "' not implemented. Only 'mesh_geometry' exists for now. Exiting.";
+    throw std::runtime_error(error_ss.str());
 }
 
 auto APTracer::Entities::SceneContext_t::create_object(const tinyxml2::XMLElement* xml_object,
@@ -1521,8 +1523,9 @@ auto APTracer::Entities::SceneContext_t::create_object(const tinyxml2::XMLElemen
                                                                   xml_object->UnsignedAttribute("index"));
     }
 
-    std::cerr << "Error: Object type '" << type << "' not implemented. Exiting." << std::endl;
-    exit(60);
+    std::stringstream error_ss;
+    error_ss << "Error: Object type '" << type << "' not implemented. Exiting.";
+    throw std::runtime_error(error_ss.str());
 }
 
 auto APTracer::Entities::SceneContext_t::create_directional_light(const tinyxml2::XMLElement* xml_directional_light, const tinyxml2::XMLElement* xml_transform_matrices)
@@ -1545,8 +1548,9 @@ auto APTracer::Entities::SceneContext_t::create_directional_light(const tinyxml2
                                                     get_transform_matrix(xml_directional_light->Attribute("transform_matrix"), xml_transform_matrices));
     }
 
-    std::cerr << "Error: Directional light type '" << type << "' not implemented. Only 'directional_light' exists for now. Exiting." << std::endl;
-    exit(70);
+    std::stringstream error_ss;
+    error_ss << "Error: Directional light type '" << type << "' not implemented. Only 'directional_light' exists for now. Exiting.";
+    throw std::runtime_error(error_ss.str());
 }
 
 auto APTracer::Entities::SceneContext_t::create_skybox(const tinyxml2::XMLElement* xml_skybox,
@@ -2011,8 +2015,9 @@ auto APTracer::Entities::SceneContext_t::create_camera(const tinyxml2::XMLElemen
                                                                               xml_camera->DoubleAttribute("gammaind"));
     }
 
-    std::cerr << "Error: Camera type '" << type << "' not implemented. Exiting." << std::endl;
-    exit(100);
+    std::stringstream error_ss;
+    error_ss << "Error: Camera type '" << type << "' not implemented. Exiting.";
+    throw std::runtime_error(error_ss.str());
 }
 
 auto APTracer::Entities::SceneContext_t::create_acceleration_structure(const tinyxml2::XMLElement* xml_acceleration_structure) const -> void {
@@ -2141,13 +2146,15 @@ auto APTracer::Entities::SceneContext_t::get_material_index_list(std::string str
                     ++index;
                 }
                 if (missing) {
-                    std::cerr << "Error: Material '" << token << "' not found. Exiting." << std::endl;
-                    exit(498);
+                    std::stringstream error_ss;
+                    error_ss << "Error: Material '" << token << "' not found. Exiting.";
+                    throw std::runtime_error(error_ss.str());
                 }
             }
             else {
-                std::cerr << "Error: No materials, material '" << token << "' not found. Exiting." << std::endl;
-                exit(499);
+                std::stringstream error_ss;
+                error_ss << "Error: No materials, material '" << token << "' not found. Exiting.";
+                throw std::runtime_error(error_ss.str());
             }
         }
         // CHECK this should check for errors.
@@ -2176,13 +2183,15 @@ auto APTracer::Entities::SceneContext_t::get_material_index_list(std::string str
                 ++index;
             }
             if (missing) {
-                std::cerr << "Error: Material '" << string_material_list << "' not found. Exiting." << std::endl;
-                exit(498);
+                std::stringstream error_ss;
+                error_ss << "Error: Material '" << string_material_list << "' not found. Exiting.";
+                throw std::runtime_error(error_ss.str());
             }
         }
         else {
-            std::cerr << "Error: No materials, material '" << string_material_list << "' not found. Exiting." << std::endl;
-            exit(499);
+            std::stringstream error_ss;
+            error_ss << "Error: No materials, material '" << string_material_list << "' not found. Exiting.";
+            throw std::runtime_error(error_ss.str());
         }
     }
     return material_list;
@@ -2219,13 +2228,15 @@ auto APTracer::Entities::SceneContext_t::get_medium_index_list(std::string strin
                     ++index;
                 }
                 if (missing) {
-                    std::cerr << "Error: Medium '" << token << "' not found. Exiting." << std::endl;
-                    exit(498);
+                    std::stringstream error_ss;
+                    error_ss << "Error: Medium '" << token << "' not found. Exiting.";
+                    throw std::runtime_error(error_ss.str());
                 }
             }
             else {
-                std::cerr << "Error: No mediums, medium '" << token << "' not found. Exiting." << std::endl;
-                exit(499);
+                std::stringstream error_ss;
+                error_ss << "Error: No mediums, medium '" << token << "' not found. Exiting.";
+                throw std::runtime_error(error_ss.str());
             }
         }
         // CHECK this should check for errors.
@@ -2254,13 +2265,15 @@ auto APTracer::Entities::SceneContext_t::get_medium_index_list(std::string strin
                 ++index;
             }
             if (missing) {
-                std::cerr << "Error: Medium '" << string_medium_list << "' not found. Exiting." << std::endl;
-                exit(498);
+                std::stringstream error_ss;
+                error_ss << "Error: Medium '" << string_medium_list << "' not found. Exiting.";
+                throw std::runtime_error(error_ss.str());
             }
         }
         else {
-            std::cerr << "Error: No mediums, medium '" << string_medium_list << "' not found. Exiting." << std::endl;
-            exit(499);
+            std::stringstream error_ss;
+            error_ss << "Error: No mediums, medium '" << string_medium_list << "' not found. Exiting.";
+            throw std::runtime_error(error_ss.str());
         }
     }
     return medium_list;
@@ -2297,13 +2310,15 @@ auto APTracer::Entities::SceneContext_t::get_medium_list(std::string string_medi
                     ++index;
                 }
                 if (missing) {
-                    std::cerr << "Error: Medium '" << token << "' not found. Exiting." << std::endl;
-                    exit(496);
+                    std::stringstream error_ss;
+                    error_ss << "Error: Medium '" << token << "' not found. Exiting.";
+                    throw std::runtime_error(error_ss.str());
                 }
             }
             else {
-                std::cerr << "Error: No mediums, medium '" << token << "' not found. Exiting." << std::endl;
-                exit(497);
+                std::stringstream error_ss;
+                error_ss << "Error: No mediums, medium '" << token << "' not found. Exiting.";
+                throw std::runtime_error(error_ss.str());
             }
         }
         // CHECK this should check for errors.
@@ -2332,13 +2347,15 @@ auto APTracer::Entities::SceneContext_t::get_medium_list(std::string string_medi
                 ++index;
             }
             if (missing) {
-                std::cerr << "Error: Medium '" << string_medium_list << "' not found. Exiting." << std::endl;
-                exit(496);
+                std::stringstream error_ss;
+                error_ss << "Error: Medium '" << string_medium_list << "' not found. Exiting.";
+                throw std::runtime_error(error_ss.str());
             }
         }
         else {
-            std::cerr << "Error: No mediums, medium '" << string_medium_list << "' not found. Exiting." << std::endl;
-            exit(497);
+            std::stringstream error_ss;
+            error_ss << "Error: No mediums, medium '" << string_medium_list << "' not found. Exiting.";
+            throw std::runtime_error(error_ss.str());
         }
     }
     return medium_list;
@@ -2365,8 +2382,9 @@ auto APTracer::Entities::SceneContext_t::get_texture(std::string texture, const 
         }
     }
 
-    std::cerr << "Error. Texture '" << texture << "' not found. Exiting." << std::endl;
-    exit(21);
+    std::stringstream error_ss;
+    error_ss << "Error. Texture '" << texture << "' not found. Exiting.";
+    throw std::runtime_error(error_ss.str());
 }
 
 auto APTracer::Entities::SceneContext_t::get_material_mix(std::string material_refracted, std::string material_reflected, const tinyxml2::XMLElement* xml_materials) -> std::array<size_t, 2> {
@@ -2394,13 +2412,15 @@ auto APTracer::Entities::SceneContext_t::get_material_mix(std::string material_r
                 ++index;
             }
             if (material_missing) {
-                std::cerr << "Error: Material '" << material_refracted << "' not found. Exiting." << std::endl;
-                exit(41);
+                std::stringstream error_ss;
+                error_ss << "Error: Material '" << material_refracted << "' not found. Exiting.";
+                throw std::runtime_error(error_ss.str());
             }
         }
         else {
-            std::cerr << "Error: No materials, '" << material_refracted << "' not found. Exiting." << std::endl;
-            exit(47);
+            std::stringstream error_ss;
+            error_ss << "Error: No materials, '" << material_refracted << "' not found. Exiting.";
+            throw std::runtime_error(error_ss.str());
         }
     }
 
@@ -2426,13 +2446,15 @@ auto APTracer::Entities::SceneContext_t::get_material_mix(std::string material_r
                 ++index;
             }
             if (material_missing) {
-                std::cerr << "Error: Material '" << material_reflected << "' not found. Exiting." << std::endl;
-                exit(41);
+                std::stringstream error_ss;
+                error_ss << "Error: Material '" << material_reflected << "' not found. Exiting.";
+                throw std::runtime_error(error_ss.str());
             }
         }
         else {
-            std::cerr << "Error: No materials, '" << material_reflected << "' not found. Exiting." << std::endl;
-            exit(47);
+            std::stringstream error_ss;
+            error_ss << "Error: No materials, '" << material_reflected << "' not found. Exiting.";
+            throw std::runtime_error(error_ss.str());
         }
     }
 
@@ -2489,8 +2511,9 @@ auto APTracer::Entities::SceneContext_t::get_mesh_geometry(std::string mesh_geom
         }
     }
 
-    std::cerr << "Error: Mesh geometry '" << mesh_geometry << "' not found. Exiting." << std::endl;
-    exit(51);
+    std::stringstream error_ss;
+    error_ss << "Error: Mesh geometry '" << mesh_geometry << "' not found. Exiting.";
+    throw std::runtime_error(error_ss.str());
 }
 
 auto APTracer::Entities::SceneContext_t::get_material_index(std::string material, const tinyxml2::XMLElement* xml_materials) -> size_t {
@@ -2514,8 +2537,9 @@ auto APTracer::Entities::SceneContext_t::get_material_index(std::string material
         }
     }
 
-    std::cerr << "Error: Material '" << material << "' not found. Exiting." << std::endl;
-    exit(41);
+    std::stringstream error_ss;
+    error_ss << "Error: Material '" << material << "' not found. Exiting.";
+    throw std::runtime_error(error_ss.str());
 }
 
 auto APTracer::Entities::SceneContext_t::get_material(std::string material, const tinyxml2::XMLElement* xml_materials) const -> Material_t* {
@@ -2539,8 +2563,9 @@ auto APTracer::Entities::SceneContext_t::get_material(std::string material, cons
         }
     }
 
-    std::cerr << "Error: Material '" << material << "' not found. Exiting." << std::endl;
-    exit(41);
+    std::stringstream error_ss;
+    error_ss << "Error: Material '" << material << "' not found. Exiting.";
+    throw std::runtime_error(error_ss.str());
 }
 
 auto APTracer::Entities::SceneContext_t::get_lights(std::string lights_string, const tinyxml2::XMLElement* xml_directional_lights) const -> std::vector<DirectionalLight_t*> {
@@ -2649,8 +2674,9 @@ auto APTracer::Entities::SceneContext_t::get_imgbuffer(std::string imgbuffer, co
         }
     }
 
-    std::cerr << "Error: Image buffer '" << imgbuffer << "' not found. Exiting." << std::endl;
-    exit(91);
+    std::stringstream error_ss;
+    error_ss << "Error: Image buffer '" << imgbuffer << "' not found. Exiting.";
+    throw std::runtime_error(error_ss.str());
 }
 
 auto APTracer::Entities::SceneContext_t::get_skybox(std::string skybox, const tinyxml2::XMLElement* xml_skyboxes) const -> Skybox_t* {
@@ -2674,8 +2700,9 @@ auto APTracer::Entities::SceneContext_t::get_skybox(std::string skybox, const ti
         }
     }
 
-    std::cerr << "Error: Skybox '" << skybox << "' not found. Exiting." << std::endl;
-    exit(81);
+    std::stringstream error_ss;
+    error_ss << "Error: Skybox '" << skybox << "' not found. Exiting.";
+    throw std::runtime_error(error_ss.str());
 }
 
 auto APTracer::Entities::SceneContext_t::get_objects(std::string objects_string, std::vector<Shape_t*>& shapes, std::vector<Shapes::MeshTop_t*>& meshes, const tinyxml2::XMLElement* xml_objects) const
@@ -2843,8 +2870,7 @@ auto APTracer::get_points(std::string points_string) -> std::array<Vec3f, 3> {
     std::transform(points_string.begin(), points_string.end(), points_string.begin(), ::tolower);
 
     if (points_string == "nan") {
-        std::cerr << "Error: Triangle points should not be empty. Exiting." << std::endl;
-        exit(69);
+        throw std::runtime_error("Error: Triangle points should not be empty. Exiting.");
     }
 
     std::array<Vec3f, 3> points{};
@@ -2859,9 +2885,10 @@ auto APTracer::get_points(std::string points_string) -> std::array<Vec3f, 3> {
         ++count;
     }
     if (count != points.size() * 3) {
-        std::cerr << "Error: Triangle points should be " << points.size() * 3 << " values separated by spaces. Current number of values is " << count << ", points are '" << points_string
-                  << "'. Exiting." << std::endl;
-        exit(67);
+        std::stringstream error_ss;
+        error_ss << "Error: Triangle points should be " << points.size() * 3 << " values separated by spaces. Current number of values is " << count << ", points are '" << points_string
+                  << "'. Exiting.";
+        throw std::runtime_error(error_ss.str());
     }
 
     return points;
@@ -2887,9 +2914,10 @@ auto APTracer::get_normals(std::string normals_string, const std::array<Vec3f, 3
         ++count;
     }
     if (count != normals.size() * 3) {
-        std::cerr << "Error: Triangle normals should be " << normals.size() * 3 << " values separated by spaces, or nan. Current number of values is " << count << ", normals are '" << normals_string
-                  << "'. Exiting." << std::endl;
-        exit(71);
+        std::stringstream error_ss;
+        error_ss << "Error: Triangle normals should be " << normals.size() * 3 << " values separated by spaces, or nan. Current number of values is " << count << ", normals are '" << normals_string
+                  << "'. Exiting.";
+        throw std::runtime_error(error_ss.str());
     }
 
     return normals;
@@ -2912,9 +2940,10 @@ auto APTracer::get_texture_coordinates(std::string texture_coordinates_string) -
         ++count;
     }
     if (count != texture_coordinates.size()) {
-        std::cerr << "Error: Triangle texture coordinates should be " << texture_coordinates.size() << " values separated by spaces, or nan. Current number of values is " << count
-                  << ", texture coordinates are '" << texture_coordinates_string << "'. Exiting." << std::endl;
-        exit(68);
+        std::stringstream error_ss;
+        error_ss << "Error: Triangle texture coordinates should be " << texture_coordinates.size() << " values separated by spaces, or nan. Current number of values is " << count
+                  << ", texture coordinates are '" << texture_coordinates_string << "'. Exiting.";
+        throw std::runtime_error(error_ss.str());
     }
 
     return texture_coordinates;
@@ -3039,6 +3068,7 @@ auto APTracer::apply_transformation(TransformMatrix_t* transform_matrix, const t
 }
 
 auto APTracer::require_attributes(const tinyxml2::XMLElement* element, const std::vector<const char*>& attributes) -> void {
+    std::stringstream error_ss;
     bool missing = false;
 
     for (const auto* attribute: attributes) {
@@ -3050,14 +3080,15 @@ auto APTracer::require_attributes(const tinyxml2::XMLElement* element, const std
                 const char* type_type  = element->Attribute("type");
                 const std::string name = (name_char == nullptr) ? "" : name_char;
                 const std::string type = (type_type == nullptr) ? "" : type_type;
-                std::cerr << "Error: " << element->Name() << " XML element with name '" << name << "' and type '" << type << "' has the following attributes missing:" << std::endl;
+                error_ss << "Error: " << element->Name() << " XML element with name '" << name << "' and type '" << type << "' has the following attributes missing:";
             }
-            std::cerr << '\t' << attribute << std::endl;
+            error_ss << '\t' << attribute;
         }
     }
 
     if (missing) {
-        std::cerr << "Exiting." << std::endl;
-        exit(2);
+        std::stringstream error_ss;
+        error_ss << "Exiting.";
+        throw std::runtime_error(error_ss.str());
     }
 }
