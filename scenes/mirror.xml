@@ -1,54 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <scene name="mirror">
-   <mediums>
-      <medium name="air" type="nonabsorber" ind="1.001" priority="0"/>
-   </mediums>
-   <materials>
-      <material materials_list="unknown, difwhite, mirror, metal, unknown, difwhite, difyellow" materials_names="IKEAFBXASC032IkornnesFBXASC032FloorFBXASC032MirrorSG, IKEAFBXASC032IkornnesFBXASC032FloorFBXASC032MirrorSG4, IKEAFBXASC032IkornnesFBXASC032FloorFBXASC032MirrorSG, IKEAFBXASC032IkornnesFBXASC032FloorFBXASC032MirrorSG1, IKEAFBXASC032IkornnesFBXASC032FloorFBXASC032MirrorSG2, IKEAFBXASC032IkornnesFBXASC032FloorFBXASC032MirrorSG3, IKEAFBXASC032IkornnesFBXASC032FloorFBXASC032MirrorSG2" name="mirror_aggregate_mat" type="aggregate"/>
-      <material texture="wood_texture" emission="black" name="wood_material" roughness="1" type="diffuse_tex"/>
-      <material colour="black" emission="black" name="difblack" roughness="1" type="diffuse"/>
-      <material colour="white" emission="black" name="reflective" type="reflective"/>
-      <material first_material="reflective" second_material="difblack" texture="noms_texture" name="mirror" type="texturemix"/>
-      <material colour="0 1 0" emission="black" name="unknown" roughness="1" type="diffuse"/>
-      <material colour="1 0 1" emission="black" name="difpurple" roughness="1" type="diffuse"/>
-      <material colour="white" emission="black" name="difwhite" roughness="1" type="diffuse"/>
-      <material colour="1 0.99 0.67" emission="black" name="difyellow" roughness="1" type="diffuse"/>
-      <material colour="grey2" diffusivity="0.05" emission="black" name="metal" order="1" type="reflective_fuzz"/>
-   </materials>
-   <objects>
-      <object material="mirror_aggregate_mat" mesh_geometry="mirror_mesh" name="mirror_shape" transform_matrix="NaN" type="mesh_motionblur">
-         <transformations_pre>
-            <transformation_pre type="translate" value="0 0 -3"/>
-            <transformation_pre type="uniformscale" value="0.025"/>
-            <transformation_pre type="rotatex" value="1.5708"/>
-            <transformation_pre type="rotatez" value="-0.4635"/>
-            <transformation_pre type="rotatezaxis" value="4.7124"/>
-         </transformations_pre>
-      </object>
-   </objects>
-   <skyboxes>
-      <skybox light_colour="48.6373 44.9395 44.6477" light_position="0.88 0.55" light_radius="0.025" name="room" texture="room_texture" type="skybox_texture_sun"/>
-   </skyboxes>
-   <imgbuffers>
-      <imgbuffer name="buffer" resx="2400" resy="1600" type="imgbuffer_opengl"/>
-   </imgbuffers>
-   <cameras>
-      <camera aperture="0.005" filename="NaN" focus_distance="NaN" focus_position="0.5 0.5" fov="1.86168 2.7926" gammaind="1" imgbuffer="1" max_bounces="8" medium_list="air, air" n_iter="Inf" name="camera1" rendermode="accumulation" write_interval="500" skybox="room" subpix="1 1" transform_matrix="NaN" type="cam_aperture" up="0 0 1">
-         <transformations_pre>
-            <transformation_pre type="translate" value="0 -4 0"/>
-            <transformation_pre type="rotatezaxis" value="4.71238898"/>
-         </transformations_pre>
-      </camera>
-   </cameras>
-   <textures>
-      <texture filename="assets/BirchWood.png" name="wood_texture" type="texture"/>
-      <texture filename="assets/stsauveur.png" name="room_texture" type="texture"/>
-      <texture filename="assets/noms.png" name="noms_texture" type="texture"/>
-   </textures>
-   <mesh_geometries>
-      <mesh_geometry filename="assets/ikea_ikornnes_2.obj" name="mirror_mesh" type="mesh_geometry"/>
-   </mesh_geometries>
-   <acceleration_structures>
-      <acceleration_structure type="multi_grid_vector" min_resolution="1" max_resolution="128" max_cell_content="32" max_grid_level="1"/>
-   </acceleration_structures>
+    <mediums>
+        <medium name="air" type="nonabsorber" ind="1.001" priority="0"/>
+    </mediums>
+    <materials>
+        <material materials_list="unknown, difwhite, mirror, metal, unknown, difwhite, difyellow" materials_names="IKEAFBXASC032IkornnesFBXASC032FloorFBXASC032MirrorSG, IKEAFBXASC032IkornnesFBXASC032FloorFBXASC032MirrorSG4, IKEAFBXASC032IkornnesFBXASC032FloorFBXASC032MirrorSG, IKEAFBXASC032IkornnesFBXASC032FloorFBXASC032MirrorSG1, IKEAFBXASC032IkornnesFBXASC032FloorFBXASC032MirrorSG2, IKEAFBXASC032IkornnesFBXASC032FloorFBXASC032MirrorSG3, IKEAFBXASC032IkornnesFBXASC032FloorFBXASC032MirrorSG2" name="mirror_aggregate_mat" type="aggregate"/>
+        <material texture="wood_texture" emission="black" name="wood_material" roughness="1" type="diffuse_tex"/>
+        <material colour="black" emission="black" name="difblack" roughness="1" type="diffuse"/>
+        <material colour="white" emission="black" name="reflective" type="reflective"/>
+        <material first_material="reflective" second_material="difblack" texture="noms_texture" name="mirror" type="texturemix"/>
+        <material colour="0 1 0" emission="black" name="unknown" roughness="1" type="diffuse"/>
+        <material colour="1 0 1" emission="black" name="difpurple" roughness="1" type="diffuse"/>
+        <material colour="white" emission="black" name="difwhite" roughness="1" type="diffuse"/>
+        <material colour="1 0.99 0.67" emission="black" name="difyellow" roughness="1" type="diffuse"/>
+        <material colour="grey2" diffusivity="0.05" emission="black" name="metal" order="1" type="reflective_fuzz"/>
+    </materials>
+    <objects>
+        <object material="mirror_aggregate_mat" mesh_geometry="mirror_mesh" name="mirror_shape" transform_matrix="NaN" type="mesh_motionblur">
+            <transformations_pre>
+                <transformation_pre type="translate" value="0 0 -3"/>
+                <transformation_pre type="uniformscale" value="0.025"/>
+                <transformation_pre type="rotatex" value="1.5708"/>
+                <transformation_pre type="rotatez" value="-0.4635"/>
+                <transformation_pre type="rotatezaxis" value="4.7124"/>
+            </transformations_pre>
+        </object>
+    </objects>
+    <skyboxes>
+        <skybox light_colour="48.6373 44.9395 44.6477" light_position="0.88 0.55" light_radius="0.025" name="room" texture="room_texture" type="skybox_texture_sun"/>
+    </skyboxes>
+    <imgbuffers>
+        <imgbuffer name="buffer" resx="2400" resy="1600" type="imgbuffer_opengl"/>
+    </imgbuffers>
+    <cameras>
+        <camera aperture="0.005" filename="NaN" focus_distance="NaN" focus_position="0.5 0.5" fov="1.86168 2.7926" gammaind="1" imgbuffer="1" max_bounces="8" medium_list="air, air" n_iter="Inf" name="camera1" rendermode="accumulation" write_interval="500" skybox="room" subpix="1 1" transform_matrix="NaN" type="cam_aperture" up="0 0 1">
+            <transformations_pre>
+                <transformation_pre type="translate" value="0 -4 0"/>
+                <transformation_pre type="rotatezaxis" value="4.71238898"/>
+            </transformations_pre>
+        </camera>
+    </cameras>
+    <textures>
+        <texture filename="assets/BirchWood.png" name="wood_texture" type="texture"/>
+        <texture filename="assets/stsauveur.png" name="room_texture" type="texture"/>
+        <texture filename="assets/noms.png" name="noms_texture" type="texture"/>
+    </textures>
+    <mesh_geometries>
+        <mesh_geometry filename="assets/ikea_ikornnes_2.obj" name="mirror_mesh" type="mesh_geometry"/>
+    </mesh_geometries>
+    <acceleration_structures>
+        <acceleration_structure type="multi_grid_vector" min_resolution="1" max_resolution="128" max_cell_content="32" max_grid_level="1"/>
+    </acceleration_structures>
 </scene>

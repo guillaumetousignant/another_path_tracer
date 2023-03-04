@@ -78,3 +78,4 @@ if read_the_docs_build:
     configureDoxyfile(input_dir, output_dir)
     subprocess.call('doxygen', shell=True)
     breathe_projects['another_path_tracer'] = output_dir + '/xml'
+    
