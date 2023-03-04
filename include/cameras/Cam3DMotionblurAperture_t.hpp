@@ -68,41 +68,6 @@ namespace APTracer { namespace Cameras {
                                       std::array<double, 2> time,
                                       double gammaind);
 
-            /**
-             * @brief Destroy the Cam3DMotionblurAperture_t object.
-             */
-            ~Cam3DMotionblurAperture_t() final = default;
-
-            /**
-             * @brief Copy construct a new Cam3DMotionblurAperture_t object.
-             *
-             * @param other Object to copy.
-             */
-            Cam3DMotionblurAperture_t(const Cam3DMotionblurAperture_t& other);
-
-            /**
-             * @brief Move construct a new Cam3DMotionblurAperture_t object.
-             *
-             * @param other Object to move.
-             */
-            Cam3DMotionblurAperture_t(Cam3DMotionblurAperture_t&& other) noexcept = default;
-
-            /**
-             * @brief Copy assignment.
-             *
-             * @param other Object to copy.
-             * @return Cam3DMotionblurAperture_t& Reference to this object.
-             */
-            auto operator=(const Cam3DMotionblurAperture_t& other) -> Cam3DMotionblurAperture_t&;
-
-            /**
-             * @brief Move assignment.
-             *
-             * @param other Object to move.
-             * @return Cam3DMotionblurAperture_t& Reference to this object.
-             */
-            auto operator=(Cam3DMotionblurAperture_t&& other) noexcept -> Cam3DMotionblurAperture_t& = default;
-
             Entities::ImgBuffer_t* image_; /**< @brief Image buffer into which the resulting 3D anaglyph image is stored.*/
             std::uniform_real_distribution<double> unif_; /**< @brief Uniform random distribution used for generating random numbers.*/
             double eye_dist_; /**< @brief Distance between the left and right eye cameras. Higher values will make the 3D effect stronger.*/
@@ -119,8 +84,8 @@ namespace APTracer { namespace Cameras {
             Entities::Vec3f up_last_; /**< @brief Vector pointing up before last update. Used for motion blur.*/
             std::array<double, 2> fov_last_; /**< @brief Field of view before last update. Used for motion blur.*/
 
-            std::unique_ptr<CamMotionblurAperture_t> camera_L_; /**< @brief Left eye camera. Managed by the 3D camera, do not update directly.*/
-            std::unique_ptr<CamMotionblurAperture_t> camera_R_; /**< @brief Right eye camera. Managed by the 3D camera, do not update directly.*/
+            CamMotionblurAperture_t camera_L_; /**< @brief Left eye camera. Managed by the 3D camera, do not update directly.*/
+            CamMotionblurAperture_t camera_R_; /**< @brief Right eye camera. Managed by the 3D camera, do not update directly.*/
             std::array<double, 2> focus_coordinates_; /**< @brief Image-space coordinates on which the camera is focussed. [horizontal, vertical] from 0 to 1, from left to right and bottom to top.*/
 
             /**

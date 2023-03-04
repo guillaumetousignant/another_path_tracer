@@ -62,41 +62,6 @@ namespace APTracer { namespace Cameras {
                             double aperture,
                             double gammaind);
 
-            /**
-             * @brief Destroy the Cam3DAperture_t object.
-             */
-            ~Cam3DAperture_t() final = default;
-
-            /**
-             * @brief Copy construct a new Cam3DAperture_t object.
-             *
-             * @param other Object to copy.
-             */
-            Cam3DAperture_t(const Cam3DAperture_t& other);
-
-            /**
-             * @brief Move construct a new Cam3DAperture_t object.
-             *
-             * @param other Object to move.
-             */
-            Cam3DAperture_t(Cam3DAperture_t&& other) noexcept = default;
-
-            /**
-             * @brief Copy assignment.
-             *
-             * @param other Object to copy.
-             * @return Cam3DAperture_t& Reference to this object.
-             */
-            auto operator=(const Cam3DAperture_t& other) -> Cam3DAperture_t&;
-
-            /**
-             * @brief Move assignment.
-             *
-             * @param other Object to move.
-             * @return Cam3DAperture_t& Reference to this object.
-             */
-            auto operator=(Cam3DAperture_t&& other) noexcept -> Cam3DAperture_t& = default;
-
             Entities::ImgBuffer_t* image_; /**< @brief Image buffer into which the resulting 3D anaglyph image is stored.*/
             std::uniform_real_distribution<double> unif_; /**< @brief Uniform random distribution used for generating random numbers.*/
             double eye_dist_; /**< @brief Distance between the left and right eye cameras. Higher values will make the 3D effect stronger.*/
@@ -104,8 +69,8 @@ namespace APTracer { namespace Cameras {
                                        this radius. Distance at which both eye cameras converge.*/
             double focus_distance_buffer_; /**< @brief Focus distance to be modified between updates. Its value is given to the real focus distance on update.*/
             double aperture_; /**< @brief Radius of the disk on which rays are created around the origin. Higher values will cause stronger depth of field, objects out of focus will be blurrier.*/
-            std::unique_ptr<CamAperture_t> camera_L_; /**< @brief Left eye camera. Managed by the 3D camera, do not update directly.*/
-            std::unique_ptr<CamAperture_t> camera_R_; /**< @brief Right eye camera. Managed by the 3D camera, do not update directly.*/
+            CamAperture_t camera_L_; /**< @brief Left eye camera. Managed by the 3D camera, do not update directly.*/
+            CamAperture_t camera_R_; /**< @brief Right eye camera. Managed by the 3D camera, do not update directly.*/
             std::array<double, 2> focus_coordinates_; /**< @brief Image-space coordinates on which the camera is focussed. [horizontal, vertical] from 0 to 1, from left to right and bottom to top.*/
 
             /**

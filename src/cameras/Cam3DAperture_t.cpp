@@ -34,6 +34,8 @@ Cam3DAperture_t::Cam3DAperture_t(TransformMatrix_t* transformation,
         focus_distance_(focus_distance),
         focus_distance_buffer_(focus_distance),
         aperture_(aperture),
+        camera_L_(transformation, filename, up_, fov_, subpix_, image_L, medium_list_, skybox_, max_bounces_, focus_distance_, aperture_, gammaind_),
+        camera_R_(transformation, filename, up_, fov_, subpix_, image_R, medium_list_, skybox_, max_bounces_, focus_distance_, aperture_, gammaind_),
         focus_coordinates_{0.5, 0.5} {
 
     std::string filename_L;
@@ -50,41 +52,21 @@ Cam3DAperture_t::Cam3DAperture_t(TransformMatrix_t* transformation,
         filename_R = filename + "_R.png";
     }
 
-    camera_L_ = std::make_unique<CamAperture_t>(transformation, filename_L, up_, fov_, subpix_, image_L, medium_list_, skybox_, max_bounces_, focus_distance_, aperture_, gammaind_);
-    camera_R_ = std::make_unique<CamAperture_t>(transformation, filename_R, up_, fov_, subpix_, image_R, medium_list_, skybox_, max_bounces_, focus_distance_, aperture_, gammaind_);
+    camera_L_.filename_ = filename_L;
+    camera_R_.filename_ = filename_R;
 
     const Vec3f horizontal      = direction_.cross(up).normalize_inplace();
     const Vec3f vertical        = horizontal.cross(direction_).normalize_inplace();
     const Vec3f focus_direction = Vec3f(1.0, pi / 2.0 + (focus_coordinates_[1] - 0.5) * fov_[0], (focus_coordinates_[0] - 0.5) * fov_[1]).to_xyz_offset(direction_, horizontal, vertical); // 0, y, x
 
-    camera_L_->focus_distance_ = (focus_direction * focus_distance_ + horizontal * eye_dist_).magnitude();
-    camera_R_->focus_distance_ = (focus_direction * focus_distance_ - horizontal * eye_dist_).magnitude();
+    camera_L_.focus_distance_ = (focus_direction * focus_distance_ + horizontal * eye_dist_).magnitude();
+    camera_R_.focus_distance_ = (focus_direction * focus_distance_ - horizontal * eye_dist_).magnitude();
 
-    camera_L_->origin_ = horizontal * -eye_dist_ + origin_;
-    camera_R_->origin_ = horizontal * eye_dist_ + origin_;
+    camera_L_.origin_ = horizontal * -eye_dist_ + origin_;
+    camera_R_.origin_ = horizontal * eye_dist_ + origin_;
 
-    camera_L_->direction_ = (direction_ * focus_distance_ + horizontal * eye_dist_).normalize_inplace();
-    camera_R_->direction_ = (direction_ * focus_distance_ - horizontal * eye_dist_).normalize_inplace();
-}
-
-Cam3DAperture_t::Cam3DAperture_t(const Cam3DAperture_t& other) :
-        Camera_t(other),
-        image_(other.image_),
-        unif_(other.unif_),
-        eye_dist_(other.eye_dist_),
-        focus_distance_(other.focus_distance_),
-        focus_distance_buffer_(other.focus_distance_buffer_),
-        aperture_(other.aperture_),
-        focus_coordinates_(other.focus_coordinates_) {
-    camera_L_ = std::make_unique<CamAperture_t>(*other.camera_L_);
-    camera_R_ = std::make_unique<CamAperture_t>(*other.camera_R_);
-}
-
-auto Cam3DAperture_t::operator=(const Cam3DAperture_t& other) -> Cam3DAperture_t& {
-    if (this != &other) {
-        *this = Cam3DAperture_t(other);
-    }
-    return *this;
+    camera_L_.direction_ = (direction_ * focus_distance_ + horizontal * eye_dist_).normalize_inplace();
+    camera_R_.direction_ = (direction_ * focus_distance_ - horizontal * eye_dist_).normalize_inplace();
 }
 
 auto Cam3DAperture_t::update() -> void {
@@ -94,33 +76,33 @@ auto Cam3DAperture_t::update() -> void {
     up_             = up_buffer_;
     fov_            = fov_buffer_;
 
-    camera_L_->up_  = up_;
-    camera_R_->up_  = up_;
-    camera_L_->fov_ = fov_;
-    camera_R_->fov_ = fov_;
+    camera_L_.up_  = up_;
+    camera_R_.up_  = up_;
+    camera_L_.fov_ = fov_;
+    camera_R_.fov_ = fov_;
 
     const Vec3f horizontal      = direction_.cross(up_);
     const Vec3f vertical        = horizontal.cross(direction_).normalize_inplace();
     const Vec3f focus_direction = Vec3f(1.0, pi / 2.0 + (focus_coordinates_[1] - 0.5) * fov_[0], (focus_coordinates_[0] - 0.5) * fov_[1]).to_xyz_offset(direction_, horizontal, vertical); // 0, y, x
 
-    camera_L_->focus_distance_ = (focus_direction * focus_distance_ + horizontal * eye_dist_).magnitude();
-    camera_R_->focus_distance_ = (focus_direction * focus_distance_ - horizontal * eye_dist_).magnitude();
-    camera_L_->origin_         = horizontal * -eye_dist_ + origin_;
-    camera_R_->origin_         = horizontal * eye_dist_ + origin_;
-    camera_L_->direction_      = (direction_ * focus_distance_ + horizontal * eye_dist_).normalize_inplace();
-    camera_R_->direction_      = (direction_ * focus_distance_ - horizontal * eye_dist_).normalize_inplace();
+    camera_L_.focus_distance_ = (focus_direction * focus_distance_ + horizontal * eye_dist_).magnitude();
+    camera_R_.focus_distance_ = (focus_direction * focus_distance_ - horizontal * eye_dist_).magnitude();
+    camera_L_.origin_         = horizontal * -eye_dist_ + origin_;
+    camera_R_.origin_         = horizontal * eye_dist_ + origin_;
+    camera_L_.direction_      = (direction_ * focus_distance_ + horizontal * eye_dist_).normalize_inplace();
+    camera_R_.direction_      = (direction_ * focus_distance_ - horizontal * eye_dist_).normalize_inplace();
 }
 
 auto Cam3DAperture_t::raytrace(const Scene_t* scene) -> void {
-    camera_L_->raytrace(scene);
-    camera_R_->raytrace(scene);
+    camera_L_.raytrace(scene);
+    camera_R_.raytrace(scene);
 
     image_->update();
     for (size_t j = 0; j < image_->size_y_; j++) {
         for (size_t i = 0; i < image_->size_x_; i++) {
-            image_->set(Vec3f(camera_L_->image_->img_[j * camera_L_->image_->size_x_ + i][0],
-                              camera_R_->image_->img_[j * camera_L_->image_->size_x_ + i][1],
-                              camera_R_->image_->img_[j * camera_L_->image_->size_x_ + i][2]),
+            image_->set(Vec3f(camera_L_.image_->img_[j * camera_L_.image_->size_x_ + i][0],
+                              camera_R_.image_->img_[j * camera_L_.image_->size_x_ + i][1],
+                              camera_R_.image_->img_[j * camera_L_.image_->size_x_ + i][2]),
                         i,
                         j);
         }
@@ -145,14 +127,14 @@ auto Cam3DAperture_t::write(const std::string& file_name) -> void {
         filename_R = file_name + "_R.png";
     }
 
-    camera_L_->write(filename_L);
-    camera_R_->write(filename_R);
+    camera_L_.write(filename_L);
+    camera_R_.write(filename_R);
     image_->write(file_name);
 }
 
 auto Cam3DAperture_t::write() -> void {
-    camera_L_->write();
-    camera_R_->write();
+    camera_L_.write();
+    camera_R_.write();
     image_->write(filename_);
 }
 
@@ -161,8 +143,8 @@ auto Cam3DAperture_t::show() const -> void {
 }
 
 auto Cam3DAperture_t::reset() -> void {
-    camera_L_->reset();
-    camera_R_->reset();
+    camera_L_.reset();
+    camera_R_.reset();
     image_->reset();
 }
 
