@@ -1,8 +1,5 @@
 #include "entities/Ray_t.hpp"
-#include "entities/Material_t.hpp"
 #include "entities/Medium_t.hpp"
-#include "entities/Scene_t.hpp"
-#include "entities/Shape_t.hpp"
 
 using APTracer::Entities::Ray_t;
 
@@ -11,29 +8,6 @@ Ray_t::Ray_t(const Vec3f& origin, const Vec3f& direction, const Vec3f& colour, c
 
 Ray_t::Ray_t(const Vec3f& origin, const Vec3f& direction, const Vec3f& colour, const Vec3f& mask, std::list<Medium_t*> medium_list, double time) :
         origin_(origin), direction_(direction), colour_(colour), mask_(mask), dist_(0.0), medium_list_(std::move(medium_list)), time_(time) {}
-
-auto Ray_t::raycast(const Scene_t* scene, unsigned int max_bounces, const Skybox_t* skybox) -> void {
-    unsigned int bounces = 0;
-
-    constexpr double minimum_mask = 0.01;
-    while ((bounces < max_bounces) && (mask_.magnitudeSquared() > minimum_mask)) { // Should maybe make magnitudeSquared min value lower
-        double t{};
-        std::array<double, 2> uv{};
-
-        const Shape_t* hit_obj = scene->intersect(*this, t, uv);
-
-        if (hit_obj == nullptr) {
-            colour_ += mask_ * skybox->get(direction_);
-            return;
-        }
-        dist_ = t;
-        bounces++;
-
-        if (!medium_list_.front()->scatter(*this)) {
-            hit_obj->material_->bounce(uv, hit_obj, *this);
-        }
-    }
-}
 
 auto Ray_t::add_to_mediums(Medium_t* medium) -> void {
     for (auto i = medium_list_.begin(); i != medium_list_.end(); ++i) {

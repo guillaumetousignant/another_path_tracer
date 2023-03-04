@@ -94,7 +94,7 @@ auto IsoCamMotionblur_t::raytrace(const Scene_t* scene) -> void {
                                    + horizontal_int * subpix_span_x_int * (static_cast<double>(l) - static_cast<double>(subpix_[1]) / 2.0 + jitter_x);
 
             Ray_t ray = Ray_t(ray_origin, direction_int, Vec3f(), Vec3f(1.0), medium_list_, rand_time);
-            ray.raycast(scene, max_bounces_, skybox_);
+            scene->raycast(ray, max_bounces_, skybox_);
             col += ray.colour_;
         }
         col = col / tot_subpix;

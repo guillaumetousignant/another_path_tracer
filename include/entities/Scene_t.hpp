@@ -4,6 +4,7 @@
 #include "entities/AccelerationStructure_t.hpp"
 #include "entities/Ray_t.hpp"
 #include "entities/Shape_t.hpp"
+#include "entities/Skybox_t.hpp"
 #include "shapes/MeshTop_t.hpp"
 #include <array>
 #include <memory>
@@ -191,6 +192,24 @@ namespace APTracer { namespace Entities {
              * @return Shape_t* Pointer of the intersected shape. Returns nullptr if there is no intersection.
              */
             auto intersect(const Ray_t& ray, double& t, std::array<double, 2>& uv) const -> Shape_t*;
+    
+            /**
+             * @brief Intersects the ray with objects in the scene and bounces it on their material.
+             *
+             * This is the main function to compute the colour of a ray. A ray is sent through the scene,
+             * finding the closest object hit. Then, the ray is modified by this object's material.
+             * This change can change ray direction, origin, colour and mask. This process is repeated
+             * up to max_bounces times, or until no object is it, at which point the skybox is intersected.
+             * The ray is also modified by its first medium using the scatter function. If it is scattered,
+             * it won't be bounced on the hit object's material, as it intersects the medium instead of
+             * the object.
+             *
+             * @param ray Ray to intersect with the scene.
+             * @param[in] max_bounces Upper bound of number of bounces. Number of bounces may be less if no object is hit or ray can't be illuminated anymore.
+             * @param[in] skybox Skybox that will be intersected if no object is hit.
+             */
+            auto raycast(Ray_t& ray, unsigned int max_bounces, const Skybox_t* skybox) const -> void;
+
     };
 }}
 

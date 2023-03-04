@@ -82,7 +82,7 @@ auto RecCamAperture_t::raytrace(const Scene_t* scene) -> void {
                                          .normalize_inplace();
 
             Ray_t ray = Ray_t(origin2, subpix_vec, Vec3f(), Vec3f(1.0), medium_list_);
-            ray.raycast(scene, max_bounces_, skybox_);
+            scene->raycast(ray, max_bounces_, skybox_);
             col += ray.colour_;
         }
         col = col / tot_subpix;

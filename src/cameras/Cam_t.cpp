@@ -70,7 +70,7 @@ auto Cam_t::raytrace(const Scene_t* scene) -> void {
                                          .to_xyz_offset(direction_, horizontal, vertical);
 
             Ray_t ray = Ray_t(origin_, subpix_vec, Vec3f(), Vec3f(1.0), medium_list_);
-            ray.raycast(scene, max_bounces_, skybox_);
+            scene->raycast(ray, max_bounces_, skybox_);
             col += ray.colour_;
         }
         col = col / tot_subpix;

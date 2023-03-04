@@ -1,4 +1,5 @@
 #include "entities/Scene_t.hpp"
+#include "entities/Medium_t.hpp"
 #include "acceleration/AccelerationMultiGridVector_t.hpp"
 #include <algorithm>
 #include <limits>
@@ -139,4 +140,27 @@ auto Scene_t::intersect_brute(const Ray_t& ray, double& t, std::array<double, 2>
 
 auto Scene_t::intersect(const Ray_t& ray, double& t, std::array<double, 2>& uv) const -> Shape_t* {
     return acc_->intersect(ray, t, uv);
+}
+
+auto Scene_t::raycast(Ray_t& ray, unsigned int max_bounces, const Skybox_t* skybox) const -> void {
+    unsigned int bounces = 0;
+
+    constexpr double minimum_mask = 0.01;
+    while ((bounces < max_bounces) && (ray.mask_.magnitudeSquared() > minimum_mask)) { // Should maybe make magnitudeSquared min value lower
+        double t{};
+        std::array<double, 2> uv{};
+
+        const Shape_t* hit_obj = acc_->intersect(ray, t, uv);
+
+        if (hit_obj == nullptr) {
+            ray.colour_ += ray.mask_ * skybox->get(ray.direction_);
+            return;
+        }
+        ray.dist_ = t;
+        bounces++;
+
+        if (!ray.medium_list_.front()->scatter(ray)) {
+            hit_obj->material_->bounce(uv, hit_obj, ray);
+        }
+    }
 }

@@ -80,7 +80,7 @@ auto IsoCamAperture_t::raytrace(const Scene_t* scene) -> void {
             const Vec3f direction2  = (subpix_ray_origin + direction_ * focus_distance_ - ray_origin2).normalize_inplace();
 
             Ray_t ray = Ray_t(ray_origin2, direction2, Vec3f(), Vec3f(1.0), medium_list_);
-            ray.raycast(scene, max_bounces_, skybox_);
+            scene->raycast(ray, max_bounces_, skybox_);
             col += ray.colour_;
         }
         col = col / tot_subpix;

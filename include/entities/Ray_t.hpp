@@ -1,13 +1,11 @@
 #ifndef APTRACER_ENTITIES_RAY_T_HPP
 #define APTRACER_ENTITIES_RAY_T_HPP
 
-#include "entities/Skybox_t.hpp"
 #include "entities/Vec3f.hpp"
 #include <list>
 
 namespace APTracer { namespace Entities {
     class Medium_t;
-    class Scene_t;
 
     /**
      * @brief The ray class contains colour data and can be intersected with geometry.
@@ -51,23 +49,6 @@ namespace APTracer { namespace Entities {
             double dist_; /**< @brief Distance traveled by the ray since last bounce.*/
             std::list<Medium_t*> medium_list_; /**< @brief List of materials in which the ray travels. The first one is the current one.*/
             double time_; /**< @brief Time of emission of the ray, relative to exposure time. 0 for start of exposure to 1 for end.*/
-
-            /**
-             * @brief Intersects the ray with objects in the scene and bounces it on their material.
-             *
-             * This is the main function to compute the colour of a ray. A ray is sent through the scene,
-             * finding the closest object hit. Then, the ray is modified by this object's material.
-             * This change can change ray direction, origin, colour and mask. This process is repeated
-             * up to max_bounces times, or until no object is it, at which point the skybox is intersected.
-             * The ray is also modified by its first medium using the scatter function. If it is scattered,
-             * it won't be bounced on the hit object's material, as it intersects the medium instead of
-             * the object.
-             *
-             * @param[in] scene Scene containing the objects the ray will intersect.
-             * @param[in] max_bounces Upper bound of number of bounces. Number of bounces may be less if no object is hit or ray can't be illuminated anymore.
-             * @param[in] skybox Skybox that will be intersected if no object is hit.
-             */
-            auto raycast(const Scene_t* scene, unsigned int max_bounces, const Skybox_t* skybox) -> void;
 
             /**
              * @brief Adds a medium to a ray's list of mediums, according to the medium's priority.

@@ -66,7 +66,7 @@ auto IsoCam_t::raytrace(const Scene_t* scene) -> void {
             ;
 
             Ray_t ray = Ray_t(subpix_ray_origin, direction_, Vec3f(), Vec3f(1.0), medium_list_);
-            ray.raycast(scene, max_bounces_, skybox_);
+            scene->raycast(ray, max_bounces_, skybox_);
             col += ray.colour_;
         }
         col = col / tot_subpix;
