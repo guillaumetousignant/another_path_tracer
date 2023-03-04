@@ -255,8 +255,8 @@ auto OpenGLRenderer_t::keyboardPaused(unsigned char key, int /*x*/, int /*y*/) -
         case 'q':
 #ifdef APTRACER_USE_OPENGL
             glutDestroyWindow(0);
+            glutLeaveMainLoop();
 #endif
-            exit(0);
             break;
 
         case 'p':
@@ -300,8 +300,8 @@ auto OpenGLRenderer_t::keyboard(unsigned char key, int x, int y) -> void {
         case 'q':
 #ifdef APTRACER_USE_OPENGL
             glutDestroyWindow(0);
+            glutLeaveMainLoop();
 #endif
-            exit(0);
             break;
 
         case 'p':
