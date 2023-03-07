@@ -16,7 +16,7 @@ APTracer::Shapes::TriangleMesh_t::TriangleMesh_t(APTracer::Entities::Material_t*
         index_(index),
         texture_coordinates_{geom_->vt_[index_][0][0], geom_->vt_[index_][0][1], geom_->vt_[index_][1][0], geom_->vt_[index_][1][1], geom_->vt_[index_][2][0], geom_->vt_[index_][2][1]},
         points_{transformation_->multVec(geom_->v_[index_][0]), transformation_->multVec(geom_->v_[index_][1]), transformation_->multVec(geom_->v_[index_][2])},
-        normals_{transformation_->multDir(geom_->vn_[index_][0]), transformation_->multDir(geom_->vn_[index_][1]), transformation_->multDir(geom_->vn_[index_ + 2][1])},
+        normals_{transformation_->multDir(geom_->vn_[index_][0]), transformation_->multDir(geom_->vn_[index_][1]), transformation_->multDir(geom_->vn_[index_][2])},
         v0v1_(points_[1] - points_[0]),
         v0v2_(points_[2] - points_[0]),
         tuv_to_world_{} {
@@ -36,7 +36,7 @@ APTracer::Shapes::TriangleMesh_t::TriangleMesh_t(APTracer::Entities::Material_t*
 
 auto APTracer::Shapes::TriangleMesh_t::update() -> void {
     points_  = {transformation_->multVec(geom_->v_[index_][0]), transformation_->multVec(geom_->v_[index_][1]), transformation_->multVec(geom_->v_[index_][2])};
-    normals_ = {transformation_->multDir(geom_->vn_[index_][0]), transformation_->multDir(geom_->vn_[index_][1]), transformation_->multDir(geom_->vn_[index_ + 2][1])};
+    normals_ = {transformation_->multDir(geom_->vn_[index_][0]), transformation_->multDir(geom_->vn_[index_][1]), transformation_->multDir(geom_->vn_[index_][2])};
 
     v0v1_ = points_[1] - points_[0];
     v0v2_ = points_[2] - points_[0];
