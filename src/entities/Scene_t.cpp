@@ -1,6 +1,6 @@
 #include "entities/Scene_t.hpp"
-#include "entities/Medium_t.hpp"
 #include "acceleration/AccelerationMultiGridVector_t.hpp"
+#include "entities/Medium_t.hpp"
 #include <algorithm>
 #include <limits>
 

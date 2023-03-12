@@ -1,4 +1,5 @@
 #include "acceleration/GridCellArray_t.hpp"
+#include <algorithm>
 #include <limits>
 
 using APTracer::Acceleration::GridCellArray_t;

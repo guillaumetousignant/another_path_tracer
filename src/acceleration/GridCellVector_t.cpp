@@ -1,4 +1,5 @@
 #include "acceleration/GridCellVector_t.hpp"
+#include <algorithm>
 #include <limits>
 #include <vector>
 
