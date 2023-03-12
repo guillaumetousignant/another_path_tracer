@@ -31,13 +31,13 @@ cmake --install .
 
 Link with `$ANOTHER_PATH_TRACER_DIR/lib`  
 Include `$ANOTHER_PATH_TRACER_DIR/include`  
-You can add `$ANOTHER_PATH_TRACER_DIR/bin` to your path.  
+You can add `$ANOTHER_PATH_TRACER_DIR/bin` to your path.
 
 To build without OpenMP, add `-DUSE_OPENMP=OFF` to cmake call.  
 To build without OpenGL, add `-DUSE_OPENGL=OFF` to cmake call.  
 To build without PNG, add `-DUSE_PNG=OFF` to cmake call.  
 To build without JPEG, add `-DUSE_JPEG=OFF` to cmake call.  
-To build without TIFF, add `-DUSE_TIFF=OFF` to cmake call.  
+To build without TIFF, add `-DUSE_TIFF=OFF` to cmake call.
 
 To build tests, add `-DBUILD_TESTING=ON` to cmake call. Then:
 
@@ -56,6 +56,6 @@ To generate documentation, add `-DBUILD_DOC=ON` to cmake call. Additional depend
 To include in a CMake project:
 
 ```bash
-find_package(APTracer 1.2.0 REQUIRED)
+find_package(APTracer 1.3.0 REQUIRED)
 target_link_libraries(example APTracer::APTracer)
 ```
