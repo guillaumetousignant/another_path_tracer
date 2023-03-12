@@ -2887,7 +2887,7 @@ auto APTracer::get_points(std::string points_string) -> std::array<Vec3f, 3> {
     if (count != points.size() * 3) {
         std::stringstream error_ss;
         error_ss << "Error: Triangle points should be " << points.size() * 3 << " values separated by spaces. Current number of values is " << count << ", points are '" << points_string
-                  << "'. Exiting.";
+                 << "'. Exiting.";
         throw std::runtime_error(error_ss.str());
     }
 
@@ -2916,7 +2916,7 @@ auto APTracer::get_normals(std::string normals_string, const std::array<Vec3f, 3
     if (count != normals.size() * 3) {
         std::stringstream error_ss;
         error_ss << "Error: Triangle normals should be " << normals.size() * 3 << " values separated by spaces, or nan. Current number of values is " << count << ", normals are '" << normals_string
-                  << "'. Exiting.";
+                 << "'. Exiting.";
         throw std::runtime_error(error_ss.str());
     }
 
@@ -2942,7 +2942,7 @@ auto APTracer::get_texture_coordinates(std::string texture_coordinates_string) -
     if (count != texture_coordinates.size()) {
         std::stringstream error_ss;
         error_ss << "Error: Triangle texture coordinates should be " << texture_coordinates.size() << " values separated by spaces, or nan. Current number of values is " << count
-                  << ", texture coordinates are '" << texture_coordinates_string << "'. Exiting.";
+                 << ", texture coordinates are '" << texture_coordinates_string << "'. Exiting.";
         throw std::runtime_error(error_ss.str());
     }
 
