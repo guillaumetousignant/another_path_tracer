@@ -8,9 +8,9 @@
 constexpr GLint GL_CLAMP_TO_EDGE = 0x812F;
     #else
         #ifndef __APPLE__
-            #include "GL/glut.h"
+            #include "GL/freeglut.h"
         #else
-            #include <GLUT/glut.h>
+            #include <GLUT/freeglut.h>
         #endif
     #endif
     #ifndef __APPLE__
