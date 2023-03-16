@@ -7,8 +7,8 @@
 #include <sstream>
 #include <string>
 
-#include "functions/Colours.hpp"
 #include "functions/NextFilename.hpp"
+#include "helpers/Colours.hpp"
 
 #include "materials/BounceMaterial_t.hpp"
 #include "materials/Diffuse_t.hpp"
@@ -2839,8 +2839,8 @@ auto APTracer::Entities::SceneContext_t::get_objects(std::vector<Shape_t*>& shap
 auto APTracer::get_colour(std::string colour) -> Vec3f {
     std::transform(colour.begin(), colour.end(), colour.begin(), ::tolower);
 
-    auto colour_iterator = APTracer::Colours::colours.find(colour);
-    if (colour_iterator != APTracer::Colours::colours.end()) {
+    auto colour_iterator = APTracer::Helpers::colours.find(colour);
+    if (colour_iterator != APTracer::Helpers::colours.end()) {
         return colour_iterator->second;
     }
 

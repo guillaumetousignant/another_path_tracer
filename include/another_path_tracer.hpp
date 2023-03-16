@@ -15,6 +15,7 @@ namespace APTracer {
 #include "entities/entities.hpp"
 #include "entities/SceneContext_t.hpp"
 #include "functions/functions.hpp"
+#include "helpers/helpers.hpp"
 #include "materials/materials.hpp"
 #include "shapes/shapes.hpp"
 #include "skyboxes/skyboxes.hpp"

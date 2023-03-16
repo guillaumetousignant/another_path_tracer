@@ -1,8 +1,9 @@
-#include "functions/Colours.hpp"
+#include "helpers/Colours.hpp"
 
 using APTracer::Entities::Vec3f;
 
-namespace APTracer { namespace Colours {
+namespace APTracer { namespace Helpers {
+    // Good candidate for string_view
     const std::unordered_map<std::string, Vec3f> colours{
         {"yellow", Vec3f(0.98, 1.0, 0.9)},
         {"purple", Vec3f(0.98, 0.7, 0.85)},

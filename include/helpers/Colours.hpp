@@ -1,11 +1,11 @@
-#ifndef APTRACER_FUNCTIONS_COLOURS_HPP
-#define APTRACER_FUNCTIONS_COLOURS_HPP
+#ifndef APTRACER_HELPERS_COLOURS_HPP
+#define APTRACER_HELPERS_COLOURS_HPP
 
 #include "entities/Vec3f.hpp"
 #include <string>
 #include <unordered_map>
 
-namespace APTracer { namespace Colours {
+namespace APTracer { namespace Helpers {
     /**
      * @brief This maps some predefined colours to colour names.
      *

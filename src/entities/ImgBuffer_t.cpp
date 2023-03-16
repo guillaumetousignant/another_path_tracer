@@ -15,7 +15,7 @@
 #endif
 #define cimg_use_cpp11 1
 #define cimg_display 0
-#include "functions/CImg.h"
+#include "external/CImg.h"
 #include <algorithm>
 #include <cmath>
 

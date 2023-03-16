@@ -16,7 +16,7 @@
 #include "entities/Texture_t.hpp"
 #include "entities/TransformMatrix_t.hpp"
 #include "entities/Vec3f.hpp"
-#include "functions/tinyxml2.h"
+#include "external/tinyxml2.h"
 #include "materials/FresnelMix_t.hpp"
 #include "materials/FresnelMixIn_t.hpp"
 #include "materials/FresnelMixNormal_t.hpp"
@@ -32,10 +32,10 @@
 #include <list>
 #include <memory>
 #include <sstream>
+#include <stdexcept>
 #include <string>
 #include <utility>
 #include <vector>
-#include <stdexcept>
 
 namespace APTracer { namespace Entities {
 
@@ -441,7 +441,7 @@ namespace APTracer {
 /**
  * @brief Get the colour encoded in a string. Can be one numerical value, three numerical values, or a colour name.
  *
- * The colour can be a colour name, provided it is defined in the APTracer::Colours::colours map. It can also be
+ * The colour can be a colour name, provided it is defined in the APTracer::Helpers::colours map. It can also be
  * a single numerical value, in which case all three components will have the same value, or three values, one for
  * each component.
  *
