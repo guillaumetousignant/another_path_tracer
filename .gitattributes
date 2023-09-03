@@ -13,6 +13,7 @@ docs/pull_request_template.md linguist-vendored
 .github/workflows/windows-build-and-test.yml linguist-vendored
 .github/issue_template.md linguist-vendored
 .github/pull_request_template.md linguist-vendored
+requirements.txt  linguist-vendored
 
 * text=auto eol=crlf
 *.{cmd,[cC][mM][dD]} text eol=crlf
