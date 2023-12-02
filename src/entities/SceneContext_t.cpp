@@ -610,6 +610,9 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
     for (auto& camera: cameras_) {
         camera->update();
     }
+    for (auto& directional_light: directional_lights_) {
+        directional_light->update();
+    }
     auto t_end = std::chrono::high_resolution_clock::now();
     std::cout << "Scene updated in " << std::chrono::duration<double>(t_end - t_start).count() << "s." << std::endl << std::endl;
 
@@ -670,6 +673,10 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
             ++index;
         }
         std::cout << "Directional lights transformed post." << std::endl;
+    }
+
+    for (auto& directional_light: directional_lights_) {
+        directional_light->update();
     }
 
     // Objects
