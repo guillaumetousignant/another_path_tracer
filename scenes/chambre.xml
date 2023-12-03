@@ -12,7 +12,7 @@
     </mediums>
     <materials>
         <material texture="floor_texture" emission="black" name="floor" roughness_map="floor_roughness_map" normal_map="floor_normal_map" type="diffuse_tex_normal_rough"/>
-        <material texture="murale" emission="black" name="murale" roughness="1" type="diffuse"/>
+        <material texture="murale" emission="black" name="murale" roughness="1" type="diffuse_tex"/>
         <material colour="purple" emission="black" name="difpurple" roughness="1" type="diffuse"/>
         <material colour="white" emission="2 2 2" name="diflight" roughness="1" type="diffuse"/>
         <material colour="green" emission="black" name="difgreen" roughness="1" type="diffuse"/>
