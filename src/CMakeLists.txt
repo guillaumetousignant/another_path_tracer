@@ -9,8 +9,10 @@ add_subdirectory(materials)
 add_subdirectory(shapes)
 add_subdirectory(skyboxes)
 
+include(GNUInstallDirs)
+
 target_include_directories(APTracer PUBLIC
-    $<INSTALL_INTERFACE:include/another_path_tracer/>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/another_path_tracer/>
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/>)
 
 option(USE_PNG "Use the PNG library to be able to read/write PNG images." ON)
@@ -94,11 +96,11 @@ endif()
 
 install(TARGETS APTracer
     EXPORT aptracer-targets
-    DESTINATION lib)
+    DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 if(NOT CMAKE_SOURCE_DIR STREQUAL CMAKE_INSTALL_PREFIX)
     install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/
-        DESTINATION include/another_path_tracer
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/another_path_tracer
         FILES_MATCHING
         PATTERN "*.h"
         PATTERN "*.hpp")
@@ -106,7 +108,7 @@ endif()
 
 if(WIN32)
     install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/
-        DESTINATION bin
+        DESTINATION ${CMAKE_INSTALL_BINDIR}
         FILES_MATCHING PATTERN "*.dll")
 endif()
 
@@ -116,7 +118,7 @@ install(EXPORT aptracer-targets
     NAMESPACE
     APTracer::
     DESTINATION
-    lib/cmake/APTracer
+    ${CMAKE_INSTALL_LIBDIR}/cmake/APTracer
 )
 
 # Create a ConfigVersion.cmake file
@@ -129,14 +131,14 @@ write_basic_package_version_file(
 
 configure_package_config_file(${PROJECT_SOURCE_DIR}/cmake/APTracerConfig.cmake.in
     ${CMAKE_CURRENT_BINARY_DIR}/APTracerConfig.cmake
-    INSTALL_DESTINATION lib/cmake/APTracer
+    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/APTracer
 )
 
 # Install the config, configversion and custom find modules
 install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/APTracerConfig.cmake
     ${CMAKE_CURRENT_BINARY_DIR}/APTracerConfigVersion.cmake
-    DESTINATION lib/cmake/APTracer
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/APTracer
 )
 
 export(EXPORT aptracer-targets
@@ -161,4 +163,4 @@ if(OPTIMIZE_FOR_NATIVE)
     endif()
 endif()
 
-install(TARGETS another_path_tracer DESTINATION bin)
+install(TARGETS another_path_tracer DESTINATION ${CMAKE_INSTALL_BINDIR})
