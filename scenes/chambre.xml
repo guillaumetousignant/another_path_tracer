@@ -30,12 +30,12 @@
                 <transformation_pre type="rotatezaxis" value="0"/>
             </transformations_pre>
         </object>
-        <object material="murale" name="murale1" normals="NaN" points="0 0 1.9558&#xA; 0 0 0&#xA; 0 3.556 0" texture_coordinates="0 1&#xA;0 0&#xA;1 0" transform_matrix="NaN" type="triangle">
+        <object material="murale" name="murale1" normals="NaN" points="0 0 1.9558&#xA; 0 0 0&#xA; 0 3.556 0" texture_coordinates="0 1&#xA;0 0&#xA;0.909 0" transform_matrix="NaN" type="triangle">
             <transformations_pre>
                 <transformation_pre type="rotatezaxis" value="0"/>
             </transformations_pre>
         </object>
-        <object material="murale" name="murale2" normals="NaN" points="0 0 1.9558&#xA; 0 3.556 0&#xA; 0 3.556 1.9558" texture_coordinates="0 1&#xA;1 0&#xA;1 1" transform_matrix="NaN" type="triangle">
+        <object material="murale" name="murale2" normals="NaN" points="0 0 1.9558&#xA; 0 3.556 0&#xA; 0 3.556 1.9558" texture_coordinates="0 1&#xA;0.909 0&#xA;0.909 1" transform_matrix="NaN" type="triangle">
             <transformations_pre>
                 <transformation_pre type="rotatezaxis" value="0"/>
             </transformations_pre>
