@@ -16,6 +16,7 @@
 #include "materials/DiffuseNormal_t.hpp"
 #include "materials/DiffuseTex_t.hpp"
 #include "materials/DiffuseTexNormal_t.hpp"
+#include "materials/DiffuseTexNormalRough_t.hpp"
 #include "materials/DistanceMaterial_t.hpp"
 #include "materials/NormalDiffuseMaterial_t.hpp"
 #include "materials/NormalMaterial_t.hpp"
@@ -1193,6 +1194,14 @@ auto APTracer::Entities::SceneContext_t::create_material(const tinyxml2::XMLElem
                                                                          get_texture(xml_material->Attribute("texture"), xml_textures),
                                                                          get_texture(xml_material->Attribute("normal_map"), xml_textures),
                                                                          xml_material->DoubleAttribute("roughness"));
+    }
+    if (type == "diffuse_tex_normal_rough") {
+        const std::vector<const char*> attributes = {"emission", "texture", "normal_map", "roughness_map"};
+        require_attributes(xml_material, attributes);
+        return std::make_unique<APTracer::Materials::DiffuseTexNormalRough_t>(APTracer::get_colour(xml_material->Attribute("emission")),
+                                                                              get_texture(xml_material->Attribute("texture"), xml_textures),
+                                                                              get_texture(xml_material->Attribute("normal_map"), xml_textures),
+                                                                              get_texture(xml_material->Attribute("roughness_map"), xml_textures));
     }
     if (type == "fresnelmix") {
         const std::vector<const char*> attributes = {"material_refracted", "material_reflected", "ind"};

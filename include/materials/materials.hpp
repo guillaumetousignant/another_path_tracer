@@ -25,6 +25,7 @@ namespace APTracer {
 #include "DiffuseNormal_t.hpp"
 #include "DiffuseTex_t.hpp"
 #include "DiffuseTexNormal_t.hpp"
+#include "DiffuseTexNormalRough_t.hpp"
 #include "DistanceMaterial_t.hpp"
 #include "FresnelMix_t.hpp"
 #include "FresnelMixIn_t.hpp"
