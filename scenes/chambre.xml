@@ -51,8 +51,8 @@
         <directional_light colour="20 20 10" name="sun" transform_matrix="NaN" type="directional_light">
             <transformations_pre>
                 <transformation_pre type="uniformscale" value="0.95"/>
-                <transformation_pre type="rotatez" value="-0.7854"/>
-                <transformation_pre type="rotatex" value="-1.1781"/>
+                <transformation_pre type="rotatez" value="3.0"/>
+                <transformation_pre type="rotatex" value="0.5"/>
             </transformations_pre>
         </directional_light>
     </directional_lights>
