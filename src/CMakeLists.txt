@@ -106,12 +106,6 @@ if(NOT CMAKE_SOURCE_DIR STREQUAL CMAKE_INSTALL_PREFIX)
         PATTERN "*.hpp")
 endif()
 
-if(WIN32)
-    install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/
-        DESTINATION ${CMAKE_INSTALL_BINDIR}
-        FILES_MATCHING PATTERN "*.dll")
-endif()
-
 install(EXPORT aptracer-targets
     FILE
     APTracerTargets.cmake
@@ -164,3 +158,9 @@ if(OPTIMIZE_FOR_NATIVE)
 endif()
 
 install(TARGETS another_path_tracer DESTINATION ${CMAKE_INSTALL_BINDIR})
+
+if(WIN32)
+    install(DIRECTORY $<TARGET_FILE_DIR:another_path_tracer>/
+        DESTINATION ${CMAKE_INSTALL_BINDIR}
+        FILES_MATCHING PATTERN "*.dll")
+endif()
