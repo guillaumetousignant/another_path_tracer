@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<scene name="chambre" object_list="floor1, floor2, murale1, murale2, spherepurple">
+<scene name="chambre" object_list="floor1, floor2, murale1, murale2">
     <textures>
         <texture filename="assets\laminate_floor\textures\laminate_floor_diff_4k.jpg" name="floor_texture" type="texture"/>
         <texture filename="assets\laminate_floor\textures\laminate_floor_nor_gl_4k.png" name="floor_normal_map" type="texture"/>
@@ -12,11 +12,8 @@
     </mediums>
     <materials>
         <material texture="floor_texture" emission="black" name="floor" roughness_map="floor_roughness_map" normal_map="floor_normal_map" type="diffuse_tex_normal_rough"/>
-        <material texture="murale" emission="black" name="murale" roughness="1" type="diffuse_tex"/>
-        <material colour="purple" emission="black" name="difpurple" roughness="1" type="diffuse"/>
+        <material texture="murale" emission="black" name="murale" roughness="0.25" type="diffuse_tex"/>
         <material colour="white" emission="2 2 2" name="diflight" roughness="1" type="diffuse"/>
-        <material colour="green" emission="black" name="difgreen" roughness="1" type="diffuse"/>
-        <material colour="yellow" emission="black" name="ref1" type="reflective"/>
         <material colour="white" emission="black" name="glass" medium="glass_absorber" type="reflective_refractive"/>
     </materials>
     <objects>
@@ -40,12 +37,6 @@
                 <transformation_pre type="rotatezaxis" value="0"/>
             </transformations_pre>
         </object>
-        <object material="difpurple" name="spherepurple" transform_matrix="NaN" type="sphere">
-            <transformations_pre>
-                <transformation_pre type="translate" value="1 2 0.5"/>
-                <transformation_pre type="uniformscale" value="0.5"/>
-            </transformations_pre>
-        </object>
     </objects>
     <directional_lights>
         <directional_light colour="20 20 10" name="sun" transform_matrix="NaN" type="directional_light">
@@ -63,9 +54,9 @@
         <imgbuffer name="buffer1" resx="900" resy="600" type="imgbuffer_opengl"/>
     </imgbuffers>
     <cameras>
-        <camera filename="NaN" fov="0.93084 1.3963" gammaind="1" imgbuffer="1" max_bounces="8" medium_list="air, air" n_iter="Inf" name="camera1" rendermode="accumulation_write" skybox="1" subpix="1 1" transform_matrix="NaN" type="cam" up="0 0 1" write_interval="100">
+        <camera filename="NaN" fov="0.93084 1.3963" gammaind="1" imgbuffer="1" max_bounces="8" medium_list="air, air" n_iter="Inf" name="camera1" rendermode="accumulation_write" skybox="1" subpix="1 1" transform_matrix="NaN" type="cam" up="0 0 1" write_interval="1000">
             <transformations_pre>
-                <transformation_pre type="translate" value="1.5367 -2 2"/>
+                <transformation_pre type="translate" value="1.5367 -2 1.5"/>
             </transformations_pre>
         </camera>
     </cameras>
