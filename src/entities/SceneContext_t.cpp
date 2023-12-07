@@ -766,7 +766,7 @@ auto APTracer::Entities::SceneContext_t::readXML(const std::string& filename) ->
     if (xml_cameras != nullptr) {
         if (use_gl_) {
             opengl_camera_   = cameras_[0].get(); // CHECK dunno how to fix this
-            opengl_renderer_ = std::make_unique<OpenGLRenderer_t>(scene_.get(), opengl_camera_, opengl_imgbuffer_);
+            opengl_renderer_ = std::make_unique<OpenGLRenderer_t>(scene_.get(), opengl_camera_, opengl_imgbuffer_, 2.0);
             opengl_renderer_->initialise();
             std::cout << "OpenGL initialised." << std::endl;
         }

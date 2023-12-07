@@ -38,8 +38,9 @@ namespace APTracer { namespace Entities {
              * @param scene Scene that will be rendered by the camera and used for autofocus.
              * @param camera Camera that will render the scene, and be moved by user input.
              * @param imgbuffer Image buffer to be displayed on the screen and used by the renderer.
+             * @param camera_dist Distance from the camera to the focus point.
              */
-            OpenGLRenderer_t(Scene_t* scene, Camera_t* camera, ImgBufferOpenGL_t* imgbuffer);
+            OpenGLRenderer_t(Scene_t* scene, Camera_t* camera, ImgBufferOpenGL_t* imgbuffer, double camera_dist);
 
             static std::unique_ptr<OpenGLRenderer_t> renderer_; /**< @brief Single OpenGLRenderer_t instance to be used by OpenGL.*/
             Camera_t* camera_             = nullptr; /**< @brief Camera used to render the scene, and be moved by user input.*/
@@ -54,8 +55,8 @@ namespace APTracer { namespace Entities {
             bool right_clicked_; /**< @brief True if the right mouse button is currently pressed.*/
             bool left_clicked_; /**< @brief True if the left mouse button is currently pressed.*/
             bool middle_clicked_; /**< @brief True if the middle mouse button is currently pressed.*/
-            Vec3f focus_point_; /**< @brief Point around which the camera rotates.*/
             double camera_dist_; /**< @brief Distance from the focus point to the camera.*/
+            Vec3f focus_point_; /**< @brief Point around which the camera rotates.*/
             bool updated_; /**< @brief True if the camera moved or has been changed and scene must be redrawn.*/
             unsigned int write_interval_; /**< @brief Writes to disk every write_interval_ samples.*/
             void (*render_function_)(); /**< @brief Function pointer to the function used at each frame for rendering the scene.*/

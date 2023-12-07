@@ -49,7 +49,7 @@ OpenGLRenderer_t::OpenGLRenderer_t() :
     renderer_ = std::unique_ptr<OpenGLRenderer_t>(this);
 }
 
-OpenGLRenderer_t::OpenGLRenderer_t(Scene_t* scene, Camera_t* camera, ImgBufferOpenGL_t* imgbuffer) :
+OpenGLRenderer_t::OpenGLRenderer_t(Scene_t* scene, Camera_t* camera, ImgBufferOpenGL_t* imgbuffer, double camera_dist) :
         camera_(camera),
         scene_(scene),
         imgbuffer_(imgbuffer),
@@ -62,7 +62,8 @@ OpenGLRenderer_t::OpenGLRenderer_t(Scene_t* scene, Camera_t* camera, ImgBufferOp
         right_clicked_(false),
         left_clicked_(false),
         middle_clicked_(false),
-        camera_dist_((focus_point_ - camera_->origin_).magnitude()),
+        camera_dist_(camera_dist),
+        focus_point_(camera_->origin_ + camera_dist * camera_->direction_),
         updated_(false),
         write_interval_(1),
         render_function_(openGL_accumulate) {
