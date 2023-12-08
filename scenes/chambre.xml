@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<scene name="chambre" object_list="floor1, floor2, murale1, murale2">
+<scene name="chambre">
     <textures>
         <texture filename="assets\laminate_floor\textures\laminate_floor_diff_4k.jpg" name="floor_texture" type="texture"/>
         <texture filename="assets\laminate_floor\textures\laminate_floor_nor_gl_4k.png" name="floor_normal_map" type="texture"/>
@@ -13,7 +13,8 @@
     <materials>
         <material texture="floor_texture" emission="black" name="floor" roughness_map="floor_roughness_map" normal_map="floor_normal_map" type="diffuse_tex_normal_rough"/>
         <material texture="murale" emission="black" name="murale" roughness="0.25" type="diffuse_tex"/>
-        <material colour="white" emission="2 2 2" name="diflight" roughness="1" type="diffuse"/>
+        <material colour="0.99 0.99 0.99" emission="black" name="paint" roughness="0.5" type="diffuse"/>
+        <material colour="white" emission="16 16 16" name="diflight" roughness="1" type="diffuse"/>
         <material colour="white" emission="black" name="glass" medium="glass_absorber" type="reflective_refractive"/>
     </materials>
     <objects>
@@ -37,11 +38,197 @@
                 <transformation_pre type="rotatezaxis" value="0"/>
             </transformations_pre>
         </object>
+        <object material="paint" name="mur_gauche1" normals="NaN" points="0 0 2.4639&#xA; 0 0 1.9558&#xA; 0 3.556 1.9558" texture_coordinates="0 1&#xA;0 0&#xA;0.909 0" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="mur_gauche2" normals="NaN" points="0 0 2.4639&#xA; 0 3.556 1.9558&#xA; 0 3.556 2.4639" texture_coordinates="0 1&#xA;0.909 0&#xA;0.909 1" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="mur_fond_gauche1" normals="NaN" points="0 3.556 1.9558&#xA; 0 3.556 0&#xA; 0.6731 3.556 0" texture_coordinates="0 1&#xA;0 0&#xA;0.909 0" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="mur_fond_gauche2" normals="NaN" points="0 3.556 1.9558&#xA; 0.6731 3.556 0&#xA; 0.6731 3.556 1.9558" texture_coordinates="0 1&#xA;0.909 0&#xA;0.909 1" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="mur_fond_gauche_haut1" normals="NaN" points="0 3.556 2.4639&#xA; 0 3.556 1.9558&#xA; 0.6731 3.556 1.9558" texture_coordinates="0 1&#xA;0 0&#xA;0.909 0" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="mur_fond_gauche_haut2" normals="NaN" points="0 3.556 2.4639&#xA; 0.6731 3.556 1.9558&#xA; 0.6731 3.556 2.4639" texture_coordinates="0 1&#xA;0.909 0&#xA;0.909 1" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="mur_fond_milieu1" normals="NaN" points="0.6731 3.556 1.1684&#xA; 0.6731 3.556 0&#xA; 2.2733 3.556 0" texture_coordinates="0 1&#xA;0 0&#xA;0.909 0" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="mur_fond_milieu2" normals="NaN" points="0.6731 3.556 1.1684&#xA; 2.2733 3.556 0&#xA; 2.2733 3.556 1.1684" texture_coordinates="0 1&#xA;0.909 0&#xA;0.909 1" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="mur_fond_milieu_haut1" normals="NaN" points="0.6731 3.556 2.4638&#xA; 0.6731 3.556 2.1084&#xA; 2.2733 3.556 2.1084" texture_coordinates="0 1&#xA;0 0&#xA;0.909 0" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="mur_fond_milieu_haut2" normals="NaN" points="0.6731 3.556 2.4638&#xA; 2.2733 3.556 2.1084&#xA; 2.2733 3.556 2.4638" texture_coordinates="0 1&#xA;0.909 0&#xA;0.909 1" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="mur_fond_droite1" normals="NaN" points="2.2733 3.556 1.9558&#xA; 2.2733 3.556 0&#xA; 3.0734 3.556 0" texture_coordinates="0 1&#xA;0 0&#xA;0.909 0" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="mur_fond_droite2" normals="NaN" points="2.2733 3.556 1.9558&#xA; 3.0734 3.556 0&#xA; 3.0734 3.556 1.9558" texture_coordinates="0 1&#xA;0.909 0&#xA;0.909 1" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="mur_fond_droite_haut1" normals="NaN" points="2.2733 3.556 2.4638&#xA; 2.2733 3.556 1.9558&#xA; 3.0734 3.556 1.9558" texture_coordinates="0 1&#xA;0 0&#xA;0.909 0" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="mur_fond_droite_haut2" normals="NaN" points="2.2733 3.556 2.4638&#xA; 3.0734 3.556 1.9558&#xA; 3.0734 3.556 2.4638" texture_coordinates="0 1&#xA;0.909 0&#xA;0.909 1" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="mur_avant_gauche1" normals="NaN" points="2.1844 0 1.9558&#xA; 2.1844 0 0&#xA; 0 0 0" texture_coordinates="0 1&#xA;0 0&#xA;0.909 0" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="mur_avant_gauche2" normals="NaN" points="2.1844 0 1.9558&#xA; 0 0 0&#xA; 0 0 1.9558" texture_coordinates="0 1&#xA;0.909 0&#xA;0.909 1" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="mur_avant_gauche_haut1" normals="NaN" points="2.1844 0 2.4638&#xA; 2.1844 0 1.9558&#xA; 0 0 1.9558" texture_coordinates="0 1&#xA;0 0&#xA;0.909 0" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="mur_avant_gauche_haut2" normals="NaN" points="2.1844 0 2.4638&#xA; 0 0 1.9558&#xA; 0 0 2.4638" texture_coordinates="0 1&#xA;0.909 0&#xA;0.909 1" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="mur_avant_milieu1" normals="NaN" points="2.9718 0 2.4638&#xA; 2.9718 0 1.9812&#xA; 2.1844 0 1.9812" texture_coordinates="0 1&#xA;0 0&#xA;0.909 0" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="mur_avant_milieu2" normals="NaN" points="2.9718 0 2.4638&#xA; 2.1844 0 1.9812&#xA; 2.1844 0 2.4638" texture_coordinates="0 1&#xA;0.909 0&#xA;0.909 1" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="mur_avant_droite1" normals="NaN" points="3.0734 0 1.9558&#xA; 3.0734 0 0&#xA; 2.9718 0 0" texture_coordinates="0 1&#xA;0 0&#xA;0.909 0" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="mur_avant_droite2" normals="NaN" points="3.0734 0 1.9558&#xA; 2.9718 0 0&#xA; 2.9718 0 1.9558" texture_coordinates="0 1&#xA;0.909 0&#xA;0.909 1" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="mur_avant_droite_haut1" normals="NaN" points="3.0734 0 2.4638&#xA; 3.0734 0 1.9558&#xA; 2.9718 0 1.9558" texture_coordinates="0 1&#xA;0 0&#xA;0.909 0" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="mur_avant_droite_haut2" normals="NaN" points="3.0734 0 2.4638&#xA; 2.9718 0 1.9558&#xA; 2.9718 0 2.4638" texture_coordinates="0 1&#xA;0.909 0&#xA;0.909 1" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="mur_droite_fond1" normals="NaN" points="3.0734 3.556 1.9558&#xA; 3.0734 3.556 0&#xA; 3.0734 2.091 0" texture_coordinates="0 1&#xA;0 0&#xA;0.909 0" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="mur_droite_fond2" normals="NaN" points="3.0734 3.556 1.9558&#xA; 3.0734 2.091 0&#xA; 3.0734 2.091 1.9558" texture_coordinates="0 1&#xA;0.909 0&#xA;0.909 1" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="mur_droite_fond_haut1" normals="NaN" points="3.0734 3.556 2.4638&#xA; 3.0734 3.556 1.9558&#xA; 3.0734 2.091 1.9558" texture_coordinates="0 1&#xA;0 0&#xA;0.909 0" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="mur_droite_fond_haut2" normals="NaN" points="3.0734 3.556 2.4638&#xA; 3.0734 2.091 1.9558&#xA; 3.0734 2.091 2.4638" texture_coordinates="0 1&#xA;0.909 0&#xA;0.909 1" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="mur_droite_milieu1" normals="NaN" points="3.0734 2.091 2.4638&#xA; 3.0734 2.091 2.0574&#xA; 3.0734 0.8382 2.0574" texture_coordinates="0 1&#xA;0 0&#xA;0.909 0" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="mur_droite_milieu2" normals="NaN" points="3.0734 2.091 2.4638&#xA; 3.0734 0.8382 2.0574&#xA; 3.0734 0.8382 2.4638" texture_coordinates="0 1&#xA;0.909 0&#xA;0.909 1" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="mur_droite_proche1" normals="NaN" points="3.0734 0.8382 1.9558&#xA; 3.0734 0.8382 0&#xA; 3.0734 0 0" texture_coordinates="0 1&#xA;0 0&#xA;0.909 0" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="mur_droite_proche2" normals="NaN" points="3.0734 0.8382 1.9558&#xA; 3.0734 0 0&#xA; 3.0734 0 1.9558" texture_coordinates="0 1&#xA;0.909 0&#xA;0.909 1" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="mur_droite_proche_haut1" normals="NaN" points="3.0734 0.8382 2.4638&#xA; 3.0734 0.8382 1.9558&#xA; 3.0734 0 1.9558" texture_coordinates="0 1&#xA;0 0&#xA;0.909 0" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="mur_droite_proche_haut2" normals="NaN" points="3.0734 0.8382 2.4638&#xA; 3.0734 0 1.9558&#xA; 3.0734 0 2.4638" texture_coordinates="0 1&#xA;0.909 0&#xA;0.909 1" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="plafond1" normals="NaN" points="0 0 2.4638&#xA; 0 3.556 2.4638&#xA; 3.0734 3.556 2.4638" texture_coordinates="0 1.6&#xA;0 0&#xA;1.38 0" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="plafond1" normals="NaN" points="0 0 2.4638&#xA; 3.0734 3.556 2.4638&#xA; 3.0734 0 2.4638" texture_coordinates="0 1.6&#xA;1.38 0&#xA;1.38 1.6" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="diflight" name="light" transform_matrix="NaN" type="sphere">
+            <transformations_pre>
+                <transformation_pre type="translate" value="1.524 1.8288 2.4638"/>
+                <transformation_pre type="uniformscale" value="0.30"/>
+            </transformations_pre>
+        </object>
     </objects>
     <directional_lights>
-        <directional_light colour="20 20 10" name="sun" transform_matrix="NaN" type="directional_light">
+        <directional_light colour="320 320 256" name="sun" transform_matrix="NaN" type="directional_light">
             <transformations_pre>
-                <transformation_pre type="uniformscale" value="0.95"/>
+                <transformation_pre type="uniformscale" value="0.995"/>
                 <transformation_pre type="rotatez" value="3.0"/>
                 <transformation_pre type="rotatex" value="0.5"/>
             </transformations_pre>
@@ -51,12 +238,13 @@
         <skybox colour="0.8706 0.9765 1.0" lights="sun" name="grey" type="skybox_flat_sun"/>
     </skyboxes>
     <imgbuffers>
-        <imgbuffer name="buffer1" resx="900" resy="600" type="imgbuffer_opengl"/>
+        <imgbuffer name="buffer1" resx="3000" resy="2000" type="imgbuffer_opengl"/>
     </imgbuffers>
     <cameras>
         <camera filename="NaN" fov="0.93084 1.3963" gammaind="1" imgbuffer="1" max_bounces="8" medium_list="air, air" n_iter="Inf" name="camera1" rendermode="accumulation_write" skybox="1" subpix="1 1" transform_matrix="NaN" type="cam" up="0 0 1" write_interval="1000">
             <transformations_pre>
-                <transformation_pre type="translate" value="1.5367 -2 1.5"/>
+                <transformation_pre type="translate" value="2.5781 0 1.5"/>
+                <transformation_pre type="rotatez" value="0.7854"/>
             </transformations_pre>
         </camera>
     </cameras>
