@@ -14,9 +14,13 @@
         <material texture="floor_texture" emission="black" name="floor" roughness_map="floor_roughness_map" normal_map="floor_normal_map" type="diffuse_tex_normal_rough"/>
         <material texture="murale" emission="black" name="murale" roughness="0.25" type="diffuse_tex"/>
         <material colour="0.99 0.99 0.99" emission="black" name="paint" roughness="0.5" type="diffuse"/>
-        <material colour="white" emission="16 16 16" name="diflight" roughness="1" type="diffuse"/>
+        <material colour="0.99 0 0.99" emission="black" name="test" roughness="0.5" type="diffuse"/>
+        <material colour="white" emission="32 32 32" name="diflight" roughness="1" type="diffuse"/>
         <material colour="white" emission="black" name="glass" medium="glass_absorber" type="reflective_refractive"/>
     </materials>
+    <mesh_geometries>
+        <mesh_geometry filename="./assets/moulure.obj" name="moulure_geometry" type="mesh_geometry"/>
+    </mesh_geometries>
     <objects>
         <object material="floor" name="floor1" normals="0 0 1&#xA;0 0 1&#xA;0 0 1" points="0 3.556 0&#xA; 0 0 0&#xA; 3.0734 0 0" texture_coordinates="0 1.6&#xA;0 0&#xA;1.38 0" transform_matrix="NaN" type="triangle">
             <transformations_pre>
@@ -224,9 +228,175 @@
                 <transformation_pre type="uniformscale" value="0.30"/>
             </transformations_pre>
         </object>
+        <object material="paint" name="garde_robe_portail_gauche1" normals="NaN" points="3.0734 2.091 2.0574&#xA; 3.0734 2.091 0&#xA; 3.19405 2.091 0" texture_coordinates="0 1&#xA;0 0&#xA;0.909 0" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="garde_robe_portail_gauche2" normals="NaN" points="3.0734 2.091 2.0574&#xA; 3.19405 2.091 0&#xA; 3.19405 2.091 2.0574" texture_coordinates="0 1&#xA;0.909 0&#xA;0.909 1" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="garde_robe_portail_haut1" normals="NaN" points="3.0734 0.8382 2.0574&#xA; 3.0734 2.091 2.0574&#xA; 3.19405 2.091 2.0574" texture_coordinates="0 1.6&#xA;0 0&#xA;1.38 0" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="garde_robe_portail_haut2" normals="NaN" points="3.0734 0.8382 2.0574&#xA; 3.19405 2.091 2.0574&#xA; 3.19405 0.8382 2.0574" texture_coordinates="0 1.6&#xA;1.38 0&#xA;1.38 1.6" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="garde_robe_portail_droite1" normals="NaN" points="3.19405 0.8382 2.0574&#xA; 3.19405 0.8382 0&#xA; 3.0734 0.8382 0" texture_coordinates="0 1&#xA;0 0&#xA;0.909 0" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="garde_robe_portail_droite2" normals="NaN" points="3.19405 0.8382 2.0574&#xA; 3.0734 0.8382 0&#xA; 3.0734 0.8382 2.0574" texture_coordinates="0 1&#xA;0.909 0&#xA;0.909 1" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="garde_robe_proche_gauche1" normals="NaN" points="3.19405 2.091 2.0574&#xA; 3.19405 2.091 0&#xA; 3.19405 2.2434 0" texture_coordinates="0 1&#xA;0 0&#xA;0.909 0" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="garde_robe_proche_gauche2" normals="NaN" points="3.19405 2.091 2.0574&#xA; 3.19405 2.2434 0&#xA; 3.19405 2.2434 2.0574" texture_coordinates="0 1&#xA;0.909 0&#xA;0.909 1" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="garde_robe_proche_droite1" normals="NaN" points="3.19405 0.6985 2.0574&#xA; 3.19405 0.6985 0&#xA; 3.19405 0.8382 0" texture_coordinates="0 1&#xA;0 0&#xA;0.909 0" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="garde_robe_proche_droite2" normals="NaN" points="3.19405 0.6985 2.0574&#xA; 3.19405 0.8382 0&#xA; 3.19405 0.8382 2.0574" texture_coordinates="0 1&#xA;0.909 0&#xA;0.909 1" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="garde_robe_proche_haut1" normals="NaN" points="3.19405 0.6985 2.4638&#xA; 3.19405 0.6985 2.0574&#xA; 3.19405 2.2434 2.0574" texture_coordinates="0 1&#xA;0 0&#xA;0.909 0" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="garde_robe_proche_haut2" normals="NaN" points="3.19405 0.6985 2.4638&#xA; 3.19405 2.2434 2.0574&#xA; 3.19405 2.2434 2.4638" texture_coordinates="0 1&#xA;0.909 0&#xA;0.909 1" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="garde_robe_gauche1" normals="NaN" points="3.19405 2.2434 2.4638&#xA; 3.19405 2.2434 0&#xA; 3.80095 2.2434 0" texture_coordinates="0 1&#xA;0 0&#xA;0.909 0" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="garde_robe_gauche2" normals="NaN" points="3.19405 2.2434 2.4638&#xA; 3.80095 2.2434 0&#xA; 3.80095 2.2434 2.4638" texture_coordinates="0 1&#xA;0.909 0&#xA;0.909 1" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="garde_robe_droite1" normals="NaN" points="3.80095 0.6985 2.4638&#xA; 3.80095 0.6985 0&#xA; 3.19405 0.6985 0" texture_coordinates="0 1&#xA;0 0&#xA;0.909 0" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="garde_robe_droite2" normals="NaN" points="3.80095 0.6985 2.4638&#xA; 3.19405 0.6985 0&#xA; 3.19405 0.6985 2.4638" texture_coordinates="0 1&#xA;0.909 0&#xA;0.909 1" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="garde_robe_fond1" normals="NaN" points="3.80095 2.2434 2.4638&#xA; 3.80095 2.2434 0&#xA; 3.80095 0.6985 0" texture_coordinates="0 1&#xA;0 0&#xA;0.909 0" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="garde_robe_fond2" normals="NaN" points="3.80095 2.2434 2.4638&#xA; 3.80095 0.6985 0&#xA; 3.80095 0.6985 2.4638" texture_coordinates="0 1&#xA;0.909 0&#xA;0.909 1" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="garde_robe_plafond1" normals="NaN" points="3.19405 0.6985 2.4638&#xA; 3.19405 2.2434 2.4638&#xA; 3.80095 2.2434 2.4638" texture_coordinates="0 1.6&#xA;0 0&#xA;1.38 0" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" name="garde_robe_plafond2" normals="NaN" points="3.19405 0.6985 2.4638&#xA; 3.80095 2.2434 2.4638&#xA; 3.80095 0.6985 2.4638" texture_coordinates="0 1.6&#xA;1.38 0&#xA;1.38 1.6" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="floor" name="garde_robe_floor1" normals="NaN" points="3.0734 2.2434 0&#xA; 3.0734 0.6985 0&#xA; 3.80095 0.6985 0" texture_coordinates="1.38 1.0094&#xA;1.38 0.314285714&#xA;1.70668 0.314285714" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="floor" name="garde_robe_floor2" normals="NaN" points="3.0734 2.2434 0&#xA; 3.80095 0.6985 0&#xA; 3.80095 2.2434 0" texture_coordinates="1.38 1.0094&#xA;1.70668 0.314285714&#xA;1.70668 1.0094" transform_matrix="NaN" type="triangle">
+            <transformations_pre>
+                <transformation_pre type="rotatezaxis" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" mesh_geometry="moulure_geometry" name="moulure_gauche" transform_matrix="NaN" type="mesh">
+            <transformations_pre>
+                <transformation_pre type="translate" value="0 0 1.9558"/>
+                <transformation_pre type="scale" value="3.556 1 1"/>
+                <transformation_pre type="rotatex" value="1.570796327"/>
+                <transformation_pre type="rotatez" value="1.570796327"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" mesh_geometry="moulure_geometry" name="moulure_fond_gauche" transform_matrix="NaN" type="mesh">
+            <transformations_pre>
+                <transformation_pre type="translate" value="0 3.556 1.9558"/>
+                <transformation_pre type="scale" value="0.6731 1 1"/>
+                <transformation_pre type="rotatex" value="1.570796327"/>
+                <transformation_pre type="rotatez" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" mesh_geometry="moulure_geometry" name="moulure_fond_droite" transform_matrix="NaN" type="mesh">
+            <transformations_pre>
+                <transformation_pre type="translate" value="2.2733 3.556 1.9558"/>
+                <transformation_pre type="scale" value="0.8001 1 1"/>
+                <transformation_pre type="rotatex" value="1.570796327"/>
+                <transformation_pre type="rotatez" value="0"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" mesh_geometry="moulure_geometry" name="moulure_droite_fond" transform_matrix="NaN" type="mesh">
+            <transformations_pre>
+                <transformation_pre type="translate" value="3.0734 3.556 1.9558"/>
+                <transformation_pre type="scale" value="1.4605 1 1"/>
+                <transformation_pre type="rotatex" value="1.570796327"/>
+                <transformation_pre type="rotatez" value="-1.570796327"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" mesh_geometry="moulure_geometry" name="moulure_droite_proche" transform_matrix="NaN" type="mesh">
+            <transformations_pre>
+                <transformation_pre type="translate" value="3.0734 0.8382 1.9558"/>
+                <transformation_pre type="scale" value="0.8382 1 1"/>
+                <transformation_pre type="rotatex" value="1.570796327"/>
+                <transformation_pre type="rotatez" value="-1.570796327"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" mesh_geometry="moulure_geometry" name="moulure_proche_droite" transform_matrix="NaN" type="mesh">
+            <transformations_pre>
+                <transformation_pre type="translate" value="3.0734 0 1.9558"/>
+                <transformation_pre type="scale" value="0.1016 1 1"/>
+                <transformation_pre type="rotatex" value="1.570796327"/>
+                <transformation_pre type="rotatez" value="3.141592654"/>
+            </transformations_pre>
+        </object>
+        <object material="paint" mesh_geometry="moulure_geometry" name="moulure_proche_gauche" transform_matrix="NaN" type="mesh">
+            <transformations_pre>
+                <transformation_pre type="translate" value="2.1844 0 1.9558"/>
+                <transformation_pre type="scale" value="2.1844 1 1"/>
+                <transformation_pre type="rotatex" value="1.570796327"/>
+                <transformation_pre type="rotatez" value="3.141592654"/>
+            </transformations_pre>
+        </object>
     </objects>
     <directional_lights>
-        <directional_light colour="320 320 256" name="sun" transform_matrix="NaN" type="directional_light">
+        <directional_light colour="640 640 512" name="sun" transform_matrix="NaN" type="directional_light">
             <transformations_pre>
                 <transformation_pre type="uniformscale" value="0.995"/>
                 <transformation_pre type="rotatez" value="3.0"/>
