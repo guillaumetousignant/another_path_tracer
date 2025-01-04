@@ -6,11 +6,13 @@
 #endif
 #ifdef APTRACER_USE_PNG
     #define cimg_use_png
+    #define cimg_use_tinyexr
+    #define TINYEXR_USE_MINIZ (0)
+    #include "zlib.h"
 #endif
 #ifdef APTRACER_USE_TIFF
     #define cimg_use_tiff
 #endif
-#define cimg_use_tinyexr
 #ifdef APTRACER_USE_OPENMP
     #define TINYEXR_USE_OPENMP (1)
     #define cimg_use_openmp 1
