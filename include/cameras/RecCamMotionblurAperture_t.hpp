@@ -24,6 +24,7 @@ namespace APTracer { namespace Cameras {
      * and other objects will be out of focus. The shape of the focal plane is a plane
      * at focus_distance_ from the origin.
      * This camera stores the result from its rays in a single image buffer.
+     * The formula for vertical FOV from horizontal FOV is: fov_y = 2 * tan^-1(tan(fov_x / 2) * res_y/res_x)
      */
     class RecCamMotionblurAperture_t final : public Entities::Camera_t {
         public:

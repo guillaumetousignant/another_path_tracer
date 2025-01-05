@@ -17,6 +17,7 @@ namespace APTracer { namespace Cameras {
      * It introduces distorsion at higher fields of views, and caps at 180°.
      * This camera stores the result from its rays in a single image buffer, and has no
      * other effects like motion blur or aperture.
+     * The formula for vertical FOV from horizontal FOV is: fov_y = 2 * tan^-1(tan(fov_x / 2) * res_y/res_x)
      */
     class RecCam_t final : public Entities::Camera_t {
         public:

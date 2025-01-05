@@ -21,6 +21,7 @@ namespace APTracer { namespace Cameras {
      * at focus_distance_ from the origin.
      * This camera stores the result from its rays in a single image buffer, and has no
      * motion blur.
+     * The formula for vertical FOV from horizontal FOV is: fov_y = 2 * tan^-1(tan(fov_x / 2) * res_y/res_x)
      */
     class RecCamAperture_t final : public Entities::Camera_t {
         public:
