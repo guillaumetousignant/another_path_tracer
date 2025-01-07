@@ -5,20 +5,15 @@ jobs:
     name: build-windows
     runs-on: windows-latest
     steps:
+      - uses: ilammy/msvc-dev-cmd@v1
+      - name: Installing dependencies (Windows)
+        run: vcpkg install --recurse --triplet x64-windows zlib libpng libjpeg-turbo tiff freeglut
       - name: Checkout
-        uses: actions/checkout@v2
-      - name: Prepare vcpkg (Windows)
-        uses: lukka/run-vcpkg@v6
-        id: runvcpkg
-        with:
-          vcpkgArguments: zlib:x64-windows libpng:x64-windows libjpeg-turbo:x64-windows tiff:x64-windows freeglut:x64-windows
-          vcpkgDirectory: ${{ runner.workspace }}/another_path_tracer/vcpkg/
-          vcpkgGitCommitId: ec6fe06e8da05a8157dc8581fa96b36b571c1bd5
-          vcpkgTriplet: x64-windows
+        uses: actions/checkout@v3
       - name: Creating build directory (Windows)
         run: mkdir build
       - name: Running CMake (Windows)
-        run: cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON -DCMAKE_TOOLCHAIN_FILE=${{ runner.workspace }}\another_path_tracer\vcpkg\scripts\buildsystems\vcpkg.cmake
+        run: cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake
         working-directory: ${{ github.workspace }}/build
       - name: Build (Windows)
         run: cmake --build .

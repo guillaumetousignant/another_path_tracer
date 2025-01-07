@@ -8,6 +8,10 @@ target_sources(APTracer
         CamAperture_t.cpp
         CamMotionblur_t.cpp
         CamMotionblurAperture_t.cpp
+        FishCam_t.cpp
+        FishCamAperture_t.cpp
+        FishCamMotionblur_t.cpp
+        FishCamMotionblurAperture_t.cpp
         IsoCam_t.cpp
         IsoCamAperture_t.cpp
         IsoCamMotionblur_t.cpp

@@ -16,4 +16,4 @@ if(NOT TARGET APTracer::APTracer)
     include("${APTRACER_CMAKE_DIR}/APTracerTargets.cmake")
 endif()
 
-set(APTRACER_lIBRARIES APTracer::APTracer)
+set(APTRACER_LIBRARIES APTracer::APTracer)

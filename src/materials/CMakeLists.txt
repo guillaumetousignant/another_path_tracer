@@ -7,6 +7,7 @@ target_sources(APTracer
         DiffuseNormal_t.cpp
         DiffuseTex_t.cpp
         DiffuseTexNormal_t.cpp
+        DiffuseTexNormalRough_t.cpp
         DistanceMaterial_t.cpp
         FresnelMix_t.cpp
         FresnelMixIn_t.cpp
@@ -33,6 +34,8 @@ target_sources(APTracer
         ScattererExp_t.cpp
         ScattererExpFull_t.cpp
         ScattererFull_t.cpp
+        TextureMix_t.cpp
+        TextureMixIn_t.cpp
         Toon_t.cpp
         Transparent_t.cpp
 )

@@ -14,7 +14,7 @@
 # Compiled Dynamic libraries
 *.so
 *.dylib
-#*.dll
+*.dll
 
 # Fortran module files
 *.mod
@@ -24,24 +24,26 @@
 *.lai
 *.la
 *.a
-#*.lib
+*.lib
 
 # Executables
 *.exe
 *.out
 *.app
 
-/.vscode/*
-/bin/*
-/lib/*
-/images/*
-/assets/*
+/.vscode
+/bin
+/lib
+/images
+/assets
 *.png
-/.vs/*
+/.vs
 *.user
-/x64/*
+/x64
 *.tmp
-/html/*
-/latex/*
-/docs/html/*
-/build/*
+/html
+/latex
+/docs/html
+/build
+/env
+/install

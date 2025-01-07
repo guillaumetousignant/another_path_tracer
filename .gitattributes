@@ -1,8 +1,19 @@
 .gitignore linguist-vendored
-.makeignore linguist-vendored
+.clang-format linguist-vendored
+.clang-tidy linguist-vendored
 LICENSE linguist-vendored
 README.md linguist-vendored
-catch.hpp linguist-vendored
+include/external/CImg.h linguist-vendored
+include/external/tinyexr.h linguist-vendored
+include/external/tinyxml2.h linguist-vendored
+src/external/tinyxml2.cpp linguist-vendored
+docs/pull_request_template.md linguist-vendored
+.github/workflows/macos-build-and-test.yml linguist-vendored
+.github/workflows/ubuntu-build-and-test.yml linguist-vendored
+.github/workflows/windows-build-and-test.yml linguist-vendored
+.github/issue_template.md linguist-vendored
+.github/pull_request_template.md linguist-vendored
+requirements.txt  linguist-vendored
 
 * text=auto eol=crlf
 *.{cmd,[cC][mM][dD]} text eol=crlf

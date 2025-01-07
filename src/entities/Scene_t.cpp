@@ -1,90 +1,109 @@
-#include "entities/Scene_t.h"
-#include "entities/Shape_t.h"
-#include "entities/AccelerationStructure_t.h"
-#include "shapes/MeshTop_t.h"
-#include <limits>
+#include "entities/Scene_t.hpp"
+#include "acceleration/AccelerationMultiGridVector_t.hpp"
+#include "entities/Medium_t.hpp"
 #include <algorithm>
-#include "acceleration/AccelerationMultiGridVector_t.h"
+#include <limits>
 
-using APTracer::Entities::Scene_t;
-using APTracer::Entities::Shape_t;
-using APTracer::Shapes::MeshTop_t;
 using APTracer::Acceleration::AccelerationMultiGridVector_t;
+using APTracer::Entities::Scene_t;
+using APTracer::Shapes::MeshTop_t;
 
 Scene_t::Scene_t(Shape_t* shape) : geometry_(1, shape) {}
 
-Scene_t::Scene_t(Shape_t** shapes, size_t n_shapes) : geometry_(shapes, shapes + n_shapes) {}
+Scene_t::Scene_t(std::vector<Shape_t*> shapes) : geometry_(std::move(shapes)) {}
 
-Scene_t::Scene_t(MeshTop_t* mesh) : geometry_(mesh->triangles_) {}
-
-Scene_t::Scene_t(MeshTop_t** meshes, size_t n_meshes) {
-    for (size_t i = 0; i < n_meshes; i++) {
-        geometry_.insert(geometry_.end(), meshes[i]->triangles_.begin(), meshes[i]->triangles_.end());
+Scene_t::Scene_t(MeshTop_t* mesh) : geometry_(mesh->triangles_.size()) {
+    for (size_t i = 0; i < mesh->triangles_.size(); ++i) {
+        geometry_[i] = mesh->triangles_[i].get();
     }
+}
+
+Scene_t::Scene_t(const std::vector<MeshTop_t*>& meshes) {
+    size_t additional_size = 0;
+    for (const auto& mesh: meshes) {
+        additional_size += mesh->triangles_.size();
+    }
+
+    geometry_ = std::vector<Shape_t*>(additional_size);
+
+    size_t index = 0;
+    for (const auto& mesh: meshes) {
+        for (size_t i = 0; i < mesh->triangles_.size(); ++i) {
+            geometry_[index + i] = mesh->triangles_[i].get();
+        }
+        index += mesh->triangles_.size();
+    }
+}
+
+Scene_t::Scene_t(const Scene_t& other) : geometry_(other.geometry_) {
+    acc_ = other.acc_->clone();
+}
+
+auto Scene_t::operator=(const Scene_t& other) -> Scene_t& {
+    if (this != &other) {
+        *this = Scene_t(other);
+    }
+    return *this;
 }
 
 auto Scene_t::add(Shape_t* shape) -> void {
     geometry_.push_back(shape);
 }
 
-auto Scene_t::add(Shape_t** shapes, size_t n_shapes) -> void {
-    geometry_.insert(geometry_.end(), shapes, shapes + n_shapes);
+auto Scene_t::add(const std::vector<Shape_t*>& shapes) -> void {
+    geometry_.insert(geometry_.end(), shapes.begin(), shapes.end());
 }
 
 auto Scene_t::add(MeshTop_t* mesh) -> void {
-    geometry_.insert(geometry_.end(), mesh->triangles_.begin(), mesh->triangles_.end());
+
+    const size_t index = geometry_.size();
+    geometry_.resize(geometry_.size() + mesh->triangles_.size());
+
+    for (size_t i = 0; i < mesh->triangles_.size(); ++i) {
+        geometry_[index + i] = mesh->triangles_[i].get();
+    }
 }
 
-auto Scene_t::add(MeshTop_t** meshes, size_t n_meshes) -> void {
-    size_t new_size = geometry_.size();
-    for (size_t i = 0; i < n_meshes; i++) {
-        new_size += meshes[i]->triangles_.size();
+auto Scene_t::add(const std::vector<MeshTop_t*>& meshes) -> void {
+    size_t additional_size = 0;
+    for (const auto& mesh: meshes) {
+        additional_size += mesh->triangles_.size();
     }
-    geometry_.reserve(new_size);
-    for (size_t i = 0; i < n_meshes; i++) {
-        geometry_.insert(geometry_.end(), meshes[i]->triangles_.begin(), meshes[i]->triangles_.end());
+
+    size_t index = geometry_.size();
+    geometry_.resize(geometry_.size() + additional_size);
+
+    for (const auto& mesh: meshes) {
+        for (size_t i = 0; i < mesh->triangles_.size(); ++i) {
+            geometry_[index + i] = mesh->triangles_[i].get();
+        }
+        index += mesh->triangles_.size();
     }
 }
 
 auto Scene_t::remove(Shape_t* shape) -> void {
-    for (size_t i = 0; i < geometry_.size(); ++i) {
-        if (geometry_[i] == shape) {
-            geometry_.erase(geometry_.begin() + i);
-            break;
-        }
-    }
+    geometry_.erase(std::remove(geometry_.begin(), geometry_.end(), shape), geometry_.end());
 }
 
-auto Scene_t::remove(Shape_t** shapes, size_t n_shapes) -> void {
-    for (size_t j = 0; j < n_shapes; ++j) {
-        for (size_t i = 0; i < geometry_.size(); ++i) {
-            if (geometry_[i] == shapes[j]) {
-                geometry_.erase(geometry_.begin() + i);
-                break;
-            }
-        }
-    }
+auto Scene_t::remove(const std::vector<Shape_t*>& shapes) -> void {
+    geometry_.erase(std::remove_if(geometry_.begin(), geometry_.end(), [&shapes](Shape_t* shape) { return std::find(shapes.begin(), shapes.end(), shape) != shapes.end(); }), geometry_.end());
 }
 
 auto Scene_t::remove(MeshTop_t* mesh) -> void {
-    if (mesh->n_tris_ > 0) {
-        for (size_t i = 0; i < geometry_.size(); ++i) {
-            if (geometry_[i] == mesh->triangles_[0]) {
-                geometry_.erase(geometry_.begin() + i, geometry_.begin() + std::max(i + mesh->n_tris_, geometry_.size()));
-                break;
-            }
+    if (!mesh->triangles_.empty()) {
+        const auto triangle = std::find(geometry_.begin(), geometry_.end(), mesh->triangles_[0].get());
+        if (triangle != geometry_.end()) {
+            geometry_.erase(triangle, triangle + static_cast<long long>(mesh->triangles_.size()));
         }
     }
 }
 
-auto Scene_t::remove(MeshTop_t** meshes, size_t n_meshes) -> void {
-    for (size_t k = 0; k < n_meshes; ++k) {
-        if (meshes[k]->n_tris_ > 0) {
-            for (size_t i = 0; i < geometry_.size(); ++i) {
-                if (geometry_[i] == meshes[k]->triangles_[0]) {
-                    geometry_.erase(geometry_.begin() + i, geometry_.begin() + std::max(i + meshes[k]->n_tris_, geometry_.size()));
-                    break;
-                }
+auto Scene_t::remove(const std::vector<MeshTop_t*>& meshes) -> void {
+    for (const auto& mesh: meshes) {
+        if (!mesh->triangles_.empty()) {
+            const auto triangle = std::find(geometry_.begin(), geometry_.end(), mesh->triangles_[0].get());
+            if (triangle != geometry_.end()) {
+                geometry_.erase(triangle, triangle + static_cast<long long>(mesh->triangles_.size()));
             }
         }
     }
@@ -97,26 +116,51 @@ auto Scene_t::update() -> void {
 }
 
 auto Scene_t::build_acc() -> void {
-    acc_ = std::unique_ptr<AccelerationStructure_t>(new AccelerationMultiGridVector_t(geometry_.data(), geometry_.size(), 1, 128, 32, 1));
+    constexpr size_t grid_max_res          = 128;
+    constexpr size_t grid_max_cell_content = 32;
+    acc_                                   = std::make_unique<AccelerationMultiGridVector_t>(geometry_, 1, grid_max_res, grid_max_cell_content, 1);
 }
 
-auto Scene_t::intersect_brute(const Ray_t &ray, double &t, std::array<double, 2> &uv) const -> Shape_t* {
-    double t_temp;
-    std::array<double, 2> uv_temp;
-    
-    t = std::numeric_limits<double>::infinity();
+auto Scene_t::intersect_brute(const Ray_t& ray, double& t, std::array<double, 2>& uv) const -> Shape_t* {
+    double t_temp = std::numeric_limits<double>::max();
+    std::array<double, 2> uv_temp{};
+
+    t                = std::numeric_limits<double>::max();
     Shape_t* hit_obj = nullptr;
 
     for (auto* shape: geometry_) {
         if (shape->intersection(ray, t_temp, uv_temp) && (t_temp < t)) {
             hit_obj = shape;
-            uv = uv_temp;
-            t = t_temp;
+            uv      = uv_temp;
+            t       = t_temp;
         }
     }
     return hit_obj;
 }
 
-auto Scene_t::intersect(const Ray_t &ray, double &t, std::array<double, 2> &uv) const -> Shape_t* {
+auto Scene_t::intersect(const Ray_t& ray, double& t, std::array<double, 2>& uv) const -> Shape_t* {
     return acc_->intersect(ray, t, uv);
+}
+
+auto Scene_t::raycast(Ray_t& ray, unsigned int max_bounces, const Skybox_t* skybox) const -> void {
+    unsigned int bounces = 0;
+
+    constexpr double minimum_mask = 0.01;
+    while ((bounces < max_bounces) && (ray.mask_.magnitudeSquared() > minimum_mask)) { // Should maybe make magnitudeSquared min value lower
+        double t{};
+        std::array<double, 2> uv{};
+
+        const Shape_t* hit_obj = acc_->intersect(ray, t, uv);
+
+        if (hit_obj == nullptr) {
+            ray.colour_ += ray.mask_ * skybox->get(ray.direction_);
+            return;
+        }
+        ray.dist_ = t;
+        bounces++;
+
+        if (!ray.medium_list_.front()->scatter(ray)) {
+            hit_obj->material_->bounce(uv, hit_obj, ray);
+        }
+    }
 }
