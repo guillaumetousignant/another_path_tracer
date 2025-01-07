@@ -5,8 +5,10 @@ jobs:
     name: build-ubuntu
     runs-on: ubuntu-latest
     steps:
+      - name: Test
+        run: apt search libjpeg
       - name: Installing dependencies (Ubuntu)
-        run: sudo apt install freeglut3-dev ninja-build libpng-dev libjpeg-turbo-dev
+        run: sudo apt install freeglut3-dev ninja-build libpng-dev libjpeg-dev
       - name: Checkout
         uses: actions/checkout@v3
       - name: Creating build directory (Ubuntu)
