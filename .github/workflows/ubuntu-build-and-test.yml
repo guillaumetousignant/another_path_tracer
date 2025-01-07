@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Installing dependencies (Ubuntu)
-        run: sudo apt install freeglut3-dev ninja-build
+        run: sudo apt install freeglut3-dev ninja-build libpng-dev
       - name: Checkout
         uses: actions/checkout@v3
       - name: Creating build directory (Ubuntu)
