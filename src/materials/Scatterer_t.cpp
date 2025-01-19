@@ -8,8 +8,8 @@ using APTracer::Entities::Vec3f;
 
 APTracer::Materials::Scatterer_t::Scatterer_t(Entities::Vec3f emi_vol, Entities::Vec3f col_vol, double abs_dist_emi, double abs_dist_col, double scat_dist, double ind, unsigned int priority) :
         Medium_t(ind, priority),
-        emission_vol_(-col_vol.ln() / abs_dist_col),
-        colour_vol_(emi_vol * emi_vol / abs_dist_emi /*CHECK probably not right.*/),
+        emission_vol_(emi_vol * emi_vol / abs_dist_emi /*CHECK probably not right.*/),
+        colour_vol_(-col_vol.ln() / abs_dist_col),
         scattering_coefficient_(1.0 / scat_dist),
         unif_(0.0, 1.0) {}
 
