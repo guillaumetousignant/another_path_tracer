@@ -527,4 +527,11 @@ auto TransformMatrix_t::buildInverse() -> void {
     }
 }
 
+auto operator<<(std::ostream& output, const TransformMatrix_t& m) -> std::ostream& {
+    output << '[' << m.matrix_[0] << ", " << m.matrix_[1] << ", " << m.matrix_[2] << ", " << m.matrix_[3] << "; " << m.matrix_[4] << ", " << m.matrix_[5] << ", " << m.matrix_[6] << ", "
+           << m.matrix_[7] << "; " << m.matrix_[8] << ", " << m.matrix_[9] << ", " << m.matrix_[10] << ", " << m.matrix_[11] << "; " << m.matrix_[12] << ", " << m.matrix_[13] << ", " << m.matrix_[14]
+           << ", " << m.matrix_[15] << ']';
+    return output;
+}
+
 // NOLINTEND(cppcoreguidelines-avoid-magic-numbers, readability-magic-numbers)

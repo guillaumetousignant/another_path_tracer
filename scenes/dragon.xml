@@ -11,7 +11,7 @@
         <material colour="grey1" emission="black" name="difgrey" roughness="1" type="diffuse"/>
         <material colour="grey2" emission="black" name="difgrey2" roughness="1" type="diffuse"/>
         <material colour="1 1 1" emission="black" name="dragonmat" roughness="1" texture="1" type="diffuse"/>
-        <material colour="white" diffusivity="1" emission="black" name="air2" order="1" medium="air2_scatterer" type="reflective_refractive_fuzz"/>
+        <material name="smoke" medium="air2_scatterer" type="transparent"/>
         <material colour="white" emission="black" name="glass" medium="glass_absorber" type="reflective_refractive"/>
         <material colour="white" emission="black" name="jade" medium="jade_scatterer" type="reflective_refractive"/>
         <material colour="white" emission="black" name="emissive" medium="emissive_scatterer" type="reflective_refractive"/>
@@ -27,7 +27,7 @@
                 <transformation_pre type="rotatezaxis" value="3.1416"/>
             </transformations_pre>
         </object>
-        <object material="jade" mesh_geometry="dragon_mesh" name="dragon" transform_matrix="NaN" type="mesh_motionblur">
+        <object material="smoke" mesh_geometry="dragon_mesh" name="dragon" transform_matrix="NaN" type="mesh_motionblur">
             <transformations_pre>
                 <transformation_pre type="translate" value="0 0 0"/>
                 <transformation_pre type="uniformscale" value="1"/>
