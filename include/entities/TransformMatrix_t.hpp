@@ -53,7 +53,7 @@ namespace APTracer { namespace Entities {
              *
              * @param values Array containing the elements of the matrix, ordered by rows.
              */
-            TransformMatrix_t(std::array<double, size_> values);
+            explicit TransformMatrix_t(std::array<double, size_> values);
 
             std::array<double, size_> matrix_; /**< @brief Array of the 16 values in the 4x4 matrix.*/
             std::array<double, size_> matrix_inverse_; /**< @brief Transposed inverted matrix, used to transform directions.*/
@@ -267,5 +267,14 @@ namespace APTracer { namespace Entities {
             auto buildInverse() -> void;
     };
 }}
+
+/**
+ * @brief Formats a transformation matrix to be displayed.
+ *
+ * @param output Output stream.
+ * @param m Transformation matrix to be displayed.
+ * @return std::ostream& Output stream.
+ */
+auto operator<<(std::ostream& output, const APTracer::Entities::TransformMatrix_t& m) -> std::ostream&;
 
 #endif

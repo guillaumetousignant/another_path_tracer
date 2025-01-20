@@ -28,9 +28,8 @@ auto MeshGeometry_t::readObj(const std::string& filename) -> std::vector<std::ar
     size_t n_vertex_texture_coordinates = 0;
     size_t n_vertex_normals             = 0;
     size_t n_faces                      = 0;
-    unsigned int nsides                 = 0;
+    size_t nsides                       = 0;
     std::string line;
-    std::string token;
     std::string dummy;
 
     std::ifstream meshfile(filename);
@@ -41,19 +40,23 @@ auto MeshGeometry_t::readObj(const std::string& filename) -> std::vector<std::ar
 
     // Getting number of elements
     while (std::getline(meshfile, line)) {
-        std::istringstream liness(line);
-        liness >> token;
+        if (line.length() < 3) {
+            continue;
+        }
 
-        if (token == "v") {
+        if (line[0] == 'v' && line[1] == ' ') {
             ++n_vertices;
         }
-        else if (token == "vt") {
+        else if (line[0] == 'v' && line[1] == 't' && line[2] == ' ') {
             ++n_vertex_texture_coordinates;
         }
-        else if (token == "vn") {
+        else if (line[0] == 'v' && line[1] == 'n' && line[2] == ' ') {
             ++n_vertex_normals;
         }
-        else if (token == "f") {
+        else if (line[0] == 'f' && line[1] == ' ') {
+            std::istringstream liness(line);
+            liness >> dummy;
+
             nsides = 0;
             while (liness >> dummy) {
                 ++nsides;
@@ -78,21 +81,25 @@ auto MeshGeometry_t::readObj(const std::string& filename) -> std::vector<std::ar
     meshfile.seekg(0, std::ios::beg);
 
     while (std::getline(meshfile, line)) {
-        std::istringstream liness(line);
-        liness >> token;
+        if (line.length() < 3) {
+            continue;
+        }
 
-        if (token == "v") {
-            liness >> val0 >> val1 >> val2;
+        if (line[0] == 'v' && line[1] == ' ') {
+            std::istringstream liness(line);
+            liness >> dummy >> val0 >> val1 >> val2;
             vertices[vertex_counter] = Vec3f(val0, val1, val2);
             ++vertex_counter;
         }
-        else if (token == "vt") {
-            liness >> val0 >> val1;
+        else if (line[0] == 'v' && line[1] == 't' && line[2] == ' ') {
+            std::istringstream liness(line);
+            liness >> dummy >> val0 >> val1;
             vertex_texture_coordinates[vertex_texture_coordinate_counter] = {val0, val1};
             ++vertex_texture_coordinate_counter;
         }
-        else if (token == "vn") {
-            liness >> val0 >> val1 >> val2;
+        else if (line[0] == 'v' && line[1] == 'n' && line[2] == ' ') {
+            std::istringstream liness(line);
+            liness >> dummy >> val0 >> val1 >> val2;
             vertex_normals[vertex_normal_counter] = Vec3f(val0, val1, val2);
             ++vertex_normal_counter;
         }
@@ -115,28 +122,40 @@ auto MeshGeometry_t::readObj(const std::string& filename) -> std::vector<std::ar
     meshfile.seekg(0, std::ios::beg);
 
     while (std::getline(meshfile, line)) {
-        std::istringstream liness(line);
-        liness >> token;
-        if (token == "f") {
-            liness >> tokens[0] >> tokens[1];
+        if (line.length() < 3) {
+            continue;
+        }
+
+        if (line[0] == 'f' && line[1] == ' ') {
+            std::istringstream liness(line);
+            liness >> dummy >> tokens[0] >> tokens[1];
             while (liness >> tokens[2]) {
                 for (unsigned int i = 0; i < 3; ++i) {
                     value              = tokens[i];
                     mat_[face_counter] = material;
                     pos                = value.find('/');
                     if (pos == std::string::npos) {
-                        v_[face_counter][i]              = vertices[std::stoi(value, nullptr) - 1];
+                        const long long vertex_obj_index = std::stoll(value, nullptr);
+                        const size_t vertex_index        = (vertex_obj_index > 0) ? vertex_obj_index - 1 : vertices.size() + vertex_obj_index;
+
+                        v_[face_counter][i]              = vertices[vertex_index];
                         vt_[face_counter][i]             = {0.0, 0.0};
                         vn_[face_counter][i]             = Vec3f(0.0);
                         missing_normals[face_counter][i] = true;
                     }
                     else {
-                        v_[face_counter][i] = vertices[std::stoi(value.substr(0, pos), nullptr) - 1];
+                        const long long vertex_obj_index = std::stoll(value.substr(0, pos), nullptr);
+                        const size_t vertex_index        = (vertex_obj_index > 0) ? vertex_obj_index - 1 : vertices.size() + vertex_obj_index;
+
+                        v_[face_counter][i] = vertices[vertex_index];
                         value.erase(0, pos + 1);
 
                         pos = value.find('/');
                         if (pos == std::string::npos) {
-                            vt_[face_counter][i]             = vertex_texture_coordinates[std::stoi(value, nullptr) - 1];
+                            const long long texture_obj_index = std::stoll(value, nullptr);
+                            const size_t texture_index        = (texture_obj_index > 0) ? texture_obj_index - 1 : vertex_texture_coordinates.size() + texture_obj_index;
+
+                            vt_[face_counter][i]             = vertex_texture_coordinates[texture_index];
                             vn_[face_counter][i]             = Vec3f(0.0);
                             missing_normals[face_counter][i] = true;
                         }
@@ -145,10 +164,17 @@ auto MeshGeometry_t::readObj(const std::string& filename) -> std::vector<std::ar
                                 vt_[face_counter][i] = {0.0, 0.0};
                             }
                             else {
-                                vt_[face_counter][i] = vertex_texture_coordinates[std::stoi(value.substr(0, pos), nullptr) - 1];
+                                const long long texture_obj_index = std::stoll(value.substr(0, pos), nullptr);
+                                const size_t texture_index        = (texture_obj_index > 0) ? texture_obj_index - 1 : vertex_texture_coordinates.size() + texture_obj_index;
+
+                                vt_[face_counter][i] = vertex_texture_coordinates[texture_index];
                             }
                             value.erase(0, pos + 1);
-                            vn_[face_counter][i]             = vertex_normals[std::stoi(value, nullptr) - 1];
+
+                            const long long normal_obj_index = std::stoll(value, nullptr);
+                            const size_t normal_index        = (normal_obj_index > 0) ? normal_obj_index - 1 : vertex_normals.size() + normal_obj_index;
+
+                            vn_[face_counter][i]             = vertex_normals[normal_index];
                             missing_normals[face_counter][i] = false;
                         }
                     }
@@ -157,8 +183,9 @@ auto MeshGeometry_t::readObj(const std::string& filename) -> std::vector<std::ar
                 tokens[1] = tokens[2];
             }
         }
-        else if (token == "usemtl") { // check if there is :
-            liness >> tokens[0];
+        else if (line.length() > 7 && line[0] == 'u' && line[1] == 's' && line[2] == 'e' && line[3] == 'm' && line[4] == 't' && line[5] == 'l' && line[6] == ' ') { // check if there is :
+            std::istringstream liness(line);
+            liness >> dummy >> tokens[0];
             pos = tokens[0].find(':');
             if (pos != std::string::npos) {
                 tokens[0].erase(0, pos + 1);
