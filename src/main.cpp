@@ -17,7 +17,7 @@ auto main(int argc, char** argv) -> int {
             return 0;
         }
         if (input_parser.cmdOptionExists("--version") || input_parser.cmdOptionExists("-v")) {
-            std::cout << "another_path_tracer.exe 1.3.1" << std::endl;
+            std::cout << "another_path_tracer.exe 1.3.2" << std::endl;
             return 0;
         }
 

@@ -56,6 +56,6 @@ To generate documentation, add `-DBUILD_DOC=ON` to cmake call. Additional depend
 To include in a CMake project:
 
 ```bash
-find_package(APTracer 1.3.1 REQUIRED)
+find_package(APTracer 1.3.2 REQUIRED)
 target_link_libraries(example APTracer::APTracer)
 ```
