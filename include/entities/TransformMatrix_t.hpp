@@ -3,7 +3,6 @@
 
 #include "entities/Vec3f.hpp"
 #include <array>
-#include <cmath>
 
 namespace APTracer { namespace Entities {
 
