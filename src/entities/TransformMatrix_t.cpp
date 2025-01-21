@@ -1,5 +1,6 @@
 #include "entities/TransformMatrix_t.hpp"
 #include <algorithm>
+#include <cmath>
 
 using APTracer::Entities::TransformMatrix_t;
 
@@ -449,7 +450,7 @@ auto TransformMatrix_t::multDir(const Vec3f& vec) const -> Vec3f { // Different 
 auto TransformMatrix_t::getScale() const -> double {
     const double norm0 = Vec3f(matrix_[0], matrix_[1], matrix_[2]).magnitude();
     const double norm1 = Vec3f(matrix_[4], matrix_[5], matrix_[6]).magnitude();
-    const double norm2 = Vec3f(matrix_[7], matrix_[8], matrix_[9]).magnitude();
+    const double norm2 = Vec3f(matrix_[8], matrix_[9], matrix_[10]).magnitude();
     return std::max(std::max(norm0, norm1), norm2);
 }
 
